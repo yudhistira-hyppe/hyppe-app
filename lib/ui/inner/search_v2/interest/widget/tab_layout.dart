@@ -41,7 +41,10 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
         final currentSkip =  currentType == HyppeType.HyppeVid ? lenghtVid :
         currentType == HyppeType.HyppeDiary ? lenghtDiary : lenghtPic;
         if(currentSkip%12 == 0){
-          notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest, reload: false, hyppe: currentType);
+          final hasNext = notifier.hasNext;
+          if(!hasNext){
+            notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest, reload: false, hyppe: currentType);
+          }
         }
       }
     });
@@ -137,7 +140,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                           if(data != null){
                             switch(type){
                               case HyppeType.HyppeVid:
-                                return data.vid.isNotNullAndEmpty() ? GridContentView(type: type, data: data.vid ?? []) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                                return data.vid.isNotNullAndEmpty() ? GridContentView(type: type, data: data.vid ?? [],) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                               case HyppeType.HyppeDiary:
                                 return data.diary.isNotNullAndEmpty() ? GridContentView(type: type, data: data.diary ?? []) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                               case HyppeType.HyppePic:

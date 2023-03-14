@@ -33,6 +33,10 @@ import 'package:story_view/controller/story_controller.dart';
 import '../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import '../../../core/bloc/posts_v2/bloc.dart';
 import '../../../core/models/collection/database/search_history.dart';
+import '../../constant/widget/custom_loading.dart';
+import 'hashtag/widget/grid_hashtag_diary.dart';
+import 'hashtag/widget/grid_hashtag_pic.dart';
+import 'hashtag/widget/grid_hashtag_vid.dart';
 
 class SearchNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -65,7 +69,7 @@ class SearchNotifier with ChangeNotifier {
   List<ContentData>? _searchVid;
   List<ContentData>? get searchVid => _searchVid;
 
-  set searchVid(List<ContentData>? values){
+  set searchVid(List<ContentData>? values) {
     _searchVid = values;
     notifyListeners();
   }
@@ -73,7 +77,7 @@ class SearchNotifier with ChangeNotifier {
   List<ContentData>? _searchDiary;
   List<ContentData>? get searchDiary => _searchDiary;
 
-  set searchDiary(List<ContentData>? values){
+  set searchDiary(List<ContentData>? values) {
     _searchDiary = values;
     notifyListeners();
   }
@@ -81,7 +85,7 @@ class SearchNotifier with ChangeNotifier {
   List<ContentData>? _searchPic;
   List<ContentData>? get searchPic => _searchPic;
 
-  set searchPic(List<ContentData>? values){
+  set searchPic(List<ContentData>? values) {
     _searchPic = values;
     notifyListeners();
   }
@@ -89,7 +93,7 @@ class SearchNotifier with ChangeNotifier {
   List<Tags>? _searchHashtag;
   List<Tags>? get searchHashtag => _searchHashtag;
 
-  set searchHashtag(List<Tags>? values){
+  set searchHashtag(List<Tags>? values) {
     _searchHashtag = values;
     notifyListeners();
   }
@@ -97,53 +101,66 @@ class SearchNotifier with ChangeNotifier {
   List<DataUser>? _searchUsers;
   List<DataUser>? get searchUsers => _searchUsers;
 
-  set searchUsers(List<DataUser>? values){
+  set searchUsers(List<DataUser>? values) {
     _searchUsers = values;
     notifyListeners();
   }
 
-  // SearchContentModel? _detailHashTag;
-  // SearchContentModel? get detailHashTag => _detailHashTag;
-  // set detailHashTag(SearchContentModel? val){
-  //   _detailHashTag = val;
-  //   notifyListeners();
-  // }
+  SearchContentModel? _detailHashTag;
+  SearchContentModel? get detailHashTag => _detailHashTag;
+  set detailHashTag(SearchContentModel? val){
+    _detailHashTag = val;
+    notifyListeners();
+  }
 
   List<ContentData>? _hashtagVid;
   List<ContentData>? get hashtagVid => _hashtagVid;
-  set hashtagVid(List<ContentData>? data){
+  set hashtagVid(List<ContentData>? data) {
     _hashtagVid = data;
     notifyListeners();
   }
 
   List<ContentData>? _hashtagDiary;
   List<ContentData>? get hashtagDiary => _hashtagDiary;
-  set hashtagDiary(List<ContentData>? data){
+  set hashtagDiary(List<ContentData>? data) {
     _hashtagDiary = data;
     notifyListeners();
   }
 
   List<ContentData>? _hashtagPic;
   List<ContentData>? get hashtagPic => _hashtagPic;
-  set hashtagPic(List<ContentData>? data){
+  set hashtagPic(List<ContentData>? data) {
     _hashtagPic = data;
+    notifyListeners();
+  }
+
+  String _tagImageMain = '';
+  String get tagImageMain => _tagImageMain;
+  set tagImageMain(String val){
+    _tagImageMain = val;
+    notifyListeners();
+  }
+
+  int _countTag = 0;
+  int get countTag => _countTag;
+  set countTag(int value){
+    _countTag = value;
     notifyListeners();
   }
 
   Tags? _currentHashtag;
   Tags? get currentHashtag => _currentHashtag;
-  set currentHashtag(Tags? data){
+  set currentHashtag(Tags? data) {
     _currentHashtag = data;
     notifyListeners();
   }
 
   SearchContentModel? _detailInterest;
   SearchContentModel? get detailInterest => _detailInterest;
-  set detailInterest(SearchContentModel? val){
+  set detailInterest(SearchContentModel? val) {
     _detailInterest = val;
     notifyListeners();
   }
-
 
   AllContents? _searchContentFirstPage;
   AllContents? get searchContentFirstPage => _searchContentFirstPage;
@@ -151,6 +168,9 @@ class SearchNotifier with ChangeNotifier {
   bool _isLoading = true;
   bool get isLoading => _isLoading;
 
+  setLoading(bool state){
+    _isLoading = state;
+  }
 
   ContentsDataQuery vidContentsQuery = ContentsDataQuery();
   ContentsDataQuery diaryContentsQuery = ContentsDataQuery();
@@ -216,7 +236,7 @@ class SearchNotifier with ChangeNotifier {
   bool _loadLandingPage = true;
   bool get loadLandingPage => _loadLandingPage;
 
-  set loadLandingPage(bool state){
+  set loadLandingPage(bool state) {
     _loadLandingPage = state;
     notifyListeners();
   }
@@ -224,8 +244,15 @@ class SearchNotifier with ChangeNotifier {
   bool _loadContents = true;
   bool get loadContents => _loadContents;
 
-  set loadContents(bool state){
+  set loadContents(bool state) {
     _loadContents = state;
+    notifyListeners();
+  }
+
+  bool _hasNext = false;
+  bool get hasNext => _hasNext;
+  set hasNext(bool state) {
+    _hasNext = state;
     notifyListeners();
   }
 
@@ -240,7 +267,7 @@ class SearchNotifier with ChangeNotifier {
   List<Interest>? _listInterest;
   List<Interest>? get listInterest => _listInterest;
 
-  set listInterest(List<Interest>? values){
+  set listInterest(List<Interest>? values) {
     _listInterest = values;
     notifyListeners();
   }
@@ -248,80 +275,83 @@ class SearchNotifier with ChangeNotifier {
   Map<String, SearchContentModel> _interestContents = {};
   Map<String, SearchContentModel> get interestContents => _interestContents;
 
-  set interestContents(Map<String, SearchContentModel> values){
+  set interestContents(Map<String, SearchContentModel> values) {
     _interestContents = values;
     notifyListeners();
   }
 
   Tags? _selectedHashtag;
   Tags? get selectedHashtag => _selectedHashtag;
-  set selectedHashtag(Tags? data){
+  set selectedHashtag(Tags? data) {
     _selectedHashtag = data;
     notifyListeners();
   }
 
   Interest? _selectedInterest;
   Interest? get selectedInterest => _selectedInterest;
-  set selectedInterest(Interest? val){
+  set selectedInterest(Interest? val) {
     _selectedInterest = val;
     notifyListeners();
   }
 
   List<SearchHistory>? _riwayat = [];
   List<SearchHistory>? get riwayat => _riwayat;
-  set riwayat(List<SearchHistory>? values){
+  set riwayat(List<SearchHistory>? values) {
     _riwayat = values;
     notifyListeners();
   }
 
-
-  Future onSearchLandingPage(BuildContext context) async{
-    try{
+  Future onSearchLandingPage(BuildContext context) async {
+    try {
       loadLandingPage = true;
       final notifier = SearchContentBloc();
       await notifier.landingPageSearch(context);
       final fetch = notifier.searchContentFetch;
-      if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
+      if (fetch.searchContentState ==
+          SearchContentState.getSearchContentBlocSuccess) {
         LandingSearch res = LandingSearch.fromJson(fetch.data);
         listHashtag = res.tag ?? [];
         listInterest = res.interest ?? [];
-
-      }else{
+      } else {
         throw 'Failed landing page search execution';
       }
-    }catch(e){
+    } catch (e) {
       'Error onSearchLandingPage: $e'.logger();
-    }finally{
+    } finally {
       loadLandingPage = false;
       // getAllInterestContents(context);
     }
   }
 
-  Future getAllInterestContents(BuildContext context) async{
-    try{
+  Future getAllInterestContents(BuildContext context) async {
+    try {
       loadContents = true;
-      if(listInterest != null){
-        if(listInterest!.isNotEmpty){
-          await for(final value in getInterest(context, listInterest! )){
+      if (listInterest != null) {
+        if (listInterest!.isNotEmpty) {
+          await for (final value in getInterest(context, listInterest!)) {
             final id = value?.interests?[0].id ?? '613bc4da9ec319617aa6c38e';
-            if(value != null){
+            if (value != null) {
               interestContents[id] = value;
             }
           }
           notifyListeners();
         }
       }
-    }catch(e){
+    } catch (e) {
       'Error Get Interest Contests'.logger();
-    }finally{
+    } finally {
       loadContents = false;
     }
-
   }
 
-  Stream<SearchContentModel?> getInterest(BuildContext context, List<Interest> interests) async*{
-    for(final interest in interests){
-      yield await _hitApiGetDetail(context, interest.id ?? '613bc4da9ec319617aa6c38e', TypeApiSearch.detailInterest, 0);
+  Stream<SearchContentModel?> getInterest(
+      BuildContext context, List<Interest> interests) async* {
+    for (final interest in interests) {
+      yield await _hitApiGetDetail(
+          context,
+          interest.id ?? '613bc4da9ec319617aa6c38e',
+          TypeApiSearch.detailInterest,
+          0);
     }
   }
 
@@ -348,33 +378,33 @@ class SearchNotifier with ChangeNotifier {
 
   SearchLayout _layout = SearchLayout.first;
   SearchLayout get layout => _layout;
-  set layout(SearchLayout val){
+  set layout(SearchLayout val) {
     _layout = val;
     notifyListeners();
   }
 
-  startLayout(){
+  startLayout() {
     _layout = SearchLayout.first;
   }
 
-  initDetailHashtag(){
+  initDetailHashtag() {
     _hashtagTab = HyppeType.HyppeVid;
   }
 
-  initSearchAll(){
+  initSearchAll() {
     _contentTab = HyppeType.HyppeVid;
   }
 
   HyppeType _contentTab = HyppeType.HyppeVid;
   HyppeType get contentTab => _contentTab;
-  set contentTab(HyppeType type){
+  set contentTab(HyppeType type) {
     _contentTab = type;
     notifyListeners();
   }
 
   HyppeType _hashtagTab = HyppeType.HyppeVid;
   HyppeType get hashtagTab => _hashtagTab;
-  set hashtagTab(HyppeType type){
+  set hashtagTab(HyppeType type) {
     _hashtagTab = type;
     notifyListeners();
   }
@@ -463,26 +493,29 @@ class SearchNotifier with ChangeNotifier {
     searchController.clear();
   }
 
-  void getHistories() async{
+  void getHistories() async {
     riwayat = await globalDB.getHistories();
   }
 
-  void insertHistory(BuildContext context, String keyword) async{
+  void insertHistory(BuildContext context, String keyword) async {
     final checkData = await globalDB.getHistoryByKeyword(keyword);
     final date = System().getCurrentDate();
-    if(checkData == null){
-      await globalDB.insertHistory(SearchHistory(keyword: keyword, datetime: date));
-    }else{
-      await globalDB.updateHistory(SearchHistory(keyword: keyword, datetime: date));
+    if (checkData == null) {
+      await globalDB
+          .insertHistory(SearchHistory(keyword: keyword, datetime: date));
+    } else {
+      await globalDB
+          .updateHistory(SearchHistory(keyword: keyword, datetime: date));
     }
   }
 
-  void deleteHistory(SearchHistory data) async{
+  void deleteHistory(SearchHistory data) async {
     await globalDB.deleteHistory(data);
     getHistories();
   }
 
-  Future onInitialSearchNew(BuildContext context, FeatureType featureType, {bool reload = false}) async {
+  Future onInitialSearchNew(BuildContext context, FeatureType featureType,
+      {bool reload = false}) async {
     focusNode.unfocus();
     _layout = SearchLayout.first;
     print('reload search');
@@ -490,7 +523,9 @@ class SearchNotifier with ChangeNotifier {
     print(reload == false);
 
     if (featureType == FeatureType.vid) {
-      if ((_searchContentFirstPage?.video != null || (_searchContentFirstPage?.video?.length ?? 0) > 0) && reload == false) {
+      if ((_searchContentFirstPage?.video != null ||
+              (_searchContentFirstPage?.video?.length ?? 0) > 0) &&
+          reload == false) {
         return null;
       } else {
         if (!reload) {
@@ -502,7 +537,8 @@ class SearchNotifier with ChangeNotifier {
     }
 
     if (featureType == FeatureType.diary) {
-      if (_searchContentFirstPage?.diary != null || (_searchContentFirstPage?.diary?.length ?? 0) > 0) {
+      if (_searchContentFirstPage?.diary != null ||
+          (_searchContentFirstPage?.diary?.length ?? 0) > 0) {
         return;
       } else {
         isLoading = true;
@@ -511,7 +547,8 @@ class SearchNotifier with ChangeNotifier {
     }
 
     if (featureType == FeatureType.pic) {
-      if (_searchContentFirstPage?.pict != null || (_searchContentFirstPage?.pict?.length ?? 0) > 0) {
+      if (_searchContentFirstPage?.pict != null ||
+          (_searchContentFirstPage?.pict?.length ?? 0) > 0) {
         return null;
       } else {
         isLoading = true;
@@ -557,7 +594,10 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  Future<AllContents> allReload(BuildContext context, {bool myContent = false, bool otherContent = false, String? featureType}) async {
+  Future<AllContents> allReload(BuildContext context,
+      {bool myContent = false,
+      bool otherContent = false,
+      String? featureType}) async {
     AllContents? res;
     // final notifier = PostsBloc();
     //
@@ -569,7 +609,13 @@ class SearchNotifier with ChangeNotifier {
     try {
       final notifier = PostsBloc();
 
-      await notifier.getAllContentsBlocV2(context, pageNumber: 1, pageRows: 18, visibility: 'PUBLIC', myContent: myContent, otherContent: otherContent, postType: featureType);
+      await notifier.getAllContentsBlocV2(context,
+          pageNumber: 1,
+          pageRows: 18,
+          visibility: 'PUBLIC',
+          myContent: myContent,
+          otherContent: otherContent,
+          postType: featureType);
       final fetch = notifier.postsFetch;
       '${AllContents.fromJson(fetch.data).toJson()}'.logger();
       res = AllContents.fromJson(fetch.data);
@@ -581,17 +627,28 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  Future<List<ContentData>> getListPosts(BuildContext context, FeatureType type, {bool myContent = false, bool otherContent = false}) async {
+  Future<List<ContentData>> getListPosts(BuildContext context, FeatureType type,
+      {bool myContent = false, bool otherContent = false}) async {
     print('reload');
 
     List<ContentData>? res;
     try {
       final notifier = PostsBloc();
       await notifier.getContentsBlocV2(context,
-          postID: null, pageRows: 18, pageNumber: 0, type: type, searchText: searchController.text, onlyMyData: false, visibility: 'PUBLIC', myContent: myContent, otherContent: otherContent);
+          postID: null,
+          pageRows: 18,
+          pageNumber: 0,
+          type: type,
+          searchText: searchController.text,
+          onlyMyData: false,
+          visibility: 'PUBLIC',
+          myContent: myContent,
+          otherContent: otherContent);
       final fetch = notifier.postsFetch;
 
-      res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
+      res = (fetch.data as List<dynamic>?)
+          ?.map((e) => ContentData.fromJson(e as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       '$e'.logger();
       rethrow;
@@ -600,8 +657,10 @@ class SearchNotifier with ChangeNotifier {
     return res ?? [];
   }
 
-  onScrollListenerFirstPage(BuildContext context, ScrollController scrollController, FeatureType type) async {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+  onScrollListenerFirstPage(BuildContext context,
+      ScrollController scrollController, FeatureType type) async {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
       List<ContentData>? res = [];
       focusNode.unfocus();
       switch (type) {
@@ -614,7 +673,10 @@ class SearchNotifier with ChangeNotifier {
           vidContentsQuery.featureType = FeatureType.vid;
           vidContentsQuery.limit = 18;
           res = await vidContentsQuery.loadNext(context, isLandingPage: true);
-          _searchContentFirstPage?.video = [...(_searchContentFirstPage?.video ?? []), ...(res)];
+          _searchContentFirstPage?.video = [
+            ...(_searchContentFirstPage?.video ?? []),
+            ...(res)
+          ];
           break;
         case FeatureType.diary:
           _skipDiary = _skip + _skipDiary;
@@ -622,7 +684,10 @@ class SearchNotifier with ChangeNotifier {
           diaryContentsQuery.featureType = FeatureType.diary;
           diaryContentsQuery.limit = 18;
           res = await diaryContentsQuery.loadNext(context, isLandingPage: true);
-          _searchContentFirstPage?.diary = [...(_searchContentFirstPage?.diary ?? []), ...(res)];
+          _searchContentFirstPage?.diary = [
+            ...(_searchContentFirstPage?.diary ?? []),
+            ...(res)
+          ];
           break;
         default:
           _skipPict = _skip + _skipPict;
@@ -630,7 +695,10 @@ class SearchNotifier with ChangeNotifier {
           picContentsQuery.limit = 18;
           picContentsQuery.featureType = FeatureType.pic;
           res = await picContentsQuery.loadNext(context, isLandingPage: true);
-          _searchContentFirstPage?.pict = [...(_searchContentFirstPage?.pict ?? []), ...(res)];
+          _searchContentFirstPage?.pict = [
+            ...(_searchContentFirstPage?.pict ?? []),
+            ...(res)
+          ];
       }
 
       notifyListeners();
@@ -643,113 +711,278 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-
-
-  Future getDetail(BuildContext context, String keys, TypeApiSearch type, {reload = true, HyppeType? hyppe}) async{
-    try{
-      if(reload){
+  Future getDetailHashtag(BuildContext context, String keys,
+      {reload = true, HyppeType? hyppe}) async {
+    try {
+      final lenghtVid = _detailHashTag?.vid?.length ?? 0;
+      final lenghtDiary = _detailHashTag?.diary?.length ?? 0;
+      final lenghtPic = _detailHashTag?.pict?.length ?? 0;
+      if (reload) {
         isLoading = true;
+        final _res = await _hitApiGetDetail(
+            context, keys, TypeApiSearch.detailHashTag, 0,
+            type: hyppe);
+        if (_res != null) {
+          _detailHashTag = _res;
+          final videos = _detailHashTag?.vid ?? [];
+          final diaries = _detailHashTag?.diary ?? [];
+          final pics = _detailHashTag?.pict ?? [];
+          final hashtags = _detailHashTag?.tags ?? [];
+          if (hashtags.isNotNullAndEmpty()) {
+            _currentHashtag = hashtags.first;
+            final extraTag = _currentHashtag;
+            final count = (extraTag != null ? (extraTag.total ?? 0) : 0);
+            if((pics.isEmpty) && (diaries.isEmpty) && (videos.isEmpty)){
+              _countTag = 0;
+            }else{
+              _countTag = count;
+            }
+          }
+          _detailHashTag?.vid = videos;
+          _detailHashTag?.diary = diaries;
+          _detailHashTag?.pict = pics;
+          if(pics.isNotNullAndEmpty()){
+            final data =
+            pics[0];
+            final url = data != null ? ((data.isApsara ?? false)
+                ? ( data.media?.imageInfo?[0].url ?? (data.mediaThumbEndPoint ?? ''))
+                : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
+            _tagImageMain = url;
+          }
+
+
+        }
+        isLoading = false;
+      } else {
+        final currentSkip = hyppe == HyppeType.HyppeVid
+            ? lenghtVid
+            : hyppe == HyppeType.HyppeDiary
+                ? lenghtDiary
+                : lenghtPic;
+        if (currentSkip % 12 == 0) {
+          if (!hasNext) {
+            hasNext = true;
+            final _res = await _hitApiGetDetail(
+                context, keys, TypeApiSearch.detailHashTag, currentSkip,
+                type: hyppe);
+            if (_res != null) {
+              final videos = _res.vid;
+              final diaries = _res.diary;
+              final pics = _res.pict;
+              if (hyppe == HyppeType.HyppeVid) {
+                for(final video in videos ?? []){
+                  _detailHashTag?.vid?.add(video);
+                }
+                // _hashtagVid = [...(_hashtagVid ?? []), ...(videos ?? [])];
+              } else if (hyppe == HyppeType.HyppeDiary) {
+                for(final diary in diaries ?? []){
+                  _detailHashTag?.diary?.add(diary);
+                }
+                // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
+              } else {
+                for(final pic in pics ?? []){
+                  _detailHashTag?.pict?.add(pic);
+                }
+                // _hashtagPic = [...(_hashtagPic ?? []), ...(pics ?? [])];
+              }
+            }
+
+          }
+        }
+        hasNext = false;
+      }
+    } catch (e) {
+      if(_isLoading){
+        isLoading = false;
+      }
+      if(_hasNext){
+        hasNext = false;
       }
 
+      'Error getDetail: $e'.logger();
+    }finally{
+      if(_isLoading){
+        isLoading = false;
+      }
+      if(_hasNext){
+        hasNext = false;
+      }
+    }
+  }
+
+  List<Widget> getGridHashtag(String hashtag) {
+    Map<String, List<Widget>> map = {
+      'HyppeVid' : [
+        GridHashtagVid(),
+        if ((hashtagVid ?? []).length % limitSearch == 0)
+          SliverToBoxAdapter(
+            child: Container(
+                width: double.infinity,
+                height: 90,
+                alignment: Alignment.center,
+                child: const CustomLoading()),
+          )
+      ],
+      'HyppeDiary' : [
+        GridHashtagDiary(),
+        if ((hashtagDiary ?? []).length % limitSearch == 0)
+          SliverToBoxAdapter(
+            child: Container(
+                width: double.infinity,
+                height: 90,
+                alignment: Alignment.center,
+                child: const CustomLoading()),
+          )
+      ],
+      'HyppePic' : [
+        GridHashtagPic(),
+        if ((hashtagPic ?? []).length % limitSearch == 0)
+          SliverToBoxAdapter(
+            child: Container(
+                width: double.infinity,
+                height: 90,
+                alignment: Alignment.center,
+                child: const CustomLoading()),
+          )
+      ]
+    };
+    final key = System().getTitleHyppe(hashtagTab);
+    return map[key] ?? [
+      GridHashtagVid(),
+      if ((hashtagVid ?? []).length % limitSearch == 0)
+        SliverToBoxAdapter(
+          child: Container(
+              width: double.infinity,
+              height: 90,
+              alignment: Alignment.center,
+              child: const CustomLoading()),
+        )
+    ];
+  }
+
+  Future getDetail(BuildContext context, String keys, TypeApiSearch type,
+      {reload = true, HyppeType? hyppe}) async {
+    try {
+      if (reload) {
+        isLoading = true;
+      } else {
+        hasNext = true;
+      }
       List<ContentData> currentVid = [];
       List<ContentData> currentDairy = [];
       List<ContentData> currentPic = [];
       int currentSkip = 0;
-      if(!reload){
-        if(type == TypeApiSearch.detailHashTag){
+      if (!reload) {
+        if (type == TypeApiSearch.detailHashTag) {
           // currentVid = detailHashTag?.vid ?? [];
           // currentDairy = detailHashTag?.diary ?? [];
           // currentPic = detailHashTag?.pict ?? [];
-          currentVid = hashtagVid ?? [];
-          currentDairy = hashtagDiary ?? [];
-          currentPic = hashtagPic ?? [];
+          currentVid = _hashtagVid ?? [];
+          currentDairy = _hashtagDiary ?? [];
+          currentPic = _hashtagPic ?? [];
           final lenghtVid = currentVid.length;
           final lenghtDiary = currentDairy.length;
           final lenghtPic = currentPic.length;
-          currentSkip = hyppe == HyppeType.HyppeVid ? lenghtVid :
-          hyppe == HyppeType.HyppeDiary ? lenghtDiary : lenghtPic;
-        }else if(type == TypeApiSearch.detailInterest){
+          currentSkip = hyppe == HyppeType.HyppeVid
+              ? lenghtVid
+              : hyppe == HyppeType.HyppeDiary
+                  ? lenghtDiary
+                  : lenghtPic;
+        } else if (type == TypeApiSearch.detailInterest) {
           currentVid = interestContents[keys]?.vid ?? [];
           currentDairy = interestContents[keys]?.diary ?? [];
           currentPic = interestContents[keys]?.pict ?? [];
           final lenghtVid = currentVid.length;
           final lenghtDiary = currentDairy.length;
           final lenghtPic = currentPic.length;
-          currentSkip = hyppe == HyppeType.HyppeVid ? lenghtVid :
-          hyppe == HyppeType.HyppeDiary ? lenghtDiary : lenghtPic;
+          currentSkip = hyppe == HyppeType.HyppeVid
+              ? lenghtVid
+              : hyppe == HyppeType.HyppeDiary
+                  ? lenghtDiary
+                  : lenghtPic;
         }
-        if(currentSkip%limitSearch != 0){
+        if (currentSkip % limitSearch != 0) {
           throw 'hitApiGetDetail : preventing api because the system must reduce useless action ';
         }
       }
-      final _res = await _hitApiGetDetail(context, keys, type, currentSkip, type: hyppe);
-      if(_res != null){
+      final _res =
+          await _hitApiGetDetail(context, keys, type, currentSkip, type: hyppe);
+      if (_res != null) {
         final videos = _res.vid;
         final diaries = _res.diary;
         final pics = _res.pict;
         final hashtags = _res.tags;
 
-        if(type == TypeApiSearch.detailHashTag){
-          if(!reload){
-            if(hyppe != null){
-              if(hyppe == HyppeType.HyppeVid){
-                hashtagVid = [...currentVid, ...(videos ?? [])];
-              }else if(hyppe == HyppeType.HyppeDiary){
-                hashtagDiary = [...currentDairy, ...(diaries ?? [])];
-              }else{
-                hashtagPic = [...currentPic, ...(pics ?? [])];
+        if (type == TypeApiSearch.detailHashTag) {
+          if (!reload) {
+            if (hyppe != null) {
+              if (hyppe == HyppeType.HyppeVid) {
+                _hashtagVid = [...currentVid, ...(videos ?? [])];
+              } else if (hyppe == HyppeType.HyppeDiary) {
+                _hashtagDiary = [...currentDairy, ...(diaries ?? [])];
+              } else {
+                _hashtagPic = [...currentPic, ...(pics ?? [])];
               }
-            }else{
-              hashtagVid = [...currentVid, ...(videos ?? [])];
-              hashtagDiary = [...currentDairy, ...(diaries ?? [])];
-              hashtagPic = [...currentPic, ...(pics ?? [])];
+            } else {
+              _hashtagVid = [...currentVid, ...(videos ?? [])];
+              _hashtagDiary = [...currentDairy, ...(diaries ?? [])];
+              _hashtagPic = [...currentPic, ...(pics ?? [])];
             }
-
-          }else{
-            if(hashtags.isNotNullAndEmpty()){
+          } else {
+            if (hashtags.isNotNullAndEmpty()) {
               currentHashtag = hashtags?.first;
             }
-            hashtagVid = videos;
-            hashtagDiary = diaries;
-            hashtagPic = pics;
+            _hashtagVid = videos;
+            _hashtagDiary = diaries;
+            _hashtagPic = pics;
           }
-        }else if(type == TypeApiSearch.detailInterest){
-          if(!reload){
-            if(hyppe != null){
-              if(hyppe == HyppeType.HyppeVid){
-                interestContents[keys]?.vid = [...currentVid, ...(videos ?? [])];
-              }else if(hyppe == HyppeType.HyppeDiary){
-                interestContents[keys]?.diary = [...currentDairy, ...(diaries ?? [])];
-              }else{
+        } else if (type == TypeApiSearch.detailInterest) {
+          if (!reload) {
+            if (hyppe != null) {
+              if (hyppe == HyppeType.HyppeVid) {
+                interestContents[keys]?.vid = [
+                  ...currentVid,
+                  ...(videos ?? [])
+                ];
+              } else if (hyppe == HyppeType.HyppeDiary) {
+                interestContents[keys]?.diary = [
+                  ...currentDairy,
+                  ...(diaries ?? [])
+                ];
+              } else {
                 interestContents[keys]?.pict = [...currentPic, ...(pics ?? [])];
               }
-            }else{
+            } else {
               interestContents[keys]?.vid = [...currentVid, ...(videos ?? [])];
-              interestContents[keys]?.diary = [...currentDairy, ...(diaries ?? [])];
+              interestContents[keys]?.diary = [
+                ...currentDairy,
+                ...(diaries ?? [])
+              ];
               interestContents[keys]?.pict = [...currentPic, ...(pics ?? [])];
             }
-
-          }else{
+          } else {
             interestContents[keys] = _res;
           }
         }
-        notifyListeners();
       }
-
-    }catch(e){
+    } catch (e) {
       'Error getDetail: $e'.logger();
-    }finally{
-      if(reload){
+    } finally {
+      if (reload) {
         isLoading = false;
+      } else {
+        hasNext = true;
       }
     }
   }
 
-  Future<SearchContentModel?> _hitApiGetDetail(BuildContext context, String keys, TypeApiSearch typeApi, int currentSkip, {HyppeType? type}) async{
-    try{
+  Future<SearchContentModel?> _hitApiGetDetail(
+      BuildContext context, String keys, TypeApiSearch typeApi, int currentSkip,
+      {HyppeType? type}) async {
+    try {
       String email = SharedPreference().readStorage(SpKeys.email);
       var param = <String, dynamic>{};
-      if(type != null){
+      if (type != null) {
         param = {
           "email": email,
           "keys": keys,
@@ -759,7 +992,7 @@ class SearchNotifier with ChangeNotifier {
           "skip": currentSkip,
           "limit": limitSearch,
         };
-      }else{
+      } else {
         param = {
           "email": email,
           "keys": keys,
@@ -774,58 +1007,63 @@ class SearchNotifier with ChangeNotifier {
       final notifier = SearchContentBloc();
       await notifier.getSearchContent(context, param, type: typeApi);
       final fetch = notifier.searchContentFetch;
-      if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
+      if (fetch.searchContentState ==
+          SearchContentState.getSearchContentBlocSuccess) {
         final _res = SearchContentModel.fromJson(fetch.data[0]);
         return _res;
-      }else if(fetch.searchContentState == SearchContentState.getSearchContentBlocError){
+      } else if (fetch.searchContentState ==
+          SearchContentState.getSearchContentBlocError) {
         throw 'getAllDataSearch failed $typeApi';
-      }else{
+      } else {
         throw 'undefined';
       }
-    }catch(e){
+    } catch (e) {
       'Error _hitApiGetDetail: $e'.logger();
       return null;
     }
   }
 
-  Future getDataSearch(
-      BuildContext context, {SearchLoadData typeSearch = SearchLoadData.all, bool reload = true}) async {
-
-
-    try{
+  Future getDataSearch(BuildContext context,
+      {SearchLoadData typeSearch = SearchLoadData.all,
+      bool reload = true}) async {
+    try {
       final lenghtVid = _searchVid?.length ?? limitSearch;
       final lenghtDiary = _searchDiary?.length ?? limitSearch;
       final lenghtPic = _searchPic?.length ?? limitSearch;
       var skipContent = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
 
-      final int currentSkip = typeSearch == SearchLoadData.all ? 0 :
-      typeSearch == SearchLoadData.hashtag ? (_searchHashtag?.length ?? 0) :
-      typeSearch == SearchLoadData.content ? skipContent :
-      typeSearch == SearchLoadData.user ? _searchUsers?.length ?? 0 : 0;
-      if((currentSkip != 0 && typeSearch == SearchLoadData.all)){
+      final int currentSkip = typeSearch == SearchLoadData.all
+          ? 0
+          : typeSearch == SearchLoadData.hashtag
+              ? (_searchHashtag?.length ?? 0)
+              : typeSearch == SearchLoadData.content
+                  ? skipContent
+                  : typeSearch == SearchLoadData.user
+                      ? _searchUsers?.length ?? 0
+                      : 0;
+      if ((currentSkip != 0 && typeSearch == SearchLoadData.all)) {
         throw 'Error get all because the state is not from beginning $currentSkip';
-      }else if(currentSkip%limitSearch != 0){
-        if(!reload){
+      } else if (currentSkip % limitSearch != 0) {
+        if (!reload) {
           throw 'Error because we have to prevent the action for refusing wasting action';
         }
-
       }
 
-      if(reload){
+      if (reload) {
         isLoading = true;
       }
 
       String email = SharedPreference().readStorage(SpKeys.email);
       String search = searchController.text;
-      if(search.isHashtag()){
+      if (search.isHashtag()) {
         search = search.replaceFirst('#', '');
       }
       Map<String, dynamic> param = {};
-      if(typeSearch == SearchLoadData.all){
+      if (typeSearch == SearchLoadData.all) {
         focusNode.unfocus();
       }
 
-      switch(typeSearch){
+      switch (typeSearch) {
         case SearchLoadData.all:
           param = {
             "email": email,
@@ -838,7 +1076,7 @@ class SearchNotifier with ChangeNotifier {
             "skip": currentSkip,
             "limit": limitSearch,
           };
-          await  _hitApiGetSearchData(context, param, typeSearch, reload);
+          await _hitApiGetSearchData(context, param, typeSearch, reload);
           insertHistory(context, search);
           break;
         case SearchLoadData.user:
@@ -853,7 +1091,7 @@ class SearchNotifier with ChangeNotifier {
             "skip": currentSkip,
             "limit": limitSearch,
           };
-          await  _hitApiGetSearchData(context, param, typeSearch, reload);
+          await _hitApiGetSearchData(context, param, typeSearch, reload);
           break;
         case SearchLoadData.hashtag:
           param = {
@@ -867,7 +1105,7 @@ class SearchNotifier with ChangeNotifier {
             "skip": currentSkip,
             "limit": limitSearch,
           };
-          await  _hitApiGetSearchData(context, param, typeSearch, reload);
+          await _hitApiGetSearchData(context, param, typeSearch, reload);
           break;
         case SearchLoadData.content:
           param = {
@@ -881,31 +1119,30 @@ class SearchNotifier with ChangeNotifier {
             "skip": currentSkip,
             "limit": limitSearch,
           };
-          await  _hitApiGetSearchData(context, param, typeSearch, reload);
+          await _hitApiGetSearchData(context, param, typeSearch, reload);
           break;
       }
-
-    }catch(e){
+    } catch (e) {
       'Error getAllDataSearch: $e'.logger();
-    }finally{
-      if(reload){
+    } finally {
+      if (reload) {
         isLoading = false;
       }
     }
-
   }
 
-  Future _hitApiGetSearchData(BuildContext context, Map<String, dynamic> req, SearchLoadData typeSearch, bool reload) async{
-    try{
-
+  Future _hitApiGetSearchData(BuildContext context, Map<String, dynamic> req,
+      SearchLoadData typeSearch, bool reload) async {
+    try {
       final notifier = SearchContentBloc();
       print('_hitApiGetSearchData#1 ${context.getCurrentDate()}');
       await notifier.getSearchContent(context, req);
       print('_hitApiGetSearchData ${context.getCurrentDate()}');
       final fetch = notifier.searchContentFetch;
-      if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
+      if (fetch.searchContentState ==
+          SearchContentState.getSearchContentBlocSuccess) {
         final _res = SearchContentModel.fromJson(fetch.data[0]);
-        switch(typeSearch){
+        switch (typeSearch) {
           case SearchLoadData.all:
             searchUsers = _res.users;
             searchVid = _res.vid;
@@ -919,41 +1156,54 @@ class SearchNotifier with ChangeNotifier {
             searchPic = [...(searchPic ?? []), ...(_res.pict ?? [])];
             break;
           case SearchLoadData.user:
-            if(!reload){
+            if (!reload) {
               searchUsers = [...(searchUsers ?? []), ...(_res.users ?? [])];
-            }else{
+            } else {
               searchUsers = _res.users;
             }
             break;
           case SearchLoadData.hashtag:
-            if(!reload){
+            if (!reload) {
               searchHashtag = [...(searchHashtag ?? []), ...(_res.tags ?? [])];
-            }else{
+            } else {
               searchHashtag = _res.tags;
             }
 
             break;
         }
-
-      }else if(fetch.searchContentState == SearchContentState.getSearchContentBlocError){
+      } else if (fetch.searchContentState ==
+          SearchContentState.getSearchContentBlocError) {
         throw 'getAllDataSearch failed $typeSearch';
       }
-    }catch(e){
+    } catch (e) {
       rethrow;
     }
   }
 
-  Future navigateToSeeAllScreen(BuildContext context, List<ContentData> data, int index) async {
+  Future navigateToSeeAllScreen(
+      BuildContext context, List<ContentData> data, int index) async {
     focusNode.unfocus();
     bool connect = await System().checkConnections();
     if (connect) {
-      if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: data[index]));
+      if (pageIndex == 0)
+        _routing.move(Routes.vidDetail,
+            argument: VidDetailScreenArgument(vidData: data[index]));
       if (pageIndex == 1)
         _routing.move(Routes.diaryDetail,
-            argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search));
+            argument: DiaryDetailScreenArgument(
+                diaryData: data,
+                index: index.toDouble(),
+                page: diaryContentsQuery.page,
+                limit: diaryContentsQuery.limit,
+                type: TypePlaylist.search));
       if (pageIndex == 2)
         _routing.move(Routes.picSlideDetailPreview,
-            argument: SlidedPicDetailScreenArgument(picData: data, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.search));
+            argument: SlidedPicDetailScreenArgument(
+                picData: data,
+                index: index.toDouble(),
+                page: picContentsQuery.page,
+                limit: picContentsQuery.limit,
+                type: TypePlaylist.search));
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         _routing.moveBack();
@@ -962,7 +1212,8 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  Future navigateToSeeAllScreen2(BuildContext context, List<ContentData> data, int index, int selectIndex) async {
+  Future navigateToSeeAllScreen2(BuildContext context, List<ContentData> data,
+      int index, int selectIndex) async {
     print(index);
     print(selectIndex);
     context.read<ReportNotifier>().inPosition = contentPosition.search;
@@ -980,12 +1231,22 @@ class SearchNotifier with ChangeNotifier {
       if (selectIndex == 3) {
         context.read<ReportNotifier>().type = 'diary';
         _routing.move(Routes.diaryDetail,
-            argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search));
+            argument: DiaryDetailScreenArgument(
+                diaryData: data,
+                index: index.toDouble(),
+                page: diaryContentsQuery.page,
+                limit: diaryContentsQuery.limit,
+                type: TypePlaylist.search));
       }
       if (selectIndex == 4) {
         context.read<ReportNotifier>().type = 'pict';
         _routing.move(Routes.picSlideDetailPreview,
-            argument: SlidedPicDetailScreenArgument(picData: data, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.search));
+            argument: SlidedPicDetailScreenArgument(
+                picData: data,
+                index: index.toDouble(),
+                page: picContentsQuery.page,
+                limit: picContentsQuery.limit,
+                type: TypePlaylist.search));
       }
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
@@ -995,13 +1256,13 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  Future navigateToSeeAllScreen3(BuildContext context, List<ContentData> data, int index, HyppeType type) async {
+  Future navigateToSeeAllScreen3(BuildContext context, List<ContentData> data,
+      int index, HyppeType type) async {
     context.read<ReportNotifier>().inPosition = contentPosition.search;
     focusNode.unfocus();
     bool connect = await System().checkConnections();
     if (connect) {
-
-      switch(type){
+      switch (type) {
         case HyppeType.HyppeVid:
           context.read<ReportNotifier>().type = 'vid';
           _routing.move(Routes.vidDetail,
@@ -1012,13 +1273,22 @@ class SearchNotifier with ChangeNotifier {
         case HyppeType.HyppeDiary:
           context.read<ReportNotifier>().type = 'diary';
           _routing.move(Routes.diaryDetail,
-              argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search));
+              argument: DiaryDetailScreenArgument(
+                  diaryData: data,
+                  index: index.toDouble(),
+                  page: diaryContentsQuery.page,
+                  limit: diaryContentsQuery.limit,
+                  type: TypePlaylist.search));
           break;
         case HyppeType.HyppePic:
           context.read<ReportNotifier>().type = 'pict';
           _routing.move(Routes.picSlideDetailPreview,
-              argument: SlidedPicDetailScreenArgument(picData: data, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.search));
-
+              argument: SlidedPicDetailScreenArgument(
+                  picData: data,
+                  index: index.toDouble(),
+                  page: picContentsQuery.page,
+                  limit: picContentsQuery.limit,
+                  type: TypePlaylist.search));
       }
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
@@ -1072,25 +1342,34 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  void navigateToOtherProfile(BuildContext context, ContentData data, StoryController storyController) {
-    Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email;
+  void navigateToOtherProfile(
+      BuildContext context, ContentData data, StoryController storyController) {
+    Provider.of<OtherProfileNotifier>(context, listen: false).userEmail =
+        data.email;
     storyController.pause();
-    _routing.move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data.email)).whenComplete(() => storyController.play());
+    _routing
+        .move(Routes.otherProfile,
+            argument: OtherProfileArgument(senderEmail: data.email))
+        .whenComplete(() => storyController.play());
   }
 
-  void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
+  void showContentSensitive(BuildContext context,
+      {required String postID, required String content, bool? isReport}) {
     ContentData? _updatedData;
     ContentData? _updatedData2;
 
     switch (content) {
       case hyppeVid:
-        _updatedData = _searchContentFirstPage?.video?.firstWhere((element) => element.postID == postID);
+        _updatedData = _searchContentFirstPage?.video
+            ?.firstWhere((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        _updatedData = _searchContentFirstPage?.diary?.firstWhere((element) => element.postID == postID);
+        _updatedData = _searchContentFirstPage?.diary
+            ?.firstWhere((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData = _searchContentFirstPage?.pict?.firstWhere((element) => element.postID == postID);
+        _updatedData = _searchContentFirstPage?.pict
+            ?.firstWhere((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
@@ -1110,4 +1389,6 @@ class SearchNotifier with ChangeNotifier {
 
     notifyListeners();
   }
+
+
 }
