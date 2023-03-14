@@ -161,7 +161,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     //set player
     fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
     fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-
+    fAliplayer?.prepare();
+    print('prepare done');
     if (Platform.isAndroid) {
       getExternalStorageDirectories().then((value) {
         if ((value?.length ?? 0) > 0) {
@@ -193,6 +194,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           print("-======= auth iklan ${jsonMap['PlayAuth']}");
           _dataSourceAdsMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
         } else {
+          print("-======= auth konten ${jsonMap['PlayAuth']}");
           _dataSourceMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
         }
 
@@ -817,7 +819,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   void _onPlayerHide() {
     Future.delayed(const Duration(seconds: 4), () {
       onTapCtrl = false;
-      setState(() {});
+      // setState(() {});
     });
   }
 
@@ -856,7 +858,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     return GestureDetector(
       onTap: () {
         if (isPause) {
-          if (_showTipsWidget) fAliplayer?.prepare();
+          // if (_showTipsWidget) fAliplayer?.prepare();
           fAliplayer?.play();
           isPause = false;
           setState(() {});
@@ -889,10 +891,12 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         } else {
           value = 5000;
         }
+
         changevalue = _currentPosition - value;
         if (changevalue < 0) {
           changevalue = 0;
         }
+        print("currSeek: "+value.toString()+", changeSeek: "+changevalue.toString());
         fAliplayer?.requestBitmapAtPosition(changevalue);
         setState(() {
           _currentPosition = changevalue;
@@ -905,7 +909,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
             });
           }
         });
-        fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
+        // fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
+        fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
       },
       child: const CustomIconWidget(
         iconData: "${AssetPath.vectorPath}replay10.svg",
@@ -929,6 +934,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         if (changevalue > _videoDuration) {
           changevalue = _videoDuration;
         }
+        print("currSeek: "+value.toString()+", changeSeek: "+changevalue.toString());
         fAliplayer?.requestBitmapAtPosition(changevalue);
         setState(() {
           _currentPosition = changevalue;
@@ -941,7 +947,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
             });
           }
         });
-        fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
+        // fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
+        fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
       },
       child: const CustomIconWidget(
         iconData: "${AssetPath.vectorPath}forward10.svg",
@@ -980,7 +987,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                 setState(() {
                   _showTipsWidget = false;
                 });
-                fAliplayer?.prepare();
+                // fAliplayer?.prepare();
                 fAliplayer?.play();
               },
             ),
@@ -1089,6 +1096,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   }
 
   _buildContentWidget(Orientation orientation) {
+    // print('ORIENTATION: CHANGING ORIENTATION');
     return SafeArea(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -1140,9 +1148,12 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                             });
                           }
                         });
+                        // isActiveAds
+                        //     ? fAliplayerAds?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE)
+                        //     : fAliplayer?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
                         isActiveAds
-                            ? fAliplayerAds?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE)
-                            : fAliplayer?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
+                            ? fAliplayerAds?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE)
+                            : fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
                       },
                       onChanged: (value) {
                         print('on change');
@@ -1157,7 +1168,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
               ),
               GestureDetector(
                 onTap: () {
-                  print('sentuh aku $orientation');
+                  print('ORIENTATION: TRIGGER $orientation');
+                  fAliplayer?.pause();
 
                   if (orientation == Orientation.portrait) {
                     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
@@ -1166,6 +1178,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
                     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
                   }
+                  fAliplayer?.play();
+                  print('ORIENTATION: DONE $orientation');
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(19.0),
