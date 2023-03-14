@@ -296,8 +296,8 @@ class ShowGeneralDialog {
     );
   }
 
-  static Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false, bool isInAppAds = false}) async {
-    if(isInAppAds){
+  static Future adsPopUp(BuildContext context, AdsData data, String auth, {bool isSponsored = false, bool isInAppAds = false}) async {
+    if (isInAppAds) {
       SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, context.getCurrentDate());
     }
     await showGeneralDialog(
@@ -308,15 +308,14 @@ class ShowGeneralDialog {
       transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (context, animation, secondAnimation) => AdsPopUpDialog(
         data: data,
-        urlAds: url,
+        auth: auth,
         isSponsored: isSponsored,
       ),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
-        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+        return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
       },
     );
-
   }
 
   static Future remarkWidthdrawal(BuildContext context) async {

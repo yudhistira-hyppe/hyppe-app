@@ -671,19 +671,19 @@ class HomeNotifier with ChangeNotifier {
       try {
         final notifier = PostsBloc();
 
-        await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
-
+        // await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
+        await notifier.getAuthApsara(context, apsaraId: ads.videoId ?? '');
         final fetch = notifier.postsFetch;
 
         if (fetch.postsState == PostsState.videoApsaraSuccess) {
           Map jsonMap = json.decode(fetch.data.toString());
           print('jsonMap video Apsara : $jsonMap');
-          final adsUrl = jsonMap['PlayUrl'];
+          final auth = jsonMap['PlayAuth'];
           // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
           print('get Ads Video');
           final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
           // if (!isShowAds) {
-          System().adsPopUp(context, ads, adsUrl, isInAppAds: isInAppAds);
+          System().adsPopUp(context, ads, auth, isInAppAds: isInAppAds);
           // }
 
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];

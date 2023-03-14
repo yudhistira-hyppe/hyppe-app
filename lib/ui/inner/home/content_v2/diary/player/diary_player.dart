@@ -1,38 +1,23 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/constants/shared_preference_keys.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
-import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/diary_sensitive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/left_items.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/title_playlist_diaries.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/bottom_item_view.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/bottom_user_tag.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/top_item_view.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -153,8 +138,6 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       };
       fAliplayer?.setConfig(configMap);
 
-      print("Hahahaha $_videoDuration");
-
       _animationController = AnimationController(
         /// [AnimationController]s can be created with `vsync: this` because of
         /// [TickerProviderStateMixin].
@@ -164,7 +147,6 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
           setState(() {});
         });
 
-      _playMode = ModeTypeAliPLayer.auth;
       // if (widget.data?.apsaraId != '') {
       // } else {
       //   _playMode = ModeTypeAliPLayer.url;
@@ -227,6 +209,32 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
             playAuth: auth,
             definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
             previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
+        setState(() {
+          isloading = false;
+        });
+        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      setState(() {
+        isloading = false;
+      });
+      // 'Failed to fetch ads data $e'.logger();
+    }
+  }
+
+  Future getOldVideoUrl() async {
+    setState(() {
+      isloading = true;
+    });
+    try {
+      final notifier = PostsBloc();
+      await notifier.getOldVideo(context, apsaraId: widget.argument.diaryData?[_curIdx].postID ?? '');
+      final fetch = notifier.postsFetch;
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+
+        fAliplayer?.setUrl(jsonMap['data']['url']);
+
         setState(() {
           isloading = false;
         });
@@ -619,6 +627,12 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     var notifier = context.read<DiariesPlaylistNotifier>();
     notifier.initState(context, widget.argument);
     _listData = notifier.listData;
+    if (_listData?[_curIdx].isApsara ?? false) {
+      _playMode = ModeTypeAliPLayer.auth;
+    } else {
+      _playMode = ModeTypeAliPLayer.url;
+    }
+
     start();
   }
 
@@ -627,7 +641,12 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     _animationController?.reset();
     fAliplayer?.stop();
     isPlay = false;
-    await getAuth(_listData?[_curIdx].apsaraId ?? '');
+    if (_playMode == ModeTypeAliPLayer.auth) {
+      await getAuth(_listData?[_curIdx].apsaraId ?? '');
+    } else {
+      await getOldVideoUrl();
+    }
+
     setState(() {
       _isPause = false;
       _isFirstRenderShow = false;

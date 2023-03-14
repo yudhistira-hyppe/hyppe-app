@@ -62,6 +62,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   ModeTypeAliPLayer? _playMode;
   Map<String, dynamic>? _dataSourceMap;
   Map<String, dynamic>? _dataSourceAdsMap;
+  String urlVid = '';
 
   bool isPlay = false;
   bool onTapCtrl = false;
@@ -135,7 +136,12 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    getAuth();
+    if (widget.playMode == ModeTypeAliPLayer.auth) {
+      getAuth();
+    } else {
+      getOldVideoUrl();
+    }
+
     fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: "0");
 
     WidgetsBinding.instance.addObserver(this);
@@ -198,6 +204,33 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     setState(() {
       isloading = false;
     });
+  }
+
+  Future getOldVideoUrl() async {
+    setState(() {
+      isloading = true;
+    });
+    try {
+      final notifier = PostsBloc();
+      await notifier.getOldVideo(context, apsaraId: widget.data?.postID ?? '');
+      final fetch = notifier.postsFetch;
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        print("iyyiyiyiyiyi $jsonMap");
+        print("iyyiyiyiyiyi $jsonMap['data']['url]");
+        urlVid = jsonMap['data']['url'];
+
+        setState(() {
+          isloading = false;
+        });
+        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      setState(() {
+        isloading = false;
+      });
+      // 'Failed to fetch ads data $e'.logger();
+    }
   }
 
   _initListener() async {
@@ -744,7 +777,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     fAliplayer?.setPlayerView(viewId);
     switch (_playMode) {
       case ModeTypeAliPLayer.url:
-        fAliplayer?.setUrl(_dataSourceMap?[DataSourceRelated.urlKey]);
+        fAliplayer?.setUrl(urlVid);
         break;
       case ModeTypeAliPLayer.sts:
         fAliplayer?.setVidSts(

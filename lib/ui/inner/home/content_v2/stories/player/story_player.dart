@@ -117,7 +117,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   List<StoriesGroup>? _groupUserStories;
 
-  PageController? _pageController;
+  late PageController? _pageController;
 
   int _curIdx = 0;
   int _curChildIdx = 0;
@@ -145,6 +145,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             }
           },
         );
+      _curChildIdx = 0;
+
       _curIdx = widget.argument.peopleIndex.toInt();
       _lastCurIndex = widget.argument.peopleIndex.toInt();
       _pageController = PageController(initialPage: widget.argument.peopleIndex);
@@ -244,7 +246,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       isPlay = true;
     });
     fAliplayer?.setOnRenderingStart((playerId) {
-      // _animationController?.forward();
+      _animationController?.forward();
 
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
     });
@@ -259,7 +261,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             _showLoading = false;
             isPause = false;
           });
-          // _animationController?.forward();
+          _animationController?.forward();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
@@ -495,6 +497,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             start();
           }
           _lastCurIndex = _curIdx;
+          _curChildIdx = 0;
         },
         itemBuilder: (context, index) {
           return Stack(
@@ -632,7 +635,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                         widthPlaceHolder: 112,
                         heightPlaceHolder: 40,
                         imageUrl: (_groupUserStories?[_curIdx].story?[_curChildIdx].isApsara ?? false)
-                            ? "${_groupUserStories?[_curIdx].story?[_curChildIdx].media?.imageInfo?[0].url}"
+                            ? (_groupUserStories?[_curIdx].story?[_curChildIdx].media) == null
+                                ? "${_groupUserStories?[_curIdx].story?[_curChildIdx].mediaUri}"
+                                : "${_groupUserStories?[_curIdx].story?[_curChildIdx].media?.imageInfo?[0].url}"
                             : "${_groupUserStories?[_curIdx].story?[_curChildIdx].fullThumbPath}",
                         imageBuilder: (context, imageProvider) {
                           if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {}
@@ -706,7 +711,11 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     isPlay = false;
 
     if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'video') {
-      await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].apsaraId ?? '');
+      if (_playMode == ModeTypeAliPLayer.auth) {
+        await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].apsaraId ?? '');
+      } else {
+        await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].apsaraId ?? '');
+      }
       setState(() {
         _isPause = false;
         _isFirstRenderShow = false;

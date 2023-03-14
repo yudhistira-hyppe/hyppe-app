@@ -83,7 +83,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     final activity = DeviceBloc();
 
     print("Status Lifecycle: $state");
-    try{
+    try {
       final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
       if (state == AppLifecycleState.inactive) {
         if (notifier.listMusics.isNotEmpty || notifier.listExpMusics.isNotEmpty) {
@@ -153,10 +153,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           DynamicLinkService.handleDynamicLinks();
         });
       }
-    }catch(e, s){
+    } catch (e, s) {
       'error lifecycle: $e --- $s'.logger();
     }
-
 
     if (state == AppLifecycleState.paused) {
       // Show custom alert message or perform action
@@ -194,20 +193,38 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     final id = ads.videoId;
     if (id != null && ads.adsType != null) {
       try {
+        // final notifier = PostsBloc();
+        // await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
+
+        // final fetch = notifier.postsFetch;
+
+        // if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        //   Map jsonMap = json.decode(fetch.data.toString());
+        //   print('jsonMap video Apsara : $jsonMap');
+        //   final adsUrl = jsonMap['PlayUrl'];
+        //   // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
+        //   print('get Ads Video');
+        //   final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+        //   if (!isShowAds) {
+        //     System().adsPopUp(context, ads, adsUrl);
+        //   }
+
+        //   // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+        // }
         final notifier = PostsBloc();
-        await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
+        await notifier.getAuthApsara(context, apsaraId: ads.videoId ?? '');
 
         final fetch = notifier.postsFetch;
-
         if (fetch.postsState == PostsState.videoApsaraSuccess) {
           Map jsonMap = json.decode(fetch.data.toString());
           print('jsonMap video Apsara : $jsonMap');
-          final adsUrl = jsonMap['PlayUrl'];
+          final auth = jsonMap['PlayAuth'];
           // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
           print('get Ads Video');
           final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+          print("---------- $isShowAds");
           if (!isShowAds) {
-            System().adsPopUp(context, ads, adsUrl);
+            System().adsPopUp(context, ads, auth);
           }
 
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];

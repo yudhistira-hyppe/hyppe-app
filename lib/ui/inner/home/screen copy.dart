@@ -1,10 +1,14 @@
+import 'package:flutter/services.dart';
+import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
+import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
 import 'package:hyppe/ui/inner/home/widget/filter.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -21,14 +25,14 @@ import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
 import 'package:move_to_background/move_to_background.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeScreenOld extends StatefulWidget {
+  const HomeScreenOld({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeScreenOldState createState() => _HomeScreenOldState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin {
+class _HomeScreenOldState extends State<HomeScreenOld> with RouteAware, AfterFirstLayoutMixin {
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
 

@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/widget/profile.dart';
@@ -12,14 +13,18 @@ class HomeAppBar extends StatelessWidget {
     return AppBar(
       centerTitle: false,
       automaticallyImplyLeading: false,
+      backgroundColor: Colors.white,
       actions: const [
         // Doku(),
         Profile(),
         // AliPlayer(),
         sixteenPx,
       ],
-      title:
-          const CustomIconWidget(iconData: "${AssetPath.vectorPath}hyppe.svg"),
+      title: Text(
+        "Halo, Natalia!",
+        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+      ),
+      // const CustomIconWidget(iconData: "${AssetPath.vectorPath}hyppe.svg"),
     );
   }
 }

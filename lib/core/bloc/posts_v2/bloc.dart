@@ -480,4 +480,30 @@ class PostsBloc {
       methodType: MethodType.get,
     );
   }
+
+  Future getOldVideo(
+    BuildContext context, {
+    required String apsaraId,
+  }) async {
+    setPostsFetch(PostsFetch(PostsState.loading));
+    var url = UrlConstants.oldVideo + apsaraId;
+
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setPostsFetch(PostsFetch(PostsState.videoApsaraError));
+        } else {
+          setPostsFetch(PostsFetch(PostsState.videoApsaraSuccess, data: onResult));
+        }
+      },
+      (errorData) {
+        setPostsFetch(PostsFetch(PostsState.videoApsaraError));
+      },
+      withAlertMessage: false,
+      withCheckConnection: true,
+      host: url,
+      methodType: MethodType.get,
+    );
+  }
 }

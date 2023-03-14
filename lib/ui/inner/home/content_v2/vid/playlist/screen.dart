@@ -87,7 +87,7 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                     Container(
                       color: Colors.black,
                       child: PlayerPage(
-                        playMode: ModeTypeAliPLayer.auth,
+                        playMode: (widget.arguments.vidData?.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                         dataSourceMap: map,
                         data: widget.arguments.vidData,
                         height: height,

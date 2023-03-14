@@ -426,4 +426,7 @@ class UrlConstants {
   static const String ticketComments = "/api/usertickets/comment";
   static const String replyComment = "/api/usertickets/reply";
   static const String reportHistories = "/api/reportuser/listreport";
+
+  // Get Old Video
+  static const String oldVideo = "/stream/v2?postid=";
 }
