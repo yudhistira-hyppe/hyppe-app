@@ -53,15 +53,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
       builder: (_, notifier, home, __) => Container(
         width: SizeConfig.screenWidth,
         height: SizeWidget.barHyppePic,
-        margin: const EdgeInsets.only(top: 16.0, bottom: 12),
+        // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomHeaderFeature(
-              title: notifier.language.latestPicsForYou ?? '',
-              onPressed: () => notifier.navigateToSeeAll(context),
-            ),
-            eightPx,
             Expanded(
               child: context.read<ErrorService>().isInitialError(error, notifier.pic)
                   ? CustomErrorWidget(
@@ -86,7 +81,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
                           },
                           child: ListView.builder(
                             // controller: notifier.scrollController,
-                            scrollDirection: Axis.horizontal,
+                            // scrollDirection: Axis.horizontal,
                             itemCount: notifier.itemCount,
                             padding: const EdgeInsets.symmetric(horizontal: 11.5),
                             itemBuilder: (context, index) {

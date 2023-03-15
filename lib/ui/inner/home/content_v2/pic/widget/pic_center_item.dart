@@ -34,61 +34,72 @@ class PicCenterItem extends StatelessWidget {
     // 'mediaThumbEndPoint : ${data?.mediaThumbEndPoint} , ${data?.mediaEndpoint}. ${data?.postID}'.logger();
     return GestureDetector(
       onTap: onTap as void Function()?,
-      child: Stack(
-        children: [
-          CustomBaseCacheImage(
-            memCacheWidth: 100,
-            memCacheHeight: 100,
-            widthPlaceHolder: 80,
-            heightPlaceHolder: 80,
-            imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : "${data?.fullThumbPath}",
-            imageBuilder: (context, imageProvider) => Container(
-              margin: margin,
-              // const EdgeInsets.symmetric(horizontal: 4.5),
-              width: _scaling,
-              height: 168,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: _buildBody(context),
-            ),
-            errorWidget: (context, url, error) {
-              'errorWidget :  $error'.logger();
-              return Container(
-                margin: margin,
-                // const EdgeInsets.symmetric(horizontal: 4.5),
-                width: _scaling,
-                height: 186,
-                child: _buildBody(context),
-                decoration: BoxDecoration(
-                  image: const DecorationImage(
-                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                    fit: BoxFit.cover,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+        ),
+        padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                CustomBaseCacheImage(
+                  memCacheWidth: 100,
+                  memCacheHeight: 100,
+                  widthPlaceHolder: 80,
+                  heightPlaceHolder: 80,
+                  imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : "${data?.fullThumbPath}",
+                  imageBuilder: (context, imageProvider) => Container(
+                    margin: margin,
+                    // const EdgeInsets.symmetric(horizontal: 4.5),
+                    width: _scaling,
+                    height: 168,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: _buildBody(context),
                   ),
-                  borderRadius: BorderRadius.circular(8.0),
+                  errorWidget: (context, url, error) {
+                    'errorWidget :  $error'.logger();
+                    return Container(
+                      margin: margin,
+                      // const EdgeInsets.symmetric(horizontal: 4.5),
+                      width: _scaling,
+                      height: 186,
+                      child: _buildBody(context),
+                      decoration: BoxDecoration(
+                        image: const DecorationImage(
+                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    );
+                  },
+                  emptyWidget: Container(
+                    margin: margin,
+                    // const EdgeInsets.symmetric(horizontal: 4.5),
+                    width: _scaling,
+                    height: 186,
+                    child: _buildBody(context),
+                    decoration: BoxDecoration(
+                      image: const DecorationImage(
+                        image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
                 ),
-              );
-            },
-            emptyWidget: Container(
-              margin: margin,
-              // const EdgeInsets.symmetric(horizontal: 4.5),
-              width: _scaling,
-              height: 186,
-              child: _buildBody(context),
-              decoration: BoxDecoration(
-                image: const DecorationImage(
-                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
+              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

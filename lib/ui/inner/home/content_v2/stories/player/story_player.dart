@@ -117,7 +117,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   List<StoriesGroup>? _groupUserStories;
 
-  late PageController? _pageController;
+  late PageController _pageController;
 
   int _curIdx = 0;
   int _curChildIdx = 0;
@@ -130,8 +130,14 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   @override
   void initState() {
     print("======================ke initstate");
+
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        print("=========== ${widget.argument.peopleIndex}");
+        _pageController = PageController(initialPage: widget.argument.peopleIndex);
+      });
       _animationController = AnimationController(
         vsync: this,
       )
@@ -149,7 +155,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
       _curIdx = widget.argument.peopleIndex.toInt();
       _lastCurIndex = widget.argument.peopleIndex.toInt();
-      _pageController = PageController(initialPage: widget.argument.peopleIndex);
+
       print("initial index ${widget.argument.peopleIndex}");
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
       initStory();
@@ -711,16 +717,14 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     isPlay = false;
 
     if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'video') {
-      if (_playMode == ModeTypeAliPLayer.auth) {
-        await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].apsaraId ?? '');
-      } else {
-        await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].apsaraId ?? '');
-      }
+      fAliplayer?.destroy();
+      await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].apsaraId ?? '');
+      print("startsttt==========");
       setState(() {
         _isPause = false;
         _isFirstRenderShow = false;
       });
-
+      print("startseettt==========");
       fAliplayer?.prepare();
     } else {
       print("animasi start");

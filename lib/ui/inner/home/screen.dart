@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -149,230 +150,76 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                     delegate: SliverChildListDelegate([
                       const ProcessUploadComponent(),
                       const HyppePreviewStories(),
-                      Material(
-                        color: Colors.black,
-                        child: TabBar(
-                          controller: _tabController,
-                          indicator: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              25.0,
-                            ),
-                            color: kHyppePrimary,
+                      sixPx,
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        color: kHyppeLightSurface,
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(24),
+                            color: kHyppeLightButtonText,
                           ),
-                          labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                          labelColor: kHyppeLightButtonText,
-                          unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                          labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                          // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                          unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                          tabs: [
-                            ...List.generate(
-                              filterList.length,
-                              (index) => Padding(
-                                padding: EdgeInsets.all(9),
-                                child: Text(
-                                  filterList[index]['name'],
+                          child: TabBar(
+                            controller: _tabController,
+                            indicator: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                25.0,
+                              ),
+                              color: kHyppePrimary,
+                            ),
+                            labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                            labelColor: kHyppeLightButtonText,
+                            unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                            labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                            // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                            unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                            tabs: [
+                              ...List.generate(
+                                filterList.length,
+                                (index) => Padding(
+                                  padding: EdgeInsets.all(9),
+                                  child: Text(
+                                    filterList[index]['name'],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: [
-                            // first tab bar view widget
-                            Container(
-                                color: Colors.red,
-                                child: ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: 20,
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                      width: 100,
-                                      height: 20,
-                                      color: Colors.blue,
-                                      margin: EdgeInsets.all(10),
-                                    );
-                                  },
-                                )),
-                            Container(
-                              color: Colors.red,
-                              child: Center(
-                                child: Text(
-                                  'Bike',
-                                ),
-                              ),
-                            ),
-                            // second tab bar viiew widget
-                            Container(
-                              color: Colors.pink,
-                              child: Center(
-                                child: Text(
-                                  'Car',
-                                ),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ]),
                   ),
 
-                  // Expanded(
-                  //   child: Container(
-                  //     color: kHyppeLightSurface,
-                  //     padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-                  //     child: Column(
-                  //       children: [
-                  //         Material(
-                  //           color: Colors.black,
-                  //           child: TabBar(
-                  //             controller: _tabController,
-                  //             indicator: BoxDecoration(
-                  //               borderRadius: BorderRadius.circular(
-                  //                 25.0,
-                  //               ),
-                  //               color: kHyppePrimary,
-                  //             ),
-                  //             labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                  //             labelColor: kHyppeLightButtonText,
-                  //             unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                  //             labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                  //             // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                  //             unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                  //             tabs: [
-                  //               ...List.generate(
-                  //                 filterList.length,
-                  //                 (index) => Padding(
-                  //                   padding: EdgeInsets.all(9),
-                  //                   child: Text(
-                  //                     filterList[index]['name'],
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ],
-                  //           ),
-                  //         ),
-                  //         Expanded(
-                  //           child: TabBarView(
-                  //             controller: _tabController,
-                  //             children: [
-                  //               // first tab bar view widget
-                  //               Container(
-                  //                   color: Colors.red,
-                  //                   child: ListView.builder(
-                  //                     physics: const NeverScrollableScrollPhysics(),
-                  //                     itemCount: 20,
-                  //                     itemBuilder: (context, index) {
-                  //                       return Container(
-                  //                         width: 100,
-                  //                         height: 20,
-                  //                         color: Colors.blue,
-                  //                         margin: EdgeInsets.all(10),
-                  //                       );
-                  //                     },
-                  //                   )),
-                  //               Container(
-                  //                 color: Colors.red,
-                  //                 child: Center(
-                  //                   child: Text(
-                  //                     'Bike',
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //               // second tab bar viiew widget
-                  //               Container(
-                  //                 color: Colors.pink,
-                  //                 child: Center(
-                  //                   child: Text(
-                  //                     'Car',
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-
                   // FilterLanding(),
                   // HyppePreviewVid(),
                   // HyppePreviewDiary(),
-                  // HyppePreviewPic(),
                 ];
               },
-              body: Column(
+              body: TabBarView(
+                controller: _tabController,
                 children: [
-                  Material(
-                    color: Colors.black,
-                    child: TabBar(
-                      controller: _tabController,
-                      indicator: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          25.0,
-                        ),
-                        color: kHyppePrimary,
+                  // Pict
+                  Container(
+                    padding: const EdgeInsets.only(left: 16.0, right: 16),
+                    color: kHyppeLightSurface,
+                    child: HyppePreviewPic(),
+                  ),
+                  Container(
+                    color: Colors.red,
+                    child: Center(
+                      child: Text(
+                        'Bike',
                       ),
-                      labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                      labelColor: kHyppeLightButtonText,
-                      unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                      labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                      // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                      unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                      tabs: [
-                        ...List.generate(
-                          filterList.length,
-                          (index) => Padding(
-                            padding: EdgeInsets.all(9),
-                            child: Text(
-                              filterList[index]['name'],
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        // first tab bar view widget
-                        Container(
-                            color: Colors.red,
-                            child: ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: 20,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  width: 100,
-                                  height: 20,
-                                  color: Colors.blue,
-                                  margin: EdgeInsets.all(10),
-                                );
-                              },
-                            )),
-                        Container(
-                          color: Colors.red,
-                          child: Center(
-                            child: Text(
-                              'Bike',
-                            ),
-                          ),
-                        ),
-                        // second tab bar viiew widget
-                        Container(
-                          color: Colors.pink,
-                          child: Center(
-                            child: Text(
-                              'Car',
-                            ),
-                          ),
-                        ),
-                      ],
+                  // second tab bar viiew widget
+                  Container(
+                    color: Colors.pink,
+                    child: Center(
+                      child: Text(
+                        'Car',
+                      ),
                     ),
                   ),
                 ],
