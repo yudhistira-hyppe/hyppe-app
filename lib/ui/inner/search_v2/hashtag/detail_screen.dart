@@ -228,6 +228,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
             Expanded(
                 child: BottomDetail(
                   hashtag: widget.argument.hashtag,
+                  fromRoute: widget.argument.fromRoute,
                 ))
           ],
         ),

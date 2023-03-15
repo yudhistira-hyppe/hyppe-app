@@ -110,7 +110,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
                   onTap: () => _system.navigateToProfile(context, users?[index].email ?? '',isReplaced: false),
                   contentPadding: EdgeInsets.zero,
                   title: Text("${users?[index].fullName}"),
-                  subtitle: Text(isIndo ? (users?[index].statusID ?? '') : (users?[index].statusEN ?? ''), style: context.getTextTheme().caption,),
+                  subtitle: Text(isIndo ? (users?[index].statusID ?? '') : (users?[index].statusEN ?? ''), style: context.getTextTheme().overline,),
                   leading: StoryColorValidator(
                     haveStory: false,
                     featureType: FeatureType.pic,

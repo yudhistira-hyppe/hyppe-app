@@ -890,14 +890,14 @@ class SearchNotifier with ChangeNotifier {
 
 
 
-  List<Widget> getGridHashtag(String hashtag) {
+  List<Widget> getGridHashtag(String hashtag, bool fromRoute) {
     Map<String, List<Widget>> map = {
       'HyppeVid': [
         const GridHashtagVid(),
         if ((_detailHashTag?.vid ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty)
           SliverToBoxAdapter(
             child: Container(
-                margin: const EdgeInsets.only(bottom: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
+                margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
           )
       ],
       'HyppeDiary': [
@@ -905,7 +905,7 @@ class SearchNotifier with ChangeNotifier {
         if ((_detailHashTag?.diary ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty)
           SliverToBoxAdapter(
             child: Container(
-                margin: const EdgeInsets.only(bottom: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
+                margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
           )
       ],
       'HyppePic': [
@@ -913,7 +913,7 @@ class SearchNotifier with ChangeNotifier {
         if ((_detailHashTag?.pict ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty)
           SliverToBoxAdapter(
             child: Container(
-                margin: const EdgeInsets.only(bottom: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
+                margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
           )
       ]
     };
@@ -924,7 +924,7 @@ class SearchNotifier with ChangeNotifier {
           if ((hashtagVid ?? []).length % limitSearch == 0)
             SliverToBoxAdapter(
               child: Container(
-                margin: const EdgeInsets.only(bottom: 30),
+                margin: EdgeInsets.only(bottom: fromRoute ? 90: 30),
                   width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
             )
         ];

@@ -9,7 +9,6 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
-import 'package:hyppe/ui/constant/widget/music_status_detail_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
@@ -18,7 +17,6 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/profile_component.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_header_feature.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -67,7 +65,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
     SizeConfig().init(context);
     // final vidNotifier = context.watch<PreviewVidNotifier>();
     final error = context.select((ErrorService value) => value.getError(ErrorType.vid));
-    final likeNotifier = Provider.of<LikeNotifier>(context, listen: false);
+    // final likeNotifier = Provider.of<LikeNotifier>(context, listen: false);
 
     return Consumer3<PreviewVidNotifier, TranslateNotifierV2, HomeNotifier>(
       builder: (context, vidNotifier, translateNotifier, homeNotifier, widget) => SizedBox(
@@ -263,6 +261,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                 child: SizedBox(
                                                   width: 240,
                                                   child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       CustomDescContent(
                                                         desc: "${vidData?.description}",
@@ -283,8 +283,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                       // if(vidData?.music?.musicTitle != null)
                                                       // MusicStatusDetail(music: vidData!.music!,)
                                                     ],
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+
                                                   ),
                                                 ),
                                               ),

@@ -95,7 +95,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
                               onTap: () => _system.navigateToProfile(context, widget.users?[index].email ?? '', isReplaced: false),
                               contentPadding: EdgeInsets.zero,
                               title: Text("${widget.users?[index].fullName}"),
-                              subtitle: Text(isIndo ? (widget.users?[index].statusID ?? '') : (widget.users?[index].statusEN ?? ''), style: context.getTextTheme().caption,),
+                              subtitle: Text(isIndo ? (widget.users?[index].statusID ?? '') : (widget.users?[index].statusEN ?? ''), style: context.getTextTheme().overline,),
                               leading: StoryColorValidator(
                                 haveStory: false,
                                 featureType: FeatureType.pic,

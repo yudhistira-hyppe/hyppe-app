@@ -84,7 +84,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
 
   @override
   void didPop() {
-    'didPop searfc false'.logger();
+    'didPop searchFirst false'.logger();
     super.didPop();
   }
 
@@ -93,7 +93,10 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     Future.delayed(const Duration(milliseconds: 500), () {
       (materialAppKey.currentContext ?? context).read<ReportNotifier>().inPosition = contentPosition.searchFirst;
     });
-
+    final notifier = context.read<SearchNotifier>();
+    if(notifier.layout == SearchLayout.searchMore){
+      notifier.getDataSearch(context);
+    }
     super.didPopNext();
   }
 
@@ -106,14 +109,14 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
 
   @override
   void deactivate() {
-    'deactivate searfc false'.logger();
+    'deactivate searchFirst false'.logger();
 
     super.deactivate();
   }
 
   @override
   void didPush() {
-    'didPush searfc false'.logger();
+    'didPush searchFirst false'.logger();
     super.didPush();
   }
 
@@ -124,7 +127,12 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     return Consumer<SearchNotifier>(
       builder: (context, notifier, child) => WillPopScope(
         onWillPop: () async {
-          context.read<MainNotifier>().pageIndex = 0;
+          if(notifier.layout != SearchLayout.first){
+            notifier.layout = SearchLayout.first;
+          }else{
+            context.read<MainNotifier>().pageIndex = 0;
+          }
+
           return false;
         },
         child: _searchLayout(notifier.layout, notifier),
