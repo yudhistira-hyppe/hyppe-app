@@ -97,7 +97,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
         style: _defaultDelimiterStyle,
         recognizer: TapGestureRecognizer()..onTap = _onSeeMore);
 
-    print('desc ${widget.desc} ');
+    // print('desc ${widget.desc} ');
     Widget result = LayoutBuilder(builder: (context, constraints) {
       assert(constraints.hasBoundedWidth);
       final maxWidth = constraints.maxWidth;

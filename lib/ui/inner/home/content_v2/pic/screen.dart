@@ -79,58 +79,68 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
 
                             return true;
                           },
-                          child: ListView.builder(
-                            // controller: notifier.scrollController,
-                            // scrollDirection: Axis.horizontal,
-                            itemCount: notifier.itemCount,
-                            padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                            itemBuilder: (context, index) {
-                              if (notifier.pic == null || home.isLoadingPict) {
-                                return CustomShimmer(
-                                  width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                                  height: 168,
-                                  radius: 8,
-                                  margin: const EdgeInsets.symmetric(horizontal: 4.5),
-                                  padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                                );
-                              } else if (index == notifier.pic?.length && notifier.hasNext) {
-                                return UnconstrainedBox(
-                                  child: Container(
-                                    child: const CustomLoading(),
-                                    alignment: Alignment.center,
-                                    width: 80 * SizeConfig.scaleDiagonal,
-                                    height: 80 * SizeConfig.scaleDiagonal,
-                                  ),
-                                );
-                              }
-
-                              return PicCenterItem(
-                                data: notifier.pic?[index],
-                                // onTap: () => context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, notifier.pic![index]),
-                                // onTap: () => context.read<PicDetailNotifier>().navigateToDetailPic(notifier.pic![index]),
-                                onTap: () => context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, index),
-                                margin: const EdgeInsets.symmetric(horizontal: 4.5),
-                              );
-
-                              // if (notifier.pic != null) {
-                              //   if (notifier.pic!.data[index].isLoading == null) {
-                              //     return PicCenterItem(
-                              //       data: notifier.pic!.data[index],
-                              //       onTap: () => context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, notifier.pic!.data[index]),
-                              //     );
-                              //   } else {
-                              //     return CustomLoading();
-                              //   }
-                              // }
-
-                              // return CustomShimmer(
-                              //   width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                              //   height: 168,
-                              //   radius: 8,
-                              //   margin: const EdgeInsets.symmetric(horizontal: 4.5),
-                              //   padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                              // );
+                          child: NotificationListener<OverscrollIndicatorNotification>(
+                            onNotification: (overscroll) {
+                              overscroll.disallowIndicator();
+                              return false;
                             },
+                            child: ListView.builder(
+                              scrollDirection: Axis.vertical,
+
+                              // controller: notifier.scrollController,
+                              // scrollDirection: Axis.horizontal,
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: false,
+                              itemCount: notifier.itemCount,
+                              padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                              itemBuilder: (context, index) {
+                                if (notifier.pic == null || home.isLoadingPict) {
+                                  return CustomShimmer(
+                                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                    height: 168,
+                                    radius: 8,
+                                    margin: const EdgeInsets.symmetric(horizontal: 4.5),
+                                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                  );
+                                } else if (index == notifier.pic?.length && notifier.hasNext) {
+                                  return UnconstrainedBox(
+                                    child: Container(
+                                      child: const CustomLoading(),
+                                      alignment: Alignment.center,
+                                      width: 80 * SizeConfig.scaleDiagonal,
+                                      height: 80 * SizeConfig.scaleDiagonal,
+                                    ),
+                                  );
+                                }
+
+                                return PicCenterItem(
+                                  data: notifier.pic?[index],
+                                  // onTap: () => context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, notifier.pic![index]),
+                                  // onTap: () => context.read<PicDetailNotifier>().navigateToDetailPic(notifier.pic![index]),
+                                  onTap: () => context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, index),
+                                  margin: const EdgeInsets.symmetric(horizontal: 4.5),
+                                );
+
+                                // if (notifier.pic != null) {
+                                //   if (notifier.pic!.data[index].isLoading == null) {
+                                //     return PicCenterItem(
+                                //       data: notifier.pic!.data[index],
+                                //       onTap: () => context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, notifier.pic!.data[index]),
+                                //     );
+                                //   } else {
+                                //     return CustomLoading();
+                                //   }
+                                // }
+
+                                // return CustomShimmer(
+                                //   width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                //   height: 168,
+                                //   radius: 8,
+                                //   margin: const EdgeInsets.symmetric(horizontal: 4.5),
+                                //   padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                // );
+                              },
+                            ),
                           ),
                         ),
             )

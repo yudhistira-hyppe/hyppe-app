@@ -152,7 +152,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
           },
         );
       _curChildIdx = 0;
-
       _curIdx = widget.argument.peopleIndex.toInt();
       _lastCurIndex = widget.argument.peopleIndex.toInt();
 
@@ -161,22 +160,15 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       initStory();
 
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
-
-      WidgetsBinding.instance.addObserver(this);
-      bottomIndex = 0;
-      fAliplayer?.setAutoPlay(true);
       var configMap = {
         'mClearFrameWhenStop': true,
       };
       fAliplayer?.setConfig(configMap);
 
-      print("Hahahaha $_videoDuration");
-
+      WidgetsBinding.instance.addObserver(this);
+      bottomIndex = 0;
+      fAliplayer?.setAutoPlay(true);
       _playMode = ModeTypeAliPLayer.auth;
-      // if (widget.data?.apsaraId != '') {
-      // } else {
-      //   _playMode = ModeTypeAliPLayer.url;
-      // }
       isPlay = false;
       isPrepare = false;
       setState(() {});
@@ -205,7 +197,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   Future getAuth(String apsaraId) async {
     setState(() {
-      // isloading = true;
+      isloading = true;
     });
     try {
       final notifier = PostsBloc();
@@ -358,40 +350,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
     });
-
-    fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {
-      _thumbnailSuccess = true;
-    }, preparedFail: (playerId) {
-      _thumbnailSuccess = false;
-    });
-
-    fAliplayer?.setOnThumbnailGetListener(
-        onThumbnailGetSuccess: (bitmap, range, playerId) {
-          // _thumbnailBitmap = bitmap;
-          var provider = MemoryImage(bitmap);
-          precacheImage(provider, context).then((_) {
-            setState(() {
-              _imageProvider = provider;
-            });
-          });
-        },
-        onThumbnailGetFail: (playerId) {});
-
-    fAliplayer?.setOnSubtitleHide((trackIndex, subtitleID, playerId) {
-      if (mounted) {
-        setState(() {
-          extSubTitleText = '';
-        });
-      }
-    });
-
-    fAliplayer?.setOnSubtitleShow((trackIndex, subtitleID, subtitle, playerId) {
-      if (mounted) {
-        setState(() {
-          extSubTitleText = subtitle;
-        });
-      }
-    });
   }
 
   void storyComplete() {
@@ -400,7 +358,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       if (_curIdx == (_groupUserStories!.length - 1)) {
         Routing().moveBack();
       } else {
-        _pageController?.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+        _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
         _curChildIdx = 0;
         setState(() {});
       }
@@ -500,10 +458,10 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
           _curIdx = index;
           setState(() {});
           if (_lastCurIndex != _curIdx) {
+            _curChildIdx = 0;
             start();
           }
           _lastCurIndex = _curIdx;
-          _curChildIdx = 0;
         },
         itemBuilder: (context, index) {
           return Stack(
@@ -715,16 +673,44 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     _animationController?.reset();
     fAliplayer?.stop();
     isPlay = false;
+    print("ini index1 $_curIdx");
+    print("ini index2 $_curChildIdx");
 
     if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'video') {
-      fAliplayer?.destroy();
       await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].apsaraId ?? '');
       print("startsttt==========");
       setState(() {
         _isPause = false;
         _isFirstRenderShow = false;
       });
-      print("startseettt==========");
+      // var configMap = {
+      //   'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+      //   'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+      //   'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+      //   'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+      //   'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+      //   'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+      //   'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
+      //   'mLocalCacheDir': GlobalSettings.mDirController,
+      //   'mClearFrameWhenStop': true
+      // };
+      // // Configure the application.
+      // fAliplayer?.setConfig(configMap);
+      // var map = {
+      //   "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
+
+      //   /// The maximum space that can be occupied by the cache directory.
+      //   "mMaxDurationS": GlobalSettings.mMaxDurationSController,
+
+      //   /// The maximum cache duration of a single file.
+      //   "mDir": GlobalSettings.mDirController,
+
+      //   /// The cache directory.
+      //   "mEnable": GlobalSettings.mEnableCacheConfig
+
+      //   /// Specify whether to enable the cache feature.
+      // };
+      // fAliplayer?.setCacheConfig(map);
       fAliplayer?.prepare();
     } else {
       print("animasi start");

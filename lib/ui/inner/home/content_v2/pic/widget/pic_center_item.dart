@@ -3,14 +3,18 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/profile_component.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_bottom_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:provider/provider.dart';
@@ -39,9 +43,67 @@ class PicCenterItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           color: Colors.white,
         ),
-        padding: EdgeInsets.only(top: 20, left: 16, right: 16),
+        padding: const EdgeInsets.only(top: 20, left: 16, right: 16),
         child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // StoryColorValidator(
+                //   haveStory: haveStory,
+                //   featureType: featureType,
+                //   child: CustomProfileImage(
+                //     cacheKey: cacheKey,
+                //     width: widthCircle,
+                //     height: heightCircle,
+                //     onTap: onTapOnProfileImage,
+                //     imageUrl: imageUrl,
+                //     following: following,
+                //     onFollow: onFollow,
+                //   ),
+                // ),
+                ProfileComponent(
+                  show: true,
+                  // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
+                  onFollow: () {},
+                  following: true,
+                  haveStory: false,
+                  // username: vidData?.username,
+                  username: "Test Name",
+                  featureType: FeatureType.other,
+                  // isCelebrity: vidData?.privacy?.isCelebrity,
+                  isCelebrity: false,
+                  // imageUrl: '${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}',
+                  imageUrl:
+                      'https://cdn1-production-images-kly.akamaized.net/HVzlC2h8IkU9KlXfBqQL42n2OrE=/640x360/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/1858174/original/068844300_1517557076-Langsing-Tanpa-Diet-ala-Raisa-Andriana-Foto-Deki-Prayoga-Digital-Imaging-Muhammad-Iqbal-Nurfajri-Bintang-com.jpg',
+                  // onTapOnProfileImage: () => System().navigateToProfile(context, vidData?.email ?? '', isReplaced: false),
+                  onTapOnProfileImage: () {},
+                  createdAt: '2022-02-02',
+                  // createdAt: '${System().readTimestamp(
+                  //   DateTime.parse(System().dateTimeRemoveT(vidData?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                  //   context,
+                  //   fullCaption: true,
+                  // )}',
+                ),
+                GestureDetector(
+                  // onTap: () {
+                  //   if (vidData?.email != SharedPreference().readStorage(SpKeys.email)) {
+                  //     vidNotifier.reportContent(context, vidNotifier.vidData?[index] ?? ContentData());
+                  //   } else {
+                  //     ShowBottomSheet().onShowOptionContent(
+                  //       context,
+                  //       contentData: vidData ?? ContentData(),
+                  //       captionTitle: hyppeVid,
+                  //       onDetail: false,
+                  //       isShare: vidData?.isShared,
+                  //       onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                  //     );
+                  //   }
+                  // },
+                  child: const Icon(Icons.more_vert),
+                ),
+              ],
+            ),
             Stack(
               children: [
                 CustomBaseCacheImage(

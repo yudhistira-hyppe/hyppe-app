@@ -73,7 +73,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    print('lokasi is ${widget.location}');
+    // print('lokasi is ${widget.location}');
 
     final notifier = context.read<TranslateNotifierV2>();
     return Container(

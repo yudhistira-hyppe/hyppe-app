@@ -130,99 +130,110 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeNotifier>(
-      builder: (_, notifier, __) => WillPopScope(
-        onWillPop: () async {
-          MoveToBackground.moveTaskToBack();
-          return false;
-        },
-        child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-            child: HomeAppBar(),
-          ),
-          body: DefaultTabController(
-            length: 3,
-            child: NestedScrollView(
-              headerSliverBuilder: (context, _) {
-                return [
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      const ProcessUploadComponent(),
-                      const HyppePreviewStories(),
-                      sixPx,
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        color: kHyppeLightSurface,
-                        child: Container(
-                          padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24),
-                            color: kHyppeLightButtonText,
-                          ),
-                          child: TabBar(
-                            controller: _tabController,
-                            indicator: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                25.0,
-                              ),
-                              color: kHyppePrimary,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        textTheme: Theme.of(context).textTheme.apply(
+              bodyColor: Colors.pinkAccent, //<-- SEE HERE
+              displayColor: Colors.pinkAccent, //<-- SEE HERE
+            ),
+      ),
+      home: Consumer<HomeNotifier>(
+        builder: (_, notifier, __) => WillPopScope(
+          onWillPop: () async {
+            MoveToBackground.moveTaskToBack();
+            return false;
+          },
+          child: Scaffold(
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
+              child: HomeAppBar(),
+            ),
+            body: DefaultTabController(
+              length: 3,
+              child: NestedScrollView(
+                headerSliverBuilder: (context, _) {
+                  return [
+                    SliverList(
+                      delegate: SliverChildListDelegate([
+                        const ProcessUploadComponent(),
+                        const HyppePreviewStories(),
+                        sixPx,
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          color: kHyppeLightSurface,
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(24),
+                              color: kHyppeLightButtonText,
                             ),
-                            labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                            labelColor: kHyppeLightButtonText,
-                            unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                            labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                            // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                            unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                            tabs: [
-                              ...List.generate(
-                                filterList.length,
-                                (index) => Padding(
-                                  padding: EdgeInsets.all(9),
-                                  child: Text(
-                                    filterList[index]['name'],
+                            child: TabBar(
+                              controller: _tabController,
+                              indicator: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  25.0,
+                                ),
+                                color: kHyppePrimary,
+                              ),
+                              labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                              labelColor: kHyppeLightButtonText,
+                              unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                              labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                              // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                              unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                              tabs: [
+                                ...List.generate(
+                                  filterList.length,
+                                  (index) => Padding(
+                                    padding: EdgeInsets.all(9),
+                                    child: Text(
+                                      filterList[index]['name'],
+                                      style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ]),
-                  ),
+                      ]),
+                    ),
 
-                  // FilterLanding(),
-                  // HyppePreviewVid(),
-                  // HyppePreviewDiary(),
-                ];
-              },
-              body: TabBarView(
-                controller: _tabController,
-                children: [
-                  // Pict
-                  Container(
-                    padding: const EdgeInsets.only(left: 16.0, right: 16),
-                    color: kHyppeLightSurface,
-                    child: HyppePreviewPic(),
-                  ),
-                  Container(
-                    color: Colors.red,
-                    child: Center(
-                      child: Text(
-                        'Bike',
+                    // FilterLanding(),
+                    // HyppePreviewVid(),
+                    // HyppePreviewDiary(),
+                  ];
+                },
+                body: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    // Pict
+                    Container(
+                      padding: const EdgeInsets.only(left: 16.0, right: 16),
+                      color: kHyppeLightSurface,
+                      child: const HyppePreviewPic(),
+                    ),
+                    Container(
+                      color: Colors.red,
+                      child: Center(
+                        child: Text(
+                          'Bike',
+                        ),
                       ),
                     ),
-                  ),
-                  // second tab bar viiew widget
-                  Container(
-                    color: Colors.pink,
-                    child: Center(
-                      child: Text(
-                        'Car',
+                    // second tab bar viiew widget
+                    Container(
+                      color: Colors.pink,
+                      child: Center(
+                        child: Text(
+                          'Car',
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
