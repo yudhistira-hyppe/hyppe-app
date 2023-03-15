@@ -168,4 +168,13 @@ class DatabaseHelper {
       return 0;
     }
   }
+
+  Future<int> deleteAllThumb() async{
+    if(_db != null){
+      final query = await _db?.delete(THUMBNAIL_TABLE);
+      return query ?? 0;
+    }else{
+      return 0;
+    }
+  }
 }

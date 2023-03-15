@@ -36,8 +36,7 @@ class GridHashtagVid extends StatelessWidget {
                   final imageInfo = dataitem?.media?.videoList ?? [];
                   if (imageInfo.isNotNullAndEmpty()) {
                     thumb = (dataitem?.isApsara ?? false)
-                        ? (imageInfo[0].coverURL ??
-                        (dataitem?.mediaThumbEndPoint ?? ''))
+                        ? (dataitem?.mediaThumbEndPoint ?? '')
                         : System().showUserPicture(
                         dataitem?.mediaThumbEndPoint) ??
                         '';

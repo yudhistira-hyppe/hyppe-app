@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -37,8 +38,10 @@ class _SetNewPasswordState extends State<SetNewPassword> {
             leading: CustomIconButtonWidget(
               color: Theme.of(context).iconTheme.color,
               onPressed: (){
-                notifier.passwordConfirmController.text = '';
-                notifier.passwordController.text = '';
+                notifier.passwordConfirmController.clear();
+                notifier.passwordController.clear();
+                notifier.password = '';
+                notifier.confirmPassword = '';
                 Navigator.pop(context);
 
               },
@@ -74,7 +77,8 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                             textEditingController: notifier.passwordController,
                             style: Theme.of(context).textTheme.bodyText1,
                             obscureText: notifier.hidePassword,
-                            textInputType: TextInputType.text,
+                            inputFormatter: [ FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9!@#\$%^&*_]'))],
+                            textInputType: TextInputType.visiblePassword,
                             onChanged: (v) => notifier.password = v,
                             inputDecoration: InputDecoration(
                               counterText: '',
@@ -133,7 +137,8 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                             textEditingController: notifier.passwordConfirmController,
                             style: Theme.of(context).textTheme.bodyText1,
                             obscureText: notifier.hideConfirmPassword,
-                            textInputType: TextInputType.text,
+                            textInputType: TextInputType.visiblePassword,
+                            inputFormatter: [ FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9!@#\$%^&*_]'))],
                             onChanged: (v) => notifier.confirmPassword = v,
                             inputDecoration: InputDecoration(
                                 hintText: notifier.language.enterPassword,

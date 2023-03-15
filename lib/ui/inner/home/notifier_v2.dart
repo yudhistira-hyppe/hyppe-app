@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
 import 'package:hyppe/core/bloc/ads_video/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';

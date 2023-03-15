@@ -708,7 +708,7 @@ class System {
   saveThumbnail(String url, String id, {bool isCheck = false}) async{
     final byte = await url.getThumbBlob();
     if(byte != null){
-      'result saveThumbnail $e'.logger();
+      'result saveThumbnail'.logger();
       if(isCheck){
         final data = await globalDB.getThumbnail(id);
         if(data == null){

@@ -691,13 +691,14 @@ class SearchNotifier with ChangeNotifier {
       final lenghtPic = _detailHashTag?.pict?.length ?? 0;
       if (reload) {
         loadTagDetail = true;
-        final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailHashTag, 0, type: hyppe);
+        final _res = await _hitApiGetDetail(context, keys.toLowerCase().replaceAll(' ', ''), TypeApiSearch.detailHashTag, 0, type: hyppe);
         if (_res != null) {
           _detailHashTag = _res;
           final videos = _detailHashTag?.vid ?? [];
           final diaries = _detailHashTag?.diary ?? [];
           final pics = _detailHashTag?.pict ?? [];
           final hashtags = _detailHashTag?.tags ?? [];
+
           if (hashtags.isNotNullAndEmpty()) {
             _currentHashtag = hashtags.first;
             final extraTag = _currentHashtag;
@@ -707,15 +708,27 @@ class SearchNotifier with ChangeNotifier {
             } else {
               _countTag = count;
             }
+          }else{
+            _countTag = 0;
           }
+          // for(int i = 0; pics.length > i; i++){
+          //   final _pic = pics[i];
+          //   await pics[i].getBlob();
+          //   if(_pic.blob == null){
+          //     saveThumb(_pic);
+          //   }
+          // }
           _detailHashTag?.vid = videos;
           _detailHashTag?.diary = diaries;
           _detailHashTag?.pict = pics;
           if (pics.isNotNullAndEmpty()) {
             final data = pics[0];
-            final url = data != null ? ((data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? (data.mediaThumbEndPoint ?? '')) : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
+            final url = data != null ? ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
             _tagImageMain = url;
+          }else{
+            _tagImageMain = '';
           }
+
         }
         loadTagDetail = false;
       } else {
@@ -727,7 +740,7 @@ class SearchNotifier with ChangeNotifier {
         if (currentSkip % 12 == 0) {
           if (!hasNext) {
             hasNext = true;
-            final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailHashTag, currentSkip, type: hyppe);
+            final _res = await _hitApiGetDetail(context, keys.toLowerCase().replaceAll(' ', ''), TypeApiSearch.detailHashTag, currentSkip, type: hyppe);
             if (_res != null) {
               final videos = _res.vid;
               final diaries = _res.diary;
@@ -743,8 +756,12 @@ class SearchNotifier with ChangeNotifier {
                 }
                 // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
               } else {
-                for (final pic in pics ?? []) {
+                for (ContentData pic in pics ?? []) {
+                  // await pic.getBlob();
                   _detailHashTag?.pict?.add(pic);
+                  // if(pic.blob == null){
+                  //   saveThumb(pic);
+                  // }
                 }
                 // _hashtagPic = [...(_hashtagPic ?? []), ...(pics ?? [])];
               }
@@ -768,6 +785,18 @@ class SearchNotifier with ChangeNotifier {
       }
       if (_hasNext) {
         hasNext = false;
+      }
+    }
+  }
+
+  Future saveThumb(ContentData dataitem) async{
+    if(!(dataitem.isApsara ?? true)){
+      final imageUrl = System().showUserPicture(dataitem.mediaThumbEndPoint);
+      if(imageUrl?.isNotEmpty ?? false){
+        final id = dataitem.postID;
+        if(id != null){
+          System().saveThumbnail(imageUrl!, id);
+        }
       }
     }
   }
@@ -859,11 +888,13 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
+
+
   List<Widget> getGridHashtag(String hashtag) {
     Map<String, List<Widget>> map = {
       'HyppeVid': [
         const GridHashtagVid(),
-        if ((_detailHashTag?.vid ?? []).length % limitSearch == 0)
+        if ((_detailHashTag?.vid ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty)
           SliverToBoxAdapter(
             child: Container(
                 margin: const EdgeInsets.only(bottom: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
@@ -871,7 +902,7 @@ class SearchNotifier with ChangeNotifier {
       ],
       'HyppeDiary': [
         const GridHashtagDiary(),
-        if ((_detailHashTag?.diary ?? []).length % limitSearch == 0)
+        if ((_detailHashTag?.diary ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty)
           SliverToBoxAdapter(
             child: Container(
                 margin: const EdgeInsets.only(bottom: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
@@ -879,7 +910,7 @@ class SearchNotifier with ChangeNotifier {
       ],
       'HyppePic': [
         const GridHashtagPic(),
-        if ((_detailHashTag?.pict ?? []).length % limitSearch == 0)
+        if ((_detailHashTag?.pict ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty)
           SliverToBoxAdapter(
             child: Container(
                 margin: const EdgeInsets.only(bottom: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),

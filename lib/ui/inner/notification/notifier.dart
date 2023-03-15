@@ -243,7 +243,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 
-  void checkAndNavigateToProfile(BuildContext context, String? username) async {
+  void checkAndNavigateToProfile(BuildContext context, String? username, {bool isReplace = false}) async {
     UserProfileModel? result = null;
     try {
       if (username != null) {
@@ -254,7 +254,12 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
         if (usersFetch.userState == UserState.getUserProfilesSuccess) {
           result = usersFetch.data;
           if (result != null) {
-            Routing().move(Routes.otherProfile, argument: OtherProfileArgument(profile: result, senderEmail: result.email));
+            if(isReplace){
+              Routing().moveReplacement(Routes.otherProfile, argument: OtherProfileArgument(profile: result, senderEmail: result.email));
+            }else{
+              Routing().move(Routes.otherProfile, argument: OtherProfileArgument(profile: result, senderEmail: result.email));
+            }
+
           } else {
             throw "Couldn't find the user ";
           }

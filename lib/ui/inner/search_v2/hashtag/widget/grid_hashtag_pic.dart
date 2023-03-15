@@ -31,25 +31,33 @@ class GridHashtagPic extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index){
                 try {
+
                   final dataitem = ref.item1?.pict?[index];
                   String thumb = System().showUserPicture(dataitem?.mediaThumbEndPoint) ?? '';
-                  final imageInfo = dataitem?.media?.imageInfo;
-                  if(imageInfo.isNotNullAndEmpty()){
-                    thumb = (dataitem?.isApsara ?? false)
-                        ? ( imageInfo?[0].url ?? (dataitem?.mediaThumbEndPoint ?? ''))
-                        : System().showUserPicture(dataitem?.mediaThumbEndPoint) ?? '';
-
+                  ImageBlob? blob;
+                  if(dataitem?.blob != null){
+                    blob = ImageBlob(dataitem?.postID, data: dataitem!.blob!);
                   }else{
-                    if(!(dataitem?.isApsara ?? true)){
-                      final imageUrl = System().showUserPicture(dataitem?.mediaThumbEndPoint);
-                      if(imageUrl?.isNotEmpty ?? false){
-                        final id = dataitem?.postID;
-                        if(id != null){
-                          System().saveThumbnail(imageUrl!, id, isCheck: true);
-                        }
-                      }
+                    final imageInfo = dataitem?.media?.imageInfo;
+                    if(imageInfo.isNotNullAndEmpty()){
+                      thumb = (dataitem?.isApsara ?? false)
+                          ? (dataitem?.mediaThumbEndPoint ?? '')
+                          : System().showUserPicture(dataitem?.mediaThumbEndPoint) ?? '';
+
                     }
                   }
+
+                  // else{
+                  //   if(!(dataitem?.isApsara ?? true)){
+                  //     final imageUrl = System().showUserPicture(dataitem?.mediaThumbEndPoint);
+                  //     if(imageUrl?.isNotEmpty ?? false){
+                  //       final id = dataitem?.postID;
+                  //       if(id != null){
+                  //         System().saveThumbnail(imageUrl!, id, isCheck: true);
+                  //       }
+                  //     }
+                  //   }
+                  // }
 
                   return GestureDetector(
                     onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen3(context, ref.item1?.pict ?? [], index, HyppeType.HyppePic),
@@ -65,7 +73,7 @@ class GridHashtagPic extends StatelessWidget {
                               height: double.infinity,
                               isSale: false,
                               isSafe: true, //notifier.postData.data.listPic[index].isSafe,
-                              thumbnail: ImageUrl(dataitem?.postID, url: thumb),
+                              thumbnail: blob ?? ImageUrl(dataitem?.postID, url: thumb),
                             ),
                           ),
                           (dataitem?.saleAmount ?? 0) > 0
