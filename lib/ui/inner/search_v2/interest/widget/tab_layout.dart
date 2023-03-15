@@ -37,7 +37,6 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
       if (_scrollController.offset >= (_scrollController.position.maxScrollExtent)) {
         final notifier = context.read<SearchNotifier>();
         final key = widget.interest.id ?? ' ';
-        print("mukaaa");
         notifier.getDetailInterest(context, key.replaceAll(' ', ''), reload: false, hyppe: currentType);
 
         // final key = widget.interest.id;
