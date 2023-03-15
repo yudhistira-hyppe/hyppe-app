@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
@@ -162,6 +165,8 @@ class ContentData {
 
   bool? isReport;
 
+  Uint8List? blob;
+
   List<Boosted> boosted = [];
   int? boostCount;
   int? isBoost;
@@ -173,6 +178,8 @@ class ContentData {
   MediaModel? media;
   bool? apsara;
   bool? isShared;
+
+
 
   ContentData({
     this.metadata,
@@ -375,6 +382,16 @@ class ContentData {
       return '';
     }
   }
+
+  // Future getBlob()async{
+  //   final _postID = postID;
+  //   if(_postID != null && !(apsara ?? true)){
+  //     final data =  await globalDB.getThumbnail(_postID);
+  //     if(data != null){
+  //       blob = data.thumbnail;
+  //     }
+  //   }
+  // }
 }
 
 class Metadata {

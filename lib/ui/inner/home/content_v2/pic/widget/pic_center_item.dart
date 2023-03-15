@@ -8,6 +8,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
@@ -69,9 +70,7 @@ class PicCenterItem extends StatelessWidget {
                     featureType: FeatureType.other,
                     // isCelebrity: vidData?.privacy?.isCelebrity,
                     isCelebrity: false,
-                    // imageUrl: '${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}',
-                    imageUrl:
-                        'https://cdn1-production-images-kly.akamaized.net/HVzlC2h8IkU9KlXfBqQL42n2OrE=/640x360/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/1858174/original/068844300_1517557076-Langsing-Tanpa-Diet-ala-Raisa-Andriana-Foto-Deki-Prayoga-Digital-Imaging-Muhammad-Iqbal-Nurfajri-Bintang-com.jpg',
+                    imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
                     // onTapOnProfileImage: () => System().navigateToProfile(context, vidData?.email ?? '', isReplaced: false),
                     onTapOnProfileImage: () {},
                     createdAt: '2022-02-02',
@@ -242,7 +241,7 @@ class PicCenterItem extends StatelessWidget {
               hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
               expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 4.0),
               child: Text(
                 "Lihat semua 200 komentar",
@@ -268,10 +267,14 @@ class PicCenterItem extends StatelessWidget {
                 );
               },
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 4.0),
               child: Text(
-                "11 menit lalu",
+                "${System().readTimestamp(
+                  DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                  context,
+                  fullCaption: true,
+                )}",
                 style: TextStyle(fontSize: 12, color: kHyppeBurem),
               ),
             ),

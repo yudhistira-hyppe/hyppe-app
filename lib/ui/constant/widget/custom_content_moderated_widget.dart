@@ -90,8 +90,11 @@ class CustomContentModeratedWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-              ) : Image.memory((thumbnail as ImageBlob).data, fit: boxFitContent, width: width,
-                height: height,),
+              ) : ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                child: Image.memory((thumbnail as ImageBlob).data, fit: boxFitContent, width: width,
+                  height: height,),
+              ),
               if (featureType != FeatureType.pic)
                 CustomIconWidget(
                   defaultColor: false,

@@ -23,6 +23,7 @@ class CustomDescContent extends StatefulWidget {
   final String? seeMore;
   final String? seeLess;
   final String? delimiter;
+  final bool isReplace;
 
   final Function(bool val)? callback;
 
@@ -39,6 +40,7 @@ class CustomDescContent extends StatefulWidget {
       this.seeMore,
       this.seeLess,
       this.textOverflow,
+      this.isReplace = false,
       this.delimiter = '\u2026 '})
       : super(key: key);
 
@@ -187,6 +189,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
 
   List<TextSpan> collectDescItems(BuildContext context, List<ItemDesc> items,
       {TextSpan? spanTrim}) {
+    final callback = widget.callback;
     List<TextSpan> results = [];
     for (var item in items) {
       if (item.type == CaptionType.seeMore ||
@@ -211,18 +214,30 @@ class _CustomDescContentState extends State<CustomDescContent> {
                 : (TapGestureRecognizer()
                   ..onTap = () {
                     if (item.type == CaptionType.hashtag) {
+
+                      if(callback != null){
+                        callback(true);
+                      }
                       var fixKeyword = item.desc[0] == '#'
                           ? item.desc.substring(1, item.desc.length)
                           : item.desc;
                       fixKeyword = fixKeyword.replaceAll(',', '');
-                      Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
+                      if(widget.isReplace){
+                        Routing().moveReplacement(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
+                      }else{
+                        Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
+                      }
+
                     } else {
+                      if(callback != null){
+                        callback(true);
+                      }
                       final fixUsername = item.desc[0] == '@'
                           ? item.desc.substring(1, item.desc.length)
                           : item.desc;
                       materialAppKey.currentContext!
                           .read<NotificationNotifier>()
-                          .checkAndNavigateToProfile(context, fixUsername);
+                          .checkAndNavigateToProfile(context, fixUsername, isReplace: widget.isReplace);
                     }
                   })));
       }

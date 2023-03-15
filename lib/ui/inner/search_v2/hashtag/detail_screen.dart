@@ -154,7 +154,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   fit: BoxFit.contain,
-                                  image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
                                 ),
                               ),
                             );
@@ -165,7 +165,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 fit: BoxFit.contain,
-                                image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                                image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
                               ),
                             ),
                           ),
@@ -228,6 +228,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
             Expanded(
                 child: BottomDetail(
                   hashtag: widget.argument.hashtag,
+                  fromRoute: widget.argument.fromRoute,
                 ))
           ],
         ),

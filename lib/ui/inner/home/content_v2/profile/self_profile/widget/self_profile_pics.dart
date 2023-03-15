@@ -65,7 +65,7 @@ class SelfProfilePics extends StatelessWidget {
                                           ? const Align(
                                               alignment: Alignment.topRight,
                                               child: Padding(
-                                                padding: const EdgeInsets.all(4.0),
+                                                padding: EdgeInsets.all(4.0),
                                                 child: CustomIconWidget(
                                                   iconData: "${AssetPath.vectorPath}sale.svg",
                                                   height: 22,

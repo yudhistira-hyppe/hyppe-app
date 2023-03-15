@@ -9,7 +9,8 @@ import 'hastag_tab.dart';
 
 class BottomDetail extends StatefulWidget {
   Tags hashtag;
-  BottomDetail({Key? key, required this.hashtag}) : super(key: key);
+  bool fromRoute;
+  BottomDetail({Key? key, required this.hashtag, this.fromRoute = false}) : super(key: key);
 
   @override
   State<BottomDetail> createState() => _BottomDetailState();
@@ -89,7 +90,7 @@ class _BottomDetailState extends State<BottomDetail> {
                 controller: _scrollController,
                 scrollDirection: Axis.vertical,
                 physics: const AlwaysScrollableScrollPhysics(),
-                slivers: notifier.getGridHashtag(widget.hashtag.tag ?? '-'),
+                slivers: notifier.getGridHashtag(widget.hashtag.tag ?? '-', widget.fromRoute),
               ),
             ),
           )

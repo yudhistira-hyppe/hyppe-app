@@ -34,7 +34,6 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   late TabController _tabController;
   int _currentIndex = 0;
 
-
   @override
   void didChangeDependencies() {
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
@@ -62,7 +61,6 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
       },
     );
 
-
     if (notifier.searchContentFirstPage?.video == null) {
       Future.delayed(Duration.zero, () => notifier.onInitialSearchNew(context, FeatureType.vid));
     }
@@ -84,7 +82,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
 
   @override
   void didPop() {
-    'didPop searfc false'.logger();
+    'didPop searchFirst false'.logger();
     super.didPop();
   }
 
@@ -93,7 +91,10 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     Future.delayed(const Duration(milliseconds: 500), () {
       (materialAppKey.currentContext ?? context).read<ReportNotifier>().inPosition = contentPosition.searchFirst;
     });
-
+    final notifier = context.read<SearchNotifier>();
+    if (notifier.layout == SearchLayout.searchMore) {
+      notifier.getDataSearch(context);
+    }
     super.didPopNext();
   }
 
@@ -106,14 +107,14 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
 
   @override
   void deactivate() {
-    'deactivate searfc false'.logger();
+    'deactivate searchFirst false'.logger();
 
     super.deactivate();
   }
 
   @override
   void didPush() {
-    'didPush searfc false'.logger();
+    'didPush searchFirst false'.logger();
     super.didPush();
   }
 
@@ -124,7 +125,11 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     return Consumer<SearchNotifier>(
       builder: (context, notifier, child) => WillPopScope(
         onWillPop: () async {
-          context.read<MainNotifier>().pageIndex = 0;
+          if (notifier.layout != SearchLayout.first) {
+            notifier.layout = SearchLayout.first;
+          } else {
+            context.read<MainNotifier>().pageIndex = 0;
+          }
           return false;
         },
         child: _searchLayout(notifier.layout, notifier),
@@ -132,7 +137,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     );
   }
 
-  Widget _firstLayout(SearchNotifier notifier){
+  Widget _firstLayout(SearchNotifier notifier) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: PreferredSize(
@@ -153,16 +158,18 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
                   contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
                   focusNode: notifier.focusNode1,
                   controller: notifier.searchController1,
-                  onTap: (){
+                  onTap: () {
                     notifier.layout = SearchLayout.search;
                   },
                 ),
               ),
               const HashtagScreen(),
-              InterestScreen(onClick: (value){
-                notifier.selectedInterest = value;
-                notifier.layout = SearchLayout.interestDetail;
-              },),
+              InterestScreen(
+                onClick: (value) {
+                  notifier.selectedInterest = value;
+                  notifier.layout = SearchLayout.interestDetail;
+                },
+              ),
               sixtyFourPx,
               sixtyFourPx
             ],
@@ -172,8 +179,8 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     );
   }
 
-  Widget _searchLayout(SearchLayout state, SearchNotifier notifier){
-    switch(state){
+  Widget _searchLayout(SearchLayout state, SearchNotifier notifier) {
+    switch (state) {
       case SearchLayout.first:
         return _firstLayout(notifier);
       case SearchLayout.search:
@@ -181,27 +188,25 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
       case SearchLayout.searchMore:
         return const SearchMoreCompleteScreenV2();
       case SearchLayout.mainHashtagDetail:
-        if(notifier.selectedHashtag != null){
-          return DetailHashtagScreen(argument: HashtagArgument(isTitle: true, hashtag: notifier.selectedHashtag!),);
-        }else{
+        if (notifier.selectedHashtag != null) {
+          return DetailHashtagScreen(
+            argument: HashtagArgument(isTitle: true, hashtag: notifier.selectedHashtag!),
+          );
+        } else {
           return _firstLayout(notifier);
         }
       case SearchLayout.hashtagDetail:
-        if(notifier.selectedHashtag != null){
+        if (notifier.selectedHashtag != null) {
           return DetailHashtagScreen(argument: HashtagArgument(isTitle: false, hashtag: notifier.selectedHashtag!));
-        }else{
+        } else {
           return _firstLayout(notifier);
         }
       case SearchLayout.interestDetail:
-        if(notifier.selectedInterest != null){
+        if (notifier.selectedInterest != null) {
           return InterestDetailScreen(data: notifier.selectedInterest!);
-        }else{
+        } else {
           return _firstLayout(notifier);
         }
-
-
     }
   }
-
-
 }

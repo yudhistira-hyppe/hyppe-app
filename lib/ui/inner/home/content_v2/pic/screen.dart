@@ -104,10 +104,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
                                 } else if (index == notifier.pic?.length && notifier.hasNext) {
                                   return UnconstrainedBox(
                                     child: Container(
-                                      child: const CustomLoading(),
                                       alignment: Alignment.center,
                                       width: 80 * SizeConfig.scaleDiagonal,
                                       height: 80 * SizeConfig.scaleDiagonal,
+                                      child: const CustomLoading(),
                                     ),
                                   );
                                 }
