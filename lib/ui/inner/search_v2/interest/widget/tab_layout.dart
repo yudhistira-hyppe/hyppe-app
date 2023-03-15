@@ -100,7 +100,9 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                         child: InkWell(
                           onTap: () {
                             setState((){
+
                               currentType = e;
+                              _scrollController..animateTo(0, duration: Duration(milliseconds: 70), curve: Curves.fastOutSlowIn);
                             });
                           },
                           borderRadius: const BorderRadius.all(Radius.circular(18)),

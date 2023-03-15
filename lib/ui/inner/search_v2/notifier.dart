@@ -736,35 +736,38 @@ class SearchNotifier with ChangeNotifier {
             ? lenghtVid
             : hyppe == HyppeType.HyppeDiary
             ? lenghtDiary
-            : lenghtPic;
+            : hyppe == HyppeType.HyppePic ? lenghtPic : 0;
         if (currentSkip % 12 == 0) {
           if (!hasNext) {
             hasNext = true;
             final _res = await _hitApiGetDetail(context, keys.toLowerCase().replaceAll(' ', ''), TypeApiSearch.detailHashTag, currentSkip, type: hyppe);
             if (_res != null) {
-              final videos = _res.vid;
-              final diaries = _res.diary;
-              final pics = _res.pict;
-              if (hyppe == HyppeType.HyppeVid) {
-                for (final video in videos ?? []) {
-                  _detailHashTag?.vid?.add(video);
+              if(currentSkip != 0){
+                final videos = _res.vid;
+                final diaries = _res.diary;
+                final pics = _res.pict;
+                if (hyppe == HyppeType.HyppeVid) {
+                  for (final video in videos ?? []) {
+                    _detailHashTag?.vid?.add(video);
+                  }
+                  // _hashtagVid = [...(_hashtagVid ?? []), ...(videos ?? [])];
+                } else if (hyppe == HyppeType.HyppeDiary) {
+                  for (final diary in diaries ?? []) {
+                    _detailHashTag?.diary?.add(diary);
+                  }
+                  // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
+                } else if (hyppe == HyppeType.HyppePic){
+                  for (ContentData pic in pics ?? []) {
+                    // await pic.getBlob();
+                    _detailHashTag?.pict?.add(pic);
+                    // if(pic.blob == null){
+                    //   saveThumb(pic);
+                    // }
+                  }
+                  // _hashtagPic = [...(_hashtagPic ?? []), ...(pics ?? [])];
                 }
-                // _hashtagVid = [...(_hashtagVid ?? []), ...(videos ?? [])];
-              } else if (hyppe == HyppeType.HyppeDiary) {
-                for (final diary in diaries ?? []) {
-                  _detailHashTag?.diary?.add(diary);
-                }
-                // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
-              } else {
-                for (ContentData pic in pics ?? []) {
-                  // await pic.getBlob();
-                  _detailHashTag?.pict?.add(pic);
-                  // if(pic.blob == null){
-                  //   saveThumb(pic);
-                  // }
-                }
-                // _hashtagPic = [...(_hashtagPic ?? []), ...(pics ?? [])];
               }
+
             }
           }
         }
@@ -839,31 +842,34 @@ class SearchNotifier with ChangeNotifier {
             ? lenghtVid
             : hyppe == HyppeType.HyppeDiary
                 ? lenghtDiary
-                : lenghtPic;
+                : hyppe == HyppeType.HyppePic ? lenghtPic : 0;
         if (currentSkip % 12 == 0) {
           if (!hasNext) {
             hasNext = true;
             final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, currentSkip, type: hyppe);
             if (_res != null) {
-              final videos = _res.vid;
-              final diaries = _res.diary;
-              final pics = _res.pict;
-              if (hyppe == HyppeType.HyppeVid) {
-                for (final video in videos ?? []) {
-                  interestContents[keys]?.vid?.add(video);
+              if(currentSkip != 0){
+                final videos = _res.vid;
+                final diaries = _res.diary;
+                final pics = _res.pict;
+                if (hyppe == HyppeType.HyppeVid) {
+                  for (final video in videos ?? []) {
+                    interestContents[keys]?.vid?.add(video);
+                  }
+                  // _hashtagVid = [...(_hashtagVid ?? []), ...(videos ?? [])];
+                } else if (hyppe == HyppeType.HyppeDiary) {
+                  for (final diary in diaries ?? []) {
+                    interestContents[keys]?.diary?.add(diary);
+                  }
+                  // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
+                } else if (hyppe == HyppeType.HyppePic){
+                  for (final pic in pics ?? []) {
+                    interestContents[keys]?.pict?.add(pic);
+                  }
+                  // _hashtagPic = [...(_hashtagPic ?? []), ...(pics ?? [])];
                 }
-                // _hashtagVid = [...(_hashtagVid ?? []), ...(videos ?? [])];
-              } else if (hyppe == HyppeType.HyppeDiary) {
-                for (final diary in diaries ?? []) {
-                  interestContents[keys]?.diary?.add(diary);
-                }
-                // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
-              } else {
-                for (final pic in pics ?? []) {
-                  interestContents[keys]?.pict?.add(pic);
-                }
-                // _hashtagPic = [...(_hashtagPic ?? []), ...(pics ?? [])];
               }
+
             }
           }
         }
@@ -952,7 +958,7 @@ class SearchNotifier with ChangeNotifier {
           "listvid": true,
           "listdiary": true,
           "listpict": true,
-          "skip": currentSkip,
+          "skip": 0,
           "limit": limitSearch,
         };
       }
@@ -1037,7 +1043,7 @@ class SearchNotifier with ChangeNotifier {
             "listdiary": false,
             "listpict": false,
             "listtag": false,
-            "skip": currentSkip,
+            "skip": reload ? 0 :currentSkip,
             "limit": limitSearch,
           };
           await _hitApiGetSearchData(context, param, typeSearch, reload);
@@ -1051,7 +1057,7 @@ class SearchNotifier with ChangeNotifier {
             "listdiary": false,
             "listpict": false,
             "listtag": true,
-            "skip": currentSkip,
+            "skip": reload ? 0 : currentSkip,
             "limit": limitSearch,
           };
           await _hitApiGetSearchData(context, param, typeSearch, reload);
