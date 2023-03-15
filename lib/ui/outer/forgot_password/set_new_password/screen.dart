@@ -68,7 +68,6 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                           thirtySixPx,
                           CustomTextFormField(
                             // focusNode: notifier.passwordFocus,
-                            maxLength: 20,
                             obscuringCharacter: '*',
                             inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
                             inputAreaWidth: SizeConfig.screenWidth!,
@@ -78,6 +77,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                             textInputType: TextInputType.text,
                             onChanged: (v) => notifier.password = v,
                             inputDecoration: InputDecoration(
+                              counterText: '',
                               hintText: notifier.language.enterPassword,
                               isDense: true,
                               contentPadding: const EdgeInsets.only(right: 16, bottom: 16),
@@ -121,10 +121,10 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                               // focusedBorder:
                               // UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                             ),
+                            maxLength: 20,
                           ),
                           sixteenPx,
                           CustomTextFormField(
-                            maxLength: 20,
                             // focusNode: notifier.passwordFocus,
                             isEnabled: notifier.validationRegister(),
                             obscuringCharacter: '*',
@@ -137,6 +137,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                             onChanged: (v) => notifier.confirmPassword = v,
                             inputDecoration: InputDecoration(
                                 hintText: notifier.language.enterPassword,
+                                counterText: '',
                                 isDense: true,
                                 contentPadding: EdgeInsets.only(right: 16, bottom: !isMatch ? 0 : 16),
                                 labelText: notifier.language.rewriteNewPassword,
@@ -179,6 +180,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                                 //     UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
                                 errorText: isMatch ? null : notifier.language.passwordDoesntMatch
                             ),
+                            maxLength: 20,
                           ),
                           sixteenPx,
                           CustomTextWidget(textToDisplay: notifier.language.yourPasswordMustBeAtLeast ?? '', textStyle: TextStyle(color: context.isDarkMode() ? Colors.white : Colors.black, fontWeight: FontWeight.w700, fontSize: 16),),
