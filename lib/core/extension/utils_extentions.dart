@@ -1,6 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -141,6 +145,17 @@ extension StringDefine on String {
       return false;
     }
     return (substring(0, 1) == '#');
+  }
+
+  Future<Uint8List?> getThumbBlob() async{
+    try{
+      final ByteData data =
+      await NetworkAssetBundle(Uri.parse(this)).load(this);
+      final Uint8List bytes = data.buffer.asUint8List();
+      return bytes;
+    }catch(e){
+      'Error getThumbBlob: $e'.logger();
+    }
   }
 }
 

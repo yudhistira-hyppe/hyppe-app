@@ -57,7 +57,7 @@ class GridHashtagDiary extends StatelessWidget {
                               featureType: FeatureType.diary,
                               isSafe: true, //notifier.postData.data.listDiary[index].isSafe,
                               isSale: false,
-                              thumbnail: thumb,
+                              thumbnail: ImageUrl(dataitem?.postID, url: thumb),
                             ),
                           ),
                           (dataitem?.saleAmount ?? 0) > 0

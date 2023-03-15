@@ -68,6 +68,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                           thirtySixPx,
                           CustomTextFormField(
                             // focusNode: notifier.passwordFocus,
+                            maxLength: 20,
                             obscuringCharacter: '*',
                             inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
                             inputAreaWidth: SizeConfig.screenWidth!,
@@ -118,11 +119,12 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                               border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                               enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                               // focusedBorder:
-                              //     UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
+                              // UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                             ),
                           ),
                           sixteenPx,
                           CustomTextFormField(
+                            maxLength: 20,
                             // focusNode: notifier.passwordFocus,
                             isEnabled: notifier.validationRegister(),
                             obscuringCharacter: '*',

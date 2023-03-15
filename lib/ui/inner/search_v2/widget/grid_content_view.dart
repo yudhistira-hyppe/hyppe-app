@@ -73,7 +73,7 @@ class _GridContentViewState extends State<GridContentView> {
                                       height: double.infinity,
                                       isSale: false,
                                       isSafe: true, //notifier.postData.data.listPic[index].isSafe,
-                                      thumbnail: thumb,
+                                      thumbnail: ImageUrl(dataitem.postID, url: thumb),
                                     ),
                                   ),
                                   // SelectableText(notifier.iw tem1?.pics?[index].isApsara ?? false
@@ -125,7 +125,7 @@ class _GridContentViewState extends State<GridContentView> {
                                       featureType: FeatureType.vid,
                                       isSale: false,
                                       isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                      thumbnail: thumb,
+                                      thumbnail: ImageUrl(dataitem.postID, url: thumb),
                                     ),
                                   ),
                                   (dataitem.saleAmount ?? 0) > 0
@@ -174,7 +174,7 @@ class _GridContentViewState extends State<GridContentView> {
                                       featureType: FeatureType.vid,
                                       isSale: false,
                                       isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                      thumbnail: thumb,
+                                      thumbnail: ImageUrl(dataitem.postID, url: thumb),
                                     ),
                                   ),
                                   // SelectableText(notifier.iw tem1?.vids?[index].isApsara ?? false

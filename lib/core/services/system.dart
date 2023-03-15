@@ -14,6 +14,8 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/database/local_thumbnail.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart' as v2;
 
@@ -54,6 +56,7 @@ import 'package:story_view/story_view.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart' as intl;
 
+import '../../app.dart';
 import '../arguments/ads_argument.dart';
 import '../models/collection/advertising/ads_video_data.dart';
 import 'package:exif/exif.dart';
@@ -702,6 +705,22 @@ class System {
     return {_errorMsg: _filePickerResult};
   }
 
+  saveThumbnail(String url, String id, {bool isCheck = false}) async{
+    final byte = await url.getThumbBlob();
+    if(byte != null){
+      'result saveThumbnail $e'.logger();
+      if(isCheck){
+        final data = await globalDB.getThumbnail(id);
+        if(data == null){
+          globalDB.insertThumbnail(LocalThumbnail(id: id, thumbnail: byte));
+        }
+      }else{
+        globalDB.insertThumbnail(LocalThumbnail(id: id, thumbnail: byte));
+      }
+
+    }
+  }
+
   Future<File> rotateAndCompressAndSaveImage(File image) async {
     int rotate = 0;
     // List<int> imageBytes = await image.readAsBytes();
@@ -1134,7 +1153,9 @@ class System {
   }
 
   bool atLeastContainOneCharacterAndOneNumber({required String text}) {
-    return text.length > 1 && text.contains(RegExp(r'[0-9]'));
+    final isOneNumber = text.contains(RegExp(r'[0-9]'));
+    final isOneChar = text.contains(RegExp(r'[a-zA-Z]'));
+    return text.length > 1 && isOneNumber && isOneChar;
   }
 
   bool passwordMatch({required String password, required String confirmPassword}) {

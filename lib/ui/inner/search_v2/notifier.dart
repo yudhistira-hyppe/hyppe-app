@@ -684,7 +684,7 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  Future getDetailHashtag(BuildContext context, String keys, {reload = true, HyppeType? hyppe}) async {
+  Future getDetailHashtag(BuildContext context, String keys, {reload = true, HyppeType? hyppe}) async{
     try {
       final lenghtVid = _detailHashTag?.vid?.length ?? 0;
       final lenghtDiary = _detailHashTag?.diary?.length ?? 0;
@@ -722,8 +722,8 @@ class SearchNotifier with ChangeNotifier {
         final currentSkip = hyppe == HyppeType.HyppeVid
             ? lenghtVid
             : hyppe == HyppeType.HyppeDiary
-                ? lenghtDiary
-                : lenghtPic;
+            ? lenghtDiary
+            : lenghtPic;
         if (currentSkip % 12 == 0) {
           if (!hasNext) {
             hasNext = true;
@@ -756,6 +756,93 @@ class SearchNotifier with ChangeNotifier {
     } catch (e) {
       if (loadTagDetail) {
         loadTagDetail = false;
+      }
+      if (_hasNext) {
+        hasNext = false;
+      }
+
+      'Error getDetail: $e'.logger();
+    } finally {
+      if (loadTagDetail) {
+        loadTagDetail = false;
+      }
+      if (_hasNext) {
+        hasNext = false;
+      }
+    }
+  }
+
+  Future getDetailInterest(BuildContext context, String keys, {reload = true, HyppeType? hyppe}) async {
+    try {
+      final currentVid = interestContents[keys]?.vid ?? [];
+      final currentDairy = interestContents[keys]?.diary ?? [];
+      final currentPic = interestContents[keys]?.pict ?? [];
+      final lenghtVid = currentVid.length;
+      final lenghtDiary = currentDairy.length;
+      final lenghtPic = currentPic.length;
+      if (reload) {
+        loadIntDetail = true;
+        final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: hyppe);
+        if (_res != null) {
+          interestContents[keys] = _res;
+          // if (interest.isNotNullAndEmpty()) {
+          //   _currentHashtag = hashtags.first;
+          //   final extraTag = _currentHashtag;
+          //   final count = (extraTag != null ? (extraTag.total ?? 0) : 0);
+          //   if ((pics.isEmpty) && (diaries.isEmpty) && (videos.isEmpty)) {
+          //     _countTag = 0;
+          //   } else {
+          //     _countTag = count;
+          //   }
+          // }
+          // _detailHashTag?.vid = videos;
+          // _detailHashTag?.diary = diaries;
+          // _detailHashTag?.pict = pics;
+          // if (pics.isNotNullAndEmpty()) {
+          //   final data = pics[0];
+          //   final url = data != null ? ((data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? (data.mediaThumbEndPoint ?? '')) : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
+          //   _tagImageMain = url;
+          // }
+        }
+        loadIntDetail = false;
+      } else {
+        final currentSkip = hyppe == HyppeType.HyppeVid
+            ? lenghtVid
+            : hyppe == HyppeType.HyppeDiary
+                ? lenghtDiary
+                : lenghtPic;
+        if (currentSkip % 12 == 0) {
+          if (!hasNext) {
+            hasNext = true;
+            final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, currentSkip, type: hyppe);
+            if (_res != null) {
+              final videos = _res.vid;
+              final diaries = _res.diary;
+              final pics = _res.pict;
+              if (hyppe == HyppeType.HyppeVid) {
+                for (final video in videos ?? []) {
+                  interestContents[keys]?.vid?.add(video);
+                }
+                // _hashtagVid = [...(_hashtagVid ?? []), ...(videos ?? [])];
+              } else if (hyppe == HyppeType.HyppeDiary) {
+                for (final diary in diaries ?? []) {
+                  interestContents[keys]?.diary?.add(diary);
+                }
+                // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
+              } else {
+                for (final pic in pics ?? []) {
+                  interestContents[keys]?.pict?.add(pic);
+                }
+                // _hashtagPic = [...(_hashtagPic ?? []), ...(pics ?? [])];
+              }
+            }
+          }
+        }
+        hasNext = false;
+      }
+    } catch (e) {
+      if (loadTagDetail) {
+        loadIntDetail = false;
       }
       if (_hasNext) {
         hasNext = false;
@@ -812,110 +899,6 @@ class SearchNotifier with ChangeNotifier {
         ];
   }
 
-  Future getDetail(BuildContext context, String keys, TypeApiSearch type, {reload = true, HyppeType? hyppe}) async {
-    try {
-      if (reload) {
-        loadIntDetail = true;
-      } else {
-        hasNext = true;
-      }
-      List<ContentData> currentVid = [];
-      List<ContentData> currentDairy = [];
-      List<ContentData> currentPic = [];
-      int currentSkip = 0;
-      if (!reload) {
-        if (type == TypeApiSearch.detailHashTag) {
-          // currentVid = detailHashTag?.vid ?? [];
-          // currentDairy = detailHashTag?.diary ?? [];
-          // currentPic = detailHashTag?.pict ?? [];
-          currentVid = _hashtagVid ?? [];
-          currentDairy = _hashtagDiary ?? [];
-          currentPic = _hashtagPic ?? [];
-          final lenghtVid = currentVid.length;
-          final lenghtDiary = currentDairy.length;
-          final lenghtPic = currentPic.length;
-          currentSkip = hyppe == HyppeType.HyppeVid
-              ? lenghtVid
-              : hyppe == HyppeType.HyppeDiary
-                  ? lenghtDiary
-                  : lenghtPic;
-        } else if (type == TypeApiSearch.detailInterest) {
-          currentVid = interestContents[keys]?.vid ?? [];
-          currentDairy = interestContents[keys]?.diary ?? [];
-          currentPic = interestContents[keys]?.pict ?? [];
-          final lenghtVid = currentVid.length;
-          final lenghtDiary = currentDairy.length;
-          final lenghtPic = currentPic.length;
-          currentSkip = hyppe == HyppeType.HyppeVid
-              ? lenghtVid
-              : hyppe == HyppeType.HyppeDiary
-                  ? lenghtDiary
-                  : lenghtPic;
-        }
-        if (currentSkip % limitSearch != 0) {
-          throw 'hitApiGetDetail : preventing api because the system must reduce useless action ';
-        }
-      }
-      final _res = await _hitApiGetDetail(context, keys, type, currentSkip, type: hyppe);
-      if (_res != null) {
-        final videos = _res.vid;
-        final diaries = _res.diary;
-        final pics = _res.pict;
-        final hashtags = _res.tags;
-
-        if (type == TypeApiSearch.detailHashTag) {
-          if (!reload) {
-            if (hyppe != null) {
-              if (hyppe == HyppeType.HyppeVid) {
-                _hashtagVid = [...currentVid, ...(videos ?? [])];
-              } else if (hyppe == HyppeType.HyppeDiary) {
-                _hashtagDiary = [...currentDairy, ...(diaries ?? [])];
-              } else {
-                _hashtagPic = [...currentPic, ...(pics ?? [])];
-              }
-            } else {
-              _hashtagVid = [...currentVid, ...(videos ?? [])];
-              _hashtagDiary = [...currentDairy, ...(diaries ?? [])];
-              _hashtagPic = [...currentPic, ...(pics ?? [])];
-            }
-          } else {
-            if (hashtags.isNotNullAndEmpty()) {
-              currentHashtag = hashtags?.first;
-            }
-            _hashtagVid = videos;
-            _hashtagDiary = diaries;
-            _hashtagPic = pics;
-          }
-        } else if (type == TypeApiSearch.detailInterest) {
-          if (!reload) {
-            if (hyppe != null) {
-              if (hyppe == HyppeType.HyppeVid) {
-                interestContents[keys]?.vid = [...currentVid, ...(videos ?? [])];
-              } else if (hyppe == HyppeType.HyppeDiary) {
-                interestContents[keys]?.diary = [...currentDairy, ...(diaries ?? [])];
-              } else {
-                interestContents[keys]?.pict = [...currentPic, ...(pics ?? [])];
-              }
-            } else {
-              interestContents[keys]?.vid = [...currentVid, ...(videos ?? [])];
-              interestContents[keys]?.diary = [...currentDairy, ...(diaries ?? [])];
-              interestContents[keys]?.pict = [...currentPic, ...(pics ?? [])];
-            }
-          } else {
-            interestContents[keys] = _res;
-          }
-        }
-      }
-    } catch (e) {
-      'Error getDetail: $e'.logger();
-    } finally {
-      if (reload) {
-        loadIntDetail = false;
-      } else {
-        hasNext = true;
-      }
-    }
-  }
 
   Future<SearchContentModel?> _hitApiGetDetail(BuildContext context, String keys, TypeApiSearch typeApi, int currentSkip, {HyppeType? type}) async {
     try {

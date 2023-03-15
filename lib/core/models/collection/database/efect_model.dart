@@ -1,6 +1,5 @@
-final String databaseName = 'hyppe.db';
-final String tableEfect = 'efect';
-final int databaseVersion = 2;
+final String databaseName = 'hyppe2.db';
+final int databaseVersion = 6;
 
 class EfectFields {
   static const String effectId = 'effectId';

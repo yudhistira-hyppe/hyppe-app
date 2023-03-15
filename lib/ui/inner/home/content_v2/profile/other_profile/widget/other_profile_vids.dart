@@ -49,9 +49,9 @@ class OtherProfileVids extends StatelessWidget {
                                       isSale: false,
                                       featureType: FeatureType.vid,
                                       isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                      thumbnail: (notifier.item1?.vids?[index].isApsara ?? false)
+                                      thumbnail: ImageUrl(notifier.item1?.vids?[index].postID, url: (notifier.item1?.vids?[index].isApsara ?? false)
                                           ? (notifier.item1?.vids?[index].mediaThumbEndPoint ?? '')
-                                          : System().showUserPicture(notifier.item1?.vids?[index].mediaThumbEndPoint) ?? '',
+                                          : System().showUserPicture(notifier.item1?.vids?[index].mediaThumbEndPoint) ?? ''),
                                     ),
                                   ),
                                   (notifier.item1?.vids?[index].saleAmount ?? 0) > 0

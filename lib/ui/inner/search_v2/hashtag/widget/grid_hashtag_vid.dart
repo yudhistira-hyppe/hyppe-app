@@ -58,7 +58,7 @@ class GridHashtagVid extends StatelessWidget {
                               isSale: false,
                               featureType: FeatureType.vid,
                               isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                              thumbnail: thumb,
+                              thumbnail: ImageUrl(dataitem?.postID, url: thumb),
                             ),
                           ),
                           (dataitem?.saleAmount ?? 0) > 0

@@ -47,9 +47,9 @@ class OtherProfilePics extends StatelessWidget {
                                       height: double.infinity,
                                       isSale: false,
                                       isSafe: true, //notifier.postData.data.listPic[index].isSafe,
-                                      thumbnail: (notifier.item1?.pics?[index].isApsara ?? false)
+                                      thumbnail: ImageUrl(notifier.item1?.pics?[index].postID, url: (notifier.item1?.pics?[index].isApsara ?? false)
                                           ? (notifier.item1?.pics?[index].mediaThumbEndPoint ?? '')
-                                          : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint) ?? '',
+                                          : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint) ?? ''),
                                     ),
                                   ),
                                   (notifier.item1?.pics?[index].saleAmount ?? 0) > 0

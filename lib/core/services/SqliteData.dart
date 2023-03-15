@@ -1,6 +1,7 @@
 
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/database/efect_model.dart';
+import 'package:hyppe/core/models/collection/database/local_thumbnail.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -13,6 +14,7 @@ class DatabaseHelper {
   DatabaseHelper.internal();
 
   final String SEARCH_TABLE = 'search';
+  final String THUMBNAIL_TABLE = 'thumbnail';
 
   static Database? _db;
 
@@ -70,6 +72,13 @@ class DatabaseHelper {
         datetime TEXT
       );
         ''').then((value) => print('sukses database '));
+      await db.execute('''
+      CREATE TABLE IF NOT EXISTS $THUMBNAIL_TABLE (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id_post TEXT,
+        image BLOB
+      );
+      ''').then((value) => print('sukses database '));
     } catch (e) {
       print('gagal database $e');
     }
@@ -90,6 +99,8 @@ class DatabaseHelper {
     return data;
   }
 
+
+
   Future<SearchHistory?> getHistoryByKeyword(String keyword) async{
     List<SearchHistory> data = [];
     final initDb = await db;
@@ -105,11 +116,37 @@ class DatabaseHelper {
     return null;
   }
 
+  Future<LocalThumbnail?> getThumbnail(String id) async{
+    List<LocalThumbnail> data = [];
+    final initDb = await db;
+    try{
+      List<Map>? _res = await initDb?.query(DatabaseHelper._instance.THUMBNAIL_TABLE, where: "id_post = ?", whereArgs: [id]);
+      for(final row in _res ?? []){
+        data.add(LocalThumbnail.fromJson(row));
+      }
+      return data[0];
+    }catch(e){
+      'Error getThumbnail'.logger();
+    }
+    return null;
+  }
+
   Future<int> insertHistory(SearchHistory data) async{
     if(_db != null){
       final query = await _db?.insert(SEARCH_TABLE, data.toJson());
       return query ?? 0;
     }else{
+      return 0;
+    }
+  }
+
+  Future<int> insertThumbnail(LocalThumbnail thumb)async{
+    if(_db != null){
+      final query = await _db?.insert(THUMBNAIL_TABLE, thumb.toJson());
+      print('insertThumbnail: $query');
+      return query ?? 0;
+    }else{
+      print('Error insertThumbnail: 0');
       return 0;
     }
   }

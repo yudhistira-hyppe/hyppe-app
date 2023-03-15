@@ -29,7 +29,7 @@ class GridHashtagPic extends StatelessWidget {
           }
           return !ref.item3 ? ref.item2 == 0 ? SliverToBoxAdapter(child: SearchNoResultImage(locale: context.read<SearchNotifier>().language, keyword: tag)) : SliverGrid(
             delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
+                  (BuildContext context, int index){
                 try {
                   final dataitem = ref.item1?.pict?[index];
                   String thumb = System().showUserPicture(dataitem?.mediaThumbEndPoint) ?? '';
@@ -38,6 +38,17 @@ class GridHashtagPic extends StatelessWidget {
                     thumb = (dataitem?.isApsara ?? false)
                         ? ( imageInfo?[0].url ?? (dataitem?.mediaThumbEndPoint ?? ''))
                         : System().showUserPicture(dataitem?.mediaThumbEndPoint) ?? '';
+
+                  }else{
+                    if(!(dataitem?.isApsara ?? true)){
+                      final imageUrl = System().showUserPicture(dataitem?.mediaThumbEndPoint);
+                      if(imageUrl?.isNotEmpty ?? false){
+                        final id = dataitem?.postID;
+                        if(id != null){
+                          System().saveThumbnail(imageUrl!, id, isCheck: true);
+                        }
+                      }
+                    }
                   }
 
                   return GestureDetector(
@@ -54,7 +65,7 @@ class GridHashtagPic extends StatelessWidget {
                               height: double.infinity,
                               isSale: false,
                               isSafe: true, //notifier.postData.data.listPic[index].isSafe,
-                              thumbnail: thumb,
+                              thumbnail: ImageUrl(dataitem?.postID, url: thumb),
                             ),
                           ),
                           (dataitem?.saleAmount ?? 0) > 0

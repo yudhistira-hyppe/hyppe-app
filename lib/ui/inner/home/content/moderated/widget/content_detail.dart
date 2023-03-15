@@ -38,7 +38,7 @@ class ContentDetail extends StatelessWidget {
                     isSafe: true,
                     boxFitError: BoxFit.fill,
                     boxFitContent: BoxFit.contain,
-                    thumbnail: '${data.fullThumbPath}' + thumbnail()),
+                    thumbnail: ImageUrl(data.postID, url: '${data.fullThumbPath}' + thumbnail())),
                 CustomIconButtonWidget(
                     onPressed: () => Routing().moveBack(),
                     iconData: '${AssetPath.vectorPath}back-arrow.svg',

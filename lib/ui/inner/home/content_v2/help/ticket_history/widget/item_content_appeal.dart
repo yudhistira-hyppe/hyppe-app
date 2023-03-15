@@ -81,7 +81,7 @@ class ItemContentAppeal extends StatelessWidget {
                       height: 40,
                       isSale: false,
                       isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                      thumbnail: thumbnail,
+                      thumbnail: ImageUrl(data.postID, url: thumbnail),
                     );
                   }
                 ),
