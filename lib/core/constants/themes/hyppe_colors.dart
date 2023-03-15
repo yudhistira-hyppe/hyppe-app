@@ -69,6 +69,7 @@ const kHyppeFontSolve = Color(0xff84B122);
 const kHyppeFontNotSolve = Color(0xff7B7B7B);
 const kHyppeBgSender = Color(0xff72808B);
 const kHyppeBgReceiver = Color(0xffD3D3D3);
+const kHyppeBurem = Color(0xff9b9b9b);
 
 ///basic colors
 const kHyppeCyan = Color(0xff00A3FF);

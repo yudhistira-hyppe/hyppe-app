@@ -17,7 +17,7 @@ class HomeAppBar extends StatelessWidget {
       actions: const [
         // Doku(),
         CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}message.svg'),
-        // Profile(),
+        Profile(),
         // AliPlayer(),
         sixteenPx,
       ],

@@ -80,7 +80,7 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with Single
 
                 tabs: (notifier.listInterest ?? []).map((e) {
                   return Container(
-                    padding: EdgeInsets.fromLTRB(8.0, 20, 8, 13),
+                    padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 13),
                     child: Center(
                       child: Text(
                           context.isIndo() ? (e.interestNameId ?? '') : (e.interestName ?? ''),

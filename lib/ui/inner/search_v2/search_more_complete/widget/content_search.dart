@@ -82,7 +82,7 @@ class ContentSearchState extends State<ContentSearch> {
                                 height: double.infinity,
                                 featureType: widget.featureType ?? FeatureType.other,
                                 isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                thumbnail: gambar,
+                                thumbnail: ImageUrl(widget.content?[index].postID, url: gambar),
                               ),
                             ),
                             PicTopItem(data: widget.content?[index]),

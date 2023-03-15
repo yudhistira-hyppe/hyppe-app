@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -20,7 +21,7 @@ class GridHashtagDiary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<SearchNotifier, Tuple3<SearchContentModel?, int, bool>>(
-        selector: (_, select) =>Tuple3(select.detailHashTag, select.detailHashTag?.diary?.length ?? 0, select.isLoading),
+        selector: (_, select) =>Tuple3(select.detailHashTag, select.detailHashTag?.diary?.length ?? 0, select.loadTagDetail),
         builder: (context, ref, _) {
           String tag = '';
           if(ref.item1?.tags?.isNotEmpty ?? false){
@@ -32,9 +33,15 @@ class GridHashtagDiary extends StatelessWidget {
                 try {
                   final dataitem = ref.item1?.diary?[index];
                   String thumb = System().showUserPicture(dataitem?.mediaThumbEndPoint) ?? '';
-                  thumb = (dataitem?.isApsara ?? false)
-                      ? ( dataitem?.media?.videoList?[0].coverURL ?? (dataitem?.mediaThumbEndPoint ?? ''))
-                      : System().showUserPicture(dataitem?.mediaThumbEndPoint) ?? '';
+                  final imageInfo = dataitem?.media?.videoList ?? [];
+                  if (imageInfo.isNotNullAndEmpty()) {
+                    thumb = (dataitem?.isApsara ?? false)
+                        ? (imageInfo[0].coverURL ??
+                        (dataitem?.mediaThumbEndPoint ?? ''))
+                        : System().showUserPicture(
+                        dataitem?.mediaThumbEndPoint) ??
+                        '';
+                  }
                   return GestureDetector(
                     onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen3(context, ref.item1?.diary ?? [], index, HyppeType.HyppeDiary),
                     child: Padding(
@@ -50,7 +57,7 @@ class GridHashtagDiary extends StatelessWidget {
                               featureType: FeatureType.diary,
                               isSafe: true, //notifier.postData.data.listDiary[index].isSafe,
                               isSale: false,
-                              thumbnail: thumb,
+                              thumbnail: ImageUrl(dataitem?.postID, url: thumb),
                             ),
                           ),
                           (dataitem?.saleAmount ?? 0) > 0

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -20,7 +21,7 @@ class GridHashtagPic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<SearchNotifier, Tuple3<SearchContentModel?, int, bool>>(
-        selector: (_, select) =>Tuple3(select.detailHashTag, select.detailHashTag?.pict?.length ?? 0, select.isLoading),
+        selector: (_, select) =>Tuple3(select.detailHashTag, select.detailHashTag?.pict?.length ?? 0, select.loadTagDetail),
         builder: (context, ref, _) {
           String tag = '';
           if(ref.item1?.tags?.isNotEmpty ?? false){
@@ -28,13 +29,28 @@ class GridHashtagPic extends StatelessWidget {
           }
           return !ref.item3 ? ref.item2 == 0 ? SliverToBoxAdapter(child: SearchNoResultImage(locale: context.read<SearchNotifier>().language, keyword: tag)) : SliverGrid(
             delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
+                  (BuildContext context, int index){
                 try {
                   final dataitem = ref.item1?.pict?[index];
                   String thumb = System().showUserPicture(dataitem?.mediaThumbEndPoint) ?? '';
-                  thumb = (dataitem?.isApsara ?? false)
-                      ? ( dataitem?.media?.imageInfo?[0].url ?? (dataitem?.mediaThumbEndPoint ?? ''))
-                      : System().showUserPicture(dataitem?.mediaThumbEndPoint) ?? '';
+                  final imageInfo = dataitem?.media?.imageInfo;
+                  if(imageInfo.isNotNullAndEmpty()){
+                    thumb = (dataitem?.isApsara ?? false)
+                        ? ( imageInfo?[0].url ?? (dataitem?.mediaThumbEndPoint ?? ''))
+                        : System().showUserPicture(dataitem?.mediaThumbEndPoint) ?? '';
+
+                  }else{
+                    if(!(dataitem?.isApsara ?? true)){
+                      final imageUrl = System().showUserPicture(dataitem?.mediaThumbEndPoint);
+                      if(imageUrl?.isNotEmpty ?? false){
+                        final id = dataitem?.postID;
+                        if(id != null){
+                          System().saveThumbnail(imageUrl!, id, isCheck: true);
+                        }
+                      }
+                    }
+                  }
+
                   return GestureDetector(
                     onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen3(context, ref.item1?.pict ?? [], index, HyppeType.HyppePic),
                     child: Padding(
@@ -49,7 +65,7 @@ class GridHashtagPic extends StatelessWidget {
                               height: double.infinity,
                               isSale: false,
                               isSafe: true, //notifier.postData.data.listPic[index].isSafe,
-                              thumbnail: thumb,
+                              thumbnail: ImageUrl(dataitem?.postID, url: thumb),
                             ),
                           ),
                           (dataitem?.saleAmount ?? 0) > 0

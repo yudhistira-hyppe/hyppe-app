@@ -45,9 +45,7 @@ class HashtagItem extends StatelessWidget {
                         textAlign: TextAlign.start,
                       ),
                       Text(
-                        count > 500
-                            ? "500+ $countContainer"
-                            : "$count $countContainer",
+                        "$count $countContainer",
                         style: const TextStyle(
                             fontSize: 12, color: kHyppeGrey),
                       )

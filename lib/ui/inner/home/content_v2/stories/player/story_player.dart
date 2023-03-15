@@ -126,6 +126,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   double _playerY = 0;
   bool _isFirstRenderShow = false;
   bool _isBackgroundMode = false;
+  int loadImage = 0;
 
   @override
   void initState() {
@@ -366,7 +367,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       setState(() {
         if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
           _animationController?.duration = const Duration(milliseconds: 5000);
-          _animationController?.forward();
         }
         shown.add(_groupUserStories![_curIdx].story?[_curChildIdx].postID);
         print(shown);
@@ -384,7 +384,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     } else {
       if (_curIdx > 0) {
         shown = [];
-        _pageController?.previousPage(duration: const Duration(milliseconds: 900), curve: Curves.ease);
+        _pageController.previousPage(duration: const Duration(milliseconds: 900), curve: Curves.ease);
         _curChildIdx = 0;
         setState(() {});
       }
@@ -589,6 +589,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   Widget _buildSingleScreen(int index) {
     // VideoModel model = _dataList[index];
+    if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image' && loadImage == 1) {
+      _animationController?.forward();
+    }
     return !isPlay
         ? Stack(
             children: [
@@ -604,7 +607,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                                 : "${_groupUserStories?[_curIdx].story?[_curChildIdx].media?.imageInfo?[0].url}"
                             : "${_groupUserStories?[_curIdx].story?[_curChildIdx].fullThumbPath}",
                         imageBuilder: (context, imageProvider) {
-                          if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {}
+                          if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
+                            loadImage++;
+                          }
                           return Container(
                             clipBehavior: Clip.hardEdge,
                             width: double.infinity,
@@ -617,9 +622,29 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                                 fit: BoxFit.contain,
                               ),
                             ),
-                            // child: _buildBody(index),
                           );
                         },
+                        placeHolderWidget: Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          color: Colors.transparent,
+                          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: Center(
+                            child: SizedBox(
+                              height: 40,
+                              width: 40,
+                              child: Column(
+                                children: [
+                                  CircularProgressIndicator(
+                                    backgroundColor: Colors.white,
+                                    strokeWidth: 3.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          // child: _buildBody(index),
+                        ),
                         errorWidget: (context, url, error) => Container(
                           width: double.infinity,
                           height: double.infinity,

@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -13,7 +14,7 @@ class CustomContentModeratedWidget extends StatelessWidget {
   final bool isSale;
   final double? width;
   final double? height;
-  final String thumbnail;
+  final ImageContent thumbnail;
   final BoxFit boxFitError;
   final BoxFit boxFitContent;
   final double blurIfNotSafe;
@@ -48,9 +49,10 @@ class CustomContentModeratedWidget extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: [
+              (thumbnail is ImageUrl) ?
               CustomBaseCacheImage(
                 // cacheKey: _networklHasErrorNotifier.value.toString(),
-                imageUrl: thumbnail,
+                imageUrl: (thumbnail as ImageUrl).url,
                 memCacheWidth: 70,
                 memCacheHeight: 70,
                 imageBuilder: (_, imageProvider) {
@@ -88,7 +90,8 @@ class CustomContentModeratedWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
+              ) : Image.memory((thumbnail as ImageBlob).data, fit: boxFitContent, width: width,
+                height: height,),
               if (featureType != FeatureType.pic)
                 CustomIconWidget(
                   defaultColor: false,
@@ -144,4 +147,19 @@ class CustomContentModeratedWidget extends StatelessWidget {
       },
     );
   }
+}
+
+class ImageUrl extends ImageContent{
+  String url;
+  ImageUrl(super.id, {required this.url});
+}
+
+class ImageBlob extends ImageContent{
+  Uint8List data;
+  ImageBlob(super.id, {required this.data});
+}
+
+class ImageContent{
+  String? id;
+  ImageContent(this.id);
 }

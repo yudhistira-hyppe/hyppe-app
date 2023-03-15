@@ -191,6 +191,34 @@ class PostsBloc {
     );
   }
 
+  Future getNewContentsBlocV2(
+    BuildContext context, {
+    Map? data,
+  }) async {
+    print('getAllContentsBlocV2 paging : $data');
+    setPostsFetch(PostsFetch(PostsState.loading));
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        print("test $onResult");
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setPostsFetch(PostsFetch(PostsState.getAllContentsError));
+        } else {
+          print("test2 ${GenericResponse.fromJson(onResult.data).responseData}");
+          setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, version: onResult.data['version'], data: onResult.data));
+        }
+      },
+      (errorData) {
+        setPostsFetch(PostsFetch(PostsState.getAllContentsError));
+      },
+      data: data,
+      host: UrlConstants.getNewLandingPage,
+      withAlertMessage: false,
+      withCheckConnection: false,
+      methodType: MethodType.post,
+    );
+  }
+
   Future postContentsBlocV2(BuildContext context,
       {List<String>? tags,
       List<String>? cats,
@@ -411,18 +439,6 @@ class PostsBloc {
     final token = SharedPreference().readStorage(SpKeys.userToken);
     setPostsFetch(PostsFetch(PostsState.loading));
     String speed = 'SD';
-    speedInternet = context.read<HomeNotifier>().internetSpeed;
-    print("hasil dari home $speedInternet");
-    switch (speedInternet) {
-      case SpeedInternet.fast:
-        speed = 'SD';
-        break;
-      case SpeedInternet.medium:
-        speed = 'LD';
-        break;
-      default:
-        speed = 'FD';
-    }
 
     await _repos.reposPost(
       context,

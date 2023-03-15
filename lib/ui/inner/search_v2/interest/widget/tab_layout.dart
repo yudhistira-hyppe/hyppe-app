@@ -31,21 +31,27 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
   @override
   void initState() {
     currentType = HyppeType.HyppeVid;
+    final notifier = context.read<SearchNotifier>();
+    notifier.initDetailInterest();
     _scrollController.addListener(() {
       if (_scrollController.offset >= _scrollController.position.maxScrollExtent) {
+
         final notifier = context.read<SearchNotifier>();
-        final key = widget.interest.id;
-        final lenghtVid = notifier.interestContents[key]?.vid?.length ?? 0;
-        final lenghtDiary = notifier.interestContents[key]?.diary?.length ?? 0;
-        final lenghtPic = notifier.interestContents[key]?.pict?.length ?? 0;
-        final currentSkip =  currentType == HyppeType.HyppeVid ? lenghtVid :
-        currentType == HyppeType.HyppeDiary ? lenghtDiary : lenghtPic;
-        if(currentSkip%12 == 0){
-          final hasNext = notifier.hasNext;
-          if(!hasNext){
-            notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest, reload: false, hyppe: currentType);
-          }
-        }
+        final key = widget.interest.id ?? ' ';
+        notifier.getDetailInterest(context, key.replaceAll(' ', ''),
+            reload: false, hyppe: currentType);
+        // final key = widget.interest.id;
+        // final lenghtVid = notifier.interestContents[key]?.vid?.length ?? 0;
+        // final lenghtDiary = notifier.interestContents[key]?.diary?.length ?? 0;
+        // final lenghtPic = notifier.interestContents[key]?.pict?.length ?? 0;
+        // final currentSkip =  currentType == HyppeType.HyppeVid ? lenghtVid :
+        // currentType == HyppeType.HyppeDiary ? lenghtDiary : lenghtPic;
+        // if(currentSkip%12 == 0){
+        //   final hasNext = notifier.hasNext;
+        //   if(!hasNext){
+        //     notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest, reload: false, hyppe: currentType);
+        //   }
+        // }
       }
     });
     super.initState();
@@ -54,7 +60,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
   @override
   void afterFirstLayout(BuildContext context) {
     final notifier = context.read<SearchNotifier>();
-    notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest);
+    notifier.getDetailInterest(context, widget.interest.id ?? '');
   }
   
   @override
@@ -66,7 +72,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
     ];
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final data = notifier.interestContents[widget.interest.id];
-      return !notifier.isLoading ? Column(
+      return !notifier.loadIntDetail ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -128,7 +134,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
             child: RefreshIndicator(
               strokeWidth: 2.0,
               color: context.getColorScheme().primary,
-              onRefresh: () => notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest),
+              onRefresh: () => notifier.getDetailInterest(context, widget.interest.id ?? ''),
               child: SingleChildScrollView(
                 controller: _scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),

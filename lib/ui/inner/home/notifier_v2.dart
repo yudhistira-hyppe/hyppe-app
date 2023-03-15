@@ -3,11 +3,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
 import 'package:hyppe/core/bloc/ads_video/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
-import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
@@ -51,6 +49,10 @@ class HomeNotifier with ChangeNotifier {
   bool _isLoadingDiary = false;
   bool _isLoadingPict = false;
 
+  int skipPic = 0;
+  int skipDiary = 0;
+  int skipvid = 0;
+
   bool get isLoadingVid => _isLoadingVid;
   bool get isLoadingDiary => _isLoadingDiary;
   bool get isLoadingPict => _isLoadingPict;
@@ -78,9 +80,6 @@ class HomeNotifier with ChangeNotifier {
 
   String _select = 'PUBLIC';
   String get select => _select;
-
-  SpeedInternet _internetSpeed = SpeedInternet.medium;
-  SpeedInternet get internetSpeed => _internetSpeed;
 
   int _tabIndex = 0;
   int get tabIndex => _tabIndex;
@@ -113,11 +112,6 @@ class HomeNotifier with ChangeNotifier {
   //   _isHaveSomethingNew = val;
   //   notifyListeners();
   // }
-
-  set internetSpeed(SpeedInternet val) {
-    _internetSpeed = val;
-    notifyListeners();
-  }
 
   set isLoadingVid(bool val) {
     _isLoadingVid = val;
@@ -166,43 +160,64 @@ class HomeNotifier with ChangeNotifier {
     _sessionID = null;
   }
 
-  Ping? ping;
-  Future startPing(BuildContext context) async {
-    int index = 0;
-    double milliseconds = 0;
-    int totalmilliseconds = 0;
+  void onUpdate() => notifyListeners();
 
-    // var result = context.read<HomeNotifier>().internetSpeed;
+  Future initNewHome(BuildContext context, bool mounted) async {
+    context.read<ReportNotifier>().inPosition = contentPosition.home;
+    bool isConnected = await System().checkConnections();
+    if (isConnected) {
+      var email = SharedPreference().readStorage(SpKeys.email);
+      Map data = {"email": email, "type": "pict", "skip": 0, "limit": 15};
+      var index = _tabIndex;
+      print("tab index $_tabIndex");
 
-    try {
-      ping = Ping(
-        UrlConstants.urlPing,
-        count: 2,
-        timeout: 1,
-        interval: 1,
-        ipv6: false,
-        ttl: 40,
-      );
-      ping!.stream.listen((event) {
-        index++;
+      switch (index) {
+        case 0:
+          data['type'] = 'pict';
+          data['skip'] = skipPic;
+          break;
+        case 1:
+          data['type'] = 'diary';
+          data['skip'] = skipDiary;
+          break;
+        case 2:
+          data['type'] = 'vid';
+          data['skip'] = skipvid;
+          break;
+      }
+      if (!mounted) return;
+      final profile = Provider.of<MainNotifier>(context, listen: false);
+      final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
+      final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
+      final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
+      final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
+      final allContents = await reload(context, data);
 
-        totalmilliseconds += event.response?.time?.inMilliseconds ?? 0;
-        milliseconds = totalmilliseconds / index;
-
-        if (milliseconds < 100) {
-          internetSpeed = SpeedInternet.fast;
-        } else if (milliseconds >= 100 && milliseconds <= 170) {
-          internetSpeed = SpeedInternet.medium;
-        } else {
-          internetSpeed = SpeedInternet.slow;
+      await stories.initialStories(context);
+      if (profileImage == '') {
+        try {
+          await profile.initMain(context, onUpdateProfile: true);
+        } catch (e) {
+          'profile.initMain error $e'.logger();
         }
-      });
-    } catch (e) {
-      debugPrint('error $e');
+      }
+
+      switch (index) {
+        case 0:
+          if (!mounted) return;
+          await pic.initialPic(context, reload: true, list: allContents);
+          break;
+        case 1:
+          if (!mounted) return;
+          await diary.initialDiary(context, reload: true, list: allContents);
+          break;
+        case 2:
+          if (!mounted) return;
+          await vid.initialVid(context, reload: true, list: allContents);
+          break;
+      }
     }
   }
-
-  void onUpdate() => notifyListeners();
 
   Future initHome(BuildContext context, bool mounted) async {
     // db.initDb();
@@ -211,10 +226,6 @@ class HomeNotifier with ChangeNotifier {
     // await db.getFilterCamera();
 
     'init Home'.logger();
-    startPing(context);
-    Timer.periodic(const Duration(minutes: 1), (timer) async {
-      startPing(context);
-    });
 
     context.read<ReportNotifier>().inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
@@ -356,6 +367,37 @@ class HomeNotifier with ChangeNotifier {
     // isHaveSomethingNew = false;
   }
 
+  Future<List<ContentData>> reload(BuildContext context, Map data) async {
+    List<ContentData> res = [];
+    final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
+    'ambil semua data ${notifierMain.visibilty}'.logger();
+    // final notifier = PostsBloc();
+    //
+    // await notifier.getAllContentsBlocV2(context, pageNumber: page, visibility: notifierMain.visibilty, myContent: myContent, otherContent: otherContent);
+    // final fetch = notifier.postsFetch;
+    // '${AllContents.fromJson(fetch.data).toJson()}'.logger();
+    // res = AllContents.fromJson(fetch.data);
+    // return res;
+    try {
+      final notifier = PostsBloc();
+
+      await notifier.getNewContentsBlocV2(context, data: data);
+      final fetch = notifier.postsFetch;
+      'AllContents : ${fetch.data}'.logger();
+
+      fetch.data['data'].forEach((v) {
+        res.add(ContentData.fromJson(v));
+      });
+
+      await CheckVersion().check(context, fetch.version);
+
+      return res;
+    } catch (e) {
+      'landing page error : $e'.logger();
+      return [];
+    }
+  }
+
   Future<AllContents> allReload(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
     AllContents? res;
     final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
@@ -382,6 +424,33 @@ class HomeNotifier with ChangeNotifier {
       return AllContents(story: [], video: [], diary: [], pict: []);
     }
   }
+
+  // Future<ContentData> newLandingPage(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
+  //   AllContents? res;
+  //   final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
+  //   'ambil semua data ${notifierMain.visibilty}'.logger();
+  //   // final notifier = PostsBloc();
+  //   //
+  //   // await notifier.getAllContentsBlocV2(context, pageNumber: page, visibility: notifierMain.visibilty, myContent: myContent, otherContent: otherContent);
+  //   // final fetch = notifier.postsFetch;
+  //   // '${AllContents.fromJson(fetch.data).toJson()}'.logger();
+  //   // res = AllContents.fromJson(fetch.data);
+  //   // return res;
+  //   try {
+  //     final notifier = PostsBloc();
+
+  //     await notifier.getAllContentsBlocV2(context, pageNumber: 1, visibility: notifierMain.visibilty, myContent: myContent, otherContent: otherContent);
+  //     final fetch = notifier.postsFetch;
+  //     'AllContents : ${AllContents.fromJson(fetch.data).toJson()}'.logger();
+  //     res = AllContents.fromJson(fetch.data);
+  //     await CheckVersion().check(context, fetch.version);
+
+  //     return res;
+  //   } catch (e) {
+  //     'landing page error : $e'.logger();
+  //     return AllContents(story: [], video: [], diary: [], pict: []);
+  //   }
+  // }
 
   void onDeleteSelfPostContent(BuildContext context, {required String postID, required String content}) {
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
@@ -479,7 +548,6 @@ class HomeNotifier with ChangeNotifier {
           );
         }
       }
-
       if (_updatedData2 != null) {
         _updatedData2.tags = tags;
         _updatedData2.description = description;
@@ -507,7 +575,6 @@ class HomeNotifier with ChangeNotifier {
           }
         }
       }
-
       '${_updatedData.cats?.length}'.logger();
     }
 

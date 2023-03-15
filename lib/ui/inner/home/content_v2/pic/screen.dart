@@ -7,13 +7,12 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/services/error_service.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_header_feature.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_center_item.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class HyppePreviewPic extends StatefulWidget {
   const HyppePreviewPic({Key? key}) : super(key: key);
@@ -39,10 +38,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
     } catch (e) {
       e.logger();
     }
-
-    // TODO: implement dispose
     super.dispose();
   }
+
+  int _currentItem = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +75,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
                                 notifier.initialPic(context);
                               });
                             }
-
                             return true;
                           },
                           child: NotificationListener<OverscrollIndicatorNotification>(
@@ -93,6 +91,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
                               shrinkWrap: false,
                               itemCount: notifier.itemCount,
                               padding: const EdgeInsets.symmetric(horizontal: 11.5),
+
                               itemBuilder: (context, index) {
                                 if (notifier.pic == null || home.isLoadingPict) {
                                   return CustomShimmer(
@@ -113,32 +112,23 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
                                   );
                                 }
 
-                                return PicCenterItem(
-                                  data: notifier.pic?[index],
-                                  // onTap: () => context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, notifier.pic![index]),
-                                  // onTap: () => context.read<PicDetailNotifier>().navigateToDetailPic(notifier.pic![index]),
-                                  onTap: () => context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, index),
-                                  margin: const EdgeInsets.symmetric(horizontal: 4.5),
+                                return VisibilityDetector(
+                                  key: Key(index.toString()),
+                                  onVisibilityChanged: (info) {
+                                    if (info.visibleFraction == 1)
+                                      setState(() {
+                                        _currentItem = index;
+                                        print(_currentItem);
+                                      });
+                                  },
+                                  child: PicCenterItem(
+                                    data: notifier.pic?[index],
+                                    // onTap: () => context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, notifier.pic![index]),
+                                    // onTap: () => context.read<PicDetailNotifier>().navigateToDetailPic(notifier.pic![index]),
+                                    onTap: () => context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, index),
+                                    // margin: const EdgeInsets.symmetric(horizontal: 4.5),
+                                  ),
                                 );
-
-                                // if (notifier.pic != null) {
-                                //   if (notifier.pic!.data[index].isLoading == null) {
-                                //     return PicCenterItem(
-                                //       data: notifier.pic!.data[index],
-                                //       onTap: () => context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, notifier.pic!.data[index]),
-                                //     );
-                                //   } else {
-                                //     return CustomLoading();
-                                //   }
-                                // }
-
-                                // return CustomShimmer(
-                                //   width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                                //   height: 168,
-                                //   radius: 8,
-                                //   margin: const EdgeInsets.symmetric(horizontal: 4.5),
-                                //   padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                                // );
                               },
                             ),
                           ),

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
-import 'package:hyppe/ui/constant/widget/custom_image_assets.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/hashtag/widget/bottom_detail.dart';
@@ -79,7 +76,6 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
   void initState() {
     final notifier = context.read<SearchNotifier>();
     notifier.initDetailHashtag();
-    notifier.setLoading(true);
 
     super.initState();
   }
@@ -131,7 +127,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                     left: 16, top: 16, right: 16, bottom: 12),
                 child: Column(
                   children: [
-                    !notifier.isLoading ? Row(
+                    !notifier.loadTagDetail ? Row(
                       children: [Builder(builder: (context) {
 
                         return CustomBaseCacheImage(

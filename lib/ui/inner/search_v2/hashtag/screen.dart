@@ -7,12 +7,8 @@ import 'package:hyppe/ui/inner/search_v2/hashtag/widget/shimmer.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/arguments/hashtag_argument.dart';
 import '../../../../core/constants/size_config.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
-import '../../../../core/models/collection/search/search_content.dart';
-import '../../../../ux/path.dart';
-import '../../../../ux/routing.dart';
 
 class HashtagScreen extends StatefulWidget {
   const HashtagScreen({Key? key}) : super(key: key);
@@ -72,12 +68,12 @@ class _HashtagScreenState extends State<HashtagScreen> with AfterFirstLayoutMixi
                   count: notifier.listHashtag?[index].total ?? 0,
                   countContainer: notifier.language.posts ?? 'Posts',
                   onTap: () {
-                    // notifier.selectedHashtag = notifier.listHashtag?[index];
-                    // notifier.layout = SearchLayout.mainHashtagDetail;
-                    final data = notifier.listHashtag?[index];
-                    if(data != null){
-                      Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: true, hashtag: data, fromRoute: true));
-                    }
+                    notifier.selectedHashtag = notifier.listHashtag?[index];
+                    notifier.layout = SearchLayout.mainHashtagDetail;
+                    // final data = notifier.listHashtag?[index];
+                    // if(data != null){
+                    //   Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: true, hashtag: data, fromRoute: true));
+                    // }
                   },
                 );})
         ],
