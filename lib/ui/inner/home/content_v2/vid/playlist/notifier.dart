@@ -2,6 +2,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/query_request/users_data_query.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -19,7 +20,11 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/ux/routing.dart';
 
+import '../../../../../../core/arguments/comment_argument.dart';
+import '../../../../../../core/bloc/comment/bloc.dart';
+import '../../../../../../core/models/collection/comment_v2/comment_data_v2.dart';
 import '../../../../../../core/models/collection/localization_v2/localization_model.dart';
+import 'comments_detail/screen.dart';
 
 class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
@@ -40,6 +45,11 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   VidDetailScreenArgument? _routeArgument;
 
   ContentData? get data => _data;
+
+  set data(ContentData? value){
+    _data = value;
+    notifyListeners();
+  }
   StatusFollowing get statusFollowing => _statusFollowing;
 
   bool _checkIsLoading = false;
@@ -80,7 +90,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future<void> _initialVid(
+  _initialVid(
     BuildContext context,
   ) async {
     Future<List<ContentData>> _resFuture;
@@ -89,12 +99,18 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
     try {
       loadDetail = true;
-      'reload contentsQuery : 16'.logger();
-      _resFuture = contentsQuery.reload(context);
-      final res = await _resFuture;
-      _data = res.firstOrNull;
+
+      final res = await contentsQuery.reload(context);
+      data = res.firstOrNull;
+      if(data != null){
+        final postID = _data?.postID;
+        if(postID != null){
+          getFirstComment(context, postID);
+        }
+      }
+      'reload contentsQuery : ${_data?.toJson()}'.logger();
       loadDetail = false;
-      _checkFollowingToUser(context, autoFollow: true);
+      // _checkFollowingToUser(context, autoFollow: true);
     } catch (e) {
       loadDetail = false;
       'load vid: ERROR: $e'.logger();
@@ -237,6 +253,49 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   set loadDetail(bool state){
     _loadDetail = state;
     notifyListeners();
+  }
+
+  CommentDataV2? _firstComment;
+  CommentDataV2? get firstComment => _firstComment;
+  set firstComment(CommentDataV2? data){
+    _firstComment = data;
+    notifyListeners();
+  }
+
+  bool _loadComment = true;
+  bool get loadComment => _loadComment;
+  set loadComment(bool state){
+    _loadComment = state;
+    notifyListeners();
+  }
+
+  Future getFirstComment(BuildContext context, String postID) async{
+    try {
+      loadComment = true;
+      final param = CommentArgument()
+        ..isQuery = true
+        ..postID = postID
+        ..pageRow = 1
+        ..pageNumber = 0;
+
+      final notifier = CommentBloc();
+      await notifier.commentsBlocV2(context, argument: param);
+
+      final fetch = notifier.commentFetch;
+
+      final res = (fetch.data as List<dynamic>?)?.map((e) => CommentDataV2.fromJson(e as Map<String, dynamic>)).toList();
+      if(res.isNotNullAndEmpty()){
+        firstComment = res?.first;
+      }
+      loadComment = false;
+    } catch (e) {
+      loadComment = false;
+      '$e'.logger();
+    }
+  }
+
+  goToComments(CommentsArgument args){
+    Routing().move(Routes.commentsDetail, argument: args);
   }
   //
   // ContentData? _contentDetail;

@@ -13,6 +13,7 @@ class CommentDataV2 {
   String? email;
   String? updatedAt;
   String? username;
+  bool? isIdVerified;
 
   CommentDataV2({
     this.createdAt,
@@ -40,6 +41,7 @@ class CommentDataV2 {
     email = json['email'];
     updatedAt = json['updatedAt'];
     username = json['username'];
+    isIdVerified = json['isIdVerified'];
   }
 
   CommentDataV2.fromJsonResponse(Map<String, dynamic> json) {
@@ -54,6 +56,7 @@ class CommentDataV2 {
     email = json['email'];
     updatedAt = json['updatedAt'];
     username = json['username'];
+    isIdVerified = json['isIdVerified'];
   }
 
   Map<String, dynamic> toJson() {
@@ -70,6 +73,7 @@ class CommentDataV2 {
     data['email'] = email;
     data['updatedAt'] = updatedAt;
     data['username'] = username;
+    data['isIdVerified'] = isIdVerified;
     return data;
   }
 
@@ -137,6 +141,7 @@ class DisqusLogs {
   String? lineID;
   bool? active;
   String? updatedAt;
+  bool? isIdVerified;
 
   DisqusLogs({
     this.sequenceNumber,
@@ -148,6 +153,7 @@ class DisqusLogs {
     this.lineID,
     this.active,
     this.updatedAt,
+    this.isIdVerified
   });
 
   DisqusLogs.fromJson(Map<String, dynamic> json) {
@@ -160,6 +166,7 @@ class DisqusLogs {
     lineID = json['lineID'];
     active = json['active'];
     updatedAt = json['updatedAt'];
+    isIdVerified = json['isIdVerified'];
   }
 
   Map<String, dynamic> toJson() {
@@ -175,6 +182,7 @@ class DisqusLogs {
     data['lineID'] = lineID;
     data['active'] = active;
     data['updatedAt'] = updatedAt;
+    data['isIdVerified'] = isIdVerified;
     return data;
   }
 }
@@ -183,6 +191,7 @@ class SenderInfo {
   String? fullName;
   Avatar? avatar;
   String? username;
+  bool? isIdVerified;
 
   SenderInfo({
     this.fullName,
@@ -194,6 +203,7 @@ class SenderInfo {
     fullName = json['fullName'];
     avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
     username = json['username'];
+    isIdVerified = json['isIdVerified'];
   }
 
   Map<String, dynamic> toJson() {
@@ -203,6 +213,7 @@ class SenderInfo {
       data['avatar'] = avatar?.toJson();
     }
     data['username'] = username;
+    data['isIdVerified'] = isIdVerified;
     return data;
   }
 }
