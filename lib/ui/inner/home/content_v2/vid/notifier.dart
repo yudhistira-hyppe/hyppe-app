@@ -143,7 +143,6 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
         //     }
         //   }
         // }
-
       } else {
         'initial video'.logger();
         vidData = [...(vidData ?? [] as List<ContentData>)] + res;
