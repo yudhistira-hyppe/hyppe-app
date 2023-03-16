@@ -19,7 +19,16 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/ux/routing.dart';
 
+import '../../../../../../core/models/collection/localization_v2/localization_model.dart';
+
 class VidDetailNotifier with ChangeNotifier, GeneralMixin {
+
+  LocalizationModelV2 language = LocalizationModelV2();
+  translate(LocalizationModelV2 translate) {
+    language = translate;
+    notifyListeners();
+  }
+
   final UsersDataQuery _usersFollowingQuery = UsersDataQuery()
     ..eventType = InteractiveEventType.following
     ..withEvents = [InteractiveEvent.initial, InteractiveEvent.accept, InteractiveEvent.request];
@@ -79,13 +88,15 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     contentsQuery.postID = _routeArgument?.postID;
 
     try {
+      loadDetail = true;
       'reload contentsQuery : 16'.logger();
       _resFuture = contentsQuery.reload(context);
       final res = await _resFuture;
       _data = res.firstOrNull;
-      notifyListeners();
+      loadDetail = false;
       _checkFollowingToUser(context, autoFollow: true);
     } catch (e) {
+      loadDetail = false;
       'load vid: ERROR: $e'.logger();
     }
   }
@@ -218,4 +229,50 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     _data?.reportedStatus = '';
     notifyListeners();
   }
+
+  ///==== Detail V2 ====
+  //
+  bool _loadDetail = true;
+  bool get loadDetail => _loadDetail;
+  set loadDetail(bool state){
+    _loadDetail = state;
+    notifyListeners();
+  }
+  //
+  // ContentData? _contentDetail;
+  // ContentData? get contentDetail => _contentDetail;
+  // set contentDetail(ContentData? detail){
+  //   _contentDetail = detail;
+  //   notifyListeners();
+  // }
+  //
+  // getDetail(BuildContext context, String postID) async {
+  //   contentDetail = await getDetailPost(context, postID);
+  // }
+  //
+  // Future<ContentData?> getDetailPost(BuildContext context, String postID) async{
+  //   try{
+  //     loadDetail = true;
+  //     final notifier = PostsBloc();
+  //     await notifier.getContentsBlocV2(context,
+  //         postID: postID,
+  //         pageRows: 1,
+  //         pageNumber: 1,
+  //         type: FeatureType.pic);
+  //     final fetch = notifier.postsFetch;
+  //
+  //     final res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
+  //     loadDetail = false;
+  //     if(res != null){
+  //       return res.firstOrNull;
+  //     }else{
+  //       return null;
+  //     }
+  //   }catch(e){
+  //     loadDetail = false;
+  //     e.logger();
+  //     return null;
+  //   }
+  //
+  // }
 }

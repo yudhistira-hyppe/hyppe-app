@@ -54,11 +54,8 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
 
   @override
   Widget build(BuildContext context) {
-    var x = 0.0;
-    var y = 0.0;
     Orientation orientation = MediaQuery.of(context).orientation;
 
-    setState(() {});
     var width = MediaQuery.of(context).size.width;
     var height;
     if (orientation == Orientation.portrait) {
