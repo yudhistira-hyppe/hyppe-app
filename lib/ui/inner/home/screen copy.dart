@@ -1,14 +1,11 @@
 import 'package:flutter/services.dart';
-import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
-import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
 import 'package:hyppe/ui/inner/home/widget/filter.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';

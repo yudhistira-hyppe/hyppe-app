@@ -1,10 +1,14 @@
+import 'package:flutter/services.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/widget/filter.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -28,9 +32,15 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin {
+class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
+  late TabController _tabController;
+  List filterList = [
+    {"id": '1', 'name': "Pic"},
+    {"id": '2', 'name': "Diary"},
+    {"id": '3', 'name': "Vid"},
+  ];
 
   @override
   void didChangeDependencies() {
@@ -92,13 +102,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   void initState() {
     isHomeScreen = true;
     'isOnHomeScreen $isHomeScreen'.logger();
+    _tabController = TabController(length: 3, vsync: this);
     Future.delayed(Duration.zero, () {
       final notifier = context.read<HomeNotifier>();
       notifier.setSessionID();
       final _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
 
-      notifier.initHome(context, mounted);
+      notifier.initNewHome(context, mounted);
       if (notifierFollow.listFollow.isEmpty) {
         notifierFollow.listFollow = [
           {'name': "${_language.follow}", 'code': 'TOFOLLOW'},
@@ -130,42 +141,84 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
             preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
             child: HomeAppBar(),
           ),
-          body: RefreshIndicator(
-            key: _globalKey,
-            strokeWidth: 2.0,
-            color: Colors.purple,
-            onRefresh: () => notifier.onRefresh(context, notifier.visibilty),
-            child: Stack(
-              children: [
-                // notifier.isLoadingVid
-                // ? ListView(
-                //     controller: _scrollController,
-                //     physics: const AlwaysScrollableScrollPhysics(),
-                //     children: const [
-                //       ProcessUploadComponent(),
-                //       HyppePreviewStories(),
-                //       FilterLanding(),
-                //       Padding(
-                //         padding: EdgeInsets.only(top: 100.0),
-                //         child: CustomLoading(),
-                //       ),
-                //     ],
-                //   )
-                // :
-                ListView(
-                  controller: _scrollController,
-                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                  children: const [
-                    ProcessUploadComponent(),
-                    HyppePreviewStories(),
-                    FilterLanding(),
-                    HyppePreviewVid(),
-                    HyppePreviewDiary(),
-                    HyppePreviewPic(),
-                  ],
-                ),
-                // CustomPopUpNotification()
-              ],
+          body: DefaultTabController(
+            length: 3,
+            child: NestedScrollView(
+              headerSliverBuilder: (context, _) {
+                return [
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      const ProcessUploadComponent(),
+                      const HyppePreviewStories(),
+                      sixPx,
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        color: kHyppeLightSurface,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(24),
+                            color: kHyppeLightButtonText,
+                          ),
+                          child: TabBar(
+                            controller: _tabController,
+                            indicator: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                25.0,
+                              ),
+                              color: kHyppePrimary,
+                            ),
+                            labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                            labelColor: kHyppeLightButtonText,
+                            unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                            labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                            // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                            unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                            tabs: [
+                              ...List.generate(
+                                filterList.length,
+                                (index) => Padding(
+                                  padding: EdgeInsets.all(9),
+                                  child: Text(
+                                    filterList[index]['name'],
+                                    style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ),
+
+                  // FilterLanding(),
+                  // HyppePreviewVid(),
+                  // HyppePreviewDiary(),
+                ];
+              },
+              body: TabBarView(
+                controller: _tabController,
+                children: [
+                  // Pict
+                  Container(
+                    padding: const EdgeInsets.only(left: 6.0, right: 6),
+                    color: kHyppeLightSurface,
+                    child: const HyppePreviewPic(),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    color: kHyppeLightSurface,
+                    child: const HyppePreviewPic(),
+                  ),
+                  // second tab bar viiew widget
+                  Container(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    color: kHyppeLightSurface,
+                    child: const HyppePreviewPic(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -178,6 +231,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     print("afterrrrrrr============");
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
     var homneNotifier = context.read<HomeNotifier>();
+    _tabController.index = homneNotifier.tabIndex;
+    _tabController.animation?.addListener(() {
+      homneNotifier.tabIndex = _tabController.index;
+    });
     if (isHomeScreen) {
       print("isOnHomeScreen hit ads");
       homneNotifier.getAdsApsara(context, true);

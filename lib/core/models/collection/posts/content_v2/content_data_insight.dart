@@ -19,6 +19,7 @@ class ContentDataInsight {
 
   List<InsightLogs>? insightLogs;
   bool? isloading;
+  bool? isloadingFollow;
 
   ContentDataInsight({
     this.shares,
@@ -30,6 +31,7 @@ class ContentDataInsight {
     this.views,
     this.likes,
     this.isloading,
+    this.isloadingFollow,
   });
 
   ContentDataInsight.fromJson(Map<String, dynamic> json, {bool isLike = false}) {
@@ -47,6 +49,7 @@ class ContentDataInsight {
     isPostLiked = isLike;
     isView = (json['isView'] != null) ? json['isView'] : false;
     isloading = false;
+    isloadingFollow = false;
   }
 
   Map<String, dynamic> toJson() {

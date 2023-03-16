@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:provider/provider.dart';
@@ -17,49 +20,49 @@ import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 
 class PicBottomItem extends StatelessWidget {
   final ContentData? data;
-  const PicBottomItem({Key? key, this.data}) : super(key: key);
+  final double? width;
+  const PicBottomItem({Key? key, this.data, this.width}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Consumer<LikeNotifier>(
-          builder: (context, value, child) {
-            return CustomBalloonWidget(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const CustomIconWidget(
-                    iconData: '${AssetPath.vectorPath}like.svg',
-                    defaultColor: false,
-                    color: kHyppeLightButtonText,
-                  ),
-                  fourPx,
-                  CustomTextWidget(
-                    // textToDisplay: '${data.lCount}',
-                    textToDisplay: System().formatterNumber(data?.insight?.likes ?? 0),
-                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
-                  )
-                ],
+    return Consumer<LikeNotifier>(
+      builder: (context, value, child) {
+        // return CustomBalloonWidget(
+        return Stack(
+          children: [
+            Positioned(
+              bottom: 18,
+              right: 90,
+              child: CustomIconWidget(
+                iconData: '${AssetPath.vectorPath}sound-on.svg',
+                defaultColor: false,
+                height: 20,
               ),
-            );
-          },
-        ),
-        // Consumer<LikeNotifier>(
-        //   builder: (context, notifier, child) {
-        //     return CustomIconButtonWidget(
-        //       padding: EdgeInsets.zero,
-        //       alignment: Alignment.centerRight,
-        //       iconData: '${AssetPath.vectorPath}${data.isReacted == 0 ? 'none-like.svg' : 'liked.svg'}',
-        //       onPressed: () {
-        //         data.isReacted == 0 ? notifier.showReactionList(context, data) : notifier.onLikeContent(context, data: data);
-        //       },
-        //     );
-        //   },
-        // )
-      ],
+            ),
+            // Container(
+            //   height: 26,
+            //   alignment: Alignment.center,
+            //   width: width,
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: const [
+            //       CustomIconWidget(
+            //         iconData: '${AssetPath.vectorPath}tag_people.svg',
+            //         defaultColor: false,
+            //         height: 20,
+            //       ),
+            //       CustomIconWidget(
+            //         iconData: '${AssetPath.vectorPath}sound-on.svg',
+            //         defaultColor: false,
+            //         height: 20,
+            //       ),
+            //     ],
+            //   ),
+            // ),
+          ],
+        );
+      },
     );
   }
 }

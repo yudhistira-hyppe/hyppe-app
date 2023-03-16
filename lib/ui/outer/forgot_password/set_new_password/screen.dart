@@ -31,19 +31,18 @@ class _SetNewPasswordState extends State<SetNewPassword> {
   Widget build(BuildContext context) {
     final translate = context.read<TranslateNotifierV2>().translate;
     return Consumer<ForgotPasswordNotifier>(
-      builder: (_, notifier, __){
+      builder: (_, notifier, __) {
         final isMatch = notifier.passwordConfirmController.text.isNotEmpty ? notifier.passwordController.text == notifier.passwordConfirmController.text : true;
         return Scaffold(
           appBar: AppBar(
             leading: CustomIconButtonWidget(
               color: Theme.of(context).iconTheme.color,
-              onPressed: (){
+              onPressed: () {
                 notifier.passwordConfirmController.clear();
                 notifier.passwordController.clear();
                 notifier.password = '';
                 notifier.confirmPassword = '';
                 Navigator.pop(context);
-
               },
               iconData: '${AssetPath.vectorPath}close.svg',
             ),
@@ -77,7 +76,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                             textEditingController: notifier.passwordController,
                             style: Theme.of(context).textTheme.bodyText1,
                             obscureText: notifier.hidePassword,
-                            inputFormatter: [ FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9!@#\$%^&*_]'))],
+                            inputFormatter: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9!@#\$%^&*_]'))],
                             textInputType: TextInputType.visiblePassword,
                             onChanged: (v) => notifier.password = v,
                             inputDecoration: InputDecoration(
@@ -138,7 +137,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                             style: Theme.of(context).textTheme.bodyText1,
                             obscureText: notifier.hideConfirmPassword,
                             textInputType: TextInputType.visiblePassword,
-                            inputFormatter: [ FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9!@#\$%^&*_]'))],
+                            inputFormatter: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9!@#\$%^&*_]'))],
                             onChanged: (v) => notifier.confirmPassword = v,
                             inputDecoration: InputDecoration(
                                 hintText: notifier.language.enterPassword,
@@ -183,12 +182,14 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                                 enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                                 // focusedBorder:
                                 //     UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
-                                errorText: isMatch ? null : notifier.language.passwordDoesntMatch
-                            ),
+                                errorText: isMatch ? null : notifier.language.passwordDoesntMatch),
                             maxLength: 20,
                           ),
                           sixteenPx,
-                          CustomTextWidget(textToDisplay: notifier.language.yourPasswordMustBeAtLeast ?? '', textStyle: TextStyle(color: context.isDarkMode() ? Colors.white : Colors.black, fontWeight: FontWeight.w700, fontSize: 16),),
+                          CustomTextWidget(
+                            textToDisplay: notifier.language.yourPasswordMustBeAtLeast ?? '',
+                            textStyle: TextStyle(color: context.isDarkMode() ? Colors.white : Colors.black, fontWeight: FontWeight.w700, fontSize: 16),
+                          ),
                           eightPx,
                           Row(
                             mainAxisSize: MainAxisSize.min,
@@ -226,12 +227,12 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                                   onePx,
                                   CustomTextWidget(
                                     textToDisplay: notifier.language.labelExampleSpecialChar ?? '',
-                                    textStyle: Theme.of(context).textTheme.caption,)
+                                    textStyle: Theme.of(context).textTheme.caption,
+                                  )
                                 ],
                               )
                             ],
                           ),
-
                         ],
                       ),
                     ),
@@ -245,14 +246,14 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                         foregroundColor: MaterialStateProperty.all<Color>(notifier.nextButtonColor(context)),
                         shadowColor: MaterialStateProperty.all<Color>(notifier.nextButtonColor(context))),
                     function: () {
-                        notifier.nextButton(context, mounted);
+                      notifier.nextButton(context, mounted);
                     },
                     child: notifier.loading
                         ? const CustomLoading()
                         : CustomTextWidget(
-                      textToDisplay: notifier.language.resetPassword ?? 'Reset Password',
-                      textStyle: notifier.nextTextColor(context),
-                    ),
+                            textToDisplay: notifier.language.resetPassword ?? 'Reset Password',
+                            textStyle: notifier.nextTextColor(context),
+                          ),
                   ),
                   sixPx,
                 ],

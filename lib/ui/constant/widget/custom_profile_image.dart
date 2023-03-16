@@ -40,38 +40,41 @@ class CustomProfileImage extends StatelessWidget {
         imageBuilder: (context, imageProvider) => Container(
           width: width,
           height: height,
-          child: _buildBody(),
           alignment: Alignment.bottomCenter,
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
+            // shape: BoxShape.circle,
+            borderRadius: BorderRadius.circular(20),
             image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
           ),
+          child: _buildBody(),
         ),
         errorWidget: (context, url, error) => Container(
           width: width,
           height: height,
-          child: _buildBody(),
           alignment: Alignment.bottomCenter,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            image: const DecorationImage(
               fit: BoxFit.cover,
               image: AssetImage('${AssetPath.pngPath}profile-error.png'),
             ),
-            shape: BoxShape.circle,
+            // shape: BoxShape.circle,
           ),
+          child: _buildBody(),
         ),
         emptyWidget: Container(
           width: width,
           height: height,
-          child: _buildBody(),
           alignment: Alignment.bottomCenter,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
             image: DecorationImage(
               fit: BoxFit.cover,
               image: AssetImage('${AssetPath.pngPath}profile-error.png'),
             ),
-            shape: BoxShape.circle,
+            // shape: BoxShape.circle,
           ),
+          child: _buildBody(),
         ),
       ),
     );

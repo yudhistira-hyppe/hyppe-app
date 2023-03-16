@@ -224,7 +224,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
           print("---------- $isShowAds");
           if (!isShowAds) {
-            System().adsPopUp(context, ads, auth);
+            System().adsPopUp(context, ads, auth, isInAppAds: true);
           }
 
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
