@@ -79,6 +79,7 @@ import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/screen.dart' as message_detail_v2;
 import 'package:hyppe/ui/inner/message_v2/message_detail/widget/image_preview_view.dart';
+import 'package:hyppe/ui/inner/message_v2/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/upload/make_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/payment/screen.dart';
@@ -163,6 +164,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => SignUpPin(arguments: settings.arguments as VerifyPageArgument));
       case Routes.signUpWelcome:
         return MaterialPageRoute(builder: (_) => SignUpWelcome());
+      case Routes.message:
+        return MaterialPageRoute(builder: (_) => const MessageScreen());
       case Routes.messageDetail:
         return MaterialPageRoute(builder: (_) => message_detail_v2.MessageDetailScreen(argument: settings.arguments as MessageDetailArgument));
       case Routes.report:

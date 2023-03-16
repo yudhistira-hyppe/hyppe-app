@@ -127,4 +127,5 @@ class Routes {
   static const String boostList = '/boost-list';
 
   static const String aliTest = '/ali-test';
+  static const String message = '/message';
 }

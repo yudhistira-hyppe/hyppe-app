@@ -163,13 +163,14 @@ class HomeNotifier with ChangeNotifier {
 
   void onUpdate() => notifyListeners();
 
-  Future initNewHome(BuildContext context, bool mounted) async {
+  Future initNewHome(BuildContext context, bool mounted, {int? forceIndex}) async {
     context.read<ReportNotifier>().inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
     if (isConnected) {
       var email = SharedPreference().readStorage(SpKeys.email);
-      Map data = {"email": email, "type": "pict", "skip": 0, "limit": 15};
+      Map data = {"email": email, "limit": 15};
       var index = _tabIndex;
+      if (forceIndex != null) index = forceIndex;
       print("tab index $_tabIndex");
 
       switch (index) {
@@ -202,11 +203,16 @@ class HomeNotifier with ChangeNotifier {
           'profile.initMain error $e'.logger();
         }
       }
-
       switch (index) {
         case 0:
           if (!mounted) return;
           await pic.initialPic(context, reload: true, list: allContents);
+          if (diary.diaryData == null) {
+            await initNewHome(context, mounted, forceIndex: 1);
+          }
+          if (vid.vidData == null) {
+            await initNewHome(context, mounted, forceIndex: 2);
+          }
           break;
         case 1:
           if (!mounted) return;

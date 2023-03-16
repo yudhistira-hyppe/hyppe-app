@@ -1,5 +1,6 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/inner/home/widget/profile.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -94,7 +95,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
               BottomNavigationBarItem(
-                icon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color, iconData: '${AssetPath.vectorPath}message.svg'),
+                icon: Padding(padding: EdgeInsets.only(right: 20), child: Profile()),
                 activeIcon: CustomIconWidget(
                   defaultColor: false,
                   color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
@@ -102,6 +103,15 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 label: '',
               ),
+              // BottomNavigationBarItem(
+              //   icon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color, iconData: '${AssetPath.vectorPath}message.svg'),
+              //   activeIcon: CustomIconWidget(
+              //     defaultColor: false,
+              //     color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+              //     iconData: '${AssetPath.vectorPath}message-active.svg',
+              //   ),
+              //   label: '',
+              // ),
             ],
           ),
         );

@@ -168,6 +168,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     Map device = System().readAndroidBuildData(await deviceInfo.androidInfo);
 
     var nameDevice = "${device['manufacturer']}-${device['model']}";
+    print("device aku $nameDevice");
     SharedPreference().writeStorage(SpKeys.brand, nameDevice);
   }
 

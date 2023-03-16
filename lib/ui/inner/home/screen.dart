@@ -9,6 +9,8 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/widget/filter.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -130,8 +132,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeNotifier>(
-      builder: (_, notifier, __) => WillPopScope(
+    return Consumer2<HomeNotifier, SelfProfileNotifier>(
+      builder: (_, notifier, selfnotifier, __) => WillPopScope(
         onWillPop: () async {
           MoveToBackground.moveTaskToBack();
           return false;
@@ -139,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         child: Scaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-            child: HomeAppBar(),
+            child: HomeAppBar(name: selfnotifier.user.profile?.fullName),
           ),
           body: DefaultTabController(
             length: 3,
@@ -207,15 +209,15 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                     child: const HyppePreviewPic(),
                   ),
                   Container(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    padding: const EdgeInsets.only(left: 6.0, right: 6),
                     color: kHyppeLightSurface,
-                    child: const HyppePreviewPic(),
+                    child: const LandingDiaryPage(),
                   ),
                   // second tab bar viiew widget
                   Container(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    padding: const EdgeInsets.only(left: 16.0, right: 16),
                     color: kHyppeLightSurface,
-                    child: const HyppePreviewPic(),
+                    child: const HyppePreviewVid(),
                   ),
                 ],
               ),

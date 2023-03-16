@@ -64,6 +64,7 @@ class ProfileLandingPage extends StatelessWidget {
       visible: show,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           StoryColorValidator(
             haveStory: haveStory,

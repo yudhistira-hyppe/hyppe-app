@@ -18,9 +18,9 @@ class StoryColorValidator extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: const EdgeInsets.all(6),
+      // padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(27),
         border: Border.all(
             width: width,
             color: !isMy
@@ -28,7 +28,7 @@ class StoryColorValidator extends StatelessWidget {
                     ? theme.colorScheme.secondary
                     : featureType == FeatureType.story
                         ? theme.colorScheme.primary
-                        : Colors.transparent
+                        : kHyppeBorderTab
                 : kHyppeBorderTab),
       ),
       child: child,
