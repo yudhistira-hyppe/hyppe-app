@@ -72,6 +72,7 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_docume
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/preview.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/verification_loading.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
@@ -123,6 +124,7 @@ import '../core/arguments/detail_ticket_argument.dart';
 import '../ui/inner/home/content_v2/help/detail_ticket/screen.dart';
 import '../ui/inner/home/content_v2/help/ticket_history/screen.dart';
 import '../ui/inner/home/content_v2/pic/playlist/slide/slide_screen.dart';
+import '../ui/inner/home/content_v2/vid/playlist/screen_v2.dart';
 import '../ui/inner/search_v2/hashtag/detail_screen.dart';
 
 class Generate {
@@ -229,9 +231,12 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const PicSeeAllScreen());
 
       case Routes.vidDetail:
-        return MaterialPageRoute(builder: (_) => VidDetailScreen(arguments: settings.arguments as VidDetailScreenArgument));
+        return MaterialPageRoute(builder: (_) => NewVideoDetailScreen(arguments: settings.arguments as VidDetailScreenArgument));
       case Routes.vidSeeAllScreen:
         return MaterialPageRoute(builder: (_) => const VidSeeAllScreen());
+
+      case Routes.commentsDetail:
+        return MaterialPageRoute(builder: (_) => CommentsDetailScreen(argument: settings.arguments as CommentsArgument));
 
       case Routes.imagePreviewScreen:
         return MaterialPageRoute(builder: (_) => ImagePreviewView(argument: settings.arguments as ImagePreviewArgument));

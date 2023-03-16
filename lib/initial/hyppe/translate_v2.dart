@@ -22,6 +22,7 @@ import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -236,6 +237,7 @@ class TranslateNotifierV2 with ChangeNotifier {
       context.read<CommentNotifierV2>().translate(translate);
       context.read<TicketHistoryNotifier>().translate(translate);
       context.read<DetailTicketNotifier>().translate(translate);
+      context.read<VidDetailNotifier>().translate(translate);
       // await context.read<TransactionNotifier>().translate(translate);
       // await context.read<PinAccountNotifier>().translate(translate);
 

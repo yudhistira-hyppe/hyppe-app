@@ -9,6 +9,7 @@ import 'package:hyppe/core/models/collection/utils/search_people/search_people.d
 import 'package:hyppe/core/query_request/comment_data_query.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/widget/sub_comment_list_tile.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/widget/sub_comment_tile.dart';
 import 'package:hyppe/ux/routing.dart';
 
 import '../../../../core/models/collection/localization_v2/localization_model.dart';
@@ -182,7 +183,7 @@ class CommentNotifierV2 with ChangeNotifier {
           _commentData?[_parentIndex ?? 0].replies.insert(0, res.comment ?? DisqusLogs());
           repliesComments[parentID]?.insertAll(0, [
             const SizedBox(height: 16),
-            SubCommentListTile(data: res.comment, parentID: parentID, fromFront: fromFront),
+            SubCommentTile(logs: res.comment, parentID: parentID, fromFront: fromFront),
           ]);
         }
 
@@ -217,8 +218,10 @@ class CommentNotifierV2 with ChangeNotifier {
       String _tmpString = '@${comment?.senderInfo?.username ?? '' ' ' + commentController.text}';
       commentController.clear();
       commentController.text = _tmpString;
+      commentController.selection = TextSelection.fromPosition(TextPosition(offset: commentController.text.length));
     } else {
       commentController.text = '@${comment?.senderInfo?.username} ';
+      commentController.selection = TextSelection.fromPosition(TextPosition(offset: commentController.text.length));
     }
   }
 
@@ -229,15 +232,14 @@ class CommentNotifierV2 with ChangeNotifier {
       repliesComments[comment?.comment?.lineID] = [
         for (final subComment in comment?.replies ?? []) ...[
           const SizedBox(height: 16),
-          SubCommentListTile(
-            data: subComment,
+          SubCommentTile(
+            logs: subComment,
             fromFront: fromFront,
             parentID: comment?.comment?.lineID,
           ),
         ],
       ];
     }
-
     notifyListeners();
   }
 
@@ -255,6 +257,8 @@ class CommentNotifierV2 with ChangeNotifier {
     _loading = val;
     notifyListeners();
   }
+
+  onUpdate() => notifyListeners();
 
   set sendButtonColor(Color? val) {
     _sendButtonColor = val;

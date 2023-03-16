@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const Widget onePx = SizedBox(width: 1.0, height: 1.0);
+const Widget twoPx = SizedBox(width: 2.0, height: 2.0);
 const Widget fourPx = SizedBox(width: 4.0, height: 4.0);
 const Widget fourPointFivePx = SizedBox(width: 4.5, height: 4.5);
 const Widget fivePx = SizedBox(width: 5.0, height: 5.0);

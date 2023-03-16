@@ -111,6 +111,8 @@ class ContentData {
 
   String? postID;
 
+  bool? isIdVerified;
+
   String? title;
 
   bool? isViewed;
@@ -194,6 +196,7 @@ class ContentData {
     this.mediaType,
     this.mediaThumbEndPoint,
     this.postID,
+    this.isIdVerified,
     this.title,
     this.isViewed,
     this.tags = const [],
@@ -249,6 +252,7 @@ class ContentData {
     mediaType = json['mediaType'];
     mediaThumbEndPoint = json['mediaThumbEndpoint'];
     postID = json['postID'];
+    isIdVerified = json['isIdVerified'];
     title = json['title'];
     isViewed = json['isViewed'] ?? false;
     tags = json['tags'] != null ? json['tags'].cast<String>() : [];
@@ -339,6 +343,7 @@ class ContentData {
     data['mediaType'] = mediaType;
     data['mediaThumbEndpoint'] = mediaThumbEndPoint;
     data['postID'] = postID;
+    data['isIdVerified'] = isIdVerified;
     data['title'] = title;
     data['isViewed'] = isViewed;
     data['tags'] = tags;

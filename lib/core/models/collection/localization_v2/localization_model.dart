@@ -173,6 +173,7 @@ class LocalizationModelV2 {
   String? newPost;
   String? writeACaption;
   String? tagPeople;
+  String? people;
   String? category;
   String? selectCategory;
   String? seeMore;
@@ -278,6 +279,8 @@ class LocalizationModelV2 {
   String? badConnectionTitle;
   String? captionForgotPassword;
   String? comment;
+  String? noCommentYet;
+  String? tapHere2;
   String? commentedOnYourHyppePic;
   String? chooseCategory;
   String? completeYourProfile;
@@ -1059,6 +1062,7 @@ class LocalizationModelV2 {
     this.newPost,
     this.writeACaption,
     this.tagPeople,
+    this.people,
     this.category,
     this.selectCategory,
     this.seeMore,
@@ -1164,6 +1168,8 @@ class LocalizationModelV2 {
     this.badConnectionTitle,
     this.captionForgotPassword,
     this.comment,
+    this.noCommentYet,
+    this.tapHere2,
     this.commentedOnYourHyppePic,
     this.chooseCategory,
     this.completeYourProfile,
@@ -1946,6 +1952,7 @@ class LocalizationModelV2 {
     newPost = json['newPost'];
     writeACaption = json['writeACaption'];
     tagPeople = json['tagPeople'];
+    people = json['people'];
     category = json['category'];
     selectCategory = json['selectCategory'];
     seeMore = json['seeMore'];
@@ -2052,6 +2059,8 @@ class LocalizationModelV2 {
     badConnectionTitle = json['badConnectionTitle'];
     captionForgotPassword = json['captionForgotPassword'];
     comment = json['comment'];
+    noCommentYet = json['noCommentYet'];
+    tapHere2 = json['tapHere2'];
     commentedOnYourHyppePic = json['commentedOnYourHyppePic'];
     chooseCategory = json['chooseCategory'];
     completeYourProfile = json['completeYourProfile'];
