@@ -178,8 +178,7 @@ class ContentData {
   MediaModel? media;
   bool? apsara;
   bool? isShared;
-
-
+  bool? following;
 
   ContentData({
     this.metadata,
@@ -231,6 +230,7 @@ class ContentData {
     this.media,
     this.apsara,
     this.isShared,
+    this.following,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -308,6 +308,7 @@ class ContentData {
         : json['media'] is List
             ? null
             : MediaModel.fromJSON(json['media']);
+    following = json['following'] ?? false;
   }
 
   Map<String, dynamic> toJson() {

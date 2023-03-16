@@ -127,6 +127,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
                                     // onTap: () => context.read<PicDetailNotifier>().navigateToDetailPic(notifier.pic![index]),
                                     onTap: () => context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, index),
                                     // margin: const EdgeInsets.symmetric(horizontal: 4.5),
+                                    lang: notifier.language,
                                   ),
                                 );
                               },

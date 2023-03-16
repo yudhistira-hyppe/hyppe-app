@@ -30,6 +30,8 @@ class ProfileLandingPage extends StatelessWidget {
   final bool haveStory;
   final FeatureType featureType;
   final String? cacheKey;
+  final String? location;
+  final String? musicName;
 
   const ProfileLandingPage(
       {Key? key,
@@ -50,6 +52,8 @@ class ProfileLandingPage extends StatelessWidget {
       this.textColor,
       this.cacheKey,
       this.haveStory = false,
+      this.musicName,
+      this.location,
       required this.featureType})
       : super(key: key);
 
@@ -93,32 +97,39 @@ class ProfileLandingPage extends StatelessWidget {
                     CustomVerifiedWidget(verified: isCelebrity),
                   ],
                 ),
-                Text(
-                  'Eiffel Tower, France',
-                  maxLines: 1,
-                  style: TextStyle(color: textColor, fontSize: 10),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                fivePx,
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
-                      defaultColor: false,
-                      color: textColor,
-                      height: 10,
+                if (location != '')
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      '$location',
+                      maxLines: 1,
+                      style: TextStyle(color: textColor, fontSize: 10),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    Expanded(
-                      child: CustomTextWidget(
-                        textToDisplay: " Linkin Park",
-                        maxLines: 1,
-                        textStyle: TextStyle(color: textColor, fontSize: 12, fontWeight: FontWeight.w700),
-                        textAlign: TextAlign.left,
-                      ),
+                  ),
+                if (musicName != '')
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CustomIconWidget(
+                          iconData: "${AssetPath.vectorPath}music_stroke_black.svg",
+                          defaultColor: false,
+                          color: textColor,
+                          height: 10,
+                        ),
+                        Expanded(
+                          child: CustomTextWidget(
+                            textToDisplay: " $musicName",
+                            maxLines: 1,
+                            textStyle: TextStyle(color: textColor, fontSize: 12, fontWeight: FontWeight.w700),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
               ],
             ),
           )

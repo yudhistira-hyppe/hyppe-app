@@ -60,11 +60,11 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  setLoadMusic(bool state){
+  setLoadMusic(bool state) {
     _isLoadMusic = state;
   }
 
-  set preventMusic(bool state){
+  set preventMusic(bool state) {
     _preventMusic = state;
     notifyListeners();
   }
@@ -148,29 +148,24 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     return null;
   }
 
-  Future<ContentData?> getDetailPost(BuildContext context, String postID) async{
+  Future<ContentData?> getDetailPost(BuildContext context, String postID) async {
     final notifier = PostsBloc();
-    await notifier.getContentsBlocV2(context,
-        postID: postID,
-        pageRows: 1,
-        pageNumber: 1,
-        type: FeatureType.pic);
+    await notifier.getContentsBlocV2(context, postID: postID, pageRows: 1, pageNumber: 1, type: FeatureType.pic);
     final fetch = notifier.postsFetch;
 
     final _res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
-    if(_res != null){
-      if(_res.isNotEmpty){
+    if (_res != null) {
+      if (_res.isNotEmpty) {
         return _res.first;
-      }else{
+      } else {
         return null;
       }
-    }else{
+    } else {
       return null;
     }
   }
 
-  Future initDetailPost(BuildContext context, String postID) async{
-
+  Future initDetailPost(BuildContext context, String postID) async {
     data = await getDetailPost(context, postID);
     print("tetsdausdjha1 ${data?.toJson()}");
   }
@@ -197,7 +192,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future followUser(BuildContext context, {bool checkIdCard = true, isUnFollow = false}) async {
+  Future followUser(BuildContext context, {bool checkIdCard = true, isUnFollow = false, String receiverParty = ''}) async {
     try {
       checkIsLoading = true;
       if (checkIdCard) {
@@ -209,19 +204,18 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
         await notifier.followUserBlocV2(
           context,
           data: FollowUserArgument(
-            receiverParty: _data?.email ?? '',
+            receiverParty: receiverParty != '' ? receiverParty : _data?.email ?? '',
             eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
           ),
         );
         final fetch = notifier.followFetch;
         if (fetch.followState == FollowState.followUserSuccess) {
-          if(isUnFollow){
+          if (isUnFollow) {
             statusFollowing = StatusFollowing.none;
-          }else{
+          } else {
             statusFollowing = StatusFollowing.following;
           }
-
-        }else if(statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following){
+        } else if (statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following) {
           statusFollowing = StatusFollowing.none;
         }
         //   },
@@ -239,12 +233,12 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
         );
         final fetch = notifier.followFetch;
         if (fetch.followState == FollowState.followUserSuccess) {
-          if(isUnFollow){
+          if (isUnFollow) {
             statusFollowing = StatusFollowing.none;
-          }else{
+          } else {
             statusFollowing = StatusFollowing.following;
           }
-        }else if(statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following){
+        } else if (statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following) {
           statusFollowing = StatusFollowing.none;
         }
       }

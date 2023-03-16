@@ -23,7 +23,7 @@ class CustomFollowButton extends StatelessWidget {
     SizeConfig().init(context);
     String title = '';
     bool _isAbleToClick = isFollowing != StatusFollowing.requested;
-    bool _isNotFollowing = (isFollowing == StatusFollowing.rejected || isFollowing == StatusFollowing.none );
+    bool _isNotFollowing = (isFollowing == StatusFollowing.rejected || isFollowing == StatusFollowing.none);
 
     return Consumer<TranslateNotifierV2>(builder: (context, value, _) {
       switch (isFollowing) {
@@ -45,9 +45,7 @@ class CustomFollowButton extends StatelessWidget {
               ? const CustomLoading()
               : CustomTextWidget(
                   textToDisplay: title,
-                  textStyle: Theme.of(context).textTheme.button?.copyWith(
-                        color: _isNotFollowing ? Theme.of(context).colorScheme.primary : null,
-                      ),
+                  textStyle: Theme.of(context).textTheme.button?.copyWith(color: _isNotFollowing ? Theme.of(context).colorScheme.primary : null, fontSize: 12),
                 ),
           // width: 50.0 * SizeConfig.scaleDiagonal,
         ),
