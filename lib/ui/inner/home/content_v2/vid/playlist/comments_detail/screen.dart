@@ -158,7 +158,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
               Container(
                 color: context.getColorScheme().surface,
                 padding: const EdgeInsets.only(
-                    bottom: 4, left: 16, right: 16, top: 10),
+                    bottom: 12, left: 16, right: 16, top: 10),
                 child: Column(
                   children: [
                     Row(
@@ -189,9 +189,17 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                       style: Theme.of(context).textTheme.bodyText2,
                       decoration: InputDecoration(
                         filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        borderSide: BorderSide(
+                            color: context.getColorScheme().surface)),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50),
+                            borderSide: BorderSide(
+                                color: context.getColorScheme().surface)),
                         fillColor: Theme.of(context).colorScheme.background,
                             focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
+                                borderRadius: BorderRadius.circular(50),
                                 borderSide: BorderSide(
                                     color: context.getColorScheme().surface)),
                         hintText: "${notifier.language.typeAMessage}...",
@@ -229,7 +237,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                       ),
                       onChanged: (value) =>
                           notifier.onChangeHandler(value, context),
-                    )
+                    ),
                     // TextFormField(
                     //   minLines: 1,
                     //   maxLines: 7,
