@@ -11,7 +11,6 @@ import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/widget/filter.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
@@ -21,7 +20,6 @@ import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 // v2 view
 import 'package:hyppe/ui/inner/home/content_v2/pic/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/preview/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/screen.dart';
 import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
@@ -118,6 +116,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           {'name': "${_language.following}", 'code': 'FOLLOWING'},
         ];
       }
+      _scrollController.addListener(() {
+        if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
+          notifier.initNewHome(context, mounted, isreload: false);
+        }
+      });
       context.read<ReportNotifier>().inPosition = contentPosition.home;
     });
 
@@ -146,6 +149,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           body: DefaultTabController(
             length: 3,
             child: NestedScrollView(
+              controller: _scrollController,
               headerSliverBuilder: (context, _) {
                 return [
                   SliverList(

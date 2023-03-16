@@ -62,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
             },
             currentIndex: notifier.pageIndex,
             type: BottomNavigationBarType.fixed,
-            items: <BottomNavigationBarItem>[
+            items: [
               BottomNavigationBarItem(
                 icon: CustomIconWidget(
                   defaultColor: false,
@@ -77,10 +77,10 @@ class _MainScreenState extends State<MainScreen> {
                 label: '',
                 activeIcon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color, iconData: '${AssetPath.vectorPath}search-active.svg'),
               ),
-              BottomNavigationBarItem(
-                icon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.selectedIconTheme?.color, iconData: '${AssetPath.vectorPath}upload.svg'),
+              const BottomNavigationBarItem(
+                icon: CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}hyppe-button.svg'),
                 label: '',
-                activeIcon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.selectedIconTheme?.color, iconData: '${AssetPath.vectorPath}upload.svg'),
+                activeIcon: CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}hyppe-button.svg'),
               ),
               BottomNavigationBarItem(
                 icon: Stack(children: [
