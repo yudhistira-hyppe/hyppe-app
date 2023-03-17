@@ -26,23 +26,23 @@ class OnColouredSheet extends StatefulWidget {
   final int? milisecond;
   final bool isArrow;
   final bool isMargin;
-  const OnColouredSheet({
-    Key? key,
-    required this.caption,
-    this.subCaption,
-    this.subCaptionButton,
-    this.iconSvg,
-    this.sizeIcon,
-    this.maxLines,
-    this.fromSnackBar = false,
-    this.iconColor,
-    this.function,
-    this.textOverflow,
-    this.functionSubCaption,
-    this.milisecond,
-    this.isArrow = false,
-    this.isMargin = false
-  }) : super(key: key);
+  const OnColouredSheet(
+      {Key? key,
+      required this.caption,
+      this.subCaption,
+      this.subCaptionButton,
+      this.iconSvg,
+      this.sizeIcon,
+      this.maxLines,
+      this.fromSnackBar = false,
+      this.iconColor,
+      this.function,
+      this.textOverflow,
+      this.functionSubCaption,
+      this.milisecond,
+      this.isArrow = false,
+      this.isMargin = false})
+      : super(key: key);
 
   @override
   _OnColouredSheetState createState() => _OnColouredSheetState();
@@ -93,123 +93,124 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return widget.isMargin ? _withMargin() :Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                sixteenPx,
-                CustomIconWidget(
-                  iconData: widget.iconSvg ?? "${AssetPath.vectorPath}valid-invert.svg",
-                  defaultColor: false,
-                  height: widget.sizeIcon,
-                  width: widget.sizeIcon,
-                  color: widget.iconColor,
-                ),
-                eightPx,
-                SizedBox(
-                  width: MediaQuery.of(context).size.width - (16 + 8 + 14 + 60),
-                  child: CustomTextWidget(
-                    maxLines: widget.maxLines,
-                    textOverflow: widget.textOverflow,
-                    textToDisplay: widget.caption,
-                    textAlign: TextAlign.left,
-                    textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
-                  ),
-                )
-              ],
-            ),
-            widget.subCaption != null
-                ? Row(
+    return widget.isMargin
+        ? _withMargin()
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: widget.functionSubCaption,
-                        child: Container(
-                            width: SizeConfig.screenWidth,
-                            padding: const EdgeInsets.only(left: 40, bottom: 10, top: 6),
-                            child: Text.rich(
-                              TextSpan(
-                                text: "${widget.subCaption} ",
-                                style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
-                                children: [
-                                  widget.subCaptionButton != null
-                                      ? TextSpan(
-                                          text: '${widget.subCaptionButton}',
-                                          style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                                                color: kHyppeLightButtonText,
-                                                decoration: TextDecoration.underline,
-                                              ),
-                                        )
-                                      : const TextSpan()
-                                ],
-                              ),
-                            )
-                            //        CustomTextWidget(
-                            //         maxLines: widget.maxLines,
-                            //         textToDisplay: widget.subCaption ?? '',
-                            //         textOverflow: TextOverflow.visible,
-                            //         textAlign: TextAlign.left,
-                            //         textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
-                            //       ),
-                            ),
+                      sixteenPx,
+                      CustomIconWidget(
+                        iconData: widget.iconSvg ?? "${AssetPath.vectorPath}valid-invert.svg",
+                        defaultColor: false,
+                        height: widget.sizeIcon,
+                        width: widget.sizeIcon,
+                        color: widget.iconColor,
                       ),
+                      eightPx,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width - (16 + 8 + 14 + 60),
+                        child: CustomTextWidget(
+                          maxLines: widget.maxLines,
+                          textOverflow: widget.textOverflow,
+                          textToDisplay: widget.caption,
+                          textAlign: TextAlign.left,
+                          textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
+                        ),
+                      )
                     ],
-                  )
-                : Container()
-          ],
-        ),
-        widget.subCaption != null
-            ? const SizedBox.shrink()
-            : SizedBox(
-                width: 50,
-                height: 50,
-                child: CustomTextButton(
-                  onPressed: () => _conditionalFunction(),
-                  child: ValueListenableBuilder<bool>(
-                    valueListenable: _loading,
-                    builder: (_, value, __) {
-                      if (value) {
-                        return const SizedBox(height: 40, width: 40, child: CustomLoading());
-                      }
-
-                      return CustomTextWidget(
-                        maxLines: 1,
-                        textToDisplay: 'Ok',
-                        textAlign: TextAlign.right,
-                        textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
-                      );
-                    },
                   ),
-                ),
+                  widget.subCaption != null
+                      ? Row(
+                          children: [
+                            GestureDetector(
+                              onTap: widget.functionSubCaption,
+                              child: Container(
+                                  width: SizeConfig.screenWidth,
+                                  padding: const EdgeInsets.only(left: 40, bottom: 10, top: 6),
+                                  child: Text.rich(
+                                    TextSpan(
+                                      text: "${widget.subCaption} ",
+                                      style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                                      children: [
+                                        widget.subCaptionButton != null
+                                            ? TextSpan(
+                                                text: '${widget.subCaptionButton}',
+                                                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                                                      color: kHyppeLightButtonText,
+                                                      decoration: TextDecoration.underline,
+                                                    ),
+                                              )
+                                            : const TextSpan()
+                                      ],
+                                    ),
+                                  )
+                                  //        CustomTextWidget(
+                                  //         maxLines: widget.maxLines,
+                                  //         textToDisplay: widget.subCaption ?? '',
+                                  //         textOverflow: TextOverflow.visible,
+                                  //         textAlign: TextAlign.left,
+                                  //         textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                                  //       ),
+                                  ),
+                            ),
+                          ],
+                        )
+                      : Container()
+                ],
               ),
-      ],
-    );
+              widget.subCaption != null
+                  ? const SizedBox.shrink()
+                  : SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: CustomTextButton(
+                        onPressed: () => _conditionalFunction(),
+                        child: ValueListenableBuilder<bool>(
+                          valueListenable: _loading,
+                          builder: (_, value, __) {
+                            if (value) {
+                              return const SizedBox(height: 40, width: 40, child: CustomLoading());
+                            }
+
+                            return CustomTextWidget(
+                              maxLines: 1,
+                              textToDisplay: 'Ok',
+                              textAlign: TextAlign.right,
+                              textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+            ],
+          );
   }
 
-  Widget _withMargin(){
+  Widget _withMargin() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: [
-        if(widget.iconSvg != null)
-        CustomIconWidget(
-          iconData: widget.iconSvg!,
-          defaultColor: false,
-          height: widget.sizeIcon,
-          width: widget.sizeIcon,
-          color: widget.iconColor,
-        ),
-        if(widget.iconSvg != null)
-        fourteenPx,
+        if (widget.iconSvg != null)
+          CustomIconWidget(
+            iconData: widget.iconSvg!,
+            defaultColor: false,
+            height: widget.sizeIcon,
+            width: widget.sizeIcon,
+            color: widget.iconColor,
+          ),
+        if (widget.iconSvg != null) fourteenPx,
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -223,35 +224,33 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                 textAlign: TextAlign.left,
                 textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText, fontSize: 10, fontWeight: FontWeight.w700),
               ),
-              if(widget.subCaption != null)
-              CustomTextWidget(
-                maxLines: widget.maxLines,
-                textOverflow: widget.textOverflow,
-                textToDisplay: widget.subCaption!,
-                textAlign: TextAlign.left,
-                textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText, fontSize: 12, fontWeight: FontWeight.w400),
-              )
+              if (widget.subCaption != null)
+                CustomTextWidget(
+                  maxLines: widget.maxLines,
+                  textOverflow: widget.textOverflow,
+                  textToDisplay: widget.subCaption!,
+                  textAlign: TextAlign.left,
+                  textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText, fontSize: 12, fontWeight: FontWeight.w400),
+                )
             ],
           ),
         ),
-        if(widget.isArrow)
-        InkWell(
-          onTap: (){
-            if(widget.function != null){
-              widget.function!();
-            }
-          },
-          child: const CustomIconWidget(
-            iconData: "${AssetPath.vectorPath}arrow_right.svg",
-            defaultColor: false,
-            height: 20,
-            width: 20,
-            color: Colors.white,
+        if (widget.isArrow)
+          InkWell(
+            onTap: () {
+              if (widget.function != null) {
+                widget.function!();
+              }
+            },
+            child: const CustomIconWidget(
+              iconData: "${AssetPath.vectorPath}arrow_right.svg",
+              defaultColor: false,
+              height: 20,
+              width: 20,
+              color: Colors.white,
+            ),
           ),
-        ),
       ],
     );
   }
 }
-
-

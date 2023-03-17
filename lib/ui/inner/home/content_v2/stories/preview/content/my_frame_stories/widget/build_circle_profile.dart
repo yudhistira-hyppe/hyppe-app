@@ -36,13 +36,16 @@ class BuildCircleProfile extends StatelessWidget {
             featureType: FeatureType.story,
             haveStory: listStory?.isNotEmpty ?? false,
             isMy: true,
-            child: CustomProfileImage(
-              cacheKey: imageUrlKey,
-              following: true,
-              imageUrl: imageUrl,
-              headers: headers,
-              width: SizeWidget.circleDiameterOutside,
-              height: SizeWidget.circleDiameterOutside,
+            child: Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: CustomProfileImage(
+                cacheKey: imageUrlKey,
+                following: true,
+                imageUrl: imageUrl,
+                headers: headers,
+                width: SizeWidget.circleDiameterOutside,
+                height: SizeWidget.circleDiameterOutside,
+              ),
             ),
           ),
           Visibility(

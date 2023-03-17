@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/follow_user_argument.dart';
+import 'package:hyppe/core/bloc/follow/bloc.dart';
+import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
@@ -149,10 +153,48 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  // Future<bool> addPostViewMixin(BuildContext context, ContentData data) async {
-  //   String? _userID = SharedPreference().readStorage(SpKeys.userID);
-  //   final _result = await addPostView(context, data: AddPostView(userID: data.userID, postID: data.postID, vUserID: _userID));
+  Future<void> followUser(BuildContext context, ContentData dataContent, {bool checkIdCard = true, isUnFollow = false, String receiverParty = '', bool isloading = false}) async {
+    try {
+      dataContent.insight?.isloadingFollow = true;
+      print(isloading);
+      notifyListeners();
+      final notifier = FollowBloc();
+      await notifier.followUserBlocV2(
+        context,
+        data: FollowUserArgument(
+          receiverParty: dataContent?.email ?? '',
+          eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
+        ),
+      );
+      final fetch = notifier.followFetch;
+      if (fetch.followState == FollowState.followUserSuccess) {
+        print('asdasdasd');
+        if (isUnFollow) {
+          print('1');
+          dataContent.following = false;
+          dataContent.insight?.isloadingFollow = false;
+          notifyListeners();
+        } else {
+          print('3');
+          dataContent.following = true;
+          dataContent.insight?.isloadingFollow = false;
+          notifyListeners();
+        }
+      }
 
-  //   return _result;
-  // }
+      print("=============data ${dataContent.following}");
+      //   },
+      //   uploadContentAction: false,
+      // );
+
+      notifyListeners();
+    } catch (e) {
+      isloading = false;
+      'follow user: ERROR: $e'.logger();
+    }
+  }
+
+  void reportContent(BuildContext context, ContentData data) {
+    ShowBottomSheet.onReportContent(context, postData: data, type: hyppePic, inDetail: false);
+  }
 }

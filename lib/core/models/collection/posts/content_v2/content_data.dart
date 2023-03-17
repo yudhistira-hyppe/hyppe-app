@@ -181,6 +181,8 @@ class ContentData {
   bool? apsara;
   bool? isShared;
   bool? following;
+  List<Comment>? comment;
+  bool? isDiaryPlay;
 
   ContentData({
     this.metadata,
@@ -234,6 +236,8 @@ class ContentData {
     this.apsara,
     this.isShared,
     this.following,
+    this.comment,
+    this.isDiaryPlay,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -313,6 +317,13 @@ class ContentData {
             ? null
             : MediaModel.fromJSON(json['media']);
     following = json['following'] ?? false;
+    if (json['comment'] != null) {
+      comment = <Comment>[];
+      json['comment'].forEach((v) {
+        comment!.add(Comment.fromJson(v));
+      });
+    }
+    isDiaryPlay = false;
   }
 
   Map<String, dynamic> toJson() {
@@ -451,16 +462,20 @@ class Privacy {
 
   bool? isPrivate;
 
+  bool? isIdVerified;
+
   Privacy({
     this.isPrivate,
     this.isCelebrity,
     this.isPostPrivate,
+    this.isIdVerified,
   });
 
   Privacy.fromJson(Map<String, dynamic> json) {
     isPostPrivate = json['isPostPrivate'];
     isCelebrity = json['isCelebrity'];
     isPrivate = json['isPrivate'];
+    isIdVerified = json['isIdVerified'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
@@ -522,4 +537,150 @@ class TagPeople {
         "status": status,
         "avatar": avatar != null ? avatar?.toJson() : '',
       };
+}
+
+class Comment {
+  String? sId;
+  String? disqusID;
+  int? sequenceNumber;
+  String? sender;
+  String? receiver;
+  bool? active;
+  String? postType;
+  String? txtMessages;
+  String? postID;
+  String? createdAt;
+  String? updatedAt;
+  List<Medias>? medias;
+  List<Null>? replyLogs;
+  List<Null>? tags;
+  String? sClass;
+  int? iV;
+  UserComment? userComment;
+
+  Comment(
+      {this.sId,
+      this.disqusID,
+      this.sequenceNumber,
+      this.sender,
+      this.receiver,
+      this.active,
+      this.postType,
+      this.txtMessages,
+      this.postID,
+      this.createdAt,
+      this.updatedAt,
+      this.medias,
+      this.replyLogs,
+      this.tags,
+      this.sClass,
+      this.iV,
+      this.userComment});
+
+  Comment.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    disqusID = json['disqusID'];
+    sequenceNumber = json['sequenceNumber'];
+    sender = json['sender'];
+    receiver = json['receiver'];
+    active = json['active'];
+    postType = json['postType'];
+    txtMessages = json['txtMessages'];
+    postID = json['postID'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    if (json['medias'] != null) {
+      medias = <Medias>[];
+      json['medias'].forEach((v) {
+        medias!.add(Medias.fromJson(v));
+      });
+    }
+
+    sClass = json['_class'];
+    iV = json['__v'];
+    userComment = json['userComment'] != null ? new UserComment.fromJson(json['userComment']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['disqusID'] = disqusID;
+    data['sequenceNumber'] = sequenceNumber;
+    data['sender'] = sender;
+    data['receiver'] = receiver;
+    data['active'] = active;
+    data['postType'] = postType;
+    data['txtMessages'] = txtMessages;
+    data['postID'] = postID;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    if (medias != null) {
+      data['medias'] = medias!.map((v) => v.toJson()).toList();
+    }
+    data['_class'] = sClass;
+    data['__v'] = iV;
+    if (userComment != null) {
+      data['userComment'] = userComment!.toJson();
+    }
+    return data;
+  }
+}
+
+class Medias {
+  String? createdAt;
+  String? postType;
+  String? description;
+  bool? active;
+  String? mediaType;
+  String? mediaThumbEndpoint;
+  String? postID;
+  bool? apsara;
+  String? apsaraId;
+
+  Medias({this.createdAt, this.postType, this.description, this.active, this.mediaType, this.mediaThumbEndpoint, this.postID, this.apsara, this.apsaraId});
+
+  Medias.fromJson(Map<String, dynamic> json) {
+    createdAt = json['createdAt'];
+    postType = json['postType'];
+    description = json['description'];
+    active = json['active'];
+    mediaType = json['mediaType'];
+    mediaThumbEndpoint = json['mediaThumbEndpoint'];
+    postID = json['postID'];
+    apsara = json['apsara'];
+    apsaraId = json['apsaraId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['createdAt'] = createdAt;
+    data['postType'] = postType;
+    data['description'] = description;
+    data['active'] = active;
+    data['mediaType'] = mediaType;
+    data['mediaThumbEndpoint'] = mediaThumbEndpoint;
+    data['postID'] = postID;
+    data['apsara'] = apsara;
+    data['apsaraId'] = apsaraId;
+    return data;
+  }
+}
+
+class UserComment {
+  String? sId;
+  String? username;
+
+  UserComment({this.sId, this.username});
+
+  UserComment.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    username = json['username'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['username'] = username;
+    return data;
+  }
 }

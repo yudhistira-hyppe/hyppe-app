@@ -69,7 +69,7 @@ class ReportNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  setPosition(contentPosition? val){
+  setPosition(contentPosition? val) {
     _inPosition = val;
   }
 

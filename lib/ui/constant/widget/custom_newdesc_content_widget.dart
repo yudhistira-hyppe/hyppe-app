@@ -223,7 +223,6 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
   }
 
   List<ItemDesc> getDescItems({int? lastIndex, required bool linkLongerThanLine}) {
-    print('readmore $_readMore');
     var fixDesc = _readMore
         ? lastIndex != null
             ? widget.desc.substring(0, lastIndex + 1) + (linkLongerThanLine ? _kLineSeparator : '')

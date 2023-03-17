@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -9,7 +8,8 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/home/widget/filter.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
@@ -19,7 +19,6 @@ import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 // v2 view
 import 'package:hyppe/ui/inner/home/content_v2/pic/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/preview/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/screen.dart';
 import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
@@ -36,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
   late TabController _tabController;
+  double offset = 0.0;
   List filterList = [
     {"id": '1', 'name': "Pic"},
     {"id": '2', 'name': "Diary"},
@@ -103,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     isHomeScreen = true;
     'isOnHomeScreen $isHomeScreen'.logger();
     _tabController = TabController(length: 3, vsync: this);
+    offset = 0;
     Future.delayed(Duration.zero, () {
       final notifier = context.read<HomeNotifier>();
       notifier.setSessionID();
@@ -116,6 +117,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           {'name': "${_language.following}", 'code': 'FOLLOWING'},
         ];
       }
+      _scrollController.addListener(() {
+        offset = _scrollController.offset;
+        if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
+          notifier.initNewHome(context, mounted, isreload: false);
+        }
+      });
       context.read<ReportNotifier>().inPosition = contentPosition.home;
     });
 
@@ -130,8 +137,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeNotifier>(
-      builder: (_, notifier, __) => WillPopScope(
+    return Consumer2<HomeNotifier, SelfProfileNotifier>(
+      builder: (_, notifier, selfnotifier, __) => WillPopScope(
         onWillPop: () async {
           MoveToBackground.moveTaskToBack();
           return false;
@@ -139,11 +146,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         child: Scaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-            child: HomeAppBar(),
+            child: HomeAppBar(name: selfnotifier.user.profile?.fullName, offset: offset),
           ),
           body: DefaultTabController(
             length: 3,
             child: NestedScrollView(
+              controller: _scrollController,
               headerSliverBuilder: (context, _) {
                 return [
                   SliverList(
@@ -207,15 +215,15 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                     child: const HyppePreviewPic(),
                   ),
                   Container(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    padding: const EdgeInsets.only(left: 6.0, right: 6),
                     color: kHyppeLightSurface,
-                    child: const HyppePreviewPic(),
+                    child: const LandingDiaryPage(),
                   ),
                   // second tab bar viiew widget
                   Container(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    padding: const EdgeInsets.only(left: 16.0, right: 16),
                     color: kHyppeLightSurface,
-                    child: const HyppePreviewPic(),
+                    child: const HyppePreviewVid(),
                   ),
                 ],
               ),

@@ -127,10 +127,10 @@ class _HomeScreenOldState extends State<HomeScreenOld> with RouteAware, AfterFir
           return false;
         },
         child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-            child: HomeAppBar(),
-          ),
+          // appBar: PreferredSize(
+          //   preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
+          //   child: HomeAppBar(),
+          // ),
           body: RefreshIndicator(
             key: _globalKey,
             strokeWidth: 2.0,

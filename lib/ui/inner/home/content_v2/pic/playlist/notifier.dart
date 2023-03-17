@@ -192,7 +192,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future followUser(BuildContext context, {bool checkIdCard = true, isUnFollow = false, String receiverParty = ''}) async {
+  Future followUser(BuildContext context, {bool checkIdCard = true, isUnFollow = false, String receiverParty = '', ContentData? dataContent}) async {
     try {
       checkIsLoading = true;
       if (checkIdCard) {
@@ -204,20 +204,37 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
         await notifier.followUserBlocV2(
           context,
           data: FollowUserArgument(
-            receiverParty: receiverParty != '' ? receiverParty : _data?.email ?? '',
+            receiverParty: dataContent != null ? dataContent.email ?? '' : _data?.email ?? '',
             eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
           ),
         );
         final fetch = notifier.followFetch;
         if (fetch.followState == FollowState.followUserSuccess) {
           if (isUnFollow) {
-            statusFollowing = StatusFollowing.none;
+            if (dataContent != null) {
+              dataContent.following = false;
+              notifyListeners();
+            } else {
+              statusFollowing = StatusFollowing.none;
+            }
           } else {
-            statusFollowing = StatusFollowing.following;
+            if (dataContent != null) {
+              dataContent.following = true;
+              notifyListeners();
+            } else {
+              statusFollowing = StatusFollowing.following;
+            }
           }
         } else if (statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following) {
-          statusFollowing = StatusFollowing.none;
+          if (dataContent != null) {
+            dataContent.following = false;
+            notifyListeners();
+          } else {
+            statusFollowing = StatusFollowing.none;
+          }
         }
+
+        print("=============data ${dataContent?.following}");
         //   },
         //   uploadContentAction: false,
         // );

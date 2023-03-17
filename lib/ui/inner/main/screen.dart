@@ -1,5 +1,7 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/ui/inner/home/widget/profile.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -41,8 +43,8 @@ class _MainScreenState extends State<MainScreen> {
           backgroundColor: _themes.backgroundColor,
           body: SafeArea(
             child: AnimatedSwitcher(
-              child: notifier.mainScreen(context),
               duration: const Duration(milliseconds: 250),
+              child: notifier.mainScreen(context),
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
@@ -61,25 +63,25 @@ class _MainScreenState extends State<MainScreen> {
             },
             currentIndex: notifier.pageIndex,
             type: BottomNavigationBarType.fixed,
-            items: <BottomNavigationBarItem>[
+            items: [
               BottomNavigationBarItem(
                 icon: CustomIconWidget(
                   defaultColor: false,
                   color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
                   iconData: '${AssetPath.vectorPath}home.svg',
                 ),
-                activeIcon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color, iconData: '${AssetPath.vectorPath}home-active.svg'),
+                activeIcon: const CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}home-active.svg'),
                 label: '',
               ),
               BottomNavigationBarItem(
                 icon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color, iconData: '${AssetPath.vectorPath}search-nav.svg'),
                 label: '',
-                activeIcon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color, iconData: '${AssetPath.vectorPath}search-active.svg'),
+                activeIcon: const CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}search-active.svg'),
               ),
-              BottomNavigationBarItem(
-                icon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.selectedIconTheme?.color, iconData: '${AssetPath.vectorPath}upload.svg'),
+              const BottomNavigationBarItem(
+                icon: CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}hyppe-button.svg'),
                 label: '',
-                activeIcon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.selectedIconTheme?.color, iconData: '${AssetPath.vectorPath}upload.svg'),
+                activeIcon: CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}hyppe-button.svg'),
               ),
               BottomNavigationBarItem(
                 icon: Stack(children: [
@@ -87,21 +89,25 @@ class _MainScreenState extends State<MainScreen> {
                   const NotificationCircle()
                 ]),
                 label: '',
-                activeIcon: CustomIconWidget(
+                activeIcon: const CustomIconWidget(
                   defaultColor: false,
-                  color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+                  color: kHyppeTextLightPrimary,
                   iconData: '${AssetPath.vectorPath}notification-active.svg',
                 ),
               ),
-              BottomNavigationBarItem(
-                icon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color, iconData: '${AssetPath.vectorPath}message.svg'),
-                activeIcon: CustomIconWidget(
-                  defaultColor: false,
-                  color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
-                  iconData: '${AssetPath.vectorPath}message-active.svg',
-                ),
+              const BottomNavigationBarItem(
+                icon: Profile(),
                 label: '',
               ),
+              // BottomNavigationBarItem(
+              //   icon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color, iconData: '${AssetPath.vectorPath}message.svg'),
+              //   activeIcon: CustomIconWidget(
+              //     defaultColor: false,
+              //     color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+              //     iconData: '${AssetPath.vectorPath}message-active.svg',
+              //   ),
+              //   label: '',
+              // ),
             ],
           ),
         );

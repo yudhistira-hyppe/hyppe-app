@@ -669,6 +669,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
               if (secondsSkip < 1) {
                 if (data.adsUrlLink?.isEmail() ?? false) {
                   final email = data.adsUrlLink!.replaceAll('email:', '');
+                  adsView(widget.data, secondsVideo, isClick: true);
                   Navigator.pop(context);
                   Future.delayed(const Duration(milliseconds: 500), () {
                     Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
@@ -1233,6 +1234,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                 if (data.adsUrlLink?.isEmail() ?? false) {
                   final email = data.adsUrlLink!.replaceAll('email:', '');
                   Navigator.pop(context);
+                  adsView(widget.data, secondsVideo, isClick: true);
                   Future.delayed(const Duration(milliseconds: 500), () {
                     Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                   });

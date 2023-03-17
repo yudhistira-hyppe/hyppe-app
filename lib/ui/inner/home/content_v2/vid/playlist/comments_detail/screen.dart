@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/widget/comment_tile.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/user_template.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../../core/models/collection/comment_v2/comment_data_v2.dart';
 import '../../../../../../../core/models/collection/posts/content_v2/content_data.dart';
 import '../../../../../../../core/services/system.dart';
@@ -16,6 +15,7 @@ import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 import '../../../../../../constant/widget/custom_icon_widget.dart';
 import '../../../../../../constant/widget/custom_loading.dart';
 import '../../../../../../constant/widget/custom_profile_image.dart';
+import '../../../../../../constant/widget/custom_shimmer.dart';
 import '../../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../../constant/widget/custom_text_button.dart';
 import '../../../../../../constant/widget/custom_text_widget.dart';
@@ -73,7 +73,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
     final data = widget.argument.data;
     return Consumer<CommentNotifierV2>(builder: (context, notifier, _) {
       if (notifier.commentData == null) {
-        return const Center(child: CustomLoading());
+        return _commentsShimmer(context);
       }
       return Scaffold(
         backgroundColor: context.getColorScheme().surface,
@@ -88,6 +88,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                     GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
+                          notifier.parentID = null;
                         },
                         child: const CustomIconWidget(
                             width: 20,
@@ -155,148 +156,128 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                   ),
                 ),
               ),
-              Container(
-                color: context.getColorScheme().surface,
-                padding: const EdgeInsets.only(
-                    bottom: 12, left: 16, right: 16, top: 10),
-                child: Column(
-                  children: [
-                    Row(
-                      children: List.generate(emoji.length, (index) {
-                        return Expanded(
-                            child: InkWell(
-                                onTap: () {
-                                  final currentText =
-                                      notifier.commentController.text;
-                                  notifier.commentController.text =
-                                      "$currentText${emoji[index]}";
-                                  notifier.commentController.selection =
-                                      TextSelection.fromPosition(TextPosition(
-                                          offset: notifier
-                                              .commentController.text.length));
-                                  notifier.onUpdate();
-                                },
-                                child: CustomTextWidget(
-                                  textToDisplay: emoji[index],
-                                  textStyle: const TextStyle(fontSize: 24),
-                                )));
-                      }),
-                    ),
-                    tenPx,
-                    TextField(
-                      controller: notifier.commentController,
-                      focusNode: notifier.inputNode,
-                      style: Theme.of(context).textTheme.bodyText2,
-                      decoration: InputDecoration(
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide(
-                            color: context.getColorScheme().surface)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50),
-                            borderSide: BorderSide(
-                                color: context.getColorScheme().surface)),
-                        fillColor: Theme.of(context).colorScheme.background,
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50),
+              Builder(
+                builder: (context) {
+                  final parentID = notifier.parentID;
+                  List<CommentsLogs>? comments;
+                  try{
+                    if(parentID != null){
+                      comments = notifier.commentData?.where((element) => element.comment?.lineID == parentID).toList();
+                    }else{
+                      comments = null;
+                    }
+                  }catch(e){
+                    comments = null;
+                  }
+                  return Column(
+                    children: [
+                      if(comments?.isNotEmpty ?? false)
+                      Container(
+                        color: kHyppeBgNotSolve,
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                        child: Row(
+                          children: [
+                            Expanded(child: CustomTextWidget(textAlign: TextAlign.start, textToDisplay: '${notifier.language.replyTo} ${comments?.first.comment?.senderInfo?.username ?? '-'}')),
+                            InkWell(
+                              onTap: (){
+                                notifier.parentID = null;
+                                notifier.commentController.clear();
+                                notifier.onUpdate();
+                              },
+                              child: CustomIconWidget(width: 20, height: 20, iconData: '${AssetPath.vectorPath}close.svg', defaultColor: false, color: context.getColorScheme().onBackground,),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        color: context.getColorScheme().surface,
+                        padding: const EdgeInsets.only(
+                            bottom: 12, left: 16, right: 16, top: 10),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: List.generate(emoji.length, (index) {
+                                return Expanded(
+                                    child: InkWell(
+                                        onTap: () {
+                                          final currentText =
+                                              notifier.commentController.text;
+                                          notifier.commentController.text =
+                                              "$currentText${emoji[index]}";
+                                          notifier.commentController.selection =
+                                              TextSelection.fromPosition(TextPosition(
+                                                  offset: notifier
+                                                      .commentController.text.length));
+                                          notifier.onUpdate();
+                                        },
+                                        child: CustomTextWidget(
+                                          textToDisplay: emoji[index],
+                                          textStyle: const TextStyle(fontSize: 24),
+                                        )));
+                              }),
+                            ),
+                            tenPx,
+                            TextField(
+                              controller: notifier.commentController,
+                              focusNode: notifier.inputNode,
+                              style: Theme.of(context).textTheme.bodyText2,
+                              decoration: InputDecoration(
+                                filled: true,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(50),
                                 borderSide: BorderSide(
                                     color: context.getColorScheme().surface)),
-                        hintText: "${notifier.language.typeAMessage}...",
-                        prefixIcon: Container(
-                          margin: const EdgeInsets.only(right: 5, left: 5),
-                          child: CustomProfileImage(
-                            width: 26,
-                            height: 26,
-                            imageUrl: System()
-                                .showUserPicture(data.avatar?.mediaEndpoint),
-                            following: true,
-                          ),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    borderSide: BorderSide(
+                                        color: context.getColorScheme().surface)),
+                                fillColor: Theme.of(context).colorScheme.background,
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(50),
+                                        borderSide: BorderSide(
+                                            color: context.getColorScheme().surface)),
+                                hintText: "${notifier.language.typeAMessage}...",
+                                prefixIcon: Container(
+                                  margin: const EdgeInsets.only(right: 5, left: 5),
+                                  child: CustomProfileImage(
+                                    width: 26,
+                                    height: 26,
+                                    imageUrl: System()
+                                        .showUserPicture(comments?.first.comment?.senderInfo?.avatar?.mediaEndpoint ?? data.avatar?.mediaEndpoint),
+                                    following: true,
+                                  ),
+                                ),
+                                prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+                                    suffixIcon: notifier.commentController.text.isNotEmpty
+                                        ? notifier.loading
+                                            ? const CustomLoading(size: 4)
+                                            : CustomTextButton(
+                                                child: CustomTextWidget(
+                                                  textToDisplay:
+                                                      notifier.language.send ?? '',
+                                                  textStyle: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  notifier.addComment(context);
+                                                },
+                                              )
+                                        : const SizedBox.shrink(),
+                              ),
+                              onChanged: (value) =>
+                                  notifier.onChangeHandler(value, context),
+                            ),
+                          ],
                         ),
-                        prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
-                            suffixIcon: notifier.commentController.text.isNotEmpty
-                                ? notifier.loading
-                                    ? const CustomLoading(size: 4)
-                                    : CustomTextButton(
-                                        child: CustomTextWidget(
-                                          textToDisplay:
-                                              notifier.language.send ?? '',
-                                          textStyle: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          notifier.addComment(context);
-                                        },
-                                      )
-                                : const SizedBox.shrink(),
                       ),
-                      onChanged: (value) =>
-                          notifier.onChangeHandler(value, context),
-                    ),
-                    // TextFormField(
-                    //   minLines: 1,
-                    //   maxLines: 7,
-                    //   textAlignVertical: TextAlignVertical.center,
-                    //   focusNode: notifier.inputNode,
-                    //   keyboardType: TextInputType.text,
-                    //   keyboardAppearance: Brightness.dark,
-                    //   controller: notifier.commentController,
-                    //   textInputAction: TextInputAction.unspecified,
-                    //   style: Theme.of(context).textTheme.bodyText2,
-                    //   autofocus: true,
-                    //   decoration: InputDecoration(
-                    //     fillColor: Theme.of(context).colorScheme.background,
-                    //     hintText: "${notifier.language.typeAMessage}...",
-                    //     hintStyle: const TextStyle(
-                    //         color: Color(0xffBABABA), fontSize: 14),
-                    //     // border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-                    //     contentPadding: const EdgeInsets.symmetric(
-                    //         horizontal: 10, vertical: 10),
-                    //     // enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-                    //     focusedBorder: OutlineInputBorder(
-                    //         borderRadius: BorderRadius.circular(25),
-                    //         borderSide: BorderSide(
-                    //             color: context.getColorScheme().surface)),
-                    //     prefixIconConstraints:
-                    //         BoxConstraints(minWidth: 0, minHeight: 0),
-                    //     prefix: CustomProfileImage(
-                    //       width: 26,
-                    //       height: 26,
-                    //       imageUrl: System()
-                    //           .showUserPicture(data.avatar?.mediaEndpoint),
-                    //       following: true,
-                    //     ),
-                    //     suffixIcon: notifier.commentController.text.isNotEmpty
-                    //         ? notifier.loading
-                    //             ? const CustomLoading(size: 4)
-                    //             : CustomTextButton(
-                    //                 child: CustomTextWidget(
-                    //                   textToDisplay:
-                    //                       notifier.language.send ?? '',
-                    //                   textStyle: TextStyle(
-                    //                     color: Theme.of(context)
-                    //                         .colorScheme
-                    //                         .primary,
-                    //                     fontSize: 16,
-                    //                     fontWeight: FontWeight.w700,
-                    //                   ),
-                    //                 ),
-                    //                 onPressed: () {
-                    //                   notifier.addComment(context);
-                    //                 },
-                    //               )
-                    //         : const SizedBox.shrink(),
-                    //   ),
-                    //   onChanged: (value) =>
-                    //       notifier.onChangeHandler(value, context),
-                    // ),
-                  ],
-                ),
+                    ],
+                  );
+                }
               )
             ],
           ),
@@ -380,6 +361,165 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _commentItemShimmer(BuildContext context){
+    final width = context.getWidth();
+    return Container(
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              const CustomShimmer(
+                height: 36,
+                width: 36,
+                radius: 18,
+              ),
+              twelvePx,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomShimmer(
+                    width: width * 0.7,
+                    height: 16,
+                    radius: 8,
+                    margin: EdgeInsets.only(right: 20),
+                  ),
+                  fourPx,
+                  CustomShimmer(
+                    width: width * 0.6,
+                    height: 16,
+                    radius: 8,
+                    margin: EdgeInsets.only(right: 30),
+                  )
+                ],
+              ),
+            ],
+          ),
+          tenPx,
+          Container(
+            margin: const EdgeInsets.only(left: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const CustomShimmer(
+                      height: 36,
+                      width: 36,
+                      radius: 18,
+                    ),
+                    twelvePx,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomShimmer(
+                          width: width * 0.4,
+                          height: 16,
+                          radius: 8,
+                          margin: EdgeInsets.only(right: 20),
+                        ),
+                        fourPx,
+                        CustomShimmer(
+                          width: width * 0.3,
+                          height: 16,
+                          radius: 8,
+                          margin: EdgeInsets.only(right: 30),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                tenPx,
+                Row(
+                  children: [
+                    const CustomShimmer(
+                      height: 36,
+                      width: 36,
+                      radius: 18,
+                    ),
+                    twelvePx,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomShimmer(
+                          width: width * 0.4,
+                          height: 16,
+                          radius: 8,
+                          margin: EdgeInsets.only(right: 20),
+                        ),
+                        fourPx,
+                        CustomShimmer(
+                          width: width * 0.3,
+                          height: 16,
+                          radius: 8,
+                          margin: EdgeInsets.only(right: 30),
+                        )
+                      ],
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          tenPx,
+        ],
+      ),
+    );
+  }
+
+  Widget _commentsShimmer(BuildContext context){
+    final width = context.getWidth();
+    return Scaffold(
+      backgroundColor: context.getColorScheme().surface,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 20, right: 16, left: 16, bottom: 16),
+              child: Row(
+                children: [
+                  const CustomShimmer(
+                    height: 36,
+                    width: 36,
+                    radius: 18,
+                  ),
+                  twelvePx,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomShimmer(
+                        width: width * 0.7,
+                        height: 16,
+                        radius: 8,
+                        margin: EdgeInsets.only(right: 20),
+                      ),
+                      fourPx,
+                      CustomShimmer(
+                        width: width * 0.6,
+                        height: 16,
+                        radius: 8,
+                        margin: EdgeInsets.only(right: 30),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            sixteenPx,
+            Expanded(child: SingleChildScrollView(
+              child: Container(
+                color: context.getColorScheme().background,
+                child: Column(
+                  children: List.generate(5, (index) => _commentItemShimmer(context)),
+                ),
+              ),
+            ))
+          ],
+        ),
       ),
     );
   }

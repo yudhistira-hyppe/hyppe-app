@@ -17,19 +17,12 @@ class Profile extends StatelessWidget {
     // final myPicture = context.select((SelfProfileNotifier value) => value.user.profile?.avatar?.mediaEndpoint);
     final notifier = Provider.of<HomeNotifier>(context);
     // 'showUserPicture 1 : ${notifier.profileImage}'.logger();
-    return SizedBox(
-      width: 50,
-      child: CustomTextButton(
-        style: ButtonStyle(alignment: Alignment.centerRight, padding: MaterialStateProperty.all(const EdgeInsets.only(left: 0.0))),
-        onPressed: () => context.read<HomeNotifier>().navigateToProfilePage(context),
-        child: CustomProfileImage(
-          cacheKey: notifier.profileImageKey,
-          width: 26,
-          height: 26,
-          following: true,
-          imageUrl: System().showUserPicture(notifier.profileImage) ?? '',
-        ),
-      ),
+    return CustomProfileImage(
+      cacheKey: notifier.profileImageKey,
+      width: 36,
+      height: 36,
+      following: true,
+      imageUrl: System().showUserPicture(notifier.profileImage) ?? '',
     );
 
     // return notifier.item1 != null

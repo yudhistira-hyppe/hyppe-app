@@ -73,20 +73,15 @@ class _CustomDescContentState extends State<CustomDescContent> {
       effectiveTextStyle = defaultTextStyle.style.merge(widget.normStyle);
     }
 
-    final textAlign =
-        widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
+    final textAlign = widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
     final textDirection = Directionality.of(context);
     final textScaleFactor = MediaQuery.textScaleFactorOf(context);
 
     final colorClickableText = Theme.of(context).colorScheme.surface;
-    final _defaultMoreLessStyle = widget.expandStyle ??
-        effectiveTextStyle?.copyWith(color: colorClickableText);
+    final _defaultMoreLessStyle = widget.expandStyle ?? effectiveTextStyle?.copyWith(color: colorClickableText);
     final _defaultDelimiterStyle = widget.normStyle ?? effectiveTextStyle;
 
-    final link = TextSpan(
-        text: _readMore ? widget.seeMore : widget.seeLess,
-        style: _defaultMoreLessStyle,
-        recognizer: TapGestureRecognizer()..onTap = _onSeeMore);
+    final link = TextSpan(text: _readMore ? widget.seeMore : widget.seeLess, style: _defaultMoreLessStyle, recognizer: TapGestureRecognizer()..onTap = _onSeeMore);
 
     final _delimiter = TextSpan(
         text: _readMore
@@ -133,9 +128,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
       if (linkSize.width < maxWidth) {
         final readMoreSize = linkSize.width + delimiterSize.width;
         final pos = textPainter.getPositionForOffset(Offset(
-          textDirection == TextDirection.rtl
-              ? readMoreSize
-              : textSize.width - readMoreSize,
+          textDirection == TextDirection.rtl ? readMoreSize : textSize.width - readMoreSize,
           textSize.height,
         ));
         endIndex = textPainter.getOffsetBefore(pos.offset) ?? 0;
@@ -152,8 +145,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
           style: effectiveTextStyle,
           children: collectDescItems(
             context,
-            getDescItems(
-                lastIndex: endIndex, linkLongerThanLine: linkLongerThanLine),
+            getDescItems(lastIndex: endIndex, linkLongerThanLine: linkLongerThanLine),
             spanTrim: link,
           ),
         );
@@ -168,10 +160,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
       } else {
         var textSpan = TextSpan(
           style: effectiveTextStyle,
-          children: collectDescItems(
-              context,
-              getDescItems(
-                  lastIndex: null, linkLongerThanLine: linkLongerThanLine)),
+          children: collectDescItems(context, getDescItems(lastIndex: null, linkLongerThanLine: linkLongerThanLine)),
         );
         return Text.rich(
           textSpan,
@@ -187,57 +176,41 @@ class _CustomDescContentState extends State<CustomDescContent> {
     return result;
   }
 
-  List<TextSpan> collectDescItems(BuildContext context, List<ItemDesc> items,
-      {TextSpan? spanTrim}) {
+  List<TextSpan> collectDescItems(BuildContext context, List<ItemDesc> items, {TextSpan? spanTrim}) {
     final callback = widget.callback;
     List<TextSpan> results = [];
     for (var item in items) {
-      if (item.type == CaptionType.seeMore ||
-          item.type == CaptionType.seeLess) {
+      if (item.type == CaptionType.seeMore || item.type == CaptionType.seeLess) {
         if (spanTrim != null) {
           results.add(spanTrim);
         }
       } else {
         results.add(TextSpan(
             text: item.desc,
-            style: item.type == CaptionType.mention ||
-                    item.type == CaptionType.hashtag
-                ? (widget.hrefStyle ??
-                    Theme.of(context)
-                        .textTheme
-                        .bodyText2!
-                        .copyWith(color: Theme.of(context).colorScheme.primary))
-                : (widget.normStyle ??
-                    Theme.of(context).textTheme.bodyText2!.copyWith()),
+            style: item.type == CaptionType.mention || item.type == CaptionType.hashtag
+                ? (widget.hrefStyle ?? Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primary))
+                : (widget.normStyle ?? Theme.of(context).textTheme.bodyText2!.copyWith()),
             recognizer: item.type == CaptionType.normal
                 ? null
                 : (TapGestureRecognizer()
                   ..onTap = () {
                     if (item.type == CaptionType.hashtag) {
-
-                      if(callback != null){
+                      if (callback != null) {
                         callback(true);
                       }
-                      var fixKeyword = item.desc[0] == '#'
-                          ? item.desc.substring(1, item.desc.length)
-                          : item.desc;
+                      var fixKeyword = item.desc[0] == '#' ? item.desc.substring(1, item.desc.length) : item.desc;
                       fixKeyword = fixKeyword.replaceAll(',', '');
-                      if(widget.isReplace){
+                      if (widget.isReplace) {
                         Routing().moveReplacement(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
-                      }else{
+                      } else {
                         Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
                       }
-
                     } else {
-                      if(callback != null){
+                      if (callback != null) {
                         callback(true);
                       }
-                      final fixUsername = item.desc[0] == '@'
-                          ? item.desc.substring(1, item.desc.length)
-                          : item.desc;
-                      materialAppKey.currentContext!
-                          .read<NotificationNotifier>()
-                          .checkAndNavigateToProfile(context, fixUsername, isReplace: widget.isReplace);
+                      final fixUsername = item.desc[0] == '@' ? item.desc.substring(1, item.desc.length) : item.desc;
+                      materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(context, fixUsername, isReplace: widget.isReplace);
                     }
                   })));
       }
@@ -245,13 +218,10 @@ class _CustomDescContentState extends State<CustomDescContent> {
     return results;
   }
 
-  List<ItemDesc> getDescItems(
-      {int? lastIndex, required bool linkLongerThanLine}) {
-    print('readmore $_readMore');
+  List<ItemDesc> getDescItems({int? lastIndex, required bool linkLongerThanLine}) {
     var fixDesc = _readMore
         ? lastIndex != null
-            ? widget.desc.substring(0, lastIndex + 1) +
-                (linkLongerThanLine ? _kLineSeparator : '')
+            ? widget.desc.substring(0, lastIndex + 1) + (linkLongerThanLine ? _kLineSeparator : '')
             : widget.desc
         : widget.desc;
     fixDesc = fixDesc.replaceAll('\n@', '\n @');
@@ -271,36 +241,28 @@ class _CustomDescContentState extends State<CustomDescContent> {
         final firstChar = splitDesc[i].substring(0, 1);
         if (firstChar == '@') {
           if (tempDesc.isNotEmpty) {
-            descItems
-                .add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
+            descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
             tempDesc = '';
           }
-          print(
-              'hit prepare username: ${splitDesc[i].substring(0, 1)} , ${splitDesc[i].substring(1, splitDesc[i].length)}');
-          descItems.add(
-              ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
+          print('hit prepare username: ${splitDesc[i].substring(0, 1)} , ${splitDesc[i].substring(1, splitDesc[i].length)}');
+          descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
         } else if (firstChar == '#') {
           if (tempDesc.isNotEmpty) {
-            descItems
-                .add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
+            descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
             tempDesc = '';
           }
-          descItems
-              .add(ItemDesc(desc: '${splitDesc[i]}  ', type: CaptionType.hashtag));
+          descItems.add(ItemDesc(desc: '${splitDesc[i]}  ', type: CaptionType.hashtag));
         } else {
           tempDesc = '$tempDesc ${splitDesc[i]}';
           if (i == (splitDesc.length - 1)) {
-            descItems.add(ItemDesc(
-                desc: getWithoutSpaces(tempDesc), type: CaptionType.normal));
+            descItems.add(ItemDesc(desc: getWithoutSpaces(tempDesc), type: CaptionType.normal));
           }
         }
       }
     }
 
     if (widget.seeMore != null && widget.seeLess != null) {
-      descItems.add(ItemDesc(
-          desc: _readMore ? (widget.seeMore ?? '') : (widget.seeLess ?? ''),
-          type: _readMore ? CaptionType.seeMore : CaptionType.seeLess));
+      descItems.add(ItemDesc(desc: _readMore ? (widget.seeMore ?? '') : (widget.seeLess ?? ''), type: _readMore ? CaptionType.seeMore : CaptionType.seeLess));
     }
 
     ///only for check the results

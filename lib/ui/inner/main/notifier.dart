@@ -22,6 +22,7 @@ import 'package:hyppe/core/services/socket_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/home/screen%20copy.dart';
 import 'package:hyppe/ui/inner/home/screen.dart';
@@ -140,7 +141,7 @@ class MainNotifier with ChangeNotifier {
   }
 
   Widget mainScreen(BuildContext context) {
-    List pages = [const HomeScreen(), SearchScreen(), NotificationScreen(), MessageScreen()];
+    List pages = [const HomeScreen(), SearchScreen(), NotificationScreen(), SelfProfileScreen()];
     late Widget screen;
 
     switch (pageIndex) {

@@ -9,7 +9,6 @@ import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 
 import 'package:hyppe/ux/path.dart';
 
@@ -18,11 +17,6 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
-
-import 'package:provider/provider.dart';
-
-import '../../../../../../app.dart';
-import '../../../notifier_v2.dart';
 
 class PreviewDiaryNotifier with ChangeNotifier {
   final _system = System();

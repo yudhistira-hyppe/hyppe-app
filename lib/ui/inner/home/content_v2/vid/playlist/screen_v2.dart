@@ -44,9 +44,7 @@ class NewVideoDetailScreen extends StatefulWidget {
   State<NewVideoDetailScreen> createState() => _NewVideoDetailScreenState();
 }
 
-class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
-    with AfterFirstLayoutMixin {
-
+class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterFirstLayoutMixin {
   @override
   void afterFirstLayout(BuildContext context) {
     // context.read<VidDetailNotifier>().getDetail(context, 'c3690a7d-d6a4-47fc-c068-71a1ae4225c4');
@@ -68,9 +66,9 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
     } else {
       height = MediaQuery.of(context).size.height;
     }
-    return Consumer2<VidDetailNotifier, LikeNotifier>(
-        builder: (context, notifier, like, _) {
+    return Consumer2<VidDetailNotifier, LikeNotifier>(builder: (context, notifier, like, _) {
       final data = notifier.data;
+      print("======data ${data?.postID}");
       var map = {
         DataSourceRelated.vidKey: widget.arguments.vidData?.apsaraId,
         DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
@@ -78,76 +76,69 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
 
       return Scaffold(
         backgroundColor: context.getColorScheme().surface,
-        body: data != null ? notifier.loadDetail
-            ? SafeArea(child: _contentDetailShimmer(context))
-            : SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(left: 16, top: 12, right: 16),
-                  decoration: BoxDecoration(
-                    boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
-                      borderRadius:
-                      const BorderRadius.all(Radius.circular(16)),
-                      color: context.getColorScheme().background),
-                  child: Column(
-                    children: [
-                      _topDetail(context, notifier, data),
-                      Container(
-                        color: Colors.black,
-                        child: PlayerPage(
-                          playMode:
-                          (widget.arguments.vidData?.isApsara ??
-                              false)
-                              ? ModeTypeAliPLayer.auth
-                              : ModeTypeAliPLayer.url,
-                          dataSourceMap: map,
-                          data: widget.arguments.vidData,
-                          height: height,
-                          width: width,
-                        ),
+        body: data != null
+            ? notifier.loadDetail
+                ? SafeArea(child: _contentDetailShimmer(context))
+                : SafeArea(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(left: 16, top: 12, right: 16),
+                            decoration: BoxDecoration(
+                                boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                                borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                color: context.getColorScheme().background),
+                            child: Column(
+                              children: [
+                                _topDetail(context, notifier, data),
+                                Container(
+                                  color: Colors.black,
+                                  child: PlayerPage(
+                                    playMode: (widget.arguments.vidData?.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                                    dataSourceMap: map,
+                                    data: widget.arguments.vidData,
+                                    height: height,
+                                    width: width,
+                                  ),
+                                ),
+                                _middleDetail(context, notifier, like, data),
+                              ],
+                            ),
+                          ),
+                          twelvePx,
+                          _bottomDetail(context, notifier, data)
+                        ],
                       ),
-                      _middleDetail(context, notifier, like, data),
-                    ],
-                  ),
-                ),
-                twelvePx,
-                _bottomDetail(context, notifier, data)
-              ],
-            ),
-          ),
-        ) : SafeArea(child: _contentDetailShimmer(context)),
+                    ),
+                  )
+            : SafeArea(child: _contentDetailShimmer(context)),
       );
 
       if (data != null) {
-
       } else {
         return SafeArea(child: _contentDetailShimmer(context));
       }
     });
   }
 
-  Widget _topDetail(
-      BuildContext context, VidDetailNotifier notifier, ContentData data) {
+  Widget _topDetail(BuildContext context, VidDetailNotifier notifier, ContentData data) {
     return Container(
       padding: const EdgeInsets.only(top: 16, right: 16, left: 16, bottom: 23),
       child: Row(
         children: [
           GestureDetector(
-              onTap: () {Navigator.pop(context);},
-              child: const CustomIconWidget(
-                width: 20,
-                  height: 25,
-                  iconData: '${AssetPath.vectorPath}back-arrow.svg')),
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const CustomIconWidget(width: 20, height: 25, iconData: '${AssetPath.vectorPath}back-arrow.svg')),
           sixteenPx,
           CustomProfileImage(
             width: 36,
             height: 36,
             onTap: () {},
-            imageUrl: System()
-                .showUserPicture(data.avatar?.mediaEndpoint?.split('_')[0]),
+            imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint?.split('_')[0]),
             following: true,
             onFollow: () {},
           ),
@@ -155,10 +146,14 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
           Expanded(
               child: Row(
             children: [
-              Expanded(child: Column(
+              Expanded(
+                  child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  UserTemplate(username: data.username ?? 'No Username', isVerified: data.isIdVerified ?? false, ),
+                  UserTemplate(
+                    username: data.username ?? 'No Username',
+                    isVerified: data.isIdVerified ?? false,
+                  ),
                   twoPx,
                   // CustomTextWidget(
                   //   textToDisplay: 'France, Paris',
@@ -169,8 +164,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
                       textToDisplay: data.location ?? '',
                       textStyle: context.getTextTheme().caption,
                     ),
-                  if (data.location?.isNotEmpty ?? false)
-                  twoPx,
+                  if (data.location?.isNotEmpty ?? false) twoPx,
                   if (data.music?.artistName != null)
                     Row(
                       children: [
@@ -180,23 +174,18 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
                           defaultColor: false,
                         ),
                         fourPx,
-                        CustomTextWidget(
-                            textToDisplay:
-                            '${data.music?.musicTitle} - ${data.music?.artistName}')
+                        Expanded(child: CustomTextWidget(textToDisplay: '${data.music?.musicTitle} - ${data.music?.artistName}'))
                       ],
                     )
                 ],
               )),
               eightPx,
               notifier.checkIsLoading
-                  ? const Center(
-                      child: SizedBox(height: 40, child: CustomLoading()))
+                  ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
                   : CustomFollowButton(
                       onPressed: () async {
                         try {
-                          await notifier.followUser(context,
-                              isUnFollow: notifier.statusFollowing ==
-                                  StatusFollowing.following);
+                          await notifier.followUser(context, isUnFollow: notifier.statusFollowing == StatusFollowing.following);
                         } catch (e) {
                           'follow error $e'.logger();
                         }
@@ -213,8 +202,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
                           postData: data,
                           type: hyppePic,
                           adsData: null,
-                          onUpdate: () =>
-                              context.read<PicDetailNotifier>().onUpdate(),
+                          onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
                         ),
                         child: const CustomIconWidget(
                           defaultColor: false,
@@ -237,8 +225,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
                             onDetail: true,
                             contentData: data,
                             captionTitle: hyppeVid,
-                            onUpdate: () =>
-                                context.read<VidDetailNotifier>().onUpdate(),
+                            onUpdate: () => context.read<VidDetailNotifier>().onUpdate(),
                             isShare: data.isShared,
                           );
                           if (globalAudioPlayer != null) {
@@ -261,8 +248,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
     );
   }
 
-  Widget _middleDetail(BuildContext context, VidDetailNotifier notifier,
-      LikeNotifier like, ContentData data) {
+  Widget _middleDetail(BuildContext context, VidDetailNotifier notifier, LikeNotifier like, ContentData data) {
     return Container(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 16),
       child: Column(
@@ -272,17 +258,10 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
             children: [
               CustomTextWidget(
                 textToDisplay: System().formatterNumber(data.insight?.views),
-                textStyle: context.getTextTheme().overline?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: context.getColorScheme().onBackground),
+                textStyle: context.getTextTheme().overline?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
               ),
               twoPx,
-              CustomTextWidget(
-                  textToDisplay: '${notifier.language.views}',
-                  textStyle: context
-                      .getTextTheme()
-                      .overline
-                      ?.copyWith(color: context.getColorScheme().secondary)),
+              CustomTextWidget(textToDisplay: '${notifier.language.views}', textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary)),
             ],
           ),
           sixteenPx,
@@ -294,7 +273,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     InkWell(
-                      onTap: (){
+                      onTap: () {
                         like.likePost(context, data);
                       },
                       child: CustomIconWidget(
@@ -302,61 +281,60 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
                         height: 20,
                         color: (data.insight?.isPostLiked ?? false) ? null : Colors.black,
                         defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'ic_like_red.svg' : 'ic_like_stroke.svg'}',),
+                        iconData: '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'ic_like_red.svg' : 'ic_like_stroke.svg'}',
+                      ),
                     ),
-                    if(data.allowComments ?? false)
-                    twentyPx,
-                    if(data.allowComments ?? false)
-                    InkWell(
-                      onTap: (){
-                        notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
-                      },
-                      child: const CustomIconWidget(
-                        width: 20,
-                        height: 20,
-                        color: Colors.black,
-                        defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}comment2.svg',),
-                    ),
-                    if(data.isShared ?? false)
-                    twentyPx,
-                    if(data.isShared ?? false)
-                    InkWell(
-                      onTap: (){
-                        like.likePost(context, data);
-                      },
-                      child: const CustomIconWidget(
-                        width: 20,
-                        height: 20,
-                        color: Colors.black,
-                        defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}share2.svg',),
-                    ),
+                    if (data.allowComments ?? false) twentyPx,
+                    if (data.allowComments ?? false)
+                      InkWell(
+                        onTap: () {
+                          notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
+                        },
+                        child: const CustomIconWidget(
+                          width: 20,
+                          height: 20,
+                          color: Colors.black,
+                          defaultColor: false,
+                          iconData: '${AssetPath.vectorPath}comment2.svg',
+                        ),
+                      ),
+                    if (data.isShared ?? false) twentyPx,
+                    if (data.isShared ?? false)
+                      InkWell(
+                        onTap: () {
+                          like.likePost(context, data);
+                        },
+                        child: const CustomIconWidget(
+                          width: 20,
+                          height: 20,
+                          color: Colors.black,
+                          defaultColor: false,
+                          iconData: '${AssetPath.vectorPath}share2.svg',
+                        ),
+                      ),
                   ],
                 ),
               ),
-              if((data.saleAmount ?? 0) > 0)
-              Container(
-                margin: const EdgeInsets.only(left: 10),
-                child: InkWell(
-                  onTap: (){
-                    notifier.createdDynamicLink(context, data: data);
-                  },
-                  child: const CustomIconWidget(
-                    width: 25,
-                    height: 25,
-                    color: Colors.black,
-                    defaultColor: false,
-                    iconData: '${AssetPath.vectorPath}cart.svg',),
+              if ((data.saleAmount ?? 0) > 0)
+                Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  child: InkWell(
+                    onTap: () {
+                      notifier.createdDynamicLink(context, data: data);
+                    },
+                    child: const CustomIconWidget(
+                      width: 25,
+                      height: 25,
+                      color: Colors.black,
+                      defaultColor: false,
+                      iconData: '${AssetPath.vectorPath}cart.svg',
+                    ),
+                  ),
                 ),
-              ),
-
             ],
           ),
           sixteenPx,
-          CustomTextWidget(
-              textToDisplay:
-              '${data.insight?.likes ?? 0} ${notifier.language.like}'),
+          CustomTextWidget(textToDisplay: '${data.insight?.likes ?? 0} ${notifier.language.like}'),
           fourPx,
           SingleChildScrollView(
             child: Column(
@@ -369,15 +347,8 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
                   seeLess: ' ${notifier.language.seeLess}',
                   seeMore: ' ${notifier.language.seeMoreContent}',
                   normStyle: Theme.of(context).textTheme.subtitle2,
-                  hrefStyle: Theme.of(context)
-                      .textTheme
-                      .subtitle2
-                      ?.copyWith(color: kHyppePrimary),
-                  expandStyle: Theme.of(context)
-                      .textTheme
-                      .subtitle2
-                      ?.copyWith(
-                      color: Theme.of(context).colorScheme.primary),
+                  hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                  expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
                 ),
               ],
             ),
@@ -389,12 +360,9 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
               if (tags.isNotEmpty) {
                 return TagLabel(
                   icon: 'tag_people',
-                  label: tags.length > 1
-                      ? '${tags.length} ${notifier.language.people}'
-                      : '${data.tagPeople?.first.username}',
+                  label: tags.length > 1 ? '${tags.length} ${notifier.language.people}' : '${data.tagPeople?.first.username}',
                   function: () {
-                    notifier.showUserTag(
-                        context, data.tagPeople, data.postID);
+                    notifier.showUserTag(context, data.tagPeople, data.postID);
                     // vidNotifier.showUserTag(context, index, data.postID);
                   },
                 );
@@ -402,27 +370,21 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
                 return const SizedBox.shrink();
               }
             }),
-          if (data.tagPeople != null)
-          twelvePx,
+          if (data.tagPeople != null) twelvePx,
           CustomTextWidget(
             textToDisplay: '${System().readTimestamp(
-              DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? ''))
-                  .millisecondsSinceEpoch,
+              DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? '')).millisecondsSinceEpoch,
               context,
               fullCaption: true,
             )}',
-            textStyle: context
-                .getTextTheme()
-                .overline
-                ?.copyWith(color: context.getColorScheme().secondary),
+            textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary),
           ),
         ],
       ),
     );
   }
 
-  Widget _bottomDetail(
-      BuildContext context, VidDetailNotifier notifier, ContentData data) {
+  Widget _bottomDetail(BuildContext context, VidDetailNotifier notifier, ContentData data) {
     final comment = notifier.firstComment;
     if((comment?.disqusLogs ?? []).isEmpty){
       return _noComment(context, notifier, data);
@@ -431,15 +393,14 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
     return !notifier.loadComment
         ? notifier.firstComment != null
             ? InkWell(
-      onTap: (){
-        notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
-      },
-              child: Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                onTap: () {
+                  notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   decoration: BoxDecoration(
-                      boxShadow: const[BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                      boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
                       borderRadius: const BorderRadius.all(Radius.circular(16)),
                       color: context.getColorScheme().background),
                   child: Column(
@@ -449,16 +410,12 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
                         children: [
                           CustomTextWidget(
                             textToDisplay: notifier.language.comment ?? '',
-                            textStyle: context.getTextTheme().bodyText2?.copyWith(
-                                fontWeight: FontWeight.w700,
-                                color: context.getColorScheme().onBackground),
+                            textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
                           ),
                           fourPx,
                           CustomTextWidget(
-                            textToDisplay:
-                                System().formatterNumber(data.insight?.comments),
-                            textStyle: context.getTextTheme().overline?.copyWith(
-                                color: context.getColorScheme().secondary),
+                            textToDisplay: System().formatterNumber(data.insight?.comments ?? (comment?.comment ?? 0)),
+                            textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary),
                           )
                         ],
                       ),
@@ -470,8 +427,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
                             width: 36,
                             height: 36,
                             onTap: () {},
-                            imageUrl: System()
-                                .showUserPicture(commentor?.avatar?.mediaEndpoint),
+                            imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
                             following: true,
                             onFollow: () {},
                           ),
@@ -480,31 +436,23 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                UserTemplate(username: '${commentor?.username}', isVerified: commentor?.isIdVerified ?? false, date:
-                                comment?.createdAt ??
-                                    DateTime.now().toString()
-                                ),
+                                UserTemplate(username: '${commentor?.username}', isVerified: commentor?.isIdVerified ?? false, date: comment?.createdAt ?? DateTime.now().toString()),
                                 twoPx,
                                 Row(
                                   children: [
                                     Expanded(
                                       child: CustomTextWidget(
                                         textAlign: TextAlign.start,
-                                        textToDisplay:
-                                        '${comment?.disqusLogs?[0].comment?.txtMessages}',
+                                        textToDisplay: '${comment?.disqusLogs?[0].comment?.txtMessages}',
                                         maxLines: 2,
-                                        textStyle: context
-                                            .getTextTheme()
-                                            .caption
-                                            ?.copyWith(
-                                            color: context
-                                                .getColorScheme()
-                                                .onBackground),
+                                        textStyle: context.getTextTheme().caption?.copyWith(color: context.getColorScheme().onBackground),
                                       ),
                                     ),
                                     Container(
-                                      margin: const EdgeInsets.only(right: 5),
-                                        child: const CustomIconWidget(iconData: '${AssetPath.vectorPath}arrow_down.svg',))
+                                        margin: const EdgeInsets.only(right: 5),
+                                        child: const CustomIconWidget(
+                                          iconData: '${AssetPath.vectorPath}arrow_down.svg',
+                                        ))
                                   ],
                                 )
                               ],
@@ -512,7 +460,6 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
                           ),
                         ],
                       ),
-
                     ],
                   ),
                 ),
@@ -523,30 +470,24 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
 
   Widget _noComment(BuildContext context, VidDetailNotifier notifier, ContentData data){
     return Container(
-        padding:
-        const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(16)),
-            color: context.getColorScheme().background),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(16)), color: context.getColorScheme().background),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomTextWidget(
               textToDisplay: '${notifier.language.noCommentYet}',
-              textStyle: context
-                  .getTextTheme()
-                  .bodyText2
-                  ?.copyWith(color: context.getColorScheme().secondary),
+              textStyle: context.getTextTheme().bodyText2?.copyWith(color: context.getColorScheme().secondary),
             ),
             eightPx,
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CustomTextWidget(
-                  textToDisplay:
-                  '${notifier.language.beTheFirstToComment}',
-                  textStyle: context.getTextTheme().bodyText2?.copyWith(
-                      color: context.getColorScheme().secondary),
+                  textToDisplay: '${notifier.language.beTheFirstToComment}',
+                  textStyle: context.getTextTheme().bodyText2?.copyWith(color: context.getColorScheme().secondary),
                 ),
                 fourPx,
                 InkWell(
@@ -555,12 +496,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
                   },
                   child: CustomTextWidget(
                     textToDisplay: '${notifier.language.tapHere2}',
-                    textStyle: context
-                        .getTextTheme()
-                        .bodyText2
-                        ?.copyWith(
-                        color: context.getColorScheme().primary,
-                        fontWeight: FontWeight.w700),
+                    textStyle: context.getTextTheme().bodyText2?.copyWith(color: context.getColorScheme().primary, fontWeight: FontWeight.w700),
                   ),
                 ),
               ],
@@ -621,7 +557,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
     );
   }
 
-  Widget _contentDetailShimmer(BuildContext context){
+  Widget _contentDetailShimmer(BuildContext context) {
     final width = context.getWidth();
     return Container(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 30),
@@ -677,25 +613,27 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen>
             ],
           ),
           sixteenPx,
-          Row(children: const [
-            CustomShimmer(
-              width: 20,
-              height: 20,
-              radius: 5,
-            ),
-            twentyPx,
-            CustomShimmer(
-              width: 20,
-              height: 20,
-              radius: 5,
-            ),
-            twentyPx,
-            CustomShimmer(
-              width: 20,
-              height: 20,
-              radius: 5,
-            ),
-          ],),
+          Row(
+            children: const [
+              CustomShimmer(
+                width: 20,
+                height: 20,
+                radius: 5,
+              ),
+              twentyPx,
+              CustomShimmer(
+                width: 20,
+                height: 20,
+                radius: 5,
+              ),
+              twentyPx,
+              CustomShimmer(
+                width: 20,
+                height: 20,
+                radius: 5,
+              ),
+            ],
+          ),
           sixteenPx,
           CustomShimmer(
             width: width * 0.2,

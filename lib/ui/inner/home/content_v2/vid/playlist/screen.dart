@@ -80,7 +80,6 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     if (orientation == Orientation.portrait) VidDetailTop(data: notifier.data),
-
                     Container(
                       color: Colors.black,
                       child: PlayerPage(

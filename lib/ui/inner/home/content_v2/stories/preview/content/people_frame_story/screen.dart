@@ -29,7 +29,7 @@ class PeopleFrameStory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final getData =  data?.story?[0];
+    final getData = data?.story?[0];
     SizeConfig().init(context);
     final _themes = Theme.of(context);
     return Column(
@@ -42,19 +42,22 @@ class PeopleFrameStory extends StatelessWidget {
             // haveStory: data[index].story.map((e) => e.isView).contains(0),
             haveStory: index.isEven,
             contentData: getData,
-            child: CustomProfileImage(
-              following: true,
-              width: SizeWidget.circleDiameterOutside,
-              height: SizeWidget.circleDiameterOutside,
-              onTap: () {
-                context.read<PreviewStoriesNotifier>().changeBorderColor(getData ?? ContentData());
-                context.read<ViewerStoriesNotifier>().postViewer(context, getData?.postID ?? '');
-                // if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
-                // context.read<PreviewStoriesNotifier>().navigateToShortVideoPlayer(context, index);
-                context.read<PreviewStoriesNotifier>().navigateToPeopleStoryGroup(context, index);
-              },
-              // imageUrl: context.read<PreviewStoriesNotifier>().onProfilePicShow(data[index].profilePicture),
-              imageUrl: System().showUserPicture(getData?.avatar?.mediaEndpoint),
+            child: Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: CustomProfileImage(
+                following: true,
+                width: SizeWidget.circleDiameterOutside,
+                height: SizeWidget.circleDiameterOutside,
+                onTap: () {
+                  context.read<PreviewStoriesNotifier>().changeBorderColor(getData ?? ContentData());
+                  context.read<ViewerStoriesNotifier>().postViewer(context, getData?.postID ?? '');
+                  // if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
+                  // context.read<PreviewStoriesNotifier>().navigateToShortVideoPlayer(context, index);
+                  context.read<PreviewStoriesNotifier>().navigateToPeopleStoryGroup(context, index);
+                },
+                // imageUrl: context.read<PreviewStoriesNotifier>().onProfilePicShow(data[index].profilePicture),
+                imageUrl: System().showUserPicture(getData?.avatar?.mediaEndpoint),
+              ),
             ),
           ),
         ),
