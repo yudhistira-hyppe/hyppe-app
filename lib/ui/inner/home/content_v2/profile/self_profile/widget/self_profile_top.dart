@@ -32,17 +32,25 @@ class SelfProfileTop extends StatelessWidget {
             // SelectableText("${notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}")}"),
             Row(
               children: <Widget>[
-                StoryColorValidator(
-                  haveStory: notifier.checkHaveStory(context),
-                  featureType: FeatureType.other,
-                  child: CustomProfileImage(
-                    cacheKey: notifier.user.profile?.avatar?.imageKey,
-                    following: true,
-                    width: 80 * SizeConfig.scaleDiagonal,
-                    height: 80 * SizeConfig.scaleDiagonal,
-                    imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
-                    onTap: () => notifier.viewStory(context),
-                  ),
+                // StoryColorValidator(
+                //   haveStory: notifier.checkHaveStory(context),
+                //   featureType: FeatureType.other,
+                //   child: CustomProfileImage(
+                //     cacheKey: notifier.user.profile?.avatar?.imageKey,
+                //     following: true,
+                //     width: 80 * SizeConfig.scaleDiagonal,
+                //     height: 80 * SizeConfig.scaleDiagonal,
+                //     imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
+                //     onTap: () => notifier.viewStory(context),
+                //   ),
+                // ),
+                CustomProfileImage(
+                  cacheKey: notifier.user.profile?.avatar?.imageKey,
+                  following: true,
+                  width: 80 * SizeConfig.scaleDiagonal,
+                  height: 80 * SizeConfig.scaleDiagonal,
+                  imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
+                  onTap: () => notifier.viewStory(context),
                 ),
                 Expanded(
                   child: Row(

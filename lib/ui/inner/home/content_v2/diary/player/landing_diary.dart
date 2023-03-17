@@ -534,7 +534,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     child: Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),
-                                        color: Colors.yellow,
+                                        color: Colors.white,
                                       ),
                                       child: Stack(
                                         children: [

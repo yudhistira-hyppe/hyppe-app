@@ -45,6 +45,7 @@ class BuildCircleProfile extends StatelessWidget {
                 headers: headers,
                 width: SizeWidget.circleDiameterOutside,
                 height: SizeWidget.circleDiameterOutside,
+                forStory: true,
               ),
             ),
           ),

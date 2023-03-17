@@ -142,18 +142,22 @@ class PicCenterItem extends StatelessWidget {
                 widthPlaceHolder: 80,
                 heightPlaceHolder: 80,
                 imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : "${data?.fullThumbPath}",
-                imageBuilder: (context, imageProvider) => ClipRRect(
-                  borderRadius: BorderRadius.circular(20), // Image border
-                  child: data?.reportedStatus == 'BLURRED'
-                      ? ImageFiltered(
-                          imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                          child: Image(
-                            image: imageProvider,
-                          ),
-                        )
-                      : Image(
-                          image: imageProvider,
-                        ),
+                imageBuilder: (context, imageProvider) => Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20), // Image border
+                      child: data?.reportedStatus == 'BLURRED'
+                          ? ImageFiltered(
+                              imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                              child: Image(
+                                image: imageProvider,
+                              ),
+                            )
+                          : Image(
+                              image: imageProvider,
+                            ),
+                    ),
+                  ],
                 ),
                 errorWidget: (context, url, error) {
                   return Container(
@@ -187,6 +191,7 @@ class PicCenterItem extends StatelessWidget {
                 ),
               ),
               // _buildBody(context, SizeConfig.screenWidth),
+              blurContentWidget(context),
             ],
           ),
           twentyPx,
@@ -234,7 +239,7 @@ class PicCenterItem extends StatelessWidget {
                     ),
                   ),
                 ),
-              if ((data?.isShared ?? false) && email != data?.email)
+              if ((data?.isShared ?? false))
                 Padding(
                   padding: const EdgeInsets.only(left: 21.0),
                   child: GestureDetector(
@@ -345,8 +350,7 @@ class PicCenterItem extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(context, width) {
-    final translate = Provider.of<TranslateNotifierV2>(context, listen: false);
+  Widget _buildBody(BuildContext context, width) {
     return Stack(
       children: [
         PicTopItem(data: data),
@@ -377,65 +381,69 @@ class PicCenterItem extends StatelessWidget {
               ),
             ),
           ),
-        // Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data, width: width)),
-        // data?.reportedStatus == 'BLURRED'
-        //     ? Consumer<TranslateNotifierV2>(
-        //         builder: (context, transnot, child) => Column(
-        //           mainAxisAlignment: MainAxisAlignment.end,
-        //           children: [
-        //             const Spacer(),
-        //             const CustomIconWidget(
-        //               iconData: "${AssetPath.vectorPath}eye-off.svg",
-        //               defaultColor: false,
-        //               height: 30,
-        //             ),
-        //             Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-        //             Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
-        //                 textAlign: TextAlign.center,
-        //                 style: const TextStyle(
-        //                   color: Colors.white,
-        //                   fontSize: 13,
-        //                 )),
-        //             data?.email == SharedPreference().readStorage(SpKeys.email)
-        //                 ? GestureDetector(
-        //                     onTap: () => Routing().move(Routes.appeal, argument: data),
-        //                     child: Container(
-        //                         padding: const EdgeInsets.all(8),
-        //                         margin: const EdgeInsets.all(18),
-        //                         decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-        //                         child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-        //                   )
-        //                 : const SizedBox(),
-        //             const Spacer(),
-        //             GestureDetector(
-        //               onTap: () {
-        //                 context.read<ReportNotifier>().seeContent(context, data ?? ContentData(), hyppePic);
-        //               },
-        //               child: Container(
-        //                 padding: const EdgeInsets.only(top: 8),
-        //                 margin: const EdgeInsets.all(8),
-        //                 width: SizeConfig.screenWidth,
-        //                 decoration: const BoxDecoration(
-        //                   border: Border(
-        //                     top: BorderSide(
-        //                       color: Colors.white,
-        //                       width: 1,
-        //                     ),
-        //                   ),
-        //                 ),
-        //                 child: Text(
-        //                   "${transnot.translate.see} HyppePic",
-        //                   style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-        //                   textAlign: TextAlign.center,
-        //                 ),
-        //               ),
-        //             ),
-        //             thirtyTwoPx,
-        //           ],
-        //         ),
-        //       )
-        //     : Container(),
       ],
     );
+  }
+
+  Widget blurContentWidget(BuildContext context) {
+    final transnot = Provider.of<TranslateNotifierV2>(context, listen: false);
+    return data?.reportedStatus == 'BLURRED'
+        ? Positioned.fill(
+            child: Align(
+                alignment: Alignment.centerRight,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Spacer(),
+                    const CustomIconWidget(
+                      iconData: "${AssetPath.vectorPath}eye-off.svg",
+                      defaultColor: false,
+                      height: 30,
+                    ),
+                    Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                    Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                        )),
+                    data?.email == SharedPreference().readStorage(SpKeys.email)
+                        ? GestureDetector(
+                            onTap: () => Routing().move(Routes.appeal, argument: data),
+                            child: Container(
+                                padding: const EdgeInsets.all(8),
+                                margin: const EdgeInsets.all(18),
+                                decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                                child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                          )
+                        : const SizedBox(),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        context.read<ReportNotifier>().seeContent(context, data ?? ContentData(), hyppePic);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.only(top: 8),
+                        margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                        width: SizeConfig.screenWidth,
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                              color: Colors.white,
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          "${transnot.translate.see} HyppePic",
+                          style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+          )
+        : Container();
   }
 }

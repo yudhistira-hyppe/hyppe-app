@@ -15,6 +15,7 @@ class CustomProfileImage extends StatelessWidget {
   final String? cacheKey;
   final Function? onFollow;
   final Map<String, String>? headers;
+  final bool forStory;
 
   const CustomProfileImage({
     Key? key,
@@ -26,6 +27,7 @@ class CustomProfileImage extends StatelessWidget {
     required this.imageUrl,
     this.cacheKey,
     this.following = false,
+    this.forStory = false,
   }) : super(key: key);
 
   @override
@@ -41,11 +43,16 @@ class CustomProfileImage extends StatelessWidget {
           width: width,
           height: height,
           alignment: Alignment.bottomCenter,
-          decoration: BoxDecoration(
-            // shape: BoxShape.circle,
-            borderRadius: BorderRadius.circular(20),
-            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-          ),
+          decoration: forStory
+              ? BoxDecoration(
+                  // shape: BoxShape.circle,
+                  borderRadius: BorderRadius.circular(20),
+                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                )
+              : BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                ),
           child: _buildBody(),
         ),
         errorWidget: (context, url, error) => Container(

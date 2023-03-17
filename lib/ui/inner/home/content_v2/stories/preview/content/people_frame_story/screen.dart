@@ -57,6 +57,7 @@ class PeopleFrameStory extends StatelessWidget {
                 },
                 // imageUrl: context.read<PreviewStoriesNotifier>().onProfilePicShow(data[index].profilePicture),
                 imageUrl: System().showUserPicture(getData?.avatar?.mediaEndpoint),
+                forStory: true,
               ),
             ),
           ),
