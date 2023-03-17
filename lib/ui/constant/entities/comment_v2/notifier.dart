@@ -212,8 +212,9 @@ class CommentNotifierV2 with ChangeNotifier {
     required String? parentCommentID,
   }) {
     parentID = parentCommentID;
-
-    FocusScope.of(context).requestFocus(_inputNode);
+    Future.delayed(const Duration(milliseconds: 1000), (){
+      FocusScope.of(context).requestFocus(_inputNode);
+    });
     if (commentController.text.isNotEmpty && !commentController.text.contains('@')) {
       String _tmpString = '@${comment?.senderInfo?.username ?? '' ' ' + commentController.text}';
       commentController.clear();
@@ -223,6 +224,7 @@ class CommentNotifierV2 with ChangeNotifier {
       commentController.text = '@${comment?.senderInfo?.username} ';
       commentController.selection = TextSelection.fromPosition(TextPosition(offset: commentController.text.length));
     }
+
   }
 
   void seeMoreReplies(CommentsLogs? comment) {

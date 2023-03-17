@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 
+import '../../../../../../../../core/constants/asset_path.dart';
 import '../../../../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../../../../core/constants/size_config.dart';
 import '../../../../../../../../core/services/shared_preference.dart';
 import '../../../../../../../../core/services/system.dart';
 import '../../../../../../../constant/entities/comment_v2/notifier.dart';
 import '../../../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import '../../../../../../../constant/overlay/general_dialog/show_general_dialog.dart';
 import '../../../../../../../constant/widget/custom_desc_content_widget.dart';
 import '../../../../../../../constant/widget/custom_profile_image.dart';
 import '../../../../../../../constant/widget/custom_spacer.dart';
@@ -94,7 +97,7 @@ class CommentTile extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: CustomTextWidget(
-                      textStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
+                      textStyle: context.getTextTheme().overline?.copyWith(color: Theme.of(context).colorScheme.secondary),
                       textToDisplay: notifier.repliesComments.containsKey(logs?.comment?.lineID)
                           ? '${_language.hideReplies}'
                           : "${_language.see} $repliesCount ${repliesCount > 1 ? _language.replies : _language.reply2}",
@@ -113,6 +116,15 @@ class CommentTile extends StatelessWidget {
               ],
             ),
           ),
+          if(comment?.sender == email)
+            InkWell(
+              onTap: (){
+                ShowGeneralDialog.deleteContentDialog(context, '${_language.comment}', () async {
+                  notifier.deleteComment(context, comment?.lineID ?? '');
+                });
+              },
+              child: CustomIconWidget(width: 20, height: 20, iconData: '${AssetPath.vectorPath}close.svg', defaultColor: false, color: context.getColorScheme().onBackground,),
+            )
         ],
       ),
     );

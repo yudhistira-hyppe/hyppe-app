@@ -279,7 +279,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                       child: CustomIconWidget(
                         width: 20,
                         height: 20,
-                        color: Colors.black,
+                        color: (data.insight?.isPostLiked ?? false) ? null : Colors.black,
                         defaultColor: false,
                         iconData: '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'ic_like_red.svg' : 'ic_like_stroke.svg'}',
                       ),
@@ -386,8 +386,8 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
 
   Widget _bottomDetail(BuildContext context, VidDetailNotifier notifier, ContentData data) {
     final comment = notifier.firstComment;
-    if ((comment?.disqusLogs ?? []).isEmpty) {
-      return _noComment(context, notifier);
+    if((comment?.disqusLogs ?? []).isEmpty){
+      return _noComment(context, notifier, data);
     }
     final commentor = comment?.disqusLogs?[0].comment?.senderInfo;
     return !notifier.loadComment
@@ -414,7 +414,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                           ),
                           fourPx,
                           CustomTextWidget(
-                            textToDisplay: System().formatterNumber(data.insight?.comments),
+                            textToDisplay: System().formatterNumber(comment?.comment ?? ( data.insight?.comments ?? 0)),
                             textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary),
                           )
                         ],
@@ -463,13 +463,14 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                     ],
                   ),
                 ),
-              )
-            : _noComment(context, notifier)
+            )
+            : _noComment(context, notifier, data)
         : _shimmerComment(context);
   }
 
-  Widget _noComment(BuildContext context, VidDetailNotifier notifier) {
+  Widget _noComment(BuildContext context, VidDetailNotifier notifier, ContentData data){
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(16)), color: context.getColorScheme().background),
         child: Column(
@@ -482,6 +483,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
             ),
             eightPx,
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CustomTextWidget(
                   textToDisplay: '${notifier.language.beTheFirstToComment}',
@@ -489,7 +491,9 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                 ),
                 fourPx,
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
+                  },
                   child: CustomTextWidget(
                     textToDisplay: '${notifier.language.tapHere2}',
                     textStyle: context.getTextTheme().bodyText2?.copyWith(color: context.getColorScheme().primary, fontWeight: FontWeight.w700),

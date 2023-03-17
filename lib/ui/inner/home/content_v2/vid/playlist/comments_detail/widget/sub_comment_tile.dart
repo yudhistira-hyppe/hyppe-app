@@ -69,16 +69,12 @@ class SubCommentTile extends StatelessWidget {
                 twoPx,
                 InkWell(
                   onTap: (){
-                    if (fromFront) {
-                      ShowBottomSheet.onShowCommentV2(context, postID: notifier.postID);
-                    } else {
-                      notifier.showTextInput = true;
-                      notifier.onReplayCommentV2(
-                        context,
-                        comment: logs,
-                        parentCommentID: parentID,
-                      );
-                    }
+                    notifier.showTextInput = true;
+                    notifier.onReplayCommentV2(
+                      context,
+                      comment: logs,
+                      parentCommentID: parentID,
+                    );
                   },
                   child: CustomTextWidget(
                     textToDisplay: notifier.language.reply ?? 'Reply',

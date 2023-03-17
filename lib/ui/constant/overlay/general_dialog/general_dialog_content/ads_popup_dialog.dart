@@ -460,34 +460,45 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        SizedBox(
-          width: SizeConfig.screenWidth,
-          height: SizeConfig.screenHeight,
-          child: AliPlayerView(
-            onCreated: onViewPlayerCreated,
-            x: 0,
-            y: _playerY,
+    return WillPopScope(
+      onWillPop: () async{
+        if(secondsSkip < 1 || widget.data.isReport == true){
+          await adsView(widget.data, secondsVideo);
+          return true;
+        }else{
+          return false;
+        }
+
+      },
+      child: Stack(
+        children: [
+          SizedBox(
+            width: SizeConfig.screenWidth,
+            height: SizeConfig.screenHeight,
+            child: AliPlayerView(
+              onCreated: onViewPlayerCreated,
+              x: 0,
+              y: _playerY,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+            ),
+          ),
+          SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
+            // padding: EdgeInsets.only(bottom: 25.0),
+            child: _buildFillDiary(),
           ),
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          // padding: EdgeInsets.only(bottom: 25.0),
-          child: _buildFillDiary(),
-        ),
-        Positioned(left: 0, top: 50, right: 0, child: topAdsLayout(widget.data)),
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: (widget.data.isReport ?? false) ? Container() : bottomAdsLayout(widget.data),
-        ),
-        _buildSingleScreen(),
-      ],
+          Positioned(left: 0, top: 50, right: 0, child: topAdsLayout(widget.data)),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: (widget.data.isReport ?? false) ? Container() : bottomAdsLayout(widget.data),
+          ),
+          _buildSingleScreen(),
+        ],
+      ),
     );
   }
 

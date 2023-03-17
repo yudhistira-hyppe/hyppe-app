@@ -14,6 +14,7 @@ class CommentDataV2 {
   String? updatedAt;
   String? username;
   bool? isIdVerified;
+  int? comment;
 
   CommentDataV2({
     this.createdAt,
@@ -42,6 +43,7 @@ class CommentDataV2 {
     updatedAt = json['updatedAt'];
     username = json['username'];
     isIdVerified = json['isIdVerified'];
+    comment = json['comment'];
   }
 
   CommentDataV2.fromJsonResponse(Map<String, dynamic> json) {
@@ -57,6 +59,7 @@ class CommentDataV2 {
     updatedAt = json['updatedAt'];
     username = json['username'];
     isIdVerified = json['isIdVerified'];
+    comment = json['comment'];
   }
 
   Map<String, dynamic> toJson() {
@@ -74,6 +77,7 @@ class CommentDataV2 {
     data['updatedAt'] = updatedAt;
     data['username'] = username;
     data['isIdVerified'] = isIdVerified;
+    data['comment'] = comment;
     return data;
   }
 
