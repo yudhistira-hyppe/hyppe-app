@@ -67,71 +67,60 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
                     )
                   : notifier.itemCount == 0
                       ? const NoResultFound()
-                      : NotificationListener<ScrollNotification>(
-                          onNotification: (ScrollNotification scrollInfo) {
-                            if (scrollInfo is ScrollStartNotification) {
-                              Future.delayed(const Duration(milliseconds: 100), () {
-                                'initialPic : 5'.logger();
-                                notifier.initialPic(context);
-                              });
-                            }
-                            return true;
+                      : NotificationListener<OverscrollIndicatorNotification>(
+                          onNotification: (overscroll) {
+                            overscroll.disallowIndicator();
+                            return false;
                           },
-                          child: NotificationListener<OverscrollIndicatorNotification>(
-                            onNotification: (overscroll) {
-                              overscroll.disallowIndicator();
-                              return false;
-                            },
-                            child: ListView.builder(
-                              scrollDirection: Axis.vertical,
+                          child: ListView.builder(
+                            scrollDirection: Axis.vertical,
 
-                              // controller: notifier.scrollController,
-                              // scrollDirection: Axis.horizontal,
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: false,
-                              itemCount: notifier.itemCount,
-                              padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                            // controller: notifier.scrollController,
+                            // scrollDirection: Axis.horizontal,
+                            // physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: false,
+                            itemCount: notifier.itemCount,
+                            padding: const EdgeInsets.symmetric(horizontal: 11.5),
 
-                              itemBuilder: (context, index) {
-                                if (notifier.pic == null || home.isLoadingPict) {
-                                  return CustomShimmer(
-                                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                                    height: 168,
-                                    radius: 8,
-                                    margin: const EdgeInsets.symmetric(horizontal: 4.5),
-                                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                                  );
-                                } else if (index == notifier.pic?.length && notifier.hasNext) {
-                                  return UnconstrainedBox(
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      width: 80 * SizeConfig.scaleDiagonal,
-                                      height: 80 * SizeConfig.scaleDiagonal,
-                                      child: const CustomLoading(),
-                                    ),
-                                  );
-                                }
-
-                                return VisibilityDetector(
-                                  key: Key(index.toString()),
-                                  onVisibilityChanged: (info) {
-                                    if (info.visibleFraction == 1)
-                                      setState(() {
-                                        _currentItem = index;
-                                        print(_currentItem);
-                                      });
-                                  },
-                                  child: PicCenterItem(
-                                    data: notifier.pic?[index],
-                                    // onTap: () => context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, notifier.pic![index]),
-                                    // onTap: () => context.read<PicDetailNotifier>().navigateToDetailPic(notifier.pic![index]),
-                                    onTap: () => context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, index),
-                                    // margin: const EdgeInsets.symmetric(horizontal: 4.5),
-                                    lang: notifier.language,
+                            itemBuilder: (context, index) {
+                              if (notifier.pic == null || home.isLoadingPict) {
+                                return CustomShimmer(
+                                  width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                  height: 168,
+                                  radius: 8,
+                                  margin: const EdgeInsets.symmetric(horizontal: 4.5),
+                                  padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                );
+                              } else if (index == notifier.pic?.length && notifier.hasNext) {
+                                return UnconstrainedBox(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 80 * SizeConfig.scaleDiagonal,
+                                    height: 80 * SizeConfig.scaleDiagonal,
+                                    child: const CustomLoading(),
                                   ),
                                 );
-                              },
-                            ),
+                              }
+
+                              return VisibilityDetector(
+                                key: Key(index.toString()),
+                                onVisibilityChanged: (info) {
+                                  if (info.visibleFraction == 1)
+                                    setState(() {
+                                      _currentItem = index;
+                                      print(_currentItem);
+                                    });
+                                },
+                                child: PicCenterItem(
+                                  data: notifier.pic?[index],
+                                  // onTap: () => context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, notifier.pic![index]),
+                                  // onTap: () => context.read<PicDetailNotifier>().navigateToDetailPic(notifier.pic![index]),
+                                  onTap: () => context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, index),
+                                  // margin: const EdgeInsets.symmetric(horizontal: 4.5),
+                                  lang: notifier.language,
+                                ),
+                              );
+                            },
                           ),
                         ),
             )

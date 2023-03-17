@@ -164,19 +164,32 @@ class HomeNotifier with ChangeNotifier {
 
   void onUpdate() => notifyListeners();
 
-  Future initNewHome(BuildContext context, bool mounted, {int? forceIndex, bool isreload = true}) async {
+  Future initNewHome(BuildContext context, bool mounted, {int? forceIndex, bool isreload = true, bool isgetMore = false}) async {
     context.read<ReportNotifier>().inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
     if (isConnected) {
+      if (!mounted) return;
+      final profile = Provider.of<MainNotifier>(context, listen: false);
+      final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
+      final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
+      final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
+      final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
+      print("pic pic");
+      print(!isreload && ((pic.pic?.isNotEmpty ?? [].isNotEmpty) || (diary.diaryData?.isNotEmpty ?? [].isNotEmpty) || (vid.vidData?.isNotEmpty ?? [].isNotEmpty)));
+      if (!isreload && ((pic.pic?.isNotEmpty ?? [].isNotEmpty) || (diary.diaryData?.isNotEmpty ?? [].isNotEmpty) || (vid.vidData?.isNotEmpty ?? [].isNotEmpty))) {
+        print("pic pic masuk ");
+        return;
+      }
       var email = SharedPreference().readStorage(SpKeys.email);
       Map data = {"email": email, "limit": limit};
       var index = _tabIndex;
       if (forceIndex != null) index = forceIndex;
 
-      if (!isreload) {
+      if (isgetMore) {
         if (index == 0) skipPic = skipPic + limit;
         if (index == 1) skipDiary = skipDiary + limit;
         if (index == 2) skipvid = skipvid + limit;
+        isreload = false;
       }
 
       switch (index) {
@@ -193,12 +206,7 @@ class HomeNotifier with ChangeNotifier {
           data['skip'] = skipvid;
           break;
       }
-      if (!mounted) return;
-      final profile = Provider.of<MainNotifier>(context, listen: false);
-      final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
-      final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
-      final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
-      final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
+
       final allContents = await reload(context, data);
 
       await stories.initialStories(context);

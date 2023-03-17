@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -110,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       final _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
 
-      notifier.initNewHome(context, mounted);
+      notifier.initNewHome(context, mounted, isreload: true);
       if (notifierFollow.listFollow.isEmpty) {
         notifierFollow.listFollow = [
           {'name': "${_language.follow}", 'code': 'TOFOLLOW'},
@@ -118,7 +120,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         ];
       }
       _scrollController.addListener(() {
-        offset = _scrollController.offset;
+        setState(() {
+          offset = _scrollController.offset;
+        });
         if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
           notifier.initNewHome(context, mounted, isreload: false);
         }
@@ -150,82 +154,96 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           ),
           body: DefaultTabController(
             length: 3,
-            child: NestedScrollView(
-              controller: _scrollController,
-              headerSliverBuilder: (context, _) {
-                return [
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      const ProcessUploadComponent(),
-                      const HyppePreviewStories(),
-                      sixPx,
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        color: kHyppeLightSurface,
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24),
-                            color: kHyppeLightButtonText,
-                          ),
-                          child: TabBar(
-                            controller: _tabController,
-                            indicator: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                25.0,
-                              ),
-                              color: kHyppePrimary,
+            child: RefreshIndicator(
+              color: kHyppePrimary,
+              notificationPredicate: (notification) {
+                // with NestedScrollView local(depth == 2) OverscrollNotification are not sent
+                if (notification is OverscrollNotification || Platform.isIOS) {
+                  return notification.depth == 2;
+                }
+                return notification.depth == 0;
+              },
+              onRefresh: () async {
+                await notifier.initNewHome(context, mounted, isreload: true);
+              },
+              child: NestedScrollView(
+                controller: _scrollController,
+                physics: const BouncingScrollPhysics(),
+                headerSliverBuilder: (context, bool innerBoxIsScrolled) {
+                  return [
+                    SliverList(
+                      delegate: SliverChildListDelegate([
+                        const ProcessUploadComponent(),
+                        const HyppePreviewStories(),
+                        sixPx,
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          color: kHyppeLightSurface,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(24),
+                              color: kHyppeLightButtonText,
                             ),
-                            labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                            labelColor: kHyppeLightButtonText,
-                            unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                            labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                            // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                            unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                            tabs: [
-                              ...List.generate(
-                                filterList.length,
-                                (index) => Padding(
-                                  padding: EdgeInsets.all(9),
-                                  child: Text(
-                                    filterList[index]['name'],
-                                    style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                            child: TabBar(
+                              controller: _tabController,
+                              indicator: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  25.0,
+                                ),
+                                color: kHyppePrimary,
+                              ),
+                              labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                              labelColor: kHyppeLightButtonText,
+                              unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                              labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                              // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                              unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                              tabs: [
+                                ...List.generate(
+                                  filterList.length,
+                                  (index) => Padding(
+                                    padding: EdgeInsets.all(9),
+                                    child: Text(
+                                      filterList[index]['name'],
+                                      style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ]),
-                  ),
+                      ]),
+                    ),
 
-                  // FilterLanding(),
-                  // HyppePreviewVid(),
-                  // HyppePreviewDiary(),
-                ];
-              },
-              body: TabBarView(
-                controller: _tabController,
-                children: [
-                  // Pict
-                  Container(
-                    padding: const EdgeInsets.only(left: 6.0, right: 6),
-                    color: kHyppeLightSurface,
-                    child: const HyppePreviewPic(),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(left: 6.0, right: 6),
-                    color: kHyppeLightSurface,
-                    child: const LandingDiaryPage(),
-                  ),
-                  // second tab bar viiew widget
-                  Container(
-                    padding: const EdgeInsets.only(left: 16.0, right: 16),
-                    color: kHyppeLightSurface,
-                    child: const HyppePreviewVid(),
-                  ),
-                ],
+                    // FilterLanding(),
+                    // HyppePreviewVid(),
+                    // HyppePreviewDiary(),
+                  ];
+                },
+                body: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    // Pict
+                    Container(
+                      padding: const EdgeInsets.only(left: 6.0, right: 6),
+                      color: kHyppeLightSurface,
+                      child: const HyppePreviewPic(),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 6.0, right: 6),
+                      color: kHyppeLightSurface,
+                      child: const LandingDiaryPage(),
+                    ),
+                    // second tab bar viiew widget
+                    Container(
+                      padding: const EdgeInsets.only(left: 16.0, right: 16),
+                      color: kHyppeLightSurface,
+                      child: const HyppePreviewVid(),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

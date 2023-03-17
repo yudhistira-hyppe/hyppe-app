@@ -87,14 +87,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                 ? (vidNotifier.vidData?.isEmpty ?? true)
                     ? const NoResultFound()
                     : Expanded(
-                        child: NotificationListener<ScrollNotification>(
-                          onNotification: (ScrollNotification scrollInfo) {
-                            if (scrollInfo is ScrollStartNotification) {
-                              Future.delayed(const Duration(milliseconds: 100), () {
-                                // vidNotifier.initialVid(context);
-                              });
-                            }
-                            return true;
+                        child: NotificationListener<OverscrollIndicatorNotification>(
+                          onNotification: (overscroll) {
+                            overscroll.disallowIndicator();
+                            return false;
                           },
                           child: ListView.builder(
                             // controller: vidNotifier.pageController,
