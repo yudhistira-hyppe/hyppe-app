@@ -94,7 +94,7 @@ class CommentTile extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: CustomTextWidget(
-                      textStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
+                      textStyle: context.getTextTheme().overline?.copyWith(color: Theme.of(context).colorScheme.secondary),
                       textToDisplay: notifier.repliesComments.containsKey(logs?.comment?.lineID)
                           ? '${_language.hideReplies}'
                           : "${_language.see} $repliesCount ${repliesCount > 1 ? _language.replies : _language.reply2}",

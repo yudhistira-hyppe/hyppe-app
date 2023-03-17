@@ -82,7 +82,9 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
     if (_routeArgument?.postID != null) {
       print("hit Api dulu");
-      _initialVid(context);
+      _initialVid(context, _routeArgument?.postID ?? '');
+    } else if(_routeArgument?.vidData?.postID != null){
+      _initialVid(context, _routeArgument?.vidData?.postID ?? '');
     } else {
       _data = _routeArgument?.vidData;
       notifyListeners();
@@ -92,10 +94,11 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
   _initialVid(
     BuildContext context,
+      String postID
   ) async {
     Future<List<ContentData>> _resFuture;
 
-    contentsQuery.postID = _routeArgument?.postID;
+    contentsQuery.postID = postID;
 
     try {
       loadDetail = true;
@@ -284,11 +287,10 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
       final fetch = notifier.commentFetch;
 
       final res = (fetch.data as List<dynamic>?)?.map((e) => CommentDataV2.fromJson(e as Map<String, dynamic>)).toList();
-      if(res.isNotNullAndEmpty()){
-        firstComment = res?.first;
-      }
+      firstComment = res?.first;
       loadComment = false;
     } catch (e) {
+      firstComment = null;
       loadComment = false;
       '$e'.logger();
     }
