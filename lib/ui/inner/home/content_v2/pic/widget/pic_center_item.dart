@@ -79,6 +79,7 @@ class PicCenterItem extends StatelessWidget {
                   createdAt: '2022-02-02',
                   musicName: data?.music?.musicTitle ?? '',
                   location: data?.location ?? '',
+                  isIdVerified: data?.privacy?.isIdVerified,
                 ),
               ),
               Consumer<PreviewPicNotifier>(

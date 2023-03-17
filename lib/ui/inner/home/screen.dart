@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -36,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
   late TabController _tabController;
+  double offset = 0.0;
   List filterList = [
     {"id": '1', 'name': "Pic"},
     {"id": '2', 'name': "Diary"},
@@ -103,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     isHomeScreen = true;
     'isOnHomeScreen $isHomeScreen'.logger();
     _tabController = TabController(length: 3, vsync: this);
+    offset = 0;
     Future.delayed(Duration.zero, () {
       final notifier = context.read<HomeNotifier>();
       notifier.setSessionID();
@@ -117,6 +118,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         ];
       }
       _scrollController.addListener(() {
+        offset = _scrollController.offset;
         if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
           notifier.initNewHome(context, mounted, isreload: false);
         }
@@ -144,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         child: Scaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-            child: HomeAppBar(name: selfnotifier.user.profile?.fullName),
+            child: HomeAppBar(name: selfnotifier.user.profile?.fullName, offset: offset),
           ),
           body: DefaultTabController(
             length: 3,

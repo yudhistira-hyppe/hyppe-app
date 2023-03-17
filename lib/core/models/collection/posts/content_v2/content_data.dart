@@ -462,16 +462,20 @@ class Privacy {
 
   bool? isPrivate;
 
+  bool? isIdVerified;
+
   Privacy({
     this.isPrivate,
     this.isCelebrity,
     this.isPostPrivate,
+    this.isIdVerified,
   });
 
   Privacy.fromJson(Map<String, dynamic> json) {
     isPostPrivate = json['isPostPrivate'];
     isCelebrity = json['isCelebrity'];
     isPrivate = json['isPrivate'];
+    isIdVerified = json['isIdVerified'] ?? false;
   }
 
   Map<String, dynamic> toJson() {

@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/user_template.dart';
 
 import 'custom_profile_image.dart';
 import 'custom_spacer.dart';
@@ -32,6 +33,7 @@ class ProfileLandingPage extends StatelessWidget {
   final String? cacheKey;
   final String? location;
   final String? musicName;
+  final bool? isIdVerified;
 
   const ProfileLandingPage(
       {Key? key,
@@ -54,6 +56,7 @@ class ProfileLandingPage extends StatelessWidget {
       this.haveStory = false,
       this.musicName,
       this.location,
+      this.isIdVerified,
       required this.featureType})
       : super(key: key);
 
@@ -87,12 +90,16 @@ class ProfileLandingPage extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: CustomTextWidget(
-                        textToDisplay: username ?? '',
-                        maxLines: 1,
-                        textStyle: TextStyle(color: textColor, fontSize: 12, fontWeight: FontWeight.w700),
-                        textAlign: TextAlign.left,
+                      child: UserTemplate(
+                        username: username ?? 'No Username',
+                        isVerified: isIdVerified ?? false,
                       ),
+                      // CustomTextWidget(
+                      //   textToDisplay: username ?? '',
+                      //   maxLines: 1,
+                      //   textStyle: TextStyle(color: textColor, fontSize: 12, fontWeight: FontWeight.w700),
+                      //   textAlign: TextAlign.left,
+                      // ),
                     ),
                     tenPx,
                     CustomVerifiedWidget(verified: isCelebrity),

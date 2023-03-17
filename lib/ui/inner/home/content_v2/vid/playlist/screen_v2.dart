@@ -68,7 +68,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
     }
     return Consumer2<VidDetailNotifier, LikeNotifier>(builder: (context, notifier, like, _) {
       final data = notifier.data;
-      print("======data $data");
+      print("======data ${data?.postID}");
       var map = {
         DataSourceRelated.vidKey: widget.arguments.vidData?.apsaraId,
         DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
@@ -174,7 +174,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                           defaultColor: false,
                         ),
                         fourPx,
-                        CustomTextWidget(textToDisplay: '${data.music?.musicTitle} - ${data.music?.artistName}')
+                        Expanded(child: CustomTextWidget(textToDisplay: '${data.music?.musicTitle} - ${data.music?.artistName}'))
                       ],
                     )
                 ],

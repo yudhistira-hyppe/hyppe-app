@@ -468,6 +468,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           createdAt: '2022-02-02',
                                           musicName: notifier.diaryData?[index].music?.musicTitle ?? '',
                                           location: notifier.diaryData?[index].location ?? '',
+                                          isIdVerified: notifier.diaryData?[index].privacy?.isIdVerified,
                                         ),
                                       ),
                                       Consumer<PreviewPicNotifier>(

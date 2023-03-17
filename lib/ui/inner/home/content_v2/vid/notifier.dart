@@ -214,7 +214,12 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   void navigateToHyppeVidDetail(BuildContext context, ContentData? data) async {
     final connect = await _system.checkConnections();
     if (connect) {
-      _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: data));
+      _routing.move(Routes.vidDetail,
+          argument: VidDetailScreenArgument(
+            vidData: data,
+          )
+            ..postID = data?.postID
+            ..backPage = true);
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }

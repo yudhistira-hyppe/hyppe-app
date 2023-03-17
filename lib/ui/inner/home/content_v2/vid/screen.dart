@@ -160,6 +160,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                               createdAt: '2022-02-02',
                                               musicName: vidData?.music?.musicTitle ?? '',
                                               location: vidData?.location ?? '',
+                                              isIdVerified: vidData?.privacy?.isIdVerified,
                                             ),
                                           ),
                                           Padding(

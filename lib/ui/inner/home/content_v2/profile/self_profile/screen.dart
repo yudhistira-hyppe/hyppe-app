@@ -101,47 +101,51 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
         child: Scaffold(
           appBar: AppBar(
             elevation: 0.0,
-            automaticallyImplyLeading: false,
-            flexibleSpace: SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      // GestureDetector(
-                      //     onTap: () async {
-                      //       var response = await adsView(context);
-                      //       print("ini response $response");
-                      //       if (response) {
-                      //         Routing().moveBack();
-                      //       }
-                      //     },
-                      //     child: Text("show pop up")),
-                      IconButton(
-                        onPressed: () => notifier.routing.moveBack(),
-                        icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
-                      ),
-                      CustomTextWidget(
-                        textToDisplay: notifier.displayUserName(),
-                        textAlign: TextAlign.start,
-                        textStyle: Theme.of(context).textTheme.subtitle1,
-                      ),
-                    ],
-                  ),
-                  IconButton(
-                    // onPressed: () => notifier.routing.move(profileSettings),
-                    onPressed: () async {
-                      notifier.routing.move(Routes.appSettings);
-                      await context.read<TransactionNotifier>().getAccountBalance(context);
-                      context.read<TransactionNotifier>().isLoading = false;
-                    },
-                    icon: const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}setting.svg",
-                    ),
-                  ),
-                ],
-              ),
+            automaticallyImplyLeading: true,
+            title: CustomTextWidget(
+              textToDisplay: notifier.displayUserName(),
+              textAlign: TextAlign.start,
+              textStyle: Theme.of(context).textTheme.subtitle1,
             ),
+            actions: [
+              IconButton(
+                // onPressed: () => notifier.routing.move(profileSettings),
+                onPressed: () async {
+                  notifier.routing.move(Routes.appSettings);
+                  await context.read<TransactionNotifier>().getAccountBalance(context);
+                  context.read<TransactionNotifier>().isLoading = false;
+                },
+                icon: const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}setting.svg",
+                ),
+              ),
+            ],
+            // flexibleSpace: SafeArea(
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Padding(
+            //         padding: const EdgeInsets.only(left: 16.0),
+            //         child: CustomTextWidget(
+            //           textToDisplay: notifier.displayUserName(),
+            //           textAlign: TextAlign.start,
+            //           textStyle: Theme.of(context).textTheme.subtitle1,
+            //         ),
+            //       ),
+            //       IconButton(
+            //         // onPressed: () => notifier.routing.move(profileSettings),
+            //         onPressed: () async {
+            //           notifier.routing.move(Routes.appSettings);
+            //           await context.read<TransactionNotifier>().getAccountBalance(context);
+            //           context.read<TransactionNotifier>().isLoading = false;
+            //         },
+            //         icon: const CustomIconWidget(
+            //           iconData: "${AssetPath.vectorPath}setting.svg",
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ),
           body: RefreshIndicator(
             key: _globalKey,

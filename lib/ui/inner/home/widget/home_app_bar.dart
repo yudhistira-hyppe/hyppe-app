@@ -12,8 +12,9 @@ import 'package:provider/provider.dart';
 
 class HomeAppBar extends StatelessWidget {
   final String? name;
+  final double? offset;
 
-  const HomeAppBar({super.key, this.name});
+  const HomeAppBar({super.key, this.name, this.offset});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class HomeAppBar extends StatelessWidget {
         // AliPlayer(),
         sixteenPx,
       ],
-      title: name != null
+      title: offset! <= 100
           ? Text(
               "Halo, ${name!.split(" ").elementAt(0)}!",
               style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
