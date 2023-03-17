@@ -414,7 +414,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                           ),
                           fourPx,
                           CustomTextWidget(
-                            textToDisplay: System().formatterNumber(data.insight?.comments ?? (comment?.comment ?? 0)),
+                            textToDisplay: System().formatterNumber(comment?.comment ?? ( data.insight?.comments ?? 0)),
                             textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary),
                           )
                         ],
