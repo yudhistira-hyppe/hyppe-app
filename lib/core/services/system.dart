@@ -1188,7 +1188,7 @@ class System {
     }
   }
 
-  Future<void> navigateToProfile(BuildContext context, String email, {StoryController? storyController, bool isReplaced = true}) async {
+  Future<void> navigateToProfile(BuildContext context, String email, {StoryController? storyController}) async {
     final connect = await checkConnections();
     if (connect) {
       String myEmail = SharedPreference().readStorage(SpKeys.email) ?? "";
@@ -1196,17 +1196,9 @@ class System {
         context.read<OtherProfileNotifier>().checkFollowingToUser(context, email);
         if (storyController != null) {
           storyController.pause();
-          if (isReplaced) {
-            Routing().moveReplacement(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
-          } else {
-            Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
-          }
+          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
         } else {
-          if (isReplaced) {
-            Routing().moveReplacement(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-          } else {
-            Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-          }
+          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
         }
       } else {
         storyController != null

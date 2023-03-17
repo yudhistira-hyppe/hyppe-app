@@ -83,7 +83,7 @@ class _OnShowUserViewContentBottomSheetState extends State<OnShowUserViewContent
                           // print(System().showUserPicture(value[index].avatar));
                           if (data != null) {
                             return ListTile(
-                              onTap: () => System().navigateToProfile(context, data.email ?? '', isReplaced: false),
+                              onTap: () => System().navigateToProfile(context, data.email ?? ''),
                               contentPadding: EdgeInsets.zero,
                               title: CustomTextWidget(
                                 textToDisplay: data.username ?? '',
@@ -96,7 +96,7 @@ class _OnShowUserViewContentBottomSheetState extends State<OnShowUserViewContent
                                 child: CustomProfileImage(
                                   width: 40,
                                   height: 40,
-                                  onTap: () => System().navigateToProfile(context, data.email ?? '', isReplaced: false),
+                                  onTap: () => System().navigateToProfile(context, data.email ?? ''),
                                   imageUrl: System().showUserPicture(data.avatar == null ? '' : data.avatar?.mediaEndpoint),
                                   following: true,
                                   onFollow: () {},

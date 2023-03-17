@@ -42,7 +42,7 @@ class _UserItemState extends State<UserItem> {
               height: 50,
               following: true,
               imageUrl: System().showUserPicture(widget.data?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
-              onTap: () => System().navigateToProfile(context, widget.data?.senderOrReceiverInfo?.email ?? '', isReplaced: false),
+              onTap: () => System().navigateToProfile(context, widget.data?.senderOrReceiverInfo?.email ?? ''),
             ),
             sixteenPx,
             Expanded(

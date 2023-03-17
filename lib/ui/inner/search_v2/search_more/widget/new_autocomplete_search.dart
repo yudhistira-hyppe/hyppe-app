@@ -84,8 +84,7 @@ class _NewAutoCompleteSearchState extends State<NewAutoCompleteSearch> {
                                       System().navigateToProfile(
                                           context,
                                           notifier.searchUsers?[index].email ??
-                                              '',
-                                          isReplaced: false);
+                                              '');
                                     },
                                     title: CustomTextWidget(
                                       textToDisplay: notifier

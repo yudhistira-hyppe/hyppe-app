@@ -455,7 +455,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                         // isCelebrity: vidnotifier.diaryData?[index].privacy?.isCelebrity,
                                         isCelebrity: false,
                                         imageUrl: '${System().showUserPicture(notifier.diaryData?[index].avatar?.mediaEndpoint)}',
-                                        onTapOnProfileImage: () => System().navigateToProfile(context, notifier.diaryData?[index].email ?? '', isReplaced: false),
+                                        onTapOnProfileImage: () => System().navigateToProfile(context, notifier.diaryData?[index].email ?? ''),
                                         createdAt: '2022-02-02',
                                         musicName: notifier.diaryData?[index].music?.musicTitle ?? '',
                                         location: notifier.diaryData?[index].location ?? '',

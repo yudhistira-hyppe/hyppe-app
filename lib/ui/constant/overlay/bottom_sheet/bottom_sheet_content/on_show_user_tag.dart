@@ -81,7 +81,7 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                         return Column(
                           children: [
                             ListTile(
-                              onTap: () => System().navigateToProfile(context, notifierTag.listTagPeople[index].email ?? '', isReplaced: false),
+                              onTap: () => System().navigateToProfile(context, notifierTag.listTagPeople[index].email ?? ''),
                               contentPadding: EdgeInsets.zero,
                               title: CustomTextWidget(
                                 textToDisplay: notifierTag.listTagPeople[index].username ?? '',

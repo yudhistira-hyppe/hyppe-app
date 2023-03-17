@@ -50,7 +50,7 @@ class _UserFollowersListState extends State<UserFollowersList> {
 
           return UserItem(
             data: notifier.followersData?[index],
-            onTap: () => System().navigateToProfile(context, notifier.followersData?[index].senderOrReceiverInfo?.email ?? '', isReplaced: false),
+            onTap: () => System().navigateToProfile(context, notifier.followersData?[index].senderOrReceiverInfo?.email ?? ''),
           );
         },
       ),
