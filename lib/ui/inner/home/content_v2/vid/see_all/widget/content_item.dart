@@ -96,7 +96,7 @@ class ContentItem extends StatelessWidget {
                                   featureType: FeatureType.vid,
                                   isCelebrity: data?.privacy?.isCelebrity,
                                   imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
-                                  onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? '', isReplaced: false),
+                                  onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
                                   createdAt: '${System().readTimestamp(DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch, context, fullCaption: true)}',
                                   // onFollow: () async => await context.read<FollowRequestUnfollowNotifier>().followRequestUnfollowUser(
                                   //       context,

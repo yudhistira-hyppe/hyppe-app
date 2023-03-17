@@ -107,7 +107,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
               (index) => Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: ListTile(
-                  onTap: () => _system.navigateToProfile(context, users?[index].email ?? '',isReplaced: false),
+                  onTap: () => _system.navigateToProfile(context, users?[index].email ?? ''),
                   contentPadding: EdgeInsets.zero,
                   title: Text("${users?[index].fullName}"),
                   subtitle: Text(isIndo ? (users?[index].statusID ?? '') : (users?[index].statusEN ?? ''), style: context.getTextTheme().overline,),

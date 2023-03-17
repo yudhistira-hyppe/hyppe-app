@@ -152,7 +152,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                               // isCelebrity: vidvidData?.privacy?.isCelebrity,
                                               isCelebrity: false,
                                               imageUrl: '${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}',
-                                              onTapOnProfileImage: () => System().navigateToProfile(context, vidData?.email ?? '', isReplaced: false),
+                                              onTapOnProfileImage: () => System().navigateToProfile(context, vidData?.email ?? ''),
                                               createdAt: '2022-02-02',
                                               musicName: vidData?.music?.musicTitle ?? '',
                                               location: vidData?.location ?? '',

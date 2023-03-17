@@ -162,7 +162,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
       await notifier.followUserBlocV2(
         context,
         data: FollowUserArgument(
-          receiverParty: dataContent?.email ?? '',
+          receiverParty: dataContent.email ?? '',
           eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
         ),
       );
