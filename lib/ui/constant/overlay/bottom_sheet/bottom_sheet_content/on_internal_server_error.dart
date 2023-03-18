@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../core/services/shared_preference.dart';
 import '../../../../../ux/path.dart';
+import '../../../../inner/home/content_v2/profile/setting/setting_notifier.dart';
 
 class OnInternalServerErrorBottomSheet extends StatelessWidget {
   const OnInternalServerErrorBottomSheet({Key? key}) : super(key: key);
@@ -53,6 +54,7 @@ class OnInternalServerErrorBottomSheet extends StatelessWidget {
               width: 164 * SizeConfig.scaleDiagonal,
               height: 42 * SizeConfig.scaleDiagonal,
               function: () async{
+                context.read<SettingNotifier>().logOut(context);
                 await SharedPreference().logOutStorage();
                 Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
               },

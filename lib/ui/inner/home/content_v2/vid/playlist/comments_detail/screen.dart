@@ -112,6 +112,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                   strokeWidth: 2.0,
                   color: Colors.purple,
                   onRefresh: () async {
+                    notifier.commentData = null;
                     notifier.initState(
                         context, postID, fromFront, parentComment);
                   },

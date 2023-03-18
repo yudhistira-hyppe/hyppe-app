@@ -109,7 +109,8 @@ class CommentTile extends StatelessWidget {
                 // show sub comments
                 notifier.repliesComments.containsKey(comment?.lineID)
                     ? Column(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: notifier.repliesComments[comment?.lineID] ?? [],
                 )
                     : const SizedBox.shrink(),

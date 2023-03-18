@@ -77,7 +77,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
   void updateView(BuildContext context) => System().increaseViewCount(context, _data ?? ContentData()).whenComplete(() => notifyListeners());
 
-  void initState(BuildContext context, VidDetailScreenArgument routeArgument) {
+  Future initState(BuildContext context, VidDetailScreenArgument routeArgument) async{
     _routeArgument = routeArgument;
 
     if (_routeArgument?.postID != null) {

@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../../../core/constants/asset_path.dart';
+import '../../../../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../../../../core/models/collection/comment_v2/comment_data_v2.dart';
+import '../../../../../../../../core/services/shared_preference.dart';
 import '../../../../../../../../core/services/system.dart';
 import '../../../../../../../constant/entities/comment_v2/notifier.dart';
 import '../../../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import '../../../../../../../constant/overlay/general_dialog/show_general_dialog.dart';
+import '../../../../../../../constant/widget/custom_icon_widget.dart';
 import '../../../../../../../constant/widget/custom_profile_image.dart';
 import '../../../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../../../constant/widget/custom_text_widget.dart';
@@ -19,13 +24,17 @@ class SubCommentTile extends StatelessWidget {
     required this.parentID,
     required this.fromFront,}) : super(key: key);
 
+  final email = SharedPreference().readStorage(SpKeys.email);
+
   @override
   Widget build(BuildContext context) {
     final commentor = logs?.senderInfo;
     final notifier = context.read<CommentNotifierV2>();
     return Container(
+      width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
+        mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomProfileImage(
@@ -84,6 +93,15 @@ class SubCommentTile extends StatelessWidget {
               ],
             ),
           ),
+          if(logs?.sender == email)
+            InkWell(
+              onTap: (){
+                ShowGeneralDialog.deleteContentDialog(context, '${notifier.language.comment}', () async {
+                  notifier.deleteComment(context, logs?.lineID ?? '');
+                });
+              },
+              child: CustomIconWidget(width: 20, height: 20, iconData: '${AssetPath.vectorPath}close.svg', defaultColor: false, color: context.getColorScheme().onBackground,),
+            )
         ],
       ),
     );

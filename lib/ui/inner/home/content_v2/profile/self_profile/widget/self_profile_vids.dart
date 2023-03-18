@@ -34,7 +34,7 @@ class SelfProfileVids extends StatelessWidget {
                         //     // child: CustomLoading(size: 4),
                         //   );
                         // }
-
+                        print('url image thumb image: ${notifier.user.vids?[index].isApsara} ${notifier.user.vids?[index].mediaThumbEndPoint}');
                         return GestureDetector(
                           onTap: () => context.read<SelfProfileNotifier>().navigateToSeeAllScreen(context, index),
                           child: Padding(
@@ -50,7 +50,7 @@ class SelfProfileVids extends StatelessWidget {
                                           featureType: FeatureType.vid,
                                           isSale: false,
                                           isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                          thumbnail: ImageUrl(notifier.user.pics?[index].postID, url: (notifier.user.vids?[index].isApsara ?? false)
+                                          thumbnail: ImageUrl(notifier.user.vids?[index].postID, url: (notifier.user.vids?[index].isApsara ?? false)
                                               ? (notifier.user.vids?[index].mediaThumbEndPoint ?? '')
                                               : System().showUserPicture(notifier.user.vids?[index].mediaThumbEndPoint) ?? ''),
                                         ),

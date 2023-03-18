@@ -97,12 +97,12 @@ class CommentNotifierV2 with ChangeNotifier {
     notifyListeners();
   }
 
-  void initState(
+  Future initState(
     BuildContext context,
     String? postID,
     bool fromFront,
     DisqusLogs? parentComment,
-  ) {
+  ) async {
     this.postID = postID;
     this.fromFront = fromFront;
     getComment(context, reload: true).then((_) {
@@ -119,6 +119,7 @@ class CommentNotifierV2 with ChangeNotifier {
 
   void onDispose() {
     _showTextInput = false;
+    _commentData = null;
   }
 
   Future<void> getComment(
@@ -143,6 +144,22 @@ class CommentNotifierV2 with ChangeNotifier {
         commentData = res.firstOrNull()?.disqusLogs ?? [];
       } else {
         commentData = [...(commentData ?? [] as List<CommentsLogs>)] + (res.firstOrNull()?.disqusLogs ?? []);
+      }
+
+      final comments = _commentData;
+      if(comments != null){
+        for(final comment in comments){
+          repliesComments[comment.comment?.lineID] = [
+            for (final subComment in comment.replies ?? []) ...[
+              const SizedBox(height: 16),
+              SubCommentTile(
+                logs: subComment,
+                fromFront: fromFront,
+                parentID: comment.comment?.lineID,
+              ),
+            ],
+          ];
+        }
       }
     } catch (e) {
       'load comments list: ERROR: $e'.logger();
@@ -186,6 +203,7 @@ class CommentNotifierV2 with ChangeNotifier {
             SubCommentTile(logs: res.comment, parentID: parentID, fromFront: fromFront),
           ]);
         }
+
 
         // delete text controller
         commentController.clear();

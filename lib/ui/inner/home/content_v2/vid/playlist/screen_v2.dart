@@ -80,36 +80,42 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
             ? notifier.loadDetail
                 ? SafeArea(child: _contentDetailShimmer(context))
                 : SafeArea(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(left: 16, top: 12, right: 16),
-                            decoration: BoxDecoration(
-                                boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
-                                borderRadius: const BorderRadius.all(Radius.circular(16)),
-                                color: context.getColorScheme().background),
-                            child: Column(
-                              children: [
-                                _topDetail(context, notifier, data),
-                                Container(
-                                  color: Colors.black,
-                                  child: PlayerPage(
-                                    playMode: (widget.arguments.vidData?.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                                    dataSourceMap: map,
-                                    data: widget.arguments.vidData,
-                                    height: height,
-                                    width: width,
+                    child: RefreshIndicator(
+                      strokeWidth: 2.0,
+                      color: context.getColorScheme().primary,
+                      onRefresh: () => notifier.initState(context, widget.arguments),
+                      child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(left: 16, top: 12, right: 16),
+                              decoration: BoxDecoration(
+                                  boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                                  borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                  color: context.getColorScheme().background),
+                              child: Column(
+                                children: [
+                                  _topDetail(context, notifier, data),
+                                  Container(
+                                    color: Colors.black,
+                                    child: PlayerPage(
+                                      playMode: (widget.arguments.vidData?.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                                      dataSourceMap: map,
+                                      data: widget.arguments.vidData,
+                                      height: height,
+                                      width: width,
+                                    ),
                                   ),
-                                ),
-                                _middleDetail(context, notifier, like, data),
-                              ],
+                                  _middleDetail(context, notifier, like, data),
+                                ],
+                              ),
                             ),
-                          ),
-                          twelvePx,
-                          _bottomDetail(context, notifier, data)
-                        ],
+                            twelvePx,
+                            _bottomDetail(context, notifier, data)
+                          ],
+                        ),
                       ),
                     ),
                   )
