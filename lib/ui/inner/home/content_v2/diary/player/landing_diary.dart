@@ -26,8 +26,6 @@ import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
-import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -37,8 +35,6 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-
-import '../../vid/playlist/comments_detail/screen.dart';
 
 class LandingDiaryPage extends StatefulWidget {
   const LandingDiaryPage({Key? key}) : super(key: key);
@@ -644,7 +640,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                         padding: EdgeInsets.only(left: 21.0),
                                         child: GestureDetector(
                                           onTap: () {
-                                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: notifier.diaryData?[index].postID ?? '', fromFront: true, data: notifier.diaryData?[index] ?? ContentData()));
+                                            ShowBottomSheet.onShowCommentV2(context, postID: notifier.diaryData?[index].postID);
                                           },
                                           child: const CustomIconWidget(
                                             defaultColor: false,

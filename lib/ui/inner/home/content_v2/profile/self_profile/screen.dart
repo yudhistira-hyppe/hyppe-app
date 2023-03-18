@@ -95,7 +95,6 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
     return Consumer<SelfProfileNotifier>(
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {
-          // notifier.routing.moveBack();
           return false;
         },
         child: Scaffold(

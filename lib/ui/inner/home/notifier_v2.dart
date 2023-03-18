@@ -164,9 +164,10 @@ class HomeNotifier with ChangeNotifier {
 
   void onUpdate() => notifyListeners();
 
-  Future initNewHome(BuildContext context, bool mounted, {int? forceIndex, bool isreload = true, bool isgetMore = false}) async {
+  Future initNewHome(BuildContext context, bool mounted, {int? forceIndex, bool isreload = true, bool isgetMore = false, bool isNew = false}) async {
     context.read<ReportNotifier>().inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
+
     if (isConnected) {
       if (!mounted) return;
       final profile = Provider.of<MainNotifier>(context, listen: false);
@@ -174,9 +175,8 @@ class HomeNotifier with ChangeNotifier {
       final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
       final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
       final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
-      print("pic pic");
-      print(!isreload && ((pic.pic?.isNotEmpty ?? [].isNotEmpty) || (diary.diaryData?.isNotEmpty ?? [].isNotEmpty) || (vid.vidData?.isNotEmpty ?? [].isNotEmpty)));
-      if (!isreload && ((pic.pic?.isNotEmpty ?? [].isNotEmpty) || (diary.diaryData?.isNotEmpty ?? [].isNotEmpty) || (vid.vidData?.isNotEmpty ?? [].isNotEmpty))) {
+
+      if ((!isreload && !isgetMore) && ((pic.pic?.isNotEmpty ?? [].isNotEmpty) || (diary.diaryData?.isNotEmpty ?? [].isNotEmpty) || (vid.vidData?.isNotEmpty ?? [].isNotEmpty))) {
         print("pic pic masuk ");
         return;
       }
@@ -220,7 +220,7 @@ class HomeNotifier with ChangeNotifier {
       switch (index) {
         case 0:
           if (!mounted) return;
-          await pic.initialPic(context, reload: isreload, list: allContents);
+          await pic.initialPic(context, reload: isreload || isNew, list: allContents);
           if (diary.diaryData == null) {
             await initNewHome(context, mounted, forceIndex: 1);
           }
@@ -230,11 +230,11 @@ class HomeNotifier with ChangeNotifier {
           break;
         case 1:
           if (!mounted) return;
-          await diary.initialDiary(context, reload: isreload, list: allContents);
+          await diary.initialDiary(context, reload: isreload || isNew, list: allContents);
           break;
         case 2:
           if (!mounted) return;
-          await vid.initialVid(context, reload: isreload, list: allContents);
+          await vid.initialVid(context, reload: isreload || isNew, list: allContents);
           break;
       }
     }

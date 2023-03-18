@@ -159,45 +159,42 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                               isIdVerified: vidData?.privacy?.isIdVerified,
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                if (vidData.insight?.isloadingFollow != true) {
-                                                  context.read<PreviewPicNotifier>().followUser(
-                                                        context,
-                                                        vidData,
-                                                        isUnFollow: vidData.following,
-                                                        isloading: vidData.insight!.isloadingFollow!,
-                                                      );
-                                                }
-                                              },
-                                              child: vidData!.insight!.isloadingFollow!
-                                                  ? const SizedBox(
-                                                      height: 40,
-                                                      width: 30,
-                                                      child: Align(
-                                                        alignment: Alignment.bottomRight,
-                                                        child: CustomLoading(),
+                                          Consumer<PreviewPicNotifier>(
+                                            builder: (context, picNot, child) => Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  if (vidData?.insight?.isloadingFollow != true) {
+                                                    picNot.followUser(context, vidData ?? ContentData(), isUnFollow: vidData?.following, isloading: vidData?.insight!.isloadingFollow ?? false);
+                                                  }
+                                                },
+                                                child: vidData?.insight?.isloadingFollow ?? false
+                                                    ? Container(
+                                                        height: 40,
+                                                        width: 30,
+                                                        child: Align(
+                                                          alignment: Alignment.bottomRight,
+                                                          child: CustomLoading(),
+                                                        ),
+                                                      )
+                                                    : Text(
+                                                        (vidData?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                                        style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
                                                       ),
-                                                    )
-                                                  : Text(
-                                                      (vidData.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                                      style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                                                    ),
+                                              ),
                                             ),
                                           ),
                                           GestureDetector(
                                             onTap: () {
-                                              if (vidData.email != SharedPreference().readStorage(SpKeys.email)) {
+                                              if (vidData?.email != SharedPreference().readStorage(SpKeys.email)) {
                                                 vidNotifier.reportContent(context, vidNotifier.vidData?[index] ?? ContentData());
                                               } else {
                                                 ShowBottomSheet().onShowOptionContent(
                                                   context,
-                                                  contentData: vidData,
+                                                  contentData: vidData ?? ContentData(),
                                                   captionTitle: hyppeVid,
                                                   onDetail: false,
-                                                  isShare: vidData.isShared,
+                                                  isShare: vidData?.isShared,
                                                   onUpdate: () => context.read<HomeNotifier>().onUpdate(),
                                                 );
                                               }
@@ -224,7 +221,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                 memCacheHeight: 100,
                                                 widthPlaceHolder: 80,
                                                 heightPlaceHolder: 80,
-                                                imageUrl: (vidData.isApsara ?? false) ? (vidData.mediaThumbEndPoint ?? "") : "${vidData.fullThumbPath}",
+                                                imageUrl: (vidData?.isApsara ?? false) ? (vidData?.mediaThumbEndPoint ?? "") : "${vidData?.fullThumbPath}",
                                                 imageBuilder: (context, imageProvider) => Container(
                                                   // const EdgeInsets.symmetric(horizontal: 4.5),
                                                   width: SizeConfig.screenWidth,
@@ -269,25 +266,25 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                           AspectRatio(aspectRatio: 16 / 9, child: _buildBody(context, vidData, SizeConfig.screenWidth))
                                         ],
                                       ),
-                                      (vidData.tagPeople?.isNotEmpty ?? false) || vidData.location != ''
+                                      (vidData?.tagPeople?.isNotEmpty ?? false) || vidData?.location != ''
                                           ? Padding(
                                               padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10.0),
                                               child: Row(
                                                 children: [
-                                                  vidData.tagPeople?.isNotEmpty ?? false
+                                                  vidData?.tagPeople?.isNotEmpty ?? false
                                                       ? TagLabel(
                                                           icon: 'tag_people',
-                                                          label: '${vidData.tagPeople?.length} people',
+                                                          label: '${vidData?.tagPeople?.length} people',
                                                           function: () {
-                                                            vidNotifier.showUserTag(context, index, vidData.postID);
+                                                            vidNotifier.showUserTag(context, index, vidData?.postID);
                                                           },
                                                         )
                                                       : const SizedBox(),
-                                                  vidData.location == '' || vidData.location == null
+                                                  vidData?.location == '' || vidData?.location == null
                                                       ? const SizedBox()
                                                       : TagLabel(
                                                           icon: 'maptag',
-                                                          label: "${vidData.location}",
+                                                          label: "${vidData?.location}",
                                                           function: () {},
                                                         ),
                                                 ],
@@ -298,7 +295,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                       CustomNewDescContent(
                                         // desc: "${data?.description}",
                                         username: '',
-                                        desc: "${vidData.description}",
+                                        desc: "${vidData?.description}",
                                         trimLines: 2,
                                         textAlign: TextAlign.start,
                                         seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
@@ -312,7 +309,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                         padding: EdgeInsets.symmetric(vertical: 4.0),
                                         child: Text(
                                           "${System().readTimestamp(
-                                            DateTime.parse(System().dateTimeRemoveT(vidData.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                                            DateTime.parse(System().dateTimeRemoveT(vidData?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
                                             context,
                                             fullCaption: true,
                                           )}",

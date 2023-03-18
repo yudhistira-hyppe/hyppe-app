@@ -183,6 +183,7 @@ class ContentData {
   bool? following;
   List<Comment>? comment;
   bool? isDiaryPlay;
+  int? comments;
 
   ContentData({
     this.metadata,
@@ -238,6 +239,7 @@ class ContentData {
     this.following,
     this.comment,
     this.isDiaryPlay,
+    this.comments,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -324,6 +326,7 @@ class ContentData {
       });
     }
     isDiaryPlay = false;
+    comments = json['comments'] ?? 0;
   }
 
   Map<String, dynamic> toJson() {
