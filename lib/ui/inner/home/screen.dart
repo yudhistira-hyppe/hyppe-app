@@ -36,6 +36,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
+  final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
+
   late TabController _tabController;
   double offset = 0.0;
   List filterList = [
@@ -105,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     isHomeScreen = true;
     'isOnHomeScreen $isHomeScreen'.logger();
     _tabController = TabController(length: 3, vsync: this);
+
     offset = 0;
     Future.delayed(Duration.zero, () {
       final notifier = context.read<HomeNotifier>();
@@ -112,20 +115,25 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       final _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
 
-      notifier.initNewHome(context, mounted, isreload: true);
+      notifier.initNewHome(context, mounted, isreload: false, isNew: true);
       if (notifierFollow.listFollow.isEmpty) {
         notifierFollow.listFollow = [
           {'name': "${_language.follow}", 'code': 'TOFOLLOW'},
           {'name': "${_language.following}", 'code': 'FOLLOWING'},
         ];
       }
+
+      globalKey.currentState!.innerController.addListener(() {
+        if ((globalKey.currentState?.innerController.position.pixels ?? 0) >= (globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
+            !globalKey.currentState!.innerController.position.outOfRange) {
+          notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);
+        }
+      });
+
       _scrollController.addListener(() {
         setState(() {
           offset = _scrollController.offset;
         });
-        if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
-          notifier.initNewHome(context, mounted, isreload: false);
-        }
       });
       context.read<ReportNotifier>().inPosition = contentPosition.home;
     });
@@ -167,6 +175,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                 await notifier.initNewHome(context, mounted, isreload: true);
               },
               child: NestedScrollView(
+                key: globalKey,
                 controller: _scrollController,
                 physics: const BouncingScrollPhysics(),
                 headerSliverBuilder: (context, bool innerBoxIsScrolled) {

@@ -93,108 +93,102 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Consumer<SelfProfileNotifier>(
-      builder: (_, notifier, __) => WillPopScope(
-        onWillPop: () async {
-          notifier.routing.moveBack();
-          return false;
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0.0,
-            automaticallyImplyLeading: true,
-            title: CustomTextWidget(
-              textToDisplay: notifier.displayUserName(),
-              textAlign: TextAlign.start,
-              textStyle: Theme.of(context).textTheme.subtitle1,
-            ),
-            actions: [
-              IconButton(
-                // onPressed: () => notifier.routing.move(profileSettings),
-                onPressed: () async {
-                  notifier.routing.move(Routes.appSettings);
-                  await context.read<TransactionNotifier>().getAccountBalance(context);
-                  context.read<TransactionNotifier>().isLoading = false;
-                },
-                icon: const CustomIconWidget(
-                  iconData: "${AssetPath.vectorPath}setting.svg",
-                ),
-              ),
-            ],
-            // flexibleSpace: SafeArea(
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       Padding(
-            //         padding: const EdgeInsets.only(left: 16.0),
-            //         child: CustomTextWidget(
-            //           textToDisplay: notifier.displayUserName(),
-            //           textAlign: TextAlign.start,
-            //           textStyle: Theme.of(context).textTheme.subtitle1,
-            //         ),
-            //       ),
-            //       IconButton(
-            //         // onPressed: () => notifier.routing.move(profileSettings),
-            //         onPressed: () async {
-            //           notifier.routing.move(Routes.appSettings);
-            //           await context.read<TransactionNotifier>().getAccountBalance(context);
-            //           context.read<TransactionNotifier>().isLoading = false;
-            //         },
-            //         icon: const CustomIconWidget(
-            //           iconData: "${AssetPath.vectorPath}setting.svg",
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
+      builder: (_, notifier, __) => Scaffold(
+        appBar: AppBar(
+          elevation: 0.0,
+          automaticallyImplyLeading: true,
+          title: CustomTextWidget(
+            textToDisplay: notifier.displayUserName(),
+            textAlign: TextAlign.start,
+            textStyle: Theme.of(context).textTheme.subtitle1,
           ),
-          body: RefreshIndicator(
-            key: _globalKey,
-            strokeWidth: 2.0,
-            color: Colors.purple,
-            onRefresh: () async {
-              await notifier.getDataPerPgage(context, isReload: true);
-            },
-            child: CustomScrollView(
-              controller: _scrollController,
-              scrollDirection: Axis.vertical,
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                // SliverAppBar(
-                //   pinned: false,
-                //   stretch: false,
-                //   elevation: 0.0,
-                //   floating: false,
-                //   automaticallyImplyLeading: false,
-                //   expandedHeight: (400 * SizeConfig.scaleDiagonal) + 46,
-                //   backgroundColor: Theme.of(context).colorScheme.background,
-                //   flexibleSpace: FlexibleSpaceBar(
-                //       titlePadding: EdgeInsets.zero,
-                //       background: notifier.user.profile != null
-                //           ? SelfProfileTop()
-                //           : BothProfileTopShimmer()),
-                // ),
-                SliverToBoxAdapter(
-                  child: Container(child: notifier.user.profile != null ? const SelfProfileTop() : BothProfileTopShimmer()),
-                ),
-
-                SliverAppBar(
-                  pinned: true,
-                  flexibleSpace: const SelfProfileBottom(),
-                  automaticallyImplyLeading: false,
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                ),
-
-                notifier.optionButton(),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      return notifier.scollLoading ? const CustomLoading(size: 4) : Container();
-                    },
-                    childCount: 1,
-                  ),
-                )
-              ],
+          actions: [
+            IconButton(
+              // onPressed: () => notifier.routing.move(profileSettings),
+              onPressed: () async {
+                notifier.routing.move(Routes.appSettings);
+                await context.read<TransactionNotifier>().getAccountBalance(context);
+                context.read<TransactionNotifier>().isLoading = false;
+              },
+              icon: const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}setting.svg",
+              ),
             ),
+          ],
+          // flexibleSpace: SafeArea(
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Padding(
+          //         padding: const EdgeInsets.only(left: 16.0),
+          //         child: CustomTextWidget(
+          //           textToDisplay: notifier.displayUserName(),
+          //           textAlign: TextAlign.start,
+          //           textStyle: Theme.of(context).textTheme.subtitle1,
+          //         ),
+          //       ),
+          //       IconButton(
+          //         // onPressed: () => notifier.routing.move(profileSettings),
+          //         onPressed: () async {
+          //           notifier.routing.move(Routes.appSettings);
+          //           await context.read<TransactionNotifier>().getAccountBalance(context);
+          //           context.read<TransactionNotifier>().isLoading = false;
+          //         },
+          //         icon: const CustomIconWidget(
+          //           iconData: "${AssetPath.vectorPath}setting.svg",
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+        ),
+        body: RefreshIndicator(
+          key: _globalKey,
+          strokeWidth: 2.0,
+          color: Colors.purple,
+          onRefresh: () async {
+            await notifier.getDataPerPgage(context, isReload: true);
+          },
+          child: CustomScrollView(
+            controller: _scrollController,
+            scrollDirection: Axis.vertical,
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              // SliverAppBar(
+              //   pinned: false,
+              //   stretch: false,
+              //   elevation: 0.0,
+              //   floating: false,
+              //   automaticallyImplyLeading: false,
+              //   expandedHeight: (400 * SizeConfig.scaleDiagonal) + 46,
+              //   backgroundColor: Theme.of(context).colorScheme.background,
+              //   flexibleSpace: FlexibleSpaceBar(
+              //       titlePadding: EdgeInsets.zero,
+              //       background: notifier.user.profile != null
+              //           ? SelfProfileTop()
+              //           : BothProfileTopShimmer()),
+              // ),
+              SliverToBoxAdapter(
+                child: Container(child: notifier.user.profile != null ? const SelfProfileTop() : BothProfileTopShimmer()),
+              ),
+
+              SliverAppBar(
+                pinned: true,
+                flexibleSpace: const SelfProfileBottom(),
+                automaticallyImplyLeading: false,
+                backgroundColor: Theme.of(context).colorScheme.background,
+              ),
+
+              notifier.optionButton(),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return notifier.scollLoading ? const CustomLoading(size: 4) : Container();
+                  },
+                  childCount: 1,
+                ),
+              )
+            ],
           ),
         ),
       ),
