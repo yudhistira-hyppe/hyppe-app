@@ -308,7 +308,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                     if (data.isShared ?? false)
                       InkWell(
                         onTap: () {
-                          like.likePost(context, data);
+                          notifier.createdDynamicLink(context, data: data);
                         },
                         child: const CustomIconWidget(
                           width: 20,

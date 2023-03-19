@@ -21,7 +21,10 @@ import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
+import '../../../core/constants/asset_path.dart';
+import '../../constant/widget/custom_icon_widget.dart';
 import '../../constant/widget/custom_spacer.dart';
+import '../home/widget/profile.dart';
 import 'interest/detail_screen.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -142,7 +145,18 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
       key: _scaffoldKey,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-        child: HomeAppBar(),
+        child: AppBar(
+          centerTitle: false,
+          automaticallyImplyLeading: false,
+          actions: const [
+            // Doku(),
+            Profile(),
+            // AliPlayer(),
+            sixteenPx,
+          ],
+          title:
+          const CustomIconWidget(iconData: "${AssetPath.vectorPath}hyppe.svg"),
+        ),
       ),
       body: RefreshIndicator(
         strokeWidth: 2.0,

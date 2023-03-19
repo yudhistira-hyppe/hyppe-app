@@ -49,6 +49,7 @@ class _SearchContentsTabState extends State<SearchContentsTab> {
     ];
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final language = notifier.language;
+      final isAllEmpty = notifier.searchVid.isNotNullAndEmpty() && notifier.searchDiary.isNotNullAndEmpty() && notifier.searchPic.isNotNullAndEmpty();
       return !notifier.isLoading ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -62,81 +63,86 @@ class _SearchContentsTabState extends State<SearchContentsTab> {
               textAlign: TextAlign.start,
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(left: 16),
-            child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: listTab.map((e) {
-                  final isActive = e == notifier.contentTab;
-                  return Container(
-                    margin:
-                    const EdgeInsets.only(right: 12, top: 10, bottom: 16),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: Ink(
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: isActive
-                              ? context.getColorScheme().primary
-                              : context.getColorScheme().background,
-                          borderRadius:
-                          const BorderRadius.all(Radius.circular(18)),
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            notifier.contentTab = e;
-                          },
-                          borderRadius: const BorderRadius.all(Radius.circular(18)),
-                          splashColor: context.getColorScheme().primary,
-                          child: Container(
-                            alignment: Alignment.center,
+          Expanded(child: isAllEmpty ? SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,) : Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 16),
+                child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: listTab.map((e) {
+                      final isActive = e == notifier.contentTab;
+                      return Container(
+                        margin:
+                        const EdgeInsets.only(right: 12, top: 10, bottom: 16),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: Ink(
                             height: 36,
-                            padding: const EdgeInsets.symmetric( horizontal: 16),
                             decoration: BoxDecoration(
-                                borderRadius:
-                                const BorderRadius.all(Radius.circular(18)),
-                                border: !isActive
-                                    ? Border.all(
-                                    color:
-                                    context.getColorScheme().secondary,
-                                    width: 1)
-                                    : null),
-                            child: CustomTextWidget(
-                              textToDisplay:
-                              System().getTitleHyppe(e),
-                              textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
+                              color: isActive
+                                  ? context.getColorScheme().primary
+                                  : context.getColorScheme().background,
+                              borderRadius:
+                              const BorderRadius.all(Radius.circular(18)),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                notifier.contentTab = e;
+                              },
+                              borderRadius: const BorderRadius.all(Radius.circular(18)),
+                              splashColor: context.getColorScheme().primary,
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 36,
+                                padding: const EdgeInsets.symmetric( horizontal: 16),
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                    const BorderRadius.all(Radius.circular(18)),
+                                    border: !isActive
+                                        ? Border.all(
+                                        color:
+                                        context.getColorScheme().secondary,
+                                        width: 1)
+                                        : null),
+                                child: CustomTextWidget(
+                                  textToDisplay:
+                                  System().getTitleHyppe(e),
+                                  textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  );
-                }).toList()),
-          ),
-          Expanded(
-            child: RefreshIndicator(
-              strokeWidth: 2.0,
-              color: context.getColorScheme().primary,
-              onRefresh: () => notifier.getDataSearch(context),
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                child: Builder(
-                  builder: (context) {
-                    final type = notifier.contentTab;
-                    switch(type){
-                      case HyppeType.HyppeVid:
-                        return notifier.searchVid.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchVid ?? []) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,);
-                      case HyppeType.HyppeDiary:
-                        return notifier.searchDiary.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchDiary ?? []) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
-                      case HyppeType.HyppePic:
-                        return notifier.searchPic.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchPic ?? []) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
-                    }
-                  }
-                ),
+                      );
+                    }).toList()),
               ),
-            ),
-          )
+              Expanded(
+                child: RefreshIndicator(
+                  strokeWidth: 2.0,
+                  color: context.getColorScheme().primary,
+                  onRefresh: () => notifier.getDataSearch(context),
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Builder(
+                        builder: (context) {
+                          final type = notifier.contentTab;
+                          switch(type){
+                            case HyppeType.HyppeVid:
+                              return notifier.searchVid.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchVid ?? []) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,);
+                            case HyppeType.HyppeDiary:
+                              return notifier.searchDiary.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchDiary ?? []) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                            case HyppeType.HyppePic:
+                              return notifier.searchPic.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchPic ?? []) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                          }
+                        }
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ))
+
         ],
       ): const AllSearchShimmer();
     });
