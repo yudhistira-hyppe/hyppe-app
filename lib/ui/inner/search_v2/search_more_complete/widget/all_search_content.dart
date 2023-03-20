@@ -13,6 +13,7 @@ import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/all_search_shimmer.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/vid_search_content.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/search_no_result.dart';
+import 'package:hyppe/ui/inner/search_v2/widget/search_no_result_image.dart';
 import 'package:provider/provider.dart';
 
 import '../../hashtag/widget/hashtag_item.dart';
@@ -51,6 +52,9 @@ class _AllSearchContentState extends State<AllSearchContent> {
       final vids = notifier.searchVid;
       final diaries = notifier.searchDiary;
       final pics = notifier.searchPic;
+      final tags = notifier.searchHashtag;
+      final users = notifier.searchUsers;
+      final isAllEmpty = !vids.isNotNullAndEmpty() && !diaries.isNotNullAndEmpty() && !pics.isNotNullAndEmpty() && !tags.isNotNullAndEmpty() && !users.isNotNullAndEmpty();
       return !notifier.isLoading
           ? RefreshIndicator(
         strokeWidth: 2.0,
@@ -59,7 +63,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
             child: SingleChildScrollView(
         child: Padding(
             padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 0),
-            child: Column(
+            child: isAllEmpty ? SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,) :Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 widgetUserList(_themes, notifier),
