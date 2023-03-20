@@ -8,6 +8,7 @@ import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
@@ -77,12 +78,16 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   LocalizationModelV2? lang;
   ContentData? dataSelected;
   bool isMute = false;
+  String email = '';
+  String statusKyc = '';
 
   @override
   void initState() {
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
     lang = context.read<TranslateNotifierV2>().translate;
     notifier.scrollController.addListener(() => notifier.scrollListener(context));
+    email = SharedPreference().readStorage(SpKeys.email);
+    statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     // stopwatch = new Stopwatch()..start();
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -391,7 +396,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPopNext() {
     print("======= didPopNext");
-    fAliplayer?.play();
 
     // System().disposeBlock();
 
@@ -401,7 +405,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPushNext() {
     print("========= didPushNext");
-    fAliplayer?.stop();
+    fAliplayer?.pause();
     super.didPushNext();
   }
 
@@ -427,7 +431,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   @override
   Widget build(BuildContext context) {
-    var email = SharedPreference().readStorage(SpKeys.email);
     SizeConfig().init(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
     AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
@@ -538,13 +541,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                       ),
                                     GestureDetector(
                                       onTap: () {
+                                        fAliplayer?.pause();
                                         if (notifier.pic?[index].email != email) {
                                           context.read<PreviewPicNotifier>().reportContent(context, notifier.pic?[index] ?? ContentData());
                                         } else {
                                           ShowBottomSheet().onShowOptionContent(
                                             context,
                                             contentData: notifier.pic?[index] ?? ContentData(),
-                                            captionTitle: hyppeDiary,
+                                            captionTitle: hyppePic,
                                             onDetail: false,
                                             isShare: notifier.pic?[index].isShared,
                                             onUpdate: () => context.read<HomeNotifier>().onUpdate(),
@@ -633,6 +637,18 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               ),
                                             ),
                                           ),
+                                          Positioned.fill(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                fAliplayer?.play();
+                                              },
+                                              child: Container(
+                                                color: Colors.transparent,
+                                                width: SizeConfig.screenWidth,
+                                                height: SizeConfig.screenHeight,
+                                              ),
+                                            ),
+                                          ),
                                           _buildBody(context, SizeConfig.screenWidth, notifier.pic?[index] ?? ContentData()),
                                           blurContentWidget(context, notifier.pic?[index] ?? ContentData()),
                                         ],
@@ -640,7 +656,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                     ),
                                   ),
                                 ),
-                                (notifier.pic?[index].reportedStatus != 'OWNED' && notifier.pic?[index].reportedStatus != 'BLURRED' && notifier.pic?[index].reportedStatus2 != 'BLURRED') &&
+                                statusKyc == VERIFIED &&
+                                        (notifier.pic?[index].reportedStatus != 'OWNED' && notifier.pic?[index].reportedStatus != 'BLURRED' && notifier.pic?[index].reportedStatus2 != 'BLURRED') &&
                                         notifier.pic?[index].email == email
                                     ? Container(
                                         width: MediaQuery.of(context).size.width * 0.8,
@@ -680,7 +697,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                       defaultColor: false,
                                                       color: (notifier.pic?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
                                                       iconData: '${AssetPath.vectorPath}${(notifier.pic?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                                      width: 24,
+                                                      height: 24,
                                                     ),
                                                     onTap: () {
                                                       if (notifier.pic?[index] != null) {
@@ -702,7 +719,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                   defaultColor: false,
                                                   color: kHyppeTextLightPrimary,
                                                   iconData: '${AssetPath.vectorPath}comment2.svg',
-                                                  height: 18,
+                                                  height: 24,
                                                 ),
                                               ),
                                             ),
@@ -717,7 +734,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                   defaultColor: false,
                                                   color: kHyppeTextLightPrimary,
                                                   iconData: '${AssetPath.vectorPath}share2.svg',
-                                                  height: 18,
+                                                  height: 24,
                                                 ),
                                               ),
                                             ),
@@ -769,7 +786,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                                     child: Text(
-                                      "Lihat semua ${notifier.pic?[index].comments} komentar",
+                                      "${lang?.seeAll} ${notifier.pic?[index].comments} ${lang?.comment}",
                                       style: const TextStyle(fontSize: 12, color: kHyppeBurem),
                                     ),
                                   ),
@@ -841,7 +858,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
                   defaultColor: false,
-                  height: 20,
+                  height: 24,
                 ),
               ),
             ),
@@ -860,7 +877,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   child: CustomIconWidget(
                     iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
                     defaultColor: false,
-                    height: 20,
+                    height: 24,
                   ),
                 ),
               ),

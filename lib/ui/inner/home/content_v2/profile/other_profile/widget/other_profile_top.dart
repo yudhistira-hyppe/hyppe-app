@@ -148,18 +148,6 @@ class OtherProfileTop extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CustomElevatedButton(
-                    child: notifier.isCheckLoading
-                        ? const CustomLoading()
-                        : CustomTextWidget(
-                            textToDisplay: notifier.statusFollowing == StatusFollowing.following
-                                ? notifier.language.following ?? 'following '
-                                : notifier.statusFollowing == StatusFollowing.requested
-                                    ? notifier.language.requested ?? 'requested'
-                                    : notifier.language.follow ?? 'follow',
-                            textStyle: Theme.of(context).textTheme.button?.copyWith(
-                                  color: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? kHyppeGrey : kHyppeLightButtonText,
-                                ),
-                          ),
                     width: 167 * SizeConfig.scaleDiagonal,
                     height: 42 * SizeConfig.scaleDiagonal,
                     buttonStyle: ButtonStyle(
@@ -176,6 +164,18 @@ class OtherProfileTop extends StatelessWidget {
                               notifier.followUser(context, isUnFollow: true);
                             }
                           },
+                    child: notifier.isCheckLoading
+                        ? const CustomLoading()
+                        : CustomTextWidget(
+                            textToDisplay: notifier.statusFollowing == StatusFollowing.following
+                                ? notifier.language.following ?? 'following '
+                                : notifier.statusFollowing == StatusFollowing.requested
+                                    ? notifier.language.requested ?? 'requested'
+                                    : notifier.language.follow ?? 'follow',
+                            textStyle: Theme.of(context).textTheme.button?.copyWith(
+                                  color: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? kHyppeGrey : kHyppeLightButtonText,
+                                ),
+                          ),
                   ),
                   CustomElevatedButton(
                     child: CustomTextWidget(

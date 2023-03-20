@@ -293,14 +293,14 @@ class SelfProfileTop extends StatelessWidget {
                     Expanded(
                       // when button library is active, remove this expanded and set width value
                       child: CustomElevatedButton(
-                        child: CustomTextWidget(
-                          textToDisplay: notifier.language.editProfile ?? '',
-                          textStyle: Theme.of(context).textTheme.button,
-                        ),
                         width: null,
                         height: 42 * SizeConfig.scaleDiagonal,
                         buttonStyle: Theme.of(context).elevatedButtonTheme.style,
                         function: () => notifier.navigateToEditProfile(),
+                        child: CustomTextWidget(
+                          textToDisplay: notifier.language.editProfile ?? '',
+                          textStyle: Theme.of(context).textTheme.button,
+                        ),
                       ),
                     ),
                     sixPx,

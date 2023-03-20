@@ -545,7 +545,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
                   return GestureDetector(
                     onTap: () async {
                       reaction = _data?.data[index].icon;
-                      // _routing.moveBack();
+                      _routing.moveBack();
                       makeItems(animationController);
                       Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
                       Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
@@ -641,32 +641,31 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   String onProfilePicShow(String? urlPic) => _system.showUserPicture(urlPic) ?? '';
 
   List<Widget> buildItems(AnimationController animationController) {
-    print("itu items $items");
     return items.map((item) {
-      return Text(reaction ?? '');
-      // var tween = Tween<Offset>(
-      //   begin: Offset(0, Random().nextDouble() * 1 + 1),
-      //   end: Offset(Random().nextDouble() * 0.5, -2),
-      // ).chain(CurveTween(curve: Curves.linear));
-      // return SlideTransition(
-      //   position: animationController.drive(tween),
-      //   child: AnimatedAlign(
-      //     alignment: item.alignment,
-      //     duration: const Duration(seconds: 10),
-      //     child: AnimatedOpacity(
-      //       opacity: fadeReaction ? 0.0 : 1.0,
-      //       duration: const Duration(seconds: 1),
-      //       child: Material(
-      //         color: Colors.transparent,
-      //         child: Text(
-      //           reaction ?? '',
-      //           textAlign: TextAlign.center,
-      //           style: TextStyle(fontSize: item.size),
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // );
+      // return Text(reaction ?? '');
+      var tween = Tween<Offset>(
+        begin: Offset(0, Random().nextDouble() * 1 + 1),
+        end: Offset(Random().nextDouble() * 0.5, -2),
+      ).chain(CurveTween(curve: Curves.linear));
+      return SlideTransition(
+        position: animationController.drive(tween),
+        child: AnimatedAlign(
+          alignment: item.alignment,
+          duration: const Duration(seconds: 10),
+          child: AnimatedOpacity(
+            opacity: fadeReaction ? 0.0 : 1.0,
+            duration: const Duration(seconds: 1),
+            child: Material(
+              color: Colors.transparent,
+              child: Text(
+                reaction ?? '',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: item.size),
+              ),
+            ),
+          ),
+        ),
+      );
     }).toList();
   }
 

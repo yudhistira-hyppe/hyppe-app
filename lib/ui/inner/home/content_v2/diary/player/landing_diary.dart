@@ -7,6 +7,7 @@ import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
@@ -76,12 +77,16 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
   LocalizationModelV2? lang;
   ContentData? dataSelected;
+  String email = '';
+  String statusKyc = '';
 
   @override
   void initState() {
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
     lang = context.read<TranslateNotifierV2>().translate;
     notifier.scrollController.addListener(() => notifier.scrollListener(context));
+    email = SharedPreference().readStorage(SpKeys.email);
+    statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     // stopwatch = new Stopwatch()..start();
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -370,6 +375,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
     }
+    print("dispose dari diary");
     fAliplayer?.stop();
     fAliplayer?.destroy();
 
@@ -379,20 +385,20 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   void deactivate() {
-    print("====== deactivate ");
+    print("====== deactivate dari diary");
 
     super.deactivate();
   }
 
   @override
   void didPop() {
-    print("====== didpop ");
+    print("====== didpop dari diary");
     super.didPop();
   }
 
   @override
   void didPopNext() {
-    print("======= didPopNext");
+    print("======= didPopNext dari diary");
     fAliplayer?.play();
 
     // System().disposeBlock();
@@ -402,7 +408,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   void didPushNext() {
-    print("========= didPushNext");
+    print("========= didPushNext dari diary");
     fAliplayer?.pause();
     super.didPushNext();
   }
@@ -429,7 +435,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   Widget build(BuildContext context) {
-    var email = SharedPreference().readStorage(SpKeys.email);
     SizeConfig().init(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
     AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
@@ -665,7 +670,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     ),
                                   ),
                                 ),
-                                (notifier.diaryData?[index].reportedStatus != 'OWNED' &&
+                                statusKyc == VERIFIED &&
+                                        (notifier.diaryData?[index].reportedStatus != 'OWNED' &&
                                             notifier.diaryData?[index].reportedStatus != 'BLURRED' &&
                                             notifier.diaryData?[index].reportedStatus2 != 'BLURRED') &&
                                         notifier.diaryData?[index].email == email
@@ -708,7 +714,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                         defaultColor: false,
                                                         color: (notifier.diaryData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
                                                         iconData: '${AssetPath.vectorPath}${(notifier.diaryData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                                        height: 18,
+                                                        height: 24,
                                                       ),
                                                       onTap: () {
                                                         if (notifier.diaryData?[index] != null) {
@@ -730,7 +736,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                   defaultColor: false,
                                                   color: kHyppeTextLightPrimary,
                                                   iconData: '${AssetPath.vectorPath}comment2.svg',
-                                                  height: 18,
+                                                  height: 24,
                                                 ),
                                               ),
                                             ),
@@ -740,7 +746,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                               defaultColor: false,
                                               color: kHyppeTextLightPrimary,
                                               iconData: '${AssetPath.vectorPath}share2.svg',
-                                              height: 18,
+                                              height: 24,
                                             ),
                                           ),
                                           if ((notifier.diaryData?[index].saleAmount ?? 0) > 0 && email != notifier.diaryData?[index].email)
@@ -748,14 +754,14 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                               onTap: () async {
                                                 await ShowBottomSheet.onBuyContent(context, data: notifier.diaryData?[index]);
                                               },
-                                              child: Expanded(
+                                              child: const Expanded(
                                                 child: Align(
                                                   alignment: Alignment.centerRight,
                                                   child: CustomIconWidget(
                                                     defaultColor: false,
                                                     color: kHyppeTextLightPrimary,
                                                     iconData: '${AssetPath.vectorPath}cart.svg',
-                                                    height: 18,
+                                                    height: 24,
                                                   ),
                                                 ),
                                               ),
@@ -783,15 +789,13 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                                   expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
                                 ),
-                                (notifier.diaryData?[index].comment?.length ?? 0) > 2
-                                    ? Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                        child: Text(
-                                          "Lihat semua ${notifier.diaryData?[index].comment?.length} komentar",
-                                          style: const TextStyle(fontSize: 12, color: kHyppeBurem),
-                                        ),
-                                      )
-                                    : Container(),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                  child: Text(
+                                    "${lang?.seeAll} ${notifier.diaryData?[index].comments} ${lang?.comment}",
+                                    style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                                  ),
+                                ),
                                 (notifier.diaryData?[index].comment?.length ?? 0) > 0
                                     ? Padding(
                                         padding: const EdgeInsets.only(top: 6.0),
@@ -885,7 +889,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
                   defaultColor: false,
-                  height: 20,
+                  height: 24,
                 ),
               ),
             ),
@@ -903,7 +907,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 child: CustomIconWidget(
                   iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
                   defaultColor: false,
-                  height: 20,
+                  height: 24,
                 ),
               ),
             ),

@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 
 // TODO(Hendi Noviansyah): check if this class is still needed
 class FollowRequestUnfollowNotifier with ChangeNotifier {
-
   StatusFollowing _statusFollow = StatusFollowing.none;
   StatusFollowing get statusFollow => _statusFollow;
 
@@ -23,7 +22,7 @@ class FollowRequestUnfollowNotifier with ChangeNotifier {
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-  set isLoading(bool state){
+  set isLoading(bool state) {
     _isLoading = state;
     notifyListeners();
   }
@@ -38,7 +37,7 @@ class FollowRequestUnfollowNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  setStatusFollow(StatusFollowing val){
+  setStatusFollow(StatusFollowing val) {
     _statusFollow = val;
   }
 
@@ -85,14 +84,14 @@ class FollowRequestUnfollowNotifier with ChangeNotifier {
 
   String label(String? tile) {
     String label = '';
-    try{
+    try {
       if (tile == 'requested') {
         label = 'Requested';
       } else {
         final index = _listFollow.indexWhere((element) => element["code"] == tile);
         label = _listFollow[index]['name'];
       }
-    }catch(e){
+    } catch (e) {
       'get Label Error : $e'.logger();
     }
 
@@ -109,7 +108,7 @@ class FollowRequestUnfollowNotifier with ChangeNotifier {
         context,
         data: FollowUserArgument(
           receiverParty: email ?? '',
-          eventType: InteractiveEventType.following,
+          eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
         ),
       );
       final fetch = notifier.followFetch;

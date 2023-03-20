@@ -20,6 +20,7 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_bottom_view.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_replay_caption.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_top_view.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -118,7 +119,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   List<StoriesGroup>? _groupUserStories;
 
-  late PageController _pageController;
+  PageController _pageController = PageController();
 
   int _curIdx = 0;
   int _curChildIdx = 0;
@@ -135,12 +136,11 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
     super.initState();
 
+    _pageController = PageController(initialPage: widget.argument.peopleIndex);
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       animationController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
-      setState(() {
-        print("=========== ${widget.argument.peopleIndex}");
-        _pageController = PageController(initialPage: widget.argument.peopleIndex);
-      });
+
       _animationController = AnimationController(
         vsync: this,
       )
@@ -162,7 +162,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
       initStory();
 
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'storyPlayer');
       var configMap = {
         'mClearFrameWhenStop': true,
       };
@@ -382,6 +382,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   void storyPrev() {
     if (_curChildIdx > 0) {
       _curChildIdx--;
+      print("story kurang ${shown.length}");
+      shown.removeAt(shown.length - 1);
+      print("story setelah kurang ${shown.length}");
       setState(() {});
       start();
     } else {
@@ -428,10 +431,12 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
     }
-    animationController.dispose();
+
     fAliplayer?.stop();
     fAliplayer?.destroy();
     super.dispose();
+    animationController.reset();
+    animationController.dispose();
     WidgetsBinding.instance.removeObserver(this);
     if (_networkSubscriptiion != null) {
       _networkSubscriptiion?.cancel();
@@ -447,13 +452,13 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   @override
   void didPop() {
-    print("====== didpop ");
+    print("====== didpop dari story ");
     super.didPop();
   }
 
   @override
   void didPopNext() {
-    print("======= didPopNext");
+    print("======= didPopNext dari story");
     fAliplayer?.play();
 
     // System().disposeBlock();
@@ -463,7 +468,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   @override
   void didPushNext() {
-    print("========= didPushNext");
+    print("========= didPushNext dari story");
     pause();
     super.didPushNext();
   }
@@ -494,17 +499,17 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     //   child: ,
     // );
 
-    return Consumer<StoriesPlaylistNotifier>(builder: (context, value, child) {
-      if (MediaQuery.of(context).viewInsets.bottom > 0.0 || notifier.textEditingController.text.isNotEmpty) {
-        notifier.setIsKeyboardActive(true);
+    return Consumer2<StoriesPlaylistNotifier, PreviewStoriesNotifier>(builder: (context, value, storyNot, child) {
+      if (MediaQuery.of(context).viewInsets.bottom > 0.0 || value.textEditingController.text.isNotEmpty) {
+        value.setIsKeyboardActive(true);
       } else {
-        notifier.setIsKeyboardActive(false);
+        value.setIsKeyboardActive(false);
       }
       return Scaffold(
         body: PageView.builder(
           controller: _pageController,
           scrollDirection: Axis.horizontal,
-          itemCount: _groupUserStories?.length ?? 0,
+          itemCount: storyNot.storiesGroups?.length,
           onPageChanged: (index) async {
             _curIdx = index;
             setState(() {});
@@ -530,9 +535,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   // padding: EdgeInsets.only(bottom: 25.0),
-                  child: _buildFillStory(),
+                  child: _buildFillStory(value),
                 ),
-                _buildSingleScreen(index),
+                _buildSingleScreen(index, value),
               ],
             );
           },
@@ -541,14 +546,14 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     });
   }
 
-  Widget _buildFillStory() {
+  Widget _buildFillStory(StoriesPlaylistNotifier not) {
     return SafeArea(
       child: Stack(
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 10.0, right: 10),
             child: Row(
-              children: _groupUserStories![_curIdx].story!.map((it) {
+              children: (_groupUserStories?[_curIdx].story ?? []).map((it) {
                 return Expanded(
                   child: Container(
                     padding: EdgeInsets.only(top: 5, right: _groupUserStories![_curIdx].story!.last == it ? 0 : 4),
@@ -627,29 +632,24 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                 child: child,
               );
             },
-            child: notifier.linkCopied
+            child: not.linkCopied
                 ? const Center(
                     child: LinkCopied(),
                   )
                 : const SizedBox.shrink(),
           ),
           BuildReplayCaption(data: _groupUserStories![_curIdx].story?[_curChildIdx]),
-          Positioned.fill(
-              child: Stack(
-            children: [
-              ...notifier.buildItems(animationController),
-            ],
-          )),
+          Stack(children: [...not.buildItems(animationController)])
         ],
       ),
     );
   }
 
-  Widget _buildSingleScreen(int index) {
+  Widget _buildSingleScreen(int index, StoriesPlaylistNotifier not) {
     // VideoModel model = _dataList[index];
-    if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image' && loadImage == 1) {
-      _animationController?.forward();
-    }
+    // if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image' && loadImage == 1) {
+    //   _animationController?.forward();
+    // }
     return !isPlay || (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image' && _groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null)
         ? Stack(
             children: [
@@ -737,7 +737,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                         strokeWidth: 3.0,
                       ),
                     ),
-              _buildFillStory()
+              _buildFillStory(not),
             ],
           )
         : Container();
