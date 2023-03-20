@@ -49,7 +49,7 @@ class _SearchContentsTabState extends State<SearchContentsTab> {
     ];
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final language = notifier.language;
-      final isAllEmpty = notifier.searchVid.isNotNullAndEmpty() && notifier.searchDiary.isNotNullAndEmpty() && notifier.searchPic.isNotNullAndEmpty();
+      final isAllEmpty = !notifier.searchVid.isNotNullAndEmpty() && !notifier.searchDiary.isNotNullAndEmpty() && !notifier.searchPic.isNotNullAndEmpty();
       return !notifier.isLoading ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
