@@ -174,7 +174,7 @@ class VidDetailBottom extends StatelessWidget {
                         )
                       : _buildButton(context, '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${data?.insight?.likes ?? 0}",
                           () => notifier.likePost(context, data ?? ContentData()),
-                          colorIcon: (data?.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)
+                          colorIcon: (data?.insight?.isPostLiked ?? false) ? kHyppeRed : Theme.of(context).iconTheme.color)
                   : _buildButton(context, '${AssetPath.vectorPath}none-like.svg', "0", () {}),
             ),
             if (data?.allowComments ?? true)

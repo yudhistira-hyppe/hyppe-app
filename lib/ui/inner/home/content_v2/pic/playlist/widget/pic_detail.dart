@@ -215,7 +215,7 @@ class _PicDetailState extends State<PicDetail> {
                                 )
                               : _buildButtonV2(
                                   context: context,
-                                  colorIcon: (widget.arguments?.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
+                                  colorIcon: (widget.arguments?.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeLightButtonText,
                                   iconData: '${AssetPath.vectorPath}${(widget.arguments?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                   function: () => notifier.likePost(context, widget.arguments ?? ContentData()),
                                 ),

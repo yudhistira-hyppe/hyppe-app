@@ -89,9 +89,12 @@ class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayout
                               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
                             )),
                       )
-                    : CustomTextWidget(
-                        textToDisplay: musicTitle,
-                        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                    : DefaultTextStyle(
+                        style: TextStyle(),
+                        child: CustomTextWidget(
+                          textToDisplay: musicTitle,
+                          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                        ),
                       )
               ],
             ),
@@ -161,12 +164,11 @@ class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayout
 
   @override
   void afterFirstLayout(BuildContext context) {
-
     if ((widget.urlMusic ?? '').isNotEmpty) {
       globalAudioPlayer = audioPlayer;
       initMusic(context, widget.urlMusic!);
     } else if ((widget.music.apsaraMusicUrl?.playUrl ?? '').isNotEmpty) {
-      if(widget.isPlay){
+      if (widget.isPlay) {
         print('MusicStatusPage : ${widget.music.apsaraMusicUrl?.playUrl} : ${widget.urlMusic}');
         initMusic(context, widget.music.apsaraMusicUrl!.playUrl!);
       }

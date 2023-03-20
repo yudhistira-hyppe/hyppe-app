@@ -12,6 +12,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/link_copied_widget.dart';
@@ -37,9 +38,9 @@ class StoryPlayerPage extends StatefulWidget {
   State<StoryPlayerPage> createState() => _StoryPlayerPageState();
 }
 
-class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingObserver, TickerProviderStateMixin {
+class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
   FlutterAliplayer? fAliplayer;
-
+  late AnimationController animationController;
   bool isloading = false;
   bool isPrepare = false;
   bool isPause = false;
@@ -135,6 +136,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      animationController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
       setState(() {
         print("=========== ${widget.argument.peopleIndex}");
         _pageController = PageController(initialPage: widget.argument.peopleIndex);
@@ -242,6 +244,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
           isPrepare = true;
         });
       });
+      System().increaseViewCount(context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData());
       isPlay = true;
     });
     fAliplayer?.setOnRenderingStart((playerId) {
@@ -402,7 +405,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         break;
       case AppLifecycleState.paused:
         if (!_mEnablePlayBack) {
-          // fAliplayer?.pause();
+          fAliplayer?.pause();
         }
         if (_networkSubscriptiion != null) {
           _networkSubscriptiion?.cancel();
@@ -414,12 +417,18 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   }
 
   @override
+  void didChangeDependencies() {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
     _animationController?.dispose();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
     }
-
+    animationController.dispose();
     fAliplayer?.stop();
     fAliplayer?.destroy();
     super.dispose();
@@ -427,6 +436,36 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     if (_networkSubscriptiion != null) {
       _networkSubscriptiion?.cancel();
     }
+  }
+
+  @override
+  void deactivate() {
+    print("====== deactivate ");
+
+    super.deactivate();
+  }
+
+  @override
+  void didPop() {
+    print("====== didpop ");
+    super.didPop();
+  }
+
+  @override
+  void didPopNext() {
+    print("======= didPopNext");
+    fAliplayer?.play();
+
+    // System().disposeBlock();
+
+    super.didPopNext();
+  }
+
+  @override
+  void didPushNext() {
+    print("========= didPushNext");
+    pause();
+    super.didPushNext();
   }
 
   void play() {
@@ -448,43 +487,58 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<StoriesPlaylistNotifier>(
-      create: (context) => notifier,
-      child: PageView.builder(
-        controller: _pageController,
-        scrollDirection: Axis.horizontal,
-        itemCount: _groupUserStories?.length ?? 0,
-        onPageChanged: (index) async {
-          _curIdx = index;
-          setState(() {});
-          if (_lastCurIndex != _curIdx) {
-            _curChildIdx = 0;
-            start();
-          }
-          _lastCurIndex = _curIdx;
-        },
-        itemBuilder: (context, index) {
-          return Stack(
-            children: [
-              AliPlayerView(
-                onCreated: onViewPlayerCreated,
-                x: 0,
-                y: _playerY,
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                // padding: EdgeInsets.only(bottom: 25.0),
-                child: _buildFillStory(),
-              ),
-              _buildSingleScreen(index),
-            ],
-          );
-        },
-      ),
-    );
+    // return ChangeNotifierProvider<StoriesPlaylistNotifier>(
+    //   create: (context) {
+
+    //   },
+    //   child: ,
+    // );
+
+    return Consumer<StoriesPlaylistNotifier>(builder: (context, value, child) {
+      if (MediaQuery.of(context).viewInsets.bottom > 0.0 || notifier.textEditingController.text.isNotEmpty) {
+        notifier.setIsKeyboardActive(true);
+      } else {
+        notifier.setIsKeyboardActive(false);
+      }
+      return Scaffold(
+        body: PageView.builder(
+          controller: _pageController,
+          scrollDirection: Axis.horizontal,
+          itemCount: _groupUserStories?.length ?? 0,
+          onPageChanged: (index) async {
+            _curIdx = index;
+            setState(() {});
+            if (_lastCurIndex != _curIdx) {
+              _curChildIdx = 0;
+              start();
+            }
+            _lastCurIndex = _curIdx;
+          },
+          itemBuilder: (context, index) {
+            return Stack(
+              children: [
+                _groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null || _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType != 'image'
+                    ? AliPlayerView(
+                        onCreated: onViewPlayerCreated,
+                        x: 0,
+                        y: _playerY,
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                      )
+                    : Container(),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  // padding: EdgeInsets.only(bottom: 25.0),
+                  child: _buildFillStory(),
+                ),
+                _buildSingleScreen(index),
+              ],
+            );
+          },
+        ),
+      );
+    });
   }
 
   Widget _buildFillStory() {
@@ -557,7 +611,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                     data: _groupUserStories![_curIdx].story?[_curChildIdx],
                     // storyController: _storyController,
                     currentStory: _groupUserStories![_curIdx].story?.indexOf(_groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()),
-                    // animationController: animationController,
+                    animationController: animationController,
                     currentIndex: _curChildIdx,
                     pause: pause,
                     // play: play,
@@ -567,7 +621,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             duration: const Duration(milliseconds: 800),
             transitionBuilder: (child, animation) {
               animation = CurvedAnimation(parent: animation, curve: Curves.bounceOut);
-
               return ScaleTransition(
                 scale: animation,
                 alignment: Alignment.center,
@@ -581,7 +634,12 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                 : const SizedBox.shrink(),
           ),
           BuildReplayCaption(data: _groupUserStories![_curIdx].story?[_curChildIdx]),
-          ...notifier.buildItems(_animationController!)
+          Positioned.fill(
+              child: Stack(
+            children: [
+              ...notifier.buildItems(animationController),
+            ],
+          )),
         ],
       ),
     );
@@ -592,7 +650,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image' && loadImage == 1) {
       _animationController?.forward();
     }
-    return !isPlay
+    return !isPlay || (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image' && _groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null)
         ? Stack(
             children: [
               _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image'
@@ -689,7 +747,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     // final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
     notifier.initStateGroup(context, widget.argument);
     _groupUserStories = notifier.groupUserStories;
-    print(_groupUserStories);
+
     start();
   }
 
@@ -739,8 +797,15 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       fAliplayer?.prepare();
     } else {
       print("animasi start");
-      _animationController?.duration = const Duration(milliseconds: 5000);
-      _animationController?.forward();
+      if (_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null) {
+        print("================== gambar music ${[_curChildIdx]}");
+        print("================== gambar music ${_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic}");
+        await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic ?? '');
+        fAliplayer?.prepare();
+      } else {
+        _animationController?.duration = const Duration(milliseconds: 5000);
+        _animationController?.forward();
+      }
     }
 
     // fAliplayer?.play();

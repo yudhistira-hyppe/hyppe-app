@@ -47,7 +47,7 @@ class SlidePicScreen extends StatefulWidget {
   State<SlidePicScreen> createState() => _SlidePicScreenState();
 }
 
-class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMixin{
+class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMixin {
   @override
   void initState() {
     print('pindah screen ${widget.data.certified ?? false}');
@@ -158,7 +158,8 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                               featureType: FeatureType.pic,
                               username: (data.username?.isNotEmpty ?? false) ? data.username : notifier.savedData?.username,
                               isCelebrity: data.privacy?.isCelebrity,
-                              imageUrl: '${System().showUserPicture((data.avatar?.mediaEndpoint?.isNotEmpty ?? false) ?  data.avatar?.mediaEndpoint : (notifier.savedData?.avatar?.mediaEndpoint ?? ''))}',
+                              imageUrl:
+                                  '${System().showUserPicture((data.avatar?.mediaEndpoint?.isNotEmpty ?? false) ? data.avatar?.mediaEndpoint : (notifier.savedData?.avatar?.mediaEndpoint ?? ''))}',
                               createdAt: '${System().readTimestamp(
                                 DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? '')).millisecondsSinceEpoch,
                                 context,
@@ -307,7 +308,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                                 )
                               : _buildButtonV2(
                                   context: context,
-                                  colorIcon: (data.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
+                                  colorIcon: (data.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeLightButtonText,
                                   iconData: '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                   function: () {
                                     print('ini l0000ike');
@@ -384,7 +385,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomDescContent(
-                              callback: (value){
+                              callback: (value) {
                                 globalAudioPlayer?.pause();
                               },
                               desc: "${data.description}",
@@ -482,6 +483,4 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
       ),
     );
   }
-
-
 }

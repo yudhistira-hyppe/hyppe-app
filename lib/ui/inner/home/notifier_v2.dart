@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
+import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
 import 'package:hyppe/core/bloc/ads_video/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -695,7 +697,10 @@ class HomeNotifier with ChangeNotifier {
 
   Future navigateToProfilePage(BuildContext context, {bool whenComplete = false, Function? onWhenComplete}) async {
     if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
-    whenComplete ? Routing().move(Routes.selfProfile).whenComplete(() => onWhenComplete) : Routing().move(Routes.selfProfile);
+
+    whenComplete
+        ? Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true)).whenComplete(() => onWhenComplete)
+        : Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
   }
 
   //untuk test aliplayer

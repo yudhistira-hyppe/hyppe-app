@@ -383,7 +383,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                   ),
                   child: Container(
                     alignment: Alignment.center,
-                    width: 200.0,
+                    width: SizeConfig.screenWidth,
                     height: 200.0,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

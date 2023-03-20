@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:hyppe/core/arguments/general_argument.dart';
+import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
 import 'package:hyppe/core/bloc/ads_video/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -18,11 +20,15 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_top.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_top_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class SelfProfileScreen extends StatefulWidget {
+  final GeneralArgument? arguments;
+  const SelfProfileScreen({super.key, this.arguments});
+
   @override
   _SelfProfileScreenState createState() => _SelfProfileScreenState();
 }
@@ -33,6 +39,7 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
 
   @override
   void initState() {
+    print('asdasdad');
     final notifier = context.read<SelfProfileNotifier>();
     notifier.setPageIndex(0);
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
@@ -95,7 +102,12 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
     return Consumer<SelfProfileNotifier>(
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {
-          return false;
+          if (widget.arguments?.isTrue == null) {
+            context.read<MainNotifier>().pageIndex = 0;
+            return false;
+          } else {
+            return true;
+          }
         },
         child: Scaffold(
           appBar: AppBar(

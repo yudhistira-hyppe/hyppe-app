@@ -8,6 +8,7 @@ import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/faq_argument.dart';
 import 'package:hyppe/core/arguments/follower_screen_argument.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/arguments/hashtag_argument.dart';
 import 'package:hyppe/core/arguments/image_preview_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
@@ -142,10 +143,13 @@ class Generate {
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case Routes.lobby:
         return MaterialPageRoute(builder: (_) => const MainScreen());
+
       case Routes.selfProfile:
-        return MaterialPageRoute(builder: (_) => SelfProfileScreen());
+        return MaterialPageRoute(builder: (_) => SelfProfileScreen(arguments: settings.arguments as GeneralArgument));
+
       case Routes.otherProfile:
         return MaterialPageRoute(builder: (_) => OtherProfileScreen(arguments: settings.arguments as OtherProfileArgument));
+
       case Routes.homePageSignInSecurity:
         return MaterialPageRoute(builder: (_) => HyppeHomeSignAndSecurity());
       case Routes.makeContent:

@@ -21,6 +21,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
@@ -118,6 +119,8 @@ class AppDependencies {
 
         // Diary
         ChangeNotifierProvider(create: (context) => diaryV2.PreviewDiaryNotifier()),
+
+        ChangeNotifierProvider(create: (context) => StoriesPlaylistNotifier()),
 
         // TODO(Hendi Noviansyah): Refactor totalViews variable
         // Viewer Stories

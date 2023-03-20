@@ -15,6 +15,7 @@ import 'package:hyppe/core/bloc/reaction/bloc.dart';
 
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
 
@@ -66,7 +67,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   bool _isReactAction = false;
   bool _fadeReaction = false;
   String? _reaction;
-  final List<Item> _items = <Item>[];
+  List<Item> _items = <Item>[];
   List<StoryItem> _result = [];
   List<StoryItem> get result => _result;
 
@@ -215,6 +216,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   void onUpdate() => notifyListeners();
 
   onChangeHandler(BuildContext context, String value) {
+    print(value);
     if (_searchOnStoppedTyping != null) {
       _searchOnStoppedTyping!.cancel();
     }
@@ -239,7 +241,11 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     items.clear();
     for (int i = 0; i < 100; i++) {
       items.add(Item());
+      notifyListeners();
     }
+
+    print("ini print $items");
+
     notifyListeners();
     animationController.reset();
     animationController.forward();
@@ -486,20 +492,22 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   void showMyReaction(
     BuildContext context,
+    bool mounted,
     ContentData? data,
     StoryController? storyController,
     AnimationController? animationController,
-    Function pause,
   ) async {
+    print("ini data reaction ");
     // storyController?.pause();
-    pause();
+
     // _system.actionReqiredIdCard(
     //   context,
     //   action: () async {
     checkIfKeyboardIsFocus(context);
     Reaction? _data;
-    _data = Provider.of<MainNotifier>(context, listen: false).reactionData;
 
+    _data = Provider.of<MainNotifier>(context, listen: false).reactionData;
+    print("ini data reaction ${_data?.data[0].icon}");
     if (_data == null) {
       var _popupDialog = _system.createPopupDialog(
         Container(
@@ -519,7 +527,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     _isReactAction = true;
 
     if (_data != null) {
-      storyController?.pause();
+      // storyController?.pause();
+      if (!mounted) return;
       showGeneralDialog(
         barrierLabel: "Barrier",
         barrierDismissible: false,
@@ -536,7 +545,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
                   return GestureDetector(
                     onTap: () async {
                       reaction = _data?.data[index].icon;
-                      _routing.moveBack();
+                      // _routing.moveBack();
                       makeItems(animationController);
                       Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
                       Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
@@ -632,30 +641,32 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   String onProfilePicShow(String? urlPic) => _system.showUserPicture(urlPic) ?? '';
 
   List<Widget> buildItems(AnimationController animationController) {
+    print("itu items $items");
     return items.map((item) {
-      var tween = Tween<Offset>(
-        begin: Offset(0, Random().nextDouble() * 1 + 1),
-        end: Offset(Random().nextDouble() * 0.5, -2),
-      ).chain(CurveTween(curve: Curves.linear));
-      return SlideTransition(
-        position: animationController.drive(tween),
-        child: AnimatedAlign(
-          alignment: item.alignment,
-          duration: const Duration(seconds: 10),
-          child: AnimatedOpacity(
-            opacity: fadeReaction ? 0.0 : 1.0,
-            duration: const Duration(seconds: 1),
-            child: Material(
-              color: Colors.transparent,
-              child: Text(
-                reaction ?? '',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: item.size),
-              ),
-            ),
-          ),
-        ),
-      );
+      return Text(reaction ?? '');
+      // var tween = Tween<Offset>(
+      //   begin: Offset(0, Random().nextDouble() * 1 + 1),
+      //   end: Offset(Random().nextDouble() * 0.5, -2),
+      // ).chain(CurveTween(curve: Curves.linear));
+      // return SlideTransition(
+      //   position: animationController.drive(tween),
+      //   child: AnimatedAlign(
+      //     alignment: item.alignment,
+      //     duration: const Duration(seconds: 10),
+      //     child: AnimatedOpacity(
+      //       opacity: fadeReaction ? 0.0 : 1.0,
+      //       duration: const Duration(seconds: 1),
+      //       child: Material(
+      //         color: Colors.transparent,
+      //         child: Text(
+      //           reaction ?? '',
+      //           textAlign: TextAlign.center,
+      //           style: TextStyle(fontSize: item.size),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // );
     }).toList();
   }
 

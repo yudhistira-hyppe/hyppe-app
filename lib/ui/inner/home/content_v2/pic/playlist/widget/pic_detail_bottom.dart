@@ -192,7 +192,7 @@ class PicDetailBottom extends StatelessWidget {
                           )
                         : _buildButton(context, '${AssetPath.vectorPath}${(value.data?.isLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${value.data?.insight?.likes ?? 0}", () {
                             notifier.likePost(context, data ?? ContentData());
-                          }, colorIcon: (value.data?.isLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)),
+                          }, colorIcon: (value.data?.isLiked ?? false) ? kHyppeRed : Theme.of(context).iconTheme.color)),
 
             //   builder: (context, notifier, child) => data != null
             //       ? _buildButton(

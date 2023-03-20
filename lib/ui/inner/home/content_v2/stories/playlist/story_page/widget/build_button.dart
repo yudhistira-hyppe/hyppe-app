@@ -12,7 +12,7 @@ import 'package:story_view/controller/story_controller.dart';
 
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
-class BuildButton extends StatelessWidget {
+class BuildButton extends StatefulWidget {
   final StoryController? storyController;
   final AnimationController? animationController;
   final ContentData? data;
@@ -25,12 +25,17 @@ class BuildButton extends StatelessWidget {
   });
 
   @override
+  State<BuildButton> createState() => _BuildButtonState();
+}
+
+class _BuildButtonState extends State<BuildButton> {
+  @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<StoriesPlaylistNotifier>(context);
     return notifier.isKeyboardActive
         ? UnconstrainedBox(
             child: GestureDetector(
-              onTap: () => notifier.sendMessage(context, data),
+              onTap: () => notifier.sendMessage(context, widget.data),
               child: CustomIconWidget(
                 width: 31,
                 height: 31,
@@ -45,12 +50,13 @@ class BuildButton extends StatelessWidget {
             children: [
               InkWell(
                 onTap: () {
+                  print('sdsdfsdf');
                   notifier.showMyReaction(
                     context,
-                    data,
-                    storyController,
-                    animationController,
-                    pause!,
+                    mounted,
+                    widget.data,
+                    widget.storyController,
+                    widget.animationController,
                   );
                 },
                 child: const CustomIconWidget(
@@ -65,7 +71,7 @@ class BuildButton extends StatelessWidget {
                   iconData: '${AssetPath.vectorPath}share-white.svg',
                   color: kHyppeLightButtonText,
                 ),
-                onTap: () => notifier.createdDynamicLink(context, data, storyController: storyController),
+                onTap: () => notifier.createdDynamicLink(context, widget.data, storyController: widget.storyController),
               )
             ],
           );
