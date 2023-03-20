@@ -23,8 +23,7 @@ class BuildReplayCaption extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    final double _showBottomPos =
-        (MediaQuery.of(context).viewInsets.bottom + SizeWidget().calculateSize(60, SizeWidget.baseHeightXD, SizeConfig.screenHeight!));
+    final double _showBottomPos = (MediaQuery.of(context).viewInsets.bottom + SizeWidget().calculateSize(60, SizeWidget.baseHeightXD, SizeConfig.screenHeight!));
 
     final double _hideBottomPos = (-SizeWidget().calculateSize(100, SizeWidget.baseHeightXD, SizeConfig.screenHeight!));
 

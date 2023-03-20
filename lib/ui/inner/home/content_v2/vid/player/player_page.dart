@@ -684,7 +684,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                   fn: () {},
                 ),
               ),
-            Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
+            // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
             if (!isPlay)
               Center(
                 child: GestureDetector(

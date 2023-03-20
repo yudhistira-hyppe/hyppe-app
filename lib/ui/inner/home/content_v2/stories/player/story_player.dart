@@ -509,7 +509,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         body: PageView.builder(
           controller: _pageController,
           scrollDirection: Axis.horizontal,
-          itemCount: storyNot.storiesGroups?.length,
+          itemCount: widget.argument.myStories != null ? 1 : storyNot.storiesGroups?.length,
           onPageChanged: (index) async {
             _curIdx = index;
             setState(() {});
@@ -638,7 +638,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                   )
                 : const SizedBox.shrink(),
           ),
-          BuildReplayCaption(data: _groupUserStories![_curIdx].story?[_curChildIdx]),
+          // BuildReplayCaption(data: _groupUserStories![_curIdx].story?[_curChildIdx]),
           Stack(children: [...not.buildItems(animationController)])
         ],
       ),
