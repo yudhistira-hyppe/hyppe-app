@@ -113,7 +113,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
                         ),
                         if(!widget.users.isNotNullAndEmpty())
                           SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
-                        if((widget.users?.length ?? 0) % limitSearch == 0)
+                        if((widget.users?.length ?? 0) % limitSearch == 0 && (widget.users?.isNotEmpty ?? false))
                           Container(
                             width: double.infinity,
                             height: 50,

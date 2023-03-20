@@ -909,16 +909,16 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           color: Colors.white,
                           fontSize: 13,
                         )),
-                    data.email == SharedPreference().readStorage(SpKeys.email)
-                        ? GestureDetector(
-                            onTap: () => Routing().move(Routes.appeal, argument: data),
-                            child: Container(
-                                padding: const EdgeInsets.all(8),
-                                margin: const EdgeInsets.all(18),
-                                decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                                child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                          )
-                        : const SizedBox(),
+                    // data.email == SharedPreference().readStorage(SpKeys.email)
+                    //     ? GestureDetector(
+                    //         onTap: () => Routing().move(Routes.appeal, argument: data),
+                    //         child: Container(
+                    //             padding: const EdgeInsets.all(8),
+                    //             margin: const EdgeInsets.all(18),
+                    //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                    //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                    //       )
+                    //     : const SizedBox(),
                     const Spacer(),
                     GestureDetector(
                       onTap: () {

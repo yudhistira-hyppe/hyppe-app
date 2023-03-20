@@ -482,7 +482,7 @@ class SelfProfileNotifier with ChangeNotifier {
     }
 
     print('show my profil');
-    print(_updatedData);
+    print(_updatedData?.postID);
 
     if (_updatedData != null) {
       _updatedData.reportedStatus = '';
@@ -490,6 +490,8 @@ class SelfProfileNotifier with ChangeNotifier {
     if (_updatedData2 != null) {
       _updatedData2.reportedStatus = '';
     }
+
+    print(_updatedData?.reportedStatus);
 
     notifyListeners();
   }

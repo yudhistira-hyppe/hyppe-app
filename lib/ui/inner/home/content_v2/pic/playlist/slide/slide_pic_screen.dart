@@ -256,13 +256,17 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
+                          setState(() {
+                            data.reportedStatus = '';
+                          });
                           context.read<ReportNotifier>().seeContent(context, data, hyppePic);
                         },
                         child: Container(
-                          padding: const EdgeInsets.only(top: 8),
+                          padding: const EdgeInsets.only(top: 8, bottom: 8),
                           margin: const EdgeInsets.all(8),
                           width: SizeConfig.screenWidth,
                           decoration: const BoxDecoration(
+                            color: Colors.red,
                             border: Border(
                               top: BorderSide(
                                 color: Colors.white,
