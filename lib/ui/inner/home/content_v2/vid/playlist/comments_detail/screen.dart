@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/widget/comment_tile.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/user_template.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../../core/constants/themes/hyppe_colors.dart';
@@ -87,8 +89,9 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                   children: [
                     GestureDetector(
                         onTap: () {
-                          Navigator.pop(context);
                           notifier.parentID = null;
+                          notifier.commentController.clear();
+                          Routing().moveBack();
                         },
                         child: const CustomIconWidget(
                             width: 20,
@@ -240,12 +243,17 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                 hintText: "${notifier.language.typeAMessage}...",
                                 prefixIcon: Container(
                                   margin: const EdgeInsets.only(right: 5, left: 5),
-                                  child: CustomProfileImage(
-                                    width: 26,
-                                    height: 26,
-                                    imageUrl: System()
-                                        .showUserPicture(comments?.first.comment?.senderInfo?.avatar?.mediaEndpoint ?? data.avatar?.mediaEndpoint),
-                                    following: true,
+                                  child: Builder(
+                                    builder: (context) {
+                                      final urlImage = context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint;
+                                      return CustomProfileImage(
+                                        width: 26,
+                                        height: 26,
+                                        imageUrl: System()
+                                            .showUserPicture(comments?.first.comment?.senderInfo?.avatar?.mediaEndpoint ?? ( urlImage ?? data.avatar?.mediaEndpoint)),
+                                        following: true,
+                                      );
+                                    }
                                   ),
                                 ),
                                 prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
@@ -289,6 +297,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
 
   Widget _bottomDetail(
       BuildContext context, ContentData data, CommentNotifierV2 notifier) {
+    final comments = notifier.commentData;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -316,7 +325,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
               children: [
                 UserTemplate(
                     username: '${data.username}',
-                    isVerified: data.isIdVerified ?? false,
+                    isVerified: data.privacy?.isIdVerified ?? (data.isIdVerified ?? false),
                     date: data.createdAt ?? DateTime.now().toString()),
                 twoPx,
                 Row(

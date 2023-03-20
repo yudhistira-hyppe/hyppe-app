@@ -119,6 +119,7 @@ class CommentNotifierV2 with ChangeNotifier {
 
   void onDispose() {
     _showTextInput = false;
+    parentID = null;
     _commentData = null;
   }
 
