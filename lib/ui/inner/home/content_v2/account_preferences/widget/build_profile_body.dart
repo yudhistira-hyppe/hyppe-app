@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -12,6 +13,7 @@ import 'package:hyppe/ui/inner/home/content_v2/account_preferences/widget/text_i
 class BuildProfileBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildProfileBody');
     return Consumer<AccountPreferencesNotifier>(
       builder: (_, notifier, __) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25.0),

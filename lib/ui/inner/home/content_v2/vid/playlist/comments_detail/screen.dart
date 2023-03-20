@@ -250,7 +250,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                         width: 26,
                                         height: 26,
                                         imageUrl: System()
-                                            .showUserPicture(comments?.first.comment?.senderInfo?.avatar?.mediaEndpoint ?? ( urlImage ?? data.avatar?.mediaEndpoint)),
+                                            .showUserPicture(comments?.first.comment?.senderInfo?.avatar?.mediaEndpoint ?? ( urlImage ?? '')),
                                         following: true,
                                       );
                                     }

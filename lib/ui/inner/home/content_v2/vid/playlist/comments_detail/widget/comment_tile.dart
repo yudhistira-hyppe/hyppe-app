@@ -27,7 +27,7 @@ class CommentTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final comment = logs?.comment;
-    final replies = logs?.replies;
+    final replies = logs?.comment?.detailDisquss;
     final repliesCount = replies?.length ?? 0;
     final commentor = logs?.comment?.senderInfo;
     final _language = notifier.language;

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content/moderated/widget/content_detail.dart';
 import 'package:hyppe/ui/inner/home/content/moderated/widget/information_detail.dart';
@@ -9,6 +10,7 @@ class ModeratedContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ModeratedContent');
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
