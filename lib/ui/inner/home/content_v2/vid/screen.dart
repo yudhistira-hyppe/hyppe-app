@@ -159,31 +159,32 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                               isIdVerified: vidData?.privacy?.isIdVerified,
                                             ),
                                           ),
-                                          Consumer<PreviewPicNotifier>(
-                                            builder: (context, picNot, child) => Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  if (vidData?.insight?.isloadingFollow != true) {
-                                                    picNot.followUser(context, vidData ?? ContentData(), isUnFollow: vidData?.following, isloading: vidData?.insight!.isloadingFollow ?? false);
-                                                  }
-                                                },
-                                                child: vidData?.insight?.isloadingFollow ?? false
-                                                    ? Container(
-                                                        height: 40,
-                                                        width: 30,
-                                                        child: Align(
-                                                          alignment: Alignment.bottomRight,
-                                                          child: CustomLoading(),
+                                          if (vidData?.email != email)
+                                            Consumer<PreviewPicNotifier>(
+                                              builder: (context, picNot, child) => Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    if (vidData?.insight?.isloadingFollow != true) {
+                                                      picNot.followUser(context, vidData ?? ContentData(), isUnFollow: vidData?.following, isloading: vidData?.insight!.isloadingFollow ?? false);
+                                                    }
+                                                  },
+                                                  child: vidData?.insight?.isloadingFollow ?? false
+                                                      ? Container(
+                                                          height: 40,
+                                                          width: 30,
+                                                          child: Align(
+                                                            alignment: Alignment.bottomRight,
+                                                            child: CustomLoading(),
+                                                          ),
+                                                        )
+                                                      : Text(
+                                                          (vidData?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                                          style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
                                                         ),
-                                                      )
-                                                    : Text(
-                                                        (vidData?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                                        style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                                                      ),
+                                                ),
                                               ),
                                             ),
-                                          ),
                                           GestureDetector(
                                             onTap: () {
                                               if (vidData?.email != SharedPreference().readStorage(SpKeys.email)) {
