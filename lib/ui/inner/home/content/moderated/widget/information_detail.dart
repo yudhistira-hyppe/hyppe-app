@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
@@ -19,6 +20,7 @@ class _InformationDetailState extends State<InformationDetail> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'InformationDetail');
     return Container(
       padding: const EdgeInsets.all(16),
       color: theme.colorScheme.background,

@@ -103,7 +103,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                                     child: PlayerPage(
                                       playMode: (widget.arguments.vidData?.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                                       dataSourceMap: map,
-                                      data: widget.arguments.vidData,
+                                      data: data,
                                       height: height,
                                       width: width,
                                     ),

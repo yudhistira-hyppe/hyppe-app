@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -13,39 +14,42 @@ class BuildPersonalProfilePic extends StatelessWidget {
   const BuildPersonalProfilePic({super.key});
 
   @override
-  Widget build(BuildContext context) => Consumer<SelfProfileNotifier>(
-        builder: (_, notifier, __) => SizedBox(
-          width: 145 * SizeConfig.scaleDiagonal,
-          height: 145 * SizeConfig.scaleDiagonal,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CustomProfileImage(
-                    cacheKey: notifier.user.profile?.avatar?.imageKey,
-                    following: true,
-                    width: 122 * SizeConfig.scaleDiagonal,
-                    height: 122 * SizeConfig.scaleDiagonal,
-                    imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
-                    onTap: () {},
-                  ),
-                ],
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: CustomTextButton(
-                  style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
-                  onPressed: () async {
-                    await CachedNetworkImage.evictFromCache("${notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}")}", scale: 2000);
-                    context.read<AccountPreferencesNotifier>().onClickChangeImageProfile(context, "${notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}")}");
-                  },
-                  child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}edit-profile-pic.svg", defaultColor: false),
+  Widget build(BuildContext context){
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildPersonalProfilePic');
+    return Consumer<SelfProfileNotifier>(
+      builder: (_, notifier, __) => SizedBox(
+        width: 145 * SizeConfig.scaleDiagonal,
+        height: 145 * SizeConfig.scaleDiagonal,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CustomProfileImage(
+                  cacheKey: notifier.user.profile?.avatar?.imageKey,
+                  following: true,
+                  width: 122 * SizeConfig.scaleDiagonal,
+                  height: 122 * SizeConfig.scaleDiagonal,
+                  imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
+                  onTap: () {},
                 ),
+              ],
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: CustomTextButton(
+                style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                onPressed: () async {
+                  await CachedNetworkImage.evictFromCache("${notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}")}", scale: 2000);
+                  context.read<AccountPreferencesNotifier>().onClickChangeImageProfile(context, "${notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}")}");
+                },
+                child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}edit-profile-pic.svg", defaultColor: false),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -12,6 +13,7 @@ import 'package:provider/provider.dart';
 class BuildPersonalInformationBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildPersonalInformationBody');
     return Consumer<AccountPreferencesNotifier>(
       builder: (_, notifier, __) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 16.0),

@@ -167,6 +167,7 @@ class DisqusLogs {
   String? id;
   List<Medias> medias = [];
   String? username;
+  List<DisqusLogs>? detailDisquss;
 
   DisqusLogs({
     this.createdAt,
@@ -184,6 +185,7 @@ class DisqusLogs {
     this.id,
     this.medias = const [],
     this.username,
+    this.detailDisquss,
   });
 
   DisqusLogs.fromJson(Map<String, dynamic> json) {
@@ -210,6 +212,12 @@ class DisqusLogs {
       });
     }
     username = json['username'] ?? '';
+
+    if (json['detailDisquss'] != null) {
+      json['detailDisquss'].forEach((v) {
+        detailDisquss?.add(DisqusLogs.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {

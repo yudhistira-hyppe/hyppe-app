@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -19,6 +20,7 @@ class ProofPicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ProofPicture');
     final notifier = Provider.of<AccountPreferencesNotifier>(context);
     return Selector<SelfProfileNotifier, UserInfoModel>(
       selector: (context, user) => user.user,

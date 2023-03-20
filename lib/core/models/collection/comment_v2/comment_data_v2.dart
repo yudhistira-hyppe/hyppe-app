@@ -146,6 +146,7 @@ class DisqusLogs {
   bool? active;
   String? updatedAt;
   bool? isIdVerified;
+  List<DisqusLogs>? detailDisquss;
 
   DisqusLogs({
     this.sequenceNumber,
@@ -157,7 +158,8 @@ class DisqusLogs {
     this.lineID,
     this.active,
     this.updatedAt,
-    this.isIdVerified
+    this.isIdVerified,
+    this.detailDisquss,
   });
 
   DisqusLogs.fromJson(Map<String, dynamic> json) {
@@ -171,6 +173,12 @@ class DisqusLogs {
     active = json['active'];
     updatedAt = json['updatedAt'];
     isIdVerified = json['isIdVerified'];
+    if(json['detailDisquss'] != null){
+      detailDisquss = [];
+      detailDisquss = List<DisqusLogs>.from(
+        json['detailDisquss'].map((e) => DisqusLogs.fromJson(e)),
+      );
+    }
   }
 
   Map<String, dynamic> toJson() {

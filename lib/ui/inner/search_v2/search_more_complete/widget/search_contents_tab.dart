@@ -9,6 +9,7 @@ import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/grid_content_view.dart';
 import 'package:provider/provider.dart';
 
+import '../../widget/search_no_result.dart';
 import '../../widget/search_no_result_image.dart';
 import 'all_search_shimmer.dart';
 
@@ -49,7 +50,8 @@ class _SearchContentsTabState extends State<SearchContentsTab> {
     ];
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final language = notifier.language;
-      final isAllEmpty = notifier.searchVid.isNotNullAndEmpty() && notifier.searchDiary.isNotNullAndEmpty() && notifier.searchPic.isNotNullAndEmpty();
+      final isAllEmpty = !notifier.searchVid.isNotNullAndEmpty() && !notifier.searchDiary.isNotNullAndEmpty() && !notifier.searchPic.isNotNullAndEmpty();
+      print('isAllEmty: $isAllEmpty');
       return !notifier.isLoading ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -63,7 +65,10 @@ class _SearchContentsTabState extends State<SearchContentsTab> {
               textAlign: TextAlign.start,
             ),
           ),
-          Expanded(child: isAllEmpty ? SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,) : Column(
+          Expanded(child: isAllEmpty ? Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text,),
+          ) : Column(
             children: [
               Container(
                 margin: const EdgeInsets.only(left: 16),

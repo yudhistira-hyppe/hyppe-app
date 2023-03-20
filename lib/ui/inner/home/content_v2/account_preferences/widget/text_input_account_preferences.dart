@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
@@ -34,6 +35,7 @@ class TextInputAccountPreferences extends StatelessWidget {
       this.textInput = TextInputType.text});
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ProofPicture');
     if (controller != null) {
       return Consumer<AccountPreferencesNotifier>(
         builder: (_, notifier, __) => Padding(

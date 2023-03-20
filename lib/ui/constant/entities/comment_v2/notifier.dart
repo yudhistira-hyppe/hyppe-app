@@ -147,11 +147,13 @@ class CommentNotifierV2 with ChangeNotifier {
         commentData = [...(commentData ?? [] as List<CommentsLogs>)] + (res.firstOrNull()?.disqusLogs ?? []);
       }
 
+
       final comments = _commentData;
       if(comments != null){
+        print('comments lenght ${comments[0].comment?.detailDisquss?.length}');
         for(final comment in comments){
           repliesComments[comment.comment?.lineID] = [
-            for (final subComment in comment.replies ?? []) ...[
+            for (final subComment in (comment.comment?.detailDisquss ?? [])) ...[
               const SizedBox(height: 16),
               SubCommentTile(
                 logs: subComment,
@@ -160,6 +162,9 @@ class CommentNotifierV2 with ChangeNotifier {
               ),
             ],
           ];
+          // for(final reply in comment.comment?.detailDisquss ?? []){
+          //
+          // }
         }
       }
     } catch (e) {
@@ -251,7 +256,7 @@ class CommentNotifierV2 with ChangeNotifier {
       repliesComments.remove(comment?.comment?.lineID);
     } else {
       repliesComments[comment?.comment?.lineID] = [
-        for (final subComment in comment?.replies ?? []) ...[
+        for (final subComment in (comment?.comment?.detailDisquss ?? [])) ...[
           const SizedBox(height: 16),
           SubCommentTile(
             logs: subComment,
@@ -260,6 +265,22 @@ class CommentNotifierV2 with ChangeNotifier {
           ),
         ],
       ];
+      // for(final comment in comments){
+      //
+      //   // for(final reply in comment.comment?.detailDisquss ?? []){
+      //   //
+      //   // }
+      // }
+      // repliesComments[comment?.comment?.lineID] = [
+      //   for (final subComment in comment?.replies ?? []) ...[
+      //     const SizedBox(height: 16),
+      //     SubCommentTile(
+      //       logs: subComment,
+      //       fromFront: fromFront,
+      //       parentID: comment?.comment?.lineID,
+      //     ),
+      //   ],
+      // ];
     }
     notifyListeners();
   }
