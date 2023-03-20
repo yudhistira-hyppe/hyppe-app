@@ -62,7 +62,7 @@ class CustomProfileImage extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             image: const DecorationImage(
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               image: AssetImage('${AssetPath.pngPath}profile-error.png'),
             ),
             // shape: BoxShape.circle,
@@ -76,7 +76,7 @@ class CustomProfileImage extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             image: DecorationImage(
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               image: AssetImage('${AssetPath.pngPath}profile-error.png'),
             ),
             // shape: BoxShape.circle,
