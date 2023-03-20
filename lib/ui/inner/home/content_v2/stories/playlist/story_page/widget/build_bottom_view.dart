@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/ui/inner/home/content_v2/stories/player/story_player.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/loading_music_story.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
-
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
-
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_button.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_viewer_stories_button.dart';
-
 import '../../../../../../../constant/widget/after_first_layout_mixin.dart';
 import '../../../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../../../constant/widget/music_status_page_widget.dart';
@@ -68,22 +62,10 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                 ),
                 if (widget.data?.music?.musicTitle != null)
                   Container(
-                    margin: const EdgeInsets.only(left: 16, right: 16, top: 8),
-                    child: widget.data?.mediaType == 'video'
-                        ? MusicStatusPage(
-                            music: widget.data!.music!,
-                          )
-                        : notifier.isLoadMusic
-                            ? LoadingMusicStory(
-                                apsaraMusic: widget.data!.music!,
-                                index: widget.currentIndex,
-                                current: widget.currentStory ?? 0,
-                              )
-                            : MusicStatusPage(
-                                music: widget.data!.music!,
-                                urlMusic: notifier.urlMusic?.playUrl ?? '',
-                              ),
-                  ),
+                      margin: const EdgeInsets.only(left: 16, right: 16, top: 8),
+                      child: MusicStatusPage(
+                        music: widget.data!.music!,
+                      )),
               ],
             ),
           )

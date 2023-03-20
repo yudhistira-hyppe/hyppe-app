@@ -20,9 +20,10 @@ import 'package:provider/provider.dart';
 class ButtonBoost extends StatefulWidget {
   final ContentData? contentData;
   final bool marginBool;
+  final bool onDetail;
   Function? startState;
   Function? afterState;
-  ButtonBoost({Key? key, this.contentData, this.marginBool = false, this.startState, this.afterState}) : super(key: key);
+  ButtonBoost({Key? key, this.contentData, this.marginBool = false, this.startState, this.afterState, this.onDetail = true}) : super(key: key);
   @override
   State<ButtonBoost> createState() => _ButtonBoostState();
 }
@@ -38,7 +39,11 @@ class _ButtonBoostState extends State<ButtonBoost> {
       margin: EdgeInsets.all(widget.marginBool ? 0.0 : 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: _isKyc == VERIFIED ? kHyppePrimary : kHyppeDisabled,
+        color: _isKyc == VERIFIED
+            ? (widget.contentData?.boosted.isEmpty ?? [].isEmpty)
+                ? kHyppePrimary
+                : kHyppeDisabled
+            : kHyppeDisabled,
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
@@ -149,13 +154,14 @@ class _ButtonBoostState extends State<ButtonBoost> {
                       if (widget.afterState != null) {
                         widget.afterState!();
                       }
-                      Routing().moveBack();
+                      if (widget.onDetail) Routing().moveBack();
                     });
                   }
                 : null,
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 8),
               decoration: BoxDecoration(
+                color: (widget.contentData?.boosted.isEmpty ?? [].isEmpty) ? kHyppePrimary : kHyppeLightInactive1,
                 borderRadius: BorderRadius.circular(8),
               ),
               width: SizeConfig.screenWidth,

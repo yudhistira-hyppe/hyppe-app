@@ -76,7 +76,7 @@ class RightItems extends StatelessWidget {
                               context,
                               '${AssetPath.vectorPath}${data.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
                               (data.insight?.likes ?? 0) > 0 ? _system.formatterNumber((data.insight?.likes ?? 0)) : value2.translate.like ?? '',
-                              colorIcon: data.isLiked == true ? kHyppePrimary : kHyppeLightButtonText,
+                              colorIcon: data.isLiked == true ? kHyppeRed : kHyppeLightButtonText,
                               onTap: () {
                                 context.read<DiariesPlaylistNotifier>().forcePause = false;
                                 notifier.likePost(context, data);

@@ -19,6 +19,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
@@ -291,7 +292,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // fAliplayer?.setCacheConfig(map);
     print("sedang prepare");
     print("sedang prepare $isMute");
-    // fAliplayer?.prepare();
+    fAliplayer?.prepare();
     if (isMute) {
       fAliplayer?.setMuted(true);
     }
@@ -638,6 +639,24 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                     ),
                                   ),
                                 ),
+                                (notifier.pic?[index].reportedStatus != 'OWNED' && notifier.pic?[index].reportedStatus != 'BLURRED' && notifier.pic?[index].reportedStatus2 != 'BLURRED') &&
+                                        notifier.pic?[index].email == email
+                                    ? Container(
+                                        width: MediaQuery.of(context).size.width * 0.8,
+                                        margin: const EdgeInsets.only(bottom: 16),
+                                        child: ButtonBoost(
+                                          onDetail: false,
+                                          marginBool: true,
+                                          contentData: notifier.pic?[index],
+                                          startState: () {
+                                            SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                          },
+                                          afterState: () {
+                                            SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                          },
+                                        ),
+                                      )
+                                    : Container(),
                                 Consumer<LikeNotifier>(
                                   builder: (context, likeNotifier, child) => Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -741,15 +760,19 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                                   expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
                                 ),
-                                (notifier.pic?[index].comment?.length ?? 0) >= 2
-                                    ? Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                        child: Text(
-                                          "Lihat semua ${notifier.pic?[index].comments} komentar",
-                                          style: const TextStyle(fontSize: 12, color: kHyppeBurem),
-                                        ),
-                                      )
-                                    : Container(),
+                                GestureDetector(
+                                  onTap: () {
+                                    Routing().move(Routes.commentsDetail,
+                                        argument: CommentsArgument(postID: notifier.pic?[index].postID ?? '', fromFront: true, data: notifier.pic?[index] ?? ContentData()));
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                    child: Text(
+                                      "Lihat semua ${notifier.pic?[index].comments} komentar",
+                                      style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                                    ),
+                                  ),
+                                ),
                                 (notifier.pic?[index].comment?.length ?? 0) > 0
                                     ? Padding(
                                         padding: const EdgeInsets.only(top: 6.0),
@@ -802,7 +825,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     return Positioned.fill(
       child: Stack(
         children: [
-          PicTopItem(data: data),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: PicTopItem(data: data),
+          ),
           if (data.tagPeople?.isNotEmpty ?? false)
             Positioned(
               bottom: 18,

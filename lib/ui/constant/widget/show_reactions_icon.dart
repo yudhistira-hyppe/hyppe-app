@@ -15,14 +15,7 @@ class ShowReactionsIcon extends StatelessWidget {
   final Widget Function(BuildContext context, int index) itemBuilder;
 
   const ShowReactionsIcon(
-      {Key? key,
-        required this.data,
-        required this.itemBuilder,
-        required this.crossAxisCount,
-        required this.onTap,
-        this.widthP = 0.8,
-        this.sizeCloseIcon = 44,
-        this.sizeSubtitleText = 16})
+      {Key? key, required this.data, required this.itemBuilder, required this.crossAxisCount, required this.onTap, this.widthP = 0.8, this.sizeCloseIcon = 44, this.sizeSubtitleText = 16})
       : super(key: key);
 
   @override
