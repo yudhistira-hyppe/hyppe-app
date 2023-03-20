@@ -165,34 +165,38 @@ class VideoThumbnail extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Consumer<LikeNotifier>(
-                  builder: (context, value, child) {
-                    return GestureDetector(
-                      onTap: () {
-                        Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, videoData?.postID ?? '', 'LIKE', 'Like', videoData?.email);
-                      },
-                      child: CustomBalloonWidget(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const CustomIconWidget(
-                              width: 20,
-                              height: 20,
-                              defaultColor: false,
-                              iconData: '${AssetPath.vectorPath}like.svg',
-                              color: kHyppeLightButtonText,
-                            ),
-                            fourPx,
-                            CustomTextWidget(
-                              textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                              textToDisplay: _system.formatterNumber(videoData?.insight?.likes),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+                Container(
+                  height: 20,
+                  width: 20,
                 ),
+                // Consumer<LikeNotifier>(
+                //   builder: (context, value, child) {
+                //     return GestureDetector(
+                //       onTap: () {
+                //         Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, videoData?.postID ?? '', 'LIKE', 'Like', videoData?.email);
+                //       },
+                //       child: CustomBalloonWidget(
+                //         child: Row(
+                //           mainAxisAlignment: MainAxisAlignment.center,
+                //           children: [
+                //             const CustomIconWidget(
+                //               width: 20,
+                //               height: 20,
+                //               defaultColor: false,
+                //               iconData: '${AssetPath.vectorPath}like.svg',
+                //               color: kHyppeLightButtonText,
+                //             ),
+                //             fourPx,
+                //             CustomTextWidget(
+                //               textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                //               textToDisplay: _system.formatterNumber(videoData?.insight?.likes),
+                //             )
+                //           ],
+                //         ),
+                //       ),
+                //     );
+                //   },
+                // ),
                 CustomBalloonWidget(
                   child: CustomTextWidget(
                     textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),

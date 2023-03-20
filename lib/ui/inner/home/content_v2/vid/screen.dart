@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter_html/flutter_html.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
-import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
@@ -26,19 +24,13 @@ import 'package:provider/provider.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
-import 'package:hyppe/ui/constant/widget/profile_component.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_header_feature.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/services/error_service.dart';
-import 'package:hyppe/ui/constant/entities/like/notifier.dart';
-import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
-import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_player_page.dart';
 
 class HyppePreviewVid extends StatefulWidget {
   const HyppePreviewVid({Key? key}) : super(key: key);
@@ -267,31 +259,31 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                           AspectRatio(aspectRatio: 16 / 9, child: _buildBody(context, vidData, SizeConfig.screenWidth))
                                         ],
                                       ),
-                                      (vidData?.tagPeople?.isNotEmpty ?? false) || vidData?.location != ''
-                                          ? Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10.0),
-                                              child: Row(
-                                                children: [
-                                                  vidData?.tagPeople?.isNotEmpty ?? false
-                                                      ? TagLabel(
-                                                          icon: 'tag_people',
-                                                          label: '${vidData?.tagPeople?.length} people',
-                                                          function: () {
-                                                            vidNotifier.showUserTag(context, index, vidData?.postID);
-                                                          },
-                                                        )
-                                                      : const SizedBox(),
-                                                  vidData?.location == '' || vidData?.location == null
-                                                      ? const SizedBox()
-                                                      : TagLabel(
-                                                          icon: 'maptag',
-                                                          label: "${vidData?.location}",
-                                                          function: () {},
-                                                        ),
-                                                ],
-                                              ),
-                                            )
-                                          : const SizedBox(),
+                                      // (vidData?.tagPeople?.isNotEmpty ?? false) || vidData?.location != ''
+                                      //     ? Padding(
+                                      //         padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10.0),
+                                      //         child: Row(
+                                      //           children: [
+                                      //             vidData?.tagPeople?.isNotEmpty ?? false
+                                      //                 ? TagLabel(
+                                      //                     icon: 'tag_people',
+                                      //                     label: '${vidData?.tagPeople?.length} people',
+                                      //                     function: () {
+                                      //                       vidNotifier.showUserTag(context, index, vidData?.postID);
+                                      //                     },
+                                      //                   )
+                                      //                 : const SizedBox(),
+                                      //             vidData?.location == '' || vidData?.location == null
+                                      //                 ? const SizedBox()
+                                      //                 : TagLabel(
+                                      //                     icon: 'maptag',
+                                      //                     label: "${vidData?.location}",
+                                      //                     function: () {},
+                                      //                   ),
+                                      //           ],
+                                      //         ),
+                                      //       )
+                                      //     : const SizedBox(),
                                       twentyPx,
                                       CustomNewDescContent(
                                         // desc: "${data?.description}",

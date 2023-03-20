@@ -33,13 +33,13 @@ class _ButtonBoostState extends State<ButtonBoost> {
 
   @override
   Widget build(BuildContext context) {
-    final _isKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+    final isKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     final language = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     return Container(
       margin: EdgeInsets.all(widget.marginBool ? 0.0 : 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: _isKyc == VERIFIED
+        color: isKyc == VERIFIED
             ? (widget.contentData?.boosted.isEmpty ?? [].isEmpty)
                 ? kHyppePrimary
                 : kHyppeDisabled
@@ -51,7 +51,7 @@ class _ButtonBoostState extends State<ButtonBoost> {
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           child: InkWell(
-            onTap: _isKyc == VERIFIED
+            onTap: isKyc == VERIFIED
                 ? () async {
                     bool isPanding = false;
                     setState(() {
@@ -161,7 +161,7 @@ class _ButtonBoostState extends State<ButtonBoost> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 8),
               decoration: BoxDecoration(
-                color: (widget.contentData?.boosted.isEmpty ?? [].isEmpty) ? kHyppePrimary : kHyppeLightInactive1,
+                color: isKyc != VERIFIED || (widget.contentData?.boosted.isEmpty ?? [].isEmpty) ? kHyppePrimary : kHyppeLightInactive1,
                 borderRadius: BorderRadius.circular(8),
               ),
               width: SizeConfig.screenWidth,

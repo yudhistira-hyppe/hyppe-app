@@ -20,7 +20,6 @@ class DetailTransaction extends StatelessWidget {
     return Consumer2<TransactionNotifier, TranslateNotifierV2>(
       builder: (context, notifier, notifier2, child) {
         String title = '';
-
         Color? titleColor;
         Color? blockColor;
         Widget? bodyWidget = Container();

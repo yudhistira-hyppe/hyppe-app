@@ -186,19 +186,20 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                 ],
               )),
               eightPx,
-              notifier.checkIsLoading
-                  ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
-                  : CustomFollowButton(
-                      onPressed: () async {
-                        try {
-                          await notifier.followUser(context, isUnFollow: notifier.statusFollowing == StatusFollowing.following);
-                        } catch (e) {
-                          'follow error $e'.logger();
-                        }
-                      },
-                      isFollowing: notifier.statusFollowing,
-                      checkIsLoading: notifier.checkIsLoading,
-                    ),
+              if (data.email != SharedPreference().readStorage(SpKeys.email))
+                notifier.checkIsLoading
+                    ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
+                    : CustomFollowButton(
+                        onPressed: () async {
+                          try {
+                            await notifier.followUser(context, isUnFollow: notifier.statusFollowing == StatusFollowing.following);
+                          } catch (e) {
+                            'follow error $e'.logger();
+                          }
+                        },
+                        isFollowing: notifier.statusFollowing,
+                        checkIsLoading: notifier.checkIsLoading,
+                      ),
               data.email != SharedPreference().readStorage(SpKeys.email)
                   ? SizedBox(
                       width: 50,
@@ -340,7 +341,10 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
             ],
           ),
           sixteenPx,
-          CustomTextWidget(textToDisplay: '${data.insight?.likes ?? 0} ${notifier.language.like}'),
+          CustomTextWidget(
+            textToDisplay: '${data.insight?.likes ?? 0} ${notifier.language.like}',
+            textStyle: const TextStyle(color: kHyppeTextLightPrimary),
+          ),
           fourPx,
           SingleChildScrollView(
             child: Column(
@@ -392,7 +396,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
 
   Widget _bottomDetail(BuildContext context, VidDetailNotifier notifier, ContentData data) {
     final comment = notifier.firstComment;
-    if((comment?.disqusLogs ?? []).isEmpty){
+    if ((comment?.disqusLogs ?? []).isEmpty) {
       return _noComment(context, notifier, data);
     }
     final commentor = comment?.disqusLogs?[0].comment?.senderInfo;
@@ -420,7 +424,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                           ),
                           fourPx,
                           CustomTextWidget(
-                            textToDisplay: System().formatterNumber(comment?.comment ?? ( data.insight?.comments ?? 0)),
+                            textToDisplay: System().formatterNumber(comment?.comment ?? (data.insight?.comments ?? 0)),
                             textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary),
                           )
                         ],
@@ -469,14 +473,14 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                     ],
                   ),
                 ),
-            )
+              )
             : _noComment(context, notifier, data)
         : _shimmerComment(context);
   }
 
-  Widget _noComment(BuildContext context, VidDetailNotifier notifier, ContentData data){
+  Widget _noComment(BuildContext context, VidDetailNotifier notifier, ContentData data) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(16)), color: context.getColorScheme().background),
         child: Column(

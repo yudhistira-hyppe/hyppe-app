@@ -28,6 +28,7 @@ import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
@@ -419,6 +420,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
     switch (state) {
       case AppLifecycleState.inactive:
+        fAliplayer?.pause();
         break;
       case AppLifecycleState.resumed:
         fAliplayer?.play();
@@ -427,6 +429,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         fAliplayer?.pause();
         break;
       case AppLifecycleState.detached:
+        fAliplayer?.pause();
         break;
     }
   }
@@ -726,7 +729,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           ),
                                           if (notifier.diaryData?[index].allowComments ?? true)
                                             Padding(
-                                              padding: EdgeInsets.only(left: 21.0),
+                                              padding: const EdgeInsets.only(left: 21.0),
                                               child: GestureDetector(
                                                 onTap: () {
                                                   Routing().move(Routes.commentsDetail,
@@ -740,15 +743,21 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                 ),
                                               ),
                                             ),
-                                          const Padding(
-                                            padding: EdgeInsets.only(left: 21.0),
-                                            child: CustomIconWidget(
-                                              defaultColor: false,
-                                              color: kHyppeTextLightPrimary,
-                                              iconData: '${AssetPath.vectorPath}share2.svg',
-                                              height: 24,
+                                          if ((notifier.diaryData?[index].isShared ?? false))
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 21.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  context.read<DiariesPlaylistNotifier>().createdDynamicLink(context, data: notifier.diaryData?[index]);
+                                                },
+                                                child: CustomIconWidget(
+                                                  defaultColor: false,
+                                                  color: kHyppeTextLightPrimary,
+                                                  iconData: '${AssetPath.vectorPath}share2.svg',
+                                                  height: 24,
+                                                ),
+                                              ),
                                             ),
-                                          ),
                                           if ((notifier.diaryData?[index].saleAmount ?? 0) > 0 && email != notifier.diaryData?[index].email)
                                             GestureDetector(
                                               onTap: () async {
@@ -789,11 +798,17 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                                   expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                  child: Text(
-                                    "${lang?.seeAll} ${notifier.diaryData?[index].comments} ${lang?.comment}",
-                                    style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                                GestureDetector(
+                                  onTap: () {
+                                    Routing().move(Routes.commentsDetail,
+                                        argument: CommentsArgument(postID: notifier.diaryData?[index].postID ?? '', fromFront: true, data: notifier.diaryData?[index] ?? ContentData()));
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                    child: Text(
+                                      "${lang?.seeAll} ${notifier.diaryData?[index].comments} ${lang?.comment}",
+                                      style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                                    ),
                                   ),
                                 ),
                                 (notifier.diaryData?[index].comment?.length ?? 0) > 0

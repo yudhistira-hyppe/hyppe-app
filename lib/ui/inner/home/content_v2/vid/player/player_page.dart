@@ -13,7 +13,6 @@ import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
@@ -24,7 +23,6 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/custom_thumb_image.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
@@ -63,7 +61,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   Map<String, dynamic>? _dataSourceMap;
   Map<String, dynamic>? _dataSourceAdsMap;
   String urlVid = '';
-  String _savePath='';
+  String _savePath = '';
 
   bool isPlay = false;
   bool onTapCtrl = false;
@@ -137,13 +135,13 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    if (widget.playMode == ModeTypeAliPLayer.auth) {
-      getAuth();
-    } else {
-      getOldVideoUrl();
-    }
-
-    fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: "0");
+    // if (widget.playMode == ModeTypeAliPLayer.auth) {
+    //   getAuth();
+    // } else {
+    //   getOldVideoUrl();
+    // }
+    _initAds();
+    fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: "videoPlayer");
 
     WidgetsBinding.instance.addObserver(this);
     bottomIndex = 0;
@@ -164,7 +162,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     //set player
     fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
     fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-    
+
     if (Platform.isAndroid) {
       getExternalStorageDirectories().then((value) {
         if ((value?.length ?? 0) > 0) {
@@ -188,8 +186,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       }).then((value) {
         GlobalSettings.mDirController = _savePath;
       });
-    }
-    else if (Platform.isIOS) {
+    } else if (Platform.isIOS) {
       _savePath = "localCache";
       GlobalSettings.mDirController = _savePath;
     }
@@ -207,7 +204,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         });
       });
       isPlay = true;
-      isPause=false;
+      isPause = false;
     });
     fAliplayer?.setOnRenderingStart((playerId) {
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
@@ -347,53 +344,62 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     } else {
       getOldVideoUrl();
     }
-
-    _initAds();
   }
 
-  Future getAuth({bool isAds = false}) async {
-    setState(() {
-      isloading = true;
-    });
+  Future getAuth({String videoId = ''}) async {
+    // setState(() {
+    //   isloading = true;
+    // });
     try {
       final notifier = PostsBloc();
-      String apsaraId = widget.data?.apsaraId ?? '';
-      if (isAds) {
-        apsaraId = _newClipData?.data?.videoId ?? '';
+      String apsaraId = '';
+      if (videoId != '') {
+        apsaraId = videoId;
+      } else {
+        apsaraId = widget.data?.apsaraId ?? '';
       }
       await notifier.getAuthApsara(context, apsaraId: apsaraId);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         print(fetch.data);
         Map jsonMap = json.decode(fetch.data.toString());
-        if (isAds) {
+        if (videoId != '') {
           print("-======= auth iklan ${jsonMap['PlayAuth']}");
           _dataSourceAdsMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
         } else {
           print("-======= auth konten ${jsonMap['PlayAuth']}");
           _dataSourceMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
           var configMap = {
-            'mStartBufferDuration':GlobalSettings.mStartBufferDuration,// The buffer duration before playback. Unit: milliseconds.
-            'mHighBufferDuration':GlobalSettings.mHighBufferDuration,// The duration of high buffer. Unit: milliseconds.
-            'mMaxBufferDuration':GlobalSettings.mMaxBufferDuration,// The maximum buffer duration. Unit: milliseconds.
-            'mMaxDelayTime': GlobalSettings.mMaxDelayTime,// The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
-            'mNetworkTimeout': GlobalSettings.mNetworkTimeout,// The network timeout period. Unit: milliseconds.
-            'mNetworkRetryCount':GlobalSettings.mNetworkRetryCount,// The number of retires after a network timeout. Unit: milliseconds.
-            'mEnableLocalCache':GlobalSettings.mEnableCacheConfig,
-            'mLocalCacheDir':GlobalSettings.mDirController
+            'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+            'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+            'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+            'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+            'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+            'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+            'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
+            'mLocalCacheDir': GlobalSettings.mDirController
           };
           // Configure the application.
           fAliplayer?.setConfig(configMap);
           var map = {
-            "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,/// The maximum space that can be occupied by the cache directory.
-            "mMaxDurationS": GlobalSettings.mMaxDurationSController,/// The maximum cache duration of a single file.
-            "mDir": GlobalSettings.mDirController,/// The cache directory.
-            "mEnable": GlobalSettings.mEnableCacheConfig/// Specify whether to enable the cache feature.
+            "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
+
+            /// The maximum space that can be occupied by the cache directory.
+            "mMaxDurationS": GlobalSettings.mMaxDurationSController,
+
+            /// The maximum cache duration of a single file.
+            "mDir": GlobalSettings.mDirController,
+
+            /// The cache directory.
+            "mEnable": GlobalSettings.mEnableCacheConfig
+
+            /// Specify whether to enable the cache feature.
           };
           fAliplayer?.setCacheConfig(map);
-          fAliplayer?.prepare();print('prepare done');
+          // fAliplayer?.prepare();
+          print('prepare done');
         }
-        
+
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
@@ -431,8 +437,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     }
   }
 
-  _initAds() async{
-
+  _initAds() async {
     //for ads
     // getCountVid();
     // await _newInitAds(true);
@@ -456,7 +461,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         await getAdsVideo(isContent);
       }
     } catch (e) {
-      'Failed to fetch ads data : $e'.logger();
+      'Failed to fetch ads data 0 : $e'.logger();
     }
   }
 
@@ -475,8 +480,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         skipAdsCurent = secondsSkip;
         _dataSourceAdsMap?[DataSourceRelated.vidKey] = _newClipData?.data?.videoId;
         print("========== get source ads 1 ${_dataSourceAdsMap?[DataSourceRelated.vidKey]}");
-        await getAuth(isAds: true);
-        fAliplayerAds = FlutterAliPlayerFactory.createAliPlayer(playerId: '1');
+        await getAuth(videoId: _newClipData?.data?.videoId ?? '');
+        fAliplayerAds = FlutterAliPlayerFactory.createAliPlayer(playerId: 'iklanVideo');
         fAliplayerAds?.setPreferPlayerName(GlobalSettings.mPlayerName);
         fAliplayerAds?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
         fAliplayerAds?.setOnPrepared((playerId) {
@@ -561,10 +566,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           fAliplayer!.prepare().whenComplete(() => _showLoading = false);
           fAliplayer?.isAutoPlay();
           fAliplayer?.play();
-
           // fAliplayer!.play();
-
-          
         });
 
         // await getAdsVideoApsara(_newClipData?.data?.videoId ?? '');
@@ -633,7 +635,6 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     var y = 0.0;
     Orientation orientation = MediaQuery.of(context).orientation;
     var width = MediaQuery.of(context).size.width;
-
     var height;
     if (orientation == Orientation.portrait) {
       height = width * 9.0 / 16.0;
@@ -683,7 +684,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                   fn: () {},
                 ),
               ),
-
+            Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
             if (!isPlay)
               Center(
                 child: GestureDetector(
@@ -693,10 +694,11 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                     setState(() {
                       _showLoading = true;
                     });
+                    context.incrementAdsCount();
                     if (_newClipData != null) {
                       fAliplayerAds?.prepare().whenComplete(() => _showLoading = false);
                       fAliplayerAds?.play();
-                      context.incrementAdsCount();
+
                       setState(() {
                         isActiveAds = true;
                       });
@@ -731,8 +733,6 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                   widget.height ?? 0,
                 ),
               ),
-
-            
           ],
         ),
       );
@@ -860,7 +860,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         if (changevalue < 0) {
           changevalue = 0;
         }
-        print("currSeek: "+value.toString()+", changeSeek: "+changevalue.toString());
+        print("currSeek: " + value.toString() + ", changeSeek: " + changevalue.toString());
         fAliplayer?.requestBitmapAtPosition(changevalue);
         setState(() {
           _currentPosition = changevalue;
@@ -898,7 +898,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         if (changevalue > _videoDuration) {
           changevalue = _videoDuration;
         }
-        print("currSeek: "+value.toString()+", changeSeek: "+changevalue.toString());
+        print("currSeek: " + value.toString() + ", changeSeek: " + changevalue.toString());
         fAliplayer?.requestBitmapAtPosition(changevalue);
         setState(() {
           _currentPosition = changevalue;
@@ -1115,9 +1115,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                         // isActiveAds
                         //     ? fAliplayerAds?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE)
                         //     : fAliplayer?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
-                        isActiveAds
-                            ? fAliplayerAds?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE)
-                            : fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
+                        isActiveAds ? fAliplayerAds?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE) : fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
                       },
                       onChanged: (value) {
                         print('on change');
@@ -1148,7 +1146,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                   if (changevalue > _videoDuration) {
                     changevalue = _videoDuration;
                   }
-                  print("currSeek: "+_currentPosition.toString()+", changeSeek: "+changevalue.toString());
+                  print("currSeek: " + _currentPosition.toString() + ", changeSeek: " + changevalue.toString());
                   fAliplayer?.requestBitmapAtPosition(changevalue);
                   setState(() {
                     _currentPosition = changevalue;

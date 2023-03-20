@@ -196,14 +196,17 @@ class HomeNotifier with ChangeNotifier {
 
       switch (index) {
         case 0:
+          if (isreload) skipPic = 0;
           data['type'] = 'pict';
           data['skip'] = skipPic;
           break;
         case 1:
+          if (isreload) skipDiary = 0;
           data['type'] = 'diary';
           data['skip'] = skipDiary;
           break;
         case 2:
+          if (isreload) skipvid = 0;
           data['type'] = 'vid';
           data['skip'] = skipvid;
           break;
