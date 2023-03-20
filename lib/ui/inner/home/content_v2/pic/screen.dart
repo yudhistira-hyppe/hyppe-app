@@ -603,6 +603,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                       ),
                                                     )
                                                   : Image(
+                                                      width: SizeConfig.screenWidth,
                                                       image: imageProvider,
                                                     ),
                                             ),
@@ -679,7 +680,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                       defaultColor: false,
                                                       color: (notifier.pic?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
                                                       iconData: '${AssetPath.vectorPath}${(notifier.pic?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                                      height: 18,
+                                                      width: 24,
                                                     ),
                                                     onTap: () {
                                                       if (notifier.pic?[index] != null) {

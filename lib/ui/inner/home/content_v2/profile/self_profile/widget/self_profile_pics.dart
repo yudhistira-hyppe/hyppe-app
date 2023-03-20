@@ -53,9 +53,10 @@ class SelfProfilePics extends StatelessWidget {
                                           height: double.infinity,
                                           isSale: false,
                                           isSafe: true, //notifier.postData.data.listPic[index].isSafe,
-                                          thumbnail: ImageUrl(notifier.user.pics?[index].postID, url: (notifier.user.pics?[index].isApsara ?? false)
-                                              ? (notifier.user.pics?[index].mediaThumbEndPoint ?? '')
-                                              : System().showUserPicture(notifier.user.pics?[index].mediaEndpoint) ?? ''),
+                                          thumbnail: ImageUrl(notifier.user.pics?[index].postID,
+                                              url: (notifier.user.pics?[index].isApsara ?? false)
+                                                  ? (notifier.user.pics?[index].mediaThumbEndPoint ?? '')
+                                                  : System().showUserPicture(notifier.user.pics?[index].mediaEndpoint) ?? ''),
                                         ),
                                       ),
                                       // SelectableText(notifier.iw tem1?.pics?[index].isApsara ?? false
