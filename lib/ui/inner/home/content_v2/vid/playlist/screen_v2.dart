@@ -180,7 +180,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                   createdAt: '2022-02-02',
                   musicName: data.music?.musicTitle ?? '',
                   location: data.location ?? '',
-                  isIdVerified: data.privacy?.isIdVerified,
+                  isIdVerified: data.isIdVerified ?? false,
                 ),
               ),
               // Expanded(
@@ -468,7 +468,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                           CustomProfileImage(
                             width: 36,
                             height: 36,
-                            onTap: () {},
+                            onTap: () => System().navigateToProfile(context, comment?.disqusLogs?[0].comment?.sender ?? ''),
                             imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
                             following: true,
                             onFollow: () {},

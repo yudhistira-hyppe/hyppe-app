@@ -41,7 +41,7 @@ class CommentTile extends StatelessWidget {
           CustomProfileImage(
             width: 36,
             height: 36,
-            onTap: () {},
+            onTap: () => System().navigateToProfile(context, logs?.comment?.sender ?? ''),
             imageUrl: System()
                 .showUserPicture(commentor?.avatar?.mediaEndpoint),
             following: true,
