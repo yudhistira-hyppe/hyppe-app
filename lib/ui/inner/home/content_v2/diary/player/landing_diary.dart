@@ -673,12 +673,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     ),
                                   ),
                                 ),
-                                notifier.diaryData?[index].boosted.isEmpty ??
-                                        [].isEmpty &&
-                                            (notifier.diaryData?[index].reportedStatus != 'OWNED' &&
-                                                notifier.diaryData?[index].reportedStatus != 'BLURRED' &&
-                                                notifier.diaryData?[index].reportedStatus2 != 'BLURRED') &&
-                                            notifier.diaryData?[index].email == email
+                                (notifier.diaryData?[index].boosted.isEmpty ?? [].isEmpty) &&
+                                        (notifier.diaryData?[index].reportedStatus != 'OWNED' &&
+                                            notifier.diaryData?[index].reportedStatus != 'BLURRED' &&
+                                            notifier.diaryData?[index].reportedStatus2 != 'BLURRED') &&
+                                        notifier.diaryData?[index].email == email
                                     ? Container(
                                         width: MediaQuery.of(context).size.width * 0.8,
                                         margin: const EdgeInsets.only(bottom: 16),

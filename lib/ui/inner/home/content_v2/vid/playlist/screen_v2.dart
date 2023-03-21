@@ -11,6 +11,8 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
+import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/user_template.dart';
 import 'package:provider/provider.dart';
@@ -90,14 +92,16 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              margin: const EdgeInsets.only(left: 16, top: 12, right: 16),
-                              decoration: BoxDecoration(
-                                  boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
-                                  borderRadius: const BorderRadius.all(Radius.circular(16)),
-                                  color: context.getColorScheme().background),
+                              margin: (orientation == Orientation.portrait) ? const EdgeInsets.only(left: 16, top: 12, right: 16) : null,
+                              decoration: (orientation == Orientation.portrait)
+                                  ? BoxDecoration(
+                                      boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                                      borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                      color: context.getColorScheme().background)
+                                  : null,
                               child: Column(
                                 children: [
-                                  _topDetail(context, notifier, data),
+                                  if (orientation == Orientation.portrait) _topDetail(context, notifier, data),
                                   Container(
                                     color: Colors.black,
                                     child: PlayerPage(
@@ -108,12 +112,12 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                                       width: width,
                                     ),
                                   ),
-                                  _middleDetail(context, notifier, like, data),
+                                  if (orientation == Orientation.portrait) _middleDetail(context, notifier, like, data),
                                 ],
                               ),
                             ),
                             twelvePx,
-                            _bottomDetail(context, notifier, data)
+                            if (orientation == Orientation.portrait) _bottomDetail(context, notifier, data)
                           ],
                         ),
                       ),
@@ -134,57 +138,85 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
       padding: const EdgeInsets.only(top: 16, right: 16, left: 16, bottom: 23),
       child: Row(
         children: [
-          GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const CustomIconWidget(width: 20, height: 25, iconData: '${AssetPath.vectorPath}back-arrow.svg')),
-          sixteenPx,
-          CustomProfileImage(
-            width: 36,
-            height: 36,
-            onTap: () {},
-            imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint?.split('_')[0]),
-            following: true,
-            onFollow: () {},
+          CustomIconButtonWidget(
+            iconData: '${AssetPath.vectorPath}back-arrow.svg',
+            color: kHyppeTextLightPrimary,
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-          twelvePx,
+          // GestureDetector(
+          //     onTap: () {
+          //       Navigator.pop(context);
+          //     },
+          //     child: const CustomIconWidget(width: 20, height: 25, iconData: '${AssetPath.vectorPath}back-arrow.svg')),
+          sixteenPx,
+          // CustomProfileImage(
+          //   width: 36,
+          //   height: 36,
+          //   onTap: () {},
+          //   imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint?.split('_')[0]),
+          //   following: true,
+          //   onFollow: () {},
+          // ),
+          // twelvePx,
           Expanded(
               child: Row(
             children: [
               Expanded(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  UserTemplate(
-                    username: data.username ?? 'No Username',
-                    isVerified: data.isIdVerified ?? false,
-                  ),
-                  twoPx,
-                  // CustomTextWidget(
-                  //   textToDisplay: 'France, Paris',
-                  //   textStyle: context.getTextTheme().overline,
-                  // ),
-                  if (data.location?.isNotEmpty ?? false)
-                    CustomTextWidget(
-                      textToDisplay: data.location ?? '',
-                      textStyle: context.getTextTheme().caption,
-                    ),
-                  if (data.location?.isNotEmpty ?? false) twoPx,
-                  if (data.music?.artistName != null)
-                    Row(
-                      children: [
-                        CustomIconWidget(
-                          iconData: '${AssetPath.vectorPath}music_stroke_black.svg',
-                          color: context.getColorScheme().onBackground,
-                          defaultColor: false,
-                        ),
-                        fourPx,
-                        Expanded(child: CustomTextWidget(textToDisplay: '${data.music?.musicTitle} - ${data.music?.artistName}'))
-                      ],
-                    )
-                ],
-              )),
+                child: ProfileLandingPage(
+                  show: true,
+                  // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
+                  onFollow: () {},
+                  following: true,
+                  haveStory: false,
+                  textColor: kHyppeTextLightPrimary,
+                  username: data.username,
+                  featureType: FeatureType.other,
+                  // isCelebrity: viddata.privacy?.isCelebrity,
+                  isCelebrity: false,
+                  imageUrl: '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
+                  onTapOnProfileImage: () => System().navigateToProfile(context, data.email ?? ''),
+                  createdAt: '2022-02-02',
+                  musicName: data.music?.musicTitle ?? '',
+                  location: data.location ?? '',
+                  isIdVerified: data.privacy?.isIdVerified,
+                ),
+              ),
+              // Expanded(
+              //   child: Column(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       UserTemplate(
+              //         username: data.username ?? 'No Username',
+              //         isVerified: data.isIdVerified ?? false,
+              //       ),
+              //       twoPx,
+              //       // CustomTextWidget(
+              //       //   textToDisplay: 'France, Paris',
+              //       //   textStyle: context.getTextTheme().overline,
+              //       // ),
+              //       if (data.location?.isNotEmpty ?? false)
+              //         CustomTextWidget(
+              //           textToDisplay: data.location ?? '',
+              //           textStyle: context.getTextTheme().caption,
+              //         ),
+              //       if (data.location?.isNotEmpty ?? false) twoPx,
+              //       if (data.music?.artistName != null)
+              //         Row(
+              //           children: [
+              //             CustomIconWidget(
+              //               iconData: '${AssetPath.vectorPath}music_stroke_black.svg',
+              //               color: context.getColorScheme().onBackground,
+              //               defaultColor: false,
+              //             ),
+              //             fourPx,
+              //             Expanded(child: CustomTextWidget(textToDisplay: '${data.music?.musicTitle} - ${data.music?.artistName}'))
+              //           ],
+              //         )
+              //     ],
+              //   ),
+              // ),
               eightPx,
               if (data.email != SharedPreference().readStorage(SpKeys.email))
                 notifier.checkIsLoading

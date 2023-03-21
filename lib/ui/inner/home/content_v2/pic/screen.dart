@@ -567,12 +567,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 VisibilityDetector(
                                   key: Key(index.toString()),
                                   onVisibilityChanged: (info) {
-                                    if (info.visibleFraction == 1) {
+                                    print("ada musiknya ${info.visibleFraction}");
+                                    if (info.visibleFraction >= 0.6) {
                                       _curIdx = index;
                                       if (_lastCurIndex != _curIdx) {
-                                        print("ada musiknya ${notifier.pic?[index].music}");
                                         if (notifier.pic?[index].music != null) {
-                                          Future.delayed(const Duration(milliseconds: 400), () {
+                                          print("ada musiknya ${notifier.pic?[index].music}");
+                                          Future.delayed(const Duration(milliseconds: 100), () {
                                             start(notifier.pic?[index] ?? ContentData());
                                           });
                                         } else {
@@ -643,6 +644,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             child: GestureDetector(
                                               onTap: () {
                                                 fAliplayer?.play();
+                                                setState(() {
+                                                  isMute = !isMute;
+                                                });
+                                                fAliplayer?.setMuted(isMute);
                                               },
                                               child: Container(
                                                 color: Colors.transparent,
@@ -658,10 +663,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                     ),
                                   ),
                                 ),
-                                notifier.pic?[index].boosted.isEmpty ??
-                                        [].isEmpty &&
-                                            (notifier.pic?[index].reportedStatus != 'OWNED' && notifier.pic?[index].reportedStatus != 'BLURRED' && notifier.pic?[index].reportedStatus2 != 'BLURRED') &&
-                                            notifier.pic?[index].email == email
+                                (notifier.pic?[index].boosted.isEmpty ?? [].isEmpty) &&
+                                        (notifier.pic?[index].reportedStatus != 'OWNED' && notifier.pic?[index].reportedStatus != 'BLURRED' && notifier.pic?[index].reportedStatus2 != 'BLURRED') &&
+                                        notifier.pic?[index].email == email
                                     ? Container(
                                         width: MediaQuery.of(context).size.width * 0.8,
                                         margin: const EdgeInsets.only(bottom: 16),

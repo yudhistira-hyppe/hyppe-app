@@ -11,6 +11,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
@@ -284,7 +285,53 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                       //         ),
                                       //       )
                                       //     : const SizedBox(),
-                                      twentyPx,
+                                      (vidData?.boosted.isEmpty ?? [].isEmpty) &&
+                                              (vidData?.reportedStatus != 'OWNED' && vidData?.reportedStatus != 'BLURRED' && vidData?.reportedStatus2 != 'BLURRED') &&
+                                              vidData?.email == email
+                                          ? Container(
+                                              width: MediaQuery.of(context).size.width * 0.8,
+                                              margin: const EdgeInsets.only(top: 10),
+                                              child: ButtonBoost(
+                                                onDetail: false,
+                                                marginBool: true,
+                                                contentData: vidData,
+                                                startState: () {
+                                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                                },
+                                                afterState: () {
+                                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                                },
+                                              ),
+                                            )
+                                          : Container(),
+                                      if (vidData?.email == email && (vidData?.boostCount ?? 0) >= 0 && (vidData?.boosted.isNotEmpty ?? [].isEmpty))
+                                        Container(
+                                          padding: const EdgeInsets.all(10),
+                                          margin: EdgeInsets.only(top: 10),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(6),
+                                            color: kHyppeGreyLight,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              const CustomIconWidget(
+                                                iconData: "${AssetPath.vectorPath}reach.svg",
+                                                defaultColor: false,
+                                                height: 24,
+                                                color: kHyppeTextLightPrimary,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 13),
+                                                child: Text(
+                                                  "${vidData?.boostJangkauan ?? '0'} ${lang?.reach}",
+                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      twelvePx,
                                       CustomNewDescContent(
                                         // desc: "${data?.description}",
                                         username: '',

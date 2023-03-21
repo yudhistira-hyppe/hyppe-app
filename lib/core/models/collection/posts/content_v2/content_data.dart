@@ -555,8 +555,6 @@ class Comment {
   String? createdAt;
   String? updatedAt;
   List<Medias>? medias;
-  List<Null>? replyLogs;
-  List<Null>? tags;
   String? sClass;
   int? iV;
   UserComment? userComment;
@@ -574,8 +572,6 @@ class Comment {
       this.createdAt,
       this.updatedAt,
       this.medias,
-      this.replyLogs,
-      this.tags,
       this.sClass,
       this.iV,
       this.userComment});

@@ -1,8 +1,15 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:hyppe/core/bloc/ads_video/bloc.dart';
+import 'package:hyppe/core/bloc/ads_video/state.dart';
+import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
+import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/query_request/users_data_query.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -27,7 +34,6 @@ import '../../../../../../core/models/collection/localization_v2/localization_mo
 import 'comments_detail/screen.dart';
 
 class VidDetailNotifier with ChangeNotifier, GeneralMixin {
-
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;
@@ -44,12 +50,20 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   StatusFollowing _statusFollowing = StatusFollowing.none;
   VidDetailScreenArgument? _routeArgument;
 
+  AdsVideo? _adsData;
+  AdsVideo? get adsData => _adsData;
+
+  set adsData(val) {
+    _adsData = val;
+  }
+
   ContentData? get data => _data;
 
-  set data(ContentData? value){
+  set data(ContentData? value) {
     _data = value;
     notifyListeners();
   }
+
   StatusFollowing get statusFollowing => _statusFollowing;
 
   bool _checkIsLoading = false;
@@ -77,13 +91,13 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
   void updateView(BuildContext context) => System().increaseViewCount(context, _data ?? ContentData()).whenComplete(() => notifyListeners());
 
-  Future initState(BuildContext context, VidDetailScreenArgument routeArgument) async{
+  Future initState(BuildContext context, VidDetailScreenArgument routeArgument) async {
     _routeArgument = routeArgument;
 
     if (_routeArgument?.postID != null) {
       print("hit Api dulu");
       _initialVid(context, _routeArgument?.postID ?? '');
-    } else if(_routeArgument?.vidData?.postID != null){
+    } else if (_routeArgument?.vidData?.postID != null) {
       _initialVid(context, _routeArgument?.vidData?.postID ?? '');
     } else {
       _data = _routeArgument?.vidData;
@@ -92,10 +106,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  _initialVid(
-    BuildContext context,
-      String postID
-  ) async {
+  _initialVid(BuildContext context, String postID) async {
     Future<List<ContentData>> _resFuture;
 
     contentsQuery.postID = postID;
@@ -105,9 +116,9 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
       final res = await contentsQuery.reload(context);
       data = res.firstOrNull;
-      if(data != null){
+      if (data != null) {
         final postID = _data?.postID;
-        if(postID != null){
+        if (postID != null) {
           getFirstComment(context, postID);
         }
       }
@@ -253,26 +264,26 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   //
   bool _loadDetail = true;
   bool get loadDetail => _loadDetail;
-  set loadDetail(bool state){
+  set loadDetail(bool state) {
     _loadDetail = state;
     notifyListeners();
   }
 
   CommentDataV2? _firstComment;
   CommentDataV2? get firstComment => _firstComment;
-  set firstComment(CommentDataV2? data){
+  set firstComment(CommentDataV2? data) {
     _firstComment = data;
     notifyListeners();
   }
 
   bool _loadComment = true;
   bool get loadComment => _loadComment;
-  set loadComment(bool state){
+  set loadComment(bool state) {
     _loadComment = state;
     notifyListeners();
   }
 
-  Future getFirstComment(BuildContext context, String postID) async{
+  Future getFirstComment(BuildContext context, String postID) async {
     try {
       loadComment = true;
       final param = CommentArgument()
@@ -296,7 +307,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  goToComments(CommentsArgument args){
+  goToComments(CommentsArgument args) {
     Routing().move(Routes.commentsDetail, argument: args);
   }
   //
@@ -336,4 +347,39 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   //   }
   //
   // }
+
+  Future getAdsVideo(BuildContext context, bool isContent) async {
+    try {
+      final notifier = AdsDataBloc();
+      await notifier.adsVideoBloc(context, isContent);
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        // print('data : ${fetch.data.toString()}');
+        adsData = fetch.data;
+        getAuth(context, videoId: adsData?.data?.videoId ?? '').then((value) => adsData?.data?.apsaraAuth = value);
+
+        // await getAdsVideoApsara(_newClipData?.data?.videoId ?? '');
+      }
+    } catch (e) {
+      'Failed to fetch ads data $e'.logger();
+    }
+  }
+
+  Future<String> getAuth(BuildContext context, {String videoId = ''}) async {
+    String result = '';
+    try {
+      final notifier = PostsBloc();
+      await notifier.getAuthApsara(context, apsaraId: videoId);
+      final fetch = notifier.postsFetch;
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        result = jsonMap['PlayAuth'] ?? '';
+      }
+      return result;
+    } catch (e) {
+      return '';
+      // 'Failed to fetch ads data $e'.logger();
+    }
+  }
 }
