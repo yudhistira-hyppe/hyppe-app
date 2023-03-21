@@ -59,6 +59,9 @@ class _BuildButtonState extends State<BuildButton> {
               InkWell(
                 onTap: () {
                   print('sdsdfsdf');
+                  if(widget.pause != null){
+                    widget.pause!();
+                  }
                   notifier.showMyReaction(
                     context,
                     mounted,

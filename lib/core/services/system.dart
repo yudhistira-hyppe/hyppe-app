@@ -95,7 +95,12 @@ class System {
     String? email = SharedPreference().readStorage(SpKeys.email);
     if (url != null && email != null && token != null) {
       if (url.isNotEmpty) {
-        return '${Env.data.baseUrl}${Env.data.versionApi}$url?x-auth-token=$token&x-auth-user=$email&rundom=';
+        if(url != 'null'){
+          return '${Env.data.baseUrl}${Env.data.versionApi}$url?x-auth-token=$token&x-auth-user=$email&rundom=';
+        }else{
+          return '';
+        }
+
         // return Env.data.baseUrl +
         //     "/${Env.data.versionApi}/" +
         //     url +
