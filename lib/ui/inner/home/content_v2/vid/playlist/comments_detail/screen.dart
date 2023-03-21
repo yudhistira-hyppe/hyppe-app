@@ -318,7 +318,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
             onTap: () {},
             imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint),
             following: true,
-            onFollow: () {},
+            onFollow: () => System().navigateToProfile(context, data.email ?? ''),
           ),
           twelvePx,
           Expanded(
@@ -327,7 +327,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
               children: [
                 UserTemplate(
                     username: '${data.username}',
-                    isVerified: data.privacy?.isIdVerified ?? (data.isIdVerified ?? false),
+                    isVerified: data.isIdVerified ?? (data.privacy?.isIdVerified ?? false),
                     date: data.createdAt ?? DateTime.now().toString()),
                 twoPx,
                 Row(

@@ -25,6 +25,7 @@ import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
@@ -567,12 +568,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 VisibilityDetector(
                                   key: Key(index.toString()),
                                   onVisibilityChanged: (info) {
-                                    if (info.visibleFraction == 1) {
+                                    print("ada musiknya ${info.visibleFraction}");
+                                    if (info.visibleFraction >= 0.6) {
                                       _curIdx = index;
                                       if (_lastCurIndex != _curIdx) {
-                                        print("ada musiknya ${notifier.pic?[index].music}");
                                         if (notifier.pic?[index].music != null) {
-                                          Future.delayed(const Duration(milliseconds: 400), () {
+                                          print("ada musiknya ${notifier.pic?[index].music}");
+                                          Future.delayed(const Duration(milliseconds: 100), () {
                                             start(notifier.pic?[index] ?? ContentData());
                                           });
                                         } else {
@@ -643,6 +645,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             child: GestureDetector(
                                               onTap: () {
                                                 fAliplayer?.play();
+                                                setState(() {
+                                                  isMute = !isMute;
+                                                });
+                                                fAliplayer?.setMuted(isMute);
                                               },
                                               child: Container(
                                                 color: Colors.transparent,
@@ -658,7 +664,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                     ),
                                   ),
                                 ),
-                                (notifier.pic?[index].reportedStatus != 'OWNED' && notifier.pic?[index].reportedStatus != 'BLURRED' && notifier.pic?[index].reportedStatus2 != 'BLURRED') &&
+                                (notifier.pic?[index].boosted.isEmpty ?? [].isEmpty) &&
+                                        (notifier.pic?[index].reportedStatus != 'OWNED' && notifier.pic?[index].reportedStatus != 'BLURRED' && notifier.pic?[index].reportedStatus2 != 'BLURRED') &&
                                         notifier.pic?[index].email == email
                                     ? Container(
                                         width: MediaQuery.of(context).size.width * 0.8,
@@ -676,6 +683,33 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         ),
                                       )
                                     : Container(),
+                                if (notifier.pic?[index].email == email && (notifier.pic?[index].boostCount ?? 0) >= 0 && (notifier.pic?[index].boosted.isNotEmpty ?? [].isEmpty))
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      color: kHyppeGreyLight,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        const CustomIconWidget(
+                                          iconData: "${AssetPath.vectorPath}reach.svg",
+                                          defaultColor: false,
+                                          height: 24,
+                                          color: kHyppeTextLightPrimary,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 13),
+                                          child: CustomTextWidget(
+                                            textToDisplay: "${notifier.pic?[index].boostJangkauan ?? '0'} ${lang?.reach}",
+                                            textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 Consumer<LikeNotifier>(
                                   builder: (context, likeNotifier, child) => Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -794,23 +828,26 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 ),
                                 (notifier.pic?[index].comment?.length ?? 0) > 0
                                     ? Padding(
-                                        padding: const EdgeInsets.only(top: 6.0),
+                                        padding: const EdgeInsets.only(top: 0.0),
                                         child: ListView.builder(
                                           shrinkWrap: true,
                                           physics: const NeverScrollableScrollPhysics(),
                                           itemCount: (notifier.pic?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
                                           itemBuilder: (context, indexComment) {
-                                            return CustomNewDescContent(
-                                              // desc: "${notifier.pic?[index]?.description}",
-                                              username: notifier.pic?[index].comment?[indexComment].userComment?.username ?? '',
-                                              desc: notifier.pic?[index].comment?[indexComment].txtMessages ?? '',
-                                              trimLines: 2,
-                                              textAlign: TextAlign.start,
-                                              seeLess: ' seeLess', // ${notifier2.translate.seeLess}',
-                                              seeMore: '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
-                                              normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                                              hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                              expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                            return Padding(
+                                              padding: const EdgeInsets.only(bottom: 6.0),
+                                              child: CustomNewDescContent(
+                                                // desc: "${notifier.pic?[index]?.description}",
+                                                username: notifier.pic?[index].comment?[indexComment].userComment?.username ?? '',
+                                                desc: notifier.pic?[index].comment?[indexComment].txtMessages ?? '',
+                                                trimLines: 2,
+                                                textAlign: TextAlign.start,
+                                                seeLess: ' seeLess', // ${notifier2.translate.seeLess}',
+                                                seeMore: '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
+                                                normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                                                hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                                                expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                              ),
                                             );
                                           },
                                         ),

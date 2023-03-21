@@ -675,7 +675,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     ),
                                   ),
                                 ),
-                                statusKyc == VERIFIED &&
+                                (notifier.diaryData?[index].boosted.isEmpty ?? [].isEmpty) &&
                                         (notifier.diaryData?[index].reportedStatus != 'OWNED' &&
                                             notifier.diaryData?[index].reportedStatus != 'BLURRED' &&
                                             notifier.diaryData?[index].reportedStatus2 != 'BLURRED') &&
@@ -696,6 +696,33 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                         ),
                                       )
                                     : Container(),
+                                if (notifier.diaryData?[index].email == email && (notifier.diaryData?[index].boostCount ?? 0) >= 0 && (notifier.diaryData?[index].boosted.isNotEmpty ?? [].isEmpty))
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      color: kHyppeGreyLight,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        const CustomIconWidget(
+                                          iconData: "${AssetPath.vectorPath}reach.svg",
+                                          defaultColor: false,
+                                          height: 24,
+                                          color: kHyppeTextLightPrimary,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 13),
+                                          child: Text(
+                                            "${notifier.diaryData?[index].boostJangkauan ?? '0'} ${lang?.reach}",
+                                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 Consumer<LikeNotifier>(
                                   builder: (context, likeNotifier, child) => Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -815,23 +842,26 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                 ),
                                 (notifier.diaryData?[index].comment?.length ?? 0) > 0
                                     ? Padding(
-                                        padding: const EdgeInsets.only(top: 6.0),
+                                        padding: const EdgeInsets.only(top: 0.0),
                                         child: ListView.builder(
                                           shrinkWrap: true,
                                           physics: const NeverScrollableScrollPhysics(),
                                           itemCount: (notifier.diaryData?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
                                           itemBuilder: (context, indexComment) {
-                                            return CustomNewDescContent(
-                                              // desc: "${notifier.diaryData?[index]?.description}",
-                                              username: notifier.diaryData?[index].comment?[indexComment].userComment?.username ?? '',
-                                              desc: notifier.diaryData?[index].comment?[indexComment].txtMessages ?? '',
-                                              trimLines: 2,
-                                              textAlign: TextAlign.start,
-                                              seeLess: ' seeLess', // ${notifier2.translate.seeLess}',
-                                              seeMore: '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
-                                              normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                                              hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                              expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                            return Padding(
+                                              padding: const EdgeInsets.only(bottom: 6.0),
+                                              child: CustomNewDescContent(
+                                                // desc: "${notifier.diaryData?[index]?.description}",
+                                                username: notifier.diaryData?[index].comment?[indexComment].userComment?.username ?? '',
+                                                desc: notifier.diaryData?[index].comment?[indexComment].txtMessages ?? '',
+                                                trimLines: 2,
+                                                textAlign: TextAlign.start,
+                                                seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                                                seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                                                normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                                                hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                                                expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                              ),
                                             );
                                           },
                                         ),

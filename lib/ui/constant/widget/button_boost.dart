@@ -161,7 +161,7 @@ class _ButtonBoostState extends State<ButtonBoost> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 8),
               decoration: BoxDecoration(
-                color: isKyc != VERIFIED || (widget.contentData?.boosted.isEmpty ?? [].isEmpty) ? kHyppePrimary : kHyppeLightInactive1,
+                color: isKyc == VERIFIED && (widget.contentData?.boosted.isEmpty ?? [].isEmpty) ? kHyppePrimary : kHyppeLightInactive1,
                 borderRadius: BorderRadius.circular(8),
               ),
               width: SizeConfig.screenWidth,

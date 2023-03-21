@@ -36,6 +36,7 @@ class AdsData {
   String? videoId;
   double? duration;
   bool? isReport;
+  String? apsaraAuth;
 
   AdsData({
     this.adsId,
@@ -53,6 +54,7 @@ class AdsData {
     this.videoId,
     this.duration,
     this.isReport,
+    this.apsaraAuth,
   });
 
   AdsData.fromJson(Map<String, dynamic> json) {
@@ -71,6 +73,7 @@ class AdsData {
     videoId = json['videoId'];
     isReport = json['isReport'] ?? false;
     final value = json['duration'];
+    apsaraAuth = '';
     try {
       if (value is int) {
         duration = value.toDouble();

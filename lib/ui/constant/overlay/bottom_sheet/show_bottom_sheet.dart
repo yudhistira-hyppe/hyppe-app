@@ -275,7 +275,7 @@ class ShowBottomSheet {
             builder: (context, notifier, child) => WillPopScope(
               onWillPop: () async {
                 notifier.initState(context, postID, true, parentComment);
-                return false;
+                return true;
               },
               child: SafeArea(
                 child: Container(
