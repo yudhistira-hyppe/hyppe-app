@@ -161,8 +161,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     _playMode = widget.playMode;
     _dataSourceMap = widget.dataSourceMap;
     _dataSourceAdsMap = {};
-    isPlay = false;
-    isPrepare = false;
+    // isPlay = false;
+    // isPrepare = false;
     setState(() {});
 
     //Turn on mix mode
@@ -491,7 +491,6 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       secondsSkip = adsData?.data?.adsSkip ?? 0;
       skipAdsCurent = secondsSkip;
       print("========== get source ads 1 ${_dataSourceAdsMap?[DataSourceRelated.vidKey]}");
-      await getAuth(videoId: adsData?.data?.videoId ?? '');
       fAliplayerAds?.setVidAuth(
           vid: adsData?.data?.videoId,
           region: 'ap-southeast-5',

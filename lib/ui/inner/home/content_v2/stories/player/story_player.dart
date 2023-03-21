@@ -513,6 +513,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
           scrollDirection: Axis.horizontal,
           itemCount: widget.argument.myStories != null ? 1 : storyNot.storiesGroups?.length,
           onPageChanged: (index) async {
+            shown = [];
             _curIdx = index;
             setState(() {});
             if (_lastCurIndex != _curIdx) {

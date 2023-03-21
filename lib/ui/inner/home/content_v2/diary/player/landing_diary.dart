@@ -616,8 +616,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                     )
                                                   : Container(),
                                           // _buildProgressBar(SizeConfig.screenWidth!, 500),
-                                          _buildBody(context, SizeConfig.screenWidth, notifier.diaryData?[index] ?? ContentData()),
-                                          blurContentWidget(context, notifier.diaryData?[index] ?? ContentData()),
+
                                           Positioned.fill(
                                             child: GestureDetector(
                                               onTap: () {
@@ -634,6 +633,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                               ),
                                             ),
                                           ),
+                                          _buildBody(context, SizeConfig.screenWidth, notifier.diaryData?[index] ?? ContentData()),
+                                          blurContentWidget(context, notifier.diaryData?[index] ?? ContentData()),
+
                                           dataSelected?.postID == notifier.diaryData?[index].postID && isPlay
                                               ? Container()
                                               : CustomBaseCacheImage(

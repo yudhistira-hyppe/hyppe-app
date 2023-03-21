@@ -48,7 +48,6 @@ class NewVideoDetailScreen extends StatefulWidget {
 }
 
 class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterFirstLayoutMixin {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'NewVideoDetailScreen');
@@ -85,54 +84,57 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
         DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
       };
 
-      return Scaffold(
-        backgroundColor: context.getColorScheme().surface,
-        body: data != null
-            ? notifier.loadDetail
-                ? SafeArea(child: _contentDetailShimmer(context))
-                : SafeArea(
-                    child: RefreshIndicator(
-                      strokeWidth: 2.0,
-                      color: context.getColorScheme().primary,
-                      onRefresh: () => notifier.initState(context, widget.arguments),
-                      child: SingleChildScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              margin: (orientation == Orientation.portrait) ? const EdgeInsets.only(left: 16, top: 12, right: 16) : null,
-                              decoration: (orientation == Orientation.portrait)
-                                  ? BoxDecoration(
-                                      boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
-                                      borderRadius: const BorderRadius.all(Radius.circular(16)),
-                                      color: context.getColorScheme().background)
-                                  : null,
-                              child: Column(
-                                children: [
-                                  if (orientation == Orientation.portrait) _topDetail(context, notifier, data),
-                                  Container(
-                                    color: Colors.black,
-                                    child: PlayerPage(
-                                      playMode: (widget.arguments.vidData?.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                                      dataSourceMap: map,
-                                      data: data,
-                                      height: height,
-                                      width: width,
+      return WillPopScope(
+        onWillPop: notifier.onPop,
+        child: Scaffold(
+          backgroundColor: context.getColorScheme().surface,
+          body: data != null
+              ? notifier.loadDetail
+                  ? SafeArea(child: _contentDetailShimmer(context))
+                  : SafeArea(
+                      child: RefreshIndicator(
+                        strokeWidth: 2.0,
+                        color: context.getColorScheme().primary,
+                        onRefresh: () => notifier.initState(context, widget.arguments),
+                        child: SingleChildScrollView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: (orientation == Orientation.portrait) ? const EdgeInsets.only(left: 16, top: 12, right: 16) : null,
+                                decoration: (orientation == Orientation.portrait)
+                                    ? BoxDecoration(
+                                        boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                                        borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                        color: context.getColorScheme().background)
+                                    : null,
+                                child: Column(
+                                  children: [
+                                    _topDetail(context, notifier, data),
+                                    Container(
+                                      color: Colors.black,
+                                      child: PlayerPage(
+                                        playMode: (widget.arguments.vidData?.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                                        dataSourceMap: map,
+                                        data: data,
+                                        height: height,
+                                        width: width,
+                                      ),
                                     ),
-                                  ),
-                                  if (orientation == Orientation.portrait) _middleDetail(context, notifier, like, data),
-                                ],
+                                    _middleDetail(context, notifier, like, data),
+                                  ],
+                                ),
                               ),
-                            ),
-                            twelvePx,
-                            if (orientation == Orientation.portrait) _bottomDetail(context, notifier, data)
-                          ],
+                              twelvePx,
+                              _bottomDetail(context, notifier, data)
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  )
-            : SafeArea(child: _contentDetailShimmer(context)),
+                    )
+              : SafeArea(child: _contentDetailShimmer(context)),
+        ),
       );
 
       if (data != null) {
