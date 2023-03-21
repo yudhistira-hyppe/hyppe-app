@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
 import 'package:hyppe/core/bloc/ads_video/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
@@ -90,11 +91,11 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
   void updateView(BuildContext context) => System().increaseViewCount(context, _data ?? ContentData()).whenComplete(() => notifyListeners());
 
-  initialize(){
+  initialize() {
     _loadDetail = true;
   }
 
-  Future initState(BuildContext context, VidDetailScreenArgument routeArgument) async{
+  Future initState(BuildContext context, VidDetailScreenArgument routeArgument) async {
     _routeArgument = routeArgument;
 
     if (_routeArgument?.postID != null) {
@@ -239,6 +240,8 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<bool> onPop() async {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     if (_routeArgument?.postID != null && _routeArgument?.backPage == false) {
       System().disposeBlock();
       Routing().moveAndPop(Routes.lobby);
