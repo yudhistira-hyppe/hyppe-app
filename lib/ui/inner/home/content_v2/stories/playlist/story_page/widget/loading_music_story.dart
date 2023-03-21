@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,7 @@ class _LoadingMusicStoryState extends State<LoadingMusicStory> with AfterFirstLa
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'LoadingMusicStory');
     super.initState();
     if(globalAudioPlayer != null){
       disposeGlobalAudio();

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -56,6 +57,7 @@ class _DiaryPageState extends State<DiaryPage> {
   @override
   void initState() {
     isLoading = true;
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'DiaryPage');
     final notifier = Provider.of<DiariesPlaylistNotifier>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (mounted) {

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/loading_music_story.dart';
@@ -10,7 +11,6 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_button.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_viewer_stories_button.dart';
 import '../../../../../../../constant/widget/after_first_layout_mixin.dart';
-import '../../../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../../../constant/widget/music_status_page_widget.dart';
 
 class BuildBottomView extends StatefulWidget {
@@ -38,6 +38,7 @@ class BuildBottomView extends StatefulWidget {
 class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayoutMixin {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildBottomView');
     super.initState();
   }
 

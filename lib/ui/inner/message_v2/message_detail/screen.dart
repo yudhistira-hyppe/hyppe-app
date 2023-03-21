@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -35,6 +36,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'MessageDetailScreen');
     // Provider.of<MessageDetailNotifier>(context, listen: false).initialData(context, _scrollController);
     _notifier.initState(context, widget.argument);
     // _scrollController.addListener(() => _notifier.scrollListener(context, _scrollController));

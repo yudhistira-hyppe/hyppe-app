@@ -78,7 +78,6 @@ class Routes {
   static const String verificationIDStep7 = '/verification-id-step-7';
   static const String verificationIDFailed = '/verification-id-failed';
   static const String verificationIDSuccess = '/verification-id-success';
-  static const String verificationIDLoading = '/verification-id-loading';
 
   //delete account
   static const String deleteAccount = '/delete-account';

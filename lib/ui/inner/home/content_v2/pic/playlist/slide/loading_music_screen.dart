@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -29,6 +30,7 @@ class _LoadingMusicScreenState extends State<LoadingMusicScreen> with AfterFirst
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'LoadingMusicScreen');
     print('initState LoadingMusicScreen');
     super.initState();
     if(globalAudioPlayer != null){

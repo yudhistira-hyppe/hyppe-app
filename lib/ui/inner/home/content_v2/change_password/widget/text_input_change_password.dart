@@ -1,5 +1,6 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/home/content_v2/change_password/notifier.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -17,6 +18,7 @@ class TextInputChangePassword extends StatefulWidget {
 class _TextInputChangePasswordState extends State<TextInputChangePassword> {
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'TextInputChangePassword');
     return Consumer<ChangePasswordNotifier>(
       builder: (_, notifier, __) => Container(
         height: SizeConfig.screenHeight! * 0.35,
@@ -31,6 +33,7 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
               obscuringCharacter: '*',
               textAlign: TextAlign.left,
               textInputType: TextInputType.text,
+              inputFormatter: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9!@#\$%^&*_]'))],
               textEditingController: notifier.currentPasswordController,
               inputDecoration: InputDecoration(
                 hintText: notifier.language.currentPassword,
@@ -63,6 +66,7 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
               obscuringCharacter: '*',
               textAlign: TextAlign.left,
               textInputType: TextInputType.text,
+              inputFormatter: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9!@#\$%^&*_]'))],
               textEditingController: notifier.newPasswordController,
               inputDecoration: InputDecoration(
                 hintText: notifier.language.password,
@@ -95,6 +99,7 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
               obscuringCharacter: '*',
               textAlign: TextAlign.left,
               textInputType: TextInputType.text,
+              inputFormatter: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9!@#\$%^&*_]'))],
               textEditingController: notifier.reTypePasswordController,
               inputDecoration: InputDecoration(
                 hintText: notifier.language.password,

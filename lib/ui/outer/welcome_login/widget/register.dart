@@ -1,4 +1,5 @@
 // ignore: unused_import
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/ui/constant/widget/custom_hovered_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -11,6 +12,7 @@ class Register extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'Register');
     return Consumer<WelcomeLoginNotifier>(
       builder: (_, notifier, __) => Column(
         children: [

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -15,6 +16,7 @@ class BottomDetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'BottomDetailWidget');
     if (data?.type == TransactionType.withdrawal) {
       return withdrawWidget(context);
     } else if (data?.type == TransactionType.buy) {

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -23,6 +24,7 @@ class ForgotPinScreen extends StatefulWidget {
 class _ForgotPinScreenState extends State<ForgotPinScreen> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ForgotPinScreen');
     super.initState();
     context.read<PinAccountNotifier>().cekUserPin(context);
   }

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -22,6 +23,7 @@ class SignInForm extends StatefulWidget {
 class _SignInFormState extends State<SignInForm> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SignInForm');
     // var notif = Provider.of<WelcomeLoginNotifier>(context, listen: false);
 
     super.initState();

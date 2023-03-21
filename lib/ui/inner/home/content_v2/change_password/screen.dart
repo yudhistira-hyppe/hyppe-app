@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/ui/inner/home/content_v2/change_password/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/change_password/widget/button_change_password.dart';
 import 'package:hyppe/ui/inner/home/content_v2/change_password/widget/text_input_change_password.dart';
@@ -15,6 +16,7 @@ class HyppeChangePassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppeChangePassword');
     return Consumer<ChangePasswordNotifier>(
       builder: (_, notifier, __) => GestureDetector(
         onTap: () {

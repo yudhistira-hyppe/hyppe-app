@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -15,6 +16,13 @@ class SelfProfileBottom extends StatefulWidget {
 }
 
 class _SelfProfileBottomState extends State<SelfProfileBottom> {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SelfProfileBottom');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<SelfProfileNotifier>(

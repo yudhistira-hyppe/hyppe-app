@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 // import 'package:path/path.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -23,6 +24,7 @@ class SupportTicketScreen extends StatefulWidget {
 class _SupportTicketScreenState extends State<SupportTicketScreen> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SupportTicketScreen');
     final notifier = Provider.of<SupportTicketNotifier>(context, listen: false);
     notifier.getInitSupportTicket(context);
     notifier.descriptionController.clear();

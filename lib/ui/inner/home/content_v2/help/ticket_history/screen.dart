@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/widget/content_appeal_screen.dart';
@@ -24,6 +25,7 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'TicketHistoryScreen');
     context.read<TicketHistoryNotifier>().startOpenHistory(widget.data.values ?? []);
     super.initState();
   }

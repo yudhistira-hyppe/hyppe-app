@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -7,7 +8,6 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/bottom_item_view.dart';
-// import 'package:hyppe/ui/inner/home/content/diary/preview/widget/top_item_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/bottom_user_tag.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/top_item_view.dart';
@@ -23,6 +23,7 @@ class CenterItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'CenterItemView');
     SizeConfig().init(context);
     final _scaling = (MediaQuery.of(context).size.width - 16.0 - 16.0 - 8) / 3;
     // double _result = context.read<PreviewDiaryNotifier>().scaleDiary(context) < 100

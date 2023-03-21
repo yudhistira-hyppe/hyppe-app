@@ -58,6 +58,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'LifeCycleManager');
     _initializeFireFuture = _initializeFlutterFire();
     WidgetsBinding.instance.addObserver(this);
     _timerLink = Timer(const Duration(seconds: 2), () {

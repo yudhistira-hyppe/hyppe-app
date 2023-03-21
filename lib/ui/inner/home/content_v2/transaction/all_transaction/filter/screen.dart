@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -11,6 +12,7 @@ class AllTransactionFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'AllTransactionFilter');
     return Consumer2<FilterTransactionNotifier, TranslateNotifierV2>(builder: (_, notifier, notifier2, __) {
       return Scaffold(
           appBar: AppBar(

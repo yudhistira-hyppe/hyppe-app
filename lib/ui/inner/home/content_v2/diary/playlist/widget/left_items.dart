@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -53,6 +54,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'LeftItems');
     super.initState();
     // _controller = AnimationController(
     //   duration: const Duration(seconds: 3),

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -27,6 +28,7 @@ class ReviewBuyContentScreen extends StatefulWidget {
 class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ReviewBuyNotifier');
     var notifier = Provider.of<ReviewBuyNotifier>(context, listen: false);
     notifier.initState(context, widget.arguments);
 

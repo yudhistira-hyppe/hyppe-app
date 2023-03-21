@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
@@ -26,6 +27,7 @@ class CommentTile extends StatelessWidget {
   final email = SharedPreference().readStorage(SpKeys.email);
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'CommentTile');
     final comment = logs?.comment;
     final replies = logs?.comment?.detailDisquss;
     final repliesCount = replies?.length ?? 0;
@@ -41,7 +43,7 @@ class CommentTile extends StatelessWidget {
           CustomProfileImage(
             width: 36,
             height: 36,
-            onTap: () {},
+            onTap: () => System().navigateToProfile(context, logs?.comment?.sender ?? ''),
             imageUrl: System()
                 .showUserPicture(commentor?.avatar?.mediaEndpoint),
             following: true,

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/screen_v2.dart';
@@ -22,6 +23,7 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'StoryGroupScreen');
     super.initState();
     _pageController = PageController(initialPage: widget.argument.peopleIndex);
     _pageController.addListener(() => notifier.initialCurrentPage(_pageController.page));

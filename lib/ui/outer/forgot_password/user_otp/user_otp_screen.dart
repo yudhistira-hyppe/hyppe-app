@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_notifier.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/widget/sign_up_pin_top.dart';
@@ -29,6 +30,7 @@ class _UserOtpScreenState extends State<UserOtpScreen> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'UserOtpScreen');
     _notifier = Provider.of<UserOtpNotifier>(context, listen: false);
     _notifier.initState(widget.argument);
     super.initState();

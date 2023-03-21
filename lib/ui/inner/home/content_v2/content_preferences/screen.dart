@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -15,6 +16,12 @@ class ContentPreferencesScreen extends StatefulWidget {
 }
 
 class _ContentPreferencesScreenState extends State<ContentPreferencesScreen> {
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ContentPreferencesScreen');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;

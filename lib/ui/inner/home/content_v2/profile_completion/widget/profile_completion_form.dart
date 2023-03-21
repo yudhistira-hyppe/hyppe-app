@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
@@ -12,6 +13,7 @@ class ProfileCompletionForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ProfileCompletionForm');
     return Consumer<AccountPreferencesNotifier>(
       builder: (_, notifier, __) => Expanded(
         child: Column(

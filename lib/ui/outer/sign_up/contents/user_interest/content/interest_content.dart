@@ -1,6 +1,6 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_interest/content/interest_user_overview_tile.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_interest/user_interest_notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/widget/sign_up_button.dart';
@@ -18,6 +18,7 @@ class InterestContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'InterestContent');
     final notifier = context.watch<UserInterestNotifier>();
     final error = context.select((ErrorService value) => value.getError(ErrorType.getInterests));
 

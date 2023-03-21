@@ -2,6 +2,7 @@ import 'dart:core';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
@@ -120,6 +121,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   @override
   void initState() {
     // stopwatch = new Stopwatch()..start();
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'DiaryPlayerPage');
     print("[DIARY_PLAYER] initState() started. "+stopwatch.elapsed.toString());
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {

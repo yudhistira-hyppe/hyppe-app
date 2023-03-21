@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -26,6 +27,7 @@ class PicPlaylishScreen extends StatefulWidget {
 class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PicPlaylishScreen');
     context.incrementAdsCount();
 
     Future.delayed(Duration.zero, () async {

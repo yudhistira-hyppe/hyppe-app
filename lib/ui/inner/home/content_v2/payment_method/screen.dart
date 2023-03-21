@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -27,6 +28,7 @@ class PaymentMethodScreen extends StatefulWidget {
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PaymentMethodScreen');
     var nn = Provider.of<PaymentMethodNotifier>(context, listen: false);
     nn.initState(context);
     nn.bankSelected = '0';

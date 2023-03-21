@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -32,6 +33,7 @@ class HyppePreviewDiary extends StatefulWidget {
 class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewDiary');
     final notifier = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     // notifier.initialDiary(context, reload: true);
     notifier.scrollController.addListener(() => notifier.scrollListener(materialAppKey.currentContext ?? context));

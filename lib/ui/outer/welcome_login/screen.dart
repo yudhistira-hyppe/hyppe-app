@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/outer/welcome_login/widget/page_bottom.dart';
@@ -12,6 +13,13 @@ class WelcomeLoginScreen extends StatefulWidget {
 }
 
 class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'WelcomeLoginScreen');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

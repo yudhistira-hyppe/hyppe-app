@@ -1,4 +1,5 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/diary_player.dart';
@@ -29,6 +30,7 @@ class _HyppePlaylistDiariesState extends State<HyppePlaylistDiaries> with AfterF
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePlaylistDiaries');
     _pageController = PageController(initialPage: widget.argument.index.toInt());
     _pageController.addListener(() => notifier.currentPage = _pageController.page);
     super.initState();

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,6 +33,7 @@ class _FollowerScreenState extends State<FollowerScreen> with SingleTickerProvid
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'FollowerScreen');
     _tabController = TabController(length: 2, vsync: this, initialIndex: widget.argument.eventType == InteractiveEventType.follower ? 0 : 1);
     notifier.initState(context);
     super.initState();

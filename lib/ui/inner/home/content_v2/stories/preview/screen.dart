@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +27,7 @@ class HyppePreviewStories extends StatefulWidget {
 class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewStories');
     final notifier = Provider.of<PreviewStoriesNotifier>(context, listen: false);
     // notifier.initialStories(context);
     notifier.scrollController.addListener(() {

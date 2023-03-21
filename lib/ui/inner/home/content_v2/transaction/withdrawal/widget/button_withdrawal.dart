@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -14,6 +15,7 @@ class ButtonWithdrawalWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ButtonWithdrawalWidget');
     return Consumer<TransactionNotifier>(
       builder: (_, notifier, __) => SizedBox(
         width: SizeConfig.screenWidth,

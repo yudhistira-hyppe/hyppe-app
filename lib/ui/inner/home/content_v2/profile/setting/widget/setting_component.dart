@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -17,6 +18,7 @@ class SettingComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SettingComponent');
     final theme = Theme.of(context);
 
     return Column(

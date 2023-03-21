@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +37,7 @@ class _PageComponentState extends State<PageComponent> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PageComponent');
     final _notifier = Provider.of<NotificationNotifier>(context, listen: false);
     _scrollController.addListener(() => _notifier.scrollListener(context, _scrollController));
     super.initState();

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,13 @@ class UserFollowingList extends StatefulWidget {
 }
 
 class _UserFollowingListState extends State<UserFollowingList> {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'UserFollowersList');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final notifier = context.watch<FollowerNotifier>();

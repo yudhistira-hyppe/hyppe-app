@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
@@ -33,6 +34,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'AccountSearchContent');
     _translate = Provider.of<TranslateNotifierV2>(context, listen: false);
 
     _scrollController.addListener(() {

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -35,6 +36,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'CommentsDetailScreen');
     final notifier = context.read<CommentNotifierV2>();
     final postID = widget.argument.postID;
     final fromFront = widget.argument.fromFront;
@@ -316,7 +318,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
             onTap: () {},
             imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint),
             following: true,
-            onFollow: () {},
+            onFollow: () => System().navigateToProfile(context, data.email ?? ''),
           ),
           twelvePx,
           Expanded(
@@ -325,7 +327,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
               children: [
                 UserTemplate(
                     username: '${data.username}',
-                    isVerified: data.privacy?.isIdVerified ?? (data.isIdVerified ?? false),
+                    isVerified: data.isIdVerified ?? (data.privacy?.isIdVerified ?? false),
                     date: data.createdAt ?? DateTime.now().toString()),
                 twoPx,
                 Row(

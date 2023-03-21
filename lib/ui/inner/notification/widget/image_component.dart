@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
@@ -12,10 +13,8 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
-import 'package:provider/provider.dart';
 
 class ImageComponent extends StatelessWidget {
   final double width;
@@ -29,6 +28,7 @@ class ImageComponent extends StatelessWidget {
   const ImageComponent({Key? key, required this.data, this.width = 50, this.height = 50, this.borderRadiusGeometry, this.postType, this.postID}) : super(key: key);
 
   Future onGetContentData(BuildContext context, FeatureType featureType, Function(dynamic) callback) async {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ImageComponent');
     print('ini imagecomponen');
     final getStory = PostsBloc();
     final List<ContentData> _listContentData = [];
@@ -47,6 +47,7 @@ class ImageComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ComponentShimmer');
     SizeConfig().init(context);
     print('notifikasi data ${data}');
     if (data != null) {

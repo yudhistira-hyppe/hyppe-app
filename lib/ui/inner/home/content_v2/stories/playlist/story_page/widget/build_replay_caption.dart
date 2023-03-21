@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -21,6 +22,7 @@ class BuildReplayCaption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildReplayCaption');
     SizeConfig().init(context);
 
     final double _showBottomPos = (MediaQuery.of(context).viewInsets.bottom + SizeWidget().calculateSize(60, SizeWidget.baseHeightXD, SizeConfig.screenHeight!));

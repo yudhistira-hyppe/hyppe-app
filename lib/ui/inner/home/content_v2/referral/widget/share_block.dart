@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/referral_list_user.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -18,6 +19,13 @@ class ShareBlock extends StatefulWidget {
 }
 
 class _ShareBlockState extends State<ShareBlock> {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ShareBlock');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ReferralNotifier>(

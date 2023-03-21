@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
@@ -136,6 +137,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDSuccess');
     super.initState();
     // if (widget.playMode == ModeTypeAliPLayer.auth) {
     //   getAuth();

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -12,6 +13,7 @@ class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key, required this.child, this.onBackPressed, this.onWillPopScope, this.onKeyboardDisposal}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SignUpScreen');
     SizeConfig().init(context);
     return WillPopScope(
       onWillPop: onWillPopScope,

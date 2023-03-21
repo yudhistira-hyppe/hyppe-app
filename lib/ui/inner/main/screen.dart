@@ -1,4 +1,4 @@
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/inner/home/widget/profile.dart';
@@ -11,9 +11,7 @@ import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/main/widget/notification_circle.dart';
 
 import '../../../core/constants/shared_preference_keys.dart';
-import '../../../core/services/route_observer_service.dart';
 import '../../../core/services/shared_preference.dart';
-import '../../constant/widget/after_first_layout_mixin.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -27,6 +25,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'MainScreen');
     _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
     _mainNotifier.initMain(context, isInitSocket: true);
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);

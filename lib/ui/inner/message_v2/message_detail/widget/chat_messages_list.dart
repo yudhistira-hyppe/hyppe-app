@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ class ChatMessageList extends StatefulWidget {
 class _ChatMessageListState extends State<ChatMessageList> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ChatMessageList');
     final _notifier = Provider.of<MessageDetailNotifier>(context, listen: false);
     _notifier.scrollController.addListener(() => _notifier.scrollListener(context));
     super.initState();

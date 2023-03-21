@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -24,6 +25,7 @@ class UserAgreementDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'UserAgreementDemoScreen');
     return FutureBuilder<String>(
       future: initDummyEula(),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../../core/constants/asset_path.dart';
@@ -11,6 +12,7 @@ class TopItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'TopItemView');
     SizeConfig().init(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,

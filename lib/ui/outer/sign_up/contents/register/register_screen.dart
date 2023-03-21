@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/register/content/register_form.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/register/notifier.dart';
@@ -9,6 +10,7 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'RegisterScreen');
     SizeConfig().init(context);
     return Consumer<RegisterNotifier>(
       builder: (_, notifier, __) => SignUpScreen(

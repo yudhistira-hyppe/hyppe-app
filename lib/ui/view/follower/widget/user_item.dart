@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/services/system.dart';
 
@@ -8,7 +9,6 @@ import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
 
 import 'package:hyppe/core/models/collection/follow/interactive_follow.dart';
-import 'package:hyppe/ui/view/follower/widget/button_widget.dart';
 
 class UserItem extends StatefulWidget {
   final Function() onTap;
@@ -24,6 +24,13 @@ class UserItem extends StatefulWidget {
 }
 
 class _UserItemState extends State<UserItem> {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'UserItem');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(

@@ -48,7 +48,6 @@ import 'package:hyppe/ui/inner/home/content_v2/referral/screen.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/player/story_player.dart';
-import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_group/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/bank_account/screen.dart';
@@ -72,10 +71,8 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/success_screen.da
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/eula.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/preview.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/verification_id/verification_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 
-import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
@@ -118,7 +115,6 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail.da
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/sign_in_security/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/change_password/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/screen.dart';
 
 import '../core/arguments/detail_ticket_argument.dart';
@@ -289,8 +285,6 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const VerificationIDFailed());
       case Routes.verificationIDSuccess:
         return MaterialPageRoute(builder: (_) => const VerificationIDSuccess());
-      case Routes.verificationIDLoading:
-        return MaterialPageRoute(builder: (_) => const VerificationIDLoading());
       case Routes.deleteAccount:
         return MaterialPageRoute(builder: (_) => const HyppeDeleteAccoount());
       case Routes.confirmDeleteAccount:

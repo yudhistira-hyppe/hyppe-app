@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -16,6 +17,7 @@ class SelfProfileDiaries extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SelfProfileDiaries');
     return Consumer<SelfProfileNotifier>(builder: (_, notifier, __) {
       return notifier.user.diaries != null
           ? notifier.user.diaries!.isEmpty

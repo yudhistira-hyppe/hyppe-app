@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -29,6 +30,7 @@ class PaymentSummaryScreen extends StatefulWidget {
 class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PaymentSummaryScreen');
     var nn = Provider.of<PaymentSummaryNotifier>(context, listen: false);
     nn.initState(context);
     super.initState();

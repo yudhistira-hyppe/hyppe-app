@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -30,6 +31,7 @@ class ContentSearchState extends State<ContentSearch> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'AllSearchShimmer');
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
     // _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
     super.initState();

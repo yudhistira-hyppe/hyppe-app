@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -15,6 +16,7 @@ class OtherProfileBottom extends StatefulWidget {
 class _OtherProfileBottomState extends State<OtherProfileBottom> {
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'OtherProfileBottom');
     return Consumer<OtherProfileNotifier>(
       builder: (_, notifier, __) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

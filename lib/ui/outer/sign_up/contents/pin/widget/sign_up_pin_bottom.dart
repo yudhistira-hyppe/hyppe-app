@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
@@ -14,6 +15,7 @@ class SignUpPinBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SignUpPinBottom');
     return Consumer<SignUpPinNotifier>(
       builder: (_, notifier, __) => SafeArea(
         child: CustomElevatedButton(

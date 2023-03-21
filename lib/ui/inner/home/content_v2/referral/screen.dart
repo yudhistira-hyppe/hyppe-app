@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -23,6 +24,7 @@ class Referral extends StatefulWidget {
 class _ReferralState extends State<Referral> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'Referral');
     final notifier = Provider.of<ReferralNotifier>(context, listen: false);
     Future.delayed(Duration.zero, () => notifier.onInitial(context));
 

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -27,6 +28,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'OtherProfileScreen');
     print('other profile');
     final notifier = Provider.of<OtherProfileNotifier>(context, listen: false);
     Future.delayed(Duration.zero, () => notifier.initialOtherProfile(context, argument: widget.arguments));

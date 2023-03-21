@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart';
@@ -16,6 +17,7 @@ class ProfileCompletion extends StatefulWidget {
 class _ProfileCompletionState extends State<ProfileCompletion> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ProfileCompletion');
     final notifier =
         Provider.of<AccountPreferencesNotifier>(context, listen: false);
     Future.delayed(

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -23,6 +24,7 @@ class _ListBoostScreenState extends State<ListBoostScreen> {
   final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ListBoostScreen');
     final _notifier = Provider.of<ListBoostNotifier>(context, listen: false);
     _notifier.getInitBoost(context);
     _scrollController.addListener(() => _notifier.scrollList(context, _scrollController));

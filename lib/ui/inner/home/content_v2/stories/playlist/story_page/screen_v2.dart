@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_bottom_view.dart';
@@ -53,6 +54,7 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'StoryPageV2');
     // isLoading = false;
     currentData = widget.stories[0];
     animationController = AnimationController(vsync: this, duration: const Duration(seconds: 10));

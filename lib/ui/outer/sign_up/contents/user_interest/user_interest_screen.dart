@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -22,6 +23,7 @@ class UserInterestScreen extends StatefulWidget {
 class _UserInterestScreenState extends State<UserInterestScreen> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'UserInterestScreen');
     print(widget.arguments.userInterested);
     final notifier = Provider.of<UserInterestNotifier>(context, listen: false);
     Future.delayed(Duration.zero, () => notifier.initUserInterest(context, widget.arguments));

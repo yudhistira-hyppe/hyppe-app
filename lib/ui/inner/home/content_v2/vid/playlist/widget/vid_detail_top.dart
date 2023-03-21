@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -42,6 +43,7 @@ class VidDetailTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VidDetailTop');
     SizeConfig().init(context);
     final _themes = Theme.of(context);
     final translate = context.read<TranslateNotifierV2>().translate;

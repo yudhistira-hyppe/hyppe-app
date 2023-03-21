@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
@@ -29,6 +30,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'InterestTabLayout');
     currentType = HyppeType.HyppeVid;
     final notifier = context.read<SearchNotifier>();
     notifier.initDetailInterest();

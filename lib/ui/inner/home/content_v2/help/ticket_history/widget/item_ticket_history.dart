@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -21,6 +22,7 @@ class ItemTicketHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ItemTicketHistory');
     final isDarkMode = context.isDarkMode();
     final fixDate = data.dateTime?.split('T')[0];
     return GestureDetector(

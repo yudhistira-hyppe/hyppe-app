@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
@@ -18,6 +19,7 @@ class RectangleInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'RectangleInput');
     return Consumer<SignUpPinNotifier>(
       builder: (_, notifier, __) => Flexible(
         child: RawKeyboardListener(

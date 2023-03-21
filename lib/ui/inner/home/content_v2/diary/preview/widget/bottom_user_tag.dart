@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -13,6 +14,7 @@ class BottomUserView extends StatelessWidget {
   const BottomUserView({Key? key, this.data}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'BottomUserView');
     SizeConfig().init(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,

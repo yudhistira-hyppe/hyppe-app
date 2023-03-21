@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -18,6 +19,7 @@ class TopWithdrawalWodget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'TopWithdrawalWodget');
     return Consumer<TransactionNotifier>(
       builder: (_, notifier, __) => Container(
         padding: const EdgeInsets.all(11.0),

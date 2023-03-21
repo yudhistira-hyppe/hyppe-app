@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -22,6 +23,7 @@ class SettingTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SettingTile');
     final theme = Theme.of(context);
 
     return InkWell(

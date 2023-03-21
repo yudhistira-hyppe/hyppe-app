@@ -8,7 +8,6 @@ import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/query_request/users_data_query.dart';
@@ -91,7 +90,11 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
   void updateView(BuildContext context) => System().increaseViewCount(context, _data ?? ContentData()).whenComplete(() => notifyListeners());
 
-  Future initState(BuildContext context, VidDetailScreenArgument routeArgument) async {
+  initialize(){
+    _loadDetail = true;
+  }
+
+  Future initState(BuildContext context, VidDetailScreenArgument routeArgument) async{
     _routeArgument = routeArgument;
 
     if (_routeArgument?.postID != null) {

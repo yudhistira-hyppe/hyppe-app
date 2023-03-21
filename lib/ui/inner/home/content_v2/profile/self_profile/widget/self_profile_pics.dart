@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
@@ -12,9 +13,6 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/empty
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/sensitive_content.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
 import 'package:provider/provider.dart';
-import 'package:tuple/tuple.dart';
-
-import '../../../../../../constant/widget/custom_loading.dart';
 
 class SelfProfilePics extends StatelessWidget {
   const SelfProfilePics({Key? key}) : super(key: key);
@@ -22,6 +20,7 @@ class SelfProfilePics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<SelfProfileNotifier>(builder: (_, notifier, __) {
+      FirebaseCrashlytics.instance.setCustomKey('layout', 'SelfProfilePics');
       return notifier.user.pics != null
           ? notifier.user.pics!.isEmpty
               ? const EmptyWidget()

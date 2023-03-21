@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -30,6 +31,7 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
   String dataText = '';
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStep1');
     final ntfr = Provider.of<VerificationIDNotifier>(context, listen: false);
     ntfr.clearAllTempData();
     readFile();

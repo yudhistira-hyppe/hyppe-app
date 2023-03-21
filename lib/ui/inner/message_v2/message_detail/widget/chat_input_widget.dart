@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ class ChatInputWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ChatInputWidget');
     return Consumer2<MessageDetailNotifier, TranslateNotifierV2>(
       builder: (_, notifier, notifier2, __) => Container(
         color: Theme.of(context).colorScheme.surface,

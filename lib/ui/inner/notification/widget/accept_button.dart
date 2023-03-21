@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/models/collection/notification_v2/notification.dart';
@@ -16,6 +17,7 @@ class AcceptButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'AcceptButton');
     final theme = Theme.of(context);
 
     return SizedBox(

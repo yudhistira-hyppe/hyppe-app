@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -19,6 +20,13 @@ class InsertReferral extends StatefulWidget {
 }
 
 class _InsertReferralState extends State<InsertReferral> {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ShareBlock');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

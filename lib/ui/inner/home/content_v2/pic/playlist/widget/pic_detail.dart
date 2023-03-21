@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
@@ -44,6 +45,12 @@ class _PicDetailState extends State<PicDetail> {
       transformationController.value = Matrix4.identity();
       setState(() {});
     }
+  }
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PicDetail');
+    super.initState();
   }
 
   @override
