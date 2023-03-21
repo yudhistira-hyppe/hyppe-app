@@ -695,6 +695,45 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                 ),
               ),
             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
+            Positioned.fill(
+              bottom: 40,
+              child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: GestureDetector(
+                    child: Container(
+                      height: 40,
+                      margin: EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 5),
+                            width: skipAdsCurent == 0 ? null : 100,
+                            child: Text(
+                              skipAdsCurent > 0 ? " Your video will begin in $skipAdsCurent" : " SkipdAds",
+                              maxLines: 3,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.white, fontSize: 10),
+                            ),
+                          ),
+                          skipAdsCurent == 0
+                              ? Icon(
+                                  Icons.skip_next,
+                                  color: Colors.white,
+                                )
+                              : Container(),
+                          Container(
+                              child: Image.network(
+                            (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
+                          ))
+                        ],
+                      ),
+                    ),
+                  )),
+            ),
             if (!isPlay)
               Center(
                 child: GestureDetector(
