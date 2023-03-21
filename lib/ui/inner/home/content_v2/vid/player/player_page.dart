@@ -65,6 +65,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   Map<String, dynamic>? _dataSourceAdsMap;
   String urlVid = '';
   String _savePath = '';
+  bool isMute = false;
 
   bool isPlay = false;
   bool onTapCtrl = false;
@@ -735,7 +736,6 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
 
             _buildProgressBar(widget.width ?? 0, widget.height ?? 0),
             // _buildTipsWidget(widget.width ?? 0, widget.height ?? 0),
-
             if (isPlay && adsData == null)
               Align(
                 alignment: Alignment.topCenter,
@@ -1181,6 +1181,22 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                           isActiveAds ? _currentAdsPosition = value.ceil() : _currentPosition = value.ceil();
                         });
                       }),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isMute = !isMute;
+                  });
+                  fAliplayer?.setMuted(isMute);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: CustomIconWidget(
+                    iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                    defaultColor: false,
+                    height: 24,
+                  ),
                 ),
               ),
               GestureDetector(

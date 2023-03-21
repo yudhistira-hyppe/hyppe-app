@@ -116,51 +116,13 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
         width: 343,
         margin: EdgeInsets.only(left: 16.0, right: 16.0, top: widget.topMargin),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    CustomTextWidget(
-                      textToDisplay: notifier.message,
-                      textStyle: Theme.of(context).textTheme.caption,
-                    ),
-                  ],
-                ),
-                // Container(
-                //   height: 30,
-                //   child: Consumer<PreUploadContentNotifier>(
-                //     builder: (_, value, __) {
-                //       return CustomTextButton(
-                //         onPressed: () {
-                //           if (value.progressDev == 1.0) {
-                //             print('Do nothing, because is in Finishing up... state');
-                //           } else {
-                //             if (value.isLoading) {
-                //               context.read<PreUploadContentNotifier>().cancelUpload = true;
-                //             } else {
-                //               context.read<PreUploadContentNotifier>().showProgress = false;
-                //             }
-                //           }
-                //         },
-                //         style: Theme.of(context).textButtonTheme.style.copyWith(padding: MaterialStateProperty.all(EdgeInsets.zero)),
-                //         child: CustomTextWidget(
-                //           textToDisplay: value.isLoading ? value.language.cancelPost : 'Ok',
-                //           textStyle: Theme.of(context).textTheme.button.apply(
-                //                 color: value.progressDev == 1.0
-                //                     ? Theme.of(context).colorScheme.secondary
-                //                     : Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
-                //               ),
-                //         ),
-                //       );
-                //     },
-                //   ),
-                // )
-              ],
+            CustomTextWidget(
+              textToDisplay: notifier.message,
+              textStyle: Theme.of(context).textTheme.caption,
             ),
-            onePx,
+            tenPx,
             ClipRRect(
               borderRadius: BorderRadius.circular(40.0),
               child: LinearProgressIndicator(

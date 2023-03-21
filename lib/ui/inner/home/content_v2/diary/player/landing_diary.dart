@@ -379,10 +379,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
     }
-    print("dispose dari diary");
     fAliplayer?.stop();
-    fAliplayer?.destroy();
-
+    if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
+      fAliplayer?.destroy();
+    }
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
@@ -618,6 +618,22 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           // _buildProgressBar(SizeConfig.screenWidth!, 500),
                                           _buildBody(context, SizeConfig.screenWidth, notifier.diaryData?[index] ?? ContentData()),
                                           blurContentWidget(context, notifier.diaryData?[index] ?? ContentData()),
+                                          Positioned.fill(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                fAliplayer?.play();
+                                                setState(() {
+                                                  isMute = !isMute;
+                                                });
+                                                fAliplayer?.setMuted(isMute);
+                                              },
+                                              child: Container(
+                                                color: Colors.transparent,
+                                                width: SizeConfig.screenWidth,
+                                                height: SizeConfig.screenHeight,
+                                              ),
+                                            ),
+                                          ),
                                           dataSelected?.postID == notifier.diaryData?[index].postID && isPlay
                                               ? Container()
                                               : CustomBaseCacheImage(
