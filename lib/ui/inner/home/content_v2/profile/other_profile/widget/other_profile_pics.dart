@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -18,6 +19,7 @@ class OtherProfilePics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'OtherProfilePics');
     return Selector<OtherProfileNotifier, Tuple3<UserInfoModel?, int, bool>>(
       selector: (_, select) => Tuple3(select.user, select.picCount, select.picHasNext),
       builder: (_, notifier, __) => notifier.item1 != null

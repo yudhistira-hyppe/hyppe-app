@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -74,6 +75,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'DetailHashtagScreen');
     final notifier = context.read<SearchNotifier>();
     notifier.initDetailHashtag();
 

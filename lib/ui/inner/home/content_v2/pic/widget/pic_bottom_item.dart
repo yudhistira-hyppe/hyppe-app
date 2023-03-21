@@ -1,15 +1,7 @@
-import 'dart:ffi';
-
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:provider/provider.dart';
-
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
 
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -25,6 +17,7 @@ class PicBottomItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PicBottomItem');
     SizeConfig().init(context);
     return Consumer<LikeNotifier>(
       builder: (context, value, child) {

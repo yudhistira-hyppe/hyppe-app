@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -16,6 +17,13 @@ class QRBlock extends StatefulWidget {
 }
 
 class _QRBlockState extends State<QRBlock> {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'QRBlock');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ReferralNotifier>(

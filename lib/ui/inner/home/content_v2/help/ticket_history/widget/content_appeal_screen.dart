@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/widget/item_content_appeal.dart';
@@ -22,6 +23,7 @@ class _ContentAppealScreenState extends State<ContentAppealScreen> with AfterFir
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ContentAppealScreen');
     final notifier = Provider.of<TicketHistoryNotifier>(context, listen: false);
     notifier.startLoad();
     _scrollController.addListener(() {

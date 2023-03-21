@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
@@ -12,6 +13,7 @@ class VerificationPinBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationPinBottom');
     return Consumer2<PinAccountNotifier, TranslateNotifierV2>(
       builder: (_, notifier, notifier2, __) => Padding(
         padding: const EdgeInsets.all(16.0),

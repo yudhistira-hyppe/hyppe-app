@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -19,6 +20,7 @@ import '../../../../../notifier_v2.dart';
 class MyFrameStory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'MyFrameStory');
     SizeConfig().init(context);
     final notifier = Provider.of<PreviewStoriesNotifier>(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.peopleStory));

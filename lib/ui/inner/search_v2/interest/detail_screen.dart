@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
@@ -32,6 +33,7 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with Single
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'InterestDetailScreen');
     _tabController = TabController(length: 6, vsync: this);
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
     _tabController.addListener(() {

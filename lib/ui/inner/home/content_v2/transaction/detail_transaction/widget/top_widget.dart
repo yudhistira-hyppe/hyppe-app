@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -10,7 +11,6 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/widget/two_column_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/screen.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +22,7 @@ class TopDetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'TopDetailWidget');
     if (data?.type == TransactionType.withdrawal) {
       return withdrawWidget(context);
     } else if (data?.type == TransactionType.reward) {

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -19,6 +20,13 @@ class VerificationIDStep2 extends StatefulWidget {
 }
 
 class _VerificationIDStep2State extends State<VerificationIDStep2> {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStep2');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -19,6 +20,7 @@ class ListDataBankAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ListDataBankAccount');
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(

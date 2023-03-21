@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 class PicDetailShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PicDetailShimmer');
     return AspectRatio(
       aspectRatio: 16 / 9,
       child: Stack(

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -44,6 +45,7 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'MessageScreen');
     // notifier.initialData(context);
     _notifier.getDiscussion(context, reload: true);
     _scrollController.addListener(() => _notifier.scrollListener(context, _scrollController));

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -45,6 +46,14 @@ class NewVideoDetailScreen extends StatefulWidget {
 }
 
 class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterFirstLayoutMixin {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'NewVideoDetailScreen');
+    context.read<VidDetailNotifier>().initialize();
+    super.initState();
+  }
+
   @override
   void afterFirstLayout(BuildContext context) {
     // context.read<VidDetailNotifier>().getDetail(context, 'c3690a7d-d6a4-47fc-c068-71a1ae4225c4');

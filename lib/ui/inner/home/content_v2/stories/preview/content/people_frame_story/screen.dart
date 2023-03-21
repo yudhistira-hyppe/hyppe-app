@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/stories/notifier.dart';
@@ -29,6 +30,7 @@ class PeopleFrameStory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PeopleFrameStory');
     final getData = data?.story?[0];
     SizeConfig().init(context);
     final _themes = Theme.of(context);

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -19,6 +20,7 @@ class OtherProfileDiaries extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'OtherProfileDiaries');
     return Selector<OtherProfileNotifier, Tuple3<UserInfoModel?, int, bool>>(
       selector: (_, select) => Tuple3(select.user, select.diaryCount, select.diaryHasNext),
       builder: (_, notifier, __) => notifier.item1 != null

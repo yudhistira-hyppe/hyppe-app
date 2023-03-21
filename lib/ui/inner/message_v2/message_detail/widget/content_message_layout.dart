@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/services/system.dart';
 
@@ -17,6 +18,7 @@ class ContentMessageLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ContentMessageLayout');
     return Hero(
       tag: message.hashCode,
       child: InkWell(

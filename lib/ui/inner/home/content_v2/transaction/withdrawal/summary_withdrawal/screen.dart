@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -15,6 +16,7 @@ class SummaryWithdrawalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SummaryWithdrawalScreen');
     return Consumer2<TransactionNotifier, TranslateNotifierV2>(
       builder: (_, notifier, notifier2, __) => Scaffold(
         appBar: AppBar(

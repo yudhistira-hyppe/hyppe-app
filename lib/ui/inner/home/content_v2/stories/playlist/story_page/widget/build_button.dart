@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,13 @@ class BuildButton extends StatefulWidget {
 }
 
 class _BuildButtonState extends State<BuildButton> {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildButton');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<StoriesPlaylistNotifier>(context);

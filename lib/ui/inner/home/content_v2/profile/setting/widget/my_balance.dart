@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -11,6 +12,7 @@ class MyBalance extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'MyBalance');
     return Consumer<TransactionNotifier>(
       builder: (context, value, child) => Container(
         constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -19,6 +20,7 @@ class _FilterLandingState extends State<FilterLanding> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'FilterLanding');
     super.initState();
     // final homeNotifier = Provider.of<HomeNotifier>(context, listen: false);
   }

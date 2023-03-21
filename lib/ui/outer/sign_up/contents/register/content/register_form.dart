@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/register/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/widget/sign_up_button.dart';
@@ -16,6 +17,7 @@ class RegisterForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'RegisterForm');
     return Consumer<RegisterNotifier>(
       builder: (_, notifier, __) => SingleChildScrollView(
         child: Container(

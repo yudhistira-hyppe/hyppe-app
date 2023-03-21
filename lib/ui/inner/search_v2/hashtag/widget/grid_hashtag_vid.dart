@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,7 @@ class GridHashtagVid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'GridHashtagVid');
     return Selector<SearchNotifier, Tuple3<SearchContentModel?, int, bool>>(
         selector: (_, select) =>Tuple3(select.detailHashTag, select.detailHashTag?.vid?.length ?? 0, select.loadTagDetail),
         builder: (context, ref, _) {

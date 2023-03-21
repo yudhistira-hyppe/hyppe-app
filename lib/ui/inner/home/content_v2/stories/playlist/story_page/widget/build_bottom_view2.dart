@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -20,6 +21,13 @@ class BuildBottomView2 extends StatefulWidget {
 }
 
 class _BuildBottomView2State extends State<BuildBottomView2> with AfterFirstLayoutMixin {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildBottomView2');
+    super.initState();
+  }
+
   @override
   void afterFirstLayout(BuildContext context) {
     final notifier = context.read<StoriesPlaylistNotifier>();

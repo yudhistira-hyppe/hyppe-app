@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -21,6 +22,7 @@ class ThumbnailContentSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ThumbnailContentSearch');
     SizeConfig().init(context);
     final _scaling = (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 3;
     String gambar;

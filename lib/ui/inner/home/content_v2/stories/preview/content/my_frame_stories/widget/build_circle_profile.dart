@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -25,6 +26,7 @@ class BuildCircleProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildCircleProfile');
     SizeConfig().init(context);
     return InkWell(
       // onTap: () => context.read<PreviewStoriesNotifier>().onTapHandler(context),

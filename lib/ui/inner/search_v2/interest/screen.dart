@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -24,6 +25,13 @@ class InterestScreen extends StatefulWidget {
 }
 
 class _InterestScreenState extends State<InterestScreen> {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'InterestScreen');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<SearchNotifier>(builder: (context, notifier, child) {

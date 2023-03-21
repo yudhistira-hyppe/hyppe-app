@@ -1,20 +1,13 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_thumb_image.dart';
 import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/notifier_v2.dart';
-import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/ui/constant/entities/like/notifier.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
@@ -32,6 +25,7 @@ class VideoThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VideoThumbnail');
     SizeConfig().init(context);
     return Stack(
       children: [

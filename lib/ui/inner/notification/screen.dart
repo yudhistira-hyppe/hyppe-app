@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/error_service.dart';
@@ -17,6 +18,7 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> with AfterFirstLayoutMixin{
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'NotificationScreen');
     super.initState();
   }
 

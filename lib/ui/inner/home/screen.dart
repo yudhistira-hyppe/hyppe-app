@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -45,6 +46,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     {"id": '2', 'name': "Diary"},
     {"id": '3', 'name': "Vid"},
   ];
+
+
 
   @override
   void didChangeDependencies() {
@@ -104,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeScreen');
     isHomeScreen = true;
     'isOnHomeScreen $isHomeScreen'.logger();
     _tabController = TabController(length: 3, vsync: this);

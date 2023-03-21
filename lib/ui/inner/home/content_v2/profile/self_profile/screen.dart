@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
@@ -39,6 +40,7 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SelfProfileScreen');
     print('asdasdad');
     final notifier = context.read<SelfProfileNotifier>();
     notifier.setPageIndex(0);

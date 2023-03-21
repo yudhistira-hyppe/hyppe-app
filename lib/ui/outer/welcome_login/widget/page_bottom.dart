@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/ui/constant/widget/button_sosmed.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -16,6 +17,13 @@ class PageBottom extends StatefulWidget {
 }
 
 class _PageBottomState extends State<PageBottom> {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PageBottom');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<WelcomeLoginNotifier>(

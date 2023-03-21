@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/size_config.dart';
@@ -9,6 +10,7 @@ class PicTopItem extends StatelessWidget {
   const PicTopItem({Key? key, this.data}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PicTopItem');
     SizeConfig().init(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,

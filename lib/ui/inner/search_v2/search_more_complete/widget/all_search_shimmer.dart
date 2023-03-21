@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -7,6 +8,7 @@ class AllSearchShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'AllSearchShimmer');
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),

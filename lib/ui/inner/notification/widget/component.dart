@@ -1,9 +1,7 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/notification_v2/notification.dart';
-import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-// import 'package:hyppe/core/models/collection/notifications/notifications_data.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -24,6 +22,7 @@ class Component extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'Component');
     SizeConfig().init(context);
     return InkWell(
       onTap: () {

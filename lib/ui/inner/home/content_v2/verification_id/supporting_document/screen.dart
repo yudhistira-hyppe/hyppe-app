@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -22,6 +23,7 @@ class _VerificationIDStepSupportingDocsState
     extends State<VerificationIDStepSupportingDocs> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStepSupportingDocs');
     final ntfr = Provider.of<VerificationIDNotifier>(context, listen: false);
     ntfr.initSupportDocs();
     super.initState();

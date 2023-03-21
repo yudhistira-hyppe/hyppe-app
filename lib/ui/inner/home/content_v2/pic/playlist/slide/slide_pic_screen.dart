@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -50,6 +51,7 @@ class SlidePicScreen extends StatefulWidget {
 class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMixin {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SlidePicScreen');
     print('pindah screen ${widget.data.certified ?? false}');
     if (widget.data.certified ?? false) {
       print('pindah screen2 ${widget.data.certified ?? false}');

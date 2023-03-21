@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -16,6 +17,13 @@ class OpeningLogo extends StatefulWidget {
 }
 
 class _OpeningLogoState extends State<OpeningLogo> with AfterFirstLayoutMixin {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'OpeningLogo');
+    super.initState();
+  }
+
   @override
   void afterFirstLayout(BuildContext context) {
     if (widget.isLaunch) {

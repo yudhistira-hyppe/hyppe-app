@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/config/ali_config.dart';
@@ -28,6 +29,12 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
   final _notifier = VidDetailNotifier();
 
   Orientation? orientation = Orientation.portrait;
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VidDetailScreen');
+    super.initState();
+  }
 
   @override
   void afterFirstLayout(BuildContext context) {

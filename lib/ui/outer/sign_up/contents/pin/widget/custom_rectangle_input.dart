@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class CustomRectangleInput extends StatelessWidget {
   CustomRectangleInput({required this.afterSuccess});
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'CustomRectangleInput');
     final theme = Theme.of(context);
     return Consumer<SignUpPinNotifier>(
       builder: (_, notifier, __) => SizedBox(

@@ -1,10 +1,7 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/gestures.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-// ignore: unused_import
-import 'package:hyppe/ui/constant/widget/custom_hovered_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_rich_text_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/outer/login/notifier.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +13,7 @@ class SignUpOrGoogle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SignUpOrGoogle');
     return Consumer<LoginNotifier>(
       builder: (_, notifier, __) => Expanded(
         child: Column(

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/ui/inner/notification/widget/component.dart';
 import 'package:hyppe/ui/inner/notification/widget/component_shimmer.dart';
@@ -5,7 +6,6 @@ import 'package:hyppe/ui/inner/notification/widget/page_component.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
-import 'package:hyppe/ui/inner/notification/widget/accept_button.dart';
 
 class FollowNotification extends StatelessWidget {
   final NotificationCategory category;
@@ -14,6 +14,7 @@ class FollowNotification extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'FollowNotification');
     return Consumer<NotificationNotifier>(
       builder: (context, notifier, child) {
         final _data = category == NotificationCategory.follower ? notifier.followData() : notifier.followingData();

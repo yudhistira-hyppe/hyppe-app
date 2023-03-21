@@ -1,7 +1,7 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/enum.dart';
 
 class AliPlayer extends StatefulWidget {
@@ -16,6 +16,7 @@ class _AliPlayerState extends State<AliPlayer> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'AliPlayer');
     // Listens to successful preparation.
     fAliplayer.setOnPrepared((playerId) {});
 // Listens to the display of the first frame.

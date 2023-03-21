@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
@@ -76,6 +77,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   bool _isStartFullScreen = false;
   StreamSubscription<NativeDeviceOrientation>? _orientationStream;
   final _nativeDeviceOrientationCommunicator = NativeDeviceOrientationCommunicator();
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VideoPlayerPage');
+    super.initState();
+  }
 
   void _resetOrintationStream() {
     _orientationStream?.cancel();

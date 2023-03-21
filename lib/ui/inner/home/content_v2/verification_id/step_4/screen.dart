@@ -1,16 +1,14 @@
 import 'dart:io';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/ui/constant/entities/camera/screen.dart';
 import 'package:hyppe/ui/constant/entities/camera//widgets/camera_flash_button.dart';
-import 'package:hyppe/ui/constant/entities/camera/widgets/camera_switch_button.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/screen.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
@@ -29,6 +27,7 @@ class VerificationIDStep4 extends StatefulWidget {
 class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAware {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStep4');
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     super.initState();
   }

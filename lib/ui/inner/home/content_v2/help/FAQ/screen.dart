@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:hyppe/core/arguments/faq_argument.dart';
@@ -30,6 +31,7 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'FAQDetailScreen');
     return Consumer<TranslateNotifierV2>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(

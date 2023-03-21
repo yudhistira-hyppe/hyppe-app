@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -46,6 +47,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'StoryPage');
     if (widget.data != null) {
       _when = '${System().readTimestamp(
         DateTime.parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch,

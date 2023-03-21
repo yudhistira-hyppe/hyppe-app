@@ -1,19 +1,18 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/initial/hyppe/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/outer/login/notifier.dart';
-import 'package:provider/provider.dart';
 
 class PageTop extends StatelessWidget {
   const PageTop({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PageTop');
     bool _themeState = SharedPreference().readStorage(SpKeys.themeData) ?? false;
 
     return Column(

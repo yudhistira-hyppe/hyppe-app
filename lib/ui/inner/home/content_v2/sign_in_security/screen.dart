@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -20,6 +21,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
   var setPin = SharedPreference().readStorage(SpKeys.setPin);
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppeHomeSignAndSecurity');
     SizeConfig().init(context);
     return Consumer<TranslateNotifierV2>(
       builder: (_, notifier, __) => Scaffold(

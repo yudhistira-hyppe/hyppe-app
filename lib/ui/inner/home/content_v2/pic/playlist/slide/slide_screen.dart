@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -38,6 +39,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SlidedPicDetail');
     WidgetsBinding.instance.addObserver(this);
 
     _notifier.setMainIndex(0);

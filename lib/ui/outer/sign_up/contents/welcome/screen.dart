@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -22,6 +23,7 @@ class _SignUpWelcomeState extends State<SignUpWelcome> with SingleTickerProvider
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SignUpWelcome');
     Provider.of<SignUpWelcomeNotifier>(context, listen: false).initWelcome(context);
     _tabController = TabController(length: 5, vsync: this);
     super.initState();

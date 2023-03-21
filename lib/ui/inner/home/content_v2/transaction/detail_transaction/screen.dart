@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -17,6 +18,7 @@ class DetailTransaction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'DetailTransaction');
     return Consumer2<TransactionNotifier, TranslateNotifierV2>(
       builder: (context, notifier, notifier2, child) {
         String title = '';

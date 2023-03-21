@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 import 'package:hyppe/core/services/system.dart';
@@ -24,6 +25,7 @@ class ContentThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ContentThumbnail');
     SizeConfig().init(context);
 
     return Stack(

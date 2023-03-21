@@ -1,8 +1,7 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/transaction/bank_account/transaction_history_model.dart';
-import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
@@ -14,6 +13,7 @@ class MiddleWithdrawalDetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'MiddleWithdrawalDetailWidget');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -24,6 +25,7 @@ class _BankAccountState extends State<BankAccount> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'BankAccount');
     final _notifier = context.read<TransactionNotifier>();
     _notifier.initBankAccount(context);
     // _scrollController.addListener(() => _notifier.onScrollListener(context, _scrollController));

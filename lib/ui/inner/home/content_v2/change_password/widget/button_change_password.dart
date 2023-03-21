@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
@@ -21,33 +22,37 @@ class ButtonChangePassword extends StatelessWidget {
     this.onTap,
   }) : super(key: key);
 
+
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Consumer<TranslateNotifierV2>(
-          builder: (_, notifier, __) => Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              CustomElevatedButton(
-                width: SizeConfig.screenWidth,
-                height: 50,
-                buttonStyle: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(buttonColor),
-                    overlayColor: MaterialStateProperty.all<Color>(buttonColor),
-                    foregroundColor: MaterialStateProperty.all<Color>(buttonColor),
-                    shadowColor: MaterialStateProperty.all<Color>(buttonColor)),
-                function: onTap,
-                child: loading
-                    ? const CustomLoading()
-                    : CustomTextWidget(
-                        textToDisplay: caption ?? notifier.translate.next ?? '',
-                        textStyle: textStyle,
-                      ),
+  Widget build(BuildContext context){
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ButtonChangePassword');
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Consumer<TranslateNotifierV2>(
+        builder: (_, notifier, __) => Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            CustomElevatedButton(
+              width: SizeConfig.screenWidth,
+              height: 50,
+              buttonStyle: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(buttonColor),
+                  overlayColor: MaterialStateProperty.all<Color>(buttonColor),
+                  foregroundColor: MaterialStateProperty.all<Color>(buttonColor),
+                  shadowColor: MaterialStateProperty.all<Color>(buttonColor)),
+              function: onTap,
+              child: loading
+                  ? const CustomLoading()
+                  : CustomTextWidget(
+                textToDisplay: caption ?? notifier.translate.next ?? '',
+                textStyle: textStyle,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }

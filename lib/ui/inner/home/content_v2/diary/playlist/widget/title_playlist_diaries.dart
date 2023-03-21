@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -36,6 +37,12 @@ class TitlePlaylistDiaries extends StatefulWidget {
 }
 
 class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'TitlePlaylistDiaries');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

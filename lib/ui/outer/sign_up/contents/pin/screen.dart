@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -26,6 +27,7 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SignUpPin');
     final notifier = Provider.of<SignUpPinNotifier>(context, listen: false);
     notifier.initState(widget.arguments);
     // notifier.startTimers = true;

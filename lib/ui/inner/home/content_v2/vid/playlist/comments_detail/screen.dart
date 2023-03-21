@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -35,6 +36,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'CommentsDetailScreen');
     final notifier = context.read<CommentNotifierV2>();
     final postID = widget.argument.postID;
     final fromFront = widget.argument.fromFront;

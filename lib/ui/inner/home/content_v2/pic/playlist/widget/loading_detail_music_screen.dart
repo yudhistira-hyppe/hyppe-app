@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +29,7 @@ class _LoadingDetailMusicScreenState extends State<LoadingDetailMusicScreen> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'LoadingDetailMusicScreen');
     super.initState();
     final notifier = context.read<PicDetailNotifier>();
     // notifier.urlMusic = '';

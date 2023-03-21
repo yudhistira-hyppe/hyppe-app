@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -20,6 +21,7 @@ class _ShowImagesState extends State<ShowImages> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ShowImages');
     _pageController = PageController(initialPage: index);
     super.initState();
   }

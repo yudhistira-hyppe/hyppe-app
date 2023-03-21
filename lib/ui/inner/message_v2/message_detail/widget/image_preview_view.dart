@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/image_preview_argument.dart';
 import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
@@ -23,6 +24,7 @@ class ImagePreviewView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ImagePreviewView');
     final size = MediaQuery.of(context).size;
     return GestureDetector(
       onDoubleTap: () => Navigator.of(context).pop(),

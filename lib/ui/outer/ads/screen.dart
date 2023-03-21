@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/bloc/ads_video/state.dart';
@@ -54,6 +55,7 @@ class _AdsScreenState extends State<AdsScreen> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'AdsScreen');
     _storyItems.add(StoryItem.pageVideo(widget.argument.adsUrl,
         controller: _storyController,
         id: widget.argument.data.adsId ?? '',

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
@@ -24,6 +25,7 @@ class _PicSeeAllScreenState extends State<PicSeeAllScreen> with SingleTickerProv
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PicSeeAllScreen');
     _tabController = TabController(length: 1, vsync: this);
 
     super.initState();

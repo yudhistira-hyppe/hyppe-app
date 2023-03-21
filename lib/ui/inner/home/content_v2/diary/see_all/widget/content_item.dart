@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ class ContentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ContentItem');
     final notifier = context.watch<DiarySeeAllNotifier>();
     final error = context.select((ErrorService value) => value.getError(ErrorType.diary));
 

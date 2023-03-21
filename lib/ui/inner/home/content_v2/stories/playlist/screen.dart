@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:provider/provider.dart';
@@ -6,8 +7,6 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/screen.dart';
 
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
-
-import '../preview/notifier.dart';
 
 class HyppePlaylistStories extends StatefulWidget {
   final StoryDetailScreenArgument argument;
@@ -27,6 +26,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePlaylistStories');
     super.initState();
     _pageController = PageController(initialPage: widget.argument.index.toInt());
     _pageController.addListener(() => notifier.initialCurrentPage(_pageController.page));

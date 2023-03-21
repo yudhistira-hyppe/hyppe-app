@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -11,6 +12,7 @@ class SensitiveContentProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SensitiveContentProfile');
     return Stack(
       children: [
         Center(

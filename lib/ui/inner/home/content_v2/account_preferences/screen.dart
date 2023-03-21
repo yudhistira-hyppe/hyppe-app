@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,7 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences> with 
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppeAccountPreferences');
     final notifier = Provider.of<AccountPreferencesNotifier>(context, listen: false);
     Future.delayed(Duration.zero, () => notifier.onInitial(context, widget.argument));
     _tabController = TabController(initialIndex: notifier.initialIndex, length: 2, vsync: this);

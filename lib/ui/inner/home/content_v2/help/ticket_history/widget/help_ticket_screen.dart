@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
@@ -31,6 +32,7 @@ class _HelpTicketScreenState extends State<HelpTicketScreen> with AfterFirstLayo
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'HelpTicketScreen');
     final notifier = Provider.of<TicketHistoryNotifier>(context, listen: false);
     notifier.startLoad();
     _scrollController.addListener(() {

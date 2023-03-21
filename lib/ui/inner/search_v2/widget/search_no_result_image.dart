@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -15,6 +16,7 @@ class SearchNoResultImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'SearchNoResultImage');
     return Container(
       height: 500,
       alignment: Alignment.center,

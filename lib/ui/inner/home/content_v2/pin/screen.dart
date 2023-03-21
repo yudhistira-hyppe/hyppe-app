@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -10,7 +11,6 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/widget/custom_rectangle_input.dart';
-import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +24,7 @@ class PinScreen extends StatefulWidget {
 class _PinScreenState extends State<PinScreen> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PinScreen');
     super.initState();
     context.read<PinAccountNotifier>().cekUserPin(context);
   }

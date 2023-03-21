@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,13 @@ class VerificationIDStep5 extends StatefulWidget {
 }
 
 class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFirstLayoutMixin {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStep5');
+    super.initState();
+  }
+
   @override
   void afterFirstLayout(BuildContext context) {
     final ntfr = context.read<VerificationIDNotifier>();

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -24,6 +25,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ForgotPasswordScreen');
     final notifier = Provider.of<ForgotPasswordNotifier>(context, listen: false);
     notifier.initState();
     super.initState();

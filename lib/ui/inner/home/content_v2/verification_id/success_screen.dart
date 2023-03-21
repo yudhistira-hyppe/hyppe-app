@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -8,7 +9,6 @@ import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class VerificationIDSuccess extends StatefulWidget {
@@ -19,6 +19,13 @@ class VerificationIDSuccess extends StatefulWidget {
 }
 
 class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDSuccess');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;

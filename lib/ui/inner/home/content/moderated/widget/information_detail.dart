@@ -17,6 +17,9 @@ class InformationDetail extends StatefulWidget {
 }
 
 class _InformationDetailState extends State<InformationDetail> {
+
+
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -112,5 +115,11 @@ class _InformationDetailState extends State<InformationDetail> {
       ),
       style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600),
     );
+  }
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('class', 'InformationDetail');
+    super.initState();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -34,6 +35,7 @@ class _VidSearchContentState extends State<VidSearchContent> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VidSearchContent');
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
     super.initState();
   }

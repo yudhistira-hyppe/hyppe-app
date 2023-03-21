@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -11,6 +12,13 @@ class HashtagContentsScreen extends StatefulWidget {
 }
 
 class _HashtagContentsScreenState extends State<HashtagContentsScreen> {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'HashtagContentsScreen');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final fixType = widget.type;

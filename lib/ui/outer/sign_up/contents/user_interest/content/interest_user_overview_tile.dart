@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_network_widget.dart';
@@ -23,6 +24,7 @@ class _InterestUserOverviewTileState extends State<InterestUserOverviewTile> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'InterestUserOverviewTile');
     return Consumer<UserInterestNotifier>(
       builder: (_, notifier, __) => GridView.builder(
         shrinkWrap: true,

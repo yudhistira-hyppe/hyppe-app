@@ -1,15 +1,13 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pin/widget/custom_rectangle_input.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/pin_withdrawal/otp_field_widget.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -20,6 +18,7 @@ class PinWithdrawalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PinWithdrawalScreen');
     var setPin = SharedPreference().readStorage(SpKeys.setPin);
     return Consumer2<TransactionNotifier, TranslateNotifierV2>(
       builder: (_, notifier, notifier2, __) => Scaffold(

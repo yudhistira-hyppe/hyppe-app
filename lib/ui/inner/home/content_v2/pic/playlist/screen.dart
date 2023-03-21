@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_top.dart';
@@ -24,6 +25,11 @@ class PicDetailScreen extends StatefulWidget {
 class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayoutMixin {
   final _notifier = PicDetailNotifier();
 
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'PicDetailScreen');
+    super.initState();
+  }
 
   @override
   void afterFirstLayout(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/notifier.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,7 @@ class TicketHistoryTabsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'TicketHistoryTabsScreen');
     final notifier = Provider.of<TicketHistoryNotifier>(context);
     return Row(
       mainAxisSize: MainAxisSize.max,

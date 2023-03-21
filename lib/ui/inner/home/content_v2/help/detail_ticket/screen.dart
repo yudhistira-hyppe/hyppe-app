@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/detail_ticket_argument.dart';
@@ -49,6 +50,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'DetailTicketScreen');
     if (widget.data.ticketModel != null) {
       context.read<DetailTicketNotifier>().initStateDetailTicket(widget.data.ticketModel!);
     } else {

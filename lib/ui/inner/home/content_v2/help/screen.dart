@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/faq_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -29,6 +30,7 @@ class HelpScreen extends StatefulWidget {
 class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
   @override
   void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'HelpScreen');
     TranslateNotifierV2().startLoadingFAQ();
     super.initState();
   }

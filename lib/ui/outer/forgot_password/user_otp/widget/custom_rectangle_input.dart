@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,7 @@ class CustomRectangleInput extends StatelessWidget {
   CustomRectangleInput({required this.afterSuccess});
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'CustomRectangleInput');
     final theme = Theme.of(context);
     return Consumer<UserOtpNotifier>(
       builder: (_, notifier, __) => SizedBox(

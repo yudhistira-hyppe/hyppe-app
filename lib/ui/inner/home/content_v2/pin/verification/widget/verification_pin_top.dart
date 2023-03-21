@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -21,6 +22,13 @@ class VerificationPinTop extends StatefulWidget {
 }
 
 class _VerificationPinTopState extends State<VerificationPinTop> {
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationPinTop');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     String email = SharedPreference().readStorage(SpKeys.email);
