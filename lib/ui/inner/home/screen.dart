@@ -47,8 +47,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     {"id": '3', 'name': "Vid"},
   ];
 
-
-
   @override
   void didChangeDependencies() {
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
@@ -187,6 +185,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                     SliverList(
                       delegate: SliverChildListDelegate([
                         const ProcessUploadComponent(),
+                        sixPx,
                         const HyppePreviewStories(),
                         sixPx,
                         Container(

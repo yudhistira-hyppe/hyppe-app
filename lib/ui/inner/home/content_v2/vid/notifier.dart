@@ -224,4 +224,11 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
       ShowBottomSheet.onNoInternetConnection(context);
     }
   }
+
+  bool _canPlayOpenApps = true;
+  bool get canPlayOpenApps => _canPlayOpenApps;
+
+  set canPlayOpenApps(val) {
+    _canPlayOpenApps = val;
+  }
 }

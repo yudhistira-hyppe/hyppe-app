@@ -3,13 +3,21 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class OnUploadContentBottomSheet extends StatelessWidget {
+class OnUploadContentBottomSheet extends StatefulWidget {
+  const OnUploadContentBottomSheet({super.key});
+
+  @override
+  State<OnUploadContentBottomSheet> createState() => _OnUploadContentBottomSheetState();
+}
+
+class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -24,8 +32,7 @@ class OnUploadContentBottomSheet extends StatelessWidget {
               padding: EdgeInsets.all(8 * SizeConfig.scaleDiagonal),
               child: Column(
                 children: [
-                  const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}handler.svg"),
+                  const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
                   SizedBox(height: 16 * SizeConfig.scaleDiagonal),
                   CustomTextWidget(
                     textToDisplay: notifier.language.postTo ?? '',
@@ -43,6 +50,7 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   onTap: () {
                     // notifier.thumbnailLocalMedia();
+                    context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
                     notifier.featureType = FeatureType.story;
                     notifier.selectedDuration = 15;
                     Routing().moveAndPop(Routes.makeContent);
@@ -51,15 +59,12 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                   title: CustomTextWidget(
                     textToDisplay: "HyppeStory".toLowerCase(),
                     textAlign: TextAlign.start,
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+                    textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
                     textToDisplay: notifier.language.hyppeStoryCaption ?? '',
                     textAlign: TextAlign.start,
-                    textStyle:
-                        const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
+                    textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
                   ),
                   leading: CustomIconWidget(
                     iconData: "${AssetPath.vectorPath}story.svg",
@@ -73,6 +78,7 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                 ListTile(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   onTap: () {
+                    context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
                     // notifier.thumbnailLocalMedia();
                     notifier.featureType = FeatureType.vid;
                     notifier.isVideo = true;
@@ -83,15 +89,12 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                   title: CustomTextWidget(
                     textToDisplay: "HyppeVid".toLowerCase(),
                     textAlign: TextAlign.start,
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+                    textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
                     textToDisplay: notifier.language.hyppeVidCaption ?? '',
                     textAlign: TextAlign.start,
-                    textStyle:
-                        const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
+                    textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
                   ),
                   leading: CustomIconWidget(
                     iconData: "${AssetPath.vectorPath}vid.svg",
@@ -105,6 +108,7 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                 ListTile(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   onTap: () {
+                    context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
                     // notifier.thumbnailLocalMedia();
                     notifier.featureType = FeatureType.diary;
                     notifier.isVideo = true;
@@ -115,15 +119,12 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                   title: CustomTextWidget(
                     textToDisplay: "HyppeDiary".toLowerCase(),
                     textAlign: TextAlign.start,
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+                    textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
                     textToDisplay: notifier.language.hyppeDiaryCaption ?? '',
                     textAlign: TextAlign.start,
-                    textStyle:
-                        const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
+                    textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
                   ),
                   leading: CustomIconWidget(
                     iconData: "${AssetPath.vectorPath}diary.svg",
@@ -137,6 +138,7 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                 ListTile(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   onTap: () {
+                    context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
                     // notifier.thumbnailLocalMedia();
                     notifier.featureType = FeatureType.pic;
                     notifier.isVideo = false;
@@ -148,15 +150,12 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                   title: CustomTextWidget(
                     textToDisplay: "HyppePic".toLowerCase(),
                     textAlign: TextAlign.start,
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+                    textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
                     textToDisplay: notifier.language.hyppePicCaption ?? '',
                     textAlign: TextAlign.start,
-                    textStyle:
-                        const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
+                    textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
                   ),
                   leading: CustomIconWidget(
                     iconData: "${AssetPath.vectorPath}pic.svg",

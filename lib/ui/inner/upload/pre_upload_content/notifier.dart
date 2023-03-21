@@ -30,6 +30,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_c
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:provider/provider.dart';
@@ -690,6 +691,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         // final decode = json.decode(_uploadSuccess.toString());
         // _postIdPanding = decode['data']['postID'];
         if (_boostContent != null) _boostContentBuy(context);
+        context.read<PreviewVidNotifier>().canPlayOpenApps = true;
       });
     } catch (e) {
       print('Error create post : $e');
@@ -1157,7 +1159,9 @@ class PreUploadContentNotifier with ChangeNotifier {
 
         notifyListeners();
       } else if (fetch.utilsState == UtilsState.getInterestsError) {
-        ShowBottomSheet.onInternalServerError(context, );
+        ShowBottomSheet.onInternalServerError(
+          context,
+        );
       }
     }
   }

@@ -33,6 +33,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/path.dart';
@@ -425,7 +426,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         fAliplayer?.pause();
         break;
       case AppLifecycleState.resumed:
-        fAliplayer?.play();
+        if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
+          fAliplayer?.play();
+        }
         break;
       case AppLifecycleState.paused:
         fAliplayer?.pause();
@@ -675,7 +678,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     ),
                                   ),
                                 ),
-                                (notifier.diaryData?[index].boosted.isEmpty ?? [].isEmpty) &&
+                                SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                                        (notifier.diaryData?[index].boosted.isEmpty ?? [].isEmpty) &&
                                         (notifier.diaryData?[index].reportedStatus != 'OWNED' &&
                                             notifier.diaryData?[index].reportedStatus != 'BLURRED' &&
                                             notifier.diaryData?[index].reportedStatus2 != 'BLURRED') &&

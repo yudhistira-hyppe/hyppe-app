@@ -9,6 +9,7 @@ import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
@@ -30,6 +31,7 @@ import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -419,7 +421,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       case AppLifecycleState.inactive:
         break;
       case AppLifecycleState.resumed:
-        fAliplayer?.play();
+        if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
+          fAliplayer?.play();
+        }
+
         break;
       case AppLifecycleState.paused:
         fAliplayer?.pause();
@@ -664,7 +669,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                     ),
                                   ),
                                 ),
-                                (notifier.pic?[index].boosted.isEmpty ?? [].isEmpty) &&
+                                SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                                        (notifier.pic?[index].boosted.isEmpty ?? [].isEmpty) &&
                                         (notifier.pic?[index].reportedStatus != 'OWNED' && notifier.pic?[index].reportedStatus != 'BLURRED' && notifier.pic?[index].reportedStatus2 != 'BLURRED') &&
                                         notifier.pic?[index].email == email
                                     ? Container(

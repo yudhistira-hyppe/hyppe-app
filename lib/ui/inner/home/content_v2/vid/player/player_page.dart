@@ -677,7 +677,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
             if (adsData == null) Container(color: Colors.black, width: width, height: height, child: aliPlayerView),
 
             // Text("${adsData == null}"),
-            Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
+            // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
             // /====slide dan tombol fullscreen
             if (isPlay)
               SizedBox(
@@ -697,45 +697,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                 ),
               ),
             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
-            Positioned.fill(
-              bottom: 40,
-              child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: GestureDetector(
-                    child: Container(
-                      height: 40,
-                      margin: EdgeInsets.only(bottom: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.7),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 5),
-                            width: skipAdsCurent == 0 ? null : 100,
-                            child: Text(
-                              skipAdsCurent > 0 ? " Your video will begin in $skipAdsCurent" : " SkipdAds",
-                              maxLines: 3,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.white, fontSize: 10),
-                            ),
-                          ),
-                          skipAdsCurent == 0
-                              ? Icon(
-                                  Icons.skip_next,
-                                  color: Colors.white,
-                                )
-                              : Container(),
-                          Container(
-                              child: Image.network(
-                            (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
-                          ))
-                        ],
-                      ),
-                    ),
-                  )),
-            ),
+            if (isPlay && adsData != null) skipAds(),
             if (!isPlay)
               Center(
                 child: GestureDetector(
@@ -831,6 +793,53 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       onTapCtrl = false;
       // setState(() {});
     });
+  }
+
+  Widget skipAds() {
+    return Positioned.fill(
+      bottom: 40,
+      child: Align(
+          alignment: Alignment.bottomRight,
+          child: GestureDetector(
+            onTap: () {
+              if (skipAdsCurent == 0) {
+                adsComleteOrSkip();
+              }
+            },
+            child: Container(
+              height: 40,
+              margin: EdgeInsets.only(bottom: 10),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.7),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    width: skipAdsCurent == 0 ? null : 100,
+                    child: Text(
+                      skipAdsCurent > 0 ? " Your video will begin in $skipAdsCurent" : " SkipdAds",
+                      maxLines: 3,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white, fontSize: 10),
+                    ),
+                  ),
+                  skipAdsCurent == 0
+                      ? Icon(
+                          Icons.skip_next,
+                          color: Colors.white,
+                        )
+                      : Container(),
+                  Container(
+                      child: Image.network(
+                    (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
+                  ))
+                ],
+              ),
+            ),
+          )),
+    );
   }
 
   Widget _buildController(
@@ -1225,5 +1234,35 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         ],
       ),
     );
+  }
+
+  void adsComleteOrSkip() {
+    adsView(adsData?.data ?? AdsData(), _currentAdsPosition);
+
+    /////
+    _showTipsWidget = true;
+    _showLoading = false;
+    _tipsContent = "Play Again";
+    isPause = true;
+    setState(() {
+      // isCompleteAds = true;
+      // isActiveAds = false;
+      _currentAdsPosition = _videoAdsDuration;
+      print("========== $isCompleteAds || $isActiveAds");
+      // adsData = null;
+      isPlay = true;
+    });
+    // fAliplayerAds?.stop();
+    // fAliplayerAds?.destroy();
+    fAliplayer?.prepare().whenComplete(() => _showLoading = false);
+    fAliplayer?.isAutoPlay();
+    fAliplayer?.play();
+
+    ///
+    fAliplayerAds?.stop();
+    isActiveAds = false;
+    adsData = null;
+    context.read<VidDetailNotifier>().adsData = null;
+    setState(() {});
   }
 }

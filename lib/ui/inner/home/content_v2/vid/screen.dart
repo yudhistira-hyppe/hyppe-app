@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +89,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                           },
                           child: ListView.builder(
                             // controller: vidNotifier.pageController,
-
                             // onPageChanged: (index) async {
                             //   print('HyppePreviewVid index : $index');
                             //   if (index == (vidNotifier.itemCount - 1)) {
@@ -286,7 +286,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                       //         ),
                                       //       )
                                       //     : const SizedBox(),
-                                      (vidData?.boosted.isEmpty ?? [].isEmpty) &&
+                                      SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                                              (vidData?.boosted.isEmpty ?? [].isEmpty) &&
                                               (vidData?.reportedStatus != 'OWNED' && vidData?.reportedStatus != 'BLURRED' && vidData?.reportedStatus2 != 'BLURRED') &&
                                               vidData?.email == email
                                           ? Container(

@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/content/upload_content.dart';
 import 'package:hyppe/ui/inner/upload/make_content/content/upload_id_verification.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -40,7 +41,6 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
     super.dispose();
   }
 
-
   @override
   void deactivate() {
     print('deactivate make content');
@@ -63,7 +63,6 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
     super.didPopNext();
   }
 
-
   @override
   void didPushNext() {
     print('didPushNext make content');
@@ -78,6 +77,7 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
         onWillPop: () async {
           if (notifier.conditionalOnClose()) {
             // context.read<CameraNotifier>().showEffect(isClose: true);
+            context.read<PreviewVidNotifier>().canPlayOpenApps = true; //biar play kembali di landingpage
             bool? _sheetResponse;
             if (notifier.isRecordingVideo) {
               _sheetResponse = await ShowBottomSheet().onShowColouredSheet(
