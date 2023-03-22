@@ -119,7 +119,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
       loadDetail = true;
 
       final String myEmail = SharedPreference().readStorage(SpKeys.email);
-      final res = await contentsQuery.reload(context, myContent: myEmail == email);
+      final res = await contentsQuery.reload(context);
       data = res.firstOrNull;
       if (data != null) {
         final postID = _data?.postID;
