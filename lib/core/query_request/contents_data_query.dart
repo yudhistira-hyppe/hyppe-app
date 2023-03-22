@@ -103,7 +103,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
   }
 
   @override
-  Future<List<ContentData>> reload(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
+  Future<List<ContentData>> reload(BuildContext context, {bool myContent = false, bool otherContent = false, String? visibility}) async {
     print('reload');
 
     List<ContentData>? res;
@@ -130,7 +130,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
           type: featureType ?? FeatureType.other,
           searchText: searchText,
           onlyMyData: onlyMyData,
-          visibility: notifierMain.visibilty,
+          visibility: visibility ?? notifierMain.visibilty,
           myContent: myContent,
           otherContent: otherContent);
       final fetch = notifier.postsFetch;

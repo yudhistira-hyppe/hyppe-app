@@ -321,6 +321,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       _showLoading = false;
       _tipsContent = "Play Again";
       isPause = true;
+      // adsView(widget.data, secondsVideo);
       setState(() {
         _currentPosition = _videoDuration;
       });

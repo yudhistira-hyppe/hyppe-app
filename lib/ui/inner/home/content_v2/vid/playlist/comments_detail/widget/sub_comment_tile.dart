@@ -11,6 +11,7 @@ import '../../../../../../../../core/services/system.dart';
 import '../../../../../../../constant/entities/comment_v2/notifier.dart';
 import '../../../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../../../../../../constant/overlay/general_dialog/show_general_dialog.dart';
+import '../../../../../../../constant/widget/custom_desc_content_widget.dart';
 import '../../../../../../../constant/widget/custom_icon_widget.dart';
 import '../../../../../../../constant/widget/custom_profile_image.dart';
 import '../../../../../../../constant/widget/custom_spacer.dart';
@@ -61,20 +62,18 @@ class SubCommentTile extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: CustomTextWidget(
-                        textAlign: TextAlign.start,
-                        textToDisplay:
-                        '${logs?.txtMessages}',
-                        maxLines: 2,
-                        textStyle: context
-                            .getTextTheme()
-                            .caption
-                            ?.copyWith(
-                            color: context
-                                .getColorScheme()
-                                .onBackground),
-                      ),
-                    ),
+                      child: CustomDescContent(
+                          desc: '${logs?.txtMessages}',
+                          trimLines: 5,
+                          textAlign: TextAlign.start,
+                          seeLess: ' ${notifier.language.seeLess}',
+                          seeMore: ' ${notifier.language.seeMoreContent}',
+                          textOverflow: TextOverflow.visible,
+                          normStyle: Theme.of(context).textTheme.bodyText2,
+                          hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                          expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary)),
+                    )
+                    ,
                   ],
                 ),
                 twoPx,

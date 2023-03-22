@@ -528,7 +528,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
+                                // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
