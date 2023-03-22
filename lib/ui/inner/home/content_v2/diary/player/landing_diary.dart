@@ -13,6 +13,8 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
@@ -130,6 +132,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;
+      _initAds(context);
     });
     fAliplayer?.setOnRenderingStart((playerId) {
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
@@ -368,6 +371,31 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     fAliplayer?.setPlayerView(viewId);
   }
 
+  _initAds(BuildContext context) async {
+    //for ads
+    // getCountVid();
+    // await _newInitAds(true);
+    context.incrementAdsCount();
+    if (context.getAdsCount() == null) {
+      context.setAdsCount(0);
+    } else {
+      final adsNotifier = context.read<PreviewDiaryNotifier>();
+      if (context.getAdsCount() == 2) {
+        try {
+          context.read<PreviewDiaryNotifier>().getAdsVideo(context, false);
+        } catch (e) {
+          'Failed to fetch ads data 0 : $e'.logger();
+        }
+      }
+      if (adsNotifier.adsData != null) {
+        fAliplayer?.pause();
+        System().adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(), adsNotifier.adsData?.data?.apsaraAuth ?? '', isInAppAds: false).whenComplete(() {
+          fAliplayer?.play();
+        });
+      }
+    }
+  }
+
   @override
   void didChangeDependencies() {
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
@@ -380,9 +408,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       FlutterAliplayer.enableMix(false);
     }
     fAliplayer?.stop();
-    if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
-      fAliplayer?.destroy();
-    }
+    // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
+    //   fAliplayer?.destroy();
+    // }
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
@@ -500,6 +528,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -578,7 +607,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   key: Key(index.toString()),
                                   onVisibilityChanged: (info) {
                                     print(info.visibleFraction);
-                                    if (info.visibleFraction == 1) {
+                                    if (info.visibleFraction >= 0.6) {
                                       _curIdx = index;
                                       print('ini cur $_curIdx');
                                       if (_lastCurIndex != _curIdx) {

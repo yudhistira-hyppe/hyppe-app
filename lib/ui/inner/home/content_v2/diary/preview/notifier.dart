@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/bloc/ads_video/bloc.dart';
+import 'package:hyppe/core/bloc/ads_video/state.dart';
 
 import 'package:hyppe/core/constants/enum.dart';
 
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 
 import 'package:hyppe/ux/path.dart';
 
@@ -17,6 +21,8 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
+
+import 'package:provider/provider.dart';
 
 class PreviewDiaryNotifier with ChangeNotifier {
   final _system = System();
@@ -45,6 +51,13 @@ class PreviewDiaryNotifier with ChangeNotifier {
 
   double get heightVid => _heightVid;
   double get heightTitleFeature => _heightTitleFeature;
+
+  AdsVideo? _adsData;
+  AdsVideo? get adsData => _adsData;
+
+  set adsData(val) {
+    _adsData = val;
+  }
 
   set heightVid(double val) {
     _heightVid = val;
@@ -166,6 +179,24 @@ class PreviewDiaryNotifier with ChangeNotifier {
       _routing.move(Routes.diarySeeAllScreen);
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
+    }
+  }
+
+  Future getAdsVideo(BuildContext context, bool isContent) async {
+    try {
+      final notifier = AdsDataBloc();
+      await notifier.adsVideoBloc(context, isContent);
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        // print('data : ${fetch.data.toString()}');
+        adsData = fetch.data;
+        context.read<VidDetailNotifier>().getAuth(context, videoId: adsData?.data?.videoId ?? '').then((value) => adsData?.data?.apsaraAuth = value);
+
+        // await getAdsVideoApsara(_newClipData?.data?.videoId ?? '');
+      }
+    } catch (e) {
+      'Failed to fetch ads data $e'.logger();
     }
   }
 }

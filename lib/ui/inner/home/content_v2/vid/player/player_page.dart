@@ -21,11 +21,13 @@ import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -596,6 +598,21 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       final request = ViewAdsRequest(watchingTime: time, adsId: data.adsId, useradsId: data.useradsId);
       await notifier.viewAdsBloc(context, request);
       final fetch = notifier.adsDataFetch;
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        print("ini hasil ${fetch.data['rewards']}");
+        if (fetch.data['rewards'] == true) {
+          print("ini hasil ${mounted}");
+          if (mounted) {
+            ShowGeneralDialog.adsRewardPop(context);
+            Timer(const Duration(milliseconds: 800), () {
+              Routing().moveBack();
+              // Timer(const Duration(milliseconds: 800), () {
+              //   Routing().moveBack();
+              // });
+            });
+          }
+        }
+      }
     } catch (e) {
       'Failed hit view ads ${e}'.logger();
     }

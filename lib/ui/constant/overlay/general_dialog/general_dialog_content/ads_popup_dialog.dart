@@ -10,9 +10,11 @@ import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
@@ -153,7 +155,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
       secondsSkip = widget.data.adsSkip ?? 0;
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: "iklanPopUp");
 
       WidgetsBinding.instance.addObserver(this);
       bottomIndex = 0;
@@ -406,6 +408,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
         loadingAction = true;
       });
 
+      context.read<PreviewDiaryNotifier>().adsData = null;
+
       final notifier = AdsDataBloc();
       final request = ViewAdsRequest(
         watchingTime: time,
@@ -415,7 +419,22 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       await notifier.viewAdsBloc(context, request, isClick: isClick);
 
       final fetch = notifier.adsDataFetch;
-      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {}
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        print("ini hasil ${fetch.data['rewards']}");
+        if (fetch.data['rewards'] == true) {
+          print("ini hasil ${mounted}");
+          if (mounted) {
+            ShowGeneralDialog.adsRewardPop(context);
+            Timer(const Duration(milliseconds: 800), () {
+              Routing().moveBack();
+              // Timer(const Duration(milliseconds: 800), () {
+              //   Routing().moveBack();
+              // });
+            });
+          }
+        }
+      }
     } catch (e) {
       'Failed hit view ads $e'.logger();
       setState(() {
@@ -461,14 +480,13 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
-        if(secondsSkip < 1 || widget.data.isReport == true){
+      onWillPop: () async {
+        if (secondsSkip < 1 || widget.data.isReport == true) {
           await adsView(widget.data, secondsVideo);
           return true;
-        }else{
+        } else {
           return false;
         }
-
       },
       child: Stack(
         children: [

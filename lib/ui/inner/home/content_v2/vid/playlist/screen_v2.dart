@@ -130,8 +130,13 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                                   ],
                                 ),
                               ),
-                              Offstage(offstage: orientation == Orientation.landscape, child: _bottomDetail(context, notifier, data)),
-                              // if (orientation == Orientation.portrait) twelvePx,
+                              //  if (orientation == Orientation.portrait) twelvePx,
+                              Offstage(
+                                  offstage: orientation == Orientation.landscape,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 12.0),
+                                    child: _bottomDetail(context, notifier, data),
+                                  )),
                             ],
                           ),
                         ),
