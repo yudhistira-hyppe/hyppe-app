@@ -102,16 +102,17 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                margin: (orientation == Orientation.portrait) ? const EdgeInsets.only(left: 16, top: 12, right: 16) : null,
-                                decoration: (orientation == Orientation.portrait)
-                                    ? BoxDecoration(
-                                        boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
-                                        borderRadius: const BorderRadius.all(Radius.circular(16)),
-                                        color: context.getColorScheme().background)
-                                    : null,
+                                margin: const EdgeInsets.only(left: 16, top: 12, right: 16),
+                                decoration: BoxDecoration(
+                                    boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                                    color: context.getColorScheme().background),
                                 child: Column(
                                   children: [
-                                    _topDetail(context, notifier, data),
+                                    Offstage(
+                                      offstage: orientation == Orientation.landscape,
+                                      child: _topDetail(context, notifier, data),
+                                    ),
                                     Container(
                                       color: Colors.black,
                                       child: PlayerPage(
@@ -122,12 +123,15 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                                         width: width,
                                       ),
                                     ),
-                                    _middleDetail(context, notifier, like, data),
+                                    Offstage(
+                                      offstage: orientation == Orientation.landscape,
+                                      child: _middleDetail(context, notifier, like, data),
+                                    ),
                                   ],
                                 ),
                               ),
-                              twelvePx,
-                              _bottomDetail(context, notifier, data)
+                              Offstage(offstage: orientation == Orientation.landscape, child: _bottomDetail(context, notifier, data)),
+                              // if (orientation == Orientation.portrait) twelvePx,
                             ],
                           ),
                         ),

@@ -72,6 +72,7 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_docume
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/preview.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
@@ -232,6 +233,9 @@ class Generate {
 
       case Routes.vidDetail:
         return MaterialPageRoute(builder: (_) => NewVideoDetailScreen(arguments: settings.arguments as VidDetailScreenArgument));
+      // case Routes.vidDetail:
+      //   return MaterialPageRoute(builder: (_) => VidDetailScreen(arguments: settings.arguments as VidDetailScreenArgument));
+
       case Routes.vidSeeAllScreen:
         return MaterialPageRoute(builder: (_) => const VidSeeAllScreen());
 

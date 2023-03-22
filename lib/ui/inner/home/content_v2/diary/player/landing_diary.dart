@@ -183,9 +183,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         // }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
         _bufferPosition = extraValue ?? 0;
-        if (mounted) {
-          setState(() {});
-        }
+        // if (mounted) {
+        //   setState(() {});
+        // }
       } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
         // Fluttertoast.showToast(msg: "AutoPlay");
       } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
