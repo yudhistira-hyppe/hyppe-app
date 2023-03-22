@@ -139,9 +139,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     super.initState();
 
     _pageController = PageController(initialPage: widget.argument.peopleIndex);
-
+    animationController = AnimationController(vsync: this, duration: const Duration(seconds: 7));
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      animationController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
+
 
       _animationController = AnimationController(
         vsync: this,
@@ -433,7 +433,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
     }
-
+    print('dispose StoryPlayerPage');
     fAliplayer?.stop();
     fAliplayer?.destroy();
     super.dispose();
@@ -602,23 +602,24 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
               ),
             ],
           ),
+          if(_groupUserStories?[_curIdx].story?[_curChildIdx] != null)
           BuildTopView(
             when: System().readTimestamp(
-                  DateTime.parse(_groupUserStories![_curIdx].story?[_curChildIdx].createdAt ?? '').millisecondsSinceEpoch,
+                  DateTime.parse(_groupUserStories?[_curIdx].story?[_curChildIdx].createdAt ?? '').millisecondsSinceEpoch,
                   context,
                   fullCaption: true,
                 ) ??
                 '',
-            data: _groupUserStories![_curIdx].story?[_curChildIdx],
+            data: _groupUserStories?[_curIdx].story?[_curChildIdx],
             // storyController: _storyController,
           ),
-          (_groupUserStories![_curIdx].story?[_curChildIdx].isReport ?? false)
+          (_groupUserStories?[_curIdx].story?[_curChildIdx].isReport ?? false)
               ? Container()
               : Form(
                   child: BuildBottomView(
-                    data: _groupUserStories![_curIdx].story?[_curChildIdx],
+                    data: _groupUserStories?[_curIdx].story?[_curChildIdx],
                     // storyController: _storyController,
-                    currentStory: _groupUserStories![_curIdx].story?.indexOf(_groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()),
+                    currentStory: _groupUserStories?[_curIdx].story?.indexOf(_groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()),
                     animationController: animationController,
                     currentIndex: _curChildIdx,
                     pause: pause,

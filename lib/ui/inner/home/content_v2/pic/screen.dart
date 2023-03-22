@@ -373,16 +373,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     super.didChangeDependencies();
   }
 
+
+
   @override
   void dispose() {
     print("---=-=-=-=--===-=-=-=-DiSPOSE--=-=-=-=-=-=-=-=-=-=-=----==-=");
-    fAliplayer?.stop();
-    if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
-      fAliplayer?.destroy();
-    }
-    if (Platform.isIOS) {
-      FlutterAliplayer.enableMix(false);
-    }
+
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
@@ -390,7 +386,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void deactivate() {
     print("====== deactivate ");
-
+    fAliplayer?.stop();
+    if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
+      fAliplayer?.destroy();
+    }
+    if (Platform.isIOS) {
+      FlutterAliplayer.enableMix(false);
+    }
     super.deactivate();
   }
 

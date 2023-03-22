@@ -80,10 +80,10 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
     _selectData = -1;
     _eventService.removeDiscussHandler(EventKey.messageReceivedKey);
   }
-
   @override
   void onMessageReceived(MessageDataV2 message) {
     try {
+      print('onMessageReceived active');
       // addMessage(logs: message.disqusLogs.firstOrNull, context: context);
       addMessage(logs: message.disqusLogs.firstOrNull ?? DisqusLogs());
     } catch (e) {

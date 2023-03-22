@@ -533,7 +533,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         barrierLabel: "Barrier",
         barrierDismissible: false,
         barrierColor: Colors.black.withOpacity(0.5),
-        transitionDuration: const Duration(milliseconds: 500),
+        transitionDuration: const Duration(milliseconds: 2000),
         context: context,
         pageBuilder: (context, animation, secondaryAnimation) {
           if (animationController != null) {
@@ -548,7 +548,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
                       _routing.moveBack();
                       makeItems(animationController);
                       Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
-                      Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
+                      Future.delayed(const Duration(seconds: 6), () => fadeReaction = false);
                       try {
                         await sendMessageReaction(
                           context,
@@ -577,7 +577,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
           return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
         },
-      ).whenComplete(() => Future.delayed(const Duration(seconds: 6), () => isReactAction = false));
+      ).whenComplete(() => Future.delayed(const Duration(seconds: 3), () => isReactAction = false));
     }
     //   },
     //   uploadContentAction: false,

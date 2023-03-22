@@ -8,6 +8,9 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:provider/provider.dart';
+
+import '../../main/notifier.dart';
 
 class HomeAppBar extends StatelessWidget {
   final String? name;
@@ -34,11 +37,17 @@ class HomeAppBar extends StatelessWidget {
       backgroundColor: Colors.white,
       actions: [
         // Doku(),
-        GestureDetector(
-          onTap: () {
-            Routing().move(Routes.message);
-          },
-          child: CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}message.svg'),
+        Consumer<MainNotifier>(
+          builder: (context, notifier, _) {
+            final isReceived = notifier.receivedMsg;
+            return GestureDetector(
+              onTap: () {
+                Routing().move(Routes.message);
+                notifier.receivedMsg = false;
+              },
+              child: isReceived ? CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}message_with_dot.svg') : CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}message.svg'),
+            );
+          }
         ),
         // Profile(),
         // AliPlayer(),

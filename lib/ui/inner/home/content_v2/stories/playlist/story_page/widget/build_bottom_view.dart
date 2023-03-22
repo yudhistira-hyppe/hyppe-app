@@ -179,6 +179,7 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                                 storyController: widget.storyController,
                                 animationController: widget.animationController,
                                 data: widget.data,
+                                pause: widget.pause,
                               ),
                             ),
                           ),

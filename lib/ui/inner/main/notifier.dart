@@ -180,6 +180,13 @@ class MainNotifier with ChangeNotifier {
     //ShowBottomSheet.onShowSuccessPostContentOwnership(context);
   }
 
+  bool _receivedMsg = false;
+  bool get receivedMsg => _receivedMsg;
+  set receivedMsg(bool state){
+    _receivedMsg = state;
+    notifyListeners();
+  }
+
   void _connectAndListenToSocket() async {
     String? token = SharedPreference().readStorage(SpKeys.userToken);
     String? email = SharedPreference().readStorage(SpKeys.email);
@@ -211,6 +218,7 @@ class MainNotifier with ChangeNotifier {
                         data: msgData.toJson(),
                       ),
                       data: msgData);
+                  receivedMsg = true;
                   _eventService.notifyMessageReceived(msgData);
                 }
               }

@@ -100,9 +100,9 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
     if (_routeArgument?.postID != null) {
       print("hit Api dulu");
-      _initialVid(context, _routeArgument?.postID ?? '');
+      _initialVid(context, _routeArgument?.postID ?? '', _routeArgument?.vidData?.email ?? '');
     } else if (_routeArgument?.vidData?.postID != null) {
-      _initialVid(context, _routeArgument?.vidData?.postID ?? '');
+      _initialVid(context, _routeArgument?.vidData?.postID ?? '', _routeArgument?.vidData?.email ?? '');
     } else {
       _data = _routeArgument?.vidData;
       notifyListeners();
@@ -110,7 +110,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  _initialVid(BuildContext context, String postID) async {
+  _initialVid(BuildContext context, String postID, String email) async {
     Future<List<ContentData>> _resFuture;
 
     contentsQuery.postID = postID;
@@ -118,7 +118,8 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     try {
       loadDetail = true;
 
-      final res = await contentsQuery.reload(context);
+      final String myEmail = SharedPreference().readStorage(SpKeys.email);
+      final res = await contentsQuery.reload(context, myContent: myEmail == email);
       data = res.firstOrNull;
       if (data != null) {
         final postID = _data?.postID;
