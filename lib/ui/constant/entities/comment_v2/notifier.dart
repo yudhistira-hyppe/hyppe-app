@@ -198,13 +198,12 @@ class CommentNotifierV2 with ChangeNotifier {
       ..parentID = parentID ?? ''
       ..txtMessages = commentController.text
       ..tagComment = userTagCaption;
-    addCountComment(context, postID ?? '');
+
     try {
       final _resFuture = commentQuery.addComment(context);
-
       final res = await _resFuture;
-
       if (res != null) {
+        addCountComment(context, postID ?? '', true);
         if (parentID == null) {
           _commentData?.insert(0, res);
         } else {
@@ -393,6 +392,7 @@ class CommentNotifierV2 with ChangeNotifier {
       await notifier.postDeleteCommentBloc(context, lineID: lineID, withAlertConnection: true);
       final fetch = notifier.deletCommentFetch;
       if (fetch.deleteCommentState == DeleteCommentState.deleteCommentSuccess) {
+        addCountComment(context, postID ?? '', false);
         getComment(context, reload: true);
         _routing.moveBack();
       }
@@ -402,7 +402,7 @@ class CommentNotifierV2 with ChangeNotifier {
     }
   }
 
-  void addCountComment(BuildContext context, String postID) {
+  void addCountComment(BuildContext context, String postID, bool add) {
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -412,7 +412,11 @@ class CommentNotifierV2 with ChangeNotifier {
     _updatedData ??= diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
     _updatedData ??= pic.pic?.firstWhereOrNull((element) => element.postID == postID);
 
-    _updatedData?.comments = (_updatedData.comments ?? 0) + 1;
+    if (add) {
+      _updatedData?.comments = (_updatedData.comments ?? 0) + 1;
+    } else {
+      _updatedData?.comments = (_updatedData.comments ?? 0) - 1;
+    }
     notifyListeners();
   }
 }

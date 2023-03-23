@@ -46,71 +46,166 @@ class _MainScreenState extends State<MainScreen> {
               child: notifier.mainScreen(context),
             ),
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            elevation: 0.5,
-            onTap: (int index) async {
-              if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
-              if (index != 2) {
-                setState(() {
-                  notifier.pageIndex = index;
-                });
-              } else {
-                await notifier.onShowPostContent(consumerContext);
-              }
-            },
-            currentIndex: notifier.pageIndex,
-            type: BottomNavigationBarType.fixed,
-            items: [
-              BottomNavigationBarItem(
-                icon: CustomIconWidget(
-                  defaultColor: false,
-                  color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
-                  iconData: '${AssetPath.vectorPath}home.svg',
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: () {},
+          //   tooltip: 'Increment',
+          //   elevation: 4.0,
+          //   child: CustomIconWidget(
+          //     defaultColor: false,
+          //     // color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+          //     iconData: '${AssetPath.vectorPath}hyppe-button.svg',
+          //     height: 50,
+          //   ),
+          // ),
+          // floatingActionButtonLocation: FloatingActionButtonLocation.miniStartDocked,
+          bottomNavigationBar: BottomAppBar(
+            color: kHyppeLightSurface,
+            height: 100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: IconButton(
+                    icon: CustomIconWidget(
+                      defaultColor: false,
+                      color: notifier.pageIndex == 0 ? kHyppeTextLightPrimary : _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+                      iconData: notifier.pageIndex == 0 ? '${AssetPath.vectorPath}home-active.svg' : '${AssetPath.vectorPath}home.svg',
+                    ),
+                    onPressed: () {
+                      tapMenu(0, notifier, consumerContext);
+                    },
+                  ),
                 ),
-                activeIcon: const CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}home-active.svg'),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color, iconData: '${AssetPath.vectorPath}search-nav.svg'),
-                label: '',
-                activeIcon: const CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}search-active.svg'),
-              ),
-              const BottomNavigationBarItem(
-                icon: CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}hyppe-button.svg'),
-                label: '',
-                activeIcon: CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}hyppe-button.svg'),
-              ),
-              BottomNavigationBarItem(
-                icon: Stack(children: [
-                  CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color, iconData: '${AssetPath.vectorPath}notification.svg'),
-                  const NotificationCircle()
-                ]),
-                label: '',
-                activeIcon: const CustomIconWidget(
-                  defaultColor: false,
-                  color: kHyppeTextLightPrimary,
-                  iconData: '${AssetPath.vectorPath}notification-active.svg',
+                Expanded(
+                  child: IconButton(
+                    icon: CustomIconWidget(
+                      defaultColor: false,
+                      color: notifier.pageIndex == 1 ? kHyppeTextLightPrimary : _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+                      iconData: notifier.pageIndex == 1 ? '${AssetPath.vectorPath}search-active.svg' : '${AssetPath.vectorPath}search-nav.svg',
+                    ),
+                    onPressed: () {
+                      tapMenu(1, notifier, consumerContext);
+                    },
+                  ),
                 ),
-              ),
-              const BottomNavigationBarItem(
-                icon: Profile(),
-                label: '',
-              ),
-              // BottomNavigationBarItem(
-              //   icon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color, iconData: '${AssetPath.vectorPath}message.svg'),
-              //   activeIcon: CustomIconWidget(
-              //     defaultColor: false,
-              //     color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
-              //     iconData: '${AssetPath.vectorPath}message-active.svg',
-              //   ),
-              //   label: '',
-              // ),
-            ],
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      tapMenu(2, notifier, consumerContext);
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: CustomIconWidget(
+                        defaultColor: false,
+                        iconData: '${AssetPath.vectorPath}hyppe-button.svg',
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: IconButton(
+                    icon: Stack(children: [
+                      CustomIconWidget(
+                        defaultColor: false,
+                        color: notifier.pageIndex == 3 ? kHyppeTextLightPrimary : _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+                        iconData: notifier.pageIndex == 3 ? '${AssetPath.vectorPath}notification-active.svg' : '${AssetPath.vectorPath}notification.svg',
+                      ),
+                      const NotificationCircle()
+                    ]),
+                    onPressed: () {
+                      tapMenu(3, notifier, consumerContext);
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: IconButton(
+                    icon: Profile(),
+                    onPressed: () {
+                      tapMenu(4, notifier, consumerContext);
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
+          // bottomNavigationBar: BottomNavigationBar(
+          //   landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+          //   showSelectedLabels: false,
+          //   showUnselectedLabels: false,
+          //   elevation: 0.5,
+          //   onTap: (int index) async {
+          //     if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
+          //     if (index != 2) {
+          //       setState(() {
+          //         notifier.pageIndex = index;
+          //       });
+          //     } else {
+          //       await notifier.onShowPostContent(consumerContext);
+          //     }
+          //   },
+          //   currentIndex: notifier.pageIndex,
+          //   type: BottomNavigationBarType.fixed,
+          //   items: [
+          //     BottomNavigationBarItem(
+          //       icon: CustomIconWidget(
+          //         defaultColor: false,
+          //         color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+          //         iconData: '${AssetPath.vectorPath}home.svg',
+          //       ),
+          //       activeIcon: const CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}home-active.svg'),
+          //       label: '',
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color, iconData: '${AssetPath.vectorPath}search-nav.svg'),
+          //       label: '',
+          //       activeIcon: const CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}search-active.svg'),
+          //     ),
+          //     const BottomNavigationBarItem(
+          //       icon: CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}hyppe-button.svg'),
+          //       label: '',
+          //       activeIcon: CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}hyppe-button.svg'),
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Stack(children: [
+          //         CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color, iconData: '${AssetPath.vectorPath}notification.svg'),
+          //         const NotificationCircle()
+          //       ]),
+          //       label: '',
+          //       activeIcon: const CustomIconWidget(
+          //         defaultColor: false,
+          //         color: kHyppeTextLightPrimary,
+          //         iconData: '${AssetPath.vectorPath}notification-active.svg',
+          //       ),
+          //     ),
+          //     const BottomNavigationBarItem(
+          //       icon: Profile(),
+          //       label: '',
+          //     ),
+          //     // BottomNavigationBarItem(
+          //     //   icon: CustomIconWidget(defaultColor: false, color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color, iconData: '${AssetPath.vectorPath}message.svg'),
+          //     //   activeIcon: CustomIconWidget(
+          //     //     defaultColor: false,
+          //     //     color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+          //     //     iconData: '${AssetPath.vectorPath}message-active.svg',
+          //     //   ),
+          //     //   label: '',
+          //     // ),
+          //   ],
+          // ),
         );
       },
     );
+  }
+
+  void tapMenu(int index, MainNotifier notifier, consumerContext) async {
+    if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
+    if (index != 2) {
+      setState(() {
+        notifier.pageIndex = index;
+      });
+    } else {
+      await notifier.onShowPostContent(consumerContext);
+    }
   }
 }

@@ -22,6 +22,9 @@ import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import '../../../core/constants/asset_path.dart';
+import '../../../core/constants/themes/hyppe_colors.dart';
+import '../../../ux/path.dart';
+import '../../../ux/routing.dart';
 import '../../constant/widget/custom_icon_widget.dart';
 import '../../constant/widget/custom_spacer.dart';
 import '../home/widget/profile.dart';
@@ -149,14 +152,29 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
         child: AppBar(
           centerTitle: false,
           automaticallyImplyLeading: false,
-          actions: const [
+          actions: [
             // Doku(),
-            Profile(),
-            // AliPlayer(),
-            sixteenPx,
+            // Profile(),
+            // // AliPlayer(),
+            // sixteenPx,
+            Consumer<MainNotifier>(builder: (context, notifier, _) {
+              final isReceived = notifier.receivedMsg;
+              return GestureDetector(
+                onTap: () {
+                  Routing().move(Routes.message);
+                  notifier.receivedMsg = false;
+                },
+                child: isReceived
+                    ? CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}message_with_dot.svg')
+                    : CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}message.svg'),
+              );
+            }),
+            sixteenPx
           ],
-          title:
-          const CustomIconWidget(iconData: "${AssetPath.vectorPath}hyppe.svg"),
+          title: const CustomIconWidget(
+            iconData: "${AssetPath.vectorPath}hyppe.svg",
+            color: kHyppeTextLightPrimary,
+          ),
         ),
       ),
       body: RefreshIndicator(

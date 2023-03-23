@@ -96,15 +96,15 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     if (_routeArgument?.postID != null) {
       'pic playlist'.logger();
 
-      await _initialPic(context);
-    } else {
+      await _initialPic(context, _routeArgument?.postID ?? '', _routeArgument?.picData?.visibility ?? 'PUBLIC');
+    }else {
       _data = _routeArgument?.picData;
       data?.isLiked.logger();
       notifyListeners();
 
       _checkFollowingToUser(context, autoFollow: false);
       _increaseViewCount(context);
-      await initDetailPost(context, _data?.postID ?? '');
+      await initDetailPost(context, _data?.postID ?? '', _routeArgument?.picData?.visibility ?? 'PUBLIC');
     }
   }
 
@@ -148,9 +148,9 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     return null;
   }
 
-  Future<ContentData?> getDetailPost(BuildContext context, String postID) async {
+  Future<ContentData?> getDetailPost(BuildContext context, String postID, String visibility) async {
     final notifier = PostsBloc();
-    await notifier.getContentsBlocV2(context, postID: postID, pageRows: 1, pageNumber: 1, type: FeatureType.pic);
+    await notifier.getContentsBlocV2(context, postID: postID, pageRows: 1, pageNumber: 1, type: FeatureType.pic, visibility: visibility);
     final fetch = notifier.postsFetch;
 
     final _res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
@@ -165,21 +165,23 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future initDetailPost(BuildContext context, String postID) async {
-    data = await getDetailPost(context, postID);
+  Future initDetailPost(BuildContext context, String postID, String visibility) async {
+    data = await getDetailPost(context, postID, visibility);
     print("tetsdausdjha1 ${data?.toJson()}");
   }
 
   Future<void> _initialPic(
     BuildContext context,
+      String postID,
+      String visibility
   ) async {
     Future<List<ContentData>> _resFuture;
 
-    contentsQuery.postID = _routeArgument?.postID;
+    contentsQuery.postID = postID;
 
     try {
       'reload contentsQuery : 6'.logger();
-      _resFuture = contentsQuery.reload(context);
+      _resFuture = contentsQuery.reload(context, visibility: visibility);
 
       final res = await _resFuture;
       _data = res.firstOrNull;
