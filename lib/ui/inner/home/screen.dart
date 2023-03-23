@@ -272,6 +272,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     _tabController.index = homneNotifier.tabIndex;
     _tabController.animation?.addListener(() {
       homneNotifier.tabIndex = _tabController.index;
+      print("masuk tab slide");
+
+      if (homneNotifier.lastCurIndex != homneNotifier.tabIndex) {
+        homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
+      }
+      homneNotifier.lastCurIndex = homneNotifier.tabIndex;
     });
     if (isHomeScreen) {
       print("isOnHomeScreen hit ads");

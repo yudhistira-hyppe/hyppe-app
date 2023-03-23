@@ -88,8 +88,16 @@ class HomeNotifier with ChangeNotifier {
   int _tabIndex = 0;
   int get tabIndex => _tabIndex;
 
+  int _lastCurIndex = -1;
+  int get lastCurIndex => _lastCurIndex;
+
   set tabIndex(val) {
     _tabIndex = val;
+    notifyListeners();
+  }
+
+  set lastCurIndex(val) {
+    _lastCurIndex = val;
     notifyListeners();
   }
 
@@ -178,7 +186,8 @@ class HomeNotifier with ChangeNotifier {
       final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
       final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
 
-      if ((!isreload && !isgetMore) && ((pic.pic?.isNotEmpty ?? [].isNotEmpty) || (diary.diaryData?.isNotEmpty ?? [].isNotEmpty) || (vid.vidData?.isNotEmpty ?? [].isNotEmpty))) {
+      print("data pic ${(pic.pic?.isNotEmpty ?? [].isNotEmpty) && (diary.diaryData?.isNotEmpty ?? [].isNotEmpty)}");
+      if ((!isreload && !isgetMore) && ((pic.pic?.isNotEmpty ?? [].isNotEmpty) && (diary.diaryData?.isNotEmpty ?? [].isNotEmpty) && (vid.vidData?.isNotEmpty ?? [].isNotEmpty))) {
         print("pic pic masuk ");
         return;
       }
@@ -193,6 +202,8 @@ class HomeNotifier with ChangeNotifier {
         if (index == 2) skipvid = skipvid + limit;
         isreload = false;
       }
+
+      print("ini index $index");
 
       switch (index) {
         case 0:
@@ -211,10 +222,12 @@ class HomeNotifier with ChangeNotifier {
           data['skip'] = skipvid;
           break;
       }
+      if (isreload) {
+        await stories.initialStories(context);
+      }
 
       final allContents = await reload(context, data);
 
-      await stories.initialStories(context);
       if (profileImage == '') {
         try {
           await profile.initMain(context, onUpdateProfile: true);
@@ -227,10 +240,10 @@ class HomeNotifier with ChangeNotifier {
           if (!mounted) return;
           await pic.initialPic(context, reload: isreload || isNew, list: allContents);
           if (diary.diaryData == null) {
-            await initNewHome(context, mounted, forceIndex: 1);
+            initNewHome(context, mounted, forceIndex: 1);
           }
           if (vid.vidData == null) {
-            await initNewHome(context, mounted, forceIndex: 2);
+            initNewHome(context, mounted, forceIndex: 2);
           }
           break;
         case 1:
