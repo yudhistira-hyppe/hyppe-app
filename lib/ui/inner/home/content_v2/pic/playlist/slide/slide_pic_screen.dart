@@ -1,6 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
@@ -345,10 +346,10 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                             iconData: '${AssetPath.vectorPath}cart.svg',
                             function: () async {
                               notifier.preventMusic = true;
-                              SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                              // SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                               await ShowBottomSheet.onBuyContent(context, data: data);
                               notifier.preventMusic = false;
-                              SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                              // SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
                             },
                           ),
                       ],
@@ -431,7 +432,8 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     ),
                     twentyPx,
-                    (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&
+                    SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                            (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&
                             (data.boosted.isEmpty) &&
                             data.email == SharedPreference().readStorage(SpKeys.email)
                         ? ButtonBoost(

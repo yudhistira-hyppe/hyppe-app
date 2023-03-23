@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -138,7 +139,8 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
           ),
 
           twelvePx,
-          (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED' && widget.data?.reportedStatus2 != 'BLURRED') &&
+          SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                  (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED' && widget.data?.reportedStatus2 != 'BLURRED') &&
                   (widget.data?.boosted.isEmpty ?? [].isEmpty) &&
                   widget.data?.email == SharedPreference().readStorage(SpKeys.email)
               ? Container(

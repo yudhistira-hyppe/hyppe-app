@@ -131,12 +131,14 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                                 ),
                               ),
                               //  if (orientation == Orientation.portrait) twelvePx,
-                              Offstage(
-                                  offstage: orientation == Orientation.landscape,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 12.0),
-                                    child: _bottomDetail(context, notifier, data),
-                                  )),
+                              (widget.arguments.vidData?.allowComments ?? false)
+                                  ? Offstage(
+                                      offstage: orientation == Orientation.landscape,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 12.0),
+                                        child: _bottomDetail(context, notifier, data),
+                                      ))
+                                  : Container(),
                             ],
                           ),
                         ),
@@ -374,7 +376,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                   ],
                 ),
               ),
-              if ((data.saleAmount ?? 0) > 0)
+              if ((data.saleAmount ?? 0) > 0 && data.email != SharedPreference().readStorage(SpKeys.email))
                 Container(
                   margin: const EdgeInsets.only(left: 10),
                   child: InkWell(

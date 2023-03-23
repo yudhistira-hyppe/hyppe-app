@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -58,7 +59,8 @@ class PicDetailBottom extends StatelessWidget {
               : Container(),
           twelvePx,
           _buildDescription(context),
-          (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED' && data?.reportedStatus2 != 'BLURRED') &&
+          SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                  (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED' && data?.reportedStatus2 != 'BLURRED') &&
                   (data?.boosted.isEmpty ?? [].isEmpty) &&
                   data?.email == SharedPreference().readStorage(SpKeys.email)
               ? ButtonBoost(contentData: data)

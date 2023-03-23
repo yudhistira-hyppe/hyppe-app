@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -74,7 +75,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  set storiesGroups(List<StoriesGroup>? values){
+  set storiesGroups(List<StoriesGroup>? values) {
     _storiesGroups = values;
     notifyListeners();
   }
@@ -106,14 +107,11 @@ class PreviewStoriesNotifier with ChangeNotifier {
   //         ? (_peopleStoriesData?.length ?? 0) + 1
   //         : (_peopleStoriesData?.length ?? 0) + 1;
 
-
-  int peopleItemCount(dynamic error) => _storiesGroups == null && error == null
-      ? 10
-      : (_storiesGroups?.length ?? 0) + 1;
+  int peopleItemCount(dynamic error) => _storiesGroups == null && error == null ? 10 : (_storiesGroups?.length ?? 0) + 1;
 
   bool get hasNext => peopleContentsQuery.hasNext;
 
-  Future initialStories(BuildContext context/*, {List<ContentData>? list}*/) async {
+  Future initialStories(BuildContext context /*, {List<ContentData>? list}*/) async {
     // initialMyStories(context);
     initialMyStoryGroup(context);
     print('initialStories');
@@ -153,15 +151,15 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   Future<void> initialAllPeopleStories(BuildContext context, bool isStart) async {}
 
-  Future<void> initialStoriesGroup(BuildContext context) async{
+  Future<void> initialStoriesGroup(BuildContext context) async {
     List<StoriesGroup>? res = [];
-    try{
+    try {
       final notifier = PostsBloc();
       await notifier.getStoriesGroup(context);
       final fetch = notifier.postsFetch;
       res = (fetch.data as List<dynamic>?)?.map((e) => StoriesGroup.fromJson(e)).toList();
       storiesGroups = res ?? [];
-    }catch(e){
+    } catch (e) {
       'Story group: ERROR: $e'.logger();
     }
   }
@@ -337,6 +335,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
   }
 
   void uploadStories(BuildContext context) {
+    context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
     final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
     // notifier.thumbnailLocalMedia();
     notifier.featureType = FeatureType.story;

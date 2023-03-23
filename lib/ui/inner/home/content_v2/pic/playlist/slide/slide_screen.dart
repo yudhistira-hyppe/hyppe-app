@@ -89,7 +89,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                     itemCount: notifier.listData?.length ?? 0,
                     onPageChanged: (value) async {
                       notifier.nextPlaylistPic(context, value);
-                      notifier.initAdsVideo(context);
+                      // notifier.initAdsVideo(context);
                       final detailNotifier = context.read<PicDetailNotifier>();
                       print('onPageChanged Image : $value : ${notifier.listData?.length}');
                       print('check index hit : my index  ${notifier.currentIndex}: $value');

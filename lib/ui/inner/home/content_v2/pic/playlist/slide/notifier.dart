@@ -212,32 +212,27 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future<ContentData?> getDetailPost(BuildContext context, String postID) async{
+  Future<ContentData?> getDetailPost(BuildContext context, String postID) async {
     final notifier = PostsBloc();
-    await notifier.getContentsBlocV2(context,
-        postID: postID,
-        pageRows: 1,
-        pageNumber: 1,
-        type: FeatureType.pic);
+    await notifier.getContentsBlocV2(context, postID: postID, pageRows: 1, pageNumber: 1, type: FeatureType.pic);
     final fetch = notifier.postsFetch;
 
     final res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
-    if(res != null){
+    if (res != null) {
       return res.firstOrNull();
-    }else{
+    } else {
       return null;
     }
   }
 
   ContentData? _savedData;
   ContentData? get savedData => _savedData;
-  set savedData(ContentData? data){
+  set savedData(ContentData? data) {
     _savedData = data;
     notifyListeners();
   }
 
-  Future initDetailPost(BuildContext context, String postID) async{
-
+  Future initDetailPost(BuildContext context, String postID) async {
     savedData = await getDetailPost(context, postID);
     print("tetsdausdjha ${savedData?.toJson()}");
   }
@@ -312,7 +307,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   void initState(BuildContext context, SlidedPicDetailScreenArgument routeArgument) async {
     _routeArgument = routeArgument;
     _currentPage = _routeArgument?.index;
-    await initAdsVideo(context);
+    // await initAdsVideo(context);
     if (_routeArgument?.postID != null) {
       print("postSent");
       await _initialPic(context);

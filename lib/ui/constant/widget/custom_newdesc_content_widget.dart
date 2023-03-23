@@ -101,7 +101,7 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
       final maxWidth = constraints.maxWidth;
 
       final text = TextSpan(
-        children: [TextSpan(text: "${widget.desc}", style: effectiveTextStyle)],
+        children: [TextSpan(text: widget.desc, style: effectiveTextStyle)],
       );
 
       final textPainter = TextPainter(

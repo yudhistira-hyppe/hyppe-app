@@ -153,7 +153,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                               isIdVerified: vidData?.privacy?.isIdVerified,
                                             ),
                                           ),
-                                          if (vidData?.email != email)
+                                          if (vidData?.email != email && (vidData?.isNewFollowing ?? false))
                                             Consumer<PreviewPicNotifier>(
                                               builder: (context, picNot, child) => Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 8.0),

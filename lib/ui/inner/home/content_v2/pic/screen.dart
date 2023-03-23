@@ -373,8 +373,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     super.didChangeDependencies();
   }
 
-
-
   @override
   void dispose() {
     print("---=-=-=-=--===-=-=-=-DiSPOSE--=-=-=-=-=-=-=-=-=-=-=----==-=");
@@ -521,7 +519,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         isIdVerified: notifier.pic?[index].privacy?.isIdVerified,
                                       ),
                                     ),
-                                    if (notifier.pic?[index].email != email)
+                                    if (notifier.pic?[index].email != email && (notifier.pic?[index].isNewFollowing ?? false))
                                       Consumer<PreviewPicNotifier>(
                                         builder: (context, picNot, child) => Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -821,19 +819,20 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                                   expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Routing().move(Routes.commentsDetail,
-                                        argument: CommentsArgument(postID: notifier.pic?[index].postID ?? '', fromFront: true, data: notifier.pic?[index] ?? ContentData()));
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                    child: Text(
-                                      "${lang?.seeAll} ${notifier.pic?[index].comments} ${lang?.comment}",
-                                      style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                                if (notifier.pic?[index].allowComments ?? true)
+                                  GestureDetector(
+                                    onTap: () {
+                                      Routing().move(Routes.commentsDetail,
+                                          argument: CommentsArgument(postID: notifier.pic?[index].postID ?? '', fromFront: true, data: notifier.pic?[index] ?? ContentData()));
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                      child: Text(
+                                        "${lang?.seeAll} ${notifier.pic?[index].comments} ${lang?.comment}",
+                                        style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                                      ),
                                     ),
                                   ),
-                                ),
                                 (notifier.pic?[index].comment?.length ?? 0) > 0
                                     ? Padding(
                                         padding: const EdgeInsets.only(top: 0.0),

@@ -32,16 +32,23 @@ class OtherProfileTop extends StatelessWidget {
             // Text("${notifier.displayPhotoProfile()}"),
             Row(
               children: [
-                StoryColorValidator(
-                  haveStory: notifier.checkHaveStory(context),
-                  featureType: FeatureType.other,
-                  child: CustomProfileImage(
-                    following: true,
-                    width: 80 * SizeConfig.scaleDiagonal,
-                    height: 80 * SizeConfig.scaleDiagonal,
-                    imageUrl: notifier.displayPhotoProfile(),
-                    onTap: () => notifier.viewStory(context),
-                  ),
+                // StoryColorValidator(
+                //   haveStory: notifier.checkHaveStory(context),
+                //   featureType: FeatureType.other,
+                //   child: CustomProfileImage(
+                //     following: true,
+                //     width: 80 * SizeConfig.scaleDiagonal,
+                //     height: 80 * SizeConfig.scaleDiagonal,
+                //     imageUrl: notifier.displayPhotoProfile(),
+                //     onTap: () => notifier.viewStory(context),
+                //   ),
+                // ),
+                CustomProfileImage(
+                  following: true,
+                  width: 80 * SizeConfig.scaleDiagonal,
+                  height: 80 * SizeConfig.scaleDiagonal,
+                  imageUrl: notifier.displayPhotoProfile(),
+                  onTap: () => notifier.viewStory(context),
                 ),
                 Expanded(
                   child: Padding(

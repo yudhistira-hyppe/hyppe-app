@@ -387,7 +387,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           'Failed to fetch ads data 0 : $e'.logger();
         }
       }
-      if (adsNotifier.adsData != null) {
+      if (context.getAdsCount() == 3 && adsNotifier.adsData != null) {
         fAliplayer?.pause();
         System().adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(), adsNotifier.adsData?.data?.apsaraAuth ?? '', isInAppAds: false).whenComplete(() {
           fAliplayer?.play();
@@ -553,7 +553,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                         isIdVerified: notifier.diaryData?[index].privacy?.isIdVerified,
                                       ),
                                     ),
-                                    if (notifier.diaryData?[index].email != email)
+                                    if (notifier.diaryData?[index].email != email && (notifier.diaryData?[index].isNewFollowing ?? false))
                                       Consumer<PreviewPicNotifier>(
                                         builder: (context, picNot, child) => Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
