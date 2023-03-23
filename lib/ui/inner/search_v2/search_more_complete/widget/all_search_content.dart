@@ -91,6 +91,8 @@ class _AllSearchContentState extends State<AllSearchContent> {
   Widget widgetUserList(_themes, SearchNotifier notifier) {
     final users = notifier.searchUsers;
     final tags = notifier.searchHashtag;
+    final search = notifier.searchController.text;
+    final isHashtag = search.isHashtag();
     final isIndo = SharedPreference().readStorage(SpKeys.isoCode) == 'id';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +108,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
           ),
         ),
         twelvePx,
-        users.isNotNullAndEmpty() ? Column(
+        !isHashtag ? users.isNotNullAndEmpty() ? Column(
           children: [
             ...List.generate(
               (users?.length ?? 0) >= 5 ? 5 : users?.length ?? 0,
@@ -133,7 +135,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
               ),
             ),
           ],
-        ) : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
+        ) : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text): SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
         sixteenPx,
         Container(
           padding: const EdgeInsets.only(left: 0, top: 16),
