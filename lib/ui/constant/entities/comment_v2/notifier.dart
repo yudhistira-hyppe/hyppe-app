@@ -214,17 +214,16 @@ class CommentNotifierV2 with ChangeNotifier {
           final dataMap = repliesComments[parentID];
           if(dataMap != null){
             repliesComments[parentID]?.insertAll(0, [
-              const SizedBox(height: 16),
+              // const SizedBox(height: 16),
               SubCommentTile(logs: res.comment, parentID: parentID, fromFront: fromFront),
             ]);
           }else{
             repliesComments[parentID] = [];
             repliesComments[parentID]?.addAll([
-              const SizedBox(height: 16),
+              // const SizedBox(height: 16),
               SubCommentTile(logs: res.comment, parentID: parentID, fromFront: fromFront),
             ]);
           }
-
         }
 
         // delete text controller
@@ -272,7 +271,7 @@ class CommentNotifierV2 with ChangeNotifier {
     } else {
       repliesComments[comment?.comment?.lineID] = [
         for (final subComment in (comment?.comment?.detailDisquss ?? [])) ...[
-          const SizedBox(height: 16),
+          // const SizedBox(height: 16),
           SubCommentTile(
             logs: subComment,
             fromFront: fromFront,
