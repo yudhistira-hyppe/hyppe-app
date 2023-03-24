@@ -20,6 +20,7 @@ import 'package:hyppe/core/services/check_version.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -536,6 +537,7 @@ class HomeNotifier with ChangeNotifier {
     ContentData? _updatedData;
     ContentData? _updatedData2;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
+    final vid2 = Provider.of<VidDetailNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
     final pic2 = Provider.of<SlidedPicDetailNotifier>(context, listen: false);
@@ -544,6 +546,7 @@ class HomeNotifier with ChangeNotifier {
     switch (content) {
       case hyppeVid:
         _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData2 = vid2.data;
         break;
       case hyppeDiary:
         _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);

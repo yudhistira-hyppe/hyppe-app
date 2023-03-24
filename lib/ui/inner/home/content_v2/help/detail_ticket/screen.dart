@@ -762,55 +762,22 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
             },
             barrierColor: Colors.transparent);
       },
-      child: Container(
-        margin: const EdgeInsets.only(top: 10, bottom: 10),
-        child: Builder(builder: (context) {
-          if (lenght == 1) {
-            return CustomContentModeratedWidget(
-              width: 200,
-              height: 200,
-              isSale: false,
-              isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-              thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[0].realUrl),
-            );
-          } else if (lenght == 2) {
-            return Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 100,
-                  height: 100,
-                  alignment: Alignment.center,
-                  child: CustomContentModeratedWidget(
-                    width: 100,
-                    height: 100,
-                    isSale: false,
-                    isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                    thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[0].realUrl),
-                  ),
-                ),
-                tenPx,
-                Container(
-                  width: 100,
-                  height: 100,
-                  alignment: Alignment.center,
-                  child: CustomContentModeratedWidget(
-                    width: 100,
-                    height: 100,
-                    isSale: false,
-                    isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                    thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[1].realUrl),
-                  ),
-                ),
-              ],
-            );
-          } else if (lenght == 3) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
+      child: Column(
+        children: [
+          // SelectableText('${fixList[0].realUrl}'),
+          Container(
+            margin: const EdgeInsets.only(top: 10, bottom: 10),
+            child: Builder(builder: (context) {
+              if (lenght == 1) {
+                return CustomContentModeratedWidget(
+                  width: 200,
+                  height: 200,
+                  isSale: false,
+                  isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                  thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[0].realUrl),
+                );
+              } else if (lenght == 2) {
+                return Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -840,107 +807,145 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                       ),
                     ),
                   ],
-                ),
-                tenPx,
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                );
+              } else if (lenght == 3) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      child: CustomContentModeratedWidget(
-                        width: 100,
-                        height: 100,
-                        isSale: false,
-                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                        thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[2].realUrl),
-                      ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 100,
+                          alignment: Alignment.center,
+                          child: CustomContentModeratedWidget(
+                            width: 100,
+                            height: 100,
+                            isSale: false,
+                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[0].realUrl),
+                          ),
+                        ),
+                        tenPx,
+                        Container(
+                          width: 100,
+                          height: 100,
+                          alignment: Alignment.center,
+                          child: CustomContentModeratedWidget(
+                            width: 100,
+                            height: 100,
+                            isSale: false,
+                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[1].realUrl),
+                          ),
+                        ),
+                      ],
                     ),
                     tenPx,
-                    Container(
-                      width: 100,
-                      height: 100,
-                      color: Colors.transparent,
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 100,
+                          alignment: Alignment.center,
+                          child: CustomContentModeratedWidget(
+                            width: 100,
+                            height: 100,
+                            isSale: false,
+                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[2].realUrl),
+                          ),
+                        ),
+                        tenPx,
+                        Container(
+                          width: 100,
+                          height: 100,
+                          color: Colors.transparent,
+                        ),
+                      ],
                     ),
                   ],
-                ),
-              ],
-            );
-          } else if (lenght == 4) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                );
+              } else if (lenght == 4) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      child: CustomContentModeratedWidget(
-                        width: 100,
-                        height: 100,
-                        isSale: false,
-                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                        thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[0].realUrl),
-                      ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 100,
+                          alignment: Alignment.center,
+                          child: CustomContentModeratedWidget(
+                            width: 100,
+                            height: 100,
+                            isSale: false,
+                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[0].realUrl),
+                          ),
+                        ),
+                        tenPx,
+                        Container(
+                          width: 100,
+                          height: 100,
+                          alignment: Alignment.center,
+                          child: CustomContentModeratedWidget(
+                            width: 100,
+                            height: 100,
+                            isSale: false,
+                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[1].realUrl),
+                          ),
+                        ),
+                      ],
                     ),
                     tenPx,
-                    Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      child: CustomContentModeratedWidget(
-                        width: 100,
-                        height: 100,
-                        isSale: false,
-                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                        thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[1].realUrl),
-                      ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 100,
+                          alignment: Alignment.center,
+                          child: CustomContentModeratedWidget(
+                            width: 100,
+                            height: 100,
+                            isSale: false,
+                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[2].realUrl),
+                          ),
+                        ),
+                        tenPx,
+                        Container(
+                          width: 100,
+                          height: 100,
+                          alignment: Alignment.center,
+                          child: CustomContentModeratedWidget(
+                            width: 100,
+                            height: 100,
+                            isSale: false,
+                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                            thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[3].realUrl),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
-                ),
-                tenPx,
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      child: CustomContentModeratedWidget(
-                        width: 100,
-                        height: 100,
-                        isSale: false,
-                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                        thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[2].realUrl),
-                      ),
-                    ),
-                    tenPx,
-                    Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      child: CustomContentModeratedWidget(
-                        width: 100,
-                        height: 100,
-                        isSale: false,
-                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                        thumbnail: ImageUrl(widget.data.ticketModel?.idUser, url: fixList[3].realUrl),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        }),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            }),
+          ),
+        ],
       ),
     );
   }

@@ -141,8 +141,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     _pageController = PageController(initialPage: widget.argument.peopleIndex);
     animationController = AnimationController(vsync: this, duration: const Duration(seconds: 7));
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-
-
       _animationController = AnimationController(
         vsync: this,
       )
@@ -525,15 +523,23 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
           itemBuilder: (context, index) {
             return Stack(
               children: [
-                _groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null || _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType != 'image'
-                    ? AliPlayerView(
-                        onCreated: onViewPlayerCreated,
-                        x: 0,
-                        y: _playerY,
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                      )
-                    : Container(),
+                // Text("${_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null || _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType != 'image'}"),
+                // _groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null || _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType != 'image'
+                //     ? AliPlayerView(
+                //         onCreated: onViewPlayerCreated,
+                //         x: 0,
+                //         y: _playerY,
+                //         width: MediaQuery.of(context).size.width,
+                //         height: MediaQuery.of(context).size.height,
+                //       )
+                //     : Container(),
+                AliPlayerView(
+                  onCreated: onViewPlayerCreated,
+                  x: 0,
+                  y: _playerY,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
@@ -602,17 +608,17 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
               ),
             ],
           ),
-          if(_groupUserStories?[_curIdx].story?[_curChildIdx] != null)
-          BuildTopView(
-            when: System().readTimestamp(
-                  DateTime.parse(_groupUserStories?[_curIdx].story?[_curChildIdx].createdAt ?? '').millisecondsSinceEpoch,
-                  context,
-                  fullCaption: true,
-                ) ??
-                '',
-            data: _groupUserStories?[_curIdx].story?[_curChildIdx],
-            // storyController: _storyController,
-          ),
+          if (_groupUserStories?[_curIdx].story?[_curChildIdx] != null)
+            BuildTopView(
+              when: System().readTimestamp(
+                    DateTime.parse(_groupUserStories?[_curIdx].story?[_curChildIdx].createdAt ?? '').millisecondsSinceEpoch,
+                    context,
+                    fullCaption: true,
+                  ) ??
+                  '',
+              data: _groupUserStories?[_curIdx].story?[_curChildIdx],
+              // storyController: _storyController,
+            ),
           (_groupUserStories?[_curIdx].story?[_curChildIdx].isReport ?? false)
               ? Container()
               : Form(

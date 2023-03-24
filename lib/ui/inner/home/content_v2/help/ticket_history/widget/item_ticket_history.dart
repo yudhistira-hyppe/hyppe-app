@@ -26,7 +26,7 @@ class ItemTicketHistory extends StatelessWidget {
     final isDarkMode = context.isDarkMode();
     final fixDate = data.dateTime?.split('T')[0];
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Routing().move(Routes.detailTAHistory, argument: DetailTicketArgument(ticketModel: data));
       },
       child: Container(
@@ -36,7 +36,6 @@ class ItemTicketHistory extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
           color: Theme.of(context).colorScheme.background,
-
         ),
         child: Column(
           children: [
@@ -55,13 +54,21 @@ class ItemTicketHistory extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomTextWidget(textToDisplay: '${model.ticket}: ${data.ticketNo}', textStyle: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700, fontSize: 12),),
+                    CustomTextWidget(
+                      textToDisplay: '${model.ticket}: ${data.ticketNo}',
+                      textStyle: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700, fontSize: 12),
+                    ),
                     sixPx,
-                    CustomTextWidget(textToDisplay: 'Level: ${data.levelName ?? data.levelTicket}', textStyle: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700, fontSize: 10, color: isDarkMode ? Colors.white: kHyppeLightSecondary),)
+                    CustomTextWidget(
+                      textToDisplay: 'Level: ${data.levelName ?? data.levelTicket}',
+                      textStyle: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700, fontSize: 10, color: isDarkMode ? Colors.white : kHyppeLightSecondary),
+                    )
                   ],
                 ),
-                if(fixDate != null)
-                  CustomTextWidget(textToDisplay: fixDate.getDateFormat("yyyy-MM-dd", model), textStyle: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700, fontSize: 8, color: isDarkMode ? Colors.white: kHyppeLightSecondary))
+                if (fixDate != null)
+                  CustomTextWidget(
+                      textToDisplay: fixDate.getDateFormat("yyyy-MM-dd", model),
+                      textStyle: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700, fontSize: 8, color: isDarkMode ? Colors.white : kHyppeLightSecondary))
               ],
             )
           ],
@@ -71,10 +78,10 @@ class ItemTicketHistory extends StatelessWidget {
   }
 }
 
-Widget _getTypeBadge(BuildContext context, TicketType type, TicketStatus status, LocalizationModelV2 model){
+Widget _getTypeBadge(BuildContext context, TicketType type, TicketStatus status, LocalizationModelV2 model) {
   var resIcon = '';
   var labelBadge = '';
-  switch(type){
+  switch (type) {
     case TicketType.content:
       resIcon = "${AssetPath.vectorPath}content_icon.svg";
       labelBadge = model.content ?? 'Content';
@@ -108,7 +115,7 @@ Widget _getTypeBadge(BuildContext context, TicketType type, TicketStatus status,
   var labelProgress = '';
   var colorFont = Colors.transparent;
   var colorBg = Colors.transparent;
-  switch(status){
+  switch (status) {
     case TicketStatus.inProgress:
       labelProgress = model.inProgress ?? 'In-Progress';
       colorFont = kHyppeFontInprogress;
@@ -142,17 +149,20 @@ Widget _getTypeBadge(BuildContext context, TicketType type, TicketStatus status,
             CustomIconWidget(iconData: resIcon),
             Container(
               margin: const EdgeInsets.only(left: 8, top: 14, bottom: 13),
-              child: CustomTextWidget(textToDisplay: labelBadge, textStyle: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700, fontSize: 12),),
+              child: CustomTextWidget(
+                textToDisplay: labelBadge,
+                textStyle: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700, fontSize: 12),
+              ),
             ),
           ],
         ),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 13),
-          child: CustomTextWidget(textToDisplay: labelProgress, textStyle: TextStyle(color: colorFont, fontWeight: FontWeight.w700, fontSize: 10),),
-          decoration: BoxDecoration(
-            color: colorBg,
-            borderRadius: const BorderRadius.all(Radius.circular(4))
+          child: CustomTextWidget(
+            textToDisplay: labelProgress,
+            textStyle: TextStyle(color: colorFont, fontWeight: FontWeight.w700, fontSize: 10),
           ),
+          decoration: BoxDecoration(color: colorBg, borderRadius: const BorderRadius.all(Radius.circular(4))),
         ),
       ],
     ),
