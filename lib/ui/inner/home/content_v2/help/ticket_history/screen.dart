@@ -22,7 +22,6 @@ class TicketHistoryScreen extends StatefulWidget {
 }
 
 class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'TicketHistoryScreen');
@@ -34,7 +33,7 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Consumer<TicketHistoryNotifier>(
-      builder: (context, notifier, _){
+      builder: (context, notifier, _) {
         return Scaffold(
           appBar: AppBar(
             leading: CustomIconButtonWidget(
@@ -47,20 +46,16 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
               textToDisplay: notifier.language.ticketHistory ?? 'Ticket History',
               textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
             ),
-            centerTitle: false,),
+            centerTitle: false,
+          ),
           body: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const TicketHistoryTabsScreen(),
-              Expanded(child: notifier.isHelpTab ? HelpTicketScreen() : ContentAppealScreen())
-            ],
+            children: [const TicketHistoryTabsScreen(), Expanded(child: notifier.isHelpTab ? HelpTicketScreen() : ContentAppealScreen())],
           ),
         );
       },
     );
   }
-
-
 }

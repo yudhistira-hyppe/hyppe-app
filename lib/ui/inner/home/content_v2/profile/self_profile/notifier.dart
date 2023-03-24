@@ -422,7 +422,7 @@ class SelfProfileNotifier with ChangeNotifier {
         for (var v in cats) {
           _updatedData.cats?.add(
             Cats(
-              interestName: v,
+              id: v,
             ),
           );
         }
