@@ -791,6 +791,8 @@ class PreUploadContentNotifier with ChangeNotifier {
             isShared: isShared,
           );
 
+      // print("ini kategori $_interestData");
+
       updateContent = false;
       Routing().moveBack();
 

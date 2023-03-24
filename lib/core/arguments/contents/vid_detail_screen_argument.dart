@@ -5,9 +5,10 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 class VidDetailScreenArgument extends ContentScreenArgument {
   final ContentData? vidData;
   final contentPosition? inPosition;
+  final bool fromLAnding;
 
   @override
   FeatureType get featureType => FeatureType.vid;
 
-  VidDetailScreenArgument({this.vidData, this.inPosition});
+  VidDetailScreenArgument({this.vidData, this.inPosition, this.fromLAnding = false});
 }

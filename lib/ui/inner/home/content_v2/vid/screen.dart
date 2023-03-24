@@ -116,7 +116,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                               final vidData = vidNotifier.vidData?[index];
                               return GestureDetector(
                                 onTap: () {
-                                  vidNotifier.navigateToHyppeVidDetail(context, vidData);
+                                  vidNotifier.navigateToHyppeVidDetail(context, vidData, fromLAnding: true);
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(

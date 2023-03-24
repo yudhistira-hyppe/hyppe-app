@@ -37,9 +37,9 @@ class PlayerPage extends StatefulWidget {
   final ModeTypeAliPLayer playMode;
   final Map<String, dynamic> dataSourceMap;
   final ContentData? data;
-
   double? height;
   double? width;
+  final bool inLanding;
 
   PlayerPage({
     Key? key,
@@ -48,6 +48,7 @@ class PlayerPage extends StatefulWidget {
     required this.data,
     this.height,
     this.width,
+    this.inLanding = false,
   }) : super(key: key);
 
   @override
@@ -721,11 +722,14 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                   onTap: () {
                     print("ini play");
                     isPlay = true;
-                    _initAds(context);
+                    if (widget.inLanding) {
+                      _initAds(context);
+                      context.incrementAdsCount();
+                    }
                     setState(() {
                       _showLoading = true;
                     });
-                    context.incrementAdsCount();
+
                     if (adsData != null) {
                       fAliplayerAds?.prepare().whenComplete(() => _showLoading = false);
                       fAliplayerAds?.play();
@@ -901,6 +905,10 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           fAliplayer?.pause();
           isPause = true;
           setState(() {});
+        }
+        if (_showTipsWidget) {
+          fAliplayer?.prepare();
+          fAliplayer?.play();
         }
       },
       child: CustomIconWidget(

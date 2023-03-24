@@ -211,12 +211,13 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  void navigateToHyppeVidDetail(BuildContext context, ContentData? data) async {
+  void navigateToHyppeVidDetail(BuildContext context, ContentData? data, {bool fromLAnding = false}) async {
     final connect = await _system.checkConnections();
     if (connect) {
       _routing.move(Routes.vidDetail,
           argument: VidDetailScreenArgument(
             vidData: data,
+            fromLAnding: fromLAnding,
           )
             ..postID = data?.postID
             ..backPage = true);

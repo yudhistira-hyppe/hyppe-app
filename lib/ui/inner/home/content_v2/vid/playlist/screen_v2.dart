@@ -121,6 +121,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                                         data: data,
                                         height: height,
                                         width: width,
+                                        inLanding: widget.arguments.fromLAnding,
                                       ),
                                     ),
                                     Offstage(

@@ -582,7 +582,8 @@ class HomeNotifier with ChangeNotifier {
         for (var v in cats) {
           _updatedData.cats?.add(
             Cats(
-              interestName: v,
+              id: v,
+              // interestName: v,
             ),
           );
         }
@@ -608,7 +609,8 @@ class HomeNotifier with ChangeNotifier {
           for (var v in cats) {
             _updatedData2.cats!.add(
               Cats(
-                interestName: v,
+                id: v,
+                // interestName: v,
               ),
             );
           }
