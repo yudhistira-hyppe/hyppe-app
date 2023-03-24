@@ -210,11 +210,21 @@ class CommentNotifierV2 with ChangeNotifier {
           _commentData?.insert(0, res);
         } else {
           final _parentIndex = _commentData?.indexWhere((element) => element.comment?.lineID == parentID);
-          _commentData?[_parentIndex ?? 0].replies.insert(0, res.comment ?? DisqusLogs());
-          repliesComments[parentID]?.insertAll(0, [
-            const SizedBox(height: 16),
-            SubCommentTile(logs: res.comment, parentID: parentID, fromFront: fromFront),
-          ]);
+          _commentData?[_parentIndex ?? 0].comment?.detailDisquss?.insert(0, res.comment ?? DisqusLogs());
+          final dataMap = repliesComments[parentID];
+          if(dataMap != null){
+            repliesComments[parentID]?.insertAll(0, [
+              const SizedBox(height: 16),
+              SubCommentTile(logs: res.comment, parentID: parentID, fromFront: fromFront),
+            ]);
+          }else{
+            repliesComments[parentID] = [];
+            repliesComments[parentID]?.addAll([
+              const SizedBox(height: 16),
+              SubCommentTile(logs: res.comment, parentID: parentID, fromFront: fromFront),
+            ]);
+          }
+
         }
 
         // delete text controller
