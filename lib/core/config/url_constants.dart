@@ -168,6 +168,8 @@ class UrlConstants {
   /// user => Change Language
   static const String userPin = "$userRoute/pin";
 
+  static const String userBearer = "$userRoute/bearer";
+
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Playlist */
   /// post => Create new playlist.
