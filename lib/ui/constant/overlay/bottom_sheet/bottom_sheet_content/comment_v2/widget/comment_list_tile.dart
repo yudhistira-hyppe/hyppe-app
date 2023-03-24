@@ -46,135 +46,152 @@ class _CommentListTileState extends State<CommentListTile> {
     final _language = context.watch<TranslateNotifierV2>().translate;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16 * SizeConfig.scaleDiagonal),
-      child: Stack(
+      child: Column(
         children: [
-          Align(
-            alignment: const Alignment(-1.0, 0.0),
-            child: CustomProfileImage(
-              following: true,
-              width: 30 * SizeConfig.scaleDiagonal,
-              height: 30 * SizeConfig.scaleDiagonal,
-              imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
-              onTap: () => System().navigateToProfile(context, comment?.sender ?? ''),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 42 * SizeConfig.scaleDiagonal),
-            child: Consumer<CommentNotifierV2>(
-              builder: (_, notifier, __) => Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomRichTextWidget(
-                    textAlign: TextAlign.start,
-                    textSpan: TextSpan(
-                      style: Theme.of(context).textTheme.caption,
-                      text: commentor?.username != null ? "@" + (commentor?.username ?? '') + "   " : '',
-                      children: [
-                        TextSpan(
-                          text: System().readTimestamp(
-                            DateTime.parse(System().dateTimeRemoveT(widget.data?.comment?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                            context,
-                            fullCaption: true,
-                          ),
-                          style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary),
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 6 * SizeConfig.scaleDiagonal),
-
-                  CustomDescContent(
-                      desc: comment?.txtMessages ?? '',
-                      trimLines: 5,
-                      textAlign: TextAlign.start,
-                      seeLess: ' ${notifier.language.seeLess}',
-                      seeMore: ' ${notifier.language.seeMoreContent}',
-                      textOverflow: TextOverflow.visible,
-                      normStyle: Theme.of(context).textTheme.bodyText2,
-                      hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
-                      expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary)),
-                  SizedBox(height: 9 * SizeConfig.scaleDiagonal),
-                  Row(
+          Stack(
+            children: [
+              Align(
+                alignment: const Alignment(-1.0, 0.0),
+                child: CustomProfileImage(
+                  following: true,
+                  width: 30 * SizeConfig.scaleDiagonal,
+                  height: 30 * SizeConfig.scaleDiagonal,
+                  imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
+                  onTap: () => System().navigateToProfile(context, comment?.sender ?? ''),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 42 * SizeConfig.scaleDiagonal),
+                child: Consumer<CommentNotifierV2>(
+                  builder: (_, notifier, __) => Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          if (widget.fromFront) {
-                            ShowBottomSheet.onShowCommentV2(
-                              context,
-                              parentComment: comment,
-                              postID: notifier.postID,
-                            );
-                          } else {
-                            notifier.showTextInput = true;
-                            notifier.onReplayCommentV2(
-                              context,
-                              comment: comment,
-                              parentCommentID: comment?.lineID,
-                            );
-                          }
-                        },
-                        child: Row(
+                      CustomRichTextWidget(
+                        textAlign: TextAlign.start,
+                        textSpan: TextSpan(
+                          style: Theme.of(context).textTheme.caption,
+                          text: commentor?.username != null ? "@" + (commentor?.username ?? '') + "   " : '',
                           children: [
-                            CustomIconWidget(
-                              width: 20 * SizeConfig.scaleDiagonal,
-                              height: 20 * SizeConfig.scaleDiagonal,
-                              iconData: "${AssetPath.vectorPath}comment.svg",
-                            ),
-                            CustomTextWidget(
-                              textToDisplay: " ${_language.reply}",
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: kHyppeBottomNavBarIcon,
+                            TextSpan(
+                              text: System().readTimestamp(
+                                DateTime.parse(System().dateTimeRemoveT(widget.data?.comment?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                                context,
+                                fullCaption: true,
                               ),
-                            ),
+                              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary),
+                            )
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                  repliesCount > 0 ? SizedBox(height: 16 * SizeConfig.scaleDiagonal) : const SizedBox.shrink(),
-                  repliesCount > 0
-                      ? InkWell(
-                          onTap: () {
-                            notifier.seeMoreReplies(widget.data);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: CustomTextWidget(
-                              textStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
-                              textToDisplay: notifier.repliesComments.containsKey(widget.data?.comment?.lineID)
-                                  ? '${_language.hideReplies}'
-                                  : "${_language.see} $repliesCount ${repliesCount > 1 ? _language.replies : _language.reply2}",
+                      SizedBox(height: 6 * SizeConfig.scaleDiagonal),
+
+                      CustomDescContent(
+                          desc: comment?.txtMessages ?? '',
+                          trimLines: 5,
+                          textAlign: TextAlign.start,
+                          seeLess: ' ${notifier.language.seeLess}',
+                          seeMore: ' ${notifier.language.seeMoreContent}',
+                          textOverflow: TextOverflow.visible,
+                          normStyle: Theme.of(context).textTheme.bodyText2,
+                          hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
+                          expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary)),
+                      SizedBox(height: 9 * SizeConfig.scaleDiagonal),
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              if (widget.fromFront) {
+                                ShowBottomSheet.onShowCommentV2(
+                                  context,
+                                  parentComment: comment,
+                                  postID: notifier.postID,
+                                );
+                              } else {
+                                notifier.showTextInput = true;
+                                notifier.onReplayCommentV2(
+                                  context,
+                                  comment: comment,
+                                  parentCommentID: comment?.lineID,
+                                );
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                CustomIconWidget(
+                                  width: 20 * SizeConfig.scaleDiagonal,
+                                  height: 20 * SizeConfig.scaleDiagonal,
+                                  iconData: "${AssetPath.vectorPath}comment.svg",
+                                ),
+                                CustomTextWidget(
+                                  textToDisplay: " ${_language.reply}",
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: kHyppeBottomNavBarIcon,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        )
-                      : const SizedBox.shrink(),
+                        ],
+                      ),
+                      repliesCount > 0 ? SizedBox(height: 16 * SizeConfig.scaleDiagonal) : const SizedBox.shrink(),
+                      repliesCount > 0
+                          ? InkWell(
+                              onTap: () {
+                                notifier.seeMoreReplies(widget.data);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                child: CustomTextWidget(
+                                  textStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
+                                  textToDisplay: notifier.repliesComments.containsKey(widget.data?.comment?.lineID)
+                                      ? '${_language.hideReplies}'
+                                      : "${_language.see} $repliesCount ${repliesCount > 1 ? _language.replies : _language.reply2}",
+                                ),
+                              ),
+                            )
+                          : const SizedBox.shrink(),
 
-                  // show sub comments
-                  notifier.repliesComments.containsKey(comment?.lineID)
-                      ? Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: notifier.repliesComments[comment?.lineID] ?? [],
-                        )
-                      : const SizedBox.shrink(),
-                ],
+                      // show sub comments
+                      // notifier.repliesComments.containsKey(comment?.lineID)
+                      //     ? Column(
+                      //         mainAxisSize: MainAxisSize.min,
+                      //         children: notifier.repliesComments[comment?.lineID] ?? [],
+                      //       )
+                      //     : const SizedBox.shrink(),
+                    ],
+                  ),
+                ),
               ),
-            ),
+              widget.data?.comment?.sender == email
+                  ? Consumer<CommentNotifierV2>(
+                      builder: (_, notifier, __) => Align(
+                          alignment: const Alignment(1.0, 0.0),
+                          child: InkWell(
+                              onTap: () async {
+                                ShowGeneralDialog.deleteContentDialog(context, '${_language.comment}', () async {
+                                  notifier.deleteComment(context, comment?.lineID ?? '', comment?.detailDisquss?.length ?? 0);
+                                });
+                              },
+                              child: const Icon(Icons.close))),
+                    )
+                  : const SizedBox(),
+            ],
           ),
-          widget.data?.comment?.sender == email
-              ? Consumer<CommentNotifierV2>(
-                  builder: (_, notifier, __) => Align(
-                      alignment: const Alignment(1.0, 0.0),
-                      child: InkWell(
-                          onTap: () async {
-                            ShowGeneralDialog.deleteContentDialog(context, '${_language.comment}', () async {
-                              notifier.deleteComment(context, comment?.lineID ?? '');
-                            });
-                          },
-                          child: const Icon(Icons.close))),
-                )
-              : const SizedBox(),
+          Consumer<CommentNotifierV2>(
+            builder: (_, comnotval, __) {
+              return comnotval.repliesComments.containsKey(comment?.lineID)
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: comnotval.repliesComments[comment?.lineID] ?? [],
+                      ),
+                    )
+                  : const SizedBox.shrink();
+            },
+          )
         ],
       ),
     );

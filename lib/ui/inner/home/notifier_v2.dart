@@ -829,4 +829,50 @@ class HomeNotifier with ChangeNotifier {
     }
     return data;
   }
+
+  void updateFollowing(BuildContext context, {required String email, bool? statusFollowing}) {
+    List<ContentData>? listDataVid = [];
+    List<ContentData>? listDataDiary = [];
+    List<ContentData>? listDataPic = [];
+    final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
+    final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
+    final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
+
+    listDataVid = vid.vidData?.where((element) => element.email == email).toList();
+
+    if (listDataVid?.isNotEmpty ?? [].isEmpty) {
+      listDataVid?.forEach((e) {
+        e.following = statusFollowing;
+      });
+    }
+    listDataDiary = diary.diaryData?.where((element) => element.email == email).toList();
+    if (listDataDiary?.isNotEmpty ?? [].isEmpty) {
+      listDataDiary?.forEach((e) => e.following = statusFollowing);
+    }
+
+    listDataPic = pic.pic?.where((element) => element.email == email).toList();
+    if (listDataPic?.isNotEmpty ?? [].isEmpty) {
+      listDataPic?.forEach((e) => e.following = statusFollowing);
+    }
+
+    notifyListeners();
+  }
+
+  void addCountComment(BuildContext context, String postID, bool add, int totChild) {
+    final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
+    final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
+    final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
+
+    ContentData? _updatedData;
+    _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
+    _updatedData ??= diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
+    _updatedData ??= pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+
+    if (add) {
+      _updatedData?.comments = (_updatedData.comments ?? 0) + 1;
+    } else {
+      _updatedData?.comments = (_updatedData.comments ?? 0) - (1 + totChild);
+    }
+    notifyListeners();
+  }
 }

@@ -16,6 +16,8 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -26,6 +28,7 @@ import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../../../core/arguments/comment_argument.dart';
 import '../../../../../../core/bloc/comment/bloc.dart';
@@ -189,6 +192,9 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
             statusFollowing = StatusFollowing.none;
           }
         }
+        print("+++++++++++++++++");
+        context.read<HomeNotifier>().updateFollowing(context, email: _data?.email ?? '', statusFollowing: !isUnFollow);
+
         checkIsLoading = false;
         notifyListeners();
       } catch (e) {

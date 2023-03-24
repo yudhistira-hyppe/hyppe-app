@@ -15,6 +15,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/widget/sub_comment_tile.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart' show IterableExtension;
@@ -160,7 +161,7 @@ class CommentNotifierV2 with ChangeNotifier {
         for (final comment in comments) {
           repliesComments[comment.comment?.lineID] = [
             for (final subComment in (comment.comment?.detailDisquss ?? [])) ...[
-              const SizedBox(height: 16),
+              // const SizedBox(height: 16),
               SubCommentTile(
                 logs: subComment,
                 fromFront: fromFront,
@@ -203,7 +204,8 @@ class CommentNotifierV2 with ChangeNotifier {
       final _resFuture = commentQuery.addComment(context);
       final res = await _resFuture;
       if (res != null) {
-        addCountComment(context, postID ?? '', true);
+        context.read<HomeNotifier>().addCountComment(context, postID ?? '', true, 0);
+
         if (parentID == null) {
           _commentData?.insert(0, res);
         } else {
@@ -385,14 +387,14 @@ class CommentNotifierV2 with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteComment(BuildContext context, String lineID) async {
+  Future<void> deleteComment(BuildContext context, String lineID, int totChild) async {
     final _routing = Routing();
     final notifier = DeleteCommentBloc();
     try {
       await notifier.postDeleteCommentBloc(context, lineID: lineID, withAlertConnection: true);
       final fetch = notifier.deletCommentFetch;
       if (fetch.deleteCommentState == DeleteCommentState.deleteCommentSuccess) {
-        addCountComment(context, postID ?? '', false);
+        context.read<HomeNotifier>().addCountComment(context, postID ?? '', false, totChild);
         getComment(context, reload: true);
         _routing.moveBack();
       }
@@ -400,23 +402,5 @@ class CommentNotifierV2 with ChangeNotifier {
       _routing.moveBack();
       e.logger();
     }
-  }
-
-  void addCountComment(BuildContext context, String postID, bool add) {
-    final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
-    final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
-    final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
-
-    ContentData? _updatedData;
-    _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
-    _updatedData ??= diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
-    _updatedData ??= pic.pic?.firstWhereOrNull((element) => element.postID == postID);
-
-    if (add) {
-      _updatedData?.comments = (_updatedData.comments ?? 0) + 1;
-    } else {
-      _updatedData?.comments = (_updatedData.comments ?? 0) - 1;
-    }
-    notifyListeners();
   }
 }

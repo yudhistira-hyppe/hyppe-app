@@ -181,8 +181,8 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
           notifyListeners();
         }
       }
+      context.read<HomeNotifier>().updateFollowing(context, email: dataContent.email ?? '', statusFollowing: !isUnFollow);
 
-      print("=============data ${dataContent.following}");
       //   },
       //   uploadContentAction: false,
       // );

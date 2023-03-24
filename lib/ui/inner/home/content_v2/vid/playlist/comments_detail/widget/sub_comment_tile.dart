@@ -22,9 +22,12 @@ class SubCommentTile extends StatelessWidget {
   final String? parentID;
   final DisqusLogs? logs;
   final bool fromFront;
-  SubCommentTile({Key? key, required this.logs,
+  SubCommentTile({
+    Key? key,
+    required this.logs,
     required this.parentID,
-    required this.fromFront,}) : super(key: key);
+    required this.fromFront,
+  }) : super(key: key);
 
   final email = SharedPreference().readStorage(SpKeys.email);
 
@@ -44,8 +47,7 @@ class SubCommentTile extends StatelessWidget {
             width: 36,
             height: 36,
             onTap: () => System().navigateToProfile(context, logs?.sender ?? ''),
-            imageUrl: System()
-                .showUserPicture(commentor?.avatar?.mediaEndpoint),
+            imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
             following: true,
             onFollow: () {},
           ),
@@ -54,10 +56,7 @@ class SubCommentTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                UserTemplate(username: '${commentor?.username}', isVerified: commentor?.isIdVerified ?? false, date:
-                logs?.createdAt ??
-                    DateTime.now().toString()
-                ),
+                UserTemplate(username: '${commentor?.username}', isVerified: commentor?.isIdVerified ?? false, date: logs?.createdAt ?? DateTime.now().toString()),
                 twoPx,
                 Row(
                   children: [
@@ -72,13 +71,12 @@ class SubCommentTile extends StatelessWidget {
                           normStyle: Theme.of(context).textTheme.bodyText2,
                           hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
                           expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary)),
-                    )
-                    ,
+                    ),
                   ],
                 ),
                 twoPx,
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     notifier.showTextInput = true;
                     notifier.onReplayCommentV2(
                       context,
@@ -94,14 +92,20 @@ class SubCommentTile extends StatelessWidget {
               ],
             ),
           ),
-          if(logs?.sender == email)
+          if (logs?.sender == email)
             InkWell(
-              onTap: (){
+              onTap: () {
                 ShowGeneralDialog.deleteContentDialog(context, '${notifier.language.comment}', () async {
-                  notifier.deleteComment(context, logs?.lineID ?? '');
+                  notifier.deleteComment(context, logs?.lineID ?? '', 0);
                 });
               },
-              child: CustomIconWidget(width: 20, height: 20, iconData: '${AssetPath.vectorPath}close.svg', defaultColor: false, color: context.getColorScheme().onBackground,),
+              child: CustomIconWidget(
+                width: 20,
+                height: 20,
+                iconData: '${AssetPath.vectorPath}close.svg',
+                defaultColor: false,
+                color: context.getColorScheme().onBackground,
+              ),
             )
         ],
       ),

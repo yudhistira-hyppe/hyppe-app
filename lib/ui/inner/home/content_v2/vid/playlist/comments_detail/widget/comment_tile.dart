@@ -33,103 +33,110 @@ class CommentTile extends StatelessWidget {
     final repliesCount = replies?.length ?? 0;
     final commentor = logs?.comment?.senderInfo;
     final _language = notifier.language;
-    return Container(
-      margin: const EdgeInsets.only(top: 12),
-      padding:
-      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomProfileImage(
-            width: 36,
-            height: 36,
-            onTap: () => System().navigateToProfile(context, logs?.comment?.sender ?? ''),
-            imageUrl: System()
-                .showUserPicture(commentor?.avatar?.mediaEndpoint),
-            following: true,
-            onFollow: () {},
-          ),
-          twelvePx,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                UserTemplate(username: '${commentor?.username}', isVerified: commentor?.isIdVerified ?? false, date:
-                comment?.createdAt ??
-                    DateTime.now().toString()
-                ),
-                twoPx,
-                Row(
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 12),
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomProfileImage(
+                width: 36,
+                height: 36,
+                onTap: () => System().navigateToProfile(context, logs?.comment?.sender ?? ''),
+                imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
+                following: true,
+                onFollow: () {},
+              ),
+              twelvePx,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: CustomDescContent(
-                          desc: comment?.txtMessages ?? '',
-                          trimLines: 5,
-                          textAlign: TextAlign.start,
-                          seeLess: ' ${notifier.language.seeLess}',
-                          seeMore: ' ${notifier.language.seeMoreContent}',
-                          textOverflow: TextOverflow.visible,
-                          normStyle: Theme.of(context).textTheme.bodyText2,
-                          hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                          expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary)),
+                    UserTemplate(username: '${commentor?.username}', isVerified: commentor?.isIdVerified ?? false, date: comment?.createdAt ?? DateTime.now().toString()),
+                    twoPx,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomDescContent(
+                              desc: comment?.txtMessages ?? '',
+                              trimLines: 5,
+                              textAlign: TextAlign.start,
+                              seeLess: ' ${notifier.language.seeLess}',
+                              seeMore: ' ${notifier.language.seeMoreContent}',
+                              textOverflow: TextOverflow.visible,
+                              normStyle: Theme.of(context).textTheme.bodyText2,
+                              hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary)),
+                        ),
+                      ],
                     ),
+                    twoPx,
+                    InkWell(
+                      onTap: () {
+                        notifier.showTextInput = true;
+                        notifier.onReplayCommentV2(
+                          context,
+                          comment: comment,
+                          parentCommentID: comment?.lineID,
+                        );
+                      },
+                      child: CustomTextWidget(
+                        textToDisplay: notifier.language.reply ?? 'Reply',
+                        textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().primary, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    repliesCount > 0 ? SizedBox(height: 16 * SizeConfig.scaleDiagonal) : const SizedBox.shrink(),
+                    repliesCount > 0
+                        ? InkWell(
+                            onTap: () {
+                              notifier.seeMoreReplies(logs);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: CustomTextWidget(
+                                textStyle: context.getTextTheme().overline?.copyWith(color: Theme.of(context).colorScheme.secondary),
+                                textToDisplay: notifier.repliesComments.containsKey(logs?.comment?.lineID)
+                                    ? '${_language.hideReplies}'
+                                    : "${_language.see} $repliesCount ${repliesCount > 1 ? _language.replies : _language.reply2}",
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
-                twoPx,
+              ),
+              if (comment?.sender == email)
                 InkWell(
-                  onTap: (){
-                    notifier.showTextInput = true;
-                    notifier.onReplayCommentV2(
-                      context,
-                      comment: comment,
-                      parentCommentID: comment?.lineID,
-                    );
-                  },
-                  child: CustomTextWidget(
-                    textToDisplay: notifier.language.reply ?? 'Reply',
-                    textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().primary, fontWeight: FontWeight.w700),
-                  ),
-                ),
-                repliesCount > 0 ? SizedBox(height: 16 * SizeConfig.scaleDiagonal) : const SizedBox.shrink(),
-                repliesCount > 0
-                    ? InkWell(
                   onTap: () {
-                    notifier.seeMoreReplies(logs);
+                    ShowGeneralDialog.deleteContentDialog(context, '${_language.comment}', () async {
+                      notifier.deleteComment(context, comment?.lineID ?? '', comment?.detailDisquss?.length ?? 0);
+                    });
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: CustomTextWidget(
-                      textStyle: context.getTextTheme().overline?.copyWith(color: Theme.of(context).colorScheme.secondary),
-                      textToDisplay: notifier.repliesComments.containsKey(logs?.comment?.lineID)
-                          ? '${_language.hideReplies}'
-                          : "${_language.see} $repliesCount ${repliesCount > 1 ? _language.replies : _language.reply2}",
-                    ),
+                  child: CustomIconWidget(
+                    width: 20,
+                    height: 20,
+                    iconData: '${AssetPath.vectorPath}close.svg',
+                    defaultColor: false,
+                    color: context.getColorScheme().onBackground,
                   ),
                 )
-                    : const SizedBox.shrink(),
-
-                // show sub comments
-                notifier.repliesComments.containsKey(comment?.lineID)
-                    ? Column(
+            ],
+          ),
+        ),
+        // show sub comments
+        notifier.repliesComments.containsKey(comment?.lineID)
+            ? Container(
+                margin: EdgeInsets.only(left: 50),
+                child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: notifier.repliesComments[comment?.lineID] ?? [],
-                )
-                    : const SizedBox.shrink(),
-              ],
-            ),
-          ),
-          if(comment?.sender == email)
-            InkWell(
-              onTap: (){
-                ShowGeneralDialog.deleteContentDialog(context, '${_language.comment}', () async {
-                  notifier.deleteComment(context, comment?.lineID ?? '');
-                });
-              },
-              child: CustomIconWidget(width: 20, height: 20, iconData: '${AssetPath.vectorPath}close.svg', defaultColor: false, color: context.getColorScheme().onBackground,),
-            )
-        ],
-      ),
+                ),
+              )
+            : const SizedBox.shrink(),
+      ],
     );
   }
 }
