@@ -107,7 +107,7 @@ class HyppeNotifier with ChangeNotifier {
           'x-auth-user': email,
           'x-auth-token': token,
         },
-        host: UrlConstants.getInnteractives,
+        host: UrlConstants.userBearer,
         withAlertMessage: false,
         withCheckConnection: false,
         methodType: MethodType.post,

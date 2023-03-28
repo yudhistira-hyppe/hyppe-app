@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
@@ -266,12 +267,14 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     //   playAuth:
     //       "eyJTZWN1cml0eVRva2VuIjoiQ0FJU2lBTjFxNkZ0NUIyeWZTaklyNURISnUvWnJvZFIrb1d2VlY2SmdHa0RPdFZjaDZMRG96ejJJSDFLZlhadEJPQWN0ZlF3bFdwVDdQNGJsckl1RjhJWkdoR2ZONU10dE1RUHJGL3dKb0hidk5ldTBic0hoWnY5bGNNTHJaaWpqcUhvZU96Y1lJNzMwWjdQQWdtMlEwWVJySkwrY1RLOUphYk1VL21nZ29KbWFkSTZSeFN4YVNFOGF2NWRPZ3BscnIwSVZ4elBNdnIvSFJQMnVtN1pIV3R1dEEwZTgzMTQ1ZmFRejlHaTZ4YlRpM2I5ek9FVXFPYVhKNFMvUGZGb05ZWnlTZjZvd093VUVxL2R5M3hvN3hGYjFhRjRpODRpL0N2YzdQMlFDRU5BK3dtbFB2dTJpOE5vSUYxV2E3UVdJWXRncmZQeGsrWjEySmJOa0lpbDVCdFJFZHR3ZUNuRldLR216c3krYjRIUEROc2ljcXZoTUhuZ3k4MkdNb0tQMHprcGVuVUdMZ2hIQ2JGRFF6MVNjVUZ3RjIyRmQvVDlvQTJRTWwvK0YvbS92ZnRvZ2NvbC9UTEI1c0dYSWxXRGViS2QzQnNETjRVMEIwRlNiRU5JaERPOEwvOWNLRndUSWdrOFhlN01WL2xhYUJGUHRLWFdtaUgrV3lOcDAzVkxoZnI2YXVOcGJnUHIxVVFwTlJxQUFaT3kybE5GdndoVlFObjZmbmhsWFpsWVA0V3paN24wTnVCbjlILzdWZHJMOGR5dHhEdCtZWEtKNWI4SVh2c0lGdGw1cmFCQkF3ZC9kakhYTjJqZkZNVFJTekc0T3pMS1dKWXVzTXQycXcwMSt4SmNHeE9iMGtKZjRTcnFpQ1RLWVR6UHhwakg0eDhvQTV6Z0cvZjVIQ3lFV3pISmdDYjhEeW9EM3NwRUh4RGciLCJBdXRoSW5mbyI6IntcIkNJXCI6XCJmOUc0eExxaHg2Tkk3YThaY1Q2N3hObmYrNlhsM05abmJXR1VjRmxTelljS0VKVTN1aVRjQ29Hd3BrcitqL2phVVRXclB2L2xxdCs3MEkrQTJkb3prd0IvKzc5ZlFyT2dLUzN4VmtFWUt6TT1cIixcIkNhbGxlclwiOlwiV2NKTEpvUWJHOXR5UmM2ZXg3LzNpQXlEcS9ya3NvSldhcXJvTnlhTWs0Yz1cIixcIkV4cGlyZVRpbWVcIjpcIjIwMjMtMDMtMTZUMDk6NDE6MzdaXCIsXCJNZWRpYUlkXCI6XCJjMWIyNGQzMGIyYzY3MWVkYmZjYjU0MjI4MGU5MDEwMlwiLFwiUGxheURvbWFpblwiOlwidm9kLmh5cHBlLmNsb3VkXCIsXCJTaWduYXR1cmVcIjpcIk9pbHhxelNyaVVhOGlRZFhaVEVZZEJpbUhJUT1cIn0iLCJWaWRlb01ldGEiOnsiU3RhdHVzIjoiTm9ybWFsIiwiVmlkZW9JZCI6ImMxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyIiwiVGl0bGUiOiIyODg4MTdkYi1jNzdjLWM0ZTQtNjdmYi0zYjk1MTlmNTc0ZWIiLCJDb3ZlclVSTCI6Imh0dHBzOi8vdm9kLmh5cHBlLmNsb3VkL2MxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyL3NuYXBzaG90cy9jYzM0MjVkNzJiYjM0YTE3OWU5NmMzZTA3NTViZjJjNi0wMDAwNC5qcGciLCJEdXJhdGlvbiI6NTkuMDQ5fSwiQWNjZXNzS2V5SWQiOiJTVFMuTlNybVVtQ1hwTUdEV3g4ZGlWNlpwaGdoQSIsIlBsYXlEb21haW4iOiJ2b2QuaHlwcGUuY2xvdWQiLCJBY2Nlc3NLZXlTZWNyZXQiOiIzU1NRUkdkOThGMU04TkZ0b00xa2NlU01IZlRLNkJvZm93VXlnS1Y5aEpQdyIsIlJlZ2lvbiI6ImFwLXNvdXRoZWFzdC01IiwiQ3VzdG9tZXJJZCI6NTQ1NDc1MzIwNTI4MDU0OX0=",
     // );
-    if (data.isApsara ?? false) {
-      _playMode = ModeTypeAliPLayer.auth;
-      await getAuth(data.apsaraId ?? '');
-    } else {
-      _playMode = ModeTypeAliPLayer.url;
-      await getOldVideoUrl(data.postID ?? '');
+    if (data.reportedStatus != 'BLURRED') {
+      if (data.isApsara ?? false) {
+        _playMode = ModeTypeAliPLayer.auth;
+        await getAuth(data.apsaraId ?? '');
+      } else {
+        _playMode = ModeTypeAliPLayer.url;
+        await getOldVideoUrl(data.postID ?? '');
+      }
     }
 
     setState(() {
@@ -306,7 +309,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     //   /// Specify whether to enable the cache feature.
     // };
     // fAliplayer?.setCacheConfig(map);
-    fAliplayer?.prepare();
+    if (data.reportedStatus == 'BLURRED') {
+    } else {
+      fAliplayer?.prepare();
+    }
 
     // fAliplayer?.play();
   }
@@ -644,8 +650,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                       ),
                                                     )
                                                   : Container(),
-                                          // _buildProgressBar(SizeConfig.screenWidth!, 500),
-
+                                          _buildProgressBar(SizeConfig.screenWidth!, 500),
                                           Positioned.fill(
                                             child: GestureDetector(
                                               onTap: () {
@@ -662,9 +667,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                               ),
                                             ),
                                           ),
-                                          _buildBody(context, SizeConfig.screenWidth, notifier.diaryData?[index] ?? ContentData()),
-                                          blurContentWidget(context, notifier.diaryData?[index] ?? ContentData()),
-
                                           dataSelected?.postID == notifier.diaryData?[index].postID && isPlay
                                               ? Container()
                                               : CustomBaseCacheImage(
@@ -675,18 +677,29 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                   imageUrl: (notifier.diaryData?[index].isApsara ?? false)
                                                       ? (notifier.diaryData?[index].mediaThumbEndPoint ?? "")
                                                       : "${notifier.diaryData?[index].fullThumbPath}",
-                                                  imageBuilder: (context, imageProvider) => Container(
-                                                    // const EdgeInsets.symmetric(horizontal: 4.5),
-                                                    width: SizeConfig.screenWidth,
-                                                    height: 500,
-                                                    decoration: BoxDecoration(
-                                                      image: DecorationImage(
-                                                        image: imageProvider,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                      borderRadius: BorderRadius.circular(16.0),
-                                                    ),
-                                                  ),
+                                                  imageBuilder: (context, imageProvider) => notifier.diaryData?[index].reportedStatus == 'BLURRED'
+                                                      ? ClipRRect(
+                                                          borderRadius: BorderRadius.circular(20), // Image border
+                                                          child: ImageFiltered(
+                                                            imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                                            child: Image(
+                                                              width: SizeConfig.screenWidth,
+                                                              image: imageProvider,
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : Container(
+                                                          // const EdgeInsets.symmetric(horizontal: 4.5),
+                                                          width: SizeConfig.screenWidth,
+                                                          height: 500,
+                                                          decoration: BoxDecoration(
+                                                            image: DecorationImage(
+                                                              image: imageProvider,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                            borderRadius: BorderRadius.circular(16.0),
+                                                          ),
+                                                        ),
                                                   errorWidget: (context, url, error) {
                                                     return Container(
                                                       // const EdgeInsets.symmetric(horizontal: 4.5),
@@ -720,6 +733,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                   child: CircularProgressIndicator(),
                                                 ))
                                               : Container(),
+                                          _buildBody(context, SizeConfig.screenWidth, notifier.diaryData?[index] ?? ContentData()),
+                                          blurContentWidget(context, notifier.diaryData?[index] ?? ContentData()),
                                         ],
                                       ),
                                     ),
@@ -1031,7 +1046,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       height: 30,
                     ),
                     Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                    Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
+                    Text("HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: Colors.white,
@@ -1050,7 +1065,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                     const Spacer(),
                     GestureDetector(
                       onTap: () {
-                        context.read<ReportNotifier>().seeContent(context, data, hyppePic);
+                        data.reportedStatus = '';
+                        start(data);
+                        context.read<ReportNotifier>().seeContent(context, data, hyppeDiary);
+                        fAliplayer?.prepare();
+                        fAliplayer?.play();
                       },
                       child: Container(
                         padding: const EdgeInsets.only(top: 8),
@@ -1065,7 +1084,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           ),
                         ),
                         child: Text(
-                          "${transnot.translate.see} HyppePic",
+                          "${transnot.translate.see} HyppeDiary",
                           style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                           textAlign: TextAlign.center,
                         ),

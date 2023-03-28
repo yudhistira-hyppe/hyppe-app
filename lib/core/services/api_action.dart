@@ -94,8 +94,8 @@ class ApiAction {
       if (Env.data.debug == true) {
         url = UrlConstants.stagingUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
       } else {
-        url = UrlConstants.stagingUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
-        // url = UrlConstants.productionUploadBaseApi + "/" + Env.data.versionApi + UrlConstants.createuserposts;
+        // url = UrlConstants.stagingUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
+        url = UrlConstants.productionUploadBaseApi + "/" + Env.data.versionApi + UrlConstants.createuserposts;
       }
     }
 

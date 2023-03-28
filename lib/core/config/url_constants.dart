@@ -22,12 +22,14 @@ class UrlConstants {
 
   static const String apiV6 = '/v6/';
 
+  static const String apiV7 = '/v7/';
+
   /// Production Base url
   // static const String productionBaseApi = "https://prod.hyppe.app";
-  // static const String productionBaseApi = "https://prod.hyppe.app";
-  // static const String productionUploadBaseApi = "https://upload.hyppe.app";
-  static const String productionBaseApi = "https://s1.hyppe.cloud";
-  static const String productionUploadBaseApi = "https://s1.hyppe.cloud";
+  static const String productionBaseApi = "https://prod.hyppe.app";
+  static const String productionUploadBaseApi = "https://upload.hyppe.app";
+  // static const String productionBaseApi = "https://s1.hyppe.cloud";
+  // static const String productionUploadBaseApi = "https://s1.hyppe.cloud";
   // static const String productionBaseApi = "https://staging.hyppe.app";
   // static const String productionUploadBaseApi = "https://stagingupload.hyppe.app/";
 
@@ -165,6 +167,8 @@ class UrlConstants {
 
   /// user => Change Language
   static const String userPin = "$userRoute/pin";
+
+  static const String userBearer = "$userRoute/bearer";
 
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Playlist */
