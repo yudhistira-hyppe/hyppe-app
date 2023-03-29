@@ -43,6 +43,13 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
   }
 
   @override
+  void deactivate() {
+    final notifier = context.read<StoriesPlaylistNotifier>();
+    notifier.setIsPreventedEmoji(true);
+    super.deactivate();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final notifier = Provider.of<StoriesPlaylistNotifier>(context);

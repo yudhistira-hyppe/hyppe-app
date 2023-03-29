@@ -94,12 +94,13 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   @override
   void deactivate() {
     isHomeScreen = false;
+    globalScroller = null;
     'deactivate isOnHomeScreen $isHomeScreen'.logger();
     super.deactivate();
   }
 
   @override
-  void didPush() {
+  void didPush() { 
     'didPush isOnHomeScreen $isHomeScreen'.logger();
   }
 
@@ -109,6 +110,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     isHomeScreen = true;
     'isOnHomeScreen $isHomeScreen'.logger();
     _tabController = TabController(length: 3, vsync: this);
+    globalScroller = _scrollController;
 
     offset = 0;
     Future.delayed(Duration.zero, () {
@@ -125,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         ];
       }
 
-      globalKey.currentState!.innerController.addListener(() {
+      globalKey.currentState?.innerController.addListener(() {
         if ((globalKey.currentState?.innerController.position.pixels ?? 0) >= (globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
             !globalKey.currentState!.innerController.position.outOfRange) {
           notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);

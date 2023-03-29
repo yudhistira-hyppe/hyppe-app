@@ -24,6 +24,7 @@ import 'firebase_options.dart';
 final InAppLocalhostServer localhostServer = InAppLocalhostServer();
 final GlobalKey<ScaffoldState> materialAppKey = GlobalKey<ScaffoldState>();
 AudioPlayer? globalAudioPlayer;
+ScrollController? globalScroller;
 final globalDB = DatabaseHelper();
 bool isHomeScreen = false;
 

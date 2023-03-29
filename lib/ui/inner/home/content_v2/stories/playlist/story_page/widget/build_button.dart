@@ -62,6 +62,7 @@ class _BuildButtonState extends State<BuildButton> {
                   if(widget.pause != null){
                     widget.pause!();
                   }
+                  notifier.isPreventedEmoji = false;
                   notifier.showMyReaction(
                     context,
                     mounted,
