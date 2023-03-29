@@ -382,7 +382,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                   margin: const EdgeInsets.only(left: 10),
                   child: InkWell(
                     onTap: () {
-                      notifier.createdDynamicLink(context, data: data);
+                      ShowBottomSheet.onBuyContent(context, data: data);
                     },
                     child: const CustomIconWidget(
                       width: 25,

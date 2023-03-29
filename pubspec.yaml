@@ -80,6 +80,7 @@ dependencies:
   flutter_aliplayer: ^5.4.9
   pull_to_refresh: ^2.0.0
   dio_http_formatter: ^3.0.0-preview.1
+  webview_flutter: ^4.0.7
 
 
 

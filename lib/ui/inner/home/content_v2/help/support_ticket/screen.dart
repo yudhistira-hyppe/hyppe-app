@@ -27,12 +27,7 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SupportTicketScreen');
     final notifier = Provider.of<SupportTicketNotifier>(context, listen: false);
     notifier.getInitSupportTicket(context);
-    notifier.descriptionController.clear();
-    notifier.idCategory = '';
-    notifier.idLevelTicket = '';
-    notifier.pickedSupportingDocs = [];
-    notifier.nameCategory = '';
-    notifier.nameLevel = '';
+
     super.initState();
   }
 

@@ -72,7 +72,6 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_docume
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/preview.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
@@ -99,6 +98,7 @@ import 'package:hyppe/ui/outer/sign_up/contents/register/register_screen.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_agreement/user_agreement_screen.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_interest/user_interest_screen.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/welcome/screen.dart';
+import 'package:hyppe/ui/outer/webview/webview_screen.dart';
 import 'package:hyppe/ui/outer/welcome_login/screen.dart';
 import 'package:hyppe/ui/view/follower/follower_screen.dart';
 import 'package:hyppe/ui/view/theme/theme_screen.dart';
@@ -381,6 +381,9 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const ListBoostScreen());
       case Routes.aliTest:
         return MaterialPageRoute(builder: (_) => const AliPlayer());
+        
+      case Routes.webView:
+        return MaterialPageRoute(builder: (_) => WebviewScreen(url: settings.arguments as String) );
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

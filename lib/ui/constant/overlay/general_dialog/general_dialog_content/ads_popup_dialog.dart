@@ -14,6 +14,7 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dar
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/controller/story_controller.dart';
@@ -26,6 +27,7 @@ import '../../../../../core/constants/asset_path.dart';
 import '../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../core/models/collection/advertising/view_ads_request.dart';
 import '../../../../../core/services/shared_preference.dart';
+import '../../../../../core/services/system.dart';
 import '../../../../../ux/path.dart';
 import '../../../../../ux/routing.dart';
 import '../../../widget/custom_background_layer.dart';
@@ -551,28 +553,43 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
               children: [
                 data.isReport ?? false
                     ? Container()
-                    : Row(
-                        children: [
-                          CustomBaseCacheImage(
-                            imageUrl: data.avatar?.fullLinkURL,
-                            memCacheWidth: 200,
-                            memCacheHeight: 200,
-                            imageBuilder: (_, imageProvider) {
-                              return Container(
-                                width: 36,
-                                height: 36,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(18)),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: imageProvider,
+                    : Expanded(
+                      child: Row(
+                          children: [
+                            CustomBaseCacheImage(
+                              imageUrl: data.avatar?.fullLinkURL,
+                              memCacheWidth: 200,
+                              memCacheHeight: 200,
+                              imageBuilder: (_, imageProvider) {
+                                return Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(18)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: imageProvider,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            errorWidget: (_, __, ___) {
-                              return Container(
+                                );
+                              },
+                              errorWidget: (_, __, ___) {
+                                return Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: const BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(18)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: AssetImage(
+                                          '${AssetPath.pngPath}content-error.png'),
+                                    ),
+                                  ),
+                                );
+                              },
+                              emptyWidget: Container(
                                 width: 36,
                                 height: 36,
                                 decoration: const BoxDecoration(
@@ -584,55 +601,47 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
                                         '${AssetPath.pngPath}content-error.png'),
                                   ),
                                 ),
-                              );
-                            },
-                            emptyWidget: Container(
-                              width: 36,
-                              height: 36,
-                              decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(18)),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                      '${AssetPath.pngPath}content-error.png'),
-                                ),
                               ),
                             ),
-                          ),
-                          twelvePx,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
+                            twelvePx,
+                            Expanded(
+                              child: Row(
                                 children: [
-                                  const CustomIconWidget(
-                                    defaultColor: false,
-                                    iconData:
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const CustomIconWidget(
+                                        defaultColor: false,
+                                        iconData:
                                         "${AssetPath.vectorPath}ad_yellow_icon.svg",
+                                      ),
+                                      sixPx,
+                                      Text(
+                                        widget.isSponsored ? 'Sponsored' : '',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                        ),
+                                      )
+
+                                    ],
                                   ),
-                                  fourPx,
-                                  Text(
+                                  sixPx,
+                                  Expanded(child: Text(
+                                    maxLines: 3,
                                     data.adsDescription ?? 'Nike',
                                     style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600),
-                                  )
+                                  ))
                                 ],
                               ),
-                              sixPx,
-                              Text(
-                                widget.isSponsored ? 'Sponsored' : '',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                    ),
+                sixPx,
                 Row(
                   children: [
                     GestureDetector(
@@ -724,19 +733,24 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
                         argument: OtherProfileArgument(senderEmail: email));
                   });
                 } else {
-                  final uri = Uri.parse(data.adsUrlLink ?? '');
-                  print('bottomAdsLayout ${data.adsUrlLink}');
-                  if (await canLaunchUrl(uri)) {
+                  try{
+                    final uri = Uri.parse(data.adsUrlLink ?? '');
+                    print('bottomAdsLayout ${data.adsUrlLink}');
+                    if (await canLaunchUrl(uri)) {
+                      adsView(widget.data, secondsVideo, isClick: true);
+                      Navigator.pop(context);
+                      await launchUrl(
+                        uri,
+                        mode: LaunchMode.externalApplication,
+                      );
+                    } else {
+                      throw "Could not launch $uri";
+                    }
+                    // can't launch url, there is some error
+                  }catch(e){
                     adsView(widget.data, secondsVideo, isClick: true);
-                    Navigator.pop(context);
-                    await launchUrl(
-                      uri,
-                      mode: LaunchMode.externalApplication,
-                    );
-                  } else {
-                    throw "Could not launch $uri";
+                    System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                   }
-                  // can't launch url, there is some error
                 }
               }
             },
@@ -1167,28 +1181,43 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
               children: [
                 data.isReport ?? false
                     ? Container()
-                    : Row(
-                        children: [
-                          CustomBaseCacheImage(
-                            imageUrl: data.avatar?.fullLinkURL,
-                            memCacheWidth: 200,
-                            memCacheHeight: 200,
-                            imageBuilder: (_, imageProvider) {
-                              return Container(
-                                width: 36,
-                                height: 36,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(18)),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: imageProvider,
+                    : Expanded(
+                      child: Row(
+                          children: [
+                            CustomBaseCacheImage(
+                              imageUrl: data.avatar?.fullLinkURL,
+                              memCacheWidth: 200,
+                              memCacheHeight: 200,
+                              imageBuilder: (_, imageProvider) {
+                                return Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(18)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: imageProvider,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            errorWidget: (_, __, ___) {
-                              return Container(
+                                );
+                              },
+                              errorWidget: (_, __, ___) {
+                                return Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: const BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(18)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: AssetImage(
+                                          '${AssetPath.pngPath}content-error.png'),
+                                    ),
+                                  ),
+                                );
+                              },
+                              emptyWidget: Container(
                                 width: 36,
                                 height: 36,
                                 decoration: const BoxDecoration(
@@ -1200,55 +1229,42 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                                         '${AssetPath.pngPath}content-error.png'),
                                   ),
                                 ),
-                              );
-                            },
-                            emptyWidget: Container(
-                              width: 36,
-                              height: 36,
-                              decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(18)),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                      '${AssetPath.pngPath}content-error.png'),
-                                ),
                               ),
                             ),
-                          ),
-                          twelvePx,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const CustomIconWidget(
-                                    defaultColor: false,
-                                    iconData:
-                                        "${AssetPath.vectorPath}ad_yellow_icon.svg",
-                                  ),
-                                  fourPx,
-                                  Text(
-                                    data.adsDescription ?? 'Nike',
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
-                                  )
-                                ],
-                              ),
-                              sixPx,
-                              Text(
-                                widget.isSponsored ? 'Sponsored' : '',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
+                            twelvePx,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const CustomIconWidget(
+                                      defaultColor: false,
+                                      iconData:
+                                          "${AssetPath.vectorPath}ad_yellow_icon.svg",
+                                    ),
+                                    fourPx,
+                                    Expanded(
+                                      child: CustomTextWidget(
+                                        textToDisplay: data.adsDescription ?? 'Nike', maxLines: 3, textStyle: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600),),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                                sixPx,
+                                Text(
+                                  widget.isSponsored ? 'Sponsored' : '',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                    ),
                 Row(
                   children: [
                     GestureDetector(
@@ -1340,19 +1356,25 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                         argument: OtherProfileArgument(senderEmail: email));
                   });
                 } else {
-                  final uri = Uri.parse(data.adsUrlLink ?? '');
-                  print('bottomAdsLayout ${data.adsUrlLink}');
-                  if (await canLaunchUrl(uri)) {
+                  try{
+                    final uri = Uri.parse(data.adsUrlLink ?? '');
+                    print('bottomAdsLayout ${data.adsUrlLink}');
+                    if (await canLaunchUrl(uri)) {
+                      adsView(widget.data, secondsVideo, isClick: true);
+                      Navigator.pop(context);
+                      await launchUrl(
+                        uri,
+                        mode: LaunchMode.externalApplication,
+                      );
+                    } else {
+                      throw "Could not launch $uri";
+                    }
+                    // can't launch url, there is some error
+                  }catch(e){
                     adsView(widget.data, secondsVideo, isClick: true);
-                    Navigator.pop(context);
-                    await launchUrl(
-                      uri,
-                      mode: LaunchMode.externalApplication,
-                    );
-                  } else {
-                    throw "Could not launch $uri";
+                    System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                   }
-                  // can't launch url, there is some error
+
                 }
               }
             },

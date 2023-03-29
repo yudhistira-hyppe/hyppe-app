@@ -37,6 +37,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../../../core/arguments/other_profile_argument.dart';
 import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
+import '../../../../../../core/services/system.dart';
 import '../../../../../../initial/hyppe/translate_v2.dart';
 import '../../../../../../ux/path.dart';
 import '../../../../../../ux/routing.dart';
@@ -788,18 +789,23 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                                   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                                 });
                               } else {
-                                final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
-                                final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
-                                if (await canLaunchUrl(uri)) {
-                                  print('adsView part 1');
-                                  adsView(_newClipData?.data ?? AdsData(), second);
-                                  await launchUrl(
-                                    uri,
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                } else
-                                  // can't launch url, there is some error
-                                  throw "Could not launch $uri";
+                                try{
+                                  final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
+                                  final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
+                                  if (await canLaunchUrl(uri)) {
+                                    print('adsView part 1');
+                                    adsView(_newClipData?.data ?? AdsData(), second);
+                                    await launchUrl(
+                                      uri,
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  } else
+                                    // can't launch url, there is some error
+                                    throw "Could not launch $uri";
+                                }catch(e){
+                                  System().goToWebScreen(_newClipData?.data?.adsUrlLink ?? '');
+                                }
+
                               }
                             },
                             child: Container(
