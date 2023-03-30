@@ -27,6 +27,8 @@
   "incorrectCode": "Enter a valid OTP code.",
   "titleSuccessPin": "Sent Verification Code",
   "messageSuccessPin": "We've sent a verification code to your email.",
+  "pinSuccessCreated": "Congratulation!",
+  "messagePinSuccessCreated": "Your PIN successfully has been created",
   "sessionExpired": "Session Expired",
   "yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest": "Your session has timed out. Please return to the register page or login as a guest",
   "backToRegisterPage": "Back to register page",

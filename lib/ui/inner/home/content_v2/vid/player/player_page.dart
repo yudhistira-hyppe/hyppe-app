@@ -691,12 +691,12 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           onTapCtrl = true;
           setState(() {});
         },
-        onDoubleTap: (){
-          final _likeNotifier = context.read<LikeNotifier>();
-          if (widget.data != null) {
-            _likeNotifier.likePost(context, widget.data!);
-          }
-        },
+        // onDoubleTap: (){
+        //   final _likeNotifier = context.read<LikeNotifier>();
+        //   if (widget.data != null) {
+        //     _likeNotifier.likePost(context, widget.data!);
+        //   }
+        // },
         child: Stack(
           children: [
             // Text("${(adsData != null && !widget.inLanding)}"),
