@@ -570,6 +570,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   ],
                                 ),
                                 tenPx,
+                                // SelectableText((notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}"),
                                 VisibilityDetector(
                                   key: Key(index.toString()),
                                   onVisibilityChanged: (info) {
@@ -591,7 +592,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   },
                                   child: Container(
                                     margin: const EdgeInsets.only(bottom: 20),
-                                    width: MediaQuery.of(context).size.width,
+                                    width: SizeConfig.screenWidth,
                                     child: Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),
@@ -622,7 +623,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               errorWidget: (context, url, error) {
                                                 return Container(
                                                   // const EdgeInsets.symmetric(horizontal: 4.5),
-                                                  height: 500,
+                                                  // height: 500,
                                                   decoration: BoxDecoration(
                                                     image: const DecorationImage(
                                                       image: AssetImage('${AssetPath.pngPath}content-error.png'),
@@ -635,7 +636,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               emptyWidget: Container(
                                                 // const EdgeInsets.symmetric(horizontal: 4.5),
 
-                                                height: 500,
+                                                // height: 500,
                                                 decoration: BoxDecoration(
                                                   image: const DecorationImage(
                                                     image: AssetImage('${AssetPath.pngPath}content-error.png'),

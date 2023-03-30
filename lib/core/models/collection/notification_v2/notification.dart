@@ -199,13 +199,13 @@ class Content {
 
   String? concatThumbUri() {
     final fixMedia = mediaThumbEndpoint ?? mediaEndpoint ?? '';
-    if(fixMedia.isNotEmpty){
+    if (fixMedia.isNotEmpty) {
       return Env.data.baseUrl +
+          Env.data.versionApi +
           (mediaThumbEndpoint ?? mediaEndpoint ?? '') +
           '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
-    }else{
+    } else {
       return fixMedia;
     }
-
   }
 }

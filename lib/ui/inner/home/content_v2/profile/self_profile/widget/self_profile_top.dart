@@ -3,8 +3,10 @@ import 'package:hyppe/core/arguments/follower_screen_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
@@ -31,6 +33,7 @@ class SelfProfileTop extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // SelectableText("${notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}")}"),
+            SelectableText("${SharedPreference().readStorage(SpKeys.fcmToken)}"),
             Row(
               children: <Widget>[
                 // StoryColorValidator(
