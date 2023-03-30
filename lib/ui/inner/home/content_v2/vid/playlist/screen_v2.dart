@@ -97,7 +97,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                         color: context.getColorScheme().primary,
                         onRefresh: () => notifier.initState(context, widget.arguments),
                         child: SingleChildScrollView(
-                          physics: AlwaysScrollableScrollPhysics(),
+                          physics: const AlwaysScrollableScrollPhysics(),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -244,17 +244,22 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
               if (data.email != SharedPreference().readStorage(SpKeys.email))
                 notifier.checkIsLoading
                     ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
-                    : CustomFollowButton(
-                        onPressed: () async {
-                          try {
-                            await notifier.followUser(context, isUnFollow: notifier.statusFollowing == StatusFollowing.following);
-                          } catch (e) {
-                            'follow error $e'.logger();
-                          }
-                        },
-                        isFollowing: notifier.statusFollowing,
-                        checkIsLoading: notifier.checkIsLoading,
-                      ),
+                    : Builder(
+                      builder: (context) {
+                        final isFollowing = notifier.statusFollowing == StatusFollowing.following;
+                        return !isFollowing ? CustomFollowButton(
+                            onPressed: () async {
+                              try {
+                                await notifier.followUser(context, isUnFollow: isFollowing);
+                              } catch (e) {
+                                'follow error $e'.logger();
+                              }
+                            },
+                            isFollowing: notifier.statusFollowing,
+                            checkIsLoading: notifier.checkIsLoading,
+                          ): const SizedBox.shrink();
+                      }
+                    ),
               data.email != SharedPreference().readStorage(SpKeys.email)
                   ? SizedBox(
                       width: 50,

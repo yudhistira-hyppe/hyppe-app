@@ -198,6 +198,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
         checkIsLoading = false;
         notifyListeners();
       } catch (e) {
+        checkIsLoading = false;
         'follow user: ERROR: $e'.logger();
       }
     }
