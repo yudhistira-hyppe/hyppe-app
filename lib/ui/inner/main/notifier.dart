@@ -182,7 +182,7 @@ class MainNotifier with ChangeNotifier {
 
   bool _receivedMsg = false;
   bool get receivedMsg => _receivedMsg;
-  set receivedMsg(bool state){
+  set receivedMsg(bool state) {
     _receivedMsg = state;
     notifyListeners();
   }

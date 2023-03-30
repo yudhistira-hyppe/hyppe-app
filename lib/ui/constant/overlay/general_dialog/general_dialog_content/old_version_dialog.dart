@@ -59,8 +59,11 @@ class OldVersionDialog extends StatelessWidget {
         if (Platform.isAndroid || Platform.isIOS) {
           final appId = Platform.isAndroid ? 'com.hyppe.hyppeapp' : 'id1545595684';
           final url = Uri.parse(
-            Platform.isAndroid ? "market://details?id=$appId" : "https://apps.apple.com/app/id$appId",
+            // Platform.isAndroid ? "market://details?id=$appId" : "https://apps.apple.com/app/id$appId",
+            Platform.isAndroid ? "https://play.google.com/store/apps/details?id=$appId" : "https://apps.apple.com/app/id$appId",
           );
+          print(url);
+
           launchUrl(
             url,
             mode: LaunchMode.externalApplication,

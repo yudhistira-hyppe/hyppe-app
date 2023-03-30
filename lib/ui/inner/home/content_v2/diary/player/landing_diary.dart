@@ -860,12 +860,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                               ),
                                             ),
                                           if ((notifier.diaryData?[index].saleAmount ?? 0) > 0 && email != notifier.diaryData?[index].email)
-                                            GestureDetector(
-                                              onTap: () async {
-                                                await ShowBottomSheet.onBuyContent(context, data: notifier.diaryData?[index]);
-                                              },
-                                              child: const Expanded(
-                                                child: Align(
+                                            Expanded(
+                                              child: GestureDetector(
+                                                onTap: () async {
+                                                  await ShowBottomSheet.onBuyContent(context, data: notifier.diaryData?[index]);
+                                                },
+                                                child: const Align(
                                                   alignment: Alignment.centerRight,
                                                   child: CustomIconWidget(
                                                     defaultColor: false,
