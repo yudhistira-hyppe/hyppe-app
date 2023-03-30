@@ -19,7 +19,6 @@ import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/link_copied_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_bottom_view.dart';
-import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_replay_caption.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_top_view.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -43,6 +42,7 @@ class StoryPlayerPage extends StatefulWidget {
 class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
   FlutterAliplayer? fAliplayer;
   late AnimationController animationController;
+  late AnimationController emojiController;
   bool isloading = false;
   bool isPrepare = false;
   bool isPause = false;
@@ -140,6 +140,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
     _pageController = PageController(initialPage: widget.argument.peopleIndex);
     animationController = AnimationController(vsync: this, duration: const Duration(seconds: 7));
+    emojiController = AnimationController(vsync: this, duration: const Duration(seconds: 7));
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _animationController = AnimationController(
         vsync: this,
@@ -239,7 +240,12 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
-        _animationController?.duration = Duration(milliseconds: _videoDuration);
+        if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image'){
+          _animationController?.duration = Duration(milliseconds: _videoDuration > 5000 ? 5000 : 3000);
+        }else{
+          _animationController?.duration = Duration(milliseconds: _videoDuration);
+        }
+
         setState(() {
           isPrepare = true;
         });
@@ -435,6 +441,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     fAliplayer?.stop();
     fAliplayer?.destroy();
     super.dispose();
+    emojiController.reset();
+    emojiController.dispose();
     animationController.reset();
     animationController.dispose();
     WidgetsBinding.instance.removeObserver(this);
@@ -626,7 +634,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                     data: _groupUserStories?[_curIdx].story?[_curChildIdx],
                     // storyController: _storyController,
                     currentStory: _groupUserStories?[_curIdx].story?.indexOf(_groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()),
-                    animationController: animationController,
+                    animationController: emojiController,
                     currentIndex: _curChildIdx,
                     pause: pause,
                     // play: play,
@@ -649,7 +657,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                 : const SizedBox.shrink(),
           ),
           // BuildReplayCaption(data: _groupUserStories![_curIdx].story?[_curChildIdx]),
-          Stack(children: [...not.buildItems(animationController)])
+          notifier.isPreventedEmoji ? const SizedBox.shrink() : Stack(children: [...not.buildItems(emojiController)])
         ],
       ),
     );

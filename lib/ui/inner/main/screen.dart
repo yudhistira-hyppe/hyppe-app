@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/inner/home/widget/profile.dart';
 import 'package:provider/provider.dart';
@@ -73,7 +74,14 @@ class _MainScreenState extends State<MainScreen> {
                       iconData: notifier.pageIndex == 0 ? '${AssetPath.vectorPath}home-active.svg' : '${AssetPath.vectorPath}home.svg',
                     ),
                     onPressed: () {
-                      tapMenu(0, notifier, consumerContext);
+                      if(notifier.pageIndex == 0){
+                        if(globalScroller != null){
+                          globalScroller!.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.elasticOut);
+                        }
+                      }else{
+                        tapMenu(0, notifier, consumerContext);
+                      }
+
                     },
                   ),
                 ),

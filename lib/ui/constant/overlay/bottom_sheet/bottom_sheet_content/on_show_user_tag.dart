@@ -133,7 +133,10 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                                                     : null;
                                             return CustomTextButton(
                                               child: notifier.isLoading
-                                                  ? CustomLoading()
+                                                  ? SizedBox(
+                                                width: 15,
+                                                  height: 20,
+                                                  child: CustomLoading())
                                                   : Text(
                                                       System().getValueStringFollow(notifier.statusFollow, context.read<TranslateNotifierV2>().translate),
                                                       style: TextStyle(color: notifierTag.listTagPeople[index].status == 'TOFOLLOW' ? kHyppeTextPrimary : kHyppeLightSecondary),

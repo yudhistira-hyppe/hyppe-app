@@ -74,7 +74,13 @@ class SupportTicketNotifier with ChangeNotifier {
 
   Future getInitSupportTicket(BuildContext context) async {
     if (categoryData.isEmpty) _getCategoryTickets(context);
-    if (levelData.isEmpty) _getLevelTickets(context);
+    _getLevelTickets(context);
+    descriptionController.clear();
+    _idCategory = '';
+    _idLevelTicket = '';
+    _pickedSupportingDocs = [];
+    _nameCategory = '';
+    _nameLevel = '';
   }
 
   Future _getCategoryTickets(BuildContext context) async {
@@ -113,6 +119,7 @@ class SupportTicketNotifier with ChangeNotifier {
       print(fetch.postsState);
 
       if (fetch.postsState == SupportTicketState.getLevelSuccess) {
+        levelData = [];
         fetch.data.forEach((v) => levelData.add(LevelTicketModel.fromJson(v)));
       }
 

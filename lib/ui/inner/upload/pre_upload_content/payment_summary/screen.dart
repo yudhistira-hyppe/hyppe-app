@@ -230,14 +230,19 @@ class _PaymentBoostSummaryScreenState extends State<PaymentBoostSummaryScreen> {
                 style: {"a": Style(color: kHyppePrimary, textDecoration: TextDecoration.underline, textDecorationThickness: 0)},
                 onLinkTap: (String? url, RenderContext context, Map<String, String> attributes, element) async {
                   print(url);
-                  if (await canLaunchUrl(Uri.parse(url ?? ''))) {
-                    await launchUrl(
-                      Uri.parse(url ?? ''),
-                      mode: LaunchMode.externalApplication,
-                    );
-                  } else {
-                    throw "Could not launch $url";
+                  try{
+                    if (await canLaunchUrl(Uri.parse(url ?? ''))) {
+                      await launchUrl(
+                        Uri.parse(url ?? ''),
+                        mode: LaunchMode.externalApplication,
+                      );
+                    } else {
+                      throw "Could not launch $url";
+                    }
+                  }catch(e){
+                    System().goToWebScreen(url ?? '');
                   }
+
                 }),
           )
         ],

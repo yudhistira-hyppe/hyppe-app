@@ -1562,4 +1562,13 @@ class System {
     final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
     return formatter.format(now);
   }
+
+  void goToWebScreen(String url, {bool isPop = false}){
+    if(isPop){
+      Routing().moveBack();
+    }
+    Future.delayed(const Duration(milliseconds: 500), (){
+      Routing().move(Routes.webView, argument: url);
+    });
+  }
 }

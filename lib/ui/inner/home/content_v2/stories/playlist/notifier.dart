@@ -15,7 +15,6 @@ import 'package:hyppe/core/bloc/reaction/bloc.dart';
 
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
 
@@ -195,6 +194,17 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  bool _isPreventedEmoji = false;
+  bool get isPreventedEmoji => _isPreventedEmoji;
+  set isPreventedEmoji(bool state){
+    _isPreventedEmoji = state;
+    notifyListeners();
+  }
+
+  setIsPreventedEmoji(bool state){
+    _isPreventedEmoji = state;
+  }
+
   setIsKeyboardActive(bool val) => _isKeyboardActive = val;
 
   nextPage() {
@@ -285,7 +295,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
               imageFit: BoxFit.contain,
               isImages: true,
               id: story.postID ?? ' ',
-              duration: Duration(seconds: (duration ?? 3) > 15 ? 15 : 3),
+              duration: Duration(seconds: (duration ?? 3) > 5 ? 5 : 3),
               requestHeaders: {
                 'post-id': story.postID ?? '',
                 'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
@@ -361,7 +371,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
             imageFit: BoxFit.contain,
             isImages: true,
             id: data.postID ?? '',
-            duration: Duration(seconds: (duration ?? 3) > 15 ? 15 : 3),
+            duration: Duration(seconds: (duration ?? 3) > 5 ? 5 : 3),
             requestHeaders: {
               'post-id': data.postID ?? '',
               'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
@@ -577,7 +587,10 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
           return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
         },
-      ).whenComplete(() => Future.delayed(const Duration(seconds: 3), () => isReactAction = false));
+      ).whenComplete(() => Future.delayed(const Duration(seconds: 3), (){
+        isReactAction = false;
+        _isPreventedEmoji = true;
+      }));
     }
     //   },
     //   uploadContentAction: false,
@@ -657,7 +670,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
             duration: const Duration(seconds: 1),
             child: Material(
               color: Colors.transparent,
-              child: Text(
+              child: isPreventedEmoji ? const SizedBox.shrink() : Text(
                 reaction ?? '',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: item.size),

@@ -7,6 +7,7 @@ import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/bloc/ads_video/state.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -323,28 +324,43 @@ class _AdsScreenState extends State<AdsScreen> {
               children: [
                 data.isReport ?? false
                     ? Container()
-                    : Row(
-                        children: [
-                          CustomBaseCacheImage(
-                            imageUrl: data.avatar?.fullLinkURL,
-                            memCacheWidth: 200,
-                            memCacheHeight: 200,
-                            imageBuilder: (_, imageProvider) {
-                              return Container(
-                                width: 36,
-                                height: 36,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(18)),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: imageProvider,
+                    : Expanded(
+                      child: Row(
+                          children: [
+                            CustomBaseCacheImage(
+                              imageUrl: data.avatar?.fullLinkURL,
+                              memCacheWidth: 200,
+                              memCacheHeight: 200,
+                              imageBuilder: (_, imageProvider) {
+                                return Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(18)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: imageProvider,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            errorWidget: (_, __, ___) {
-                              return Container(
+                                );
+                              },
+                              errorWidget: (_, __, ___) {
+                                return Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: const BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(18)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: AssetImage(
+                                          '${AssetPath.pngPath}content-error.png'),
+                                    ),
+                                  ),
+                                );
+                              },
+                              emptyWidget: Container(
                                 width: 36,
                                 height: 36,
                                 decoration: const BoxDecoration(
@@ -356,55 +372,42 @@ class _AdsScreenState extends State<AdsScreen> {
                                         '${AssetPath.pngPath}content-error.png'),
                                   ),
                                 ),
-                              );
-                            },
-                            emptyWidget: Container(
-                              width: 36,
-                              height: 36,
-                              decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(18)),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                      '${AssetPath.pngPath}content-error.png'),
-                                ),
                               ),
                             ),
-                          ),
-                          twelvePx,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const CustomIconWidget(
-                                    defaultColor: false,
-                                    iconData:
-                                        "${AssetPath.vectorPath}ad_yellow_icon.svg",
-                                  ),
-                                  fourPx,
-                                  Text(
-                                    data.adsDescription ?? 'Nike',
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
-                                  )
-                                ],
-                              ),
-                              sixPx,
-                              Text(
-                                widget.argument.isSponsored ? 'Sponsored' : '',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
+                            twelvePx,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const CustomIconWidget(
+                                      defaultColor: false,
+                                      iconData:
+                                          "${AssetPath.vectorPath}ad_yellow_icon.svg",
+                                    ),
+                                    fourPx,
+                                    Text(
+                                      data.adsDescription ?? 'Nike',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                                sixPx,
+                                Text(
+                                  widget.argument.isSponsored ? 'Sponsored' : '',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                    ),
                 Row(
                   children: [
                     GestureDetector(
@@ -497,18 +500,25 @@ class _AdsScreenState extends State<AdsScreen> {
                       Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                     });
                   }else{
-                    final uri = Uri.parse(data.adsUrlLink ?? '');
-                    if (await canLaunchUrl(uri)) {
+                    try{
+                      final uri = Uri.parse(data.adsUrlLink ?? '');
+                      if (await canLaunchUrl(uri)) {
+                        adsView(context, widget.argument.data, secondsVideo,
+                            isClick: true);
+                        Navigator.pop(context);
+                        await launchUrl(
+                          uri,
+                          mode: LaunchMode.externalApplication,
+                        );
+                      } else {
+                        throw "Could not launch $uri";
+                      }
+                    }catch(e){
                       adsView(context, widget.argument.data, secondsVideo,
                           isClick: true);
-                      Navigator.pop(context);
-                      await launchUrl(
-                        uri,
-                        mode: LaunchMode.externalApplication,
-                      );
-                    } else {
-                      throw "Could not launch $uri";
+                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                     }
+
                   }
                   // can't launch url, there is some error
                 }
