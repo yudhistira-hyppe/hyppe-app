@@ -82,6 +82,13 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  bool _isLoved = false;
+  bool get isLoved => _isLoved;
+  set isLoved(bool state){
+    _isLoved = state;
+    notifyListeners();
+  }
+
   Future<void> initialVid(BuildContext context, {bool reload = false, List<ContentData>? list}) async {
     List<ContentData> res = [];
 

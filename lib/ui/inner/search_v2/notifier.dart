@@ -691,7 +691,7 @@ class SearchNotifier with ChangeNotifier {
       final lenghtPic = _detailHashTag?.pict?.length ?? 0;
       if (reload) {
         loadTagDetail = true;
-        final _res = await _hitApiGetDetail(context, keys.toLowerCase().replaceAll(' ', ''), TypeApiSearch.detailHashTag, 0, type: hyppe);
+        final _res = await _hitApiGetDetail(context, keys.replaceAll(' ', ''), TypeApiSearch.detailHashTag, 0, type: hyppe);
         if (_res != null) {
           _detailHashTag = _res;
           final videos = _detailHashTag?.vid ?? [];
@@ -740,7 +740,7 @@ class SearchNotifier with ChangeNotifier {
         if (currentSkip % 12 == 0) {
           if (!hasNext) {
             hasNext = true;
-            final _res = await _hitApiGetDetail(context, keys.toLowerCase().replaceAll(' ', ''), TypeApiSearch.detailHashTag, currentSkip, type: hyppe);
+            final _res = await _hitApiGetDetail(context, keys.replaceAll(' ', ''), TypeApiSearch.detailHashTag, currentSkip, type: hyppe);
             if (_res != null) {
               if(currentSkip != 0){
                 final videos = _res.vid;

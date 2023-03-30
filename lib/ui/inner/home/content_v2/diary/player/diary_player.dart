@@ -23,6 +23,8 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/title_playl
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import '../../../../../constant/entities/like/notifier.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
 
 class DiaryPlayerPage extends StatefulWidget {
@@ -573,6 +575,13 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
           fAliplayer?.pause();
         } else {
           fAliplayer?.play();
+        }
+      },
+      onDoubleTap: (){
+        final _likeNotifier = context.read<LikeNotifier>();
+        final data = _listData?[_curIdx];
+        if (data != null) {
+          _likeNotifier.likePost(context, data);
         }
       },
       child: !isPlay

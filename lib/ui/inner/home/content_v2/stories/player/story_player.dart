@@ -153,6 +153,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             if (status == AnimationStatus.completed) {
               storyComplete();
             }
+
           },
         );
       _curChildIdx = 0;
@@ -482,11 +483,14 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   }
 
   void play() {
+    isPause = false;
     fAliplayer?.play();
+    _animationController?.forward();
   }
 
   void pause() {
     print('pause pause');
+    isPause = true;
     fAliplayer?.pause();
     _animationController?.stop();
   }
@@ -593,8 +597,15 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    storyPrev();
+                    if(isPause){
+                      print('StoryPlayer pause1');
+                      play();
+                    }else{
+                      print('StoryPlayer page1');
+                      storyPrev();
+                    }
                   },
+                  onLongPress: () => pause(),
                   child: Container(
                     height: MediaQuery.of(context).size.height,
                     // padding: EdgeInsets.only(bottom: 25.0),
@@ -605,8 +616,15 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    storyComplete();
+                    if(isPause){
+                      print('StoryPlayer pause2');
+                      play();
+                    }else{
+                      print('StoryPlayer page2');
+                      storyComplete();
+                    }
                   },
+                  onLongPress: () => pause(),
                   child: Container(
                     height: MediaQuery.of(context).size.height,
                     // padding: EdgeInsets.only(bottom: 25.0),
