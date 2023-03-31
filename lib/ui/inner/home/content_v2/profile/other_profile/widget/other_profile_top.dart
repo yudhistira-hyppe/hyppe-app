@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
+import '../../widget/show_image_profile.dart';
 
 class OtherProfileTop extends StatelessWidget {
   const OtherProfileTop({Key? key}) : super(key: key);
@@ -48,7 +49,18 @@ class OtherProfileTop extends StatelessWidget {
                   width: 80 * SizeConfig.scaleDiagonal,
                   height: 80 * SizeConfig.scaleDiagonal,
                   imageUrl: notifier.displayPhotoProfile(),
-                  onTap: () => notifier.viewStory(context),
+                  onTap: (){
+                    // print('test show other image profile');
+                    // final imageUrl = notifier.displayPhotoProfile();
+                    // if(imageUrl?.isNotEmpty ?? false){
+                    //   showDialog(
+                    //       context: context,
+                    //       builder: (context) {
+                    //         return ShowImageProfile(imageUrl: imageUrl!);
+                    //       },
+                    //       barrierColor: Colors.transparent);
+                    // }
+                  },
                 ),
                 Expanded(
                   child: Padding(

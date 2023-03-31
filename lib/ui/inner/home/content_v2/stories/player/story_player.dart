@@ -25,6 +25,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:wakelock/wakelock.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
 
 class StoryPlayerPage extends StatefulWidget {
@@ -265,6 +266,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
+          Wakelock.enable();
           setState(() {
             _showTipsWidget = false;
             _showLoading = false;
@@ -275,7 +277,17 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
           setState(() {});
+          Wakelock.disable();
           _animationController?.stop();
+          break;
+        case FlutterAvpdef.AVPStatus_AVPStatusStopped:
+          Wakelock.disable();
+          break;
+        case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
+          Wakelock.disable();
+          break;
+        case FlutterAvpdef.AVPStatus_AVPStatusError:
+          Wakelock.disable();
           break;
         default:
       }
@@ -434,6 +446,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   @override
   void dispose() {
+    Wakelock.disable();
     _animationController?.dispose();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
