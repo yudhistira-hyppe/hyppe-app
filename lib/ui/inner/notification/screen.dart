@@ -15,7 +15,7 @@ class NotificationScreen extends StatefulWidget {
   _NotificationScreenState createState() => _NotificationScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> with AfterFirstLayoutMixin{
+class _NotificationScreenState extends State<NotificationScreen> with AfterFirstLayoutMixin {
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'NotificationScreen');
@@ -71,6 +71,15 @@ class _NotificationScreenState extends State<NotificationScreen> with AfterFirst
                       notifier.getNotifications(context, reload: true, eventTypes: notifier.eventType(index));
                     },
                     child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 2,
+                            color: notifier.listScreen.keys.elementAt(index) == notifier.screen ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.background,
+                          ),
+                        ),
+                      ),
                       child: Padding(
                         padding: EdgeInsets.only(
                           top: 14 * SizeConfig.scaleDiagonal,
@@ -82,15 +91,6 @@ class _NotificationScreenState extends State<NotificationScreen> with AfterFirst
                           textStyle: Theme.of(context).textTheme.subtitle2!.apply(
                                 color: index == notifier.pageIndex ? null : Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
                               ),
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        border: Border(
-                          bottom: BorderSide(
-                            width: 2,
-                            color: notifier.listScreen.keys.elementAt(index) == notifier.screen ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.background,
-                          ),
                         ),
                       ),
                     ),
@@ -120,6 +120,4 @@ class _NotificationScreenState extends State<NotificationScreen> with AfterFirst
       ),
     );
   }
-
-
 }

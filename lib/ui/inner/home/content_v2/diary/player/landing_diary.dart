@@ -650,7 +650,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                       ),
                                                     )
                                                   : Container(),
-                                          _buildProgressBar(SizeConfig.screenWidth!, 500),
+                                          // _buildProgressBar(SizeConfig.screenWidth!, 500),
                                           Positioned.fill(
                                             child: GestureDetector(
                                               onTap: () {

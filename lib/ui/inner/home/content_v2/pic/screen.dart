@@ -83,6 +83,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   bool isMute = false;
   String email = '';
   String statusKyc = '';
+  bool isInPage = true;
 
   @override
   void initState() {
@@ -122,6 +123,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
+      if (SharedPreference().readStorage(SpKeys.isShowPopAds)) {
+        isMute = true;
+        fAliplayer?.pause();
+      }
+
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         setState(() {
@@ -403,14 +409,23 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void didPopNext() {
     print("======= didPopNext");
+    isInPage = true;
+    fAliplayer?.play();
     // System().disposeBlock();
     super.didPopNext();
+  }
+
+  @override
+  void didPush() {
+    print("========= didPush");
+    super.didPush();
   }
 
   @override
   void didPushNext() {
     print("========= didPushNext");
     fAliplayer?.pause();
+    isInPage = false;
     super.didPushNext();
   }
 
@@ -420,16 +435,20 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
     switch (state) {
       case AppLifecycleState.inactive:
+        print("========= inactive");
         break;
       case AppLifecycleState.resumed:
+        print("========= resumed");
         if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
           fAliplayer?.play();
         }
         break;
       case AppLifecycleState.paused:
+        print("========= paused");
         fAliplayer?.pause();
         break;
       case AppLifecycleState.detached:
+        print("========= detached");
         break;
     }
   }
@@ -548,7 +567,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                       ),
                                     GestureDetector(
                                       onTap: () {
-                                        fAliplayer?.pause();
+                                        // fAliplayer?.pause();
                                         if (notifier.pic?[index].email != email) {
                                           context.read<PreviewPicNotifier>().reportContent(context, notifier.pic?[index] ?? ContentData());
                                         } else {

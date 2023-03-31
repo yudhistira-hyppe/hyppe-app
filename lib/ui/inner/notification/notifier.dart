@@ -80,7 +80,8 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     bool reload = false,
     NotificationCategory? eventTypes,
   }) async {
-    _isLoading = true;
+    if (reload) _isLoading = true;
+
     notifyListeners();
     Future<List<NotificationModel>> _resFuture;
     notificationsQuery = notificationsQuery..eventType = eventTypes;
@@ -254,12 +255,11 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
         if (usersFetch.userState == UserState.getUserProfilesSuccess) {
           result = usersFetch.data;
           if (result != null) {
-            if(isReplace){
+            if (isReplace) {
               Routing().moveReplacement(Routes.otherProfile, argument: OtherProfileArgument(profile: result, senderEmail: result.email));
-            }else{
+            } else {
               Routing().move(Routes.otherProfile, argument: OtherProfileArgument(profile: result, senderEmail: result.email));
             }
-
           } else {
             throw "Couldn't find the user ";
           }

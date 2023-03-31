@@ -60,19 +60,13 @@ class AdsPopUpDialog extends StatefulWidget {
   final String auth;
   final bool isSponsored;
 
-  const AdsPopUpDialog(
-      {Key? key,
-      required this.data,
-      required this.auth,
-      required this.isSponsored})
-      : super(key: key);
+  const AdsPopUpDialog({Key? key, required this.data, required this.auth, required this.isSponsored}) : super(key: key);
 
   @override
   State<AdsPopUpDialog> createState() => _AdsPopUpDialogState();
 }
 
-class _AdsPopUpDialogState extends State<AdsPopUpDialog>
-    with WidgetsBindingObserver, TickerProviderStateMixin {
+class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObserver, TickerProviderStateMixin {
   FlutterAliplayer? fAliplayer;
   final _sharedPrefs = SharedPreference();
   var secondsSkip = 0;
@@ -150,8 +144,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
 
   // PageController? _pageController;
 
-  RefreshController _videoListRefreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController _videoListRefreshController = RefreshController(initialRefresh: false);
 
   List<ContentData>? _listData;
 
@@ -165,8 +158,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
       secondsSkip = widget.data.adsSkip ?? 0;
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
-      fAliplayer =
-          FlutterAliPlayerFactory.createAliPlayer(playerId: "iklanPopUp");
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: "iklanPopUp");
 
       WidgetsBinding.instance.addObserver(this);
       bottomIndex = 0;
@@ -204,8 +196,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer
-          ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
 
       if (Platform.isAndroid) {
         getExternalStorageDirectories().then((value) {
@@ -229,9 +220,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer
-          ?.getPlayerName()
-          .then((value) => print("getPlayerName==${value}"));
+      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
         _animationController?.duration = Duration(milliseconds: _videoDuration);
@@ -454,6 +443,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
             ShowGeneralDialog.adsRewardPop(context);
             Timer(const Duration(milliseconds: 800), () {
               Routing().moveBack();
+              Routing().moveBack();
               // Timer(const Duration(milliseconds: 800), () {
               //   Routing().moveBack();
               // });
@@ -534,15 +524,12 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
             // padding: EdgeInsets.only(bottom: 25.0),
             child: _buildFillDiary(),
           ),
-          Positioned(
-              left: 0, top: 50, right: 0, child: topAdsLayout(widget.data)),
+          Positioned(left: 0, top: 50, right: 0, child: topAdsLayout(widget.data)),
           Positioned(
             left: 0,
             right: 0,
             bottom: 0,
-            child: (widget.data.isReport ?? false)
-                ? Container()
-                : bottomAdsLayout(widget.data),
+            child: (widget.data.isReport ?? false) ? Container() : bottomAdsLayout(widget.data),
           ),
           _buildSingleScreen(),
         ],
@@ -567,7 +554,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
                 data.isReport ?? false
                     ? Container()
                     : Expanded(
-                      child: Row(
+                        child: Row(
                           children: [
                             CustomBaseCacheImage(
                               imageUrl: data.avatar?.fullLinkURL,
@@ -578,8 +565,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
                                   width: 36,
                                   height: 36,
                                   decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(18)),
+                                    borderRadius: const BorderRadius.all(Radius.circular(18)),
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
                                       image: imageProvider,
@@ -592,12 +578,10 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
                                   width: 36,
                                   height: 36,
                                   decoration: const BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(18)),
+                                    borderRadius: BorderRadius.all(Radius.circular(18)),
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image: AssetImage(
-                                          '${AssetPath.pngPath}content-error.png'),
+                                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                     ),
                                   ),
                                 );
@@ -606,12 +590,10 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
                                 width: 36,
                                 height: 36,
                                 decoration: const BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(18)),
+                                  borderRadius: BorderRadius.all(Radius.circular(18)),
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: AssetImage(
-                                        '${AssetPath.pngPath}content-error.png'),
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                   ),
                                 ),
                               ),
@@ -625,8 +607,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
                                     children: [
                                       const CustomIconWidget(
                                         defaultColor: false,
-                                        iconData:
-                                        "${AssetPath.vectorPath}ad_yellow_icon.svg",
+                                        iconData: "${AssetPath.vectorPath}ad_yellow_icon.svg",
                                       ),
                                       sixPx,
                                       Text(
@@ -636,24 +617,21 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
                                           fontSize: 12,
                                         ),
                                       )
-
                                     ],
                                   ),
                                   sixPx,
-                                  Expanded(child: Text(
+                                  Expanded(
+                                      child: Text(
                                     maxLines: 3,
                                     data.adsDescription ?? 'Nike',
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
+                                    style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
                                   ))
                                 ],
                               ),
                             ),
                           ],
                         ),
-                    ),
+                      ),
                 sixPx,
                 Row(
                   children: [
@@ -684,9 +662,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
                                 width: 24,
                                 height: 24,
                                 alignment: Alignment.center,
-                                child: CircularProgressIndicator(
-                                    color: context.getColorScheme().primary,
-                                    strokeWidth: 3.0))
+                                child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
                             : InkWell(
                                 onTap: () {
                                   adsView(widget.data, secondsVideo);
@@ -696,8 +672,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
                                   padding: EdgeInsets.only(left: 8.0),
                                   child: CustomIconWidget(
                                     defaultColor: false,
-                                    iconData:
-                                        "${AssetPath.vectorPath}close_ads.svg",
+                                    iconData: "${AssetPath.vectorPath}close_ads.svg",
                                   ),
                                 ),
                               ))
@@ -713,13 +688,10 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
                     margin: EdgeInsets.only(top: 0),
                     child: Text(
                       '$secondsSkip',
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                     alignment: Alignment.center,
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        color: Colors.grey),
+                    decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Colors.grey),
                   )
                 : Container()
           ],
@@ -742,11 +714,10 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
                   adsView(widget.data, secondsVideo, isClick: true);
                   Navigator.pop(context);
                   Future.delayed(const Duration(milliseconds: 500), () {
-                    Routing().move(Routes.otherProfile,
-                        argument: OtherProfileArgument(senderEmail: email));
+                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                   });
                 } else {
-                  try{
+                  try {
                     final uri = Uri.parse(data.adsUrlLink ?? '');
                     print('bottomAdsLayout ${data.adsUrlLink}');
                     if (await canLaunchUrl(uri)) {
@@ -760,7 +731,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
                       throw "Could not launch $uri";
                     }
                     // can't launch url, there is some error
-                  }catch(e){
+                  } catch (e) {
                     adsView(widget.data, secondsVideo, isClick: true);
                     System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                   }
@@ -768,17 +739,11 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
               }
             },
             child: Builder(builder: (context) {
-              final learnMore = secondsSkip < 1
-                  ? (notifier.translate.learnMore ?? 'Learn More')
-                  : "${notifier.translate.learnMore ?? 'Learn More'}($secondsSkip)";
+              final learnMore = secondsSkip < 1 ? (notifier.translate.learnMore ?? 'Learn More') : "${notifier.translate.learnMore ?? 'Learn More'}($secondsSkip)";
               return Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    color: secondsSkip < 1
-                        ? KHyppeButtonAds
-                        : context.getColorScheme().secondary),
+                decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: secondsSkip < 1 ? KHyppeButtonAds : context.getColorScheme().secondary),
                 child: Text(
                   learnMore,
                   style: const TextStyle(
@@ -807,8 +772,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
               child: LinearProgressIndicator(
                 value: _animationController?.value,
                 backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
-                valueColor:
-                    const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
+                valueColor: const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
               ),
             ),
           ),
@@ -827,9 +791,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
                 Container(
                   width: double.infinity,
                   height: double.infinity,
-                  child: Center(
-                      child: SizedBox(
-                          width: 40, height: 40, child: CustomLoading())),
+                  child: Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),
                 ),
                 // Container(
                 //   color: Colors.black,
@@ -941,12 +903,7 @@ class AdsPopUpDialog2 extends StatefulWidget {
   final String urlAds;
   final bool isSponsored;
 
-  const AdsPopUpDialog2(
-      {Key? key,
-      required this.data,
-      required this.urlAds,
-      required this.isSponsored})
-      : super(key: key);
+  const AdsPopUpDialog2({Key? key, required this.data, required this.urlAds, required this.isSponsored}) : super(key: key);
 
   @override
   State<AdsPopUpDialog2> createState() => _AdsPopUpDialog2State();
@@ -971,8 +928,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
           'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
         },
         id: widget.data.adsId ?? '',
-        duration: Duration(
-            milliseconds: ((widget.data.duration ?? 15) * 1000).toInt())));
+        duration: Duration(milliseconds: ((widget.data.duration ?? 15) * 1000).toInt())));
     print('isShowPopAds true');
     SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
 
@@ -1009,9 +965,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
     final theme = Theme.of(context);
     return Scaffold(
       body: Container(
-          decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(8.0)),
+          decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(8.0)),
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -1032,9 +986,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                               imageBuilder: (ctx, imageProvider) {
                                 return Container(
                                   decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.contain),
+                                    image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
                                   ),
                                 );
                               },
@@ -1043,8 +995,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                                   decoration: const BoxDecoration(
                                     image: DecorationImage(
                                       fit: BoxFit.contain,
-                                      image: AssetImage(
-                                          '${AssetPath.pngPath}content-error.png'),
+                                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                     ),
                                   ),
                                 );
@@ -1053,8 +1004,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                                 decoration: const BoxDecoration(
                                   image: DecorationImage(
                                     fit: BoxFit.contain,
-                                    image: AssetImage(
-                                        '${AssetPath.pngPath}content-error.png'),
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                   ),
                                 ),
                               ),
@@ -1091,8 +1041,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                         ),
                         widget.data.isReport ?? false
                             ? BackdropFilter(
-                                filter:
-                                    ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                                 child: Container(
                                   color: Colors.black.withOpacity(0),
                                 ),
@@ -1110,20 +1059,12 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                           children: [
                             Spacer(),
                             const CustomIconWidget(
-                              iconData:
-                                  "${AssetPath.vectorPath}valid-invert.svg",
+                              iconData: "${AssetPath.vectorPath}valid-invert.svg",
                               defaultColor: false,
                               height: 30,
                             ),
-                            Text(transnot.translate.reportReceived ?? '',
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600)),
-                            Text(
-                                transnot.translate
-                                        .yourReportWillbeHandledImmediately ??
-                                    '',
+                            Text(transnot.translate.reportReceived ?? '', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                            Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 13,
@@ -1149,10 +1090,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                                 ),
                                 child: Text(
                                   "See Ads",
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600),
+                                  style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -1163,15 +1101,12 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                       ),
                     ))
                   : Container(),
-              Positioned(
-                  left: 0, top: 50, right: 0, child: topAdsLayout(widget.data)),
+              Positioned(left: 0, top: 50, right: 0, child: topAdsLayout(widget.data)),
               Positioned(
                 left: 0,
                 right: 0,
                 bottom: 0,
-                child: (widget.data.isReport ?? false)
-                    ? Container()
-                    : bottomAdsLayout(widget.data),
+                child: (widget.data.isReport ?? false) ? Container() : bottomAdsLayout(widget.data),
               )
             ],
           )),
@@ -1195,7 +1130,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                 data.isReport ?? false
                     ? Container()
                     : Expanded(
-                      child: Row(
+                        child: Row(
                           children: [
                             CustomBaseCacheImage(
                               imageUrl: data.avatar?.fullLinkURL,
@@ -1206,8 +1141,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                                   width: 36,
                                   height: 36,
                                   decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(18)),
+                                    borderRadius: const BorderRadius.all(Radius.circular(18)),
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
                                       image: imageProvider,
@@ -1220,12 +1154,10 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                                   width: 36,
                                   height: 36,
                                   decoration: const BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(18)),
+                                    borderRadius: BorderRadius.all(Radius.circular(18)),
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image: AssetImage(
-                                          '${AssetPath.pngPath}content-error.png'),
+                                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                     ),
                                   ),
                                 );
@@ -1234,12 +1166,10 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                                 width: 36,
                                 height: 36,
                                 decoration: const BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(18)),
+                                  borderRadius: BorderRadius.all(Radius.circular(18)),
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: AssetImage(
-                                        '${AssetPath.pngPath}content-error.png'),
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                   ),
                                 ),
                               ),
@@ -1252,16 +1182,15 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                                   children: [
                                     const CustomIconWidget(
                                       defaultColor: false,
-                                      iconData:
-                                          "${AssetPath.vectorPath}ad_yellow_icon.svg",
+                                      iconData: "${AssetPath.vectorPath}ad_yellow_icon.svg",
                                     ),
                                     fourPx,
                                     Expanded(
                                       child: CustomTextWidget(
-                                        textToDisplay: data.adsDescription ?? 'Nike', maxLines: 3, textStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600),),
+                                        textToDisplay: data.adsDescription ?? 'Nike',
+                                        maxLines: 3,
+                                        textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+                                      ),
                                     )
                                   ],
                                 ),
@@ -1277,7 +1206,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                             ),
                           ],
                         ),
-                    ),
+                      ),
                 Row(
                   children: [
                     GestureDetector(
@@ -1307,9 +1236,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                                 width: 24,
                                 height: 24,
                                 alignment: Alignment.center,
-                                child: CircularProgressIndicator(
-                                    color: context.getColorScheme().primary,
-                                    strokeWidth: 3.0))
+                                child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
                             : InkWell(
                                 onTap: () {
                                   adsView(widget.data, secondsVideo);
@@ -1319,8 +1246,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                                   padding: EdgeInsets.only(left: 8.0),
                                   child: CustomIconWidget(
                                     defaultColor: false,
-                                    iconData:
-                                        "${AssetPath.vectorPath}close_ads.svg",
+                                    iconData: "${AssetPath.vectorPath}close_ads.svg",
                                   ),
                                 ),
                               ))
@@ -1336,13 +1262,10 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                     margin: EdgeInsets.only(top: 0),
                     child: Text(
                       '$secondsSkip',
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                     alignment: Alignment.center,
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        color: Colors.grey),
+                    decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Colors.grey),
                   )
                 : Container()
           ],
@@ -1365,11 +1288,10 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                   Navigator.pop(context);
                   adsView(widget.data, secondsVideo, isClick: true);
                   Future.delayed(const Duration(milliseconds: 500), () {
-                    Routing().move(Routes.otherProfile,
-                        argument: OtherProfileArgument(senderEmail: email));
+                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                   });
                 } else {
-                  try{
+                  try {
                     final uri = Uri.parse(data.adsUrlLink ?? '');
                     print('bottomAdsLayout ${data.adsUrlLink}');
                     if (await canLaunchUrl(uri)) {
@@ -1383,18 +1305,15 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                       throw "Could not launch $uri";
                     }
                     // can't launch url, there is some error
-                  }catch(e){
+                  } catch (e) {
                     adsView(widget.data, secondsVideo, isClick: true);
                     System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                   }
-
                 }
               }
             },
             child: Builder(builder: (context) {
-              final learnMore = secondsSkip < 1
-                  ? (notifier.translate.learnMore ?? 'Learn More')
-                  : "${notifier.translate.learnMore ?? 'Learn More'}($secondsSkip)";
+              final learnMore = secondsSkip < 1 ? (notifier.translate.learnMore ?? 'Learn More') : "${notifier.translate.learnMore ?? 'Learn More'}($secondsSkip)";
               return Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
@@ -1406,11 +1325,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    color: secondsSkip < 1
-                        ? KHyppeButtonAds
-                        : context.getColorScheme().secondary),
+                decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: secondsSkip < 1 ? KHyppeButtonAds : context.getColorScheme().secondary),
               );
             }),
           ),

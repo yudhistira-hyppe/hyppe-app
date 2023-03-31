@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 class AllNotification extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'AllNotification');
     return Consumer<NotificationNotifier>(
       builder: (context, notifier, child) => PageComponent(
@@ -25,19 +25,19 @@ class AllNotification extends StatelessWidget {
           return Component(
             data: notifier.data?[index],
             rightWidget: System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.follower ||
-                System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following
-            // notifier.data?[index].event == 'REQUEST_APPEAL'
-            // notifier.data?[index].event == 'ADMIN_FLAGING' ||
-            // notifier.data?[index].event == 'NOTSUSPENDED_APPEAL'
+                    System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following
+                // notifier.data?[index].event == 'REQUEST_APPEAL'
+                // notifier.data?[index].event == 'ADMIN_FLAGING' ||
+                // notifier.data?[index].event == 'NOTSUSPENDED_APPEAL'
                 ? Container()
-            // ? AcceptButton(data: notifier.data?[index])
+                // ? AcceptButton(data: notifier.data?[index])
                 : ImageComponent(
-              borderRadiusGeometry: BorderRadius.circular(4.0),
-              // data: notifier.data?[index].content.firstOrNull,
-              data: notifier.data?[index].content,
-              postType: notifier.data?[index].postType,
-              postID: notifier.data?[index].postID,
-            ),
+                    borderRadiusGeometry: BorderRadius.circular(4.0),
+                    // data: notifier.data?[index].content.firstOrNull,
+                    data: notifier.data?[index].content,
+                    postType: notifier.data?[index].postType,
+                    postID: notifier.data?[index].postID,
+                  ),
           );
         },
       ),
