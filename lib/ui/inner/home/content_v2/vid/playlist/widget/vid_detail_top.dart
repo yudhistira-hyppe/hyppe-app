@@ -149,6 +149,7 @@ class VidDetailTop extends StatelessWidget {
           spaceProfileAndId: eightPx,
           haveStory: false,
           isCelebrity: false,
+          isUserVerified: data?.isIdVerified ?? false,
           onTapOnProfileImage: () => _system.navigateToProfile(context, data?.email ?? ''),
           featureType: FeatureType.pic,
           imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',

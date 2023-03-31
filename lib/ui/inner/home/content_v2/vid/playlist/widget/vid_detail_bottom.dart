@@ -275,6 +275,7 @@ class VidDetailBottom extends StatelessWidget {
           haveStory: false,
 
           isCelebrity: false,
+          isUserVerified: data?.isIdVerified ?? false,
           onTapOnProfileImage: () => _system.navigateToProfile(context, data?.email ?? ''),
 
           featureType: FeatureType.vid,

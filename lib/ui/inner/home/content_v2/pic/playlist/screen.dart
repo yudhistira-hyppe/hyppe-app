@@ -28,6 +28,7 @@ class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayout
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'PicDetailScreen');
+    context.read<PicDetailNotifier>().setLoadPic(true);
     super.initState();
   }
 

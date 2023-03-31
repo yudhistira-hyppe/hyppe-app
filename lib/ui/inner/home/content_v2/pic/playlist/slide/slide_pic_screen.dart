@@ -161,6 +161,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                               featureType: FeatureType.pic,
                               username: (data.username?.isNotEmpty ?? false) ? data.username : notifier.savedData?.username,
                               isCelebrity: data.privacy?.isCelebrity,
+                              isUserVerified: data.isIdVerified ?? false,
                               imageUrl:
                                   '${System().showUserPicture((data.avatar?.mediaEndpoint?.isNotEmpty ?? false) ? data.avatar?.mediaEndpoint : (notifier.savedData?.avatar?.mediaEndpoint ?? ''))}',
                               createdAt: '${System().readTimestamp(

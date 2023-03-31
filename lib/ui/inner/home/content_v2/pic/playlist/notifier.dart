@@ -149,25 +149,44 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<ContentData?> getDetailPost(BuildContext context, String postID, String visibility) async {
-    final notifier = PostsBloc();
-    await notifier.getContentsBlocV2(context, postID: postID, pageRows: 1, pageNumber: 1, type: FeatureType.pic, visibility: visibility);
-    final fetch = notifier.postsFetch;
+    try{
+      loadPic = true;
+      final notifier = PostsBloc();
+      await notifier.getContentsBlocV2(context, postID: postID, pageRows: 1, pageNumber: 1, type: FeatureType.pic, visibility: visibility);
+      final fetch = notifier.postsFetch;
 
-    final _res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
-    if (_res != null) {
-      if (_res.isNotEmpty) {
-        return _res.first;
+      final _res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
+      if (_res != null) {
+        if (_res.isNotEmpty) {
+          return _res.first;
+        } else {
+          return null;
+        }
       } else {
         return null;
       }
-    } else {
-      return null;
+
+    }catch(e){
+      e.logger();
+    }finally{
+      loadPic = false;
     }
+
   }
 
   Future initDetailPost(BuildContext context, String postID, String visibility) async {
     data = await getDetailPost(context, postID, visibility);
     print("tetsdausdjha1 ${data?.toJson()}");
+  }
+
+  bool _loadPic = false;
+  bool get loadPic => _loadPic;
+  set loadPic(bool state){
+    _loadPic = state;
+    notifyListeners();
+  }
+  setLoadPic(bool state){
+    _loadPic = true;
   }
 
   Future<void> _initialPic(
@@ -178,7 +197,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     Future<List<ContentData>> _resFuture;
 
     contentsQuery.postID = postID;
-
+    loadPic = true;
     try {
       'reload contentsQuery : 6'.logger();
       _resFuture = contentsQuery.reload(context, visibility: visibility);
@@ -188,8 +207,10 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
       notifyListeners();
       _checkFollowingToUser(context, autoFollow: true);
       _increaseViewCount(context);
+      _loadPic = false;
       notifyListeners();
     } catch (e) {
+      _loadPic = false;
       'load pic: ERROR: $e'.logger();
     }
   }
