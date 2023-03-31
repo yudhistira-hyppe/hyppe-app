@@ -56,6 +56,13 @@ class PicDetailSlider extends StatelessWidget {
               onTap: () {
                 notifier.navigateToDetailPic(picData);
               },
+              onDoubleTap: (){
+                final _likeNotifier = context.read<LikeNotifier>();
+                final data = picData;
+                if (data != null) {
+                  _likeNotifier.likePost(context, data);
+                }
+              },
               // onTap: () => notifier.navigateToSlidedDetailPic(context, index),
             ),
           ),
