@@ -240,9 +240,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
-        if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image'){
+        if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
           _animationController?.duration = Duration(milliseconds: _videoDuration > 5000 ? 5000 : 3000);
-        }else{
+        } else {
           _animationController?.duration = Duration(milliseconds: _videoDuration);
         }
 
@@ -772,6 +772,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   void start() async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
     _animationController?.reset();
+    System().increaseViewCount(context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()).whenComplete(() {});
     fAliplayer?.stop();
     isPlay = false;
     print("ini index1 $_curIdx");

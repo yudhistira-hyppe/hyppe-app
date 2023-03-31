@@ -65,6 +65,8 @@ class _PageComponentState extends State<PageComponent> {
 
     if (context.read<NotificationNotifier>().data != null && (widget.data?.isEmpty ?? true)) {
       return SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        scrollDirection: Axis.vertical,
         child: Container(
           color: Colors.transparent,
           height: mediaQuery.size.height / 1.3,
@@ -90,7 +92,6 @@ class _PageComponentState extends State<PageComponent> {
             ],
           ),
         ),
-        scrollDirection: Axis.vertical,
       );
     } else {
       return ListView.builder(

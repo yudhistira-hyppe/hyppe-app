@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   }
 
   @override
-  void didPush() { 
+  void didPush() {
     'didPush isOnHomeScreen $isHomeScreen'.logger();
   }
 
