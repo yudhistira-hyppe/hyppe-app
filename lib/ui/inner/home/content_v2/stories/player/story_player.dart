@@ -618,7 +618,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                       storyPrev();
                     }
                   },
-                  onLongPress: () => pause(),
+                  onLongPressEnd: (value) => play(),
+                  onLongPressStart: (value) => pause(),
                   child: Container(
                     height: MediaQuery.of(context).size.height,
                     // padding: EdgeInsets.only(bottom: 25.0),
@@ -637,7 +638,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                       storyComplete();
                     }
                   },
-                  onLongPress: () => pause(),
+                  onLongPressEnd: (value) => play(),
+                  onLongPressStart: (value) => pause(),
+                  // onLongPress: () => pause(),
                   child: Container(
                     height: MediaQuery.of(context).size.height,
                     // padding: EdgeInsets.only(bottom: 25.0),
