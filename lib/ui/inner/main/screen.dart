@@ -74,14 +74,13 @@ class _MainScreenState extends State<MainScreen> {
                       iconData: notifier.pageIndex == 0 ? '${AssetPath.vectorPath}home-active.svg' : '${AssetPath.vectorPath}home.svg',
                     ),
                     onPressed: () {
-                      if(notifier.pageIndex == 0){
-                        if(globalScroller != null){
+                      if (notifier.pageIndex == 0) {
+                        if (globalScroller != null) {
                           globalScroller!.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.elasticOut);
                         }
-                      }else{
+                      } else {
                         tapMenu(0, notifier, consumerContext);
                       }
-
                     },
                   ),
                 ),
@@ -128,7 +127,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 Expanded(
                   child: IconButton(
-                    icon: Profile(),
+                    icon: const ClipOval(child: Profile()),
                     onPressed: () {
                       tapMenu(4, notifier, consumerContext);
                     },

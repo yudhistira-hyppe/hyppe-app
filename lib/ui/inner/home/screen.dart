@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -176,6 +177,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                 return notification.depth == 0;
               },
               onRefresh: () async {
+                imageCache.clear();
+
                 await notifier.initNewHome(context, mounted, isreload: true);
               },
               child: NestedScrollView(

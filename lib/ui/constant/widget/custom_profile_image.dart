@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 
 import 'custom_icon_widget.dart';
@@ -35,55 +37,74 @@ class CustomProfileImage extends StatelessWidget {
     SizeConfig().init(context);
     return GestureDetector(
       onTap: onTap as void Function()?,
-      child: CustomBaseCacheImage(
-        cacheKey: cacheKey,
-        imageUrl: imageUrl,
-        headers: headers,
-        imageBuilder: (context, imageProvider) => Container(
-          width: width,
-          height: height,
-          alignment: Alignment.bottomCenter,
-          decoration: forStory
-              ? BoxDecoration(
-                  // shape: BoxShape.circle,
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                )
-              : BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                ),
-          child: _buildBody(),
-        ),
-        errorWidget: (context, url, error) => Container(
-          width: width,
-          height: height,
-          alignment: Alignment.bottomCenter,
+      child: SizedBox(
+        width: width,
+        height: height,
+        child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            image: const DecorationImage(
-              fit: BoxFit.contain,
-              image: AssetImage('${AssetPath.pngPath}profile-error.png'),
-            ),
-            // shape: BoxShape.circle,
           ),
-          child: _buildBody(),
-        ),
-        emptyWidget: Container(
-          width: width,
-          height: height,
-          alignment: Alignment.bottomCenter,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            image: DecorationImage(
-              fit: BoxFit.contain,
-              image: AssetImage('${AssetPath.pngPath}profile-error.png'),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(forStory ? 20 : 50),
+            child: Image.network(
+              '$imageUrl',
+              errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                return Image.asset('${AssetPath.pngPath}profile-error.png', fit: BoxFit.fitWidth);
+              },
             ),
-            // shape: BoxShape.circle,
           ),
-          child: _buildBody(),
         ),
       ),
+
+      // child: CustomBaseCacheImage(
+      //   cacheKey: ValueKey(Random().nextInt(100)).toString(),
+      //   imageUrl: imageUrl,
+      //   headers: headers,
+      //   imageBuilder: (context, imageProvider) => Container(
+      //     width: width,
+      //     height: height,
+      //     alignment: Alignment.bottomCenter,
+      //     decoration: forStory
+      //         ? BoxDecoration(
+      //             // shape: BoxShape.circle,
+      //             borderRadius: BorderRadius.circular(20),
+      //             image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+      //           )
+      //         : BoxDecoration(
+      //             shape: BoxShape.circle,
+      //             image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+      //           ),
+      //     child: _buildBody(),
+      //   ),
+      //   errorWidget: (context, url, error) => Container(
+      //     width: width,
+      //     height: height,
+      //     alignment: Alignment.bottomCenter,
+      //     decoration: BoxDecoration(
+      //       borderRadius: BorderRadius.circular(20),
+      //       image: const DecorationImage(
+      //         fit: BoxFit.contain,
+      //         image: AssetImage('${AssetPath.pngPath}profile-error.png'),
+      //       ),
+      //       // shape: BoxShape.circle,
+      //     ),
+      //     child: _buildBody(),
+      //   ),
+      //   emptyWidget: Container(
+      //     width: width,
+      //     height: height,
+      //     alignment: Alignment.bottomCenter,
+      //     decoration: BoxDecoration(
+      //       borderRadius: BorderRadius.circular(20),
+      //       image: DecorationImage(
+      //         fit: BoxFit.contain,
+      //         image: AssetImage('${AssetPath.pngPath}profile-error.png'),
+      //       ),
+      //       // shape: BoxShape.circle,
+      //     ),
+      //     child: _buildBody(),
+      //   ),
+      // ),
     );
   }
 
