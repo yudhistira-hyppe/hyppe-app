@@ -15,7 +15,14 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../core/models/collection/localization_v2/localization_model.dart';
+
 class PinAccountNotifier extends ChangeNotifier {
+  LocalizationModelV2 language = LocalizationModelV2();
+  translate(LocalizationModelV2 translate) {
+    language = translate;
+    notifyListeners();
+  }
   CountdownController? _countdownController;
   bool _confirm = false;
   bool _changeSetNewPin = false;
@@ -293,10 +300,10 @@ class PinAccountNotifier extends ChangeNotifier {
             backHome();
             ShowBottomSheet().onShowColouredSheet(
               context,
-              'PIN successful created',
+              language.pinSuccessCreated ??'PIN is successfully created',
               color: kHyppeTextSuccess,
               iconSvg: "${AssetPath.vectorPath}valid-invert.svg",
-              subCaption: 'Your PIN has been successfully created',
+              subCaption: language.messagePinSuccessCreated ?? 'Your PIN has been successfully created',
             );
           } else {
             Routing().move(Routes.forgotPinScreen);
@@ -307,10 +314,10 @@ class PinAccountNotifier extends ChangeNotifier {
           backHome();
           ShowBottomSheet().onShowColouredSheet(
             context,
-            'PIN successful created',
+            language.pinSuccessCreated ??'PIN is successfully created',
             color: kHyppeTextSuccess,
             iconSvg: "${AssetPath.vectorPath}valid-invert.svg",
-            subCaption: 'Your PIN has been successfully created',
+            subCaption: language.messagePinSuccessCreated ?? 'Your PIN has been successfully created',
           );
         }
       }

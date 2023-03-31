@@ -55,6 +55,7 @@ import '../../core/models/collection/support_ticket/ticket_model.dart';
 import '../../ui/constant/entities/comment_v2/notifier.dart';
 import '../../ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import '../../ui/inner/home/content_v2/help/detail_ticket/notifier.dart';
+import '../../ui/inner/home/content_v2/pin/notifier.dart';
 
 class TranslateNotifierV2 with ChangeNotifier {
   TranslateNotifierV2._private();
@@ -238,6 +239,7 @@ class TranslateNotifierV2 with ChangeNotifier {
       context.read<TicketHistoryNotifier>().translate(translate);
       context.read<DetailTicketNotifier>().translate(translate);
       context.read<VidDetailNotifier>().translate(translate);
+      context.read<PinAccountNotifier>().translate(translate);
       // await context.read<TransactionNotifier>().translate(translate);
       // await context.read<PinAccountNotifier>().translate(translate);
 

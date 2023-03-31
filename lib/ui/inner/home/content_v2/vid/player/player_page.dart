@@ -33,6 +33,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../constant/entities/like/notifier.dart';
+
 class PlayerPage extends StatefulWidget {
   final ModeTypeAliPLayer playMode;
   final Map<String, dynamic> dataSourceMap;
@@ -689,6 +691,12 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           onTapCtrl = true;
           setState(() {});
         },
+        // onDoubleTap: (){
+        //   final _likeNotifier = context.read<LikeNotifier>();
+        //   if (widget.data != null) {
+        //     _likeNotifier.likePost(context, widget.data!);
+        //   }
+        // },
         child: Stack(
           children: [
             // Text("${(adsData != null && !widget.inLanding)}"),

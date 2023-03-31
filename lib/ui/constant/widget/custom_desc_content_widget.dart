@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/hashtag_argument.dart';
@@ -226,8 +227,10 @@ class _CustomDescContentState extends State<CustomDescContent> {
         : widget.desc;
     fixDesc = fixDesc.replaceAll('\n@', '\n @');
     fixDesc = fixDesc.replaceAll('\n#', '\n #');
+    fixDesc = fixDesc.replaceAll('\n', ' \n');
 
     var splitDesc = fixDesc.split(' ');
+
     splitDesc.removeWhere((e) => e == '');
     for (final desc in splitDesc) {
       // 'Fix Desc: $desc'.logger();

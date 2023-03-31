@@ -27,6 +27,8 @@
   "incorrectCode": "Masukkan kode OTP yang valid.",
   "titleSuccessPin": "Kode Verifikasi Terkirim",
   "messageSuccessPin": "Kami telah mengirimkan kode verifikasi ke email kamu.",
+  "pinSuccessCreated": "Selamat!",
+  "messagePinSuccessCreated": "Kamu telah berhasil membuat PIN baru!",
   "sessionExpired": "Sesi telah berakhir",
   "yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest": "Sesi Anda telah habis. Mohon kembali ke laman daftar atau masuk sebagai tamu",
   "backToRegisterPage": "Kembali ke laman daftar",

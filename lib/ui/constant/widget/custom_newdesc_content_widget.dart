@@ -230,6 +230,7 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
         : widget.desc;
     fixDesc = fixDesc.replaceAll('\n@', '\n @');
     fixDesc = fixDesc.replaceAll('\n#', '\n #');
+    fixDesc = fixDesc.replaceAll('\n', ' \n');
 
     var splitDesc = fixDesc.split(' ');
     splitDesc.removeWhere((e) => e == '');

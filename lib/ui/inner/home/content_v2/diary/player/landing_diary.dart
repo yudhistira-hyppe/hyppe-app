@@ -660,6 +660,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                 });
                                                 fAliplayer?.setMuted(isMute);
                                               },
+                                              onDoubleTap: (){
+                                                final _likeNotifier = context.read<LikeNotifier>();
+                                                if (notifier.diaryData?[index] != null) {
+                                                  _likeNotifier.likePost(context, notifier.diaryData![index]);
+                                                }
+                                              },
                                               child: Container(
                                                 color: Colors.transparent,
                                                 width: SizeConfig.screenWidth,

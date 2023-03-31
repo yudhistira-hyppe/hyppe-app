@@ -675,6 +675,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 });
                                                 fAliplayer?.setMuted(isMute);
                                               },
+                                              onDoubleTap: (){
+                                                final _likeNotifier = context.read<LikeNotifier>();
+                                                if (notifier.pic?[index] != null) {
+                                                  _likeNotifier.likePost(context, notifier.pic![index]);
+                                                }
+                                              },
                                               child: Container(
                                                 color: Colors.transparent,
                                                 width: SizeConfig.screenWidth,

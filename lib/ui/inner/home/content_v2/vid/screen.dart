@@ -15,6 +15,7 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
+import 'package:hyppe/ui/constant/widget/custom_like_animation.dart';
 import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
@@ -33,6 +34,8 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/core/constants/enum.dart';
+
+import '../../../../constant/entities/like/notifier.dart';
 
 class HyppePreviewVid extends StatefulWidget {
   const HyppePreviewVid({Key? key}) : super(key: key);
@@ -71,18 +74,22 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     // final vidNotifier = context.watch<PreviewVidNotifier>();
-    final error = context.select((ErrorService value) => value.getError(ErrorType.vid));
+    final error =
+        context.select((ErrorService value) => value.getError(ErrorType.vid));
     // final likeNotifier = Provider.of<LikeNotifier>(context, listen: false);
 
     return Consumer3<PreviewVidNotifier, TranslateNotifierV2, HomeNotifier>(
-      builder: (context, vidNotifier, translateNotifier, homeNotifier, widget) => SizedBox(
+      builder:
+          (context, vidNotifier, translateNotifier, homeNotifier, widget) =>
+              SizedBox(
         child: Column(
           children: [
             (vidNotifier.vidData != null)
                 ? (vidNotifier.vidData?.isEmpty ?? true)
                     ? const NoResultFound()
                     : Expanded(
-                        child: NotificationListener<OverscrollIndicatorNotification>(
+                        child: NotificationListener<
+                            OverscrollIndicatorNotification>(
                           onNotification: (overscroll) {
                             overscroll.disallowIndicator();
                             return false;
@@ -105,33 +112,41 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                             itemBuilder: (BuildContext context, int index) {
                               if (homeNotifier.isLoadingVid) {
                                 return CustomShimmer(
-                                  margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
+                                  margin: const EdgeInsets.only(
+                                      bottom: 100, right: 16, left: 16),
                                   height: context.getHeight() / 8,
                                   width: double.infinity,
                                 );
                               }
-                              if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
+                              if (index == vidNotifier.vidData?.length &&
+                                  vidNotifier.hasNext) {
                                 return const CustomLoading(size: 5);
                               }
                               final vidData = vidNotifier.vidData?[index];
                               return GestureDetector(
                                 onTap: () {
-                                  vidNotifier.navigateToHyppeVidDetail(context, vidData, fromLAnding: true);
+                                  vidNotifier.navigateToHyppeVidDetail(
+                                      context, vidData,
+                                      fromLAnding: true);
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(16),
                                     color: Colors.white,
                                   ),
-                                  padding: const EdgeInsets.only(top: 20, left: 16, right: 16, bottom: 16),
+                                  padding: const EdgeInsets.only(
+                                      top: 20, left: 16, right: 16, bottom: 16),
                                   margin: const EdgeInsets.only(bottom: 16),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           Expanded(
                                             child: ProfileLandingPage(
@@ -145,52 +160,104 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                               featureType: FeatureType.other,
                                               // isCelebrity: vidvidData?.privacy?.isCelebrity,
                                               isCelebrity: false,
-                                              imageUrl: '${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}',
-                                              onTapOnProfileImage: () => System().navigateToProfile(context, vidData?.email ?? ''),
+                                              imageUrl:
+                                                  '${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}',
+                                              onTapOnProfileImage: () =>
+                                                  System().navigateToProfile(
+                                                      context,
+                                                      vidData?.email ?? ''),
                                               createdAt: '2022-02-02',
-                                              musicName: vidData?.music?.musicTitle ?? '',
+                                              musicName:
+                                                  vidData?.music?.musicTitle ??
+                                                      '',
                                               location: vidData?.location ?? '',
-                                              isIdVerified: vidData?.privacy?.isIdVerified,
+                                              isIdVerified: vidData
+                                                  ?.privacy?.isIdVerified,
                                             ),
                                           ),
-                                          if (vidData?.email != email && (vidData?.isNewFollowing ?? false))
+                                          if (vidData?.email != email &&
+                                              (vidData?.isNewFollowing ??
+                                                  false))
                                             Consumer<PreviewPicNotifier>(
-                                              builder: (context, picNot, child) => Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                              builder:
+                                                  (context, picNot, child) =>
+                                                      Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8.0),
                                                 child: GestureDetector(
                                                   onTap: () {
-                                                    if (vidData?.insight?.isloadingFollow != true) {
-                                                      picNot.followUser(context, vidData ?? ContentData(), isUnFollow: vidData?.following, isloading: vidData?.insight!.isloadingFollow ?? false);
+                                                    if (vidData?.insight
+                                                            ?.isloadingFollow !=
+                                                        true) {
+                                                      picNot.followUser(
+                                                          context,
+                                                          vidData ??
+                                                              ContentData(),
+                                                          isUnFollow: vidData
+                                                              ?.following,
+                                                          isloading: vidData
+                                                                  ?.insight!
+                                                                  .isloadingFollow ??
+                                                              false);
                                                     }
                                                   },
-                                                  child: vidData?.insight?.isloadingFollow ?? false
+                                                  child: vidData?.insight
+                                                              ?.isloadingFollow ??
+                                                          false
                                                       ? Container(
                                                           height: 40,
                                                           width: 30,
                                                           child: Align(
-                                                            alignment: Alignment.bottomRight,
-                                                            child: CustomLoading(),
+                                                            alignment: Alignment
+                                                                .bottomRight,
+                                                            child:
+                                                                CustomLoading(),
                                                           ),
                                                         )
                                                       : Text(
-                                                          (vidData?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                                          style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                                          (vidData?.following ??
+                                                                  false)
+                                                              ? (lang?.following ??
+                                                                  '')
+                                                              : (lang?.follow ??
+                                                                  ''),
+                                                          style: TextStyle(
+                                                              color:
+                                                                  kHyppePrimary,
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              fontFamily:
+                                                                  "Lato"),
                                                         ),
                                                 ),
                                               ),
                                             ),
                                           GestureDetector(
                                             onTap: () {
-                                              if (vidData?.email != SharedPreference().readStorage(SpKeys.email)) {
-                                                vidNotifier.reportContent(context, vidNotifier.vidData?[index] ?? ContentData());
+                                              if (vidData?.email !=
+                                                  SharedPreference()
+                                                      .readStorage(
+                                                          SpKeys.email)) {
+                                                vidNotifier.reportContent(
+                                                    context,
+                                                    vidNotifier
+                                                            .vidData?[index] ??
+                                                        ContentData());
                                               } else {
-                                                ShowBottomSheet().onShowOptionContent(
+                                                ShowBottomSheet()
+                                                    .onShowOptionContent(
                                                   context,
-                                                  contentData: vidData ?? ContentData(),
+                                                  contentData:
+                                                      vidData ?? ContentData(),
                                                   captionTitle: hyppeVid,
                                                   onDetail: false,
                                                   isShare: vidData?.isShared,
-                                                  onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                                                  onUpdate: () => context
+                                                      .read<HomeNotifier>()
+                                                      .onUpdate(),
                                                 );
                                               }
                                             },
@@ -208,7 +275,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                             aspectRatio: 16 / 9,
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(16),
+                                                borderRadius:
+                                                    BorderRadius.circular(16),
                                                 color: Colors.black,
                                               ),
                                               child: CustomBaseCacheImage(
@@ -216,30 +284,48 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                 memCacheHeight: 100,
                                                 widthPlaceHolder: 80,
                                                 heightPlaceHolder: 80,
-                                                imageUrl: (vidData?.isApsara ?? false) ? (vidData?.mediaThumbEndPoint ?? "") : "${vidData?.fullThumbPath}",
-                                                imageBuilder: (context, imageProvider) => Container(
+                                                imageUrl: (vidData
+                                                            ?.isApsara ??
+                                                        false)
+                                                    ? (vidData
+                                                            ?.mediaThumbEndPoint ??
+                                                        "")
+                                                    : "${vidData?.fullThumbPath}",
+                                                imageBuilder: (context,
+                                                        imageProvider) =>
+                                                    Container(
                                                   // const EdgeInsets.symmetric(horizontal: 4.5),
-                                                  width: SizeConfig.screenWidth,
-                                                  height: SizeConfig.screenWidth! / 1.5,
+                                                  width:
+                                                      SizeConfig.screenWidth,
+                                                  height: SizeConfig
+                                                          .screenWidth! /
+                                                      1.5,
                                                   decoration: BoxDecoration(
                                                     image: DecorationImage(
                                                       image: imageProvider,
                                                       fit: BoxFit.contain,
                                                     ),
-                                                    borderRadius: BorderRadius.circular(16.0),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16.0),
                                                   ),
                                                 ),
-                                                errorWidget: (context, url, error) {
+                                                errorWidget:
+                                                    (context, url, error) {
                                                   return Container(
                                                     // const EdgeInsets.symmetric(horizontal: 4.5),
 
                                                     height: 186,
                                                     decoration: BoxDecoration(
-                                                      image: const DecorationImage(
-                                                        image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                                      image:
+                                                          const DecorationImage(
+                                                        image: AssetImage(
+                                                            '${AssetPath.pngPath}content-error.png'),
                                                         fit: BoxFit.contain,
                                                       ),
-                                                      borderRadius: BorderRadius.circular(8.0),
+                                                      borderRadius:
+                                                          BorderRadius
+                                                              .circular(8.0),
                                                     ),
                                                   );
                                                 },
@@ -248,17 +334,26 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
 
                                                   height: 186,
                                                   decoration: BoxDecoration(
-                                                    image: const DecorationImage(
-                                                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                                    image:
+                                                        const DecorationImage(
+                                                      image: AssetImage(
+                                                          '${AssetPath.pngPath}content-error.png'),
                                                       fit: BoxFit.contain,
                                                     ),
-                                                    borderRadius: BorderRadius.circular(8.0),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.0),
                                                   ),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                          AspectRatio(aspectRatio: 16 / 9, child: _buildBody(context, vidData, SizeConfig.screenWidth))
+                                          AspectRatio(
+                                              aspectRatio: 16 / 9,
+                                              child: _buildBody(
+                                                  context,
+                                                  vidData,
+                                                  SizeConfig.screenWidth)),
                                         ],
                                       ),
                                       // (vidData?.tagPeople?.isNotEmpty ?? false) || vidData?.location != ''
@@ -286,48 +381,78 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                       //         ),
                                       //       )
                                       //     : const SizedBox(),
-                                      SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                                              (vidData?.boosted.isEmpty ?? [].isEmpty) &&
-                                              (vidData?.reportedStatus != 'OWNED' && vidData?.reportedStatus != 'BLURRED' && vidData?.reportedStatus2 != 'BLURRED') &&
+                                      SharedPreference().readStorage(SpKeys
+                                                      .statusVerificationId) ==
+                                                  VERIFIED &&
+                                              (vidData?.boosted.isEmpty ??
+                                                  [].isEmpty) &&
+                                              (vidData?.reportedStatus !=
+                                                      'OWNED' &&
+                                                  vidData?.reportedStatus !=
+                                                      'BLURRED' &&
+                                                  vidData?.reportedStatus2 !=
+                                                      'BLURRED') &&
                                               vidData?.email == email
                                           ? Container(
-                                              width: MediaQuery.of(context).size.width * 0.8,
-                                              margin: const EdgeInsets.only(top: 10),
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.8,
+                                              margin: const EdgeInsets.only(
+                                                  top: 10),
                                               child: ButtonBoost(
                                                 onDetail: false,
                                                 marginBool: true,
                                                 contentData: vidData,
                                                 startState: () {
-                                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                                  SharedPreference()
+                                                      .writeStorage(
+                                                          SpKeys.isShowPopAds,
+                                                          true);
                                                 },
                                                 afterState: () {
-                                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                                  SharedPreference()
+                                                      .writeStorage(
+                                                          SpKeys.isShowPopAds,
+                                                          false);
                                                 },
                                               ),
                                             )
                                           : Container(),
-                                      if (vidData?.email == email && (vidData?.boostCount ?? 0) >= 0 && (vidData?.boosted.isNotEmpty ?? [].isEmpty))
+                                      if (vidData?.email == email &&
+                                          (vidData?.boostCount ?? 0) >= 0 &&
+                                          (vidData?.boosted.isNotEmpty ??
+                                              [].isEmpty))
                                         Container(
                                           padding: const EdgeInsets.all(10),
                                           margin: EdgeInsets.only(top: 10),
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(6),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
                                             color: kHyppeGreyLight,
                                           ),
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
                                             children: [
                                               const CustomIconWidget(
-                                                iconData: "${AssetPath.vectorPath}reach.svg",
+                                                iconData:
+                                                    "${AssetPath.vectorPath}reach.svg",
                                                 defaultColor: false,
                                                 height: 24,
                                                 color: kHyppeTextLightPrimary,
                                               ),
                                               Padding(
-                                                padding: const EdgeInsets.only(left: 13),
+                                                padding: const EdgeInsets.only(
+                                                    left: 13),
                                                 child: Text(
                                                   "${vidData?.boostJangkauan ?? '0'} ${lang?.reach}",
-                                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color:
+                                                          kHyppeTextLightPrimary),
                                                 ),
                                               )
                                             ],
@@ -340,22 +465,42 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                         desc: "${vidData?.description}",
                                         trimLines: 2,
                                         textAlign: TextAlign.start,
-                                        seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                                        seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                                        normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                                        hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                        expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                        seeLess:
+                                            ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                                        seeMore:
+                                            '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                                        normStyle: const TextStyle(
+                                            fontSize: 12,
+                                            color: kHyppeTextLightPrimary),
+                                        hrefStyle: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2
+                                            ?.copyWith(color: kHyppePrimary),
+                                        expandStyle: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2
+                                            ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary),
                                       ),
                                       eightPx,
                                       Padding(
-                                        padding: EdgeInsets.symmetric(vertical: 4.0),
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 4.0),
                                         child: Text(
                                           "${System().readTimestamp(
-                                            DateTime.parse(System().dateTimeRemoveT(vidData?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                                            DateTime.parse(System()
+                                                    .dateTimeRemoveT(
+                                                        vidData?.createdAt ??
+                                                            DateTime.now()
+                                                                .toString()))
+                                                .millisecondsSinceEpoch,
                                             context,
                                             fullCaption: true,
                                           )}",
-                                          style: TextStyle(fontSize: 12, color: kHyppeBurem),
+                                          style: TextStyle(
+                                              fontSize: 12, color: kHyppeBurem),
                                         ),
                                       ),
                                       // vidData?.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: vidData) : Container(),
@@ -391,7 +536,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
             left: 12,
             child: GestureDetector(
               onTap: () {
-                context.read<PicDetailNotifier>().showUserTag(context, data?.tagPeople, data?.postID);
+                context
+                    .read<PicDetailNotifier>()
+                    .showUserTag(context, data?.tagPeople, data?.postID);
               },
               child: const CustomIconWidget(
                 iconData: '${AssetPath.vectorPath}tag_people.svg',
@@ -411,7 +558,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                System().formatDuration(Duration(seconds: data?.metadata?.duration ?? 0).inMilliseconds),
+                System().formatDuration(
+                    Duration(seconds: data?.metadata?.duration ?? 0)
+                        .inMilliseconds),
                 style: const TextStyle(color: Colors.white, fontSize: 10),
               ),
             )),

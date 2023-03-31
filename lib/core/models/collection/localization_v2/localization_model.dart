@@ -27,6 +27,8 @@ class LocalizationModelV2 {
   String? incorrectCode;
   String? titleSuccessPin;
   String? messageSuccessPin;
+  String? pinSuccessCreated;
+  String? messagePinSuccessCreated;
   String? sessionExpired;
   String? yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest;
   String? backToRegisterPage;
@@ -916,6 +918,8 @@ class LocalizationModelV2 {
     this.incorrectCode,
     this.titleSuccessPin,
     this.messageSuccessPin,
+    this.pinSuccessCreated,
+    this.messagePinSuccessCreated,
     this.sessionExpired,
     this.yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest,
     this.backToRegisterPage,
@@ -1806,6 +1810,8 @@ class LocalizationModelV2 {
     incorrectCode = json['incorrectCode'];
     titleSuccessPin = json['titleSuccessPin'];
     messageSuccessPin = json['messageSuccessPin'];
+    pinSuccessCreated = json['pinSuccessCreated'];
+    messagePinSuccessCreated = json['messagePinSuccessCreated'];
     sessionExpired = json['sessionExpired'];
     yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest = json['yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest'];
     backToRegisterPage = json['backToRegisterPage'];
