@@ -13,6 +13,7 @@ import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/widget/show_image_profile.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,18 @@ class SelfProfileTop extends StatelessWidget {
                   width: 80 * SizeConfig.scaleDiagonal,
                   height: 80 * SizeConfig.scaleDiagonal,
                   imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
-                  onTap: () => notifier.viewStory(context),
+                  onTap: (){
+                    // print('test show image profile');
+                    // final imageUrl = notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}");
+                    // if(imageUrl?.isNotEmpty ?? false){
+                    //   showDialog(
+                    //       context: context,
+                    //       builder: (context) {
+                    //         return ShowImageProfile(imageUrl: imageUrl!);
+                    //       },
+                    //       barrierColor: Colors.transparent);
+                    // }
+                  },
                 ),
                 Expanded(
                   child: Row(

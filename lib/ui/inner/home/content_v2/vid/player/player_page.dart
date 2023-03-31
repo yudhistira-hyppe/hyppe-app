@@ -32,6 +32,7 @@ import 'package:path_provider/path_provider.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
+import 'package:wakelock/wakelock.dart';
 
 import '../../../../../constant/entities/like/notifier.dart';
 
@@ -233,6 +234,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
+          Wakelock.enable();
           setState(() {
             _showTipsWidget = false;
             _showLoading = false;
@@ -241,7 +243,17 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
+          Wakelock.disable();
           setState(() {});
+          break;
+        case FlutterAvpdef.AVPStatus_AVPStatusStopped:
+          Wakelock.disable();
+          break;
+        case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
+          Wakelock.disable();
+          break;
+        case FlutterAvpdef.AVPStatus_AVPStatusError:
+          Wakelock.disable();
           break;
         default:
       }
@@ -645,6 +657,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    Wakelock.disable();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
     }

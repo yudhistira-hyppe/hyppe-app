@@ -20,6 +20,7 @@ import 'package:provider/provider.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wakelock/wakelock.dart';
 
 import '../../../../../core/arguments/other_profile_argument.dart';
 import '../../../../../core/bloc/ads_video/bloc.dart';
@@ -253,6 +254,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
 
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
+          Wakelock.enable();
           setState(() {
             _showTipsWidget = false;
             _showLoading = false;
@@ -263,7 +265,17 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
           setState(() {});
+          Wakelock.disable();
           _animationController?.stop();
+          break;
+        case FlutterAvpdef.AVPStatus_AVPStatusStopped:
+          Wakelock.disable();
+          break;
+        case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
+          Wakelock.disable();
+          break;
+        case FlutterAvpdef.AVPStatus_AVPStatusError:
+          Wakelock.disable();
           break;
         default:
       }
@@ -459,6 +471,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog>
 
   @override
   void dispose() {
+    Wakelock.disable();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     _animationController?.dispose();
     if (Platform.isIOS) {

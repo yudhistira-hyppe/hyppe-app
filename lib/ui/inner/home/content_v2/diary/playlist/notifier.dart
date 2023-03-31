@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:collection/collection.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
@@ -69,6 +70,14 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   bool _isLoadMine = false;
   bool _isLoadOther = false;
   bool _isLoadSearch = false;
+
+  ContentData? _data;
+  ContentData? get data => _data;
+
+  set data(ContentData? value) {
+    _data = value;
+    notifyListeners();
+  }
 
   setCurrentDiary(int val) => _currentDiary = val;
 
@@ -168,6 +177,28 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     } catch (e) {
       'Failed to fetch ads data ${e}'.logger();
       return '';
+    }
+  }
+
+  initTitleData(BuildContext context, String postID, String visibility) async{
+    try {
+      // loadDetail = true;
+
+      // final String myEmail = SharedPreference().readStorage(SpKeys.email);
+      final res = await contentsQuery.reload(context, visibility: visibility);
+      data = res.firstOrNull;
+      // if (data != null) {
+      //   final postID = _data?.postID;
+      //   if (postID != null) {
+      //     getFirstComment(context, postID);
+      //   }
+      // }
+      'reload contentsQuery : ${_data?.toJson()}'.logger();
+      // loadDetail = false;
+      // _checkFollowingToUser(context, autoFollow: true);
+    } catch (e) {
+      // loadDetail = false;
+      'load vid: ERROR: $e'.logger();
     }
   }
 
