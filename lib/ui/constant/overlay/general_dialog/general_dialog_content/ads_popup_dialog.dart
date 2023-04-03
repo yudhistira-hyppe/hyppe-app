@@ -490,7 +490,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (secondsSkip < 1 || widget.data.isReport == true) {
+        if (!loadingAction && secondsSkip < 1 || widget.data.isReport == true) {
           await adsView(widget.data, secondsVideo);
           return true;
         } else {

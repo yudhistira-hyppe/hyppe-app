@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
@@ -194,7 +195,10 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void reportContent(BuildContext context, ContentData data) {
-    ShowBottomSheet.onReportContent(context, postData: data, type: hyppePic, inDetail: false);
+  void reportContent(BuildContext context, ContentData data, {FlutterAliplayer? fAliplayer}) {
+    if (fAliplayer != null) {
+      fAliplayer.pause();
+    }
+    ShowBottomSheet.onReportContent(context, postData: data, type: hyppePic, inDetail: false, fAliplayer: fAliplayer);
   }
 }
