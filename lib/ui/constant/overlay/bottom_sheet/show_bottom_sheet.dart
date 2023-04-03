@@ -1,3 +1,4 @@
+import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -601,6 +602,7 @@ class ShowBottomSheet {
     StoryController? storyController,
     Function? onUpdate,
     bool? isShare,
+    FlutterAliplayer? fAliplayer,
   }) async {
     await showModalBottomSheet(
       context: _,
@@ -629,6 +631,7 @@ class ShowBottomSheet {
       },
     ).whenComplete(() {
       if (storyController != null) storyController.play();
+      if (fAliplayer != null) fAliplayer.play();
       if (onUpdate != null) onUpdate();
     });
   }
@@ -709,6 +712,7 @@ class ShowBottomSheet {
     StoryController? storyController,
     Function? onUpdate,
     bool? inDetail,
+    FlutterAliplayer? fAliplayer,
   }) {
     showModalBottomSheet(
       context: _,
@@ -735,7 +739,11 @@ class ShowBottomSheet {
           ),
         );
       },
-    ).whenComplete(() {});
+    ).whenComplete(() {
+      if (fAliplayer != null) {
+        fAliplayer.pause();
+      }
+    });
   }
 
   static onReportFormContent(_, {StoryController? storyController}) {

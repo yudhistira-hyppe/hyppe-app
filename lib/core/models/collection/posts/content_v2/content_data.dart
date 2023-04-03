@@ -141,6 +141,8 @@ class ContentData {
 
   String? fullContentPath;
 
+  String? fullContent;
+
   UserProfileAvatarModel? avatar;
 
   String? visibility;
@@ -242,6 +244,7 @@ class ContentData {
     this.isDiaryPlay,
     this.comments,
     this.isNewFollowing,
+    this.fullContent,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -274,6 +277,7 @@ class ContentData {
     updatedAt = json['updatedAt'];
     username = json['username'] ?? '';
     fullThumbPath = concatThumbUri();
+    fullContent = concatFullContent();
     fullContentPath = concatContentUri();
 
     avatar = json['avatar'] != null ? UserProfileAvatarModel.fromJson(json['avatar']) : null;
@@ -390,6 +394,15 @@ class ContentData {
 
   String? concatThumbUri() {
     final fixMedia = mediaThumbEndPoint ?? mediaEndpoint ?? '';
+    if (fixMedia.isNotEmpty) {
+      return Env.data.baseUrl + "${Env.data.versionApi}" + fixMedia + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    } else {
+      return fixMedia;
+    }
+  }
+
+  String? concatFullContent() {
+    final fixMedia = mediaEndpoint ?? '';
     if (fixMedia.isNotEmpty) {
       return Env.data.baseUrl + "${Env.data.versionApi}" + fixMedia + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
     } else {

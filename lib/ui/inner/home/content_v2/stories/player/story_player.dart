@@ -154,7 +154,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             if (status == AnimationStatus.completed) {
               storyComplete();
             }
-
           },
         );
       _curChildIdx = 0;
@@ -223,7 +222,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         setState(() {
           isloading = false;
         });
-        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+        // widget.videoData?.fullContent = jsonMap['PlayUrl'];
       }
     } catch (e) {
       setState(() {
@@ -565,12 +564,14 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                 ),
+
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   // padding: EdgeInsets.only(bottom: 25.0),
                   child: _buildFillStory(value),
                 ),
+
                 _buildSingleScreen(index, value),
               ],
             );
@@ -610,10 +611,10 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    if(isPause){
+                    if (isPause) {
                       print('StoryPlayer pause1');
                       play();
-                    }else{
+                    } else {
                       print('StoryPlayer page1');
                       storyPrev();
                     }
@@ -630,10 +631,10 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    if(isPause){
+                    if (isPause) {
                       print('StoryPlayer pause2');
                       play();
-                    }else{
+                    } else {
                       print('StoryPlayer page2');
                       storyComplete();
                     }
@@ -715,7 +716,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                             ? (_groupUserStories?[_curIdx].story?[_curChildIdx].media) == null
                                 ? "${_groupUserStories?[_curIdx].story?[_curChildIdx].mediaUri}"
                                 : "${_groupUserStories?[_curIdx].story?[_curChildIdx].media?.imageInfo?[0].url}"
-                            : "${_groupUserStories?[_curIdx].story?[_curChildIdx].fullThumbPath}",
+                            : "${_groupUserStories?[_curIdx].story?[_curChildIdx].fullContent}",
                         imageBuilder: (context, imageProvider) {
                           if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
                             loadImage++;

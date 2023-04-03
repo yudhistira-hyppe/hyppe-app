@@ -300,7 +300,7 @@ class UrlConstants {
   static const String deleteChat = "$postRouteV2/disqus/deletedicusslog";
 
   /// post => Get Notification
-  static const String getNotification = "$postRouteV2/getnotification";
+  static const String getNotification = "$postRouteV2/getnotification2";
 
   /// post => Get auth apsara
   static const String apsaraauth = "$postRouteV2/apsaraauth?apsaraId=";

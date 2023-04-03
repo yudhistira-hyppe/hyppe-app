@@ -62,6 +62,8 @@ class HomeNotifier with ChangeNotifier {
   bool get isLoadingDiary => _isLoadingDiary;
   bool get isLoadingPict => _isLoadingPict;
 
+  bool isLoadingLoadmore = false;
+
   List _visibiltyList = [];
   List get visibiltyList => _visibiltyList;
 
@@ -198,6 +200,8 @@ class HomeNotifier with ChangeNotifier {
       if (forceIndex != null) index = forceIndex;
 
       if (isgetMore) {
+        isLoadingLoadmore = true;
+        notifyListeners();
         if (index == 0) skipPic = skipPic + limit;
         if (index == 1) skipDiary = skipDiary + limit;
         if (index == 2) skipvid = skipvid + limit;
@@ -236,6 +240,9 @@ class HomeNotifier with ChangeNotifier {
           'profile.initMain error $e'.logger();
         }
       }
+
+      isLoadingLoadmore = false;
+      notifyListeners();
       switch (index) {
         case 0:
           if (!mounted) return;
