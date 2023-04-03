@@ -6,7 +6,6 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musi
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/music_placeholder.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/music_tabs.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/popular_music_tab.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -124,7 +123,6 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                   notifier.selectedType = null;
                   notifier.forceResetPlayer(true);
                   notifier.searchController.text = '';
-
 
                 }else{
                   await notifier.videoMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '', isInit: widget.isInit);

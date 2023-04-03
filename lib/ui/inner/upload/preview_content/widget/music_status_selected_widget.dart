@@ -110,7 +110,6 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
     if(url != null){
       notifier.audioPreviewPlayer.play(UrlSource(url));
     }
-
   }
 
 
@@ -156,6 +155,7 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
 
   @override
   void afterFirstLayout(BuildContext context) {
+    print('afterFirstLayout MusicStatusSelected');
     try{
       CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
     }catch(e){

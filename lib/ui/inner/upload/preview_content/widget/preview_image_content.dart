@@ -143,8 +143,13 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                             ),
                             twentyFourPx,
                             InkWell(
-                              onTap: () {
-                                ShowBottomSheet.onChooseMusic(context, isPic: true, isInit: false);
+                              onTap: () async{
+                                notifier.audioPreviewPlayer.pause();
+                                final tempMusic = notifier.fixSelectedMusic;
+                                notifier.fixSelectedMusic = null;
+                                await ShowBottomSheet.onChooseMusic(context, isPic: true, isInit: false);
+                                notifier.fixSelectedMusic ??= tempMusic;
+                                // notifier.audioPreviewPlayer.resume();
                               },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -300,8 +305,13 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                             ),
                             twentyFourPx,
                             InkWell(
-                              onTap: () {
-                                ShowBottomSheet.onChooseMusic(context, isPic: true, isInit: false);
+                              onTap: () async {
+                                notifier.audioPreviewPlayer.pause();
+                                final tempMusic = notifier.fixSelectedMusic;
+                                notifier.fixSelectedMusic = null;
+                                await ShowBottomSheet.onChooseMusic(context, isPic: true, isInit: false);
+                                notifier.fixSelectedMusic ??= tempMusic;
+                                // notifier.audioPreviewPlayer.resume();
                               },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
