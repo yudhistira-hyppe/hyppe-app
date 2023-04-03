@@ -73,6 +73,7 @@ class _BuildTopViewState extends State<BuildTopView> {
                             following: true,
                             createdAt: widget.when,
                             isCelebrity: false,
+                            isUserVerified: widget.data?.isIdVerified ?? false,
                             onTapOnProfileImage: () => System().navigateToProfile(context, widget.data?.email ?? '', storyController: widget.storyController),
                             featureType: FeatureType.pic,
                             username: "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.username : valueNotifier?.username ?? ''}",

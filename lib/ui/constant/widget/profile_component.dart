@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_stroke_text_widget.dart';
 
+import '../../../core/constants/asset_path.dart';
+import 'custom_icon_widget.dart';
 import 'custom_profile_image.dart';
 import 'custom_spacer.dart';
 import 'custom_text_widget.dart';
@@ -30,6 +32,7 @@ class ProfileComponent extends StatelessWidget {
   final bool haveStory;
   final FeatureType featureType;
   final String? cacheKey;
+  final bool isUserVerified;
 
   const ProfileComponent(
       {Key? key,
@@ -50,7 +53,8 @@ class ProfileComponent extends StatelessWidget {
       this.textColor,
       this.cacheKey,
       this.haveStory = false,
-      required this.featureType})
+      required this.featureType,
+      required this.isUserVerified})
       : super(key: key);
 
   @override
@@ -101,6 +105,15 @@ class ProfileComponent extends StatelessWidget {
                                     textStyle: Theme.of(context).textTheme.button?.copyWith(color: textColor),
                                     textAlign: TextAlign.left,
                                   ),
+                          ),
+                          if(isUserVerified)
+                          twoPx,
+                          if(isUserVerified)
+                          const CustomIconWidget(
+                            iconData: '${AssetPath.vectorPath}ic_verified.svg',
+                            defaultColor: false,
+                            width: 16,
+                            height: 16,
                           ),
                           tenPx,
                           CustomVerifiedWidget(verified: isCelebrity)

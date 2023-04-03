@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
@@ -19,16 +20,27 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 
-class PicDetailSlider extends StatelessWidget {
+
+class PicDetailSlider extends StatefulWidget {
   final ContentData? picData;
   final bool onDetail;
+  const PicDetailSlider({Key? key, this.picData,
+    this.onDetail = true,}) : super(key: key);
+
+  @override
+  State<PicDetailSlider> createState() => _PicDetailSliderState();
+}
+
+class _PicDetailSliderState extends State<PicDetailSlider> {
+
   static final _system = System();
 
-  const PicDetailSlider({
-    Key? key,
-    this.picData,
-    this.onDetail = true,
-  }) : super(key: key);
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,19 +58,29 @@ class PicDetailSlider extends StatelessWidget {
             onPageChanged: print,
             itemBuilder: (context, index) => InkWell(
               child: Center(
-                child: (picData?.reportedStatus == "BLURRED")
-                    ? PichTumbnailReport(pictData: picData)
-                    : CustomThumbImage(
-                        boxFit: BoxFit.cover,
-                        imageUrl: (picData?.isApsara ?? false) ? picData?.mediaThumbUri : picData?.fullThumbPath,
-                      ),
+                child: (widget.picData?.reportedStatus == "BLURRED")
+                    ? PichTumbnailReport(pictData: widget.picData)
+                    : Builder(
+                    builder: (context) {
+                      final imageUrl = (widget.picData?.isApsara ?? false) ? widget.picData?.mediaThumbUri : widget.picData?.fullThumbPath;
+                      final isLoad = notifier.loadPic;
+                      if(isLoad){
+                        return const CustomLoading();
+                      }else{
+                        return CustomThumbImage(
+                          boxFit: BoxFit.cover,
+                          imageUrl: imageUrl,
+                        );
+                      }
+                    }
+                ),
               ),
               onTap: () {
-                notifier.navigateToDetailPic(picData);
+                notifier.navigateToDetailPic(widget.picData);
               },
               onDoubleTap: (){
                 final _likeNotifier = context.read<LikeNotifier>();
-                final data = picData;
+                final data = widget.picData;
                 if (data != null) {
                   _likeNotifier.likePost(context, data);
                 }
@@ -69,28 +91,28 @@ class PicDetailSlider extends StatelessWidget {
 
           /// Back Button & More Options
           ///
-          (picData?.saleAmount ?? 0) > 0
+          (widget.picData?.saleAmount ?? 0) > 0
               ? const Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: EdgeInsets.all(4.0),
-                    child: CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}sale.svg",
-                      defaultColor: false,
-                      height: 22,
-                    ),
-                  ),
-                )
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: EdgeInsets.all(4.0),
+              child: CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}sale.svg",
+                defaultColor: false,
+                height: 22,
+              ),
+            ),
+          )
               : const SizedBox(),
 
-          (picData?.saleAmount == 0) && (picData?.certified ?? false)
+          (widget.picData?.saleAmount == 0) && (widget.picData?.certified ?? false)
               ? const Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: IconOwnership(correct: true),
-                  ),
-                )
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: EdgeInsets.all(5.0),
+              child: IconOwnership(correct: true),
+            ),
+          )
               : const SizedBox(),
 
           // Align(
@@ -185,48 +207,51 @@ class PicDetailSlider extends StatelessWidget {
           //   ),
           // ),
 
-          picData?.email != SharedPreference().readStorage(SpKeys.email) && (picData?.reportedStatus == "BLURRED")
+          widget.picData?.email != SharedPreference().readStorage(SpKeys.email) && (widget.picData?.reportedStatus == "BLURRED")
               ? Container()
               : Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Consumer<LikeNotifier>(
-                          builder: (context, value, child) => GestureDetector(
-                            onTap: () {
-                              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, picData!.postID, 'LIKE', 'Like', picData?.email);
-                            },
-                            child: CustomBalloonWidget(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const CustomIconWidget(
-                                    width: 20,
-                                    height: 20,
-                                    defaultColor: false,
-                                    iconData: '${AssetPath.vectorPath}like.svg',
-                                    color: kHyppeLightButtonText,
-                                  ),
-                                  fourPx,
-                                  CustomTextWidget(
-                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                                    // textToDisplay: _system.formatterNumber(value.data?.insight?.likes),
-                                    textToDisplay: _system.formatterNumber(picData?.insight?.likes),
-                                  ),
-                                ],
-                              ),
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Consumer<LikeNotifier>(
+                    builder: (context, value, child) => GestureDetector(
+                      onTap: () {
+                        Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, widget.picData!.postID, 'LIKE', 'Like', widget.picData?.email);
+                      },
+                      child: CustomBalloonWidget(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const CustomIconWidget(
+                              width: 20,
+                              height: 20,
+                              defaultColor: false,
+                              iconData: '${AssetPath.vectorPath}like.svg',
+                              color: kHyppeLightButtonText,
                             ),
-                          ),
+                            fourPx,
+                            CustomTextWidget(
+                              textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                              // textToDisplay: _system.formatterNumber(value.data?.insight?.likes),
+                              textToDisplay: _system.formatterNumber(widget.picData?.insight?.likes),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
+
+
+

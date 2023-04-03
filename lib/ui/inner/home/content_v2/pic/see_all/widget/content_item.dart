@@ -94,6 +94,7 @@ class ContentItem extends StatelessWidget {
                                   username: data?.username,
                                   featureType: FeatureType.pic,
                                   isCelebrity: data?.privacy?.isCelebrity,
+                                  isUserVerified: data?.isIdVerified ?? false,
                                   imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
                                   onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
                                   createdAt: '${System().readTimestamp(DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch, context, fullCaption: true)}',

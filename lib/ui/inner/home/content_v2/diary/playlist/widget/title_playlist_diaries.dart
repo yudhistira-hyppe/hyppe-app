@@ -85,6 +85,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                     featureType: FeatureType.diary,
                     imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
                     isCelebrity: data?.privacy?.isCelebrity,
+                    isUserVerified: data?.isIdVerified ?? false,
                     createdAt: '${System().readTimestamp(
                       DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
                       context,
@@ -141,7 +142,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                         contentData: data!,
                                         captionTitle: hyppeDiary,
                                         storyController: widget.storyController,
-                                        isShare: data?.isShared,
+                                        isShare: data.isShared,
                                         onUpdate: () => context.read<DiariesPlaylistNotifier>().onUpdate(),
                                       );
                                       SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
