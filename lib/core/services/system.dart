@@ -95,9 +95,9 @@ class System {
     String? email = SharedPreference().readStorage(SpKeys.email);
     if (url != null && email != null && token != null) {
       if (url.isNotEmpty) {
-        if(url != 'null'){
+        if (url != 'null') {
           return '${Env.data.baseUrl}${Env.data.versionApi}$url?x-auth-token=$token&x-auth-user=$email&rundom=';
-        }else{
+        } else {
           return '';
         }
 
@@ -710,19 +710,18 @@ class System {
     return {_errorMsg: _filePickerResult};
   }
 
-  saveThumbnail(String url, String id, {bool isCheck = false}) async{
+  saveThumbnail(String url, String id, {bool isCheck = false}) async {
     final byte = await url.getThumbBlob();
-    if(byte != null){
+    if (byte != null) {
       'result saveThumbnail'.logger();
-      if(isCheck){
+      if (isCheck) {
         final data = await globalDB.getThumbnail(id);
-        if(data == null){
+        if (data == null) {
           globalDB.insertThumbnail(LocalThumbnail(id: id, thumbnail: byte));
         }
-      }else{
+      } else {
         globalDB.insertThumbnail(LocalThumbnail(id: id, thumbnail: byte));
       }
-
     }
   }
 
@@ -1563,11 +1562,11 @@ class System {
     return formatter.format(now);
   }
 
-  void goToWebScreen(String url, {bool isPop = false}){
-    if(isPop){
+  void goToWebScreen(String url, {bool isPop = false}) {
+    if (isPop) {
       Routing().moveBack();
     }
-    Future.delayed(const Duration(milliseconds: 500), (){
+    Future.delayed(const Duration(milliseconds: 500), () {
       Routing().move(Routes.webView, argument: url);
     });
   }

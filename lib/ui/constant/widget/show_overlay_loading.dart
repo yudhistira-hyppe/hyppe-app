@@ -1,24 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:hyppe/core/extension/log_extension.dart';
-
-import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-
 import 'package:hyppe/core/services/event_service.dart';
-
 import 'package:hyppe/core/event/event_key.dart';
 import 'package:hyppe/core/event/upload_event_handler.dart';
-
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
-
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart';
 
 class ShowOverlayLoading extends StatefulWidget {
+  const ShowOverlayLoading({super.key});
+
   @override
   State<ShowOverlayLoading> createState() => _ShowOverlayLoadingState();
 }
@@ -83,17 +76,17 @@ class _ShowOverlayLoadingState extends State<ShowOverlayLoading> with UploadEven
             const UnconstrainedBox(
               child: CustomLoading(),
             ),
-            CustomTextButton(
-              child: const CustomIconWidget(
-                defaultColor: false,
-                iconData: "${AssetPath.vectorPath}close.svg",
-              ),
-              onPressed: () {
-                // notifier.cancelUpload = true;
-                // notifier.uploadProgress?.remove();
-                notifier.cancelRequest();
-              },
-            ),
+            // CustomTextButton(
+            //   child: const CustomIconWidget(
+            //     defaultColor: false,
+            //     iconData: "${AssetPath.vectorPath}close.svg",
+            //   ),
+            //   onPressed: () {
+            //     // notifier.cancelUpload = true;
+            //     // notifier.uploadProgress?.remove();
+            //     notifier.cancelRequest();
+            //   },
+            // ),
           ],
         ),
       ),

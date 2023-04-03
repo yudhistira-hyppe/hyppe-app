@@ -402,6 +402,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       case AppLifecycleState.inactive:
         break;
       case AppLifecycleState.resumed:
+        fAliplayer?.play();
         // _setNetworkChangedListener();
         break;
       case AppLifecycleState.paused:

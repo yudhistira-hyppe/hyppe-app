@@ -439,7 +439,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         break;
       case AppLifecycleState.resumed:
         print("========= resumed");
-        if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
+        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
           fAliplayer?.play();
         }
         break;
@@ -675,7 +675,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 });
                                                 fAliplayer?.setMuted(isMute);
                                               },
-                                              onDoubleTap: (){
+                                              onDoubleTap: () {
                                                 final _likeNotifier = context.read<LikeNotifier>();
                                                 if (notifier.pic?[index] != null) {
                                                   _likeNotifier.likePost(context, notifier.pic![index]);
