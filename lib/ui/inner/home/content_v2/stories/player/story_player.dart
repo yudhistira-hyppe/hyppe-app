@@ -540,6 +540,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             _curIdx = index;
             setState(() {});
             if (_lastCurIndex != _curIdx) {
+              // notifier.isPreventedEmoji = true;
               _curChildIdx = 0;
               start();
             }
@@ -691,6 +692,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                 : const SizedBox.shrink(),
           ),
           // BuildReplayCaption(data: _groupUserStories![_curIdx].story?[_curChildIdx]),
+          // Stack(children: [...not.buildItems(emojiController)])
           notifier.isPreventedEmoji ? const SizedBox.shrink() : Stack(children: [...not.buildItems(emojiController)])
         ],
       ),

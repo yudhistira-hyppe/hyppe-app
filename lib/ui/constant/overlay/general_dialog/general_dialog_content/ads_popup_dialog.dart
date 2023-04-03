@@ -36,21 +36,12 @@ import '../../../widget/custom_base_cache_image.dart';
 import '../../../widget/custom_cache_image.dart';
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
-import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
-import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
-import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/diary_sensitive.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/left_items.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/title_playlist_diaries.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
@@ -656,45 +647,43 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                         color: kHyppeLightButtonText,
                       ),
                     ),
-                    secondsSkip < 1 || widget.data.isReport == true
-                        ? (loadingAction
-                            ? Container(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                width: 24,
-                                height: 24,
-                                alignment: Alignment.center,
-                                child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
-                            : InkWell(
-                                onTap: () {
-                                  adsView(widget.data, secondsVideo);
-                                  Navigator.pop(context);
-                                },
-                                child: const Padding(
-                                  padding: EdgeInsets.only(left: 8.0),
-                                  child: CustomIconWidget(
-                                    defaultColor: false,
-                                    iconData: "${AssetPath.vectorPath}close_ads.svg",
-                                  ),
-                                ),
-                              ))
-                        : Container()
+                    loadingAction
+                        ? Container(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        width: 24,
+                        height: 24,
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
+                        : InkWell(
+                      onTap: () {
+                        adsView(widget.data, secondsVideo);
+                        Navigator.pop(context);
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: CustomIconWidget(
+                          defaultColor: false,
+                          iconData: "${AssetPath.vectorPath}close_ads.svg",
+                        ),
+                      ),
+                    )
                   ],
                 )
               ],
             ),
-            secondsSkip > 0 && widget.data.isReport != true
-                ? Container(
-                    height: 30,
-                    width: 30,
-                    margin: EdgeInsets.only(top: 0),
-                    child: Text(
-                      '$secondsSkip',
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Colors.grey),
-                  )
-                : Container()
+            // secondsSkip > 0 && widget.data.isReport != true
+            //     ? Container(
+            //         height: 30,
+            //         width: 30,
+            //         margin: EdgeInsets.only(top: 0),
+            //         child: Text(
+            //           '$secondsSkip',
+            //           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            //         ),
+            //         alignment: Alignment.center,
+            //         decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Colors.grey),
+            //       )
+            //     : Container()
           ],
         ),
       ),
@@ -1230,28 +1219,26 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                         color: kHyppeLightButtonText,
                       ),
                     ),
-                    secondsSkip < 1 || widget.data.isReport == true
-                        ? (loadingAction
-                            ? Container(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                width: 24,
-                                height: 24,
-                                alignment: Alignment.center,
-                                child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
-                            : InkWell(
-                                onTap: () {
-                                  adsView(widget.data, secondsVideo);
-                                  Navigator.pop(context);
-                                },
-                                child: const Padding(
-                                  padding: EdgeInsets.only(left: 8.0),
-                                  child: CustomIconWidget(
-                                    defaultColor: false,
-                                    iconData: "${AssetPath.vectorPath}close_ads.svg",
-                                  ),
-                                ),
-                              ))
-                        : Container()
+                    loadingAction
+                        ? Container(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        width: 24,
+                        height: 24,
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
+                        : InkWell(
+                      onTap: () {
+                        adsView(widget.data, secondsVideo);
+                        Navigator.pop(context);
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: CustomIconWidget(
+                          defaultColor: false,
+                          iconData: "${AssetPath.vectorPath}close_ads.svg",
+                        ),
+                      ),
+                    )
                   ],
                 )
               ],

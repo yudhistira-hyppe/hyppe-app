@@ -151,7 +151,7 @@ class PicDetailBottom extends StatelessWidget {
                         (data?.tagPeople?.isNotEmpty ?? false)
                             ? TagLabel(
                                 icon: 'tag_people',
-                                label: '${data?.tagPeople?.first.username ?? 0} people',
+                                label: (data?.tagPeople?.length ?? 0) < 2 ? '${data?.tagPeople?.first.username}' : '${data?.tagPeople?.length} people' ,
                                 function: () {
                                   notifier.showUserTag(context, data?.tagPeople, data?.postID);
                                   // vidNotifier.showUserTag(context, index, data.postID);

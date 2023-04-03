@@ -251,12 +251,12 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     items.clear();
     for (int i = 0; i < 100; i++) {
       items.add(Item());
-      notifyListeners();
+      // notifyListeners();
     }
 
     print("ini print $items");
 
-    notifyListeners();
+    // notifyListeners();
     animationController.reset();
     animationController.forward();
   }
@@ -543,7 +543,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         barrierLabel: "Barrier",
         barrierDismissible: false,
         barrierColor: Colors.black.withOpacity(0.5),
-        transitionDuration: const Duration(milliseconds: 2000),
+        transitionDuration: const Duration(milliseconds: 500),
         context: context,
         pageBuilder: (context, animation, secondaryAnimation) {
           if (animationController != null) {
@@ -558,7 +558,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
                       _routing.moveBack();
                       makeItems(animationController);
                       Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
-                      Future.delayed(const Duration(seconds: 6), () => fadeReaction = false);
+                      Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
                       try {
                         await sendMessageReaction(
                           context,
@@ -589,7 +589,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         },
       ).whenComplete(() => Future.delayed(const Duration(seconds: 3), (){
         isReactAction = false;
-        _isPreventedEmoji = true;
+        // _isPreventedEmoji = true;
       }));
     }
     //   },
@@ -667,10 +667,10 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           duration: const Duration(seconds: 10),
           child: AnimatedOpacity(
             opacity: fadeReaction ? 0.0 : 1.0,
-            duration: const Duration(seconds: 1),
+            duration: const Duration(seconds: 2),
             child: Material(
               color: Colors.transparent,
-              child: isPreventedEmoji ? const SizedBox.shrink() : Text(
+              child: Text(
                 reaction ?? '',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: item.size),
