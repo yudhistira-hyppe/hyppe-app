@@ -649,7 +649,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                     ),
                     loadingAction
                         ? Container(
-                        padding: const EdgeInsets.only(left: 8.0),
+                        // padding: const EdgeInsets.only(left: 8.0),
                         width: 24,
                         height: 24,
                         alignment: Alignment.center,

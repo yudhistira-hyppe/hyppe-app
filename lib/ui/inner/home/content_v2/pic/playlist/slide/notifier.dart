@@ -54,7 +54,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   ContentData? _data;
   List<ContentData>? _listData;
   int contentIndex = 0;
-  double? _currentPage = 0;
+  int? _currentPage = 0;
   StatusFollowing _statusFollowing = StatusFollowing.none;
 
   AdsData _adsData = AdsData();
@@ -79,7 +79,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   List<ContentData>? get listData => _listData;
   StatusFollowing get statusFollowing => _statusFollowing;
   bool _checkIsLoading = false;
-  double? get currentPage => _currentPage;
+  int? get currentPage => _currentPage;
   bool get checkIsLoading => _checkIsLoading;
 
   bool _isLoadMine = false;
@@ -124,7 +124,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     _mainIndex = index;
   }
 
-  set currentPage(double? val) {
+  set currentPage(int? val) {
     _currentPage = val;
     notifyListeners();
   }
@@ -306,7 +306,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   void initState(BuildContext context, SlidedPicDetailScreenArgument routeArgument) async {
     _routeArgument = routeArgument;
-    _currentPage = _routeArgument?.index;
+    _currentPage = _routeArgument?.index.toInt();
     // await initAdsVideo(context);
     if (_routeArgument?.postID != null) {
       print("postSent");

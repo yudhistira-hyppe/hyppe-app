@@ -274,10 +274,10 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
           CustomProfileImage(
             width: 36,
             height: 36,
-            onTap: () {},
+            onTap: () => System().navigateToProfile(context, data.email ?? ''),
             imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint),
             following: true,
-            onFollow: () => System().navigateToProfile(context, data.email ?? ''),
+            onFollow: (){},
           ),
           twelvePx,
           Expanded(

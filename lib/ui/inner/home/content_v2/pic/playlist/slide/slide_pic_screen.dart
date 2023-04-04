@@ -43,15 +43,23 @@ class SlidePicScreen extends StatefulWidget {
   TransformationController transformationController;
   Function resetZooming;
   int rootIndex;
-  SlidePicScreen({Key? key, required this.data, required this.transformationController, required this.resetZooming, required this.rootIndex}) : super(key: key);
+  bool isOnPageTurning;
+  SlidePicScreen({Key? key, required this.data, required this.transformationController, required this.resetZooming, required this.rootIndex, required this.isOnPageTurning}) : super(key: key);
 
   @override
   State<SlidePicScreen> createState() => _SlidePicScreenState();
 }
 
 class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMixin {
+  bool canHit = true;
+  late ContentData data;
+
   @override
   void initState() {
+    canHit = true;
+    data = widget.data;
+
+    final notifier = context.read<SlidedPicDetailNotifier>();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SlidePicScreen');
     print('pindah screen ${widget.data.certified ?? false}');
     if (widget.data.certified ?? false) {
@@ -66,7 +74,17 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
   @override
   void afterFirstLayout(BuildContext context) {
     final notifier = context.read<SlidedPicDetailNotifier>();
-    notifier.initDetailPost(context, widget.data.postID ?? '');
+    // print('isOnPageTurning: ${widget.isOnPageTurning}');
+    // if(!widget.isOnPageTurning){
+    //   notifier.initDetailPost(context, widget.data.postID ?? '');
+    // }
+    // final tempPostId = widget.data.postID;
+    // Future.delayed(const Duration(milliseconds: 500), (){
+    //   if(widget.data.postID == tempPostId){
+    //
+    //   }
+    // });
+
   }
 
   @override
@@ -78,7 +96,20 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
   Widget build(BuildContext context) {
     final notifier = Provider.of<SlidedPicDetailNotifier>(context);
     final translate = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
-    final data = notifier.savedData ?? widget.data;
+    final tempPostID = widget.data.postID;
+    final tempAllow = widget.isOnPageTurning;
+    print('isOnPageTurning: ${widget.isOnPageTurning}');
+    Future.delayed(const Duration(milliseconds: 1000), () async{
+      if(!widget.isOnPageTurning && !tempAllow){
+        if(tempPostID == widget.data.postID && canHit){
+          await notifier.initDetailPost(context, widget.data.postID ?? '');
+          setState(() {
+            data = notifier.savedData ?? widget.data;
+            canHit = false;
+          });
+        }
+      }
+    });
     return Stack(
       children: [
         // Background

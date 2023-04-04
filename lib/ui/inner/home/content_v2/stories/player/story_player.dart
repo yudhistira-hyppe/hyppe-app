@@ -152,7 +152,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         ..addStatusListener(
           (AnimationStatus status) {
             if (status == AnimationStatus.completed) {
-              storyComplete();
+              storyComplete(notifier);
             }
           },
         );
@@ -348,7 +348,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       _tipsContent = "Play Again";
       isPause = true;
       _animationController?.reset();
-      storyComplete();
+      storyComplete(notifier);
       setState(() {
         _currentPosition = _videoDuration;
       });
@@ -374,7 +374,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     });
   }
 
-  void storyComplete() {
+  void storyComplete(StoriesPlaylistNotifier not) {
+    not.isPreventedEmoji = true;
     if (_curChildIdx == ((_groupUserStories![_curIdx].story?.length ?? 0) - 1)) {
       shown = [];
       if (_curIdx == (_groupUserStories!.length - 1)) {
@@ -397,7 +398,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     }
   }
 
-  void storyPrev() {
+  void storyPrev(StoriesPlaylistNotifier not) {
+    not.isPreventedEmoji = true;
     if (_curChildIdx > 0) {
       _curChildIdx--;
       print("story kurang ${shown.length}");
@@ -612,13 +614,14 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    if (isPause) {
-                      print('StoryPlayer pause1');
-                      play();
-                    } else {
-                      print('StoryPlayer page1');
-                      storyPrev();
-                    }
+                    storyPrev(not);
+                    // if (isPause) {
+                    //   print('StoryPlayer pause1');
+                    //   play();
+                    // } else {
+                    //   print('StoryPlayer page1');
+                    //   storyPrev(not);
+                    // }
                   },
                   onLongPressEnd: (value) => play(),
                   onLongPressStart: (value) => pause(),
@@ -632,13 +635,14 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    if (isPause) {
-                      print('StoryPlayer pause2');
-                      play();
-                    } else {
-                      print('StoryPlayer page2');
-                      storyComplete();
-                    }
+                    storyComplete(not);
+                    // if (isPause) {
+                    //   print('StoryPlayer pause2');
+                    //   play();
+                    // } else {
+                    //   print('StoryPlayer page2');
+                    //   storyComplete(not);
+                    // }
                   },
                   onLongPressEnd: (value) => play(),
                   onLongPressStart: (value) => pause(),
@@ -694,7 +698,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
           ),
           // BuildReplayCaption(data: _groupUserStories![_curIdx].story?[_curChildIdx]),
           // Stack(children: [...not.buildItems(emojiController)])
-          notifier.isPreventedEmoji ? const SizedBox.shrink() : Stack(children: [...not.buildItems(emojiController)])
+          Stack(children: [...not.buildItems(emojiController)])
         ],
       ),
     );

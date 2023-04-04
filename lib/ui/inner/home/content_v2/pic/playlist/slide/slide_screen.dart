@@ -28,6 +28,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
   final _notifier = SlidedPicDetailNotifier();
   late PageController _pageController;
   late PageController _mainPageController;
+  bool isOnPageTurning = false;
   final TransformationController transformationController = TransformationController();
 
   void resetZooming() {
@@ -44,7 +45,22 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
 
     _notifier.setMainIndex(0);
     _pageController = PageController(initialPage: widget.arguments.index.toInt());
-    _pageController.addListener(() => _notifier.currentPage = _pageController.page);
+    _pageController.addListener((){
+      if (isOnPageTurning &&
+          _pageController.page == _pageController.page?.roundToDouble()) {
+        _notifier.currentPage = _pageController.page?.toInt();
+        setState(() {
+          // current = _controller.page.toInt();
+          isOnPageTurning = false;
+        });
+      } else if (!isOnPageTurning && _notifier.currentPage?.toDouble() != _pageController.page) {
+        if (((_notifier.currentPage?.toDouble() ?? 0) - (_pageController.page ?? 0)).abs() > 0.1) {
+          setState(() {
+            isOnPageTurning = true;
+          });
+        }
+      }
+    });
     _mainPageController = PageController(initialPage: 0);
     super.initState();
   }
@@ -127,6 +143,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                       transformationController: transformationController,
                                       resetZooming: resetZooming,
                                       rootIndex: indexRoot,
+                                isOnPageTurning: isOnPageTurning,
                                     )
                                   : PicDetailScreen(
                                       arguments: PicDetailScreenArgument(
