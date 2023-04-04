@@ -8,6 +8,7 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/outer/login/notifier.dart';
@@ -72,7 +73,9 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
       context.read<PreviewStoriesNotifier>().myStoriesData = null;
       context.read<PreviewStoriesNotifier>().peopleStoriesData = null;
       context.read<PreviewStoriesNotifier>().myStoryGroup = {};
+      context.read<StoriesPlaylistNotifier>().groupUserStories = [];
       context.read<PreviewDiaryNotifier>().diaryData = null;
+      context.read<PreviewDiaryNotifier>().onUpdate();
       context.read<PreviewVidNotifier>().vidData = null;
       context.read<PreviewPicNotifier>().pic = null;
 

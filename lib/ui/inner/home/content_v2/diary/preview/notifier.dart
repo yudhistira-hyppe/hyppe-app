@@ -42,6 +42,8 @@ class PreviewDiaryNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  void onUpdate() => notifyListeners();
+
   int get itemCount => _diaryData == null ? 3 : (_diaryData?.length ?? 0);
 
   bool get hasNext => contentsQuery.hasNext;

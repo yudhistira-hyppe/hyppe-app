@@ -361,7 +361,7 @@ class ShowGeneralDialog {
     showGeneralDialog(
       context: Routing.navigatorKey.currentState!.overlay!.context,
       barrierLabel: 'Barrier',
-      barrierDismissible: true,
+      barrierDismissible: false,
       pageBuilder: (context, animation, secondAnimation_) => Dialog(
         backgroundColor: Colors.transparent,
         child: Column(

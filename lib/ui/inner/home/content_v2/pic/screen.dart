@@ -82,7 +82,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   ContentData? dataSelected;
   bool isMute = false;
   String email = '';
-  String statusKyc = '';
+  // String statusKyc = '';
   bool isInPage = true;
 
   @override
@@ -92,7 +92,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     lang = context.read<TranslateNotifierV2>().translate;
     notifier.scrollController.addListener(() => notifier.scrollListener(context));
     email = SharedPreference().readStorage(SpKeys.email);
-    statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+    // statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     // stopwatch = new Stopwatch()..start();
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
