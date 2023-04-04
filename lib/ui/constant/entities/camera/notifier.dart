@@ -34,6 +34,13 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   bool _showEffected = false;
   bool get showEffected => _showEffected;
 
+  bool _isFlash = false;
+  bool get isFlash => _isFlash;
+  set isFlash(bool state){
+    _isFlash = state;
+    notifyListeners();
+  }
+
   set showEffected(bool val) {
     _showEffected = val;
     notifyListeners();
@@ -53,7 +60,8 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     try {
       final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
       flashMode = FlashMode.torch;
-      deepArController = DeepArController();
+      deepArController ??= DeepArController();
+
 
       print('Initializing DeepAR');
       await deepArController!
@@ -106,13 +114,14 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   Future<void> onNewCameraSelected() async {
     print('DeepAR: balik kamera');
+    isFlash = false;
     deepArController!.flipCamera();
   }
 
   disposeCamera(BuildContext context) async {
     try {
       if (Platform.isAndroid) {
-        deepArController = DeepArController();
+        deepArController ??= DeepArController();
         if (deepArController != null) {
           final isGranted = await System().requestPermission(context, permissions: [Permission.camera]);
           if (isGranted) {
@@ -152,23 +161,29 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> onFlashButtonPressed() async {
-    deepArController!.toggleFlash();
+    isFlash = await deepArController!.toggleFlash();
   }
 
-  void flashOff() {
+  void flashOff() async {
     if (deepArController!.flashState) {
-      deepArController!.toggleFlash();
+      isFlash = await deepArController!.toggleFlash();
     }
   }
 
   String flashIcon() {
-    if (deepArController != null && deepArController!.flashState) {
+    print('flashMode $flashMode : ${deepArController!.flashState}');
+    if(isFlash){
       return "${AssetPath.vectorPath}flash-off.svg";
-    } else if (flashMode == FlashMode.auto) {
-      return "${AssetPath.vectorPath}flash-auto.svg";
-    } else {
+    }else{
       return "${AssetPath.vectorPath}flash.svg";
     }
+    // if (deepArController != null && deepArController!.flashState) {
+    //   return "${AssetPath.vectorPath}flash-off.svg";
+    // } else if (flashMode == FlashMode.auto) {
+    //   return "${AssetPath.vectorPath}flash-auto.svg";
+    // } else {
+    //   return "${AssetPath.vectorPath}flash.svg";
+    // }
   }
 
   Future<File?> takePicture() async {

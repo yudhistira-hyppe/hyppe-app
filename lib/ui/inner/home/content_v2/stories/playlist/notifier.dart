@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
@@ -64,7 +65,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   StoryDetailScreenArgument? _routeArgument;
   bool _isReactAction = false;
-  bool _fadeReaction = false;
+  // bool _fadeReaction = false;
   String? _reaction;
   List<Item> _items = <Item>[];
   List<StoryItem> _result = [];
@@ -87,7 +88,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   final TextEditingController _textEditingController = TextEditingController();
 
   bool get isReactAction => _isReactAction;
-  bool get fadeReaction => _fadeReaction;
+  // bool get fadeReaction => _fadeReaction;
   String? get reaction => _reaction;
   List<Item> get items => _items;
 
@@ -123,10 +124,10 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  set fadeReaction(bool newValue) {
-    _fadeReaction = newValue;
-    notifyListeners();
-  }
+  // set fadeReaction(bool newValue) {
+  //   _fadeReaction = newValue;
+  //   notifyListeners();
+  // }
 
   set isReactAction(bool val) {
     _isReactAction = val;
@@ -247,18 +248,28 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void makeItems(AnimationController animationController) {
+  void makeItems( AnimationController animationController, ContentData? data, ReactionInteractive? reaction) {
     items.clear();
     for (int i = 0; i < 100; i++) {
       items.add(Item());
-      notifyListeners();
+      // notifyListeners();
     }
 
     print("ini print $items");
 
-    notifyListeners();
+    // notifyListeners();
     animationController.reset();
-    animationController.forward();
+    animationController.forward().whenComplete((){
+      try {
+        sendMessageReaction(
+          materialAppKey.currentContext!,
+          contentData: data,
+          reaction: reaction,
+        );
+      } catch (e) {
+        print(e);
+      }
+    });
   }
 
   Future<MusicUrl?> getMusicApsara(BuildContext context, String apsaraId) async {
@@ -543,7 +554,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         barrierLabel: "Barrier",
         barrierDismissible: false,
         barrierColor: Colors.black.withOpacity(0.5),
-        transitionDuration: const Duration(milliseconds: 2000),
+        transitionDuration: const Duration(milliseconds: 500),
         context: context,
         pageBuilder: (context, animation, secondaryAnimation) {
           if (animationController != null) {
@@ -553,21 +564,13 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
                 data: _data?.data ?? [],
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                    onTap: () async {
+                    onTap: () {
                       reaction = _data?.data[index].icon;
                       _routing.moveBack();
-                      makeItems(animationController);
-                      Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
-                      Future.delayed(const Duration(seconds: 6), () => fadeReaction = false);
-                      try {
-                        await sendMessageReaction(
-                          context,
-                          contentData: data,
-                          reaction: _data?.data[index],
-                        );
-                      } catch (e) {
-                        print(e);
-                      }
+                      makeItems(animationController, data, _data?.data[index]);
+                      // Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
+                      // Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
+
                     },
                     child: Material(
                       color: Colors.transparent,
@@ -589,7 +592,6 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         },
       ).whenComplete(() => Future.delayed(const Duration(seconds: 3), (){
         isReactAction = false;
-        _isPreventedEmoji = true;
       }));
     }
     //   },
@@ -654,45 +656,77 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   String onProfilePicShow(String? urlPic) => _system.showUserPicture(urlPic) ?? '';
 
   List<Widget> buildItems(AnimationController animationController) {
+
+    print('isPreventedEmoji: $isPreventedEmoji');
+    final animatedOpacity = Tween<double>(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(parent: animationController, curve: Curves.linear));
     return items.map((item) {
-      // return Text(reaction ?? '');
       var tween = Tween<Offset>(
-        begin: Offset(0, Random().nextDouble() * 1 + 1),
-        end: Offset(Random().nextDouble() * 0.5, -2),
+        begin: const Offset(0, 1),
+        end: const Offset(0, -1.7),
       ).chain(CurveTween(curve: Curves.linear));
       return SlideTransition(
         position: animationController.drive(tween),
         child: AnimatedAlign(
           alignment: item.alignment,
           duration: const Duration(seconds: 10),
-          child: AnimatedOpacity(
-            opacity: fadeReaction ? 0.0 : 1.0,
-            duration: const Duration(seconds: 1),
-            child: Material(
-              color: Colors.transparent,
-              child: isPreventedEmoji ? const SizedBox.shrink() : Text(
-                reaction ?? '',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: item.size),
-              ),
+          child: FadeTransition(opacity: animatedOpacity, child: Material(
+            color: Colors.transparent,
+            child: isPreventedEmoji ? const SizedBox.shrink() :Text(
+              reaction ?? '',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: item.size),
             ),
-          ),
+          ),)
         ),
       );
     }).toList();
+    // return items.map((item) {
+    //   // return Text(reaction ?? '');
+    //   // var tween = Tween<Offset>(
+    //   //   begin: Offset(0, Random().nextDouble() * 1 + 1),
+    //   //   end: Offset(Random().nextDouble() * 0.5, -2),
+    //   // ).chain(CurveTween(curve: Curves.linear));
+    //   var tween = Tween<Offset>(
+    //     begin: Offset(0, 0),
+    //     end: Offset(0, -2),
+    //   ).chain(CurveTween(curve: Curves.linear));
+    //   return SlideTransition(
+    //     position: animationController.drive(tween),
+    //     child: AnimatedAlign(
+    //       alignment: item.alignment,
+    //       duration: const Duration(seconds: 10),
+    //       child:
+    //       AnimatedOpacity(
+    //         opacity: fadeReaction ? 0.0 : 1.0,
+    //         duration: const Duration(seconds: 2),
+    //         child: Material(
+    //           color: Colors.transparent,
+    //           child: Text(
+    //             reaction ?? '',
+    //             textAlign: TextAlign.center,
+    //             style: TextStyle(fontSize: item.size),
+    //           ),
+    //         ),
+    //       ),
+    //     ),
+    //   );
+    // }).toList();
   }
 
-  Future sendMessageReaction(
+  sendMessageReaction(
     BuildContext context, {
     ContentData? contentData,
     ReactionInteractive? reaction,
-  }) async {
+  }) {
     try {
       reaction?.url.logger();
       contentData?.postID.logger();
 
       final notifier = ReactionBloc();
-      await notifier.addPostReactionBlocV2(
+      notifier.addPostReactionBlocV2(
         context,
         argument: PostReactionArgument(
           eventType: 'REACTION',

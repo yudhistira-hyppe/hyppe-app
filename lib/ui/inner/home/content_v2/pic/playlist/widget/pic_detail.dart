@@ -209,7 +209,10 @@ class _PicDetailState extends State<PicDetail> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        sixteenPx,
                         Consumer<LikeNotifier>(
                           builder: (context, notifier, child) => widget.arguments?.insight?.isloading ?? false
                               ? Container(
@@ -228,12 +231,23 @@ class _PicDetailState extends State<PicDetail> {
                                   function: () => notifier.likePost(context, widget.arguments ?? ContentData()),
                                 ),
                         ),
+                        eightPx,
+                        if ((widget.arguments?.allowComments ?? true))
+                          _buildButtonV2(
+                            context: context,
+                            iconData: '${AssetPath.vectorPath}comment.svg',
+                            function: () {
+                              ShowBottomSheet.onShowCommentV2(context, postID: widget.arguments?.postID);
+                            },
+                          ),
+                        eightPx,
                         if ((widget.arguments?.isShared ?? true) && widget.arguments?.visibility == 'PUBLIC')
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}share.svg',
                             function: widget.arguments != null ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.arguments) : () {},
                           ),
+                        eightPx,
                         if ((widget.arguments?.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != widget.arguments?.email)
                           _buildButtonV2(
                             context: context,
@@ -339,15 +353,18 @@ class _PicDetailState extends State<PicDetail> {
     required Function function,
     required BuildContext context,
   }) {
-    return CustomTextButton(
-      onPressed: function,
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all(EdgeInsets.zero),
-      ),
-      child: CustomIconWidget(
-        defaultColor: false,
-        iconData: iconData,
-        color: colorIcon ?? kHyppeLightButtonText,
+    return SizedBox(
+      width: 30,
+      child: CustomTextButton(
+        onPressed: function,
+        style: ButtonStyle(
+          padding: MaterialStateProperty.all(EdgeInsets.zero),
+        ),
+        child: CustomIconWidget(
+          defaultColor: false,
+          iconData: iconData,
+          color: colorIcon ?? kHyppeLightButtonText,
+        ),
       ),
     );
   }

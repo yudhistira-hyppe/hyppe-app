@@ -53,14 +53,14 @@ class ReactionBloc {
     );
   }
 
-  Future addPostReactionBlocV2(
+  addPostReactionBlocV2(
     BuildContext context, {
     required PostReactionArgument argument,
-  }) async {
+  }) {
     setReactionFetch(ReactionFetch(ReactionState.loading));
     final email = SharedPreference().readStorage(SpKeys.email);
 
-    await Repos().reposPost(
+    Repos().reposPost(
       context,
       (onResult) {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
