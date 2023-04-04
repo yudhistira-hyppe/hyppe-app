@@ -98,9 +98,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
-
       WidgetsBinding.instance.addObserver(this);
-
+      fAliplayer?.pause();
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(true);
 
@@ -480,8 +479,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     SizeConfig().init(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
     AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
-    return Consumer2<PreviewDiaryNotifier, HomeNotifier>(
-      builder: (_, notifier, home, __) => Container(
+    return Consumer2<PreviewDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
+      return Container(
         width: SizeConfig.screenWidth,
         height: SizeWidget.barHyppePic,
         // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
@@ -523,6 +522,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                               ),
                             );
                           }
+                          if (notifier.diaryData?[index].reportedStatus == 'BLURRED') {
+                            isPlay = false;
+                            fAliplayer?.stop();
+                          }
+
                           return itemDiary(notifier, index);
                         },
                       ),
@@ -536,8 +540,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 : Container(),
           ],
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget itemDiary(PreviewDiaryNotifier notifier, int index) {

@@ -16,5 +16,4 @@ abstract class PaginationQueryInterface {
   Future<List> reload(BuildContext context) async {
     throw UnimplementedError();
   }
-
 }

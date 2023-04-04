@@ -262,7 +262,10 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
             hold = true;
             progress = "${language.finishingUp}...";
+            imageCache.clear();
+            imageCache.clearLiveImages();
             await context.read<SelfProfileNotifier>().getDataPerPgage(context, isReload: true);
+            context.read<SelfProfileNotifier>().onUpdate();
 
             context.read<MainNotifier>().initMain(context, onUpdateProfile: true, updateProfilePict: true).then((_) {
               hold = false;
@@ -270,6 +273,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
               notifyListeners();
             }).whenComplete(() {
               print('data gambar');
+
               _eventService.notifyUploadSuccess(fetch.data);
             });
           } else {

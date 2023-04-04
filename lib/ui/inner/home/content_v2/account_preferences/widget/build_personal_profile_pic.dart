@@ -14,25 +14,29 @@ class BuildPersonalProfilePic extends StatelessWidget {
   const BuildPersonalProfilePic({super.key});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildPersonalProfilePic');
     return Consumer<SelfProfileNotifier>(
       builder: (_, notifier, __) => SizedBox(
-        width: 145 * SizeConfig.scaleDiagonal,
-        height: 145 * SizeConfig.scaleDiagonal,
+        width: 130 * SizeConfig.scaleDiagonal,
+        height: 130 * SizeConfig.scaleDiagonal,
         child: Stack(
           alignment: Alignment.center,
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                CustomProfileImage(
-                  cacheKey: notifier.user.profile?.avatar?.imageKey,
-                  following: true,
-                  width: 122 * SizeConfig.scaleDiagonal,
-                  height: 122 * SizeConfig.scaleDiagonal,
-                  imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
-                  onTap: () {},
+                // Text("${notifier.user.profile?.avatar?.imageKey}"),
+                ClipOval(
+                  child: CustomProfileImage(
+                    cacheKey: notifier.user.profile?.avatar?.imageKey,
+                    following: true,
+                    width: 100 * SizeConfig.scaleDiagonal,
+                    height: 100 * SizeConfig.scaleDiagonal,
+                    imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
+                    onTap: () {},
+                    forStory: false,
+                  ),
                 ),
               ],
             ),
