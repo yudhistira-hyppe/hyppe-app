@@ -307,7 +307,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // fAliplayer?.setCacheConfig(map);
     print("sedang prepare");
     print("sedang prepare $isMute");
-    fAliplayer?.prepare();
+    // fAliplayer?.prepare();
     if (isMute) {
       fAliplayer?.setMuted(true);
     }

@@ -43,6 +43,7 @@ class PlayerPage extends StatefulWidget {
   double? height;
   double? width;
   final bool inLanding;
+  final Function functionFullTriger;
 
   PlayerPage({
     Key? key,
@@ -52,6 +53,7 @@ class PlayerPage extends StatefulWidget {
     this.height,
     this.width,
     this.inLanding = false,
+    required this.functionFullTriger,
   }) : super(key: key);
 
   @override
@@ -72,7 +74,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   String urlVid = '';
   String _savePath = '';
   bool isMute = false;
-
+  bool isPotraitFull = false;
   bool isPlay = false;
   bool onTapCtrl = false;
   //是否允许后台播放
@@ -682,12 +684,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     var y = 0.0;
     Orientation orientation = MediaQuery.of(context).orientation;
     var width = MediaQuery.of(context).size.width;
-    var height;
-    if (orientation == Orientation.portrait) {
-      height = width * 9.0 / 16.0;
-    } else {
-      height = MediaQuery.of(context).size.height;
-    }
+
     if (isloading) {
       return SizedBox(
         width: widget.width,
@@ -713,8 +710,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         child: Stack(
           children: [
             // Text("${(adsData != null && !widget.inLanding)}"),
-            if (adsData != null && !isCompleteAds && widget.inLanding) Container(color: Colors.black, width: width, height: height, child: aliPlayerAdsView) else Container(),
-            if (adsData == null || (adsData != null && !widget.inLanding)) Container(color: Colors.black, width: width, height: height, child: aliPlayerView),
+            if (adsData != null && !isCompleteAds && widget.inLanding) Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView) else Container(),
+            if (adsData == null || (adsData != null && !widget.inLanding)) Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerView),
 
             // Text("${adsData == null}"),
             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
@@ -728,8 +725,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
               ),
             if (!isPlay)
               SizedBox(
-                height: height,
-                width: width,
+                height: widget.height,
+                width: widget.width,
                 child: VideoThumbnail(
                   videoData: widget.data,
                   onDetail: false,
@@ -1249,16 +1246,28 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                 ),
                 GestureDetector(
                   onTap: () {
+                    isPotraitFull = !isPotraitFull;
                     print('ORIENTATION: TRIGGER $orientation');
                     //pause
                     fAliplayer?.pause();
-                    if (orientation == Orientation.portrait) {
-                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-                      SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+                    if ((widget.data?.metadata?.height ?? 0) > (widget.data?.metadata?.width ?? 0)) {
+                      if (isPotraitFull) {
+                        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+                      } else {
+                        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+                      }
+                      widget.functionFullTriger();
                     } else {
-                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-                      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                      if (orientation == Orientation.portrait) {
+                        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+                        SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+                      } else {
+                        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+                        SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                      }
                     }
+                    print("+++++++kesini 1 ++++++++");
+
                     // try to seek
                     int changevalue;
                     changevalue = _currentPosition + 1000;

@@ -51,9 +51,10 @@ class SelfProfileDiaries extends StatelessWidget {
                                           featureType: FeatureType.vid,
                                           isSale: false,
                                           isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                          thumbnail: ImageUrl(notifier.user.diaries?[index].postID, url: (notifier.user.diaries?[index].isApsara ?? false)
-                                              ? (notifier.user.diaries?[index].mediaThumbEndPoint ?? '')
-                                              : System().showUserPicture(notifier.user.diaries?[index].mediaThumbEndPoint) ?? ''),
+                                          thumbnail: ImageUrl(notifier.user.diaries?[index].postID,
+                                              url: (notifier.user.diaries?[index].isApsara ?? false)
+                                                  ? (notifier.user.diaries?[index].mediaThumbEndPoint ?? '')
+                                                  : System().showUserPicture(notifier.user.diaries?[index].mediaThumbEndPoint) ?? ''),
                                         ),
                                       ),
                                       // SelectableText(notifier.iw tem1?.diaries?[index].isApsara ?? false

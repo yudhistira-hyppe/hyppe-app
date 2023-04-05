@@ -180,7 +180,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  initTitleData(BuildContext context, String postID, String visibility) async{
+  initTitleData(BuildContext context, String postID, String visibility) async {
     try {
       // loadDetail = true;
 
@@ -265,7 +265,6 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future initState(BuildContext context, DiaryDetailScreenArgument routeArgument) async {
-
     _routeArgument = routeArgument;
     print('ini ini ini ${_routeArgument?.postID} : ${routeArgument.postID}');
     _currentPage = _routeArgument?.index;
