@@ -563,16 +563,26 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
                       _routing.moveBack();
                       final emoji = _data?.data[index];
                       if(emoji != null){
-                        emojiActions.add(sendMessageReaction(
-                          materialAppKey.currentContext!,
-                          contentData: data,
-                          reaction: _data?.data[index],
-                        ));
+                        // emojiActions.add(sendMessageReaction(
+                        //   materialAppKey.currentContext!,
+                        //   contentData: data,
+                        //   reaction: _data?.data[index],
+                        // ));
                         final tempLength = emojiActions.length;
-                        Future.delayed(const Duration(seconds: 5), (){
-                          if(tempLength == emojiActions.length){
-                            sendAllEmoji();
+                        Future.delayed(const Duration(seconds: 3), (){
+                          try{
+                            sendMessageReaction(
+                              materialAppKey.currentContext!,
+                              contentData: data,
+                              reaction: _data?.data[index],
+                            );
+                          }catch(e){
+                            e.logger();
                           }
+
+                          // if(tempLength == emojiActions.length){
+                          //   sendAllEmoji();
+                          // }
                         });
                       }
                       // try {

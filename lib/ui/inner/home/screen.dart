@@ -29,7 +29,8 @@ import '../../constant/widget/after_first_layout_mixin.dart';
 import 'package:move_to_background/move_to_background.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final bool canShowAds;
+  HomeScreen({Key? key, required this.canShowAds}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -81,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void didPushNext() {
-    isHomeScreen = false;
+    isHomeScreen = widget.canShowAds;
     'didPushNext isOnHomeScreen $isHomeScreen'.logger();
     super.didPushNext();
   }
@@ -108,8 +109,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeScreen');
-    isHomeScreen = true;
-    'isOnHomeScreen $isHomeScreen'.logger();
+    isHomeScreen = widget.canShowAds;
+    'initState isOnHomeScreen $isHomeScreen'.logger();
     _tabController = TabController(length: 3, vsync: this);
     globalScroller = _scrollController;
 

@@ -103,9 +103,16 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
     if (_routeArgument?.postID != null) {
       print("hit Api dulu");
-      _initialVid(context, _routeArgument?.postID ?? '', _routeArgument?.vidData?.visibility ?? '');
+      final following = _routeArgument?.vidData?.following;
+      await _initialVid(context, _routeArgument?.postID ?? '', _routeArgument?.vidData?.visibility ?? '');
+      data?.following = following;
+      notifyListeners();
     } else if (_routeArgument?.vidData?.postID != null) {
-      _initialVid(context, _routeArgument?.vidData?.postID ?? '', _routeArgument?.vidData?.visibility ?? '');
+      final following = _routeArgument?.vidData?.following;
+      print('following initState $following');
+      await _initialVid(context, _routeArgument?.vidData?.postID ?? '', _routeArgument?.vidData?.visibility ?? '');
+      data?.following = following;
+      notifyListeners();
     } else {
       _data = _routeArgument?.vidData;
       notifyListeners();
@@ -113,7 +120,8 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  _initialVid(BuildContext context, String postID, String visibility) async {
+  Future _initialVid(BuildContext context, String postID, String visibility) async {
+    statusFollowing = StatusFollowing.none;
     // Future<List<ContentData>> _resFuture;
 
     contentsQuery.postID = postID;
@@ -132,7 +140,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
       }
       'reload contentsQuery : ${_data?.toJson()}'.logger();
       loadDetail = false;
-      _checkFollowingToUser(context, autoFollow: true);
+      _checkFollowingToUser(context, autoFollow: false);
     } catch (e) {
       loadDetail = false;
       'load vid: ERROR: $e'.logger();
@@ -246,30 +254,59 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<void> _checkFollowingToUser(BuildContext context, {required bool autoFollow}) async {
-    try {
-      checkIsLoading = true;
-      'reload contentsQuery : 17'.logger();
-      _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
-      final _resFuture = _usersFollowingQuery.reload(context);
-      final _resRequest = await _resFuture;
+    final _sharedPrefs = SharedPreference();
 
-      if (_resRequest.isNotEmpty) {
-        if (_resRequest.any((element) => element.event == InteractiveEvent.accept)) {
-          statusFollowing = StatusFollowing.following;
-        } else if (_resRequest.any((element) => element.event == InteractiveEvent.initial)) {
-          statusFollowing = StatusFollowing.requested;
-        } else {
-          if (autoFollow) {
-            followUser(context, checkIdCard: false);
+    if (_sharedPrefs.readStorage(SpKeys.email) != _data?.email) {
+      try {
+        checkIsLoading = true;
+        _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
+        'reload contentsQuery : dua'.logger();
+        final _resFuture = _usersFollowingQuery.reload(context);
+        final _resRequest = await _resFuture;
+        if (_resRequest.isNotEmpty) {
+          if (_resRequest.any((element) => element.event == InteractiveEvent.accept)) {
+            statusFollowing = StatusFollowing.following;
+          } else if (_resRequest.any((element) => element.event == InteractiveEvent.initial)) {
+            statusFollowing = StatusFollowing.requested;
+          } else {
+            if (autoFollow) {
+              followUser(context, checkIdCard: false);
+            }
           }
         }
+        checkIsLoading = false;
+        notifyListeners();
+      } catch (e) {
+        'load following request list: ERROR: $e'.logger();
       }
-      checkIsLoading = false;
-      notifyListeners();
-    } catch (e) {
-      'load following request list: ERROR: $e'.logger();
     }
   }
+
+  // Future<void> _checkFollowingToUser(BuildContext context, {required bool autoFollow}) async {
+  //   try {
+  //     checkIsLoading = true;
+  //     'reload contentsQuery : 17'.logger();
+  //     _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
+  //     final _resFuture = _usersFollowingQuery.reload(context);
+  //     final _resRequest = await _resFuture;
+  //
+  //     if (_resRequest.isNotEmpty) {
+  //       if (_resRequest.any((element) => element.event == InteractiveEvent.accept)) {
+  //         statusFollowing = StatusFollowing.following;
+  //       } else if (_resRequest.any((element) => element.event == InteractiveEvent.initial)) {
+  //         statusFollowing = StatusFollowing.requested;
+  //       } else {
+  //         if (autoFollow) {
+  //           followUser(context, checkIdCard: false);
+  //         }
+  //       }
+  //     }
+  //     checkIsLoading = false;
+  //     notifyListeners();
+  //   } catch (e) {
+  //     'load following request list: ERROR: $e'.logger();
+  //   }
+  // }
 
   Future<void> createdDynamicLink(
     context, {

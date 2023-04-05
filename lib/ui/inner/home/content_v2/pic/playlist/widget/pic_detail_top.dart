@@ -75,7 +75,7 @@ class PicDetailTop extends StatelessWidget {
                       children: [
                         value.checkIsLoading
                             ? const Center(child: SizedBox(height: 40, width: 40, child: CustomLoading()))
-                            : CustomFollowButton(
+                            : value.statusFollowing != StatusFollowing.following ? CustomFollowButton(
                                 checkIsLoading: value.checkIsLoading,
                                 onPressed: () async {
                                   try {
@@ -85,7 +85,7 @@ class PicDetailTop extends StatelessWidget {
                                   }
                                 },
                                 isFollowing: value.statusFollowing,
-                              ),
+                              ) : const SizedBox.shrink(),
                       ],
                     );
                   },
