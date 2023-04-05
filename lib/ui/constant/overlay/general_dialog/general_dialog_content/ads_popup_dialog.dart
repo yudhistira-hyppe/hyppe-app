@@ -432,10 +432,10 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
         if (fetch.data['rewards'] == true) {
           print("ini hasil ${mounted}");
           if (mounted) {
-            ShowGeneralDialog.adsRewardPop(context);
+            ShowGeneralDialog.adsRewardPop(context).whenComplete(() => null);
             Timer(const Duration(milliseconds: 800), () {
               Routing().moveBack();
-              Routing().moveBack();
+              // Routing().moveBack();
               // Timer(const Duration(milliseconds: 800), () {
               //   Routing().moveBack();
               // });
@@ -490,12 +490,14 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (!loadingAction && secondsSkip < 1 || widget.data.isReport == true) {
-          await adsView(widget.data, secondsVideo);
-          return true;
-        } else {
-          return false;
-        }
+        // if (!loadingAction && secondsSkip < 1 || widget.data.isReport == true) {
+        //   adsView(widget.data, secondsVideo);
+        //   return true;
+        // } else {
+        //   return false;
+        // }
+        adsView(widget.data, secondsVideo);
+        return true;
       },
       child: Stack(
         children: [
@@ -649,24 +651,24 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                     ),
                     loadingAction
                         ? Container(
-                        // padding: const EdgeInsets.only(left: 8.0),
-                        width: 24,
-                        height: 24,
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
+                            // padding: const EdgeInsets.only(left: 8.0),
+                            width: 24,
+                            height: 24,
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
                         : InkWell(
-                      onTap: () {
-                        adsView(widget.data, secondsVideo);
-                        Navigator.pop(context);
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: CustomIconWidget(
-                          defaultColor: false,
-                          iconData: "${AssetPath.vectorPath}close_ads.svg",
-                        ),
-                      ),
-                    )
+                            onTap: () {
+                              adsView(widget.data, secondsVideo);
+                              Navigator.pop(context);
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: CustomIconWidget(
+                                defaultColor: false,
+                                iconData: "${AssetPath.vectorPath}close_ads.svg",
+                              ),
+                            ),
+                          )
                   ],
                 )
               ],
@@ -1221,24 +1223,24 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                     ),
                     loadingAction
                         ? Container(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        width: 24,
-                        height: 24,
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
+                            padding: const EdgeInsets.only(left: 8.0),
+                            width: 24,
+                            height: 24,
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
                         : InkWell(
-                      onTap: () {
-                        adsView(widget.data, secondsVideo);
-                        Navigator.pop(context);
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: CustomIconWidget(
-                          defaultColor: false,
-                          iconData: "${AssetPath.vectorPath}close_ads.svg",
-                        ),
-                      ),
-                    )
+                            onTap: () {
+                              adsView(widget.data, secondsVideo);
+                              Navigator.pop(context);
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: CustomIconWidget(
+                                defaultColor: false,
+                                iconData: "${AssetPath.vectorPath}close_ads.svg",
+                              ),
+                            ),
+                          )
                   ],
                 )
               ],

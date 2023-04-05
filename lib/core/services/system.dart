@@ -1172,8 +1172,10 @@ class System {
 
   Future<void> increaseViewCount(BuildContext context, v2.ContentData data) async {
     String myEmail = SharedPreference().readStorage(SpKeys.email) ?? "";
+    print("??!!!!!!!!!!!!!!!!!!!!kirim data");
     if (myEmail != data.email) {
       try {
+        print("!!!!!!!!!!!!!!!!!!!!kirim data");
         final notifier = ViewBloc();
         await notifier.viewPostUserBloc(context, postId: data.postID ?? '', emailOwner: data.email ?? '');
         final fetch = notifier.viewFetch;

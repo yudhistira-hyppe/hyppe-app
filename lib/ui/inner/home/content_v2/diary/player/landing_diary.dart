@@ -644,6 +644,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                   print('ini cur222 $_curIdx');
                   Future.delayed(const Duration(milliseconds: 400), () {
                     start(notifier.diaryData?[index] ?? ContentData());
+                    System().increaseViewCount(context, notifier.diaryData?[index] ?? ContentData());
                   });
                 }
                 _lastCurIndex = _curIdx;

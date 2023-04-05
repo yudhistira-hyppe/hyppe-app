@@ -399,7 +399,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
     final translate = Provider.of<TranslateNotifierV2>(context, listen: false);
     return Stack(
       children: [
-        PicTopItem(data: data),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: PicTopItem(data: data),
+        ),
         if (data?.tagPeople?.isNotEmpty ?? false)
           Positioned(
             bottom: 18,

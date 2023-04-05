@@ -307,7 +307,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // fAliplayer?.setCacheConfig(map);
     print("sedang prepare");
     print("sedang prepare $isMute");
-    // fAliplayer?.prepare();
+    fAliplayer?.prepare();
     if (isMute) {
       fAliplayer?.setMuted(true);
     }
@@ -617,9 +617,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               if (info.visibleFraction >= 0.6) {
                 _curIdx = index;
                 if (_lastCurIndex != _curIdx) {
+                  Future.delayed(const Duration(milliseconds: 100), () {
+                    System().increaseViewCount(context, notifier.pic?[index] ?? ContentData());
+                  });
                   if (notifier.pic?[index].music != null) {
                     print("ada musiknya ${notifier.pic?[index].music}");
                     Future.delayed(const Duration(milliseconds: 100), () {
+                      System().increaseViewCount(context, notifier.pic?[index] ?? ContentData());
                       start(notifier.pic?[index] ?? ContentData());
                     });
                   } else {
@@ -836,7 +840,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               defaultColor: false,
                               color: kHyppeTextLightPrimary,
                               iconData: '${AssetPath.vectorPath}cart.svg',
-                              height: 18,
+                              height: 24,
                             ),
                           ),
                         ),

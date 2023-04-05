@@ -317,7 +317,6 @@
   "select": "Pilih",
   "signUp": "Daftar",
   "searchName": "Cari nama",
-
   "skipTour": "Lewati",
   "startedFollowingYou": "Mulai mengikuti anda",
   "somethingsWrong": "Terjadi kesalahan",
@@ -889,5 +888,6 @@
   "moreContents": "Konten Lainnya",
   "trendsForYou": "Tren Buat Kamu",
   "searchHistory": "Riwayat Pencarian",
-  "messageNoResult": "Cobalah gunakan kata kunci\nyang lebih relevan."
+  "messageNoResult": "Cobalah gunakan kata kunci\nyang lebih relevan.",
+  "fullNameCannotContainLeadingSpace": "Nama lengkap tidak boleh mengandung spasi di awal"
 }

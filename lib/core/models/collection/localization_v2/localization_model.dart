@@ -888,6 +888,7 @@ class LocalizationModelV2 {
   String? moreContents;
   String? searchHistory;
   String? messageNoResult;
+  String? fullNameCannotContainLeadingSpace;
 
   LocalizationModelV2({
     this.login,
@@ -1778,7 +1779,8 @@ class LocalizationModelV2 {
     this.pleaseWaitThisProcessWillTakeSomeTime,
     this.moreContents,
     this.searchHistory,
-    this.messageNoResult
+    this.messageNoResult,
+    this.fullNameCannotContainLeadingSpace,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2689,5 +2691,6 @@ class LocalizationModelV2 {
     moreContents = json['moreContents'];
     searchHistory = json['searchHistory'];
     messageNoResult = json['messageNoResult'];
+    fullNameCannotContainLeadingSpace = json['fullNameCannotContainLeadingSpace'];
   }
 }

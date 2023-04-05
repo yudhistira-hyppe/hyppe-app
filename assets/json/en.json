@@ -887,5 +887,6 @@
   "pleaseWaitThisProcessWillTakeSomeTime": "Please wait, this process will take some time.",
   "moreContents": "More Contents",
   "searchHistory": "Search History",
-  "messageNoResult": "Try to use keywords\nthat are more relevant."
+  "messageNoResult": "Try to use keywords\nthat are more relevant.",
+  "fullNameCannotContainLeadingSpace": "Full name cannot contain a leading space"
 }
