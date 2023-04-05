@@ -43,7 +43,7 @@ class PlayerPage extends StatefulWidget {
   double? height;
   double? width;
   final bool inLanding;
-  Function? test;
+  final Function functionFullTriger;
 
   PlayerPage({
     Key? key,
@@ -53,7 +53,7 @@ class PlayerPage extends StatefulWidget {
     this.height,
     this.width,
     this.inLanding = false,
-    this.test,
+    required this.functionFullTriger,
   }) : super(key: key);
 
   @override
@@ -74,7 +74,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   String urlVid = '';
   String _savePath = '';
   bool isMute = false;
-
+  bool isPotraitFull = false;
   bool isPlay = false;
   bool onTapCtrl = false;
   //是否允许后台播放
@@ -1246,12 +1246,17 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                 ),
                 GestureDetector(
                   onTap: () {
+                    isPotraitFull = !isPotraitFull;
                     print('ORIENTATION: TRIGGER $orientation');
                     //pause
                     fAliplayer?.pause();
                     if ((widget.data?.metadata?.height ?? 0) > (widget.data?.metadata?.width ?? 0)) {
-                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-                      widget.test!() as void Function();
+                      if (isPotraitFull) {
+                        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+                      } else {
+                        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+                      }
+                      widget.functionFullTriger();
                     } else {
                       if (orientation == Orientation.portrait) {
                         SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);

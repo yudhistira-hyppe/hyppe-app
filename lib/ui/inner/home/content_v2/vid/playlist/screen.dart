@@ -95,6 +95,7 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                         data: widget.arguments.vidData,
                         height: height,
                         width: width,
+                        functionFullTriger: () {},
                       ),
                     ),
                     Offstage(

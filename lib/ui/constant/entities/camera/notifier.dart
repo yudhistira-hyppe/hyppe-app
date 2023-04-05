@@ -60,6 +60,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     try {
       final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
       flashMode = FlashMode.torch;
+      isFlash = false;
       deepArController ??= DeepArController();
 
 
@@ -187,6 +188,10 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<File?> takePicture() async {
+
+    if(isFlash){
+      isFlash = (await deepArController?.toggleFlash() ?? false);
+    }
     File _result;
     File? _result2;
     if (!isInitialized) {

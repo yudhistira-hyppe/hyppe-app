@@ -114,6 +114,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   bool _hitApiMusic = false;
   bool get hitApiMusic => _hitApiMusic;
 
+  List<Future<void>> emojiActions = [];
+
   set result(List<StoryItem> val) {
     _result = val;
     notifyListeners();
@@ -260,15 +262,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     // notifyListeners();
     animationController.reset();
     animationController.forward().whenComplete((){
-      try {
-        sendMessageReaction(
-          materialAppKey.currentContext!,
-          contentData: data,
-          reaction: reaction,
-        );
-      } catch (e) {
-        print(e);
-      }
+
     });
   }
 
@@ -511,7 +505,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void showMyReaction(
+  Future<void> showMyReaction(
     BuildContext context,
     bool mounted,
     ContentData? data,
@@ -567,6 +561,29 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
                     onTap: () {
                       reaction = _data?.data[index].icon;
                       _routing.moveBack();
+                      final emoji = _data?.data[index];
+                      if(emoji != null){
+                        emojiActions.add(sendMessageReaction(
+                          materialAppKey.currentContext!,
+                          contentData: data,
+                          reaction: _data?.data[index],
+                        ));
+                        final tempLength = emojiActions.length;
+                        Future.delayed(const Duration(seconds: 5), (){
+                          if(tempLength == emojiActions.length){
+                            sendAllEmoji();
+                          }
+                        });
+                      }
+                      // try {
+                      //   sendMessageReaction(
+                      //     materialAppKey.currentContext!,
+                      //     contentData: data,
+                      //     reaction: _data?.data[index],
+                      //   );
+                      // } catch (e) {
+                      //   print(e);
+                      // }
                       makeItems(animationController, data, _data?.data[index]);
                       // Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
                       // Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
@@ -597,6 +614,12 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     //   },
     //   uploadContentAction: false,
     // );
+  }
+
+  Future sendAllEmoji() async{
+    for(final emoji in emojiActions){
+      await emoji;
+    }
   }
 
   Future<void> createdDynamicLink(
@@ -716,17 +739,17 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     // }).toList();
   }
 
-  sendMessageReaction(
+  Future sendMessageReaction(
     BuildContext context, {
     ContentData? contentData,
     ReactionInteractive? reaction,
-  }) {
+  }) async {
     try {
       reaction?.url.logger();
       contentData?.postID.logger();
 
       final notifier = ReactionBloc();
-      notifier.addPostReactionBlocV2(
+      await notifier.addPostReactionBlocV2(
         context,
         argument: PostReactionArgument(
           eventType: 'REACTION',

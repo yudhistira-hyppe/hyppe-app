@@ -12,6 +12,7 @@ import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/services/system.dart';
 
+import '../../app.dart';
 import 'shared_preference.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -94,6 +95,7 @@ class DynamicLinkService {
         }
         deepLink.path.logger();
         final path = deepLink.path;
+        isHomeScreen = false;
         switch (path) {
           case Routes.storyDetail:
             _routing.move(
@@ -112,7 +114,7 @@ class DynamicLinkService {
             );
             break;
           case Routes.diaryDetail:
-            _routing.move(
+            await _routing.move(
               path,
               argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
                 ..postID = deepLink.queryParameters['postID']
@@ -120,12 +122,15 @@ class DynamicLinkService {
             );
             break;
           case Routes.picDetail:
-            _routing.move(
-              path,
-              argument: PicDetailScreenArgument()
-                ..postID = deepLink.queryParameters['postID']
-                ..backPage = false,
-            );
+            _routing.moveAndRemoveUntil(Routes.lobby, Routes.root);
+            Future.delayed(const Duration(milliseconds: 500), (){
+              _routing.move(
+                path,
+                argument: PicDetailScreenArgument()
+                  ..postID = deepLink.queryParameters['postID']
+                  ..backPage = false,
+              );
+            });
             break;
           case Routes.picSlideDetailPreview:
             _routing.move(

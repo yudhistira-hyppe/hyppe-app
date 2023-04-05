@@ -180,7 +180,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  initTitleData(BuildContext context, String postID, String visibility) async{
+  initTitleData(BuildContext context, String postID, String visibility) async {
     try {
       // loadDetail = true;
 
@@ -264,12 +264,12 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     System().increaseViewCount(context, data);
   }
 
-  void initState(BuildContext context, DiaryDetailScreenArgument routeArgument) {
-    print('ini ini ini');
+  Future initState(BuildContext context, DiaryDetailScreenArgument routeArgument) async {
     _routeArgument = routeArgument;
+    print('ini ini ini ${_routeArgument?.postID} : ${routeArgument.postID}');
     _currentPage = _routeArgument?.index;
     if (_routeArgument?.postID != null) {
-      _initialDiary(context);
+      await _initialDiary(context);
     } else {
       _listData = _routeArgument?.diaryData;
       contentsQuery.limit = _routeArgument?.limit ?? 5;
