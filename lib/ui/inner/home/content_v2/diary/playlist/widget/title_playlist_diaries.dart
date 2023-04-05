@@ -40,6 +40,7 @@ class TitlePlaylistDiaries extends StatefulWidget {
 class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterFirstLayoutMixin {
   @override
   void initState() {
+    context.read<DiariesPlaylistNotifier>().setData(null);
     FirebaseCrashlytics.instance.setCustomKey('layout', 'TitlePlaylistDiaries');
     super.initState();
   }

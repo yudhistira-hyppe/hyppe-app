@@ -180,13 +180,19 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
+  setData(ContentData? value){
+    _data = value;
+  }
+
   initTitleData(BuildContext context, String postID, String visibility) async {
     try {
       // loadDetail = true;
 
       // final String myEmail = SharedPreference().readStorage(SpKeys.email);
-      final res = await contentsQuery.reload(context, visibility: visibility);
-      data = res.firstOrNull;
+      final res = await getDetailPost(context, postID, visibility);
+      if(res != null){
+        data = res;
+      }
       // if (data != null) {
       //   final postID = _data?.postID;
       //   if (postID != null) {
@@ -200,6 +206,32 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       // loadDetail = false;
       'load vid: ERROR: $e'.logger();
     }
+  }
+
+  Future<ContentData?> getDetailPost(BuildContext context, String postID, String visibility) async {
+    try{
+      // loadPic = true;
+      final notifier = PostsBloc();
+      await notifier.getContentsBlocV2(context, postID: postID, pageRows: 1, pageNumber: 1, type: FeatureType.diary, visibility: visibility);
+      final fetch = notifier.postsFetch;
+
+      final _res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
+      if (_res != null) {
+        if (_res.isNotEmpty) {
+          return _res.first;
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+
+    }catch(e){
+      e.logger();
+    }finally{
+      // loadPic = false;
+    }
+
   }
 
   Future<String?> getAdsVideo(BuildContext context, bool isContent) async {
