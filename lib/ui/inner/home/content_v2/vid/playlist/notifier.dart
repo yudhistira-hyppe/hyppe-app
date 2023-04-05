@@ -132,7 +132,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
       }
       'reload contentsQuery : ${_data?.toJson()}'.logger();
       loadDetail = false;
-      // _checkFollowingToUser(context, autoFollow: true);
+      _checkFollowingToUser(context, autoFollow: true);
     } catch (e) {
       loadDetail = false;
       'load vid: ERROR: $e'.logger();
@@ -201,6 +201,47 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
         checkIsLoading = false;
         'follow user: ERROR: $e'.logger();
       }
+    }
+  }
+
+  Future<void> newFollowUser(BuildContext context, ContentData dataContent, {bool checkIdCard = true, isUnFollow = false, String receiverParty = '', bool isloading = false}) async {
+    try {
+      dataContent.insight?.isloadingFollow = true;
+      print(isloading);
+      notifyListeners();
+      final notifier = FollowBloc();
+      await notifier.followUserBlocV2(
+        context,
+        data: FollowUserArgument(
+          receiverParty: dataContent.email ?? '',
+          eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
+        ),
+      );
+      final fetch = notifier.followFetch;
+      if (fetch.followState == FollowState.followUserSuccess) {
+        print('asdasdasd');
+        if (isUnFollow) {
+          print('1');
+          dataContent.following = false;
+          dataContent.insight?.isloadingFollow = false;
+          notifyListeners();
+        } else {
+          print('3');
+          dataContent.following = true;
+          dataContent.insight?.isloadingFollow = false;
+          notifyListeners();
+        }
+      }
+      context.read<HomeNotifier>().updateFollowing(context, email: dataContent.email ?? '', statusFollowing: !isUnFollow);
+
+      //   },
+      //   uploadContentAction: false,
+      // );
+
+      notifyListeners();
+    } catch (e) {
+      isloading = false;
+      'follow user: ERROR: $e'.logger();
     }
   }
 

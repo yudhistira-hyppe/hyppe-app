@@ -246,18 +246,26 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                     ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
                     : Builder(
                       builder: (context) {
-                        final isFollowing = notifier.statusFollowing == StatusFollowing.following;
-                        return !isFollowing ? CustomFollowButton(
-                            onPressed: () async {
-                              try {
-                                await notifier.followUser(context, isUnFollow: isFollowing);
-                              } catch (e) {
-                                'follow error $e'.logger();
-                              }
-                            },
-                            isFollowing: notifier.statusFollowing,
-                            checkIsLoading: notifier.checkIsLoading,
-                          ): const SizedBox.shrink();
+                        return GestureDetector(
+                          onTap: () {
+                            if (data.insight?.isloadingFollow != true) {
+                              notifier.newFollowUser(context, data, isUnFollow: data.following, isloading: data.insight!.isloadingFollow ?? false);
+                            }
+                          },
+                          child: data.insight?.isloadingFollow ?? false
+                              ? const SizedBox(
+                            height: 40,
+                            width: 30,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: CustomLoading(),
+                            ),
+                          )
+                              : Text(
+                            (data.following ?? false) ? (notifier.language.following ?? '') : (notifier.language.follow ?? ''),
+                            style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                          ),
+                        );
                       }
                     ),
               data.email != SharedPreference().readStorage(SpKeys.email)

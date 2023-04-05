@@ -614,14 +614,14 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    storyPrev(not);
-                    // if (isPause) {
-                    //   print('StoryPlayer pause1');
-                    //   play();
-                    // } else {
-                    //   print('StoryPlayer page1');
-                    //   storyPrev(not);
-                    // }
+                    // storyPrev(not);
+                    if (isPause) {
+                      print('StoryPlayer pause1');
+                      play();
+                    } else {
+                      print('StoryPlayer page1');
+                      storyPrev(not);
+                    }
                   },
                   onLongPressEnd: (value) => play(),
                   onLongPressStart: (value) => pause(),
@@ -635,14 +635,14 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    storyComplete(not);
-                    // if (isPause) {
-                    //   print('StoryPlayer pause2');
-                    //   play();
-                    // } else {
-                    //   print('StoryPlayer page2');
-                    //   storyComplete(not);
-                    // }
+                    // storyComplete(not);
+                    if (isPause) {
+                      print('StoryPlayer pause2');
+                      play();
+                    } else {
+                      print('StoryPlayer page2');
+                      storyComplete(not);
+                    }
                   },
                   onLongPressEnd: (value) => play(),
                   onLongPressStart: (value) => pause(),

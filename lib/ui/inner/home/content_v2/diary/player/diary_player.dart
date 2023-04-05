@@ -663,7 +663,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   void initDiary() async {
     print("[DIARY_PLAYER] initDiary() started. "+stopwatch.elapsed.toString());
     var notifier = context.read<DiariesPlaylistNotifier>();
-    notifier.initState(context, widget.argument);
+    await notifier.initState(context, widget.argument);
     _listData = notifier.listData;
     if (_listData?[_curIdx].isApsara ?? false) {
       _playMode = ModeTypeAliPLayer.auth;
