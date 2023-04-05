@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -66,13 +67,24 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
     }
   }
 
+  bool isFullPotrait = false;
+  void fullscreen() {
+    setState(() {
+      isFullPotrait = !isFullPotrait;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Orientation orientation = MediaQuery.of(context).orientation;
     var width = MediaQuery.of(context).size.width;
     var height;
     if (orientation == Orientation.portrait) {
-      height = width * 9.0 / 16.0;
+      if (isFullPotrait) {
+        height = MediaQuery.of(context).size.height;
+      } else {
+        height = width * 9.0 / 16.0;
+      }
     } else {
       height = MediaQuery.of(context).size.height;
     }
@@ -96,13 +108,14 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                         strokeWidth: 2.0,
                         color: context.getColorScheme().primary,
                         onRefresh: () => notifier.initState(context, widget.arguments),
+                        notificationPredicate: orientation == Orientation.landscape || isFullPotrait ? (_) => false : (_) => true,
                         child: SingleChildScrollView(
                           physics: const AlwaysScrollableScrollPhysics(),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                margin: const EdgeInsets.only(left: 16, top: 12, right: 16),
+                                // margin: const EdgeInsets.only(left: 16, top: 12, right: 16),
                                 decoration: BoxDecoration(
                                     boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
                                     borderRadius: const BorderRadius.all(Radius.circular(16)),
@@ -110,7 +123,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                                 child: Column(
                                   children: [
                                     Offstage(
-                                      offstage: orientation == Orientation.landscape,
+                                      offstage: orientation == Orientation.landscape || isFullPotrait,
                                       child: _topDetail(context, notifier, data),
                                     ),
                                     Container(
@@ -122,10 +135,14 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                                         height: height,
                                         width: width,
                                         inLanding: widget.arguments.fromLAnding,
+                                        test: () {
+                                          print('===========hahhahahahaa===========');
+                                          fullscreen();
+                                        },
                                       ),
                                     ),
                                     Offstage(
-                                      offstage: orientation == Orientation.landscape,
+                                      offstage: orientation == Orientation.landscape || isFullPotrait,
                                       child: _middleDetail(context, notifier, like, data),
                                     ),
                                   ],
@@ -134,7 +151,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                               //  if (orientation == Orientation.portrait) twelvePx,
                               (widget.arguments.vidData?.allowComments ?? false)
                                   ? Offstage(
-                                      offstage: orientation == Orientation.landscape,
+                                      offstage: orientation == Orientation.landscape || isFullPotrait,
                                       child: Padding(
                                         padding: const EdgeInsets.only(top: 12.0),
                                         child: _bottomDetail(context, notifier, data),
@@ -244,22 +261,22 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
               if (data.email != SharedPreference().readStorage(SpKeys.email))
                 notifier.checkIsLoading
                     ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
-                    : Builder(
-                      builder: (context) {
+                    : Builder(builder: (context) {
                         final isFollowing = notifier.statusFollowing == StatusFollowing.following;
-                        return !isFollowing ? CustomFollowButton(
-                            onPressed: () async {
-                              try {
-                                await notifier.followUser(context, isUnFollow: isFollowing);
-                              } catch (e) {
-                                'follow error $e'.logger();
-                              }
-                            },
-                            isFollowing: notifier.statusFollowing,
-                            checkIsLoading: notifier.checkIsLoading,
-                          ): const SizedBox.shrink();
-                      }
-                    ),
+                        return !isFollowing
+                            ? CustomFollowButton(
+                                onPressed: () async {
+                                  try {
+                                    await notifier.followUser(context, isUnFollow: isFollowing);
+                                  } catch (e) {
+                                    'follow error $e'.logger();
+                                  }
+                                },
+                                isFollowing: notifier.statusFollowing,
+                                checkIsLoading: notifier.checkIsLoading,
+                              )
+                            : const SizedBox.shrink();
+                      }),
               data.email != SharedPreference().readStorage(SpKeys.email)
                   ? SizedBox(
                       width: 50,

@@ -178,6 +178,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
               },
               onRefresh: () async {
                 imageCache.clear();
+                imageCache.clearLiveImages();
                 await notifier.initNewHome(context, mounted, isreload: true);
               },
               child: NestedScrollView(

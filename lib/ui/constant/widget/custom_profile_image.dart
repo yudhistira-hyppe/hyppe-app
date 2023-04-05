@@ -48,7 +48,7 @@ class CustomProfileImage extends StatelessWidget {
             borderRadius: BorderRadius.circular(forStory ? 20 : 50),
             child: Image.network(
               '$imageUrl',
-              key: ValueKey(cacheKey),
+              // key: ValueKey(cacheKey),
               errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                 return Image.asset('${AssetPath.pngPath}profile-error.png', fit: BoxFit.fitWidth);
               },

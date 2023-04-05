@@ -38,6 +38,10 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   // Map<String, List<ContentData>> _groupPeopleStory = {};
 
+  int limit = 10;
+
+  int page = 0;
+
   List<StoriesGroup>? _storiesGroups = null;
 
   List<ContentData>? _myStoriesData;
@@ -151,14 +155,27 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   Future<void> initialAllPeopleStories(BuildContext context, bool isStart) async {}
 
-  Future<void> initialStoriesGroup(BuildContext context) async {
+  Future<void> initialStoriesGroup(BuildContext context, {bool isloadMore = false}) async {
     List<StoriesGroup>? res = [];
+    if (!isloadMore) page = 0;
     try {
       final notifier = PostsBloc();
-      await notifier.getStoriesGroup(context);
+      await notifier.getStoriesGroup(
+        context,
+        page,
+        limit,
+      );
       final fetch = notifier.postsFetch;
       res = (fetch.data as List<dynamic>?)?.map((e) => StoriesGroup.fromJson(e)).toList();
-      storiesGroups = res ?? [];
+      if (isloadMore) {
+        storiesGroups?.addAll(res!);
+        notifyListeners();
+      } else {
+        storiesGroups = [];
+        Future.delayed(const Duration(milliseconds: 50), () {
+          storiesGroups = res ?? [];
+        });
+      }
     } catch (e) {
       'Story group: ERROR: $e'.logger();
     }
@@ -294,6 +311,8 @@ class PreviewStoriesNotifier with ChangeNotifier {
   void scrollListener(BuildContext context) {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !peopleContentsQuery.loading && hasNext) {
       // initialPeopleStories(context);
+      page++;
+      initialStoriesGroup(context, isloadMore: true);
     }
   }
 

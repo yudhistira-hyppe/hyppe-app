@@ -122,18 +122,27 @@ class PostsBloc {
     );
   }
 
-  Future getStoriesGroup(BuildContext context) async {
+  Future getStoriesGroup(BuildContext context, int page, int limit) async {
     final email = SharedPreference().readStorage(SpKeys.email);
     setPostsFetch(PostsFetch(PostsState.loading));
-    await _repos.reposPost(context, (onResult) {
-      if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setPostsFetch(PostsFetch(PostsState.getAllContentsError));
+        } else {
+          setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
         setPostsFetch(PostsFetch(PostsState.getAllContentsError));
-      } else {
-        setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
-      }
-    }, (errorData) {
-      setPostsFetch(PostsFetch(PostsState.getAllContentsError));
-    }, data: {'email': email}, host: UrlConstants.getStoriesLandingPage, withAlertMessage: false, methodType: MethodType.post, withCheckConnection: false);
+      },
+      data: {'email': email, 'page': page, 'limit': limit},
+      host: UrlConstants.getStoriesLandingPage,
+      withAlertMessage: false,
+      methodType: MethodType.post,
+      withCheckConnection: false,
+    );
   }
 
   Future getAllContentsBlocV2(

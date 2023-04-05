@@ -41,7 +41,7 @@ void mainApp(EnvType env) async {
   // HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   Env.init(env);
-  NotificationService().initializeLocalNotification();
+  NotificationService().initializeLocalNotification(); //dari sini minta permision
   FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
   HttpOverrides.global = MyHttpOverrides();
   await globalDB.initDb();

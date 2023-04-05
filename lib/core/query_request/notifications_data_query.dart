@@ -63,9 +63,7 @@ class NotificationsDataQuery extends PaginationQueryInterface {
     if (loading) throw Exception('Query operation is in progress');
 
     hasNext = true;
-
     loading = true;
-
     page = 0;
 
     List<NotificationModel>? res;
