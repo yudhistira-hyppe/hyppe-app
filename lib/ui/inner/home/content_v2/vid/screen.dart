@@ -367,7 +367,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
             CustomNewDescContent(
               // desc: "${data?.description}",
               username: '',
-              desc: "${vidData?.description}",
+              desc: "${vidData.description}",
               trimLines: 2,
               textAlign: TextAlign.start,
               seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',

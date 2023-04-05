@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/main_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/arguments/referral_argument.dart';
 import 'package:hyppe/core/bloc/referral/bloc.dart';
@@ -96,6 +97,7 @@ class DynamicLinkService {
         deepLink.path.logger();
         final path = deepLink.path;
         isHomeScreen = false;
+        'deepLink isOnHomeScreen $isHomeScreen'.logger();
         switch (path) {
           case Routes.storyDetail:
             _routing.move(
@@ -114,15 +116,18 @@ class DynamicLinkService {
             );
             break;
           case Routes.diaryDetail:
-            await _routing.move(
-              path,
-              argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
-                ..postID = deepLink.queryParameters['postID']
-                ..backPage = false,
-            );
+            _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+            Future.delayed(const Duration(milliseconds: 500), (){
+              _routing.move(
+                path,
+                argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
+                  ..postID = deepLink.queryParameters['postID']
+                  ..backPage = false,
+              );
+            });
             break;
           case Routes.picDetail:
-            _routing.moveAndRemoveUntil(Routes.lobby, Routes.root);
+            _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
             Future.delayed(const Duration(milliseconds: 500), (){
               _routing.move(
                 path,
@@ -133,19 +138,26 @@ class DynamicLinkService {
             });
             break;
           case Routes.picSlideDetailPreview:
-            _routing.move(
-              path,
-              argument: SlidedPicDetailScreenArgument(type: TypePlaylist.none)
-                ..postID = deepLink.queryParameters['postID']
-                ..backPage = false,
-            );
+            _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+            Future.delayed(const Duration(milliseconds: 500), (){
+              _routing.move(
+                path,
+                argument: SlidedPicDetailScreenArgument(type: TypePlaylist.none)
+                  ..postID = deepLink.queryParameters['postID']
+                  ..backPage = false,
+              );
+            });
+
             break;
           // TO DO: If register from referral link, then hit to backend
           case Routes.otherProfile:
-            _routing.move(
-              path,
-              argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
-            );
+            _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+            Future.delayed(const Duration(milliseconds: 500), (){
+              _routing.move(
+                path,
+                argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
+              );
+            });
             break;
         }
         // SharedPreference().writeStorage(SpKeys.isPreventRoute, false);

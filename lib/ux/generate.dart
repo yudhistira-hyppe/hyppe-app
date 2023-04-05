@@ -119,6 +119,7 @@ import 'package:hyppe/ui/inner/home/content_v2/change_password/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/screen.dart';
 
 import '../core/arguments/detail_ticket_argument.dart';
+import '../core/arguments/main_argument.dart';
 import '../ui/inner/home/content_v2/help/detail_ticket/screen.dart';
 import '../ui/inner/home/content_v2/help/ticket_history/screen.dart';
 import '../ui/inner/home/content_v2/pic/playlist/slide/slide_screen.dart';
@@ -139,7 +140,7 @@ class Generate {
       case Routes.login:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case Routes.lobby:
-        return MaterialPageRoute(builder: (_) => const MainScreen());
+        return MaterialPageRoute(builder: (_) => MainScreen(args: settings.arguments as MainArgument?));
 
       case Routes.selfProfile:
         return MaterialPageRoute(builder: (_) => SelfProfileScreen(arguments: settings.arguments as GeneralArgument));

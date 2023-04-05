@@ -11,11 +11,13 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/main/widget/notification_circle.dart';
 
+import '../../../core/arguments/main_argument.dart';
 import '../../../core/constants/shared_preference_keys.dart';
 import '../../../core/services/shared_preference.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  MainArgument? args;
+  MainScreen({Key? key, this.args}) : super(key: key);
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -39,12 +41,13 @@ class _MainScreenState extends State<MainScreen> {
     final _themes = Theme.of(context);
     return Consumer<MainNotifier>(
       builder: (consumerContext, notifier, __) {
+        final canShowAds = widget.args?.canShowAds ?? true;
         return Scaffold(
           backgroundColor: _themes.backgroundColor,
           body: SafeArea(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 250),
-              child: notifier.mainScreen(context),
+              child: notifier.mainScreen(context, canShowAds),
             ),
           ),
           // floatingActionButton: FloatingActionButton(
