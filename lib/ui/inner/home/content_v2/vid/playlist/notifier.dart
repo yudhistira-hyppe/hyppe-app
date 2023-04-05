@@ -103,9 +103,16 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
     if (_routeArgument?.postID != null) {
       print("hit Api dulu");
-      _initialVid(context, _routeArgument?.postID ?? '', _routeArgument?.vidData?.visibility ?? '');
+      final following = _routeArgument?.vidData?.following;
+      await _initialVid(context, _routeArgument?.postID ?? '', _routeArgument?.vidData?.visibility ?? '');
+      data?.following = following;
+      notifyListeners();
     } else if (_routeArgument?.vidData?.postID != null) {
-      _initialVid(context, _routeArgument?.vidData?.postID ?? '', _routeArgument?.vidData?.visibility ?? '');
+      final following = _routeArgument?.vidData?.following;
+      print('following initState $following');
+      await _initialVid(context, _routeArgument?.vidData?.postID ?? '', _routeArgument?.vidData?.visibility ?? '');
+      data?.following = following;
+      notifyListeners();
     } else {
       _data = _routeArgument?.vidData;
       notifyListeners();
@@ -113,7 +120,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  _initialVid(BuildContext context, String postID, String visibility) async {
+  Future _initialVid(BuildContext context, String postID, String visibility) async {
     // Future<List<ContentData>> _resFuture;
 
     contentsQuery.postID = postID;
