@@ -66,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   void didPopNext() {
     Future.delayed(const Duration(milliseconds: 500), () async {
       isHomeScreen = true;
+      globalScroller = _scrollController;
       'didPopNext isOnHomeScreen $isHomeScreen'.logger();
       context.read<ReportNotifier>().inPosition = contentPosition.home;
       if (isHomeScreen) {
@@ -83,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   @override
   void didPushNext() {
     isHomeScreen = widget.canShowAds;
+    globalScroller = _scrollController;
     'didPushNext isOnHomeScreen $isHomeScreen'.logger();
     super.didPushNext();
   }

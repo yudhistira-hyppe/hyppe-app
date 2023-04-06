@@ -10,6 +10,8 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../app.dart';
+
 class OnUploadContentBottomSheet extends StatefulWidget {
   const OnUploadContentBottomSheet({super.key});
 
@@ -48,12 +50,19 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
               children: [
                 ListTile(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
-                  onTap: () {
+                  onTap: () async{
                     // notifier.thumbnailLocalMedia();
                     context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
                     notifier.featureType = FeatureType.story;
                     notifier.selectedDuration = 15;
-                    Routing().moveAndPop(Routes.makeContent);
+                    final tempIsHome = isHomeScreen;
+                    if(tempIsHome){
+                      isHomeScreen = false;
+                    }
+                    await Routing().moveAndPop(Routes.makeContent);
+                    if(tempIsHome){
+                      isHomeScreen = true;
+                    }
                   },
                   dense: true,
                   title: CustomTextWidget(
@@ -83,7 +92,14 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                     notifier.featureType = FeatureType.vid;
                     notifier.isVideo = true;
                     notifier.selectedDuration = 15;
+                    final tempIsHome = isHomeScreen;
+                    if(tempIsHome){
+                      isHomeScreen = false;
+                    }
                     Routing().moveAndPop(Routes.makeContent);
+                    if(tempIsHome){
+                      isHomeScreen = true;
+                    }
                   },
                   dense: true,
                   title: CustomTextWidget(
@@ -113,7 +129,14 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                     notifier.featureType = FeatureType.diary;
                     notifier.isVideo = true;
                     notifier.selectedDuration = 15;
+                    final tempIsHome = isHomeScreen;
+                    if(tempIsHome){
+                      isHomeScreen = false;
+                    }
                     Routing().moveAndPop(Routes.makeContent);
+                    if(tempIsHome){
+                      isHomeScreen = true;
+                    }
                   },
                   dense: true,
                   title: CustomTextWidget(
@@ -143,7 +166,14 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                     notifier.featureType = FeatureType.pic;
                     notifier.isVideo = false;
                     notifier.selectedDuration = 15;
+                    final tempIsHome = isHomeScreen;
+                    if(tempIsHome){
+                      isHomeScreen = false;
+                    }
                     Routing().moveAndPop(Routes.makeContent);
+                    if(tempIsHome){
+                      isHomeScreen = true;
+                    }
                   },
                   dense: true,
                   minLeadingWidth: 20,
