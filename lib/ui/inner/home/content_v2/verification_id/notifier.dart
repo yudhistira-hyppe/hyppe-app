@@ -335,7 +335,6 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       if (fetch.verificationIDState == VerificationIDState.postVerificationIDSuccess) {
         print(fetch.data);
         var data = KTPModel.fromJson(fetch.data);
-
         idCardName = data.cardPictName ?? '';
         idCardNumber = data.cardPictNumber ?? '';
       }

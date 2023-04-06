@@ -504,12 +504,14 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         itemCount: notifier.diaryData?.length,
                         padding: const EdgeInsets.symmetric(horizontal: 11.5),
                         itemBuilder: (context, index) {
-                          if (notifier.diaryData == null || home.isLoadingPict) {
+                          if (notifier.diaryData == null || home.isLoadingDiary) {
+                            fAliplayer?.pause();
+                            _lastCurIndex = -1;
                             return CustomShimmer(
                               width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
                               height: 168,
                               radius: 8,
-                              margin: const EdgeInsets.symmetric(horizontal: 4.5),
+                              margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
                               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                             );
                           } else if (index == notifier.diaryData?.length && notifier.hasNext) {
@@ -641,7 +643,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 if (_lastCurIndex != _curIdx) {
                   Future.delayed(const Duration(milliseconds: 400), () {
                     start(notifier.diaryData?[index] ?? ContentData());
-                    System().increaseViewCount(context, notifier.diaryData?[index] ?? ContentData());
+                    System().increaseViewCount(context, notifier.diaryData?[index] ?? ContentData(), inLanding: true);
                   });
                   if (notifier.diaryData?[index].certified ?? false) {
                     System().block(context);

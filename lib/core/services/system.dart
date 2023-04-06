@@ -1170,10 +1170,10 @@ class System {
     return SharedPreference().readStorage(SpKeys.email) == email;
   }
 
-  Future<void> increaseViewCount(BuildContext context, v2.ContentData data) async {
+  Future<void> increaseViewCount(BuildContext context, v2.ContentData data, {bool inLanding = false}) async {
     String myEmail = SharedPreference().readStorage(SpKeys.email) ?? "";
     print("??!!!!!!!!!!!!!!!!!!!!kirim data");
-    if (myEmail != data.email) {
+    if (myEmail != data.email || inLanding) {
       try {
         print("!!!!!!!!!!!!!!!!!!!!kirim data");
         final notifier = ViewBloc();

@@ -98,7 +98,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
-
       WidgetsBinding.instance.addObserver(this);
 
       fAliplayer?.setAutoPlay(true);
@@ -272,7 +271,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // );
 
     _playMode = ModeTypeAliPLayer.auth;
-    await getAuth(data.music?.apsaraMusic ?? '');
+    // await getAuth(data.music?.apsaraMusic ?? '');
+    if (data.reportedStatus != 'BLURRED') {
+      _playMode = ModeTypeAliPLayer.auth;
+      await getAuth(data.music?.apsaraMusic ?? '');
+    }
 
     setState(() {
       isPause = false;
@@ -487,11 +490,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         padding: const EdgeInsets.symmetric(horizontal: 11.5),
                         itemBuilder: (context, index) {
                           if (notifier.pic == null || home.isLoadingPict) {
+                            fAliplayer?.pause();
+                            _lastCurIndex = -1;
                             return CustomShimmer(
                               width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
                               height: 168,
                               radius: 8,
-                              margin: const EdgeInsets.symmetric(horizontal: 4.5),
+                              margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
                               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                             );
                           } else if (index == notifier.pic?.length && notifier.hasNext) {
@@ -533,6 +538,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Text("$_lastCurIndex"),
+          // Text("$_curIdx"),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -621,7 +628,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   if (notifier.pic?[index].music != null) {
                     print("ada musiknya ${notifier.pic?[index].music}");
                     Future.delayed(const Duration(milliseconds: 100), () {
-                      System().increaseViewCount(context, notifier.pic?[index] ?? ContentData());
+                      System().increaseViewCount(context, notifier.pic?[index] ?? ContentData(), inLanding: true);
                       start(notifier.pic?[index] ?? ContentData());
                     });
                   } else {
@@ -699,11 +706,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     Positioned.fill(
                       child: GestureDetector(
                         onTap: () {
-                          fAliplayer?.play();
-                          setState(() {
-                            isMute = !isMute;
-                          });
-                          fAliplayer?.setMuted(isMute);
+                          if (notifier.pic?[index].reportedStatus != 'BLURRED') {
+                            fAliplayer?.play();
+                            setState(() {
+                              isMute = !isMute;
+                            });
+                            fAliplayer?.setMuted(isMute);
+                          }
                         },
                         onDoubleTap: () {
                           final _likeNotifier = context.read<LikeNotifier>();

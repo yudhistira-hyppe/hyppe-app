@@ -1,3 +1,4 @@
+import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -29,6 +30,7 @@ class OnShowOptionContent extends StatefulWidget {
   final ContentData contentData;
   final bool isShare;
   final bool visibility;
+  final FlutterAliplayer? fAliplayer;
 
   const OnShowOptionContent({
     Key? key,
@@ -37,6 +39,7 @@ class OnShowOptionContent extends StatefulWidget {
     this.onDetail = true,
     this.isShare = true,
     this.visibility = true,
+    this.fAliplayer,
   }) : super(key: key);
 
   @override
@@ -247,6 +250,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                   await deletePostByID(context, postID: widget.contentData.postID ?? '', postType: widget.contentData.postType ?? '').then((value) {
                     if (value) _handleDelete(context);
                   });
+                  widget.fAliplayer?.stop();
                 });
               },
             ),

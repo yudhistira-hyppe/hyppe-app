@@ -626,6 +626,7 @@ class ShowBottomSheet {
             contentData: contentData,
             onDetail: onDetail,
             isShare: isShare ?? true,
+            fAliplayer: fAliplayer,
           ),
         );
       },
