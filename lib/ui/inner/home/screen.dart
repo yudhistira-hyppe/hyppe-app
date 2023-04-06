@@ -155,6 +155,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   Widget build(BuildContext context) {
+    isFromSplash = false;
     return Consumer2<HomeNotifier, SelfProfileNotifier>(
       builder: (_, notifier, selfnotifier, __) => WillPopScope(
         onWillPop: () async {

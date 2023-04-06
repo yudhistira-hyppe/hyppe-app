@@ -100,6 +100,7 @@ class DynamicLinkService {
         'deepLink isOnHomeScreen $isHomeScreen'.logger();
         switch (path) {
           case Routes.storyDetail:
+            '_handleDeepLink storyDetail'.logger();
             _routing.move(
               path,
               argument: StoryDetailScreenArgument()
@@ -108,49 +109,108 @@ class DynamicLinkService {
             );
             break;
           case Routes.vidDetail:
-            _routing.move(
-              path,
-              argument: VidDetailScreenArgument()
-                ..postID = deepLink.queryParameters['postID']
-                ..backPage = false,
-            );
+            '_handleDeepLink vidDetail'.logger();
+            if(isFromSplash){
+              isFromSplash = false;
+              Future.delayed(const Duration(seconds: 10), () async{
+                await _routing.move(
+                  path,
+                  argument: VidDetailScreenArgument()
+                    ..postID = deepLink.queryParameters['postID']
+                    ..backPage = false,
+                );
+              });
+
+            }else{
+              _routing.move(
+                path,
+                argument: VidDetailScreenArgument()
+                  ..postID = deepLink.queryParameters['postID']
+                  ..backPage = false,
+              );
+            }
+
             break;
           case Routes.diaryDetail:
-            _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
-            Future.delayed(const Duration(milliseconds: 500), (){
-              _routing.move(
-                path,
-                argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
-                  ..postID = deepLink.queryParameters['postID']
-                  ..backPage = false,
-              );
-            });
+            '_handleDeepLink diaryDetail'.logger();
+            if(isFromSplash){
+              isFromSplash = false;
+              Future.delayed(const Duration(seconds: 10), () async{
+                await _routing.move(
+                  path,
+                  argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
+                    ..postID = deepLink.queryParameters['postID']
+                    ..backPage = false,
+                );
+              });
+            }else{
+              _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+              Future.delayed(const Duration(milliseconds: 500), (){
+                _routing.move(
+                  path,
+                  argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
+                    ..postID = deepLink.queryParameters['postID']
+                    ..backPage = false,
+                );
+              });
+            }
+
             break;
           case Routes.picDetail:
-            _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
-            Future.delayed(const Duration(milliseconds: 500), (){
-              _routing.move(
-                path,
-                argument: PicDetailScreenArgument()
-                  ..postID = deepLink.queryParameters['postID']
-                  ..backPage = false,
-              );
-            });
+            '_handleDeepLink picDetail'.logger();
+            if(isFromSplash){
+              isFromSplash = false;
+              Future.delayed(const Duration(seconds: 10), () async{
+                await _routing.move(
+                  path,
+                  argument: PicDetailScreenArgument()
+                    ..postID = deepLink.queryParameters['postID']
+                    ..backPage = false,
+                );
+              });
+            }else{
+              _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+              Future.delayed(const Duration(milliseconds: 500), (){
+                _routing.move(
+                  path,
+                  argument: PicDetailScreenArgument()
+                    ..postID = deepLink.queryParameters['postID']
+                    ..backPage = false,
+                );
+              });
+            }
+
             break;
           case Routes.picSlideDetailPreview:
-            _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
-            Future.delayed(const Duration(milliseconds: 500), (){
-              _routing.move(
-                path,
-                argument: SlidedPicDetailScreenArgument(type: TypePlaylist.none)
-                  ..postID = deepLink.queryParameters['postID']
-                  ..backPage = false,
-              );
-            });
+            '_handleDeepLink picSlideDetailPreview'.logger();
+            if(isFromSplash){
+              isFromSplash = false;
+              Future.delayed(const Duration(seconds: 10), () async{
+                await _routing.move(
+                  path,
+                  argument: SlidedPicDetailScreenArgument(type: TypePlaylist.none)
+                    ..postID = deepLink.queryParameters['postID']
+                    ..backPage = false,
+                );
+                isFromSplash = false;
+              });
+            }else{
+              _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+              Future.delayed(const Duration(milliseconds: 500), (){
+                _routing.move(
+                  path,
+                  argument: SlidedPicDetailScreenArgument(type: TypePlaylist.none)
+                    ..postID = deepLink.queryParameters['postID']
+                    ..backPage = false,
+                );
+              });
+            }
+
 
             break;
           // TO DO: If register from referral link, then hit to backend
           case Routes.otherProfile:
+            '_handleDeepLink otherProfile'.logger();
             _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
             Future.delayed(const Duration(milliseconds: 500), (){
               _routing.move(
