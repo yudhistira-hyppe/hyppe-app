@@ -130,7 +130,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 Expanded(
                   child: IconButton(
-                    icon: const ClipOval(child: Profile()),
+                    icon: const SizedBox(width: 32, child: Profile()),
                     onPressed: () {
                       tapMenu(4, notifier, consumerContext);
                     },

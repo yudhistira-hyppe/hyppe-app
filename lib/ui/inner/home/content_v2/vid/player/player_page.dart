@@ -217,6 +217,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       // Fluttertoast.showToast(msg: "OnPrepared ");
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
+        print("getMediaInfo==${value}");
         _videoDuration = value['duration'];
         setState(() {
           isPrepare = true;

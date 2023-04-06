@@ -433,6 +433,7 @@ class UrlConstants {
 
   // Get Old Video
   static const String oldVideo = "/stream/v2?postid=";
-
   static const String getNewLandingPage = "$userContentRoute/landingpage";
+
+  static const String getKtpText = "$postsRoute/gettext";
 }

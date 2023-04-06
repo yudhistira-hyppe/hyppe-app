@@ -218,4 +218,45 @@ class VerificationIDBloc {
       errorServiceType: System().getErrorTypeV2(FeatureType.other),
     );
   }
+
+  Future postKtp(
+    BuildContext context, {
+    required String nama,
+    required String idCardFile,
+  }) async {
+    FormData formData = FormData.fromMap({
+      "cardPict": await MultipartFile.fromFile(
+        File(idCardFile).path,
+        filename: File(idCardFile).path.split('/').last,
+        contentType: MediaType("image", "jpeg"),
+      ),
+      "fullName": nama,
+    });
+
+    setVerificationIDFetch(VerificationIDFetch(VerificationIDState.loading));
+    // if (!mounted) return;
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setVerificationIDFetch(VerificationIDFetch(VerificationIDState.postVerificationIDError, data: GenericResponse.fromJson(onResult.data).responseData));
+        } else {
+          setVerificationIDFetch(VerificationIDFetch(VerificationIDState.postVerificationIDSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        setVerificationIDFetch(VerificationIDFetch(VerificationIDState.postVerificationIDError, data: errorData));
+      },
+      data: formData,
+      headers: {
+        'x-auth-user': SharedPreference().readStorage(SpKeys.email),
+        'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
+      },
+      withAlertMessage: true,
+      withCheckConnection: true,
+      host: UrlConstants.getKtpText,
+      methodType: MethodType.postUploadContent,
+      errorServiceType: System().getErrorTypeV2(FeatureType.other),
+    );
+  }
 }

@@ -13,6 +13,7 @@ import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
@@ -495,6 +496,11 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
         setState(() {});
         if (_lastCurIndex != _curIdx) {
           start();
+          if (widget.argument.diaryData?[_curIdx].certified ?? false) {
+            System().block(context);
+          } else {
+            System().disposeBlock();
+          }
         }
         _lastCurIndex = _curIdx;
       },

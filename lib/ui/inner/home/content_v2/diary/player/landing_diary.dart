@@ -522,7 +522,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                               ),
                             );
                           }
-                          if (notifier.diaryData?[index].reportedStatus == 'BLURRED') {
+                          if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
                             isPlay = false;
                             fAliplayer?.stop();
                           }
@@ -636,16 +636,18 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           VisibilityDetector(
             key: Key(index.toString()),
             onVisibilityChanged: (info) {
-              print(info.visibleFraction);
               if (info.visibleFraction >= 0.6) {
                 _curIdx = index;
-                print('ini cur $_curIdx');
                 if (_lastCurIndex != _curIdx) {
-                  print('ini cur222 $_curIdx');
                   Future.delayed(const Duration(milliseconds: 400), () {
                     start(notifier.diaryData?[index] ?? ContentData());
                     System().increaseViewCount(context, notifier.diaryData?[index] ?? ContentData());
                   });
+                  if (notifier.diaryData?[index].certified ?? false) {
+                    System().block(context);
+                  } else {
+                    System().disposeBlock();
+                  }
                 }
                 _lastCurIndex = _curIdx;
               }
@@ -883,7 +885,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
-                            await ShowBottomSheet.onBuyContent(context, data: notifier.diaryData?[index]);
+                            fAliplayer?.pause();
+                            await ShowBottomSheet.onBuyContent(context, data: notifier.diaryData?[index], fAliplayer: fAliplayer);
+                            // fAliplayer?.play();
                           },
                           child: const Align(
                             alignment: Alignment.centerRight,

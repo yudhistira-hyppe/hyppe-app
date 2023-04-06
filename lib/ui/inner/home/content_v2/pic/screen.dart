@@ -44,6 +44,7 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../../../../../ux/path.dart';
 import '../../../../constant/entities/report/notifier.dart';
@@ -617,9 +618,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               if (info.visibleFraction >= 0.6) {
                 _curIdx = index;
                 if (_lastCurIndex != _curIdx) {
-                  Future.delayed(const Duration(milliseconds: 100), () {
-                    System().increaseViewCount(context, notifier.pic?[index] ?? ContentData());
-                  });
                   if (notifier.pic?[index].music != null) {
                     print("ada musiknya ${notifier.pic?[index].music}");
                     Future.delayed(const Duration(milliseconds: 100), () {
@@ -628,6 +626,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     });
                   } else {
                     fAliplayer?.stop();
+                  }
+                  Future.delayed(const Duration(milliseconds: 100), () {
+                    System().increaseViewCount(context, notifier.pic?[index] ?? ContentData());
+                  });
+                  if (notifier.pic?[index].certified ?? false) {
+                    System().block(context);
+                  } else {
+                    System().disposeBlock();
                   }
                 }
                 _lastCurIndex = _curIdx;
@@ -832,7 +838,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
-                            await ShowBottomSheet.onBuyContent(context, data: notifier.pic?[index]);
+                            fAliplayer?.pause();
+                            await ShowBottomSheet.onBuyContent(context, data: notifier.pic?[index], fAliplayer: fAliplayer);
                           },
                           child: const Align(
                             alignment: Alignment.centerRight,
