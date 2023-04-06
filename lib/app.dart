@@ -27,6 +27,7 @@ AudioPlayer? globalAudioPlayer;
 ScrollController? globalScroller;
 final globalDB = DatabaseHelper();
 bool isHomeScreen = false;
+bool isFromSplash = false;
 
 void disposeGlobalAudio() async {
   try {
@@ -39,6 +40,7 @@ void disposeGlobalAudio() async {
 
 void mainApp(EnvType env) async {
   // HttpOverrides.global = MyHttpOverrides();
+  isFromSplash = true;
   WidgetsFlutterBinding.ensureInitialized();
   Env.init(env);
   NotificationService().initializeLocalNotification(); //dari sini minta permision

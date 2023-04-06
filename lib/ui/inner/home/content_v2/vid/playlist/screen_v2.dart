@@ -542,7 +542,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                UserTemplate(username: '${commentor?.username}', isVerified: commentor?.isIdVerified ?? false, date: comment?.createdAt ?? DateTime.now().toString()),
+                                UserTemplate(username: '${commentor?.username}', isVerified: commentor?.isIdVerified ?? false, date: comment?.disqusLogs?[0].comment?.createdAt ?? DateTime.now().toString()),
                                 twoPx,
                                 Row(
                                   children: [
