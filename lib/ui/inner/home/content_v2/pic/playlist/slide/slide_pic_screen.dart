@@ -43,13 +43,19 @@ class SlidePicScreen extends StatefulWidget {
   // Function resetZooming;
   int rootIndex;
   bool isOnPageTurning;
-  SlidePicScreen({Key? key, required this.data, required this.rootIndex, required this.isOnPageTurning}) : super(key: key);
+  SlidePicScreen(
+      {Key? key,
+      required this.data,
+      required this.rootIndex,
+      required this.isOnPageTurning})
+      : super(key: key);
 
   @override
   State<SlidePicScreen> createState() => _SlidePicScreenState();
 }
 
-class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMixin {
+class _SlidePicScreenState extends State<SlidePicScreen>
+    with AfterFirstLayoutMixin {
   bool canHit = true;
   late ContentData data;
 
@@ -84,7 +90,6 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
     //
     //   }
     // });
-
   }
 
   @override
@@ -95,13 +100,14 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<SlidedPicDetailNotifier>(context);
-    final translate = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    final translate =
+        Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     final tempPostID = widget.data.postID;
     final tempAllow = widget.isOnPageTurning;
     print('isOnPageTurning: ${widget.isOnPageTurning}');
-    Future.delayed(const Duration(milliseconds: 1000), () async{
-      if(!widget.isOnPageTurning && !tempAllow){
-        if(tempPostID == widget.data.postID && canHit){
+    Future.delayed(const Duration(milliseconds: 1000), () async {
+      if (!widget.isOnPageTurning && !tempAllow) {
+        if (tempPostID == widget.data.postID && canHit) {
           await notifier.initDetailPost(context, widget.data.postID ?? '');
           setState(() {
             data = notifier.savedData ?? widget.data;
@@ -110,7 +116,8 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
         }
       }
     });
-    print('preventMusic ${notifier.preventMusic} | ${data.music?.musicTitle} | ${data.apsaraId}');
+    print(
+        'preventMusic ${notifier.preventMusic} | ${data.music?.musicTitle} | ${data.apsaraId}');
     return Stack(
       children: [
         // Background
@@ -118,7 +125,9 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
           sigmaX: 30,
           sigmaY: 30,
           // thumbnail: picData.content[arguments].contentUrl,
-          thumbnail: (data.isApsara ?? false) ? (data.mediaThumbUri ?? (data.media?.imageInfo?[0].url ?? '')) : data.fullThumbPath,
+          thumbnail: (data.isApsara ?? false)
+              ? (data.mediaThumbUri ?? (data.media?.imageInfo?[0].url ?? ''))
+              : data.fullThumbPath,
         ),
         // Content
         (data.reportedStatus == "BLURRED")
@@ -126,7 +135,13 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
             : PicPlaylishScreen(
                 data: notifier.adsData,
                 url: notifier.adsUrl,
-                contentData: data
+                contentData: data,
+                preventedAction: () {
+                  notifier.isZooming = true;
+                },
+                afterAction: () {
+                  notifier.isZooming = false;
+                },
               ),
         // Top action
         (data.reportedStatus == "BLURRED")
@@ -171,7 +186,8 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                               },
                               style: ButtonStyle(
                                 alignment: Alignment.topCenter,
-                                padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                padding:
+                                    MaterialStateProperty.all(EdgeInsets.zero),
                               ),
                               child: const DecoratedIconWidget(
                                 Icons.arrow_back_ios,
@@ -185,16 +201,21 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                               following: true,
                               onFollow: () {},
                               haveStory: false,
-                              onTapOnProfileImage: () => System().navigateToProfile(context, data.email ?? ''),
+                              onTapOnProfileImage: () => System()
+                                  .navigateToProfile(context, data.email ?? ''),
                               spaceProfileAndId: eightPx,
                               featureType: FeatureType.pic,
-                              username: (data.username?.isNotEmpty ?? false) ? data.username : notifier.savedData?.username,
+                              username: (data.username?.isNotEmpty ?? false)
+                                  ? data.username
+                                  : notifier.savedData?.username,
                               isCelebrity: data.privacy?.isCelebrity,
                               isUserVerified: data.isIdVerified ?? false,
                               imageUrl:
                                   '${System().showUserPicture((data.avatar?.mediaEndpoint?.isNotEmpty ?? false) ? data.avatar?.mediaEndpoint : (notifier.savedData?.avatar?.mediaEndpoint ?? ''))}',
                               createdAt: '${System().readTimestamp(
-                                DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? '')).millisecondsSinceEpoch,
+                                DateTime.parse(System()
+                                        .dateTimeRemoveT(data.createdAt ?? ''))
+                                    .millisecondsSinceEpoch,
                                 context,
                                 fullCaption: true,
                               )}',
@@ -218,16 +239,21 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                               iconData: '${AssetPath.vectorPath}more.svg',
                               function: () async {
                                 notifier.preventMusic = true;
-                                SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                SharedPreference()
+                                    .writeStorage(SpKeys.isShowPopAds, true);
                                 await ShowBottomSheet().onShowOptionContent(
                                   context,
                                   contentData: data,
-                                  captionTitle: hyppePic, isShare: data.isShared,
+                                  captionTitle: hyppePic,
+                                  isShare: data.isShared,
                                   // storyController: widget.storyController,
-                                  onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
+                                  onUpdate: () => context
+                                      .read<SlidedPicDetailNotifier>()
+                                      .onUpdate(),
                                 );
                                 notifier.preventMusic = false;
-                                SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                SharedPreference()
+                                    .writeStorage(SpKeys.isShowPopAds, false);
                               },
                             )
                           : const SizedBox(),
@@ -240,12 +266,15 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                                 postData: data,
                                 adsData: null,
                                 type: hyppePic,
-                                onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
+                                onUpdate: () => context
+                                    .read<SlidedPicDetailNotifier>()
+                                    .onUpdate(),
                               ),
                             )
                           : const SizedBox(),
                       Visibility(
-                        visible: (data.saleAmount == 0 && (data.certified ?? false)),
+                        visible:
+                            (data.saleAmount == 0 && (data.certified ?? false)),
                         child: const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: IconOwnership(correct: true),
@@ -269,8 +298,15 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                         defaultColor: false,
                         height: 30,
                       ),
-                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                      Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
+                      Text(
+                          transnot.translate.sensitiveContent ??
+                              'Sensitive Content',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600)),
+                      Text(
+                          "HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
@@ -278,12 +314,21 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                           )),
                       data.email == SharedPreference().readStorage(SpKeys.email)
                           ? GestureDetector(
-                              onTap: () => Routing().move(Routes.appeal, argument: data),
+                              onTap: () =>
+                                  Routing().move(Routes.appeal, argument: data),
                               child: Container(
                                   padding: const EdgeInsets.all(8),
                                   margin: const EdgeInsets.all(18),
-                                  decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                                  child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Text(
+                                      transnot.translate.appealThisWarning ??
+                                          'Appeal This Warning',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600))),
                             )
                           : const SizedBox(),
                       const Spacer(),
@@ -292,7 +337,9 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                           setState(() {
                             data.reportedStatus = '';
                           });
-                          context.read<ReportNotifier>().seeContent(context, data, hyppePic);
+                          context
+                              .read<ReportNotifier>()
+                              .seeContent(context, data, hyppePic);
                         },
                         child: Container(
                           padding: const EdgeInsets.only(top: 8, bottom: 8),
@@ -309,7 +356,10 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                           ),
                           child: Text(
                             "${transnot.translate.see} HyppePic",
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -334,24 +384,29 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                       children: [
                         sixteenPx,
                         Consumer<LikeNotifier>(
-                          builder: (context, notifier, child) => data.insight?.isloading ?? false
-                              ? const SizedBox(
-                                  height: 21,
-                                  width: 21,
-                                  child: CircularProgressIndicator(
-                                    color: kHyppePrimary,
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : _buildButtonV2(
-                                  context: context,
-                                  colorIcon: (data.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeLightButtonText,
-                                  iconData: '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                  function: () {
-                                    print('ini l0000ike');
-                                    notifier.likePost(context, data);
-                                  },
-                                ),
+                          builder: (context, notifier, child) =>
+                              data.insight?.isloading ?? false
+                                  ? const SizedBox(
+                                      height: 21,
+                                      width: 21,
+                                      child: CircularProgressIndicator(
+                                        color: kHyppePrimary,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : _buildButtonV2(
+                                      context: context,
+                                      colorIcon:
+                                          (data.insight?.isPostLiked ?? false)
+                                              ? kHyppeRed
+                                              : kHyppeLightButtonText,
+                                      iconData:
+                                          '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                      function: () {
+                                        print('ini l0000ike');
+                                        notifier.likePost(context, data);
+                                      },
+                                    ),
                         ),
                         eightPx,
                         if ((data.allowComments ?? true))
@@ -359,25 +414,32 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                             context: context,
                             iconData: '${AssetPath.vectorPath}comment.svg',
                             function: () {
-                              ShowBottomSheet.onShowCommentV2(context, postID: data.postID);
+                              ShowBottomSheet.onShowCommentV2(context,
+                                  postID: data.postID);
                             },
                           ),
                         eightPx,
-                        if ((data.isShared ?? true) && data.visibility == 'PUBLIC')
+                        if ((data.isShared ?? true) &&
+                            data.visibility == 'PUBLIC')
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}share.svg',
-                            function: () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: data),
+                            function: () => context
+                                .read<PicDetailNotifier>()
+                                .createdDynamicLink(context, data: data),
                           ),
                         eightPx,
-                        if ((data.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != data.email)
+                        if ((data.saleAmount ?? 0) > 0 &&
+                            SharedPreference().readStorage(SpKeys.email) !=
+                                data.email)
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}cart.svg',
                             function: () async {
                               notifier.preventMusic = true;
                               // SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                              await ShowBottomSheet.onBuyContent(context, data: data);
+                              await ShowBottomSheet.onBuyContent(context,
+                                  data: data);
                               notifier.preventMusic = false;
                               // SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
                             },
@@ -386,15 +448,20 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                     ),
                     (data.tagPeople?.isNotEmpty ?? false) || data.location != ''
                         ? Padding(
-                            padding: const EdgeInsets.only(left: 16, bottom: 0, top: 16),
+                            padding: const EdgeInsets.only(
+                                left: 16, bottom: 0, top: 16),
                             child: Row(
                               children: [
                                 data.tagPeople?.isNotEmpty ?? false
                                     ? PicTagLabel(
                                         icon: 'tag_people',
-                                        label: '${data.tagPeople?.length} people',
+                                        label:
+                                            '${data.tagPeople?.length} people',
                                         function: () {
-                                          context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID);
+                                          context
+                                              .read<PicDetailNotifier>()
+                                              .showUserTag(context,
+                                                  data.tagPeople, data.postID);
                                         },
                                         width: 18,
                                       )
@@ -415,7 +482,9 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Container(
                         padding: const EdgeInsets.all(2),
-                        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
+                        constraints: BoxConstraints(
+                            maxHeight:
+                                MediaQuery.of(context).size.height * 0.5),
                         // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
 
                         child: SingleChildScrollView(
@@ -431,9 +500,21 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                               textAlign: TextAlign.start,
                               seeLess: ' ${translate.seeLess}',
                               seeMore: ' ${translate.seeMoreContent}',
-                              normStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
-                              hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
-                              expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              normStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  ?.copyWith(color: kHyppeLightButtonText),
+                              hrefStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  ?.copyWith(color: kHyppePrimary),
+                              expandStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                             ),
                             if (data.music?.musicTitle != null)
                               notifier.preventMusic
@@ -462,23 +543,32 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                       ),
                     ),
                     twentyPx,
-                    SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                            (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&
+                    SharedPreference()
+                                    .readStorage(SpKeys.statusVerificationId) ==
+                                VERIFIED &&
+                            (data.reportedStatus != 'OWNED' &&
+                                data.reportedStatus != 'BLURRED' &&
+                                data.reportedStatus2 != 'BLURRED') &&
                             (data.boosted.isEmpty) &&
-                            data.email == SharedPreference().readStorage(SpKeys.email)
+                            data.email ==
+                                SharedPreference().readStorage(SpKeys.email)
                         ? ButtonBoost(
                             contentData: data,
                             startState: () {
-                              SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                              SharedPreference()
+                                  .writeStorage(SpKeys.isShowPopAds, true);
                               notifier.preventMusic = true;
                             },
                             afterState: () {
                               notifier.preventMusic = false;
-                              SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                              SharedPreference()
+                                  .writeStorage(SpKeys.isShowPopAds, false);
                             },
                           )
                         : Container(),
-                    (data.boosted.isNotEmpty) && data.email == SharedPreference().readStorage(SpKeys.email)
+                    (data.boosted.isNotEmpty) &&
+                            data.email ==
+                                SharedPreference().readStorage(SpKeys.email)
                         ? Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: JangkaunStatus(
@@ -487,10 +577,13 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                             ),
                           )
                         : Container(),
-                    data.email == SharedPreference().readStorage(SpKeys.email) && (data.reportedStatus == 'OWNED')
+                    data.email ==
+                                SharedPreference().readStorage(SpKeys.email) &&
+                            (data.reportedStatus == 'OWNED')
                         ? ContentViolationWidget(
                             data: data,
-                            text: translate.thisHyppePicisSubjectToModeration ?? '',
+                            text: translate.thisHyppePicisSubjectToModeration ??
+                                '',
                           )
                         : Container(),
                   ],
