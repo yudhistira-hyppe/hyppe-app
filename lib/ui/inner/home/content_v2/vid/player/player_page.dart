@@ -34,6 +34,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 
+import '../../../../../../app.dart';
 import '../../../../../constant/entities/like/notifier.dart';
 
 class PlayerPage extends StatefulWidget {
@@ -374,6 +375,14 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     } else {
       getOldVideoUrl();
     }
+
+    globalAliPlayer = fAliplayer;
+  }
+
+  @override
+  void deactivate() {
+    print('deactive player_page');
+    super.deactivate();
   }
 
   Future getAuth({String videoId = ''}) async {
@@ -660,6 +669,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   @override
   void dispose() {
     Wakelock.disable();
+    globalAliPlayer = null;
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
     }

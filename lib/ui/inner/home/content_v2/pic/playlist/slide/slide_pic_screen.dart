@@ -60,6 +60,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
     data = widget.data;
 
     final notifier = context.read<SlidedPicDetailNotifier>();
+    notifier.setPreventMusic(false);
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SlidePicScreen');
     print('pindah screen ${widget.data.certified ?? false}');
     if (widget.data.certified ?? false) {
@@ -110,6 +111,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
         }
       }
     });
+    print('preventMusic ${notifier.preventMusic} | ${data.music?.musicTitle} | ${data.apsaraId}');
     return Stack(
       children: [
         // Background
@@ -414,6 +416,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                           )
                         : const SizedBox(),
                     Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Container(
                         padding: const EdgeInsets.all(2),
                         constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
@@ -436,7 +439,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                               hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
                               expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primary),
                             ),
-                            if (data.music?.musicTitle != null && (data.apsaraId ?? '').isNotEmpty)
+                            if (data.music?.musicTitle != null)
                               notifier.preventMusic
                                   ? const SizedBox.shrink()
                                   : notifier.isLoadMusic
@@ -461,7 +464,6 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                           ],
                         )),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     ),
                     twentyPx,
                     SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&

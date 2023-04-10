@@ -243,6 +243,10 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       return null;
     }
 
+    if(isFlash){
+      isFlash = (await deepArController?.toggleFlash() ?? false);
+    }
+
     try {
       File? file = await deepArController!.stopVideoRecording();
       // final _xFile = await cameraController!.stopVideoRecording();
