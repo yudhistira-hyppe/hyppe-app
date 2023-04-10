@@ -80,6 +80,7 @@ class _VidSearchContentState extends State<VidSearchContent> {
                       },
                       child: ListView.builder(
                         // controller: notifier.scrollController,
+                        physics: AlwaysScrollableScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         itemCount: widget.content?.length,
                         padding: const EdgeInsets.only(right: 11.5),

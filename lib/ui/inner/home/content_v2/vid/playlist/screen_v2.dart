@@ -216,7 +216,9 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                   // isCelebrity: viddata.privacy?.isCelebrity,
                   isCelebrity: false,
                   imageUrl: '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
-                  onTapOnProfileImage: () => System().navigateToProfile(context, data.email ?? ''),
+                  onTapOnProfileImage: (){
+                    System().navigateToProfile(context, data.email ?? '');
+                  },
                   createdAt: '2022-02-02',
                   musicName: data.music?.musicTitle ?? '',
                   location: data.location ?? '',

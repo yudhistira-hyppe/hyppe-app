@@ -100,6 +100,10 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  setPreventMusic(bool state){
+    _preventMusic = state;
+  }
+
   set hitApiMusic(bool state) {
     _hitApiMusic = state;
     notifyListeners();

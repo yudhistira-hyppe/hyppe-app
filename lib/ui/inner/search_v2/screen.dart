@@ -27,7 +27,6 @@ import '../../../ux/path.dart';
 import '../../../ux/routing.dart';
 import '../../constant/widget/custom_icon_widget.dart';
 import '../../constant/widget/custom_spacer.dart';
-import '../home/widget/profile.dart';
 import 'interest/detail_screen.dart';
 
 class SearchScreen extends StatefulWidget {

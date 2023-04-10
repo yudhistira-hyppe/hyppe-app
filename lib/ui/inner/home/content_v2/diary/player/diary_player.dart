@@ -26,6 +26,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wakelock/wakelock.dart';
 
+import '../../../../../../app.dart';
 import '../../../../../constant/entities/like/notifier.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
 
@@ -436,6 +437,8 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
         });
       }
     });
+
+    globalAliPlayer = fAliplayer;
   }
 
   @override
@@ -462,7 +465,8 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
 
   @override
   void dispose() {
-    Wakelock.disable();
+    globalAliPlayer = null;
+        Wakelock.disable();
     _animationController?.dispose();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);

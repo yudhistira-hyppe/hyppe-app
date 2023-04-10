@@ -109,7 +109,7 @@ class ThumbnailContentSearch extends StatelessWidget {
     return Stack(
       children: [
         PicTopItem(data: data),
-        Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data)),
+        // Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data)),
         data?.reportedStatus == 'BLURRED'
             ? ClipRect(
                 child: BackdropFilter(

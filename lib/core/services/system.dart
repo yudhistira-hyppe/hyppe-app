@@ -58,6 +58,7 @@ import 'package:intl/intl.dart' as intl;
 
 import '../../app.dart';
 import '../arguments/ads_argument.dart';
+import '../arguments/general_argument.dart';
 import '../models/collection/advertising/ads_video_data.dart';
 import 'package:exif/exif.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -1224,12 +1225,36 @@ class System {
           storyController.pause();
           Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
         } else {
-          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+          if(globalAliPlayer != null){
+            globalAliPlayer?.pause();
+          }
+          if(globalAudioPlayer != null){
+            globalAudioPlayer?.pause();
+          }
+          await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+          if(globalAliPlayer != null){
+            globalAliPlayer?.play();
+          }
+          if(globalAudioPlayer != null){
+            globalAudioPlayer?.resume();
+          }
         }
       } else {
-        storyController != null
-            ? context.read<HomeNotifier>().navigateToProfilePage(context, whenComplete: true, onWhenComplete: () => storyController.play())
-            : context.read<HomeNotifier>().navigateToProfilePage(context);
+        if(storyController != null){
+          context.read<HomeNotifier>().navigateToProfilePage(context, whenComplete: true, onWhenComplete: () => storyController.play());
+        }else{
+          if(globalAliPlayer != null){
+            globalAliPlayer?.pause();
+          }
+          if(globalAudioPlayer != null){
+            globalAudioPlayer?.pause();
+          }
+          await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
+          if(globalAudioPlayer != null){
+            globalAudioPlayer?.resume();
+          }
+        }
+
       }
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
