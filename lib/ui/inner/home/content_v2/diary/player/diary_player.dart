@@ -142,6 +142,11 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       bottomIndex = 0;
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(true);
+      if (widget.argument.diaryData?[_curIdx].certified ?? false) {
+        System().block(context);
+      } else {
+        System().disposeBlock();
+      }
 
       _animationController = AnimationController(
         /// [AnimationController]s can be created with `vsync: this` because of

@@ -1170,10 +1170,10 @@ class System {
     return SharedPreference().readStorage(SpKeys.email) == email;
   }
 
-  Future<void> increaseViewCount(BuildContext context, v2.ContentData data, {bool inLanding = false}) async {
+  Future<void> increaseViewCount(BuildContext context, v2.ContentData data) async {
     String myEmail = SharedPreference().readStorage(SpKeys.email) ?? "";
     print("??!!!!!!!!!!!!!!!!!!!!kirim data");
-    if (myEmail != data.email || inLanding) {
+    if (myEmail != data.email) {
       try {
         print("!!!!!!!!!!!!!!!!!!!!kirim data");
         final notifier = ViewBloc();
@@ -1190,6 +1190,26 @@ class System {
         if (kDebugMode) {
           print('Interactive error with $e');
         }
+      }
+    }
+  }
+
+  Future<void> increaseViewCount2(BuildContext context, v2.ContentData data) async {
+    print("??!!!!!!!!!!!!!!!!!!!!kirim data");
+    try {
+      print("!!!!!!!!!!!!!!!!!!!!kirim data2");
+      final notifier = ViewBloc();
+      await notifier.viewPostUserBloc(context, postId: data.postID ?? '', emailOwner: data.email ?? '');
+      final fetch = notifier.viewFetch;
+      if (!(data.insight?.isView ?? true)) {
+        if (fetch.viewState == ViewState.viewUserPostSuccess) {
+          data.insight?.views = (data.insight?.views ?? 0) + 1;
+          data.insight?.isView = true;
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Interactive error with $e');
       }
     }
   }

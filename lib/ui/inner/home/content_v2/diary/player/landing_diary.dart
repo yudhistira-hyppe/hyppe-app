@@ -643,7 +643,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 if (_lastCurIndex != _curIdx) {
                   Future.delayed(const Duration(milliseconds: 400), () {
                     start(notifier.diaryData?[index] ?? ContentData());
-                    System().increaseViewCount(context, notifier.diaryData?[index] ?? ContentData(), inLanding: true);
+                    System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData());
                   });
                   if (notifier.diaryData?[index].certified ?? false) {
                     System().block(context);

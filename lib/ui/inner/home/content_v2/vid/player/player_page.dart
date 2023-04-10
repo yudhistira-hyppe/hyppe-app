@@ -753,13 +753,13 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                     if (adsData != null && widget.inLanding) {
                       fAliplayerAds?.prepare().whenComplete(() => _showLoading = false);
                       fAliplayerAds?.play();
-
                       setState(() {
                         isActiveAds = true;
                       });
                     } else {
                       fAliplayer?.prepare().whenComplete(() => _showLoading = false);
                       fAliplayer?.play();
+                      System().increaseViewCount2(context, widget.data ?? ContentData());
                     }
                   },
                   child: SizedBox(

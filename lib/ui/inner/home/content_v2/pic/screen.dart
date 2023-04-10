@@ -628,14 +628,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   if (notifier.pic?[index].music != null) {
                     print("ada musiknya ${notifier.pic?[index].music}");
                     Future.delayed(const Duration(milliseconds: 100), () {
-                      System().increaseViewCount(context, notifier.pic?[index] ?? ContentData(), inLanding: true);
                       start(notifier.pic?[index] ?? ContentData());
                     });
                   } else {
                     fAliplayer?.stop();
                   }
                   Future.delayed(const Duration(milliseconds: 100), () {
-                    System().increaseViewCount(context, notifier.pic?[index] ?? ContentData());
+                    System().increaseViewCount2(context, notifier.pic?[index] ?? ContentData());
                   });
                   if (notifier.pic?[index].certified ?? false) {
                     System().block(context);
