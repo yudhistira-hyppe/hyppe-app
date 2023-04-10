@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
@@ -59,6 +60,8 @@ class HyppePreviewPic extends StatefulWidget {
 
 class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   FlutterAliplayer? fAliplayer;
+  TransformationController _transformationController = TransformationController();
+
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
@@ -85,6 +88,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   String email = '';
   // String statusKyc = '';
   bool isInPage = true;
+  bool _scroolEnabled = true;
 
   @override
   void initState() {
@@ -527,6 +531,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     );
   }
 
+  var initialControllerValue;
+
   Widget itemPict(PreviewPicNotifier notifier, int index) {
     return Container(
       decoration: BoxDecoration(
@@ -617,7 +623,21 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             ],
           ),
           tenPx,
-          // SelectableText((notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}"),
+          // Stack(
+          //   children: [
+          //     Positioned.fill(
+          //       child: InteractiveViewer(
+          //         child: Image.network(
+          //           'https://flutterservice.com/wp-content/uploads/2022/10/3-1.jpg',
+          //           height: 300,
+          //           width: double.infinity,
+          //           fit: BoxFit.cover,
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+
           VisibilityDetector(
             key: Key(index.toString()),
             onVisibilityChanged: (info) {
@@ -655,42 +675,28 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 ),
                 child: Stack(
                   children: [
-                    Center(
-                      child: CustomBaseCacheImage(
-                        memCacheWidth: 100,
-                        memCacheHeight: 100,
-                        widthPlaceHolder: 80,
-                        heightPlaceHolder: 80,
-                        imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
-                        imageBuilder: (context, imageProvider) => ClipRRect(
-                          borderRadius: BorderRadius.circular(20), // Image border
-                          child: notifier.pic?[index].reportedStatus == 'BLURRED'
-                              ? ImageFiltered(
-                                  imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                  child: Image(
-                                    image: imageProvider,
-                                  ),
-                                )
-                              : Image(
+                    CustomBaseCacheImage(
+                      memCacheWidth: 100,
+                      memCacheHeight: 100,
+                      widthPlaceHolder: 80,
+                      heightPlaceHolder: 80,
+                      imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
+                      imageBuilder: (context, imageProvider) => ClipRRect(
+                        borderRadius: BorderRadius.circular(20), // Image border
+                        child: notifier.pic?[index].reportedStatus == 'BLURRED'
+                            ? ImageFiltered(
+                                imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                child: Image(
                                   image: imageProvider,
                                 ),
-                        ),
-                        errorWidget: (context, url, error) {
-                          return Container(
-                            // const EdgeInsets.symmetric(horizontal: 4.5),
-                            // height: 500,
-                            decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                fit: BoxFit.cover,
+                              )
+                            : Image(
+                                image: imageProvider,
                               ),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          );
-                        },
-                        emptyWidget: Container(
+                      ),
+                      errorWidget: (context, url, error) {
+                        return Container(
                           // const EdgeInsets.symmetric(horizontal: 4.5),
-
                           // height: 500,
                           decoration: BoxDecoration(
                             image: const DecorationImage(
@@ -699,6 +705,18 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             ),
                             borderRadius: BorderRadius.circular(8.0),
                           ),
+                        );
+                      },
+                      emptyWidget: Container(
+                        // const EdgeInsets.symmetric(horizontal: 4.5),
+
+                        // height: 500,
+                        decoration: BoxDecoration(
+                          image: const DecorationImage(
+                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
                     ),
@@ -719,10 +737,62 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             _likeNotifier.likePost(context, notifier.pic![index]);
                           }
                         },
-                        child: Container(
-                          color: Colors.transparent,
-                          width: SizeConfig.screenWidth,
-                          height: SizeConfig.screenHeight,
+                        child: GestureDetector(
+                          child: Container(
+                            color: Colors.transparent,
+                            width: SizeConfig.screenWidth,
+                            height: SizeConfig.screenHeight,
+                            // child: InteractiveViewer(
+                            //   minScale: 1.0,
+                            //   scaleEnabled: true,
+                            //   panEnabled: true,
+                            //   transformationController: _transformationController,
+                            //   onInteractionStart: (scale) {
+                            //     _scroolEnabled = false;
+                            //     initialControllerValue = _transformationController.value;
+                            //     setState(() {});
+                            //   },
+                            //   onInteractionEnd: (scale) {
+                            //     _transformationController.value = initialControllerValue;
+                            //     if (_transformationController.value.getMaxScaleOnAxis() == 1) {
+                            //       _scroolEnabled = true;
+                            //       setState(() {});
+                            //     }
+                            //   },
+                            //   child: CustomBaseCacheImage(
+                            //     memCacheWidth: 100,
+                            //     memCacheHeight: 100,
+                            //     widthPlaceHolder: 80,
+                            //     heightPlaceHolder: 80,
+                            //     imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
+                            //     imageBuilder: (context, imageProvider) => ClipRRect(
+                            //       borderRadius: BorderRadius.circular(20), // Image border
+                            //       child: notifier.pic?[index].reportedStatus == 'BLURRED'
+                            //           ? ImageFiltered(
+                            //               imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                            //               child: Image(
+                            //                 image: imageProvider,
+                            //               ),
+                            //             )
+                            //           : Image(
+                            //               image: imageProvider,
+                            //             ),
+                            //     ),
+                            //     emptyWidget: Container(
+                            //       // const EdgeInsets.symmetric(horizontal: 4.5),
+
+                            //       // height: 500,
+                            //       decoration: BoxDecoration(
+                            //         image: const DecorationImage(
+                            //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                            //           fit: BoxFit.cover,
+                            //         ),
+                            //         borderRadius: BorderRadius.circular(8.0),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                          ),
                         ),
                       ),
                     ),
@@ -1022,6 +1092,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     const Spacer(),
                     GestureDetector(
                       onTap: () {
+                        System().increaseViewCount2(context, data);
                         context.read<ReportNotifier>().seeContent(context, data, hyppePic);
                       },
                       child: Container(
