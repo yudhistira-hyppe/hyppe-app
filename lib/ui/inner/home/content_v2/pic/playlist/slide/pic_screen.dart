@@ -17,16 +17,27 @@ class PicPlaylishScreen extends StatefulWidget {
   final AdsData data;
   final String url;
   final ContentData contentData;
-  final TransformationController transformationController;
-  const PicPlaylishScreen({Key? key, required this.data, required this.url, required this.contentData, required this.transformationController}) : super(key: key);
+  const PicPlaylishScreen({Key? key, required this.data, required this.url, required this.contentData}) : super(key: key);
 
   @override
   State<PicPlaylishScreen> createState() => _PicPlaylishScreenState();
 }
 
-class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
+class _PicPlaylishScreenState extends State<PicPlaylishScreen> with SingleTickerProviderStateMixin {
+  late TransformationController transformationController;
+  late AnimationController animationController;
+  Animation<Matrix4>? animation;
+  final double minScale = 1;
+  final double maxScale = 4;
   @override
   void initState() {
+    transformationController = TransformationController();
+    animationController = AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 200),
+    )..addListener(() {
+      transformationController.value = animation!.value;
+    });
     FirebaseCrashlytics.instance.setCustomKey('layout', 'PicPlaylishScreen');
     context.incrementAdsCount();
 
@@ -56,6 +67,8 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
 
   @override
   void dispose() {
+    transformationController.dispose();
+    animationController.dispose();
     if (globalAudioPlayer != null) {
       disposeGlobalAudio();
     }
@@ -66,11 +79,15 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
   @override
   Widget build(BuildContext context) {
     return InteractiveViewer(
-      transformationController: widget.transformationController,
-      child: InkWell(
-        onDoubleTap: () {
-          context.read<LikeNotifier>().likePost(context, widget.contentData);
-        },
+      clipBehavior: Clip.none,
+      transformationController: transformationController,
+      panEnabled: false,
+      minScale: minScale,
+      maxScale: maxScale,
+      onInteractionEnd: (details){
+        resetAnimation();
+      },
+      child: ClipRRect(
         child: CustomCacheImage(
           // imageUrl: picData.content[arguments].contentUrl,
           imageUrl: (widget.contentData.isApsara ?? false) ? (widget.contentData.mediaThumbUri ?? (widget.contentData.media?.imageInfo?[0].url ?? '')) : widget.contentData.fullThumbPath,
@@ -102,6 +119,16 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
         ),
       ),
     );
+  }
+
+
+  void resetAnimation(){
+    animation = Matrix4Tween(
+      begin: transformationController.value,
+      end: Matrix4.identity()
+    ).animate(CurvedAnimation(parent: animationController, curve: Curves.linear));
+
+    animationController.forward(from: 0);
   }
 
   // void initMusic(BuildContext context, String urlMusic) async{

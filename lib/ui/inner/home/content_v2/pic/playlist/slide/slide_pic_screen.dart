@@ -40,11 +40,10 @@ import 'notifier.dart';
 
 class SlidePicScreen extends StatefulWidget {
   ContentData data;
-  TransformationController transformationController;
-  Function resetZooming;
+  // Function resetZooming;
   int rootIndex;
   bool isOnPageTurning;
-  SlidePicScreen({Key? key, required this.data, required this.transformationController, required this.resetZooming, required this.rootIndex, required this.isOnPageTurning}) : super(key: key);
+  SlidePicScreen({Key? key, required this.data, required this.rootIndex, required this.isOnPageTurning}) : super(key: key);
 
   @override
   State<SlidePicScreen> createState() => _SlidePicScreenState();
@@ -127,8 +126,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
             : PicPlaylishScreen(
                 data: notifier.adsData,
                 url: notifier.adsUrl,
-                contentData: data,
-                transformationController: widget.transformationController,
+                contentData: data
               ),
         // Top action
         (data.reportedStatus == "BLURRED")
@@ -139,7 +137,6 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                     alignment: Alignment.topLeft,
                     child: CustomTextButton(
                       onPressed: () {
-                        widget.resetZooming();
                         System().disposeBlock();
                         Routing().moveBack();
                       },
@@ -169,7 +166,6 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                           children: [
                             CustomTextButton(
                               onPressed: () {
-                                widget.resetZooming();
                                 System().disposeBlock();
                                 Routing().moveBack();
                               },

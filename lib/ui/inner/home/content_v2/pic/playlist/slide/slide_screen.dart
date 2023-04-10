@@ -29,14 +29,14 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
   late PageController _pageController;
   late PageController _mainPageController;
   bool isOnPageTurning = false;
-  final TransformationController transformationController = TransformationController();
+  // final TransformationController transformationController = TransformationController();
 
-  void resetZooming() {
-    if (transformationController.value != Matrix4.identity()) {
-      transformationController.value = Matrix4.identity();
-      setState(() {});
-    }
-  }
+  // void resetZooming() {
+  //   if (transformationController.value != Matrix4.identity()) {
+  //     transformationController.value = Matrix4.identity();
+  //     setState(() {});
+  //   }
+  // }
 
   @override
   void initState() {
@@ -93,11 +93,11 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
       child: WillPopScope(
         onWillPop: () {
           System().disposeBlock();
-          resetZooming();
+          // resetZooming();
           return Future.value(true);
         },
         child: GestureDetector(
-          onDoubleTap: () => resetZooming(),
+          // onDoubleTap: () => resetZooming(),
           child: Scaffold(body: Consumer<SlidedPicDetailNotifier>(builder: (context, notifier, child) {
             return notifier.listData != null
                 ? PageView.builder(
@@ -140,8 +140,8 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                               return indexPage == 0
                                   ? SlidePicScreen(
                                       data: notifier.listData?[indexRoot] ?? ContentData(),
-                                      transformationController: transformationController,
-                                      resetZooming: resetZooming,
+                                      // transformationController: transformationController,
+                                      // resetZooming: resetZooming,
                                       rootIndex: indexRoot,
                                 isOnPageTurning: isOnPageTurning,
                                     )
