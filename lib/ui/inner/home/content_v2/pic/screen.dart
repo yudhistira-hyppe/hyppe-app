@@ -45,14 +45,18 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'package:photo_view/photo_view.dart';
-
+import 'package:pinch_zoom/pinch_zoom.dart';
 import '../../../../../ux/path.dart';
 import '../../../../constant/entities/report/notifier.dart';
 
 class HyppePreviewPic extends StatefulWidget {
   final ScrollController? scrollController;
-  const HyppePreviewPic({Key? key, this.scrollController}) : super(key: key);
+  final Function functionZoomTriger;
+  const HyppePreviewPic({
+    Key? key,
+    this.scrollController,
+    required this.functionZoomTriger,
+  }) : super(key: key);
 
   @override
   _HyppePreviewPicState createState() => _HyppePreviewPicState();
@@ -546,6 +550,22 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         children: [
           // Text("$_lastCurIndex"),
           // Text("$_curIdx"),
+          // GestureDetector(
+          //   onScaleStart: (details) {
+          //     widget.functionZoomTriger();
+          //     print("***************** dua jari ***************");
+          //     print(details.pointerCount);
+          //   },
+          //   onScaleEnd: (details) {
+          //     print("***************** satu jari ***************");
+          //   },
+
+          //   child: Container(
+          //     width: 500,
+          //     height: 200,
+          //     color: Colors.red,
+          //   ),
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -737,61 +757,49 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             _likeNotifier.likePost(context, notifier.pic![index]);
                           }
                         },
-                        child: GestureDetector(
-                          child: Container(
-                            color: Colors.transparent,
-                            width: SizeConfig.screenWidth,
-                            height: SizeConfig.screenHeight,
-                            // child: InteractiveViewer(
-                            //   minScale: 1.0,
-                            //   scaleEnabled: true,
-                            //   panEnabled: true,
-                            //   transformationController: _transformationController,
-                            //   onInteractionStart: (scale) {
-                            //     _scroolEnabled = false;
-                            //     initialControllerValue = _transformationController.value;
-                            //     setState(() {});
-                            //   },
-                            //   onInteractionEnd: (scale) {
-                            //     _transformationController.value = initialControllerValue;
-                            //     if (_transformationController.value.getMaxScaleOnAxis() == 1) {
-                            //       _scroolEnabled = true;
-                            //       setState(() {});
-                            //     }
-                            //   },
-                            //   child: CustomBaseCacheImage(
-                            //     memCacheWidth: 100,
-                            //     memCacheHeight: 100,
-                            //     widthPlaceHolder: 80,
-                            //     heightPlaceHolder: 80,
-                            //     imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
-                            //     imageBuilder: (context, imageProvider) => ClipRRect(
-                            //       borderRadius: BorderRadius.circular(20), // Image border
-                            //       child: notifier.pic?[index].reportedStatus == 'BLURRED'
-                            //           ? ImageFiltered(
-                            //               imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                            //               child: Image(
-                            //                 image: imageProvider,
-                            //               ),
-                            //             )
-                            //           : Image(
-                            //               image: imageProvider,
-                            //             ),
-                            //     ),
-                            //     emptyWidget: Container(
-                            //       // const EdgeInsets.symmetric(horizontal: 4.5),
+                        child: Container(
+                          color: Colors.transparent,
+                          width: SizeConfig.screenWidth,
+                          height: SizeConfig.screenHeight,
+                          child: PinchZoom(
+                            onZoomStart: () {
+                              widget.functionZoomTriger();
+                            },
+                            onZoomEnd: () {
+                              widget.functionZoomTriger();
+                            },
+                            child: CustomBaseCacheImage(
+                              memCacheWidth: 100,
+                              memCacheHeight: 100,
+                              widthPlaceHolder: 80,
+                              heightPlaceHolder: 80,
+                              imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
+                              imageBuilder: (context, imageProvider) => ClipRRect(
+                                borderRadius: BorderRadius.circular(20), // Image border
+                                child: notifier.pic?[index].reportedStatus == 'BLURRED'
+                                    ? ImageFiltered(
+                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                        child: Image(
+                                          image: imageProvider,
+                                        ),
+                                      )
+                                    : Image(
+                                        image: imageProvider,
+                                      ),
+                              ),
+                              emptyWidget: Container(
+                                // const EdgeInsets.symmetric(horizontal: 4.5),
 
-                            //       // height: 500,
-                            //       decoration: BoxDecoration(
-                            //         image: const DecorationImage(
-                            //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                            //           fit: BoxFit.cover,
-                            //         ),
-                            //         borderRadius: BorderRadius.circular(8.0),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
+                                // height: 500,
+                                decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),

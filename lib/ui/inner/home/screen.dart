@@ -155,7 +155,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     'ini iniststate home'.logger();
   }
 
-  void lagiRefresh() {}
+  bool isZoom = false;
+
+  void zoom() {
+    setState(() {
+      isZoom = !isZoom;
+      print("*************** $isZoom");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
               child: NestedScrollView(
                 key: globalKey,
                 controller: _scrollController,
-                physics: const BouncingScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 headerSliverBuilder: (context, bool innerBoxIsScrolled) {
                   return [
                     SliverList(
@@ -247,12 +254,15 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                 },
                 body: TabBarView(
                   controller: _tabController,
+                  physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
                   children: [
                     // Pict
                     Container(
                       padding: const EdgeInsets.only(left: 6.0, right: 6),
                       color: kHyppeLightSurface,
-                      child: const HyppePreviewPic(),
+                      child: HyppePreviewPic(functionZoomTriger: () {
+                        zoom();
+                      }),
                     ),
                     Container(
                       padding: const EdgeInsets.only(left: 6.0, right: 6),

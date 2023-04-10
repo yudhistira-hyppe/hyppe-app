@@ -36,6 +36,7 @@ import '../../pic/playlist/notifier.dart';
 import '../player/player_page.dart';
 import '../widget/tag_label.dart';
 import 'notifier.dart';
+import 'package:flutter/services.dart';
 
 class NewVideoDetailScreen extends StatefulWidget {
   final VidDetailScreenArgument arguments;
@@ -216,7 +217,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                   // isCelebrity: viddata.privacy?.isCelebrity,
                   isCelebrity: false,
                   imageUrl: '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
-                  onTapOnProfileImage: (){
+                  onTapOnProfileImage: () {
                     System().navigateToProfile(context, data.email ?? '');
                   },
                   createdAt: '2022-02-02',
@@ -263,41 +264,43 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
               if (data.email != SharedPreference().readStorage(SpKeys.email))
                 notifier.checkIsLoading
                     ? const Center(child: SizedBox(height: 40, width: 40, child: CustomLoading()))
-                    : notifier.statusFollowing == StatusFollowing.following ? const SizedBox.shrink() : CustomFollowButton(
-                  checkIsLoading: notifier.checkIsLoading,
-                  onPressed: () async {
-                    try {
-                      await notifier.followUser(context, isUnFollow: notifier.statusFollowing == StatusFollowing.following);
-                    } catch (e) {
-                      e.logger();
-                    }
-                  },
-                  isFollowing: notifier.statusFollowing,
-                ),
-                // Builder(
-                //     builder: (context) {
-                //       return (data.following ?? false) ? const SizedBox.shrink() : GestureDetector(
-                //         onTap: () {
-                //           if (data.insight?.isloadingFollow != true) {
-                //             notifier.newFollowUser(context, data, isUnFollow: data.following, isloading: data.insight!.isloadingFollow ?? false);
-                //           }
-                //         },
-                //         child: data.insight?.isloadingFollow ?? false
-                //             ? const SizedBox(
-                //           height: 40,
-                //           width: 30,
-                //           child: Align(
-                //             alignment: Alignment.center,
-                //             child: CustomLoading(),
-                //           ),
-                //         )
-                //             : Text(
-                //            (notifier.language.follow ?? ''),
-                //           style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                //         ),
-                //       );
-                //     }
-                // ),
+                    : notifier.statusFollowing == StatusFollowing.following
+                        ? const SizedBox.shrink()
+                        : CustomFollowButton(
+                            checkIsLoading: notifier.checkIsLoading,
+                            onPressed: () async {
+                              try {
+                                await notifier.followUser(context, isUnFollow: notifier.statusFollowing == StatusFollowing.following);
+                              } catch (e) {
+                                e.logger();
+                              }
+                            },
+                            isFollowing: notifier.statusFollowing,
+                          ),
+              // Builder(
+              //     builder: (context) {
+              //       return (data.following ?? false) ? const SizedBox.shrink() : GestureDetector(
+              //         onTap: () {
+              //           if (data.insight?.isloadingFollow != true) {
+              //             notifier.newFollowUser(context, data, isUnFollow: data.following, isloading: data.insight!.isloadingFollow ?? false);
+              //           }
+              //         },
+              //         child: data.insight?.isloadingFollow ?? false
+              //             ? const SizedBox(
+              //           height: 40,
+              //           width: 30,
+              //           child: Align(
+              //             alignment: Alignment.center,
+              //             child: CustomLoading(),
+              //           ),
+              //         )
+              //             : Text(
+              //            (notifier.language.follow ?? ''),
+              //           style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+              //         ),
+              //       );
+              //     }
+              // ),
               data.email != SharedPreference().readStorage(SpKeys.email)
                   ? SizedBox(
                       width: 50,
@@ -544,7 +547,8 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                UserTemplate(username: '${commentor?.username}', isVerified: commentor?.isIdVerified ?? false, date: comment?.disqusLogs?[0].comment?.createdAt ?? DateTime.now().toString()),
+                                UserTemplate(
+                                    username: '${commentor?.username}', isVerified: commentor?.isIdVerified ?? false, date: comment?.disqusLogs?[0].comment?.createdAt ?? DateTime.now().toString()),
                                 twoPx,
                                 Row(
                                   children: [
