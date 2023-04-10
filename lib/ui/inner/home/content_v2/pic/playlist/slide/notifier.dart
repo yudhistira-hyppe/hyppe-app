@@ -196,6 +196,13 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   //   }
   // }
 
+  bool _isZooming = false;
+  bool get isZooming => _isZooming;
+  set isZooming(bool state){
+    _isZooming = state;
+    notifyListeners();
+  }
+
   void onUpdate() => notifyListeners();
 
   Future initAdsVideo(BuildContext context) async {

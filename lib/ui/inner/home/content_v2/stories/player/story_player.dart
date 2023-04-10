@@ -26,6 +26,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wakelock/wakelock.dart';
+
+import '../../../../../../app.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
 
 class StoryPlayerPage extends StatefulWidget {
@@ -372,6 +374,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
     });
+
+    globalAliPlayer = fAliplayer;
   }
 
   void storyComplete(StoriesPlaylistNotifier not) {
@@ -447,6 +451,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   @override
   void dispose() {
+    globalAliPlayer = null;
     Wakelock.disable();
     _animationController?.dispose();
     if (Platform.isIOS) {
