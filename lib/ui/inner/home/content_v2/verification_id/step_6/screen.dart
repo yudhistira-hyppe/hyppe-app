@@ -12,6 +12,8 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/camera/widgets/camera_flash_button.dart';
 import 'package:hyppe/ui/constant/entities/camera/widgets/camera_switch_button.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/screen.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/widgets/camera_flash_button.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/widgets/camera_switch_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -81,7 +83,7 @@ class _VerificationIDStep6State extends State<VerificationIDStep6> with RouteAwa
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(flex: 4, child: const CameraFlashButton()),
+                    Expanded(flex: 4, child: const CameraDevicesFlashButton()),
                     Expanded(
                       flex: 4,
                       child: SizedBox(
@@ -92,7 +94,7 @@ class _VerificationIDStep6State extends State<VerificationIDStep6> with RouteAwa
                         ),
                       ),
                     ),
-                    Expanded(flex: 4, child: const CameraSwitchButton())
+                    Expanded(flex: 4, child: const CameraDevicesSwitchButton())
                   ],
                 ),
               ),
