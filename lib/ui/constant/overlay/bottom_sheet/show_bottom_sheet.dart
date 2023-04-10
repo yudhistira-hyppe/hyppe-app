@@ -626,6 +626,7 @@ class ShowBottomSheet {
             contentData: contentData,
             onDetail: onDetail,
             isShare: isShare ?? true,
+            fAliplayer: fAliplayer,
           ),
         );
       },
@@ -1109,7 +1110,7 @@ class ShowBottomSheet {
         });
   }
 
-  static onBuyContent(context, {ContentData? data}) {
+  static onBuyContent(context, {ContentData? data, FlutterAliplayer? fAliplayer}) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -1131,7 +1132,11 @@ class ShowBottomSheet {
               data: data,
             ));
       },
-    );
+    ).whenComplete(() {
+      if (fAliplayer != null) {
+        fAliplayer.play();
+      }
+    });
   }
 
   onShowHelpBankAccount(context) {

@@ -155,6 +155,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     'ini iniststate home'.logger();
   }
 
+  void lagiRefresh() {}
+
   @override
   Widget build(BuildContext context) {
     isFromSplash = false;

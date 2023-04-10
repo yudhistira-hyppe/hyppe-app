@@ -46,14 +46,22 @@ class CustomProfileImage extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(forStory ? 20 : 50),
-            child: Image.network(
-              '$imageUrl',
-              // key: ValueKey(cacheKey),
-              errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                return Image.asset('${AssetPath.pngPath}profile-error.png', fit: BoxFit.fitWidth);
-              },
-              fit: BoxFit.cover,
-            ),
+            child: cacheKey != null
+                ? Image.network(
+                    '$imageUrl',
+                    key: cacheKey != null ? ValueKey(cacheKey) : null,
+                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                      return Image.asset('${AssetPath.pngPath}profile-error.png', fit: BoxFit.fitWidth);
+                    },
+                    fit: BoxFit.cover,
+                  )
+                : Image.network(
+                    '$imageUrl',
+                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                      return Image.asset('${AssetPath.pngPath}profile-error.png', fit: BoxFit.fitWidth);
+                    },
+                    fit: BoxFit.cover,
+                  ),
           ),
         ),
       ),

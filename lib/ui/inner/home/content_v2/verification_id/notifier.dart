@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -11,6 +12,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/models/collection/user_v2/kyc/ktp_model.dart';
 import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -323,6 +325,18 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         }
 
         lines++;
+      }
+    }
+
+    if (idCardName == "" || idCardNumber == "") {
+      final bloc = VerificationIDBloc();
+      await bloc.postKtp(context, nama: realName, idCardFile: imagePath);
+      final fetch = bloc.postsFetch;
+      if (fetch.verificationIDState == VerificationIDState.postVerificationIDSuccess) {
+        print(fetch.data);
+        var data = KTPModel.fromJson(fetch.data);
+        idCardName = data.cardPictName ?? '';
+        idCardNumber = data.cardPictNumber ?? '';
       }
     }
     Routing().moveBack();

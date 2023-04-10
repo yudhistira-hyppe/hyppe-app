@@ -318,19 +318,32 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
   Future onClickSaveProfile(BuildContext context) async {
     bool connect = await System().checkConnections();
+    if (!System().canOnlyContainLettersNumbersDotAndUnderscores(userNameController.text) || !System().atLeastThreeThreetyCharacter(userNameController.text)) {
+      await ShowBottomSheet().onShowColouredSheet(
+        context,
+        "${language.usernameOnlyContainLetters}",
+        color: Colors.red,
+        iconSvg: "${AssetPath.vectorPath}remove.svg",
+        maxLines: 2,
+      );
+      return false;
+    }
+
+    var fullname = fullNameController.text.split(' ');
+    print(fullname);
+    if (fullname[0] == '') {
+      await ShowBottomSheet().onShowColouredSheet(
+        context,
+        "${language.fullNameCannotContainLeadingSpace}",
+        color: Colors.red,
+        iconSvg: "${AssetPath.vectorPath}remove.svg",
+        maxLines: 2,
+      );
+      return false;
+    }
     if (connect) {
       if (somethingChanged(context)) {
         try {
-          if (!System().canOnlyContainLettersNumbersDotAndUnderscores(userNameController.text) || !System().atLeastThreeThreetyCharacter(userNameController.text)) {
-            await ShowBottomSheet().onShowColouredSheet(
-              context,
-              "${language.usernameOnlyContainLetters}",
-              color: Colors.red,
-              iconSvg: "${AssetPath.vectorPath}remove.svg",
-              maxLines: 2,
-            );
-            return;
-          }
           progress = "0%";
           FocusScopeNode currentFocus = FocusScope.of(context);
           uploadProgress = System().createPopupDialog(ShowOverlayLoading());

@@ -55,7 +55,11 @@ class _PageComponentState extends State<PageComponent> {
     return RefreshIndicator(
       key: _key,
       color: Theme.of(context).colorScheme.primary,
-      onRefresh: () => context.read<NotificationNotifier>().getNotifications(context, reload: true),
+      onRefresh: () async {
+        imageCache.clear();
+        imageCache.clearLiveImages();
+        await context.read<NotificationNotifier>().getNotifications(context, reload: true);
+      },
       child: _buildWidget(),
     );
   }

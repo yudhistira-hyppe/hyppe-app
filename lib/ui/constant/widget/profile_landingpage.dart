@@ -73,7 +73,7 @@ class ProfileLandingPage extends StatelessWidget {
             haveStory: haveStory,
             featureType: featureType,
             child: CustomProfileImage(
-              cacheKey: cacheKey,
+              // cacheKey: cacheKey,
               width: widthCircle,
               height: heightCircle,
               onTap: onTapOnProfileImage,

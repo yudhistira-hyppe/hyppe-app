@@ -10,6 +10,7 @@ import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/camera//widgets/camera_flash_button.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/screen.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/widgets/camera_flash_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -119,7 +120,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
                         iconData: "${AssetPath.vectorPath}shutter.svg",
                         onPressed: () => notifier.onTakePicture(context),
                       )),
-                  const SizedBox(width: 90, child: CameraFlashButton()),
+                  const SizedBox(width: 90, child: CameraDevicesFlashButton()),
                 ],
               ),
             ),

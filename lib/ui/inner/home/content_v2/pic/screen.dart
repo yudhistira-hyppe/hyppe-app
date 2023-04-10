@@ -44,6 +44,7 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../../../../../ux/path.dart';
 import '../../../../constant/entities/report/notifier.dart';
@@ -97,7 +98,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
-
       WidgetsBinding.instance.addObserver(this);
 
       fAliplayer?.setAutoPlay(true);
@@ -271,7 +271,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // );
 
     _playMode = ModeTypeAliPLayer.auth;
-    await getAuth(data.music?.apsaraMusic ?? '');
+    // await getAuth(data.music?.apsaraMusic ?? '');
+    if (data.reportedStatus != 'BLURRED') {
+      _playMode = ModeTypeAliPLayer.auth;
+      await getAuth(data.music?.apsaraMusic ?? '');
+    }
 
     setState(() {
       isPause = false;
@@ -307,7 +311,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // fAliplayer?.setCacheConfig(map);
     print("sedang prepare");
     print("sedang prepare $isMute");
-    // fAliplayer?.prepare();
+    fAliplayer?.prepare();
     if (isMute) {
       fAliplayer?.setMuted(true);
     }
@@ -486,11 +490,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         padding: const EdgeInsets.symmetric(horizontal: 11.5),
                         itemBuilder: (context, index) {
                           if (notifier.pic == null || home.isLoadingPict) {
+                            fAliplayer?.pause();
+                            _lastCurIndex = -1;
                             return CustomShimmer(
                               width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
                               height: 168,
                               radius: 8,
-                              margin: const EdgeInsets.symmetric(horizontal: 4.5),
+                              margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
                               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                             );
                           } else if (index == notifier.pic?.length && notifier.hasNext) {
@@ -532,6 +538,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Text("$_lastCurIndex"),
+          // Text("$_curIdx"),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -625,6 +633,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   } else {
                     fAliplayer?.stop();
                   }
+                  Future.delayed(const Duration(milliseconds: 100), () {
+                    System().increaseViewCount2(context, notifier.pic?[index] ?? ContentData());
+                  });
+                  if (notifier.pic?[index].certified ?? false) {
+                    System().block(context);
+                  } else {
+                    System().disposeBlock();
+                  }
                 }
                 _lastCurIndex = _curIdx;
               }
@@ -689,11 +705,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     Positioned.fill(
                       child: GestureDetector(
                         onTap: () {
-                          fAliplayer?.play();
-                          setState(() {
-                            isMute = !isMute;
-                          });
-                          fAliplayer?.setMuted(isMute);
+                          if (notifier.pic?[index].reportedStatus != 'BLURRED') {
+                            fAliplayer?.play();
+                            setState(() {
+                              isMute = !isMute;
+                            });
+                            fAliplayer?.setMuted(isMute);
+                          }
                         },
                         onDoubleTap: () {
                           final _likeNotifier = context.read<LikeNotifier>();
@@ -828,7 +846,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
-                            await ShowBottomSheet.onBuyContent(context, data: notifier.pic?[index]);
+                            fAliplayer?.pause();
+                            await ShowBottomSheet.onBuyContent(context, data: notifier.pic?[index], fAliplayer: fAliplayer);
                           },
                           child: const Align(
                             alignment: Alignment.centerRight,
@@ -836,7 +855,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               defaultColor: false,
                               color: kHyppeTextLightPrimary,
                               iconData: '${AssetPath.vectorPath}cart.svg',
-                              height: 18,
+                              height: 24,
                             ),
                           ),
                         ),

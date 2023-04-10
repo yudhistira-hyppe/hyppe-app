@@ -212,12 +212,20 @@ class HomeNotifier with ChangeNotifier {
 
       switch (index) {
         case 0:
-          if (isreload) skipPic = 0;
+          if (isreload) {
+            skipPic = 0;
+            _isLoadingPict = true;
+            notifyListeners();
+          }
           data['type'] = 'pict';
           data['skip'] = skipPic;
           break;
         case 1:
-          if (isreload) skipDiary = 0;
+          if (isreload) {
+            skipDiary = 0;
+            _isLoadingDiary = true;
+            notifyListeners();
+          }
           data['type'] = 'diary';
           data['skip'] = skipDiary;
           break;
@@ -242,6 +250,8 @@ class HomeNotifier with ChangeNotifier {
       }
 
       isLoadingLoadmore = false;
+      _isLoadingPict = false;
+      _isLoadingDiary = false;
       notifyListeners();
       switch (index) {
         case 0:

@@ -5,6 +5,8 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -20,12 +22,18 @@ class VerificationIDStep3 extends StatefulWidget {
   State<VerificationIDStep3> createState() => _VerificationIDStep3State();
 }
 
-class _VerificationIDStep3State extends State<VerificationIDStep3> {
-
+class _VerificationIDStep3State extends State<VerificationIDStep3> with AfterFirstLayoutMixin {
+  late CameraDevicesNotifier notifier;
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStep3');
     super.initState();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    notifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    notifier.initCamera(context, mounted);
   }
 
   @override
@@ -44,8 +52,7 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> {
           titleSpacing: 0,
           title: CustomTextWidget(
             textToDisplay: notifier.language.idVerification ?? '',
-            textStyle:
-                Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+            textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
@@ -88,18 +95,13 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> {
             function: () => Routing().moveAndPop(Routes.verificationIDStep4),
             child: CustomTextWidget(
               textToDisplay: notifier.language.continueStep ?? '',
-              textStyle:
-                  textTheme.button?.copyWith(color: kHyppeLightButtonText),
+              textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
             ),
             buttonStyle: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primary),
-              shadowColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primary),
-              overlayColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primary),
-              backgroundColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primary),
+              foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+              shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+              overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
             ),
           ),
         ),

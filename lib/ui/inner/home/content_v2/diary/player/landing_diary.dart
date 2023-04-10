@@ -504,12 +504,14 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         itemCount: notifier.diaryData?.length,
                         padding: const EdgeInsets.symmetric(horizontal: 11.5),
                         itemBuilder: (context, index) {
-                          if (notifier.diaryData == null || home.isLoadingPict) {
+                          if (notifier.diaryData == null || home.isLoadingDiary) {
+                            fAliplayer?.pause();
+                            _lastCurIndex = -1;
                             return CustomShimmer(
                               width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
                               height: 168,
                               radius: 8,
-                              margin: const EdgeInsets.symmetric(horizontal: 4.5),
+                              margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
                               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                             );
                           } else if (index == notifier.diaryData?.length && notifier.hasNext) {
@@ -522,7 +524,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                               ),
                             );
                           }
-                          if (notifier.diaryData?[index].reportedStatus == 'BLURRED') {
+                          if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
                             isPlay = false;
                             fAliplayer?.stop();
                           }
@@ -636,15 +638,18 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           VisibilityDetector(
             key: Key(index.toString()),
             onVisibilityChanged: (info) {
-              print(info.visibleFraction);
               if (info.visibleFraction >= 0.6) {
                 _curIdx = index;
-                print('ini cur $_curIdx');
                 if (_lastCurIndex != _curIdx) {
-                  print('ini cur222 $_curIdx');
                   Future.delayed(const Duration(milliseconds: 400), () {
                     start(notifier.diaryData?[index] ?? ContentData());
+                    System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData());
                   });
+                  if (notifier.diaryData?[index].certified ?? false) {
+                    System().block(context);
+                  } else {
+                    System().disposeBlock();
+                  }
                 }
                 _lastCurIndex = _curIdx;
               }
@@ -882,7 +887,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
-                            await ShowBottomSheet.onBuyContent(context, data: notifier.diaryData?[index]);
+                            fAliplayer?.pause();
+                            await ShowBottomSheet.onBuyContent(context, data: notifier.diaryData?[index], fAliplayer: fAliplayer);
+                            // fAliplayer?.play();
                           },
                           child: const Align(
                             alignment: Alignment.centerRight,

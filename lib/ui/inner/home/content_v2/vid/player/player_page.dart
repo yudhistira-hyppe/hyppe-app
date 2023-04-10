@@ -218,6 +218,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       // Fluttertoast.showToast(msg: "OnPrepared ");
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
+        print("getMediaInfo==${value}");
         _videoDuration = value['duration'];
         setState(() {
           isPrepare = true;
@@ -762,13 +763,13 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                     if (adsData != null && widget.inLanding) {
                       fAliplayerAds?.prepare().whenComplete(() => _showLoading = false);
                       fAliplayerAds?.play();
-
                       setState(() {
                         isActiveAds = true;
                       });
                     } else {
                       fAliplayer?.prepare().whenComplete(() => _showLoading = false);
                       fAliplayer?.play();
+                      System().increaseViewCount2(context, widget.data ?? ContentData());
                     }
                   },
                   child: SizedBox(
