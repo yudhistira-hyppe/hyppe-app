@@ -340,7 +340,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void reportContent(BuildContext context, ContentData data) {
-    ShowBottomSheet.onReportContent(context, postData: data, type: hyppeVid, adsData: null);
+    ShowBottomSheet().onReportContent(context, postData: data, type: hyppeVid, adsData: null);
   }
 
   void showUserTag(BuildContext context, data, postId) {

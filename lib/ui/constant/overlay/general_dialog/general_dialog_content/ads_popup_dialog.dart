@@ -631,7 +631,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                   children: [
                     GestureDetector(
                       onTap: () {
-                        ShowBottomSheet.onReportContent(
+                        ShowBottomSheet().onReportContent(
                           context,
                           adsData: widget.data,
                           type: adsPopUp,
@@ -1203,7 +1203,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        ShowBottomSheet.onReportContent(
+                        ShowBottomSheet().onReportContent(
                           context,
                           adsData: widget.data,
                           type: adsPopUp,

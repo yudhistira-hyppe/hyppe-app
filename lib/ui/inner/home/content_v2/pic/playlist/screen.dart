@@ -10,12 +10,16 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_bo
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_slider.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_shimmer.dart';
 
+import '../../../../../../app.dart';
+
 class PicDetailScreen extends StatefulWidget {
   final PicDetailScreenArgument arguments;
+  final bool isOnPageTurning;
 
   const PicDetailScreen({
     Key? key,
     required this.arguments,
+    required this.isOnPageTurning
   }) : super(key: key);
 
   @override
@@ -29,6 +33,7 @@ class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayout
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'PicDetailScreen');
     context.read<PicDetailNotifier>().setLoadPic(true);
+    context.read<PicDetailNotifier>().setLoadMusic(true);
     super.initState();
   }
 
@@ -39,10 +44,32 @@ class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayout
 
   @override
   Widget build(BuildContext context) {
+    final tempAllow = widget.isOnPageTurning;
+
+
     return ChangeNotifierProvider<PicDetailNotifier>(
       create: (context) => _notifier,
       child: Consumer<PicDetailNotifier>(
         builder: (_, notifier, __) {
+          Future.delayed(const Duration(milliseconds: 2000), () async {
+            print('isOnPageTurning ImageDetail: ${widget.isOnPageTurning} $tempAllow');
+            if (!widget.isOnPageTurning && !tempAllow) {
+              // notifier.urlMusic = '';
+              // notifier.isLoadMusic = false;
+              // if(globalAudioPlayer != null){
+              //   disposeGlobalAudio();
+              // }
+              final music = widget.arguments.picData?.music;
+              if(music != null){
+                final apsaraMusic = music.apsaraMusic;
+                if(apsaraMusic != null){
+                  notifier.initMusic(context, apsaraMusic);
+                }
+
+              }
+
+            }
+          });
           return WillPopScope(
             onWillPop: notifier.onPop,
             child: SafeArea(

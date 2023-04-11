@@ -261,7 +261,7 @@ class _SlidePicScreenState extends State<SlidePicScreen>
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
-                              function: () => ShowBottomSheet.onReportContent(
+                              function: () => ShowBottomSheet().onReportContent(
                                 context,
                                 postData: data,
                                 adsData: null,
