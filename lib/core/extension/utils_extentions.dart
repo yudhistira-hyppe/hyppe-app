@@ -97,7 +97,7 @@ extension StringDefine on String {
 
   String getGenderByLanguage() {
     LocalizationModelV2 language = Provider.of<TranslateNotifierV2>(materialAppKey.currentContext!, listen: false).translate;
-    if (this == 'MALE' || this == 'Laki-laki') {
+    if (toLowerCase() == 'male' || toLowerCase() == 'laki-laki') {
       return language.male ?? 'Male';
     } else {
       return language.female ?? 'Female';

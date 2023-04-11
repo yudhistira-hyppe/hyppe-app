@@ -66,6 +66,8 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> with SingleTicker
     super.deactivate();
   }
 
+
+
   @override
   void dispose() {
     transformationController.dispose();
@@ -84,9 +86,9 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> with SingleTicker
         context.read<LikeNotifier>().likePost(context, widget.contentData);
       },
       child: InteractiveViewer(
-        clipBehavior: Clip.hardEdge,
+        clipBehavior: Clip.none,
         transformationController: transformationController,
-        panEnabled: true,
+        panEnabled: false,
         minScale: minScale,
         maxScale: maxScale,
         onInteractionEnd: (details){
