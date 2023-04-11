@@ -51,6 +51,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     ..eventType = InteractiveEventType.following
     ..withEvents = [InteractiveEvent.initial, InteractiveEvent.accept, InteractiveEvent.request];
 
+
   ContentData? _data;
   List<ContentData>? _listData;
   int contentIndex = 0;
@@ -202,6 +203,10 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     _isZooming = state;
     notifyListeners();
   }
+   setIsZooming(bool state){
+    _isZooming = state;
+    notifyListeners();
+   }
 
   void onUpdate() => notifyListeners();
 

@@ -24,7 +24,8 @@ class SlidedPicDetail extends StatefulWidget {
   State<SlidedPicDetail> createState() => _SlidedPicDetailState();
 }
 
-class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayoutMixin, WidgetsBindingObserver {
+class _SlidedPicDetailState extends State<SlidedPicDetail>
+    with AfterFirstLayoutMixin, WidgetsBindingObserver {
   final _notifier = SlidedPicDetailNotifier();
   late PageController _pageController;
   late PageController _mainPageController;
@@ -44,8 +45,9 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
     WidgetsBinding.instance.addObserver(this);
 
     _notifier.setMainIndex(0);
-    _pageController = PageController(initialPage: widget.arguments.index.toInt());
-    _pageController.addListener((){
+    _pageController =
+        PageController(initialPage: widget.arguments.index.toInt(), viewportFraction: 1);
+    _pageController.addListener(() {
       if (isOnPageTurning &&
           _pageController.page == _pageController.page?.roundToDouble()) {
         _notifier.currentPage = _pageController.page?.toInt();
@@ -53,8 +55,12 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
           // current = _controller.page.toInt();
           isOnPageTurning = false;
         });
-      } else if (!isOnPageTurning && _notifier.currentPage?.toDouble() != _pageController.page) {
-        if (((_notifier.currentPage?.toDouble() ?? 0) - (_pageController.page ?? 0)).abs() > 0.1) {
+      } else if (!isOnPageTurning &&
+          _notifier.currentPage?.toDouble() != _pageController.page) {
+        if (((_notifier.currentPage?.toDouble() ?? 0) -
+                    (_pageController.page ?? 0))
+                .abs() >
+            0.1) {
           setState(() {
             isOnPageTurning = true;
           });
@@ -64,20 +70,27 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
     _mainPageController = PageController(initialPage: 0);
     _mainPageController.addListener(() {
       if (isOnPageTurning &&
-          _mainPageController.page == _mainPageController.page?.roundToDouble()) {
+          _mainPageController.page ==
+              _mainPageController.page?.roundToDouble()) {
         _notifier.currentPage = _mainPageController.page?.toInt();
         setState(() {
           // current = _controller.page.toInt();
           isOnPageTurning = false;
         });
-      } else if (!isOnPageTurning && _notifier.currentPage?.toDouble() != _mainPageController.page) {
-        if (((_notifier.currentPage?.toDouble() ?? 0) - (_mainPageController.page ?? 0)).abs() > 0.1) {
+      } else if (!isOnPageTurning &&
+          _notifier.currentPage?.toDouble() != _mainPageController.page) {
+        if (((_notifier.currentPage?.toDouble() ?? 0) -
+                    (_mainPageController.page ?? 0))
+                .abs() >
+            0.1) {
           setState(() {
             isOnPageTurning = true;
           });
         }
       }
     });
+
+
     super.initState();
   }
 
@@ -93,6 +106,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
   void afterFirstLayout(BuildContext context) {
     _notifier.initState(context, widget.arguments);
     final notif = context.read<SlidedPicDetailNotifier>();
+    notif.isZooming = true;
     notif.currentIndex = -1;
   }
 
@@ -101,6 +115,8 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
     _pageController.dispose();
     super.dispose();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -114,18 +130,42 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
         },
         child: GestureDetector(
           // onDoubleTap: () => resetZooming(),
-          child: Scaffold(body: Consumer<SlidedPicDetailNotifier>(builder: (context, notifier, child) {
+          // onScaleStart: (details) {
+          //   print('onScaleStart Detail: $details');
+          //   final notifier = context.read<SlidedPicDetailNotifier>();
+          //   notifier.isZooming = true;
+          // },
+          // onScaleUpdate: (details) {
+          //   print('onScaleUpdate Detail: $details');
+          //   final notifier = context.read<SlidedPicDetailNotifier>();
+          //   notifier.isZooming = true;
+          // },
+          // onScaleEnd: (details) {
+          //   print('onScaleEnd Detail: $details');
+          //   final notifier = context.read<SlidedPicDetailNotifier>();
+          //   notifier.isZooming = false;
+          // },
+          // onPanUpdate: (detail){
+          //   final notifier = context.read<SlidedPicDetailNotifier>();
+          //   notifier.isZooming = false;
+          // },
+          child: Scaffold(body: Consumer<SlidedPicDetailNotifier>(
+              builder: (context, notifier, child) {
             return notifier.listData != null
                 ? PageView.builder(
-                physics: notifier.isZooming ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
+                    physics: notifier.isZooming
+                        ? const NeverScrollableScrollPhysics()
+                        : const ClampingScrollPhysics(),
                     controller: _pageController,
                     itemCount: notifier.listData?.length ?? 0,
                     onPageChanged: (value) async {
                       notifier.nextPlaylistPic(context, value);
                       // notifier.initAdsVideo(context);
                       final detailNotifier = context.read<PicDetailNotifier>();
-                      print('onPageChanged Image : $value : ${notifier.listData?.length}');
-                      print('check index hit : my index  ${notifier.currentIndex}: $value');
+                      print(
+                          'onPageChanged Image : $value : ${notifier.listData?.length}');
+                      print(
+                          'check index hit : my index  ${notifier.currentIndex}: $value');
                       notifier.currentIndex = value;
                       // notifier.isLoadMusic = true;
                       notifier.mainIndex = 0;
@@ -133,41 +173,47 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                     },
                     itemBuilder: (context, indexRoot) {
                       return PageView.builder(
-                          physics: notifier.isZooming ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
+                          physics: notifier.isZooming
+                              ? const NeverScrollableScrollPhysics()
+                              : const ClampingScrollPhysics(),
                           controller: _mainPageController,
                           itemCount: 2,
                           scrollDirection: Axis.vertical,
                           onPageChanged: (verticalIndex) {
                             // notifier.urlMusic = '';
-                            final detailNotifier = context.read<PicDetailNotifier>();
+                            final detailNotifier =
+                                context.read<PicDetailNotifier>();
                             notifier.mainIndex = verticalIndex;
                             notifier.isLoadMusic = true;
                             // detailNotifier.isLoadMusic = true;
-                            if(verticalIndex != 0){
+                            if (verticalIndex != 0) {
                               notifier.isLoadMusic = true;
-                            }else{
-                              final detailNotifier = context.read<PicDetailNotifier>();
+                            } else {
+                              final detailNotifier =
+                                  context.read<PicDetailNotifier>();
                               // detailNotifier.isLoadMusic = true;
-
                             }
-
                           },
                           itemBuilder: (context, indexPage) {
                             final data = notifier.listData?[indexRoot];
                             if (data != null) {
-                              print('apsaraMusic Slides : ${data.music?.apsaraMusic}');
+                              print(
+                                  'apsaraMusic Slides : ${data.music?.apsaraMusic}');
                               return indexPage == 0
                                   ? SlidePicScreen(
-                                      data: notifier.listData?[indexRoot] ?? ContentData(),
+                                      data: notifier.listData?[indexRoot] ??
+                                          ContentData(),
                                       // transformationController: transformationController,
                                       // resetZooming: resetZooming,
                                       rootIndex: indexRoot,
-                                isOnPageTurning: isOnPageTurning,
+                                      isOnPageTurning: isOnPageTurning,
                                     )
                                   : PicDetailScreen(
                                       arguments: PicDetailScreenArgument(
-                                      picData: data,
-                                    ), isOnPageTurning: isOnPageTurning,);
+                                        picData: data,
+                                      ),
+                                      isOnPageTurning: isOnPageTurning,
+                                    );
                             } else {
                               return Stack(
                                 children: [
