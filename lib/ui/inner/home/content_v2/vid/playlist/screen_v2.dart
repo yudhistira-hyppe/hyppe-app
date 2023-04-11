@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -36,7 +38,7 @@ import '../../pic/playlist/notifier.dart';
 import '../player/player_page.dart';
 import '../widget/tag_label.dart';
 import 'notifier.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 
 class NewVideoDetailScreen extends StatefulWidget {
   final VidDetailScreenArgument arguments;
@@ -82,12 +84,20 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
     var height;
     if (orientation == Orientation.portrait) {
       if (isFullPotrait) {
-        height = MediaQuery.of(context).size.height;
+        if (Platform.isIOS) {
+          height = MediaQuery.of(context).size.height * 0.9;
+        } else {
+          height = MediaQuery.of(context).size.height;
+        }
       } else {
         height = width * 9.0 / 16.0;
       }
     } else {
-      height = MediaQuery.of(context).size.height;
+      if (Platform.isIOS) {
+        height = MediaQuery.of(context).size.height * 0.95;
+      } else {
+        height = MediaQuery.of(context).size.height;
+      }
     }
     return Consumer2<VidDetailNotifier, LikeNotifier>(builder: (context, notifier, like, _) {
       final data = notifier.data;
@@ -100,7 +110,9 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
       return WillPopScope(
         onWillPop: notifier.onPop,
         child: Scaffold(
-          backgroundColor: context.getColorScheme().surface,
+          resizeToAvoidBottomInset: false,
+          backgroundColor: orientation == Orientation.landscape || isFullPotrait ? Colors.transparent : Colors.white,
+          // backgroundColor: context.getColorScheme().surface,
           body: data != null
               ? notifier.loadDetail
                   ? SafeArea(child: _contentDetailShimmer(context))
@@ -305,7 +317,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                   ? SizedBox(
                       width: 50,
                       child: CustomTextButton(
-                        onPressed: () async{
+                        onPressed: () async {
                           globalAliPlayer?.pause();
                           await ShowBottomSheet().onReportContent(
                             context,
@@ -332,7 +344,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                           if (globalAudioPlayer != null) {
                             globalAudioPlayer!.pause();
                           }
-                          if(globalAliPlayer != null){
+                          if (globalAliPlayer != null) {
                             globalAliPlayer?.pause();
                           }
                           await ShowBottomSheet().onShowOptionContent(
@@ -347,7 +359,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                             globalAudioPlayer!.seek(Duration.zero);
                             globalAudioPlayer!.resume();
                           }
-                          if(globalAliPlayer != null){
+                          if (globalAliPlayer != null) {
                             globalAliPlayer?.play();
                           }
                         },
@@ -372,15 +384,20 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              CustomTextWidget(
-                textToDisplay: System().formatterNumber(data.insight?.views),
-                textStyle: context.getTextTheme().overline?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
-              ),
-              twoPx,
-              CustomTextWidget(textToDisplay: '${notifier.language.views}', textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary)),
-            ],
+          GestureDetector(
+            onTap: () {
+              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID, 'VIEW', 'Viewer', data?.email);
+            },
+            child: Row(
+              children: [
+                CustomTextWidget(
+                  textToDisplay: System().formatterNumber(data.insight?.views),
+                  textStyle: context.getTextTheme().overline?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
+                ),
+                twoPx,
+                CustomTextWidget(textToDisplay: '${notifier.language.views}', textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary)),
+              ],
+            ),
           ),
           sixteenPx,
           Row(

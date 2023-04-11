@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
@@ -64,7 +66,7 @@ class _MainScreenState extends State<MainScreen> {
           // floatingActionButtonLocation: FloatingActionButtonLocation.miniStartDocked,
           bottomNavigationBar: BottomAppBar(
             color: kHyppeLightSurface,
-            height: 100,
+            height: Platform.isIOS ? 135 : 100,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
