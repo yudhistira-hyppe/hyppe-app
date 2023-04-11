@@ -130,4 +130,6 @@ class Routes {
   static const String message = '/message';
 
   static const String webView = '/web-view';
+
+  static const String testImage = '/test-image';
 }

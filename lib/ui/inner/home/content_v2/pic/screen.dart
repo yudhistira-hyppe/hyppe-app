@@ -566,6 +566,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           //     color: Colors.red,
           //   ),
           // ),
+          GestureDetector(
+            onTap: () {
+              Routing().move(Routes.testImage);
+            },
+            child: Text('hahahah'),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -695,28 +701,42 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 ),
                 child: Stack(
                   children: [
-                    CustomBaseCacheImage(
-                      memCacheWidth: 100,
-                      memCacheHeight: 100,
-                      widthPlaceHolder: 80,
-                      heightPlaceHolder: 80,
-                      imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
-                      imageBuilder: (context, imageProvider) => ClipRRect(
-                        borderRadius: BorderRadius.circular(20), // Image border
-                        child: notifier.pic?[index].reportedStatus == 'BLURRED'
-                            ? ImageFiltered(
-                                imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                child: Image(
+                    Center(
+                      child: CustomBaseCacheImage(
+                        memCacheWidth: 100,
+                        memCacheHeight: 100,
+                        widthPlaceHolder: 80,
+                        heightPlaceHolder: 80,
+                        imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
+                        imageBuilder: (context, imageProvider) => ClipRRect(
+                          borderRadius: BorderRadius.circular(20), // Image border
+                          child: notifier.pic?[index].reportedStatus == 'BLURRED'
+                              ? ImageFiltered(
+                                  imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                  child: Image(
+                                    image: imageProvider,
+                                  ),
+                                )
+                              : Image(
                                   image: imageProvider,
                                 ),
-                              )
-                            : Image(
-                                image: imageProvider,
+                        ),
+                        errorWidget: (context, url, error) {
+                          return Container(
+                            // const EdgeInsets.symmetric(horizontal: 4.5),
+                            // height: 500,
+                            decoration: BoxDecoration(
+                              image: const DecorationImage(
+                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                fit: BoxFit.cover,
                               ),
-                      ),
-                      errorWidget: (context, url, error) {
-                        return Container(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          );
+                        },
+                        emptyWidget: Container(
                           // const EdgeInsets.symmetric(horizontal: 4.5),
+
                           // height: 500,
                           decoration: BoxDecoration(
                             image: const DecorationImage(
@@ -725,18 +745,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             ),
                             borderRadius: BorderRadius.circular(8.0),
                           ),
-                        );
-                      },
-                      emptyWidget: Container(
-                        // const EdgeInsets.symmetric(horizontal: 4.5),
-
-                        // height: 500,
-                        decoration: BoxDecoration(
-                          image: const DecorationImage(
-                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
                     ),
