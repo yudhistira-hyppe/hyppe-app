@@ -130,21 +130,21 @@ class _SlidedPicDetailState extends State<SlidedPicDetail>
         },
         child: GestureDetector(
           // onDoubleTap: () => resetZooming(),
-          // onScaleStart: (details) {
-          //   print('onScaleStart Detail: $details');
-          //   final notifier = context.read<SlidedPicDetailNotifier>();
-          //   notifier.isZooming = true;
-          // },
-          // onScaleUpdate: (details) {
-          //   print('onScaleUpdate Detail: $details');
-          //   final notifier = context.read<SlidedPicDetailNotifier>();
-          //   notifier.isZooming = true;
-          // },
-          // onScaleEnd: (details) {
-          //   print('onScaleEnd Detail: $details');
-          //   final notifier = context.read<SlidedPicDetailNotifier>();
-          //   notifier.isZooming = false;
-          // },
+          onScaleStart: (details) {
+            print('onScaleStart Detail: $details');
+            final notifier = context.read<SlidedPicDetailNotifier>();
+            notifier.isZooming = true;
+          },
+          onScaleUpdate: (details) {
+            print('onScaleUpdate Detail: $details');
+            final notifier = context.read<SlidedPicDetailNotifier>();
+            notifier.isZooming = true;
+          },
+          onScaleEnd: (details) {
+            print('onScaleEnd Detail: $details');
+            final notifier = context.read<SlidedPicDetailNotifier>();
+            notifier.isZooming = false;
+          },
           // onPanUpdate: (detail){
           //   final notifier = context.read<SlidedPicDetailNotifier>();
           //   notifier.isZooming = false;
