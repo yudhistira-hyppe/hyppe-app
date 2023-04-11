@@ -38,7 +38,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
-  // final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
 
   late TabController _tabController;
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   void didPopNext() {
     Future.delayed(const Duration(milliseconds: 500), () async {
       isHomeScreen = true;
-      // globalScroller = _scrollController;
+      globalScroller = _scrollController;
       'didPopNext isOnHomeScreen $isHomeScreen'.logger();
       context.read<ReportNotifier>().inPosition = contentPosition.home;
       if (isHomeScreen) {
@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   @override
   void didPushNext() {
     isHomeScreen = widget.canShowAds;
-    // globalScroller = _scrollController;
+    globalScroller = _scrollController;
     'didPushNext isOnHomeScreen $isHomeScreen'.logger();
     super.didPushNext();
   }
@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     isHomeScreen = widget.canShowAds;
     'initState isOnHomeScreen $isHomeScreen'.logger();
     _tabController = TabController(length: 3, vsync: this);
-    // globalScroller = _scrollController;
+    globalScroller = _scrollController;
 
     offset = 0;
     Future.delayed(Duration.zero, () {
@@ -199,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
               },
               child: NestedScrollView(
                 key: globalKey,
-                // controller: _scrollController,
+                controller: _scrollController,
                 physics: const NeverScrollableScrollPhysics(),
                 headerSliverBuilder: (context, bool innerBoxIsScrolled) {
                   return [

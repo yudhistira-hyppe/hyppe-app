@@ -566,12 +566,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           //     color: Colors.red,
           //   ),
           // ),
-          GestureDetector(
-            onTap: () {
-              Routing().move(Routes.testImage);
-            },
-            child: Text('hahahah'),
-          ),
+          // GestureDetector(
+          //   onTap: () {
+          //     Routing().move(Routes.testImage);
+          //   },
+          //   child: Text('hahahah'),
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -719,6 +719,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 )
                               : Image(
                                   image: imageProvider,
+                                  fit: BoxFit.fitHeight,
+                                  width: SizeConfig.screenWidth,
                                 ),
                         ),
                         errorWidget: (context, url, error) {
@@ -793,6 +795,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                       )
                                     : Image(
                                         image: imageProvider,
+                                        fit: BoxFit.fitHeight,
+                                        width: SizeConfig.screenWidth,
                                       ),
                               ),
                               emptyWidget: Container(
