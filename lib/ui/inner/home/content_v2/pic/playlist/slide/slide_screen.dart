@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/gestures.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -63,6 +62,22 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
       }
     });
     _mainPageController = PageController(initialPage: 0);
+    _mainPageController.addListener(() {
+      if (isOnPageTurning &&
+          _mainPageController.page == _mainPageController.page?.roundToDouble()) {
+        _notifier.currentPage = _mainPageController.page?.toInt();
+        setState(() {
+          // current = _controller.page.toInt();
+          isOnPageTurning = false;
+        });
+      } else if (!isOnPageTurning && _notifier.currentPage?.toDouble() != _mainPageController.page) {
+        if (((_notifier.currentPage?.toDouble() ?? 0) - (_mainPageController.page ?? 0)).abs() > 0.1) {
+          setState(() {
+            isOnPageTurning = true;
+          });
+        }
+      }
+    });
     super.initState();
   }
 
@@ -112,9 +127,9 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                       print('onPageChanged Image : $value : ${notifier.listData?.length}');
                       print('check index hit : my index  ${notifier.currentIndex}: $value');
                       notifier.currentIndex = value;
-                      notifier.isLoadMusic = true;
+                      // notifier.isLoadMusic = true;
                       notifier.mainIndex = 0;
-                      detailNotifier.isLoadMusic = true;
+                      // detailNotifier.isLoadMusic = true;
                     },
                     itemBuilder: (context, indexRoot) {
                       return PageView.builder(
@@ -127,14 +142,15 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                             final detailNotifier = context.read<PicDetailNotifier>();
                             notifier.mainIndex = verticalIndex;
                             notifier.isLoadMusic = true;
-                            detailNotifier.isLoadMusic = true;
-                            // if(verticalIndex != 0){
-                            //   notifier.isLoadMusic = true;
-                            // }else{
-                            //   final detailNotifier = context.read<PicDetailNotifier>();
-                            //   detailNotifier.isLoadMusic = true;
-                            //
-                            // }
+                            // detailNotifier.isLoadMusic = true;
+                            if(verticalIndex != 0){
+                              notifier.isLoadMusic = true;
+                            }else{
+                              final detailNotifier = context.read<PicDetailNotifier>();
+                              // detailNotifier.isLoadMusic = true;
+
+                            }
+
                           },
                           itemBuilder: (context, indexPage) {
                             final data = notifier.listData?[indexRoot];
@@ -151,7 +167,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                   : PicDetailScreen(
                                       arguments: PicDetailScreenArgument(
                                       picData: data,
-                                    ));
+                                    ), isOnPageTurning: isOnPageTurning,);
                             } else {
                               return Stack(
                                 children: [

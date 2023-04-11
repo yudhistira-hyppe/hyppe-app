@@ -413,7 +413,7 @@ class _AdsScreenState extends State<AdsScreen> {
                     GestureDetector(
                       onTap: () {
                         // _storyController.pause();
-                        ShowBottomSheet.onReportContent(
+                        ShowBottomSheet().onReportContent(
                           context,
                           adsData: widget.argument.data,
                           type: adsPopUp,

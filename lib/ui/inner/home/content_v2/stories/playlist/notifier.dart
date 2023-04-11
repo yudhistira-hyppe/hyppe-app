@@ -821,6 +821,6 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   void reportContent(BuildContext context, ContentData data, {StoryController? storyController}) {
     storyController?.pause();
-    ShowBottomSheet.onReportContent(context, postData: data, type: hyppeStory);
+    ShowBottomSheet().onReportContent(context, postData: data, type: hyppeStory);
   }
 }

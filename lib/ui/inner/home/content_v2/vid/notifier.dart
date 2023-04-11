@@ -200,7 +200,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
 
   void reportContent(BuildContext context, ContentData data) {
     context.read<ReportNotifier>().contentData = data;
-    ShowBottomSheet.onReportContent(context, postData: data, type: hyppeVid, inDetail: false);
+    ShowBottomSheet().onReportContent(context, postData: data, type: hyppeVid, inDetail: false);
   }
 
   void showUserTag(BuildContext context, index, postId) {

@@ -302,13 +302,17 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                   ? SizedBox(
                       width: 50,
                       child: CustomTextButton(
-                        onPressed: () => ShowBottomSheet.onReportContent(
-                          context,
-                          postData: data,
-                          type: hyppePic,
-                          adsData: null,
-                          onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
-                        ),
+                        onPressed: () async{
+                          globalAliPlayer?.pause();
+                          await ShowBottomSheet().onReportContent(
+                            context,
+                            postData: data,
+                            type: hyppePic,
+                            adsData: null,
+                            onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
+                          );
+                          globalAliPlayer?.play();
+                        },
                         child: const CustomIconWidget(
                           defaultColor: false,
                           iconData: '${AssetPath.vectorPath}more.svg',
@@ -325,6 +329,9 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                           if (globalAudioPlayer != null) {
                             globalAudioPlayer!.pause();
                           }
+                          if(globalAliPlayer != null){
+                            globalAliPlayer?.pause();
+                          }
                           await ShowBottomSheet().onShowOptionContent(
                             context,
                             onDetail: true,
@@ -336,6 +343,9 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                           if (globalAudioPlayer != null) {
                             globalAudioPlayer!.seek(Duration.zero);
                             globalAudioPlayer!.resume();
+                          }
+                          if(globalAliPlayer != null){
+                            globalAliPlayer?.play();
                           }
                         },
                         child: const CustomIconWidget(

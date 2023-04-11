@@ -91,7 +91,7 @@ class VidDetailTop extends StatelessWidget {
               ? SizedBox(
                   width: 50,
                   child: CustomTextButton(
-                    onPressed: () => ShowBottomSheet.onReportContent(
+                    onPressed: () => ShowBottomSheet().onReportContent(
                       context,
                       postData: data,
                       type: hyppePic,

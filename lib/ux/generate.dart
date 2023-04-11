@@ -196,7 +196,7 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const UserAgreementScreen());
 
       case Routes.picDetail:
-        return MaterialPageRoute(builder: (_) => PicDetailScreen(arguments: settings.arguments as PicDetailScreenArgument));
+        return MaterialPageRoute(builder: (_) => PicDetailScreen(arguments: settings.arguments as PicDetailScreenArgument, isOnPageTurning: true));
       case Routes.picDetailPreview:
         return MaterialPageRoute(builder: (_) => PicDetail(arguments: settings.arguments as ContentData));
       case Routes.picSlideDetailPreview:

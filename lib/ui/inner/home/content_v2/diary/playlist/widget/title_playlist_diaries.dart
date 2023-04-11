@@ -23,6 +23,8 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:story_view/story_view.dart';
 
+import '../../../../../../../app.dart';
+
 class TitlePlaylistDiaries extends StatefulWidget {
   final ContentData? data;
   final StoryController? storyController;
@@ -136,6 +138,9 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                 child: GestureDetector(
                                   onTap: () async {
                                     // widget.storyController.pause();
+                                    if(globalAliPlayer != null){
+                                      globalAliPlayer?.pause();
+                                    }
                                     SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                                     await ShowBottomSheet().onShowOptionContent(
                                       context,
@@ -146,6 +151,9 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                       onUpdate: () => context.read<DiariesPlaylistNotifier>().onUpdate(),
                                     );
                                     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                                    if(globalAliPlayer != null){
+                                      globalAliPlayer?.play();
+                                    }
                                   },
                                   child: const CustomIconWidget(
                                     defaultColor: false,
@@ -158,9 +166,12 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                         data?.email != SharedPreference().readStorage(SpKeys.email)
                             ? CustomBalloonWidget(
                                 child: GestureDetector(
-                                  onTap: () {
+                                  onTap: () async{
                                     // widget.storyController.pause();
-                                    ShowBottomSheet.onReportContent(
+                                    if(globalAliPlayer != null){
+                                      globalAliPlayer?.pause();
+                                    }
+                                    await ShowBottomSheet().onReportContent(
                                       context,
                                       postData: data,
                                       type: hyppeDiary,
@@ -171,6 +182,9 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                         // widget.storyController.pause();
                                       },
                                     );
+                                    if(globalAliPlayer != null){
+                                      globalAliPlayer?.play();
+                                    }
                                     // widget.storyController.pause();
                                   },
                                   child: const CustomIconWidget(

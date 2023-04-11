@@ -705,7 +705,7 @@ class ShowBottomSheet {
     return _result ?? false;
   }
 
-  static onReportContent(
+  Future onReportContent(
     _, {
     ContentData? postData,
     AdsData? adsData,
@@ -714,8 +714,8 @@ class ShowBottomSheet {
     Function? onUpdate,
     bool? inDetail,
     FlutterAliplayer? fAliplayer,
-  }) {
-    showModalBottomSheet(
+  }) async {
+    await showModalBottomSheet(
       context: _,
       builder: (builder) {
         return Padding(

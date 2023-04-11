@@ -101,7 +101,7 @@ class ContentItem extends StatelessWidget {
                                 ),
                                 data?.email != SharedPreference().readStorage(SpKeys.email)
                                     ? GestureDetector(
-                                        onTap: () => ShowBottomSheet.onReportContent(
+                                        onTap: () => ShowBottomSheet().onReportContent(
                                               context,
                                               postData: data,
                                               type: hyppePic,

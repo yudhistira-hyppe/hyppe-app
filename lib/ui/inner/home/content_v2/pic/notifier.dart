@@ -199,6 +199,6 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     if (fAliplayer != null) {
       fAliplayer.pause();
     }
-    ShowBottomSheet.onReportContent(context, postData: data, type: hyppePic, inDetail: false, fAliplayer: fAliplayer);
+    ShowBottomSheet().onReportContent(context, postData: data, type: hyppePic, inDetail: false, fAliplayer: fAliplayer);
   }
 }

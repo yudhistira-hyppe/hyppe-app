@@ -92,7 +92,7 @@ class VidSeeAllNotifier with ChangeNotifier {
   }
 
   void reportContent(BuildContext context, ContentData data) {
-    ShowBottomSheet.onReportContent(context, postData: data, type: hyppeVid);
+    ShowBottomSheet().onReportContent(context, postData: data, type: hyppeVid);
   }
 
   void showUserTag(BuildContext context, index) {

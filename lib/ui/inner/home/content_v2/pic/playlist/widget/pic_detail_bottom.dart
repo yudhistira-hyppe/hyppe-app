@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -116,14 +117,12 @@ class PicDetailBottom extends StatelessWidget {
             ),
             eightPx,
             if (data?.music?.musicTitle != null)
-              notifier.preventMusic
-                  ? const SizedBox.shrink()
-                  : notifier.isLoadMusic
-                      ? LoadingDetailMusicScreen(apsaraMusic: data!.music!.apsaraMusic ?? '')
-                      : MusicStatusDetail(
-                          music: data!.music!,
-                          urlMusic: notifier.urlMusic,
-                        ),
+              notifier.isLoadMusic
+                  ? LoadingDetailMusicScreen(apsaraMusic: data!.music!.apsaraMusic ?? '')
+                  : MusicStatusDetail(
+                music: data!.music!,
+                urlMusic: notifier.urlMusic,
+              ),
             if (data?.music?.musicTitle != null) eightPx,
             data != null
                 ? Container(
@@ -241,9 +240,11 @@ class PicDetailBottom extends StatelessWidget {
                 '${AssetPath.vectorPath}cart.svg',
                 value2.translate.buy ?? 'buy',
                 () async {
-                  value.preventMusic = true;
+                  // value.preventMusic = true;
+                  globalAudioPlayer?.pause();
                   await ShowBottomSheet.onBuyContent(context, data: data);
-                  value.preventMusic = false;
+                  globalAudioPlayer?.resume();
+                  // value.preventMusic = false;
                 },
               ),
 

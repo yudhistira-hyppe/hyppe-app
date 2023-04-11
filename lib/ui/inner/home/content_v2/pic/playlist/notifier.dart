@@ -44,8 +44,8 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   StatusFollowing _statusFollowing = StatusFollowing.none;
   bool _isLoadMusic = true;
   bool get isLoadMusic => _isLoadMusic;
-  bool _preventMusic = false;
-  bool get preventMusic => _preventMusic;
+  // bool _preventMusic = false;
+  // bool get preventMusic => _preventMusic;
   String _urlMusic = '';
   String get urlMusic => _urlMusic;
 
@@ -64,10 +64,10 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     _isLoadMusic = state;
   }
 
-  set preventMusic(bool state) {
-    _preventMusic = state;
-    notifyListeners();
-  }
+  // set preventMusic(bool state) {
+  //   _preventMusic = state;
+  //   notifyListeners();
+  // }
 
   set urlMusic(String val) {
     _urlMusic = val;
@@ -121,12 +121,15 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
       } else {
         throw 'apsaramusic is empty';
       }
+      isLoadMusic = false;
     } catch (e) {
+      isLoadMusic = false;
       "Error Init Video $e".logger();
     } finally {
-      Future.delayed(const Duration(milliseconds: 400), () {
-        isLoadMusic = false;
-      });
+
+      // Future.delayed(const Duration(milliseconds: 400), () {
+      //   isLoadMusic = false;
+      // });
     }
   }
 
