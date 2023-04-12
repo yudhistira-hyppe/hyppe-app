@@ -25,7 +25,7 @@ import 'firebase_options.dart';
 final InAppLocalhostServer localhostServer = InAppLocalhostServer();
 final GlobalKey<ScaffoldState> materialAppKey = GlobalKey<ScaffoldState>();
 AudioPlayer? globalAudioPlayer;
-ScrollController? globalScroller;
+// ScrollController? globalScroller;
 FlutterAliplayer? globalAliPlayer;
 final globalDB = DatabaseHelper();
 bool isHomeScreen = false;
@@ -34,7 +34,8 @@ bool isFromSplash = false;
 void disposeGlobalAudio() async {
   try {
     await globalAudioPlayer!.stop();
-    await globalAudioPlayer!.dispose();
+    // await globalAudioPlayer!.dispose();
+    globalAudioPlayer = null;
   } catch (e) {
     'globalAudioPlayer error : $e '.logger();
   }

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -15,6 +14,7 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +37,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
-  final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
-  final ScrollController _scrollController = ScrollController();
+  // final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
 
   late TabController _tabController;
@@ -66,7 +65,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   void didPopNext() {
     Future.delayed(const Duration(milliseconds: 500), () async {
       isHomeScreen = true;
-      globalScroller = _scrollController;
       'didPopNext isOnHomeScreen $isHomeScreen'.logger();
       context.read<ReportNotifier>().inPosition = contentPosition.home;
       if (isHomeScreen) {
@@ -84,7 +82,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   @override
   void didPushNext() {
     isHomeScreen = widget.canShowAds;
-    globalScroller = _scrollController;
     'didPushNext isOnHomeScreen $isHomeScreen'.logger();
     super.didPushNext();
   }
@@ -98,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   @override
   void deactivate() {
     isHomeScreen = false;
-    globalScroller = null;
+    // globalScroller = null;
     'deactivate isOnHomeScreen $isHomeScreen'.logger();
     super.deactivate();
   }
@@ -114,7 +111,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     isHomeScreen = widget.canShowAds;
     'initState isOnHomeScreen $isHomeScreen'.logger();
     _tabController = TabController(length: 3, vsync: this);
-    globalScroller = _scrollController;
 
     offset = 0;
     Future.delayed(Duration.zero, () {
@@ -138,9 +134,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         }
       });
 
-      _scrollController.addListener(() {
+      context.read<MainNotifier>().scrollController.addListener(() {
         setState(() {
-          offset = _scrollController.offset;
+          offset = context.read<MainNotifier>().scrollController.offset;
         });
       });
       context.read<ReportNotifier>().inPosition = contentPosition.home;
@@ -189,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
               },
               child: NestedScrollView(
                 key: globalKey,
-                controller: _scrollController,
+                controller: context.read<MainNotifier>().scrollController,
                 physics: const BouncingScrollPhysics(),
                 headerSliverBuilder: (context, bool innerBoxIsScrolled) {
                   return [

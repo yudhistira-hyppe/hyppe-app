@@ -185,13 +185,13 @@ class _SlidedPicDetailState extends State<SlidedPicDetail>
                                 context.read<PicDetailNotifier>();
                             notifier.mainIndex = verticalIndex;
                             notifier.isLoadMusic = true;
-                            // detailNotifier.isLoadMusic = true;
+                            detailNotifier.isLoadMusic = true;
                             if (verticalIndex != 0) {
                               notifier.isLoadMusic = true;
                             } else {
                               final detailNotifier =
                                   context.read<PicDetailNotifier>();
-                              // detailNotifier.isLoadMusic = true;
+                              detailNotifier.isLoadMusic = true;
                             }
                           },
                           itemBuilder: (context, indexPage) {
