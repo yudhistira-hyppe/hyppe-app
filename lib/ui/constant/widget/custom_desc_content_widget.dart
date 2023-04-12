@@ -247,7 +247,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
             descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
             tempDesc = '';
           }
-          print('hit prepare username: ${splitDesc[i].substring(0, 1)} , ${splitDesc[i].substring(1, splitDesc[i].length)}');
+          // print('hit prepare username: ${splitDesc[i].substring(0, 1)} , ${splitDesc[i].substring(1, splitDesc[i].length)}');
           descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
         } else if (firstChar == '#') {
           if (tempDesc.isNotEmpty) {

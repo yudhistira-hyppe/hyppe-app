@@ -128,6 +128,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       }
 
       globalKey.currentState?.innerController.addListener(() {
+        setState(() {
+          offset = globalKey.currentState?.innerController.position.pixels ?? 0;
+        });
         if ((globalKey.currentState?.innerController.position.pixels ?? 0) >= (globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
             !(globalKey.currentState?.innerController.position.outOfRange ?? true)) {
           notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);
@@ -151,7 +154,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     'ini iniststate home'.logger();
   }
 
-  void lagiRefresh() {}
+  bool isZoom = false;
+
+  void zoom() {
+    setState(() {
+      isZoom = !isZoom;
+      print("*************** $isZoom");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,54 +196,57 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
               child: NestedScrollView(
                 key: globalKey,
                 controller: context.read<MainNotifier>().scrollController,
-                physics: const BouncingScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 headerSliverBuilder: (context, bool innerBoxIsScrolled) {
                   return [
-                    SliverList(
-                      delegate: SliverChildListDelegate([
-                        const ProcessUploadComponent(),
-                        sixPx,
-                        const HyppePreviewStories(),
-                        sixPx,
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          color: kHyppeLightSurface,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(24),
-                              color: kHyppeLightButtonText,
-                            ),
-                            child: TabBar(
-                              controller: _tabController,
-                              indicator: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  25.0,
-                                ),
-                                color: kHyppePrimary,
+                    SliverOverlapAbsorber(
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate([
+                          const ProcessUploadComponent(),
+                          sixPx,
+                          const HyppePreviewStories(),
+                          sixPx,
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            color: kHyppeLightSurface,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(24),
+                                color: kHyppeLightButtonText,
                               ),
-                              labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                              labelColor: kHyppeLightButtonText,
-                              unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                              labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                              // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                              unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                              tabs: [
-                                ...List.generate(
-                                  filterList.length,
-                                  (index) => Padding(
-                                    padding: EdgeInsets.all(9),
-                                    child: Text(
-                                      filterList[index]['name'],
-                                      style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                              child: TabBar(
+                                controller: _tabController,
+                                indicator: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    25.0,
+                                  ),
+                                  color: kHyppePrimary,
+                                ),
+                                labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                                labelColor: kHyppeLightButtonText,
+                                unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                                labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                                unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                tabs: [
+                                  ...List.generate(
+                                    filterList.length,
+                                    (index) => Padding(
+                                      padding: EdgeInsets.all(9),
+                                      child: Text(
+                                        filterList[index]['name'],
+                                        style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ]),
+                        ]),
+                      ),
                     ),
 
                     // FilterLanding(),
@@ -243,12 +256,25 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                 },
                 body: TabBarView(
                   controller: _tabController,
+                  physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
                   children: [
                     // Pict
-                    Container(
-                      padding: const EdgeInsets.only(left: 6.0, right: 6),
-                      color: kHyppeLightSurface,
-                      child: const HyppePreviewPic(),
+                    GestureDetector(
+                      // onScaleStart: (details) {
+                      //   print("---------------- tangan ${details.pointerCount}");
+                      //   zoom();
+                      // },
+                      // onScaleEnd: (details) {
+                      //   print("---------------- tangan ${details.pointerCount}");
+                      //   zoom();
+                      // },
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 6.0, right: 6),
+                        color: kHyppeLightSurface,
+                        child: HyppePreviewPic(functionZoomTriger: () {
+                          zoom();
+                        }),
+                      ),
                     ),
                     Container(
                       padding: const EdgeInsets.only(left: 6.0, right: 6),
@@ -270,6 +296,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       ),
     );
   }
+
+  final events = [];
 
   @override
   void afterFirstLayout(BuildContext context) {

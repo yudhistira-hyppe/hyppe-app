@@ -57,6 +57,11 @@ class VerificationIDBloc {
       "kewarganegaraan": kewarganegaraan,
       "jenisKelamin": jenisKelamin,
     });
+    print("hasil kamera");
+    print("hasil kamera ${formData.files.first.value.filename}");
+    print("hasil kamera2 ${formData.files.last.value.filename}");
+    print("hasil kamera2 ${formData.files}");
+    print(formData.fields.map((e) => e).join(','));
 
     setVerificationIDFetch(VerificationIDFetch(VerificationIDState.loading));
     await _repos.reposPost(
@@ -190,6 +195,8 @@ class VerificationIDBloc {
                 ))));
       }
     }
+
+    print(formData.fields.map((e) => e).join(','));
 
     setVerificationIDFetch(VerificationIDFetch(VerificationIDState.loading));
     await _repos.reposPost(

@@ -83,8 +83,7 @@ dependencies:
   webview_flutter: ^4.0.7
 #  preload_page_view: ^0.1.6
   photo_view: ^0.14.0
-
-
+  pinch_zoom: ^1.0.0
 
 
   dynamic_widget: # Dynamic widget builder

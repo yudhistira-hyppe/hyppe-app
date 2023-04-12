@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
@@ -44,14 +45,18 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-// import 'package:photo_view/photo_view.dart';
-
+import 'package:pinch_zoom/pinch_zoom.dart';
 import '../../../../../ux/path.dart';
 import '../../../../constant/entities/report/notifier.dart';
 
 class HyppePreviewPic extends StatefulWidget {
   final ScrollController? scrollController;
-  const HyppePreviewPic({Key? key, this.scrollController}) : super(key: key);
+  final Function functionZoomTriger;
+  const HyppePreviewPic({
+    Key? key,
+    this.scrollController,
+    required this.functionZoomTriger,
+  }) : super(key: key);
 
   @override
   _HyppePreviewPicState createState() => _HyppePreviewPicState();
@@ -59,6 +64,8 @@ class HyppePreviewPic extends StatefulWidget {
 
 class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   FlutterAliplayer? fAliplayer;
+  TransformationController _transformationController = TransformationController();
+
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
@@ -85,6 +92,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   String email = '';
   // String statusKyc = '';
   bool isInPage = true;
+  bool _scroolEnabled = true;
 
   @override
   void initState() {
@@ -527,6 +535,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     );
   }
 
+  var initialControllerValue;
+
   Widget itemPict(PreviewPicNotifier notifier, int index) {
     return Container(
       decoration: BoxDecoration(
@@ -540,6 +550,28 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         children: [
           // Text("$_lastCurIndex"),
           // Text("$_curIdx"),
+          // GestureDetector(
+          //   onScaleStart: (details) {
+          //     widget.functionZoomTriger();
+          //     print("***************** dua jari ***************");
+          //     print(details.pointerCount);
+          //   },
+          //   onScaleEnd: (details) {
+          //     print("***************** satu jari ***************");
+          //   },
+
+          //   child: Container(
+          //     width: 500,
+          //     height: 200,
+          //     color: Colors.red,
+          //   ),
+          // ),
+          // GestureDetector(
+          //   onTap: () {
+          //     Routing().move(Routes.testImage);
+          //   },
+          //   child: Text('hahahah'),
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -617,7 +649,21 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             ],
           ),
           tenPx,
-          // SelectableText((notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}"),
+          // Stack(
+          //   children: [
+          //     Positioned.fill(
+          //       child: InteractiveViewer(
+          //         child: Image.network(
+          //           'https://flutterservice.com/wp-content/uploads/2022/10/3-1.jpg',
+          //           height: 300,
+          //           width: double.infinity,
+          //           fit: BoxFit.cover,
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+
           VisibilityDetector(
             key: Key(index.toString()),
             onVisibilityChanged: (info) {
@@ -673,6 +719,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 )
                               : Image(
                                   image: imageProvider,
+                                  fit: BoxFit.fitHeight,
+                                  width: SizeConfig.screenWidth,
                                 ),
                         ),
                         errorWidget: (context, url, error) {
@@ -723,6 +771,48 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           color: Colors.transparent,
                           width: SizeConfig.screenWidth,
                           height: SizeConfig.screenHeight,
+                          child: PinchZoom(
+                            onZoomStart: () {
+                              widget.functionZoomTriger();
+                            },
+                            onZoomEnd: () {
+                              widget.functionZoomTriger();
+                            },
+                            child: CustomBaseCacheImage(
+                              memCacheWidth: 100,
+                              memCacheHeight: 100,
+                              widthPlaceHolder: 80,
+                              heightPlaceHolder: 80,
+                              imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
+                              imageBuilder: (context, imageProvider) => ClipRRect(
+                                borderRadius: BorderRadius.circular(20), // Image border
+                                child: notifier.pic?[index].reportedStatus == 'BLURRED'
+                                    ? ImageFiltered(
+                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                        child: Image(
+                                          image: imageProvider,
+                                        ),
+                                      )
+                                    : Image(
+                                        image: imageProvider,
+                                        fit: BoxFit.fitHeight,
+                                        width: SizeConfig.screenWidth,
+                                      ),
+                              ),
+                              emptyWidget: Container(
+                                // const EdgeInsets.symmetric(horizontal: 4.5),
+
+                                // height: 500,
+                                decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -1022,6 +1112,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     const Spacer(),
                     GestureDetector(
                       onTap: () {
+                        System().increaseViewCount2(context, data);
                         context.read<ReportNotifier>().seeContent(context, data, hyppePic);
                       },
                       child: Container(
