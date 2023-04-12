@@ -167,9 +167,9 @@ class _SlidedPicDetailState extends State<SlidedPicDetail>
                       print(
                           'check index hit : my index  ${notifier.currentIndex}: $value');
                       notifier.currentIndex = value;
-                      // notifier.isLoadMusic = true;
+                      notifier.isLoadMusic = true;
                       notifier.mainIndex = 0;
-                      // detailNotifier.isLoadMusic = true;
+                      detailNotifier.isLoadMusic = true;
                     },
                     itemBuilder: (context, indexRoot) {
                       return PageView.builder(

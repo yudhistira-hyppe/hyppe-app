@@ -31,12 +31,12 @@ class _LoadingDetailMusicScreenState extends State<LoadingDetailMusicScreen> {
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'LoadingDetailMusicScreen');
     super.initState();
-    // final notifier = context.read<PicDetailNotifier>();
-    // // notifier.urlMusic = '';
-    // if(globalAudioPlayer != null){
-    //   disposeGlobalAudio();
-    // }
-    //
-    // notifier.initMusic(context, widget.apsaraMusic);
+    final notifier = context.read<PicDetailNotifier>();
+    notifier.urlMusic = '';
+    if(globalAudioPlayer != null){
+      disposeGlobalAudio();
+    }
+
+    notifier.initMusic(context, widget.apsaraMusic);
   }
 }

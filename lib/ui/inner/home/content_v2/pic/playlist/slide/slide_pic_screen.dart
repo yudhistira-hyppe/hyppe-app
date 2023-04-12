@@ -522,7 +522,7 @@ class _SlidePicScreenState extends State<SlidePicScreen>
                                   : notifier.isLoadMusic
                                       ? LoadingMusicScreen(
                                           music: data.music!,
-                                          index: widget.rootIndex,
+                                          isOnPageTurning: widget.isOnPageTurning,
                                         )
                                       : Builder(builder: (context) {
                                           final musicPost = notifier.urlMusic;
@@ -534,7 +534,7 @@ class _SlidePicScreenState extends State<SlidePicScreen>
                                           } else {
                                             return LoadingMusicScreen(
                                               music: data.music!,
-                                              index: widget.rootIndex,
+                                              isOnPageTurning: widget.isOnPageTurning,
                                             );
                                           }
                                         })

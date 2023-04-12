@@ -22,6 +22,8 @@ class _BottomDetailState extends State<BottomDetail> {
 
   @override
   void initState() {
+    final notif = context.read<SearchNotifier>();
+    notif.initAllHasNext();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'BottomDetail');
     _scrollController.addListener(() {
       if (_scrollController.offset >=

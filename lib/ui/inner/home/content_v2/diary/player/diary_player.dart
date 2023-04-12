@@ -514,25 +514,48 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
         _lastCurIndex = _curIdx;
       },
       itemBuilder: (context, index) {
-        return Stack(
-          children: [
-            _curIdx == index
-                ? AliPlayerView(
-                    onCreated: onViewPlayerCreated,
-                    x: 0,
-                    y: _playerY,
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                  )
-                : Container(),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              // padding: EdgeInsets.only(bottom: 25.0),
-              child: _buildFillDiary(),
-            ),
-            _buildSingleScreen(index),
-          ],
+        return GestureDetector(
+          onTap: () {
+
+
+          },
+          onDoubleTap: () {
+            final _likeNotifier = context.read<LikeNotifier>();
+            final data = _listData?[_curIdx];
+            if (data != null) {
+              _likeNotifier.likePost(context, data);
+            }
+          },
+          onLongPress: (){
+            if (_isPause) {
+              fAliplayer?.pause();
+            } else {
+              fAliplayer?.play();
+            }
+            setState(() {
+              _isPause = !_isPause;
+            });
+          },
+          child: Stack(
+            children: [
+              _curIdx == index
+                  ? AliPlayerView(
+                      onCreated: onViewPlayerCreated,
+                      x: 0,
+                      y: _playerY,
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                    )
+                  : Container(),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                // padding: EdgeInsets.only(bottom: 25.0),
+                child: _buildFillDiary(),
+              ),
+              // _buildSingleScreen(index),
+            ],
+          ),
         );
       },
     );

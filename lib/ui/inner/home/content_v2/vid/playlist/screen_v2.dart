@@ -386,7 +386,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
         children: [
           GestureDetector(
             onTap: () {
-              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID, 'VIEW', 'Viewer', data?.email);
+              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data.postID, 'VIEW', 'Viewer', data.email);
             },
             child: Row(
               children: [

@@ -113,11 +113,38 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isHasNextPic = true;
+  bool get isHasNextPic => _isHasNextPic;
+  set isHasNextPic(bool state){
+    _isHasNextPic = state;
+    notifyListeners();
+  }
+
+  bool _isHasNextVid = true;
+  bool get isHasNextVid => _isHasNextVid;
+  set isHasNextVid(bool state){
+    _isHasNextVid = state;
+    notifyListeners();
+  }
+
+  bool _isHasNextDiary = true;
+  bool get isHasNextDiary => _isHasNextDiary;
+  set isHasNextDiary(bool state){
+    _isHasNextDiary = state;
+    notifyListeners();
+  }
+
   List<ContentData>? _hashtagVid;
   List<ContentData>? get hashtagVid => _hashtagVid;
   set hashtagVid(List<ContentData>? data) {
     _hashtagVid = data;
     notifyListeners();
+  }
+
+  initAllHasNext(){
+    _isHasNextVid = true;
+    _isHasNextDiary = true;
+    _isHasNextPic = true;
   }
 
   List<ContentData>? _hashtagDiary;
@@ -746,6 +773,15 @@ class SearchNotifier with ChangeNotifier {
                 final videos = _res.vid;
                 final diaries = _res.diary;
                 final pics = _res.pict;
+                if(pics?.isEmpty ?? true){
+                  isHasNextPic = false;
+                }
+                if(diaries?.isEmpty ?? true){
+                  isHasNextDiary = false;
+                }
+                if(videos?.isEmpty ?? true){
+                  isHasNextVid = false;
+                }
                 if (hyppe == HyppeType.HyppeVid) {
                   for (final video in videos ?? []) {
                     _detailHashTag?.vid?.add(video);
@@ -900,7 +936,7 @@ class SearchNotifier with ChangeNotifier {
     Map<String, List<Widget>> map = {
       'HyppeVid': [
         const GridHashtagVid(),
-        if ((_detailHashTag?.vid ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty)
+        if ((_detailHashTag?.vid ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty && isHasNextVid)
           SliverToBoxAdapter(
             child: Container(
                 margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
@@ -908,7 +944,7 @@ class SearchNotifier with ChangeNotifier {
       ],
       'HyppeDiary': [
         const GridHashtagDiary(),
-        if ((_detailHashTag?.diary ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty)
+        if ((_detailHashTag?.diary ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty && isHasNextDiary)
           SliverToBoxAdapter(
             child: Container(
                 margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
@@ -916,7 +952,7 @@ class SearchNotifier with ChangeNotifier {
       ],
       'HyppePic': [
         const GridHashtagPic(),
-        if ((_detailHashTag?.pict ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty)
+        if ((_detailHashTag?.pict ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty && isHasNextPic)
           SliverToBoxAdapter(
             child: Container(
                 margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
