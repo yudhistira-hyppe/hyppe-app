@@ -154,7 +154,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         ..addStatusListener(
           (AnimationStatus status) {
             if (status == AnimationStatus.completed) {
-              storyComplete(notifier);
+              if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
+                storyComplete(notifier);
+              }
             }
           },
         );
@@ -383,8 +385,11 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     if (_curChildIdx == ((_groupUserStories![_curIdx].story?.length ?? 0) - 1)) {
       shown = [];
       if (_curIdx == (_groupUserStories!.length - 1)) {
-        Routing().moveBack();
+        print("!!!!!!ini kembali");
+        Navigator.pop(context);
+        // return Routing().moveBack();
       } else {
+        print("@@@@@selanjutnya");
         _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
         _curChildIdx = 0;
         setState(() {});

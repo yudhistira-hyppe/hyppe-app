@@ -842,7 +842,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   defaultColor: false,
                                   color: (notifier.diaryData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
                                   iconData: '${AssetPath.vectorPath}${(notifier.diaryData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                  height: 24,
+                                  height: 26,
                                 ),
                                 onTap: () {
                                   if (notifier.diaryData?[index] != null) {

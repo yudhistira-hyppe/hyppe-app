@@ -466,7 +466,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   @override
   void dispose() {
     globalAliPlayer = null;
-        Wakelock.disable();
+    Wakelock.disable();
     _animationController?.dispose();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
@@ -504,6 +504,11 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
         _curIdx = index;
         setState(() {});
         if (_lastCurIndex != _curIdx) {
+          if (_listData?[_curIdx].isApsara ?? false) {
+            _playMode = ModeTypeAliPLayer.auth;
+          } else {
+            _playMode = ModeTypeAliPLayer.url;
+          }
           start();
           if (widget.argument.diaryData?[_curIdx].certified ?? false) {
             System().block(context);
