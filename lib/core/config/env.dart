@@ -42,7 +42,7 @@ class Env {
     baseUrl: UrlConstants.productionBaseApi,
     deeplinkBaseUrl: UrlConstants.prodDeeplinkUrl,
     apiBaseUrl: UrlConstants.productionBaseApi,
-    versionApi: UrlConstants.apiV7,
+    versionApi: UrlConstants.apiV0,
   );
 }
 

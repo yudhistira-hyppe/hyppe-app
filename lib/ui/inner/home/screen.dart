@@ -264,14 +264,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                   children: [
                     // Pict
                     GestureDetector(
-                      onScaleStart: (details) {
-                        print("---------------- tangan ${details.pointerCount}");
-                        zoom();
-                      },
-                      onScaleEnd: (details) {
-                        print("---------------- tangan ${details.pointerCount}");
-                        zoom();
-                      },
+                      // onScaleStart: (details) {
+                      //   print("---------------- tangan ${details.pointerCount}");
+                      //   zoom();
+                      // },
+                      // onScaleEnd: (details) {
+                      //   print("---------------- tangan ${details.pointerCount}");
+                      //   zoom();
+                      // },
                       child: Container(
                         padding: const EdgeInsets.only(left: 6.0, right: 6),
                         color: kHyppeLightSurface,
