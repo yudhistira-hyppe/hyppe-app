@@ -206,6 +206,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   Future getAuth(String apsaraId) async {
     print("[DIARY_PLAYER] getAuth() started. " + stopwatch.elapsed.toString());
     setState(() {
+      _showLoading = true;
       // isloading = true;
     });
     try {
@@ -520,10 +521,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       },
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: () {
-
-
-          },
+          onTap: () {},
           onDoubleTap: () {
             final _likeNotifier = context.read<LikeNotifier>();
             final data = _listData?[_curIdx];
@@ -531,7 +529,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
               _likeNotifier.likePost(context, data);
             }
           },
-          onLongPress: (){
+          onLongPress: () {
             if (_isPause) {
               fAliplayer?.pause();
             } else {
@@ -783,18 +781,18 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
         left: width / 2 - 20,
         top: height / 2 - 20,
         child: Column(
-          children: [
-            const CircularProgressIndicator(
+          children: const [
+            CircularProgressIndicator(
               backgroundColor: Colors.white,
               strokeWidth: 3.0,
             ),
-            const SizedBox(
+            SizedBox(
               height: 10.0,
             ),
-            Text(
-              "$_loadingPercent%",
-              style: const TextStyle(color: Colors.white),
-            ),
+            // Text(
+            //   "$_loadingPercent%",
+            //   style: const TextStyle(color: Colors.white),
+            // ),
           ],
         ),
       );
