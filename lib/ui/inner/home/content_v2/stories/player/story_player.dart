@@ -140,7 +140,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     print("======================ke initstate");
 
     super.initState();
-
+    context.read<StoriesPlaylistNotifier>().setLoadReaction(false);
     _pageController = PageController(initialPage: widget.argument.peopleIndex);
     animationController = AnimationController(vsync: this, duration: const Duration(seconds: 7));
     emojiController = AnimationController(vsync: this, duration: const Duration(seconds: 7));

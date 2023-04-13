@@ -119,6 +119,9 @@ class SearchNotifier with ChangeNotifier {
     _isHasNextPic = state;
     notifyListeners();
   }
+  setHasNextPic(bool state){
+    _isHasNextPic = state;
+  }
 
   bool _isHasNextVid = true;
   bool get isHasNextVid => _isHasNextVid;
@@ -126,12 +129,18 @@ class SearchNotifier with ChangeNotifier {
     _isHasNextVid = state;
     notifyListeners();
   }
+  setHasNextVid(bool state){
+    _isHasNextVid = state;
+  }
 
   bool _isHasNextDiary = true;
   bool get isHasNextDiary => _isHasNextDiary;
   set isHasNextDiary(bool state){
     _isHasNextDiary = state;
     notifyListeners();
+  }
+  setHasNextDiary(bool state){
+    _isHasNextDiary = state;
   }
 
   List<ContentData>? _hashtagVid;
@@ -1133,6 +1142,9 @@ class SearchNotifier with ChangeNotifier {
         final _res = SearchContentModel.fromJson(fetch.data[0]);
         switch (typeSearch) {
           case SearchLoadData.all:
+            isHasNextVid = true;
+            isHasNextDiary = true;
+            isHasNextPic = true;
             searchUsers = _res.users;
             searchVid = _res.vid;
             searchDiary = _res.diary;
@@ -1140,9 +1152,25 @@ class SearchNotifier with ChangeNotifier {
             searchHashtag = _res.tags;
             break;
           case SearchLoadData.content:
-            searchVid = [...(searchVid ?? []), ...(_res.vid ?? [])];
-            searchDiary = [...(searchDiary ?? []), ...(_res.diary ?? [])];
-            searchPic = [...(searchPic ?? []), ...(_res.pict ?? [])];
+            final videos = _res.vid ?? [];
+            final diaries = _res.diary ?? [];
+            final picts = _res.pict ?? [];
+            if(videos.isEmpty){
+              isHasNextVid = false;
+            }else{
+              searchVid = [...(searchVid ?? []), ...videos];
+            }
+            if(diaries.isEmpty){
+              isHasNextDiary = false;
+            }else{
+              searchDiary = [...(searchDiary ?? []), ...diaries];
+            }
+            if(picts.isEmpty){
+              isHasNextPic = false;
+            }else{
+              searchPic = [...(searchPic ?? []), ...picts];
+            }
+
             break;
           case SearchLoadData.user:
             if (!reload) {

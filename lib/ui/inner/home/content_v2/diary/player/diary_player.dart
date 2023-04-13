@@ -530,14 +530,14 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
             }
           },
           onLongPress: () {
+            setState(() {
+              _isPause = !_isPause;
+            });
             if (_isPause) {
               fAliplayer?.pause();
             } else {
               fAliplayer?.play();
             }
-            setState(() {
-              _isPause = !_isPause;
-            });
           },
           child: Stack(
             children: [
@@ -564,6 +564,19 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     );
   }
 
+  void play() {
+    isPause = false;
+    fAliplayer?.play();
+    _animationController?.forward();
+  }
+
+  void pause() {
+    print('pause pause');
+    isPause = true;
+    fAliplayer?.pause();
+    _animationController?.stop();
+  }
+
   Widget _buildFillDiary() {
     // print("[DIARY_PLAYER] _buildFillDiary() started. "+stopwatch.elapsed.toString());
     return SafeArea(
@@ -580,6 +593,32 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                 valueColor: const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
               ),
             ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    // storyComplete(not);
+                    if (isPause) {
+                      play();
+                      print('DiaryPlayer pause');
+                    } else {
+                      pause();
+                      print('DiaryPlayer play');
+                    }
+                  },
+                  onLongPressEnd: (value) => play(),
+                  onLongPressStart: (value) => pause(),
+                  // onLongPress: () => pause(),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    // padding: EdgeInsets.only(bottom: 25.0),
+                    color: Colors.transparent,
+                  ),
+                ),
+              ),
+            ],
           ),
           _listData?[_curIdx].reportedStatus == "BLURRED"
               ? CustomBackgroundLayer(
@@ -603,6 +642,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
           _listData?[_curIdx].reportedStatus == "BLURRED"
               ? Container()
               : LeftItems(
+                  aliPlayer: fAliplayer,
                   description: _listData?[_curIdx].description,
                   // tags: _listData?[_curIdx].tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" "),
                   music: _listData?[_curIdx].music,

@@ -164,6 +164,7 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                                   print("sentuh dong");
                                   widget.pause!();
                                   widget.pause!();
+                                  widget.animationController!.reset();
                                   widget.animationController!.stop();
 
                                   notifier.forceStop = true;

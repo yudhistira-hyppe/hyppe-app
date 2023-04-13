@@ -136,11 +136,14 @@ class _SearchContentsTabState extends State<SearchContentsTab> {
                           final type = notifier.contentTab;
                           switch(type){
                             case HyppeType.HyppeVid:
-                              return notifier.searchVid.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchVid ?? []) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,);
+                              return notifier.searchVid.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchVid ?? [],
+                                isLoading: notifier.isHasNextVid,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,);
                             case HyppeType.HyppeDiary:
-                              return notifier.searchDiary.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchDiary ?? []) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                              return notifier.searchDiary.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchDiary ?? [],
+                                isLoading: notifier.isHasNextDiary,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
                             case HyppeType.HyppePic:
-                              return notifier.searchPic.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchPic ?? []) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                              return notifier.searchPic.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchPic ?? [],
+                                isLoading: notifier.isHasNextPic,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
                           }
                         }
                     ),
