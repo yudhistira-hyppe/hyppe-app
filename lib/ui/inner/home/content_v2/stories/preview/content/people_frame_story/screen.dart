@@ -32,6 +32,11 @@ class PeopleFrameStory extends StatelessWidget {
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'PeopleFrameStory');
     final getData = data?.story?[0];
+    bool isView = false;
+    data?.story?.forEach((element) {
+      isView = element.isViewed ?? false;
+    });
+
     SizeConfig().init(context);
     final _themes = Theme.of(context);
     return Column(
@@ -41,6 +46,7 @@ class PeopleFrameStory extends StatelessWidget {
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 4.5),
           child: StoryColorValidator(
+            isView: isView,
             // haveStory: data[index].story.map((e) => e.isView).contains(0),
             haveStory: index.isEven,
             contentData: getData,

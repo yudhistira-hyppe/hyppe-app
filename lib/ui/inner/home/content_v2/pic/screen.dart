@@ -403,6 +403,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   void deactivate() {
     print("====== deactivate ");
     fAliplayer?.stop();
+    System().disposeBlock();
     if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
       fAliplayer?.destroy();
     }
@@ -437,6 +438,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   void didPushNext() {
     print("========= didPushNext");
     fAliplayer?.pause();
+    System().disposeBlock();
     isInPage = false;
     super.didPushNext();
   }
@@ -880,8 +882,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                       alignment: Alignment.bottomRight,
                       child: notifier.pic?[index].insight?.isloading ?? false
                           ? const SizedBox(
-                              height: 10,
-                              width: 10,
+                              height: 28,
+                              width: 28,
                               child: CircularProgressIndicator(
                                 color: kHyppePrimary,
                                 strokeWidth: 2,
@@ -892,7 +894,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 defaultColor: false,
                                 color: (notifier.pic?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
                                 iconData: '${AssetPath.vectorPath}${(notifier.pic?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                height: 26,
+                                height: 28,
                               ),
                               onTap: () {
                                 if (notifier.pic?[index] != null) {
