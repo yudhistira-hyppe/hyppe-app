@@ -18,7 +18,8 @@ import '../../home/content_v2/profile/self_profile/widget/sensitive_content.dart
 class GridContentView extends StatefulWidget {
   HyppeType type;
   List<ContentData> data;
-  GridContentView({Key? key, required this.type, required this.data}) : super(key: key);
+  bool isLoading;
+  GridContentView({Key? key, required this.type, required this.data, required this.isLoading}) : super(key: key);
 
   @override
   State<GridContentView> createState() => _GridContentViewState();
@@ -28,6 +29,7 @@ class _GridContentViewState extends State<GridContentView> {
 
   @override
   void initState() {
+    context.read<SearchNotifier>().initAllHasNext();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'GridContentView');
     super.initState();
   }
@@ -221,7 +223,15 @@ class _GridContentViewState extends State<GridContentView> {
         ),
         if (widget.data.length % limitSearch == 0)
           SliverToBoxAdapter(
-            child: Container(width: double.infinity, height: 50, alignment: Alignment.center, child: const CustomLoading()),
+            child: Builder(
+              builder: (context) {
+                if(widget.isLoading){
+                  return Container(width: double.infinity, height: 50, alignment: Alignment.center, child: const CustomLoading());
+                }else{
+                  return const SizedBox.shrink();
+                }
+              }
+            ),
           )
       ],
     );
