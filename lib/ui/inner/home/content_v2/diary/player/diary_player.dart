@@ -550,6 +550,13 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                       height: MediaQuery.of(context).size.height,
                     )
                   : Container(),
+              _showLoading
+                  ? Positioned.fill(
+                      child: Align(
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(),
+                    ))
+                  : Container(),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
