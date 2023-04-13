@@ -130,21 +130,21 @@ class _SlidedPicDetailState extends State<SlidedPicDetail>
         },
         child: GestureDetector(
           // onDoubleTap: () => resetZooming(),
-          // onScaleStart: (details) {
-          //   print('onScaleStart Detail: $details');
-          //   final notifier = context.read<SlidedPicDetailNotifier>();
-          //   notifier.isZooming = true;
-          // },
-          // onScaleUpdate: (details) {
-          //   print('onScaleUpdate Detail: $details');
-          //   final notifier = context.read<SlidedPicDetailNotifier>();
-          //   notifier.isZooming = true;
-          // },
-          // onScaleEnd: (details) {
-          //   print('onScaleEnd Detail: $details');
-          //   final notifier = context.read<SlidedPicDetailNotifier>();
-          //   notifier.isZooming = false;
-          // },
+          onScaleStart: (details) {
+            print('onScaleStart Detail: $details');
+            final notifier = context.read<SlidedPicDetailNotifier>();
+            notifier.isZooming = true;
+          },
+          onScaleUpdate: (details) {
+            print('onScaleUpdate Detail: $details');
+            final notifier = context.read<SlidedPicDetailNotifier>();
+            notifier.isZooming = true;
+          },
+          onScaleEnd: (details) {
+            print('onScaleEnd Detail: $details');
+            final notifier = context.read<SlidedPicDetailNotifier>();
+            notifier.isZooming = false;
+          },
           // onPanUpdate: (detail){
           //   final notifier = context.read<SlidedPicDetailNotifier>();
           //   notifier.isZooming = false;
@@ -167,9 +167,9 @@ class _SlidedPicDetailState extends State<SlidedPicDetail>
                       print(
                           'check index hit : my index  ${notifier.currentIndex}: $value');
                       notifier.currentIndex = value;
-                      // notifier.isLoadMusic = true;
+                      notifier.isLoadMusic = true;
                       notifier.mainIndex = 0;
-                      // detailNotifier.isLoadMusic = true;
+                      detailNotifier.isLoadMusic = true;
                     },
                     itemBuilder: (context, indexRoot) {
                       return PageView.builder(
@@ -185,13 +185,13 @@ class _SlidedPicDetailState extends State<SlidedPicDetail>
                                 context.read<PicDetailNotifier>();
                             notifier.mainIndex = verticalIndex;
                             notifier.isLoadMusic = true;
-                            // detailNotifier.isLoadMusic = true;
+                            detailNotifier.isLoadMusic = true;
                             if (verticalIndex != 0) {
                               notifier.isLoadMusic = true;
                             } else {
                               final detailNotifier =
                                   context.read<PicDetailNotifier>();
-                              // detailNotifier.isLoadMusic = true;
+                              detailNotifier.isLoadMusic = true;
                             }
                           },
                           itemBuilder: (context, indexPage) {

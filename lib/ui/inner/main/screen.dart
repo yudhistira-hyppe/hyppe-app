@@ -80,9 +80,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     onPressed: () {
                       if (notifier.pageIndex == 0) {
-                        if (globalScroller != null) {
-                          globalScroller!.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.elasticOut);
-                        }
+                        notifier.scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.elasticOut);
                       } else {
                         tapMenu(0, notifier, consumerContext);
                       }

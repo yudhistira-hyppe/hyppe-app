@@ -51,25 +51,25 @@ class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayout
       create: (context) => _notifier,
       child: Consumer<PicDetailNotifier>(
         builder: (_, notifier, __) {
-          Future.delayed(const Duration(milliseconds: 2000), () async {
-            print('isOnPageTurning ImageDetail: ${widget.isOnPageTurning} $tempAllow');
-            if (!widget.isOnPageTurning && !tempAllow) {
-              // notifier.urlMusic = '';
-              // notifier.isLoadMusic = false;
-              // if(globalAudioPlayer != null){
-              //   disposeGlobalAudio();
-              // }
-              final music = widget.arguments.picData?.music;
-              if(music != null){
-                final apsaraMusic = music.apsaraMusic;
-                if(apsaraMusic != null){
-                  notifier.initMusic(context, apsaraMusic);
-                }
-
-              }
-
-            }
-          });
+          // Future.delayed(const Duration(milliseconds: 2000), () async {
+          //   print('isOnPageTurning ImageDetail: ${widget.isOnPageTurning} $tempAllow');
+          //   if (!widget.isOnPageTurning && !tempAllow) {
+          //     // notifier.urlMusic = '';
+          //     // notifier.isLoadMusic = false;
+          //     // if(globalAudioPlayer != null){
+          //     //   disposeGlobalAudio();
+          //     // }
+          //     final music = widget.arguments.picData?.music;
+          //     if(music != null){
+          //       final apsaraMusic = music.apsaraMusic;
+          //       if(apsaraMusic != null){
+          //         notifier.initMusic(context, apsaraMusic);
+          //       }
+          //
+          //     }
+          //
+          //   }
+          // });
           return WillPopScope(
             onWillPop: notifier.onPop,
             child: SafeArea(

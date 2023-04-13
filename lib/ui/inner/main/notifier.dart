@@ -50,6 +50,8 @@ class MainNotifier with ChangeNotifier {
   Timer? countdownTimer;
   Duration myDuration = const Duration(minutes: 1);
 
+  final ScrollController scrollController = ScrollController();
+
   set openValidationIDCamera(bool val) {
     _openValidationIDCamera = val;
     notifyListeners();

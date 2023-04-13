@@ -194,7 +194,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
             recognizer: item.type == CaptionType.normal
                 ? null
                 : (TapGestureRecognizer()
-                  ..onTap = () {
+                  ..onTap = () async {
                     if (item.type == CaptionType.hashtag) {
                       if (callback != null) {
                         callback(true);
@@ -204,7 +204,10 @@ class _CustomDescContentState extends State<CustomDescContent> {
                       if (widget.isReplace) {
                         Routing().moveReplacement(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
                       } else {
-                        Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
+                        if(globalAliPlayer != null){
+                          globalAliPlayer!.pause();
+                        }
+                        await Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
                       }
                     } else {
                       if (callback != null) {
