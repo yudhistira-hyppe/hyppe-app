@@ -25,6 +25,8 @@ class CustomDescContent extends StatefulWidget {
   final String? seeLess;
   final String? delimiter;
   final bool isReplace;
+  final Function()? beforeGone;
+  final Function()? afterGone;
 
   final Function(bool val)? callback;
 
@@ -42,7 +44,9 @@ class CustomDescContent extends StatefulWidget {
       this.seeLess,
       this.textOverflow,
       this.isReplace = false,
-      this.delimiter = '\u2026 '})
+      this.delimiter = '\u2026 ',
+      this.beforeGone,
+      this.afterGone})
       : super(key: key);
 
   @override
@@ -204,10 +208,13 @@ class _CustomDescContentState extends State<CustomDescContent> {
                       if (widget.isReplace) {
                         Routing().moveReplacement(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
                       } else {
-                        if(globalAliPlayer != null){
-                          globalAliPlayer!.pause();
+                        if(widget.afterGone != null){
+                          widget.beforeGone!();
                         }
                         await Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
+                        if(widget.afterGone != null){
+                          widget.afterGone!();
+                        }
                       }
                     } else {
                       if (callback != null) {
