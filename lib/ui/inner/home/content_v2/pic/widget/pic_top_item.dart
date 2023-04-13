@@ -19,15 +19,14 @@ class PicTopItem extends StatelessWidget {
           const CustomIconWidget(
             iconData: '${AssetPath.vectorPath}sale.svg',
             defaultColor: false,
-            height: 22,
+            height: 24,
           ),
         if ((data?.certified ?? false) && (data?.saleAmount ?? 0) == 0)
-          Container(
-              padding: const EdgeInsets.all(3),
-              child: const CustomIconWidget(
-                iconData: '${AssetPath.vectorPath}ownership.svg',
-                defaultColor: false,
-              ))
+          const CustomIconWidget(
+            iconData: '${AssetPath.vectorPath}ownership.svg',
+            defaultColor: false,
+            height: 24,
+          )
       ],
     );
   }
