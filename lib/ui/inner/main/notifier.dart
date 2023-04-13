@@ -144,7 +144,14 @@ class MainNotifier with ChangeNotifier {
   }
 
   Widget mainScreen(BuildContext context, bool canShowAds) {
-    List pages = [HomeScreen(canShowAds: canShowAds,), SearchScreen(), NotificationScreen(), SelfProfileScreen()];
+    List pages = [
+      HomeScreen(
+        canShowAds: canShowAds,
+      ),
+      SearchScreen(),
+      NotificationScreen(),
+      SelfProfileScreen()
+    ];
     late Widget screen;
 
     switch (pageIndex) {

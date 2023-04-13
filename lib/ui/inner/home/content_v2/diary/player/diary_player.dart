@@ -2,6 +2,7 @@ import 'dart:core';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
@@ -137,7 +138,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
       initDiary();
 
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: "${Random().nextInt(60).toDouble()}");
 
       WidgetsBinding.instance.addObserver(this);
       bottomIndex = 0;

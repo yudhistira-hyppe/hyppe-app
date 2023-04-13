@@ -830,8 +830,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         alignment: Alignment.bottomRight,
                         child: notifier.diaryData?[index].insight?.isloading ?? false
                             ? const SizedBox(
-                                height: 10,
-                                width: 10,
+                                height: 28,
+                                width: 28,
                                 child: CircularProgressIndicator(
                                   color: kHyppePrimary,
                                   strokeWidth: 2,
@@ -842,7 +842,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   defaultColor: false,
                                   color: (notifier.diaryData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
                                   iconData: '${AssetPath.vectorPath}${(notifier.diaryData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                  height: 26,
+                                  height: 28,
                                 ),
                                 onTap: () {
                                   if (notifier.diaryData?[index] != null) {
