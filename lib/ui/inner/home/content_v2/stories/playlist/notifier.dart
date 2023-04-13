@@ -199,12 +199,12 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   bool _isPreventedEmoji = false;
   bool get isPreventedEmoji => _isPreventedEmoji;
-  set isPreventedEmoji(bool state){
+  set isPreventedEmoji(bool state) {
     _isPreventedEmoji = state;
     notifyListeners();
   }
 
-  setIsPreventedEmoji(bool state){
+  setIsPreventedEmoji(bool state) {
     _isPreventedEmoji = state;
   }
 
@@ -250,7 +250,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void makeItems( AnimationController animationController, ContentData? data, ReactionInteractive? reaction) {
+  void makeItems(AnimationController animationController, ContentData? data, ReactionInteractive? reaction) {
     items.clear();
     for (int i = 0; i < 100; i++) {
       items.add(Item());
@@ -261,9 +261,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
     // notifyListeners();
     animationController.reset();
-    animationController.forward().whenComplete((){
-
-    });
+    animationController.forward().whenComplete(() {});
   }
 
   Future<MusicUrl?> getMusicApsara(BuildContext context, String apsaraId) async {
@@ -634,8 +632,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     // );
   }
 
-  Future sendAllEmoji() async{
-    for(final emoji in emojiActions){
+  Future sendAllEmoji() async {
+    for (final emoji in emojiActions) {
       await emoji;
     }
   }
@@ -697,8 +695,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   String onProfilePicShow(String? urlPic) => _system.showUserPicture(urlPic) ?? '';
 
   List<Widget> buildItems(AnimationController animationController) {
-
-    print('isPreventedEmoji: $isPreventedEmoji');
+    // print('isPreventedEmoji: $isPreventedEmoji');
     final animatedOpacity = Tween<double>(
       begin: 1.0,
       end: 0.0,
@@ -711,17 +708,21 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       return SlideTransition(
         position: animationController.drive(tween),
         child: AnimatedAlign(
-          alignment: item.alignment,
-          duration: const Duration(seconds: 10),
-          child: FadeTransition(opacity: animatedOpacity, child: Material(
-            color: Colors.transparent,
-            child: isPreventedEmoji ? const SizedBox.shrink() :Text(
-              reaction ?? '',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: item.size),
-            ),
-          ),)
-        ),
+            alignment: item.alignment,
+            duration: const Duration(seconds: 10),
+            child: FadeTransition(
+              opacity: animatedOpacity,
+              child: Material(
+                color: Colors.transparent,
+                child: isPreventedEmoji
+                    ? const SizedBox.shrink()
+                    : Text(
+                        reaction ?? '',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: item.size),
+                      ),
+              ),
+            )),
       );
     }).toList();
     // return items.map((item) {

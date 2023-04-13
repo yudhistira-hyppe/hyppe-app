@@ -27,13 +27,12 @@ class LoadingMusicScreen extends StatefulWidget {
 }
 
 class _LoadingMusicScreenState extends State<LoadingMusicScreen> with AfterFirstLayoutMixin {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'LoadingMusicScreen');
     print('initState LoadingMusicScreen');
     super.initState();
-    if(globalAudioPlayer != null){
+    if (globalAudioPlayer != null) {
       disposeGlobalAudio();
     }
   }
@@ -44,80 +43,73 @@ class _LoadingMusicScreenState extends State<LoadingMusicScreen> with AfterFirst
     initMusic(context, widget.music, notifier);
   }
 
-  void initMusic(BuildContext context, Music music, SlidedPicDetailNotifier notif) async{
+  void initMusic(BuildContext context, Music music, SlidedPicDetailNotifier notif) async {
     try {
       final apsaraId = music.apsaraMusic;
       final detailNotifier = context.read<PicDetailNotifier>();
       notif.urlMusic = '';
       detailNotifier.urlMusic = '';
-      if((apsaraId ?? '').isNotEmpty){
+      if ((apsaraId ?? '').isNotEmpty) {
         print('check index hit ${widget.isOnPageTurning} : ${notif.currentIndex} and my mainIndex = ${notif.mainIndex}');
-        if(!widget.isOnPageTurning){
+        if (!widget.isOnPageTurning) {
           final url = await notif.getAdsVideoApsara(context, apsaraId!);
-          if((url ?? '').isNotEmpty){
+          if ((url ?? '').isNotEmpty) {
             // widget.music.apsaraMusicUrl?.playUrl = url;
             print('music is $url : ${notif.isLoadMusic}');
             notif.urlMusic = url!;
-            if(notif.isLoadMusic){
+            if (notif.isLoadMusic) {
               notif.isLoadMusic = false;
-            }else{
+            } else {
               print('apakah masuk isLoading6');
               notif.isLoadMusic = true;
-              Future.delayed(const Duration(milliseconds: 500), (){
+              Future.delayed(const Duration(milliseconds: 500), () {
                 print('apakah masuk isLoading7');
                 notif.isLoadMusic = false;
               });
             }
-
-          }else{
+          } else {
             throw 'url music is nulls';
           }
-        }else{
-          if(!notif.hitApiMusic){
-            if(notif.isLoadMusic){
+        } else {
+          if (!notif.hitApiMusic) {
+            if (notif.isLoadMusic) {
               notif.isLoadMusic = false;
-              Future.delayed(const Duration(milliseconds: 500), (){
-                if(!notif.hitApiMusic){
+              Future.delayed(const Duration(milliseconds: 500), () {
+                if (!notif.hitApiMusic) {
                   print('apakah masuk isLoading2');
                   notif.isLoadMusic = true;
-                  Future.delayed(const Duration(milliseconds: 500), (){
-                    if(!notif.hitApiMusic){
+                  Future.delayed(const Duration(milliseconds: 500), () {
+                    if (!notif.hitApiMusic) {
                       print('apakah masuk isLoading3');
                       notif.isLoadMusic = false;
                     }
                   });
                 }
-
               });
-            }else{
+            } else {
               print('apakah masuk isLoading4');
               notif.isLoadMusic = true;
-              Future.delayed(const Duration(milliseconds: 500), (){
-                if(!notif.hitApiMusic){
+              Future.delayed(const Duration(milliseconds: 500), () {
+                if (!notif.hitApiMusic) {
                   print('apakah masuk isLoading5');
                   notif.isLoadMusic = false;
                 }
-
               });
             }
           }
 
           // throw 'cannot hit the apsara video';
         }
-      }else{
+      } else {
         throw 'apsaramusic is empty';
       }
-    }catch(e){
+    } catch (e) {
       "Error Init Video $e".logger();
-      Future.delayed(const Duration(milliseconds: 100), (){
+      Future.delayed(const Duration(milliseconds: 100), () {
         notif.isLoadMusic = false;
       });
     }
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -140,23 +132,33 @@ class _LoadingMusicScreenState extends State<LoadingMusicScreen> with AfterFirst
                   height: 20,
                   child: CustomLoading(),
                 ),
-                const CustomIconWidget(iconData: '${AssetPath.vectorPath}music_stroke_white.svg', color: Colors.white,),
+                const CustomIconWidget(
+                  iconData: '${AssetPath.vectorPath}music_stroke_white.svg',
+                  color: Colors.white,
+                ),
                 fourPx,
-                musicTitle.length > 30 ? Container(
-                  height: 30,
-                  child: Container(
-                      height: 30,
-                      width: context.getWidth() * 0.7,
-                      child: Marquee(text: '$musicTitle  ', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),)),
-                ) : CustomTextWidget(textToDisplay: musicTitle,
-                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),)
+                musicTitle.length > 30
+                    ? Container(
+                        height: 30,
+                        child: Container(
+                            height: 30,
+                            width: context.getWidth() * 0.7,
+                            child: Marquee(
+                              text: '$musicTitle  ',
+                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                            )),
+                      )
+                    : CustomTextWidget(
+                        textToDisplay: musicTitle,
+                        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                      )
               ],
             ),
           ),
           CustomBaseCacheImage(
             imageUrl: widget.music.apsaraThumnailUrl ?? '',
             imageBuilder: (_, imageProvider) {
-              print('MusicStatusPage success');
+              // print('MusicStatusPage success');
               return Container(
                 width: 36,
                 height: 36,
@@ -170,14 +172,11 @@ class _LoadingMusicScreenState extends State<LoadingMusicScreen> with AfterFirst
               );
             },
             errorWidget: (_, __, ___) {
-
-              print('MusicStatusPage error');
+              // print('MusicStatusPage error');
               return Container(
                 width: 36,
                 height: 36,
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(18))
-                ),
+                decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(18))),
                 child: const CustomIconWidget(
                   width: 36,
                   height: 36,
@@ -189,9 +188,7 @@ class _LoadingMusicScreenState extends State<LoadingMusicScreen> with AfterFirst
             emptyWidget: Container(
               width: 36,
               height: 36,
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(18))
-              ),
+              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(18))),
               child: const CustomIconWidget(
                 width: 36,
                 height: 36,
@@ -204,8 +201,4 @@ class _LoadingMusicScreenState extends State<LoadingMusicScreen> with AfterFirst
       ),
     );
   }
-
-
-
-
 }
