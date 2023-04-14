@@ -1085,58 +1085,61 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         ? Positioned.fill(
             child: Align(
                 alignment: Alignment.centerRight,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Spacer(),
-                    const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}eye-off.svg",
-                      defaultColor: false,
-                      height: 30,
-                    ),
-                    Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                    Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                        )),
-                    // data.email == SharedPreference().readStorage(SpKeys.email)
-                    //     ? GestureDetector(
-                    //         onTap: () => Routing().move(Routes.appeal, argument: data),
-                    //         child: Container(
-                    //             padding: const EdgeInsets.all(8),
-                    //             margin: const EdgeInsets.all(18),
-                    //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                    //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                    //       )
-                    //     : const SizedBox(),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        System().increaseViewCount2(context, data);
-                        context.read<ReportNotifier>().seeContent(context, data, hyppePic);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.only(top: 8),
-                        margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
-                        width: SizeConfig.screenWidth,
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            top: BorderSide(
-                              color: Colors.white,
-                              width: 1,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Spacer(),
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}eye-off.svg",
+                        defaultColor: false,
+                        height: 30,
+                      ),
+                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                      Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                          )),
+                      // data.email == SharedPreference().readStorage(SpKeys.email)
+                      //     ? GestureDetector(
+                      //         onTap: () => Routing().move(Routes.appeal, argument: data),
+                      //         child: Container(
+                      //             padding: const EdgeInsets.all(8),
+                      //             margin: const EdgeInsets.all(18),
+                      //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                      //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                      //       )
+                      //     : const SizedBox(),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          System().increaseViewCount2(context, data);
+                          context.read<ReportNotifier>().seeContent(context, data, hyppePic);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.only(top: 8),
+                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                          width: SizeConfig.screenWidth,
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
                             ),
                           ),
-                        ),
-                        child: Text(
-                          "${transnot.translate.see} HyppePic",
-                          style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                          textAlign: TextAlign.center,
+                          child: Text(
+                            "${transnot.translate.see} HyppePic",
+                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 )),
           )
         : Container();

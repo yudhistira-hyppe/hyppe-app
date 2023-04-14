@@ -32,68 +32,71 @@ class _DiarySensitiveState extends State<DiarySensitive> {
         child: SizedBox(
       width: SizeConfig.screenWidth,
       child: Consumer<TranslateNotifierV2>(
-        builder: (context, transnot, child) => Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            const Spacer(),
-            const CustomIconWidget(
-              iconData: "${AssetPath.vectorPath}eye-off.svg",
-              defaultColor: false,
-              height: 30,
-              color: Colors.white,
-            ),
-            Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-            Text("HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                )),
-            widget.data?.email == SharedPreference().readStorage(SpKeys.email)
-                ? GestureDetector(
-                    onTap: () => Routing().move(Routes.appeal, argument: widget.data),
-                    child: Container(
-                        padding: const EdgeInsets.all(8),
-                        margin: const EdgeInsets.all(18),
-                        decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                        child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                  )
-                : const SizedBox(),
-            const Spacer(),
-            GestureDetector(
-              onTap: () {
-                if (globalAliPlayer != null) {
-                  globalAliPlayer?.prepare();
-                  globalAliPlayer?.play();
-                }
+        builder: (context, transnot, child) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const Spacer(),
+              const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}eye-off.svg",
+                defaultColor: false,
+                height: 30,
+                color: Colors.white,
+              ),
+              Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+              Text("HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                  )),
+              widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+                  ? GestureDetector(
+                      onTap: () => Routing().move(Routes.appeal, argument: widget.data),
+                      child: Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.all(18),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                          child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                    )
+                  : const SizedBox(),
+              const Spacer(),
+              GestureDetector(
+                onTap: () {
+                  if (globalAliPlayer != null) {
+                    globalAliPlayer?.prepare();
+                    globalAliPlayer?.play();
+                  }
 
-                if (widget.function != null) {
-                  widget.function!();
-                }
+                  if (widget.function != null) {
+                    widget.function!();
+                  }
 
-                context.read<ReportNotifier>().seeContent(context, widget.data ?? ContentData(), hyppeDiary);
-              },
-              child: Container(
-                padding: const EdgeInsets.only(top: 8),
-                margin: const EdgeInsets.all(8),
-                width: SizeConfig.screenWidth,
-                decoration: const BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: Colors.white,
-                      width: 1,
+                  context.read<ReportNotifier>().seeContent(context, widget.data ?? ContentData(), hyppeDiary);
+                },
+                child: Container(
+                  padding: const EdgeInsets.only(top: 8),
+                  margin: const EdgeInsets.all(8),
+                  width: SizeConfig.screenWidth,
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: Colors.white,
+                        width: 1,
+                      ),
                     ),
                   ),
-                ),
-                child: Text(
-                  "${transnot.translate.see} HyppeDiary",
-                  style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.center,
+                  child: Text(
+                    "${transnot.translate.see} HyppeDiary",
+                    style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
-            ),
-            thirtyTwoPx,
-          ],
+              thirtyTwoPx,
+            ],
+          ),
         ),
       ),
     ));

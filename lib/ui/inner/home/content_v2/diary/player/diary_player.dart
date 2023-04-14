@@ -131,18 +131,16 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
 
   @override
   void initState() {
+    print("init init init init");
     // stopwatch = new Stopwatch()..start();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'DiaryPlayerPage');
-    print("[DIARY_PLAYER] initState() started. " + stopwatch.elapsed.toString());
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      print("[DIARY_PLAYER] addPostFrameCallback() started. " + stopwatch.elapsed.toString());
       _curIdx = widget.argument.index.toInt();
       _lastCurIndex = widget.argument.index.toInt();
       _pageController = PageController(initialPage: widget.argument.index.toInt());
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
       initDiary();
-
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: "${Random().nextInt(60).toDouble()}");
 
       WidgetsBinding.instance.addObserver(this);
@@ -217,13 +215,10 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     });
     try {
       final notifier = PostsBloc();
-      print("[DIARY_PLAYER] notifier.getAuthApsara() started. " + stopwatch.elapsed.toString());
       await notifier.getAuthApsara(context, apsaraId: apsaraId);
-      print("[DIARY_PLAYER] notifier.getAuthApsara() ended. " + stopwatch.elapsed.toString());
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
-        print("[DIARY_PLAYER] setVidAuth() started. " + stopwatch.elapsed.toString());
         auth = jsonMap['PlayAuth'];
         fAliplayer?.setVidAuth(
             vid: apsaraId,
@@ -234,7 +229,6 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
         setState(() {
           isloading = false;
         });
-        print("[DIARY_PLAYER] setVidAuth() ended. " + stopwatch.elapsed.toString());
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
@@ -272,13 +266,11 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   }
 
   _initListener() {
-    print("[DIARY_PLAYER] _initListener() started. " + stopwatch.elapsed.toString());
     fAliplayer?.setOnEventReportParams((params, playerId) {
       print("EventReportParams=${params}");
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      print("[DIARY_PLAYER] setOnPrepared() started. " + stopwatch.elapsed.toString());
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
@@ -500,6 +492,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     fAliplayer?.setPlayerView(viewId);
   }
 
+  bool loadTitle = false;
   @override
   Widget build(BuildContext context) {
     // print("[DIARY_PLAYER] build() started. "+stopwatch.elapsed.toString());
@@ -510,6 +503,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
         itemCount: _listData?.length ?? 0,
         onPageChanged: (index) async {
           _curIdx = index;
+          loadTitle = true;
           setState(() {});
           if (_lastCurIndex != _curIdx) {
             if (_listData?[_curIdx].isApsara ?? false) {
@@ -517,6 +511,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
             } else {
               _playMode = ModeTypeAliPLayer.url;
             }
+            // initDiary();
             start();
             if (widget.argument.diaryData?[_curIdx].certified ?? false) {
               System().block(context);
@@ -677,10 +672,12 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                     ),
                   ),
                 )
-              : TitlePlaylistDiaries(
-                  data: _listData?[_curIdx],
-                  // storyController: _storyController,
-                ),
+              : loadTitle
+                  ? Container()
+                  : TitlePlaylistDiaries(
+                      data: _listData?[_curIdx],
+                      // storyController: _storyController,
+                    ),
 
           // Text(_listData![_curIdx].username!),
           _listData?[_curIdx].reportedStatus == "BLURRED"
@@ -798,8 +795,11 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   }
 
   void initDiary() async {
-    print("[DIARY_PLAYER] initDiary() started. " + stopwatch.elapsed.toString());
+    print("=-=-=-=-=-=-=-=-init diary");
     var notifier = context.read<DiariesPlaylistNotifier>();
+    setState(() {
+      _showLoading = true;
+    });
     await notifier.initState(context, widget.argument);
     _listData = notifier.listData;
     if (_listData?[_curIdx].isApsara ?? false) {
@@ -807,14 +807,11 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     } else {
       _playMode = ModeTypeAliPLayer.url;
     }
-
     start();
-    print("[DIARY_PLAYER] initDiary() ended. " + stopwatch.elapsed.toString());
   }
 
   void start() async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
-    print("[DIARY_PLAYER] start() started. " + stopwatch.elapsed.toString());
     _animationController?.reset();
     fAliplayer?.stop();
     isPlay = false;
@@ -827,35 +824,36 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     setState(() {
       _isPause = false;
       _isFirstRenderShow = false;
+      loadTitle = false;
     });
-    // var configMap = {
-    //   'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
-    //   'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
-    //   'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
-    //   'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
-    //   'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
-    //   'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
-    //   'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
-    //   'mLocalCacheDir': GlobalSettings.mDirController,
-    //   'mClearFrameWhenStop': true
-    // };
-    // // Configure the application.
-    // fAliplayer?.setConfig(configMap);
-    // var map = {
-    //   "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
+    var configMap = {
+      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+      // 'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
+      'mLocalCacheDir': GlobalSettings.mDirController,
+      'mClearFrameWhenStop': true
+    };
+    // Configure the application.
+    fAliplayer?.setConfig(configMap);
+    var map = {
+      // "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
 
-    //   /// The maximum space that can be occupied by the cache directory.
-    //   "mMaxDurationS": GlobalSettings.mMaxDurationSController,
+      /// The maximum space that can be occupied by the cache directory.
+      // "mMaxDurationS": GlobalSettings.mMaxDurationSController,
 
-    //   /// The maximum cache duration of a single file.
-    //   "mDir": GlobalSettings.mDirController,
+      /// The maximum cache duration of a single file.
+      // "mDir": GlobalSettings.mDirController,
 
-    //   /// The cache directory.
-    //   "mEnable": GlobalSettings.mEnableCacheConfig
+      /// The cache directory.
+      // "mEnable": GlobalSettings.mEnableCacheConfig
 
-    //   /// Specify whether to enable the cache feature.
-    // };
-    // fAliplayer?.setCacheConfig(map);
+      /// Specify whether to enable the cache feature.
+    };
+    fAliplayer?.setCacheConfig(map);
     if (_listData?[_curIdx].reportedStatus != "BLURRED") {
       fAliplayer?.prepare();
     }

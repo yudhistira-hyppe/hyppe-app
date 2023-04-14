@@ -53,7 +53,7 @@ class HomeAppBar extends StatelessWidget {
         // AliPlayer(),
         sixteenPx,
       ],
-      title: (offset ?? 0) <= 100
+      title: (offset ?? 0) <= 150
           ? Text(
               "Halo, $helloName!",
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),

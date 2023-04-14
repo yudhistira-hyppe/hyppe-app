@@ -100,7 +100,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
     print('isOnPageTurning: ${widget.isOnPageTurning}');
     Future.delayed(const Duration(milliseconds: 1000), () async {
       if (!widget.isOnPageTurning && !tempAllow) {
-        if(widget.data.username?.isEmpty ?? true){
+        if (widget.data.username?.isEmpty ?? true) {
           if (tempPostID == widget.data.postID && canHit) {
             await notifier.initDetailPost(context, widget.data.postID ?? '');
             setState(() {
@@ -268,62 +268,66 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                 child: SizedBox(
                 width: SizeConfig.screenWidth,
                 child: Consumer<TranslateNotifierV2>(
-                  builder: (context, transnot, child) => Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const Spacer(),
-                      const CustomIconWidget(
-                        iconData: "${AssetPath.vectorPath}eye-off.svg",
-                        defaultColor: false,
-                        height: 30,
-                      ),
-                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                      Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                          )),
-                      data.email == SharedPreference().readStorage(SpKeys.email)
-                          ? GestureDetector(
-                              onTap: () => Routing().move(Routes.appeal, argument: data),
-                              child: Container(
-                                  padding: const EdgeInsets.all(8),
-                                  margin: const EdgeInsets.all(18),
-                                  decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                                  child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                            )
-                          : const SizedBox(),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            data.reportedStatus = '';
-                          });
-                          // context.read<ReportNotifier>().seeContent(context, data, hyppePic);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 8, bottom: 8),
-                          margin: const EdgeInsets.all(8),
-                          width: SizeConfig.screenWidth,
-                          decoration: const BoxDecoration(
-                            // color: Colors.red,
-                            border: Border(
-                              top: BorderSide(
-                                color: Colors.white,
-                                width: 1,
+                  builder: (context, transnot, child) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Spacer(),
+                        const CustomIconWidget(
+                          iconData: "${AssetPath.vectorPath}eye-off.svg",
+                          defaultColor: false,
+                          color: Colors.white,
+                          height: 30,
+                        ),
+                        Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                        Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                            )),
+                        data.email == SharedPreference().readStorage(SpKeys.email)
+                            ? GestureDetector(
+                                onTap: () => Routing().move(Routes.appeal, argument: data),
+                                child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    margin: const EdgeInsets.all(18),
+                                    decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                                    child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                              )
+                            : const SizedBox(),
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              data.reportedStatus = '';
+                            });
+                            // context.read<ReportNotifier>().seeContent(context, data, hyppePic);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.only(top: 8, bottom: 8),
+                            margin: const EdgeInsets.all(8),
+                            width: SizeConfig.screenWidth,
+                            decoration: const BoxDecoration(
+                              // color: Colors.red,
+                              border: Border(
+                                top: BorderSide(
+                                  color: Colors.white,
+                                  width: 1,
+                                ),
                               ),
                             ),
-                          ),
-                          child: Text(
-                            "${transnot.translate.see} HyppePic",
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                            textAlign: TextAlign.center,
+                            child: Text(
+                              "${transnot.translate.see} HyppePic",
+                              style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
-                      ),
-                      thirtyTwoPx,
-                    ],
+                        thirtyTwoPx,
+                      ],
+                    ),
                   ),
                 ),
               ))
