@@ -52,9 +52,10 @@ class SelfProfileVids extends StatelessWidget {
                                           featureType: FeatureType.vid,
                                           isSale: false,
                                           isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                          thumbnail: ImageUrl(notifier.user.vids?[index].postID, url: (notifier.user.vids?[index].isApsara ?? false)
-                                              ? (notifier.user.vids?[index].mediaThumbEndPoint ?? '')
-                                              : System().showUserPicture(notifier.user.vids?[index].mediaThumbEndPoint) ?? ''),
+                                          thumbnail: ImageUrl(notifier.user.vids?[index].postID,
+                                              url: (notifier.user.vids?[index].isApsara ?? false)
+                                                  ? (notifier.user.vids?[index].mediaThumbEndPoint ?? '')
+                                                  : System().showUserPicture(notifier.user.vids?[index].mediaThumbEndPoint) ?? ''),
                                         ),
                                       ),
                                       // SelectableText(notifier.iw tem1?.vids?[index].isApsara ?? false

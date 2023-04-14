@@ -119,6 +119,9 @@ class SearchNotifier with ChangeNotifier {
     _isHasNextPic = state;
     notifyListeners();
   }
+  setHasNextPic(bool state){
+    _isHasNextPic = state;
+  }
 
   bool _isHasNextVid = true;
   bool get isHasNextVid => _isHasNextVid;
@@ -126,12 +129,18 @@ class SearchNotifier with ChangeNotifier {
     _isHasNextVid = state;
     notifyListeners();
   }
+  setHasNextVid(bool state){
+    _isHasNextVid = state;
+  }
 
   bool _isHasNextDiary = true;
   bool get isHasNextDiary => _isHasNextDiary;
   set isHasNextDiary(bool state){
     _isHasNextDiary = state;
     notifyListeners();
+  }
+  setHasNextDiary(bool state){
+    _isHasNextDiary = state;
   }
 
   List<ContentData>? _hashtagVid;
@@ -717,6 +726,7 @@ class SearchNotifier with ChangeNotifier {
       final lenghtDiary = _detailHashTag?.diary?.length ?? 0;
       final lenghtPic = _detailHashTag?.pict?.length ?? 0;
       if (reload) {
+        initAllHasNext();
         loadTagDetail = true;
         final _res = await _hitApiGetDetail(context, keys.replaceAll(' ', ''), TypeApiSearch.detailHashTag, 0, type: hyppe);
         if (_res != null) {
@@ -773,15 +783,24 @@ class SearchNotifier with ChangeNotifier {
                 final videos = _res.vid;
                 final diaries = _res.diary;
                 final pics = _res.pict;
-                if(pics?.isEmpty ?? true){
-                  isHasNextPic = false;
+                if(hyppe == HyppeType.HyppePic){
+                  if(pics?.isEmpty ?? true){
+                    isHasNextPic = false;
+                  }
                 }
-                if(diaries?.isEmpty ?? true){
-                  isHasNextDiary = false;
+
+                if(hyppe == HyppeType.HyppeDiary){
+                  if(diaries?.isEmpty ?? true){
+                    isHasNextDiary = false;
+                  }
                 }
-                if(videos?.isEmpty ?? true){
-                  isHasNextVid = false;
+
+                if(hyppe == HyppeType.HyppeVid){
+                  if(videos?.isEmpty ?? true){
+                    isHasNextVid = false;
+                  }
                 }
+
                 if (hyppe == HyppeType.HyppeVid) {
                   for (final video in videos ?? []) {
                     _detailHashTag?.vid?.add(video);
@@ -849,6 +868,7 @@ class SearchNotifier with ChangeNotifier {
       final lenghtDiary = currentDairy.length;
       final lenghtPic = currentPic.length;
       if (reload) {
+        initAllHasNext();
         loadIntDetail = true;
         final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: hyppe);
         if (_res != null) {
@@ -888,6 +908,22 @@ class SearchNotifier with ChangeNotifier {
                 final videos = _res.vid;
                 final diaries = _res.diary;
                 final pics = _res.pict;
+                if(hyppe == HyppeType.HyppeVid){
+                  if(videos?.isEmpty ?? true){
+                    isHasNextVid = false;
+                  }
+                }
+                if(hyppe == HyppeType.HyppeDiary){
+                  if(diaries?.isEmpty ?? true){
+                    isHasNextDiary = false;
+                  }
+                }
+                if(hyppe == HyppeType.HyppePic){
+                  if(pics?.isEmpty ?? true){
+                    isHasNextPic = false;
+                  }
+                }
+
                 if (hyppe == HyppeType.HyppeVid) {
                   for (final video in videos ?? []) {
                     interestContents[keys]?.vid?.add(video);
@@ -1041,6 +1077,7 @@ class SearchNotifier with ChangeNotifier {
       }
 
       if (reload) {
+        initAllHasNext();
         isLoading = true;
       }
 
@@ -1133,6 +1170,9 @@ class SearchNotifier with ChangeNotifier {
         final _res = SearchContentModel.fromJson(fetch.data[0]);
         switch (typeSearch) {
           case SearchLoadData.all:
+            isHasNextVid = true;
+            isHasNextDiary = true;
+            isHasNextPic = true;
             searchUsers = _res.users;
             searchVid = _res.vid;
             searchDiary = _res.diary;
@@ -1140,9 +1180,25 @@ class SearchNotifier with ChangeNotifier {
             searchHashtag = _res.tags;
             break;
           case SearchLoadData.content:
-            searchVid = [...(searchVid ?? []), ...(_res.vid ?? [])];
-            searchDiary = [...(searchDiary ?? []), ...(_res.diary ?? [])];
-            searchPic = [...(searchPic ?? []), ...(_res.pict ?? [])];
+            final videos = _res.vid ?? [];
+            final diaries = _res.diary ?? [];
+            final picts = _res.pict ?? [];
+            if(videos.isEmpty){
+              isHasNextVid = false;
+            }else{
+              searchVid = [...(searchVid ?? []), ...videos];
+            }
+            if(diaries.isEmpty){
+              isHasNextDiary = false;
+            }else{
+              searchDiary = [...(searchDiary ?? []), ...diaries];
+            }
+            if(picts.isEmpty){
+              isHasNextPic = false;
+            }else{
+              searchPic = [...(searchPic ?? []), ...picts];
+            }
+
             break;
           case SearchLoadData.user:
             if (!reload) {

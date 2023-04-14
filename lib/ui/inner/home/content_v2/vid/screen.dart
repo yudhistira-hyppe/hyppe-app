@@ -23,6 +23,7 @@ import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -434,32 +435,40 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
               ),
             )),
         // Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data, width: width)),
-        data?.reportedStatus == 'BLURRED'
-            ? ClipRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: 30.0,
-                    sigmaY: 30.0,
-                  ),
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: SizeConfig.screenWidth,
-                    height: 200.0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        CustomIconWidget(
-                          iconData: "${AssetPath.vectorPath}eye-off.svg",
-                          defaultColor: false,
-                          height: 50,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
+        (data?.reportedStatus == "BLURRED")
+            ? Positioned.fill(
+                child: VideoThumbnailReport(
+                  videoData: data,
+                  seeContent: false,
                 ),
               )
             : Container(),
+        // data?.reportedStatus == 'BLURRED'
+        //     ? ClipRect(
+        //         child: BackdropFilter(
+        //           filter: ImageFilter.blur(
+        //             sigmaX: 30.0,
+        //             sigmaY: 30.0,
+        //           ),
+        //           child: Container(
+        //             alignment: Alignment.center,
+        //             width: SizeConfig.screenWidth,
+        //             height: 200.0,
+        //             child: Column(
+        //               mainAxisAlignment: MainAxisAlignment.center,
+        //               children: const [
+        //                 CustomIconWidget(
+        //                   iconData: "${AssetPath.vectorPath}eye-off.svg",
+        //                   defaultColor: false,
+        //                   height: 50,
+        //                   color: Colors.white,
+        //                 ),
+        //               ],
+        //             ),
+        //           ),
+        //         ),
+        //       )
+        //     : Container(),
       ],
     );
   }

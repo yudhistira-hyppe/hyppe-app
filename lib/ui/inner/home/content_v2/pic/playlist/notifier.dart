@@ -104,7 +104,9 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
 
       _checkFollowingToUser(context, autoFollow: false);
       _increaseViewCount(context);
-      await initDetailPost(context, _data?.postID ?? '', _routeArgument?.picData?.visibility ?? 'PUBLIC');
+      if(_data?.username?.isEmpty ?? true){
+        await initDetailPost(context, _data?.postID ?? '', _routeArgument?.picData?.visibility ?? 'PUBLIC');
+      }
     }
   }
 

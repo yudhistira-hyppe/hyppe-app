@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -30,6 +31,7 @@ class LeftItems extends StatefulWidget {
   final String? location;
   final List<TagPeople>? tagPeople;
   final ContentData? data;
+  final FlutterAliplayer? aliPlayer;
 
   const LeftItems({
     Key? key,
@@ -43,6 +45,7 @@ class LeftItems extends StatefulWidget {
     this.location,
     this.tagPeople,
     this.data,
+    this.aliPlayer
   }) : super(key: key);
 
   @override
@@ -124,6 +127,13 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomDescContent(
+                    beforeGone: (){
+                      widget.aliPlayer?.pause();
+                    },
+                    afterGone: (){
+
+                      widget.aliPlayer?.play();
+                    },
                     desc: "${widget.description}",
                     trimLines: 5,
                     textAlign: TextAlign.start,

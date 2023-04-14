@@ -125,6 +125,7 @@ class _MainScreenState extends State<MainScreen> {
                     ]),
                     onPressed: () {
                       tapMenu(3, notifier, consumerContext);
+                      context.read<MainNotifier>().receivedReaction = false;
                     },
                   ),
                 ),

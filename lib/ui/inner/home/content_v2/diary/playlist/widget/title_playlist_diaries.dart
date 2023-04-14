@@ -48,14 +48,15 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
   }
 
   @override
-  void afterFirstLayout(BuildContext context) {
-    context.read<DiariesPlaylistNotifier>().initTitleData(context, widget.data?.postID ?? '', widget.data?.visibility ?? 'PUBLIC');
+  void afterFirstLayout(BuildContext context) async {
+    await context.read<DiariesPlaylistNotifier>().initTitleData(context, widget.data?.postID ?? '', widget.data?.visibility ?? 'PUBLIC');
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Consumer2<DiariesPlaylistNotifier, FollowRequestUnfollowNotifier>(builder: (context, ref, follRef, _) {
+      print(ref.data?.username);
       final data = ref.data ?? widget.data;
       return Align(
         alignment: Alignment.topCenter,
@@ -73,153 +74,133 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
             children: [
               (data?.isReport ?? false)
                   ? Container()
-                  : Visibility(
-                      visible: (data?.reportedStatus != "BLURRED"),
-                      child: ProfileComponent(
-                        isDetail: true,
-                        show: true,
-                        onFollow: () {},
-                        following: true,
-                        haveStory: false,
-                        onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? '', storyController: widget.storyController),
-                        username: "${data?.username}",
-                        spaceProfileAndId: fourteenPx,
-                        featureType: FeatureType.diary,
-                        imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
-                        isCelebrity: data?.privacy?.isCelebrity,
-                        isUserVerified: data?.isIdVerified ?? false,
-                        createdAt: '${System().readTimestamp(
-                          DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
-                          context,
-                          fullCaption: true,
-                        )}',
-                        // haveStory: data.isHaveStory ?? false,
-                        // onFollow: () async => await context
-                        //     .read<FollowRequestUnfollowNotifier>()
-                        //     .followRequestUnfollowUser(context, fUserId: data.userID, statusFollowing: StatusFollowing.rejected, currentValue: data),
-                        // username: "${data.fullName}",
-                        // isCelebrity: data.isCelebrity,
-                        // imageUrl: "${data.profilePic}$VERYBIG",
-                        // following: value.statusFollowing == StatusFollowing.following || value.statusFollowing == StatusFollowing.requested ? true : false,
-                        // onTapOnProfileImage: () => context.read<DiariesPlaylistNotifier>().followUser(context),
-                      ),
+                  : ProfileComponent(
+                      isDetail: true,
+                      show: true,
+                      onFollow: () {},
+                      following: true,
+                      haveStory: false,
+                      onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? '', storyController: widget.storyController),
+                      username: "${data?.username}",
+                      spaceProfileAndId: fourteenPx,
+                      featureType: FeatureType.diary,
+                      imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
+                      isCelebrity: data?.privacy?.isCelebrity,
+                      isUserVerified: data?.isIdVerified ?? false,
+                      createdAt: '${System().readTimestamp(
+                        DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
+                        context,
+                        fullCaption: true,
+                      )}',
+                      // haveStory: data.isHaveStory ?? false,
+                      // onFollow: () async => await context
+                      //     .read<FollowRequestUnfollowNotifier>()
+                      //     .followRequestUnfollowUser(context, fUserId: data.userID, statusFollowing: StatusFollowing.rejected, currentValue: data),
+                      // username: "${data.fullName}",
+                      // isCelebrity: data.isCelebrity,
+                      // imageUrl: "${data.profilePic}$VERYBIG",
+                      // following: value.statusFollowing == StatusFollowing.following || value.statusFollowing == StatusFollowing.requested ? true : false,
+                      // onTapOnProfileImage: () => context.read<DiariesPlaylistNotifier>().followUser(context),
                     ),
-              (data?.reportedStatus == "BLURRED")
-                  ? SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: CustomTextButton(
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                            const EdgeInsets.only(left: 0.0),
+              Row(
+                children: [
+                  (data?.saleAmount ?? 0) > 0
+                      ? const Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: CustomIconWidget(
+                            iconData: "${AssetPath.vectorPath}sale.svg",
+                            defaultColor: false,
+                            height: 22,
                           ),
-                        ),
-                        onPressed: () => context.read<DiariesPlaylistNotifier>().onWillPop(mounted),
-                        child: const DecoratedIconWidget(
-                          Icons.close_rounded,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  : Row(
-                      children: [
-                        (data?.saleAmount ?? 0) > 0
-                            ? const Padding(
-                                padding: EdgeInsets.all(2.0),
-                                child: CustomIconWidget(
-                                  iconData: "${AssetPath.vectorPath}sale.svg",
-                                  defaultColor: false,
-                                  height: 22,
-                                ),
-                              )
-                            : const SizedBox(),
-                        data?.email == SharedPreference().readStorage(SpKeys.email)
-                            ? CustomBalloonWidget(
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    // widget.storyController.pause();
-                                    if(globalAliPlayer != null){
-                                      globalAliPlayer?.pause();
-                                    }
-                                    SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                                    await ShowBottomSheet().onShowOptionContent(
-                                      context,
-                                      contentData: data!,
-                                      captionTitle: hyppeDiary,
-                                      storyController: widget.storyController,
-                                      isShare: data.isShared,
-                                      onUpdate: () => context.read<DiariesPlaylistNotifier>().onUpdate(),
-                                    );
-                                    SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-                                    if(globalAliPlayer != null){
-                                      globalAliPlayer?.play();
-                                    }
-                                  },
-                                  child: const CustomIconWidget(
-                                    defaultColor: false,
-                                    iconData: "${AssetPath.vectorPath}more.svg",
-                                    color: kHyppeLightButtonText,
-                                  ),
-                                ),
-                              )
-                            : const SizedBox(),
-                        data?.email != SharedPreference().readStorage(SpKeys.email)
-                            ? CustomBalloonWidget(
-                                child: GestureDetector(
-                                  onTap: () async{
-                                    // widget.storyController.pause();
-                                    if(globalAliPlayer != null){
-                                      globalAliPlayer?.pause();
-                                    }
-                                    await ShowBottomSheet().onReportContent(
-                                      context,
-                                      postData: data,
-                                      type: hyppeDiary,
-                                      adsData: null,
-                                      storyController: widget.storyController,
-                                      onUpdate: () {
-                                        context.read<DiariesPlaylistNotifier>().onUpdate();
-                                        // widget.storyController.pause();
-                                      },
-                                    );
-                                    if(globalAliPlayer != null){
-                                      globalAliPlayer?.play();
-                                    }
-                                    // widget.storyController.pause();
-                                  },
-                                  child: const CustomIconWidget(
-                                    defaultColor: false,
-                                    iconData: "${AssetPath.vectorPath}more.svg",
-                                    color: kHyppeLightButtonText,
-                                  ),
-                                ),
-                              )
-                            : const SizedBox(),
-                        Visibility(
-                          visible: (data?.saleAmount == 0 && (data?.certified ?? false)),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: IconOwnership(correct: true),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: CustomTextButton(
-                            style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
-                                const EdgeInsets.only(left: 0.0),
-                              ),
-                            ),
-                            onPressed: () => context.read<DiariesPlaylistNotifier>().onWillPop(mounted),
-                            child: const DecoratedIconWidget(
-                              Icons.close_rounded,
-                              color: Colors.white,
+                        )
+                      : const SizedBox(),
+                  data?.email == SharedPreference().readStorage(SpKeys.email)
+                      ? CustomBalloonWidget(
+                          child: GestureDetector(
+                            onTap: () async {
+                              // widget.storyController.pause();
+                              if (globalAliPlayer != null) {
+                                globalAliPlayer?.pause();
+                              }
+                              SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                              await ShowBottomSheet().onShowOptionContent(
+                                context,
+                                contentData: data!,
+                                captionTitle: hyppeDiary,
+                                storyController: widget.storyController,
+                                isShare: data.isShared,
+                                onUpdate: () => context.read<DiariesPlaylistNotifier>().onUpdate(),
+                              );
+                              SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                              if (globalAliPlayer != null) {
+                                globalAliPlayer?.play();
+                              }
+                            },
+                            child: const CustomIconWidget(
+                              defaultColor: false,
+                              iconData: "${AssetPath.vectorPath}more.svg",
+                              color: kHyppeLightButtonText,
                             ),
                           ),
                         )
-                      ],
-                    )
+                      : const SizedBox(),
+                  data?.email != SharedPreference().readStorage(SpKeys.email)
+                      ? CustomBalloonWidget(
+                          child: GestureDetector(
+                            onTap: () async {
+                              // widget.storyController.pause();
+                              if (globalAliPlayer != null) {
+                                globalAliPlayer?.pause();
+                              }
+                              await ShowBottomSheet().onReportContent(
+                                context,
+                                postData: data,
+                                type: hyppeDiary,
+                                adsData: null,
+                                storyController: widget.storyController,
+                                onUpdate: () {
+                                  context.read<DiariesPlaylistNotifier>().onUpdate();
+                                  // widget.storyController.pause();
+                                },
+                              );
+                              if (globalAliPlayer != null) {
+                                globalAliPlayer?.play();
+                              }
+                              // widget.storyController.pause();
+                            },
+                            child: const CustomIconWidget(
+                              defaultColor: false,
+                              iconData: "${AssetPath.vectorPath}more.svg",
+                              color: kHyppeLightButtonText,
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
+                  Visibility(
+                    visible: (data?.saleAmount == 0 && (data?.certified ?? false)),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: IconOwnership(correct: true),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: CustomTextButton(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(
+                          const EdgeInsets.only(left: 0.0),
+                        ),
+                      ),
+                      onPressed: () => context.read<DiariesPlaylistNotifier>().onWillPop(mounted),
+                      child: const DecoratedIconWidget(
+                        Icons.close_rounded,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                ],
+              )
             ],
           ),
         ),

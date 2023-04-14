@@ -140,7 +140,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     print("======================ke initstate");
 
     super.initState();
-
+    context.read<StoriesPlaylistNotifier>().setLoadReaction(false);
     _pageController = PageController(initialPage: widget.argument.peopleIndex);
     animationController = AnimationController(vsync: this, duration: const Duration(seconds: 7));
     emojiController = AnimationController(vsync: this, duration: const Duration(seconds: 7));
@@ -154,9 +154,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         ..addStatusListener(
           (AnimationStatus status) {
             if (status == AnimationStatus.completed) {
-              if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
-                storyComplete(notifier);
-              }
+              storyComplete(notifier);
             }
           },
         );
@@ -246,7 +244,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
         if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
-          _animationController?.duration = Duration(milliseconds: _videoDuration > 5000 ? 15000 : 8000);
+          _animationController?.duration = Duration(milliseconds: _videoDuration > 5000 ? 5000 : 3000);
         } else {
           _animationController?.duration = Duration(milliseconds: _videoDuration);
         }
@@ -385,11 +383,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     if (_curChildIdx == ((_groupUserStories![_curIdx].story?.length ?? 0) - 1)) {
       shown = [];
       if (_curIdx == (_groupUserStories!.length - 1)) {
-        print("!!!!!!ini kembali");
-        Navigator.pop(context);
-        // return Routing().moveBack();
+        Routing().moveBack();
       } else {
-        print("@@@@@selanjutnya");
         _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
         _curChildIdx = 0;
         setState(() {});
@@ -397,7 +392,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     } else {
       setState(() {
         if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
-          _animationController?.duration = const Duration(milliseconds: 8000);
+          _animationController?.duration = const Duration(milliseconds: 5000);
         }
         shown.add(_groupUserStories![_curIdx].story?[_curChildIdx].postID);
         print(shown);
@@ -582,7 +577,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   // padding: EdgeInsets.only(bottom: 25.0),
-                  child: _buildFillStory(value),
+                  child: _buildFillStory(value, index),
                 ),
 
                 _buildSingleScreen(index, value),
@@ -594,22 +589,22 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     });
   }
 
-  Widget _buildFillStory(StoriesPlaylistNotifier not) {
+  Widget _buildFillStory(StoriesPlaylistNotifier not, int index) {
     return SafeArea(
       child: Stack(
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 10.0, right: 10),
             child: Row(
-              children: (_groupUserStories?[_curIdx].story ?? []).map((it) {
+              children: (_groupUserStories?[index].story ?? []).map((it) {
                 return Expanded(
                   child: Container(
-                    padding: EdgeInsets.only(top: 5, right: _groupUserStories![_curIdx].story!.last == it ? 0 : 4),
+                    padding: EdgeInsets.only(top: 5, right: _groupUserStories![index].story!.last == it ? 0 : 4),
                     height: 9,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(40.0),
                       child: LinearProgressIndicator(
-                        value: it.postID == _groupUserStories![_curIdx].story?[_curChildIdx].postID ? _animationController?.value : (shown.contains(it.postID) ? 1 : 0),
+                        value: it.postID == _groupUserStories![index].story?[_curChildIdx].postID ? _animationController?.value : (shown.contains(it.postID) ? 1 : 0),
                         backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
                         valueColor: const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
                       ),
@@ -666,24 +661,24 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
               ),
             ],
           ),
-          if (_groupUserStories?[_curIdx].story?[_curChildIdx] != null)
+          if (_groupUserStories?[index].story?[_curChildIdx] != null)
             BuildTopView(
               when: System().readTimestamp(
-                    DateTime.parse(_groupUserStories?[_curIdx].story?[_curChildIdx].createdAt ?? '').millisecondsSinceEpoch,
+                    DateTime.parse(_groupUserStories?[index].story?[_curChildIdx].createdAt ?? '').millisecondsSinceEpoch,
                     context,
                     fullCaption: true,
                   ) ??
                   '',
-              data: _groupUserStories?[_curIdx].story?[_curChildIdx],
+              data: _groupUserStories?[index].story?[_curChildIdx],
               // storyController: _storyController,
             ),
-          (_groupUserStories?[_curIdx].story?[_curChildIdx].isReport ?? false)
+          (_groupUserStories?[index].story?[_curChildIdx].isReport ?? false)
               ? Container()
               : Form(
                   child: BuildBottomView(
-                    data: _groupUserStories?[_curIdx].story?[_curChildIdx],
+                    data: _groupUserStories?[index].story?[_curChildIdx],
                     // storyController: _storyController,
-                    currentStory: _groupUserStories?[_curIdx].story?.indexOf(_groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()),
+                    currentStory: _groupUserStories?[index].story?.indexOf(_groupUserStories![index].story?[_curChildIdx] ?? ContentData()),
                     animationController: emojiController,
                     currentIndex: _curChildIdx,
                     pause: pause,
@@ -719,22 +714,22 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     // if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image' && loadImage == 1) {
     //   _animationController?.forward();
     // }
-    return !isPlay || (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image' && _groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null)
+    return !isPlay || (_groupUserStories?[index].story?[_curChildIdx].mediaType == 'image' && _groupUserStories?[index].story?[_curChildIdx].music?.apsaraMusic != null)
         ? Stack(
             children: [
-              _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image'
+              _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image'
                   ? Container(
                       color: Colors.black,
                       child: CustomBaseCacheImage(
                         widthPlaceHolder: 112,
                         heightPlaceHolder: 40,
-                        imageUrl: (_groupUserStories?[_curIdx].story?[_curChildIdx].isApsara ?? false)
-                            ? (_groupUserStories?[_curIdx].story?[_curChildIdx].media) == null
-                                ? "${_groupUserStories?[_curIdx].story?[_curChildIdx].mediaUri}"
-                                : "${_groupUserStories?[_curIdx].story?[_curChildIdx].media?.imageInfo?[0].url}"
-                            : "${_groupUserStories?[_curIdx].story?[_curChildIdx].fullContent}",
+                        imageUrl: (_groupUserStories?[index].story?[_curChildIdx].isApsara ?? false)
+                            ? (_groupUserStories?[index].story?[_curChildIdx].media) == null
+                                ? "${_groupUserStories?[index].story?[_curChildIdx].mediaUri}"
+                                : "${_groupUserStories?[index].story?[_curChildIdx].media?.imageInfo?[0].url}"
+                            : "${_groupUserStories?[index].story?[_curChildIdx].fullContent}",
                         imageBuilder: (context, imageProvider) {
-                          if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
+                          if (_groupUserStories?[index].story?[_curChildIdx].mediaType == 'image') {
                             loadImage++;
                           }
                           return Container(
@@ -806,7 +801,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                         strokeWidth: 3.0,
                       ),
                     ),
-              _buildFillStory(not),
+              _buildFillStory(not, index),
             ],
           )
         : Container();
@@ -823,11 +818,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   void start() async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
     _animationController?.reset();
-    setState(() {
-      context.read<PreviewStoriesNotifier>().storiesGroups?[_curIdx].story?[_curChildIdx].isViewed = true;
-      context.read<PreviewStoriesNotifier>().onUpdate();
-    });
-
     System().increaseViewCount(context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()).whenComplete(() {});
     fAliplayer?.stop();
     isPlay = false;
@@ -878,7 +868,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic ?? '');
         fAliplayer?.prepare();
       } else {
-        _animationController?.duration = const Duration(milliseconds: 8000);
+        _animationController?.duration = const Duration(milliseconds: 5000);
         _animationController?.forward();
       }
     }

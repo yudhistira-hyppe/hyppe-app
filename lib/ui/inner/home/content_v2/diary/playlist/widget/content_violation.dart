@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -14,6 +15,7 @@ import 'package:provider/provider.dart';
 class ContentViolationWidget extends StatelessWidget {
   final ContentData data;
   final String text;
+
   const ContentViolationWidget({Key? key, required this.data, this.text = ''}) : super(key: key);
 
   @override
@@ -22,7 +24,12 @@ class ContentViolationWidget extends StatelessWidget {
     final translate = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     SizeConfig().init(context);
     return GestureDetector(
-      onTap: () => Routing().move(Routes.appeal, argument: data),
+      onTap: () {
+        if (globalAliPlayer != null) {
+          globalAliPlayer?.pause();
+        }
+        Routing().move(Routes.appeal, argument: data);
+      },
       child: Container(
         color: Colors.red,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),

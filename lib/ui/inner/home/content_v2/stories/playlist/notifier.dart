@@ -542,81 +542,90 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     if (_data != null) {
       // storyController?.pause();
       if (!mounted) return;
-      showGeneralDialog(
-        barrierLabel: "Barrier",
-        barrierDismissible: false,
-        barrierColor: Colors.black.withOpacity(0.5),
-        transitionDuration: const Duration(milliseconds: 500),
-        context: context,
-        pageBuilder: (context, animation, secondaryAnimation) {
-          if (animationController != null) {
-            return ShowReactionsIcon(
-                onTap: () => _routing.moveBack(),
-                crossAxisCount: 3,
-                data: _data?.data ?? [],
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      reaction = _data?.data[index].icon;
-                      _routing.moveBack();
-                      final emoji = _data?.data[index];
-                      if (emoji != null) {
-                        // emojiActions.add(sendMessageReaction(
-                        //   materialAppKey.currentContext!,
-                        //   contentData: data,
-                        //   reaction: _data?.data[index],
-                        // ));
-                        final tempLength = emojiActions.length;
-                        Future.delayed(const Duration(seconds: 3), () {
-                          try {
-                            sendMessageReaction(
-                              materialAppKey.currentContext!,
-                              contentData: data,
-                              reaction: _data?.data[index],
-                            );
-                          } catch (e) {
-                            e.logger();
-                          }
+      if(!loadReaction){
+        isPreventedEmoji = false;
+        showGeneralDialog(
+          barrierLabel: "Barrier",
+          barrierDismissible: false,
+          barrierColor: Colors.black.withOpacity(0.5),
+          transitionDuration: const Duration(milliseconds: 500),
+          context: context,
+          pageBuilder: (context, animation, secondaryAnimation) {
+            if (animationController != null) {
+              return ShowReactionsIcon(
+                  onTap: () => _routing.moveBack(),
+                  crossAxisCount: 3,
+                  data: _data?.data ?? [],
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        reaction = _data?.data[index].icon;
+                        _routing.moveBack();
+                        final emoji = _data?.data[index];
+                        if(emoji != null){
 
-                          // if(tempLength == emojiActions.length){
-                          //   sendAllEmoji();
-                          // }
-                        });
-                      }
-                      // try {
-                      //   sendMessageReaction(
-                      //     materialAppKey.currentContext!,
-                      //     contentData: data,
-                      //     reaction: _data?.data[index],
-                      //   );
-                      // } catch (e) {
-                      //   print(e);
-                      // }
-                      makeItems(animationController, data, _data?.data[index]);
-                      // Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
-                      // Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
-                    },
-                    child: Material(
-                      color: Colors.transparent,
-                      child: CustomTextWidget(
-                        textToDisplay: _data?.data[index].icon ?? '',
-                        textStyle: Theme.of(context).textTheme.headline4?.apply(color: null),
+                          loadReaction = true;
+                          // emojiActions.add(sendMessageReaction(
+                          //   materialAppKey.currentContext!,
+                          //   contentData: data,
+                          //   reaction: _data?.data[index],
+                          // ));
+                          final tempLength = emojiActions.length;
+                          Future.delayed(const Duration(seconds: 3), (){
+                            try{
+                              sendMessageReaction(
+                                materialAppKey.currentContext!,
+                                contentData: data,
+                                reaction: _data?.data[index],
+                              );
+                            }catch(e){
+                              e.logger();
+                            }
+
+                            // if(tempLength == emojiActions.length){
+                            //   sendAllEmoji();
+                            // }
+                          });
+                          makeItems(animationController, data, _data?.data[index]);
+                        }
+
+                        // try {
+                        //   sendMessageReaction(
+                        //     materialAppKey.currentContext!,
+                        //     contentData: data,
+                        //     reaction: _data?.data[index],
+                        //   );
+                        // } catch (e) {
+                        //   print(e);
+                        // }
+
+                        // Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
+                        // Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
+
+                      },
+                      child: Material(
+                        color: Colors.transparent,
+                        child: CustomTextWidget(
+                          textToDisplay: _data?.data[index].icon ?? '',
+                          textStyle: Theme.of(context).textTheme.headline4?.apply(color: null),
+                        ),
                       ),
-                    ),
-                  );
-                });
-          } else {
-            return Container();
-          }
-        },
-        transitionBuilder: (context, animation, secondaryAnimation, child) {
-          animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+                    );
+                  });
+            } else {
+              return Container();
+            }
+          },
+          transitionBuilder: (context, animation, secondaryAnimation, child) {
+            animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
 
-          return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
-        },
-      ).whenComplete(() => Future.delayed(const Duration(seconds: 3), () {
-            isReactAction = false;
-          }));
+            return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+          },
+        ).whenComplete(() => Future.delayed(const Duration(seconds: 3), (){
+          isReactAction = false;
+        }));
+      }
+
     }
     //   },
     //   uploadContentAction: false,
@@ -749,12 +758,24 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     // }).toList();
   }
 
+  bool _loadReaction = false;
+  bool get loadReaction => _loadReaction;
+  set loadReaction(bool state){
+    _loadReaction = state;
+    notifyListeners();
+  }
+
+  setLoadReaction(bool state){
+    _loadReaction = state;
+  }
+
   Future sendMessageReaction(
     BuildContext context, {
     ContentData? contentData,
     ReactionInteractive? reaction,
   }) async {
     try {
+      loadReaction = true;
       reaction?.url.logger();
       contentData?.postID.logger();
 
@@ -768,7 +789,9 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           receiverParty: contentData?.email ?? '',
         ),
       );
+      loadReaction = false;
     } catch (e) {
+      loadReaction = false;
       e.toString().logger();
     }
   }

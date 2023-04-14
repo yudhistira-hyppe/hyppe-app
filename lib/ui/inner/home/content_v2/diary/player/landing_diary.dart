@@ -830,8 +830,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         alignment: Alignment.bottomRight,
                         child: notifier.diaryData?[index].insight?.isloading ?? false
                             ? const SizedBox(
-                                height: 10,
-                                width: 10,
+                                height: 28,
+                                width: 28,
                                 child: CircularProgressIndicator(
                                   color: kHyppePrimary,
                                   strokeWidth: 2,
@@ -842,7 +842,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   defaultColor: false,
                                   color: (notifier.diaryData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
                                   iconData: '${AssetPath.vectorPath}${(notifier.diaryData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                  height: 26,
+                                  height: 28,
                                 ),
                                 onTap: () {
                                   if (notifier.diaryData?[index] != null) {
@@ -1059,61 +1059,64 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         ? Positioned.fill(
             child: Align(
                 alignment: Alignment.centerRight,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Spacer(),
-                    const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}eye-off.svg",
-                      defaultColor: false,
-                      height: 30,
-                    ),
-                    Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                    Text("HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                        )),
-                    // data.email == SharedPreference().readStorage(SpKeys.email)
-                    //     ? GestureDetector(
-                    //         onTap: () => Routing().move(Routes.appeal, argument: data),
-                    //         child: Container(
-                    //             padding: const EdgeInsets.all(8),
-                    //             margin: const EdgeInsets.all(18),
-                    //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                    //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                    //       )
-                    //     : const SizedBox(),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        data.reportedStatus = '';
-                        start(data);
-                        context.read<ReportNotifier>().seeContent(context, data, hyppeDiary);
-                        fAliplayer?.prepare();
-                        fAliplayer?.play();
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.only(top: 8),
-                        margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
-                        width: SizeConfig.screenWidth,
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            top: BorderSide(
-                              color: Colors.white,
-                              width: 1,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Spacer(),
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}eye-off.svg",
+                        defaultColor: false,
+                        height: 30,
+                      ),
+                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                      Text("HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                          )),
+                      // data.email == SharedPreference().readStorage(SpKeys.email)
+                      //     ? GestureDetector(
+                      //         onTap: () => Routing().move(Routes.appeal, argument: data),
+                      //         child: Container(
+                      //             padding: const EdgeInsets.all(8),
+                      //             margin: const EdgeInsets.all(18),
+                      //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                      //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                      //       )
+                      //     : const SizedBox(),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          data.reportedStatus = '';
+                          start(data);
+                          context.read<ReportNotifier>().seeContent(context, data, hyppeDiary);
+                          fAliplayer?.prepare();
+                          fAliplayer?.play();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.only(top: 8),
+                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                          width: SizeConfig.screenWidth,
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
                             ),
                           ),
-                        ),
-                        child: Text(
-                          "${transnot.translate.see} HyppeDiary",
-                          style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                          textAlign: TextAlign.center,
+                          child: Text(
+                            "${transnot.translate.see} HyppeDiary",
+                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 )),
           )
         : Container();

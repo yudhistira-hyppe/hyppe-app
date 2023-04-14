@@ -57,96 +57,95 @@ class _VidSearchContentState extends State<VidSearchContent> {
               maxLines: 1,
               textAlign: TextAlign.left,
               textToDisplay: widget.title ?? '',
-              textStyle: _themes.textTheme.bodyText1?.copyWith(
-                color: _themes.colorScheme.onBackground,
-                fontWeight: FontWeight.w700
-              ),
+              textStyle: _themes.textTheme.bodyText1?.copyWith(color: _themes.colorScheme.onBackground, fontWeight: FontWeight.w700),
             ),
             sixPx,
-            widget.content.isNotNullAndEmpty() ? Expanded(
-              child: context.read<ErrorService>().isInitialError(error, widget.content)
-                  ? CustomErrorWidget(
-                      errorType: ErrorType.pic,
-                      // function: () => notifier.initialPic(context, reload: true),
-                    )
-                  : NotificationListener<ScrollNotification>(
-                      onNotification: (ScrollNotification scrollInfo) {
-                        if (scrollInfo is ScrollStartNotification) {
-                          Future.delayed(const Duration(milliseconds: 100), () {
-                            // notifier.initialPic(context);
-                          });
-                        }
-                        return true;
-                      },
-                      child: ListView.builder(
-                        // controller: notifier.scrollController,
-                        physics: AlwaysScrollableScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: widget.content?.length,
-                        padding: const EdgeInsets.only(right: 11.5),
-                        itemBuilder: (context, index) {
-                          if (widget.content == null) {
-                            return CustomShimmer(
-                              width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                              height: 168,
-                              radius: 8,
-                              margin: const EdgeInsets.symmetric(horizontal: 4.5),
-                              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                            );
-                            // } else if (index == widget.content?.length && notifier.hasNext) {
-                          } else if (index == widget.content?.length) {
-                            return UnconstrainedBox(
-                              child: Container(
-                                child: const CustomLoading(),
-                                alignment: Alignment.center,
-                                width: 80 * SizeConfig.scaleDiagonal,
-                                height: 80 * SizeConfig.scaleDiagonal,
-                              ),
-                            );
-                          }
-
-                          return ThumbnailContentSearch(
-                            data: widget.content?[index] ?? ContentData(),
-                            onTap: () {
-                              context.read<ReportNotifier>().inPosition = contentPosition.search;
-                              notifier.navigateToSeeAllScreen2(context, widget.content ?? [], index, widget.selecIndex ?? 0);
-                              final _routing = Routing();
-                              // switch (widget.featureType) {
-                              //   case FeatureType.vid:
-                              //     _routing.move(Routes.vidDetail,
-                              //         argument: VidDetailScreenArgument(vidData: widget.content?[index])
-                              //           ..postID = widget.content?[index].postID
-                              //           ..backPage = true);
-                              //     break;
-
-                              //   case FeatureType.diary:
-                              //     _routing.move(Routes.diaryDetail,
-                              //         argument: DiaryDetailScreenArgument(
-                              //             diaryData: widget.content, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search));
-
-                              //     _routing.move(Routes.diaryDetail,
-                              //         argument: DiaryDetailScreenArgument(diaryData: widget.content, index: index.toDouble(), type: TypePlaylist.none)
-                              //           ..postID = widget.content?[index].postID
-                              //           ..backPage = true);
-                              //     break;
-                              //   case FeatureType.pic:
-                              //     _routing.move(Routes.picDetail,
-                              //         argument: PicDetailScreenArgument(picData: widget.content?[index])
-                              //           ..postID = widget.content?[index].postID
-                              //           ..backPage = true);
-                              //     break;
-                              //   default:
-                              // }
-
-                              // print(widget.content[index].username);
-                              // context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, widget.content[index]);
+            widget.content.isNotNullAndEmpty()
+                ? Expanded(
+                    child: context.read<ErrorService>().isInitialError(error, widget.content)
+                        ? CustomErrorWidget(
+                            errorType: ErrorType.pic,
+                            // function: () => notifier.initialPic(context, reload: true),
+                          )
+                        : NotificationListener<ScrollNotification>(
+                            onNotification: (ScrollNotification scrollInfo) {
+                              if (scrollInfo is ScrollStartNotification) {
+                                Future.delayed(const Duration(milliseconds: 100), () {
+                                  // notifier.initialPic(context);
+                                });
+                              }
+                              return true;
                             },
-                            margin: EdgeInsets.only(right: 11),
-                          );
-                        },
-                      ),
-                    ),
-            ): SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
+                            child: ListView.builder(
+                              // controller: notifier.scrollController,
+                              physics: AlwaysScrollableScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: widget.content?.length,
+                              padding: const EdgeInsets.only(right: 11.5),
+                              itemBuilder: (context, index) {
+                                if (widget.content == null) {
+                                  return CustomShimmer(
+                                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                    height: 168,
+                                    radius: 8,
+                                    margin: const EdgeInsets.symmetric(horizontal: 4.5),
+                                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                  );
+                                  // } else if (index == widget.content?.length && notifier.hasNext) {
+                                } else if (index == widget.content?.length) {
+                                  return UnconstrainedBox(
+                                    child: Container(
+                                      child: const CustomLoading(),
+                                      alignment: Alignment.center,
+                                      width: 80 * SizeConfig.scaleDiagonal,
+                                      height: 80 * SizeConfig.scaleDiagonal,
+                                    ),
+                                  );
+                                }
+
+                                return ThumbnailContentSearch(
+                                  data: widget.content?[index] ?? ContentData(),
+                                  onTap: () {
+                                    context.read<ReportNotifier>().inPosition = contentPosition.search;
+                                    notifier.navigateToSeeAllScreen2(context, widget.content ?? [], index, widget.selecIndex ?? 0);
+                                    final _routing = Routing();
+                                    // switch (widget.featureType) {
+                                    //   case FeatureType.vid:
+                                    //     _routing.move(Routes.vidDetail,
+                                    //         argument: VidDetailScreenArgument(vidData: widget.content?[index])
+                                    //           ..postID = widget.content?[index].postID
+                                    //           ..backPage = true);
+                                    //     break;
+
+                                    //   case FeatureType.diary:
+                                    //     _routing.move(Routes.diaryDetail,
+                                    //         argument: DiaryDetailScreenArgument(
+                                    //             diaryData: widget.content, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search));
+
+                                    //     _routing.move(Routes.diaryDetail,
+                                    //         argument: DiaryDetailScreenArgument(diaryData: widget.content, index: index.toDouble(), type: TypePlaylist.none)
+                                    //           ..postID = widget.content?[index].postID
+                                    //           ..backPage = true);
+                                    //     break;
+                                    //   case FeatureType.pic:
+                                    //     _routing.move(Routes.picDetail,
+                                    //         argument: PicDetailScreenArgument(picData: widget.content?[index])
+                                    //           ..postID = widget.content?[index].postID
+                                    //           ..backPage = true);
+                                    //     break;
+                                    //   default:
+                                    // }
+
+                                    // print(widget.content[index].username);
+                                    // context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, widget.content[index]);
+                                  },
+                                  margin: EdgeInsets.only(right: 11),
+                                );
+                              },
+                            ),
+                          ),
+                  )
+                : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
           ],
         ),
       ),

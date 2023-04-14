@@ -18,6 +18,7 @@ class MessageDataV2 {
   String? updatedAt;
   String? lastestMessage;
   String? username;
+  String? type;
 
   MessageDataV2({
     this.createdAt,
@@ -35,6 +36,7 @@ class MessageDataV2 {
     this.senderOrReceiverInfo,
     this.lastestMessage,
     this.avatar,
+    this.type,
   });
 
   MessageDataV2.fromJson(Map<String, dynamic> json) {
@@ -61,6 +63,7 @@ class MessageDataV2 {
     } else {
       fcmMessage = lastestMessage;
     }
+    type = json['type'];
   }
 
   Map<String, dynamic> toJson() {
