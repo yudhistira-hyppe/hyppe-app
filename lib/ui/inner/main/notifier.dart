@@ -237,6 +237,7 @@ class MainNotifier with ChangeNotifier {
 
                   if (msgData.type == 'REACTION') {
                     receivedReaction = true;
+                    receivedMsg = true;
                   } else {
                     receivedMsg = true;
                   }
