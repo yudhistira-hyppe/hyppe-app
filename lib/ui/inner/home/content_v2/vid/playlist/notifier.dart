@@ -109,13 +109,13 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
       notifyListeners();
     } else if (_routeArgument?.vidData?.postID != null) {
       final userName = _routeArgument?.vidData?.username;
-      if(userName?.isEmpty ?? true){
-        final following = _routeArgument?.vidData?.following;
-        print('following initState $following');
-        await _initialVid(context, _routeArgument?.vidData?.postID ?? '', _routeArgument?.vidData?.visibility ?? '');
-        data?.following = following;
-        notifyListeners();
-      }
+      // if (userName?.isEmpty ?? true) {
+      final following = _routeArgument?.vidData?.following;
+      print('following initState $following');
+      await _initialVid(context, _routeArgument?.vidData?.postID ?? '', _routeArgument?.vidData?.visibility ?? '');
+      data?.following = following;
+      notifyListeners();
+      // }
     } else {
       _data = _routeArgument?.vidData;
       notifyListeners();

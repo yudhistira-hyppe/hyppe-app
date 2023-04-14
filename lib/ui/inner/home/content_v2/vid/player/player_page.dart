@@ -27,6 +27,7 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
@@ -689,6 +690,12 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     }
   }
 
+  void changeStatusBlur() {
+    setState(() {
+      widget.data?.reportedStatus = "";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var x = 0.0;
@@ -744,6 +751,16 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                   fn: () {},
                 ),
               ),
+            (widget.data?.reportedStatus == "BLURRED")
+                ? Positioned.fill(
+                    child: VideoThumbnailReport(
+                      videoData: widget.data,
+                      function: () {
+                        changeStatusBlur();
+                      },
+                    ),
+                  )
+                : Container(),
             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
             if (isPlay && adsData != null && widget.inLanding) skipAds(),
             if (!isPlay)
@@ -772,13 +789,16 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                       System().increaseViewCount2(context, widget.data ?? ContentData());
                     }
                   },
-                  child: SizedBox(
-                    width: widget.width,
-                    height: widget.height,
-                    child: const CustomIconWidget(
-                      defaultColor: false,
-                      iconData: '${AssetPath.vectorPath}pause.svg',
-                      color: kHyppeLightButtonText,
+                  child: Visibility(
+                    visible: (widget.data?.reportedStatus != "BLURRED"),
+                    child: SizedBox(
+                      width: widget.width,
+                      height: widget.height,
+                      child: const CustomIconWidget(
+                        defaultColor: false,
+                        iconData: '${AssetPath.vectorPath}pause.svg',
+                        color: kHyppeLightButtonText,
+                      ),
                     ),
                   ),
                 ),

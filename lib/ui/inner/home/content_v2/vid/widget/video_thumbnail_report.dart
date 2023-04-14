@@ -18,7 +18,8 @@ import 'package:provider/provider.dart';
 class VideoThumbnailReport extends StatelessWidget {
   final ContentData? videoData;
   final bool seeContent;
-  const VideoThumbnailReport({Key? key, this.videoData, this.seeContent = true}) : super(key: key);
+  final Function()? function;
+  const VideoThumbnailReport({Key? key, this.videoData, this.seeContent = true, this.function}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,34 +39,37 @@ class VideoThumbnailReport extends StatelessWidget {
         ),
         Positioned.fill(
           child: Center(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const CustomIconWidget(
-                iconData: "${AssetPath.vectorPath}eye-off.svg",
-                defaultColor: false,
-                height: 20,
-                color: Colors.white,
-              ),
-              Text(translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-              Text("HyppeVid ${translate.contentContainsSensitiveMaterial}",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 11,
-                  )),
-              videoData?.email == SharedPreference().readStorage(SpKeys.email)
-                  ? GestureDetector(
-                      onTap: () => Routing().move(Routes.appeal, argument: videoData),
-                      child: Container(
-                          padding: const EdgeInsets.all(8),
-                          margin: const EdgeInsets.all(18),
-                          decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                          child: Text(translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                    )
-                  : const SizedBox(),
-              thirtyTwoPx,
-            ],
+              child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}eye-off.svg",
+                  defaultColor: false,
+                  height: 20,
+                  color: Colors.white,
+                ),
+                Text(translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                Text("HyppeVid ${translate.contentContainsSensitiveMaterial}",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 11,
+                    )),
+                videoData?.email == SharedPreference().readStorage(SpKeys.email)
+                    ? GestureDetector(
+                        onTap: () => Routing().move(Routes.appeal, argument: videoData),
+                        child: Container(
+                            padding: const EdgeInsets.all(8),
+                            margin: const EdgeInsets.all(18),
+                            decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                            child: Text(translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                      )
+                    : const SizedBox(),
+                thirtyTwoPx,
+              ],
+            ),
           )),
         ),
         seeContent
@@ -74,6 +78,9 @@ class VideoThumbnailReport extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
+                      if (function != null) {
+                        function!();
+                      }
                       context.read<ReportNotifier>().seeContent(context, videoData!, hyppeVid);
                     },
                     child: Container(

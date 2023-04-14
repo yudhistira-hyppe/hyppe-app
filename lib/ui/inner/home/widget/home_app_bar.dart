@@ -37,18 +37,18 @@ class HomeAppBar extends StatelessWidget {
       backgroundColor: Colors.white,
       actions: [
         // Doku(),
-        Consumer<MainNotifier>(
-          builder: (context, notifier, _) {
-            final isReceived = notifier.receivedMsg;
-            return GestureDetector(
-              onTap: () {
-                Routing().move(Routes.message);
-                notifier.receivedMsg = false;
-              },
-              child: isReceived ? CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}message_with_dot.svg') : CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}message.svg'),
-            );
-          }
-        ),
+        Consumer<MainNotifier>(builder: (context, notifier, _) {
+          final isReceived = notifier.receivedMsg;
+          return GestureDetector(
+            onTap: () {
+              Routing().move(Routes.message);
+              notifier.receivedMsg = false;
+            },
+            child: isReceived
+                ? CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}message_with_dot.svg')
+                : CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}message.svg'),
+          );
+        }),
         // Profile(),
         // AliPlayer(),
         sixteenPx,
