@@ -188,7 +188,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                             width: SizeConfig.screenWidth,
                             height: 44.0 * SizeConfig.scaleDiagonal,
                             function: () {
-                              if (!prev.isLoadVideo) {
+                              if (!notifier.updateContent && !prev.isLoadVideo) {
                                 if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
                                   notifier.onClickPost(
                                     context,
