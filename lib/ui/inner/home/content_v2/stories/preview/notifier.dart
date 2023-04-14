@@ -110,7 +110,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
   //     : peopleContentsQuery.hasNext
   //         ? (_peopleStoriesData?.length ?? 0) + 1
   //         : (_peopleStoriesData?.length ?? 0) + 1;
-
+  void onUpdate() => notifyListeners();
   int peopleItemCount(dynamic error) => _storiesGroups == null && error == null ? 10 : (_storiesGroups?.length ?? 0) + 1;
 
   bool get hasNext => peopleContentsQuery.hasNext;

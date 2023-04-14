@@ -30,10 +30,10 @@ import 'package:move_to_background/move_to_background.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool canShowAds;
-  HomeScreen({Key? key, required this.canShowAds}) : super(key: key);
+  const HomeScreen({Key? key, required this.canShowAds}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {

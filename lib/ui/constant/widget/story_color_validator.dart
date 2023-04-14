@@ -10,8 +10,18 @@ class StoryColorValidator extends StatelessWidget {
   final FeatureType featureType;
   final ContentData? contentData;
   final bool isMy;
+  final bool isView;
 
-  const StoryColorValidator({Key? key, this.width = 2.0, required this.child, required this.haveStory, this.contentData, this.featureType = FeatureType.story, this.isMy = false}) : super(key: key);
+  const StoryColorValidator({
+    Key? key,
+    this.width = 2.0,
+    required this.child,
+    required this.haveStory,
+    this.contentData,
+    this.featureType = FeatureType.story,
+    this.isMy = false,
+    this.isView = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +34,7 @@ class StoryColorValidator extends StatelessWidget {
         border: Border.all(
             width: width,
             color: !isMy
-                ? (contentData?.isViewed ?? false)
+                ? (isView)
                     ? theme.colorScheme.secondary
                     : featureType == FeatureType.story
                         ? theme.colorScheme.primary
