@@ -100,12 +100,14 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
     print('isOnPageTurning: ${widget.isOnPageTurning}');
     Future.delayed(const Duration(milliseconds: 1000), () async {
       if (!widget.isOnPageTurning && !tempAllow) {
-        if (tempPostID == widget.data.postID && canHit) {
-          await notifier.initDetailPost(context, widget.data.postID ?? '');
-          setState(() {
-            data = notifier.savedData ?? widget.data;
-            canHit = false;
-          });
+        if(widget.data.username?.isEmpty ?? true){
+          if (tempPostID == widget.data.postID && canHit) {
+            await notifier.initDetailPost(context, widget.data.postID ?? '');
+            setState(() {
+              data = notifier.savedData ?? widget.data;
+              canHit = false;
+            });
+          }
         }
       }
     });
