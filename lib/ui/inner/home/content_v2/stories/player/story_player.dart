@@ -308,7 +308,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       }
       setState(() {});
     }, loadingEnd: (playerId) {
-      // _animationController?.forward();
+      _animationController?.forward();
       setState(() {
         _showLoading = false;
       });
@@ -822,14 +822,11 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   void start() async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
+    fAliplayer?.stop();
     _animationController?.reset();
-    setState(() {
-      context.read<PreviewStoriesNotifier>().storiesGroups?[_curIdx].story?[_curChildIdx].isViewed = true;
-      context.read<PreviewStoriesNotifier>().onUpdate();
-    });
 
     System().increaseViewCount(context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()).whenComplete(() {});
-    fAliplayer?.stop();
+
     isPlay = false;
     print("ini index1 $_curIdx");
     print("ini index2 $_curChildIdx");
@@ -882,6 +879,11 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         _animationController?.forward();
       }
     }
+
+    setState(() {
+      context.read<PreviewStoriesNotifier>().storiesGroups?[_curIdx].story?[_curChildIdx].isViewed = true;
+      context.read<PreviewStoriesNotifier>().onUpdate();
+    });
 
     // fAliplayer?.play();
   }

@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -14,10 +15,16 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
-class DiarySensitive extends StatelessWidget {
+class DiarySensitive extends StatefulWidget {
   final ContentData? data;
-  const DiarySensitive({Key? key, this.data}) : super(key: key);
+  final Function()? function;
+  const DiarySensitive({Key? key, this.data, this.function}) : super(key: key);
 
+  @override
+  State<DiarySensitive> createState() => _DiarySensitiveState();
+}
+
+class _DiarySensitiveState extends State<DiarySensitive> {
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'DiarySensitive');
@@ -42,9 +49,9 @@ class DiarySensitive extends StatelessWidget {
                   color: Colors.white,
                   fontSize: 13,
                 )),
-            data?.email == SharedPreference().readStorage(SpKeys.email)
+            widget.data?.email == SharedPreference().readStorage(SpKeys.email)
                 ? GestureDetector(
-                    onTap: () => Routing().move(Routes.appeal, argument: data),
+                    onTap: () => Routing().move(Routes.appeal, argument: widget.data),
                     child: Container(
                         padding: const EdgeInsets.all(8),
                         margin: const EdgeInsets.all(18),
@@ -55,7 +62,16 @@ class DiarySensitive extends StatelessWidget {
             const Spacer(),
             GestureDetector(
               onTap: () {
-                context.read<ReportNotifier>().seeContent(context, data ?? ContentData(), hyppeDiary);
+                if (globalAliPlayer != null) {
+                  globalAliPlayer?.prepare();
+                  globalAliPlayer?.play();
+                }
+
+                if (widget.function != null) {
+                  widget.function!();
+                }
+
+                context.read<ReportNotifier>().seeContent(context, widget.data ?? ContentData(), hyppeDiary);
               },
               child: Container(
                 padding: const EdgeInsets.only(top: 8),

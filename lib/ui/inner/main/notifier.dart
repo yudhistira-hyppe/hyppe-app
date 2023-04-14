@@ -196,6 +196,13 @@ class MainNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _receivedReaction = false;
+  bool get receivedReaction => _receivedReaction;
+  set receivedReaction(bool state) {
+    _receivedReaction = state;
+    notifyListeners();
+  }
+
   void _connectAndListenToSocket() async {
     String? token = SharedPreference().readStorage(SpKeys.userToken);
     String? email = SharedPreference().readStorage(SpKeys.email);
@@ -227,7 +234,13 @@ class MainNotifier with ChangeNotifier {
                         data: msgData.toJson(),
                       ),
                       data: msgData);
-                  receivedMsg = true;
+
+                  if (msgData.type == 'REACTION') {
+                    receivedReaction = true;
+                  } else {
+                    receivedMsg = true;
+                  }
+
                   _eventService.notifyMessageReceived(msgData);
                 }
               }

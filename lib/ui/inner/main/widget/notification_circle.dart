@@ -21,8 +21,8 @@ class NotificationCircle extends StatelessWidget {
       builder: (_, value, __) => Consumer<MainNotifier>(
         builder: (_, notifier, __) => AnimatedOpacity(
           duration: const Duration(milliseconds: 200),
-          // opacity: notifier.receivedMsg || value ? 1.0 : 0.0,
-          opacity: value ? 1.0 : 0.0,
+          opacity: notifier.receivedReaction || value ? 1.0 : 0.0,
+          // opacity: value ? 1.0 : 0.0,
           child: Transform.translate(
             offset: Offset(
               SizeWidget().calculateSize(170.0, SizeWidget.baseHeightXD, 54.0),

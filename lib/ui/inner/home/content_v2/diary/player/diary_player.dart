@@ -12,12 +12,17 @@ import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
+import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/diary_sensitive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/left_items.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items.dart';
@@ -498,77 +503,79 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   @override
   Widget build(BuildContext context) {
     // print("[DIARY_PLAYER] build() started. "+stopwatch.elapsed.toString());
-    return PageView.builder(
-      controller: _pageController,
-      scrollDirection: Axis.horizontal,
-      itemCount: _listData?.length ?? 0,
-      onPageChanged: (index) async {
-        _curIdx = index;
-        setState(() {});
-        if (_lastCurIndex != _curIdx) {
-          if (_listData?[_curIdx].isApsara ?? false) {
-            _playMode = ModeTypeAliPLayer.auth;
-          } else {
-            _playMode = ModeTypeAliPLayer.url;
-          }
-          start();
-          if (widget.argument.diaryData?[_curIdx].certified ?? false) {
-            System().block(context);
-          } else {
-            System().disposeBlock();
-          }
-        }
-        _lastCurIndex = _curIdx;
-      },
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {},
-          onDoubleTap: () {
-            final _likeNotifier = context.read<LikeNotifier>();
-            final data = _listData?[_curIdx];
-            if (data != null) {
-              _likeNotifier.likePost(context, data);
-            }
-          },
-          onLongPress: () {
-            setState(() {
-              _isPause = !_isPause;
-            });
-            if (_isPause) {
-              fAliplayer?.pause();
+    return Scaffold(
+      body: PageView.builder(
+        controller: _pageController,
+        scrollDirection: Axis.horizontal,
+        itemCount: _listData?.length ?? 0,
+        onPageChanged: (index) async {
+          _curIdx = index;
+          setState(() {});
+          if (_lastCurIndex != _curIdx) {
+            if (_listData?[_curIdx].isApsara ?? false) {
+              _playMode = ModeTypeAliPLayer.auth;
             } else {
-              fAliplayer?.play();
+              _playMode = ModeTypeAliPLayer.url;
             }
-          },
-          child: Stack(
-            children: [
-              _curIdx == index
-                  ? AliPlayerView(
-                      onCreated: onViewPlayerCreated,
-                      x: 0,
-                      y: _playerY,
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                    )
-                  : Container(),
-              _showLoading
-                  ? Positioned.fill(
-                      child: Align(
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator(),
-                    ))
-                  : Container(),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                // padding: EdgeInsets.only(bottom: 25.0),
-                child: _buildFillDiary(),
-              ),
-              // _buildSingleScreen(index),
-            ],
-          ),
-        );
-      },
+            start();
+            if (widget.argument.diaryData?[_curIdx].certified ?? false) {
+              System().block(context);
+            } else {
+              System().disposeBlock();
+            }
+          }
+          _lastCurIndex = _curIdx;
+        },
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {},
+            onDoubleTap: () {
+              final _likeNotifier = context.read<LikeNotifier>();
+              final data = _listData?[_curIdx];
+              if (data != null) {
+                _likeNotifier.likePost(context, data);
+              }
+            },
+            onLongPress: () {
+              setState(() {
+                _isPause = !_isPause;
+              });
+              if (_isPause) {
+                fAliplayer?.pause();
+              } else {
+                fAliplayer?.play();
+              }
+            },
+            child: Stack(
+              children: [
+                _curIdx == index
+                    ? AliPlayerView(
+                        onCreated: onViewPlayerCreated,
+                        x: 0,
+                        y: _playerY,
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                      )
+                    : Container(),
+                _showLoading
+                    ? Positioned.fill(
+                        child: Align(
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(),
+                      ))
+                    : Container(),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  // padding: EdgeInsets.only(bottom: 25.0),
+                  child: _buildFillDiary(),
+                ),
+                // _buildSingleScreen(index),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -583,6 +590,12 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     isPause = true;
     fAliplayer?.pause();
     _animationController?.stop();
+  }
+
+  void changeStatusBlur() {
+    setState(() {
+      _listData?[_curIdx].reportedStatus = "";
+    });
   }
 
   Widget _buildFillDiary() {
@@ -636,11 +649,39 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                   thumbnail: (_listData?[_curIdx].isApsara ?? false) ? (_listData?[_curIdx].mediaThumbEndPoint ?? '') : (_listData?[_curIdx].fullThumbPath ?? ''),
                 )
               : Container(),
-          (_listData?[_curIdx].reportedStatus == "BLURRED") ? DiarySensitive(data: _listData?[_curIdx]) : Container(),
-          TitlePlaylistDiaries(
-            data: _listData?[_curIdx],
-            // storyController: _storyController,
-          ),
+          (_listData?[_curIdx].reportedStatus == "BLURRED")
+              ? DiarySensitive(
+                  data: _listData?[_curIdx],
+                  function: () {
+                    changeStatusBlur();
+                  },
+                )
+              : Container(),
+          _listData?[_curIdx].reportedStatus == "BLURRED"
+              ? Align(
+                  alignment: Alignment.topRight,
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: CustomTextButton(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(
+                          const EdgeInsets.only(left: 0.0),
+                        ),
+                      ),
+                      onPressed: () => context.read<DiariesPlaylistNotifier>().onWillPop(mounted),
+                      child: const DecoratedIconWidget(
+                        Icons.close_rounded,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )
+              : TitlePlaylistDiaries(
+                  data: _listData?[_curIdx],
+                  // storyController: _storyController,
+                ),
+
           // Text(_listData![_curIdx].username!),
           _listData?[_curIdx].reportedStatus == "BLURRED"
               ? Container()
@@ -661,6 +702,12 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                   // storyController: _storyController,
                   tagPeople: _listData?[_curIdx].tagPeople,
                   data: _listData?[_curIdx]),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: _listData?[_curIdx].email == SharedPreference().readStorage(SpKeys.email) && (_listData?[_curIdx].reportedStatus == 'OWNED')
+                ? SizedBox(height: 58, child: ContentViolationWidget(data: _listData?[_curIdx] ?? ContentData()))
+                : Container(),
+          ),
         ],
       ),
     );
@@ -781,35 +828,38 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       _isPause = false;
       _isFirstRenderShow = false;
     });
-    var configMap = {
-      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
-      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
-      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
-      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
-      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
-      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
-      'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
-      'mLocalCacheDir': GlobalSettings.mDirController,
-      'mClearFrameWhenStop': true
-    };
-    // Configure the application.
-    fAliplayer?.setConfig(configMap);
-    var map = {
-      "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
+    // var configMap = {
+    //   'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+    //   'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+    //   'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+    //   'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+    //   'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+    //   'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+    //   'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
+    //   'mLocalCacheDir': GlobalSettings.mDirController,
+    //   'mClearFrameWhenStop': true
+    // };
+    // // Configure the application.
+    // fAliplayer?.setConfig(configMap);
+    // var map = {
+    //   "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
 
-      /// The maximum space that can be occupied by the cache directory.
-      "mMaxDurationS": GlobalSettings.mMaxDurationSController,
+    //   /// The maximum space that can be occupied by the cache directory.
+    //   "mMaxDurationS": GlobalSettings.mMaxDurationSController,
 
-      /// The maximum cache duration of a single file.
-      "mDir": GlobalSettings.mDirController,
+    //   /// The maximum cache duration of a single file.
+    //   "mDir": GlobalSettings.mDirController,
 
-      /// The cache directory.
-      "mEnable": GlobalSettings.mEnableCacheConfig
+    //   /// The cache directory.
+    //   "mEnable": GlobalSettings.mEnableCacheConfig
 
-      /// Specify whether to enable the cache feature.
-    };
-    fAliplayer?.setCacheConfig(map);
-    fAliplayer?.prepare();
+    //   /// Specify whether to enable the cache feature.
+    // };
+    // fAliplayer?.setCacheConfig(map);
+    if (_listData?[_curIdx].reportedStatus != "BLURRED") {
+      fAliplayer?.prepare();
+    }
+
     // fAliplayer?.play();
     print("[DIARY_PLAYER] start() ended. " + stopwatch.elapsed.toString());
   }
