@@ -38,9 +38,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
     _translate = Provider.of<TranslateNotifierV2>(context, listen: false);
 
     _scrollController.addListener(() {
-      if (_scrollController.offset >=
-          _scrollController.position.maxScrollExtent &&
-          !_scrollController.position.outOfRange) {
+      if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
         final notifier = context.read<SearchNotifier>();
         final lenght = notifier.searchUsers?.length;
         if (lenght != null) {
@@ -63,71 +61,74 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
   Widget build(BuildContext context) {
     // final _themes = Theme.of(context);
     return widget.users != null
-        ? Consumer<SearchNotifier>(
-          builder: (context, notifier, _) {
+        ? Consumer<SearchNotifier>(builder: (context, notifier, _) {
             final isIndo = SharedPreference().readStorage(SpKeys.isoCode) == 'id';
-            return !notifier.isLoading ? RefreshIndicator(
-              strokeWidth: 2.0,
-              color: context.getColorScheme().primary,
-              onRefresh: () => notifier.getDataSearch(context),
-              child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(left: 16, top: 16),
-                          width: double.infinity,
-                          margin: const EdgeInsets.only(bottom: 16),
-                          child: CustomTextWidget(
-                            textToDisplay: notifier.language.account ?? 'Contents',
-                            textStyle: context.getTextTheme().bodyText1?.copyWith(color: context.getColorScheme().onBackground, fontWeight: FontWeight.w700),
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                        twelvePx,
-                        if(widget.users.isNotNullAndEmpty())
-                        ...List.generate(
-                          widget.users?.length ?? 0,
-                          (index) => Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: ListTile(
-                              onTap: () => _system.navigateToProfile(context, widget.users?[index].email ?? ''),
-                              contentPadding: EdgeInsets.zero,
-                              title: Text("${widget.users?[index].fullName}"),
-                              subtitle: Text(isIndo ? (widget.users?[index].statusID ?? '') : (widget.users?[index].statusEN ?? ''), style: context.getTextTheme().overline,),
-                              leading: StoryColorValidator(
-                                haveStory: false,
-                                featureType: FeatureType.pic,
-                                child: CustomProfileImage(
-                                  width: 50,
-                                  height: 50,
-                                  onTap: () {},
-                                  imageUrl: widget.users?[index].avatar == null ? '' : System().showUserPicture(widget.users?[index].avatar?[0].mediaEndpoint?.split('_')[0]),
-                                  following: true,
-                                  onFollow: () {},
-                                ),
+            return !notifier.isLoading
+                ? RefreshIndicator(
+                    strokeWidth: 2.0,
+                    color: context.getColorScheme().primary,
+                    onRefresh: () => notifier.getDataSearch(context),
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.only(left: 16, top: 16),
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(bottom: 16),
+                              child: CustomTextWidget(
+                                textToDisplay: notifier.language.account ?? 'Contents',
+                                textStyle: context.getTextTheme().bodyText1?.copyWith(color: context.getColorScheme().onBackground, fontWeight: FontWeight.w700),
+                                textAlign: TextAlign.start,
                               ),
                             ),
-                          ),
+                            twelvePx,
+                            if (widget.users.isNotNullAndEmpty())
+                              ...List.generate(
+                                widget.users?.length ?? 0,
+                                (index) => Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: ListTile(
+                                    onTap: () => _system.navigateToProfile(context, widget.users?[index].email ?? ''),
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text("${widget.users?[index].fullName}"),
+                                    subtitle: Text(
+                                      isIndo ? (widget.users?[index].statusID ?? '') : (widget.users?[index].statusEN ?? ''),
+                                      style: context.getTextTheme().overline,
+                                    ),
+                                    leading: StoryColorValidator(
+                                      haveStory: false,
+                                      featureType: FeatureType.pic,
+                                      child: CustomProfileImage(
+                                        width: 50,
+                                        height: 50,
+                                        onTap: () {},
+                                        imageUrl: widget.users?[index].avatar == null ? '' : System().showUserPicture(widget.users?[index].avatar?[0].mediaEndpoint?.split('_')[0]),
+                                        following: true,
+                                        onFollow: () {},
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            if (!widget.users.isNotNullAndEmpty()) SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
+                            if ((widget.users?.length ?? 0) % limitSearch == 0 && (widget.users?.isNotEmpty ?? false))
+                              Container(
+                                width: double.infinity,
+                                height: 50,
+                                alignment: Alignment.center,
+                                child: const CustomLoading(),
+                              )
+                          ],
                         ),
-                        if(!widget.users.isNotNullAndEmpty())
-                          SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
-                        if((widget.users?.length ?? 0) % limitSearch == 0 && (widget.users?.isNotEmpty ?? false))
-                          Container(
-                            width: double.infinity,
-                            height: 50,
-                            alignment: Alignment.center,
-                            child: const CustomLoading(),
-                          )
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-            ): const AllSearchShimmer();
-          }
-        ) : Container();
+                  )
+                : const AllSearchShimmer();
+          })
+        : Container();
   }
 }

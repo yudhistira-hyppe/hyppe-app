@@ -48,14 +48,15 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
   }
 
   @override
-  void afterFirstLayout(BuildContext context) {
-    context.read<DiariesPlaylistNotifier>().initTitleData(context, widget.data?.postID ?? '', widget.data?.visibility ?? 'PUBLIC');
+  void afterFirstLayout(BuildContext context) async {
+    await context.read<DiariesPlaylistNotifier>().initTitleData(context, widget.data?.postID ?? '', widget.data?.visibility ?? 'PUBLIC');
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Consumer2<DiariesPlaylistNotifier, FollowRequestUnfollowNotifier>(builder: (context, ref, follRef, _) {
+      print(ref.data?.username);
       final data = ref.data ?? widget.data;
       return Align(
         alignment: Alignment.topCenter,
