@@ -726,6 +726,7 @@ class SearchNotifier with ChangeNotifier {
       final lenghtDiary = _detailHashTag?.diary?.length ?? 0;
       final lenghtPic = _detailHashTag?.pict?.length ?? 0;
       if (reload) {
+        initAllHasNext();
         loadTagDetail = true;
         final _res = await _hitApiGetDetail(context, keys.replaceAll(' ', ''), TypeApiSearch.detailHashTag, 0, type: hyppe);
         if (_res != null) {
@@ -782,15 +783,24 @@ class SearchNotifier with ChangeNotifier {
                 final videos = _res.vid;
                 final diaries = _res.diary;
                 final pics = _res.pict;
-                if(pics?.isEmpty ?? true){
-                  isHasNextPic = false;
+                if(hyppe == HyppeType.HyppePic){
+                  if(pics?.isEmpty ?? true){
+                    isHasNextPic = false;
+                  }
                 }
-                if(diaries?.isEmpty ?? true){
-                  isHasNextDiary = false;
+
+                if(hyppe == HyppeType.HyppeDiary){
+                  if(diaries?.isEmpty ?? true){
+                    isHasNextDiary = false;
+                  }
                 }
-                if(videos?.isEmpty ?? true){
-                  isHasNextVid = false;
+
+                if(hyppe == HyppeType.HyppeVid){
+                  if(videos?.isEmpty ?? true){
+                    isHasNextVid = false;
+                  }
                 }
+
                 if (hyppe == HyppeType.HyppeVid) {
                   for (final video in videos ?? []) {
                     _detailHashTag?.vid?.add(video);
@@ -898,15 +908,22 @@ class SearchNotifier with ChangeNotifier {
                 final videos = _res.vid;
                 final diaries = _res.diary;
                 final pics = _res.pict;
-                if(videos?.isEmpty ?? true){
-                  isHasNextVid = false;
+                if(hyppe == HyppeType.HyppeVid){
+                  if(videos?.isEmpty ?? true){
+                    isHasNextVid = false;
+                  }
                 }
-                if(diaries?.isEmpty ?? true){
-                  isHasNextDiary = false;
+                if(hyppe == HyppeType.HyppeDiary){
+                  if(diaries?.isEmpty ?? true){
+                    isHasNextDiary = false;
+                  }
                 }
-                if(pics?.isEmpty ?? true){
-                  isHasNextPic = false;
+                if(hyppe == HyppeType.HyppePic){
+                  if(pics?.isEmpty ?? true){
+                    isHasNextPic = false;
+                  }
                 }
+
                 if (hyppe == HyppeType.HyppeVid) {
                   for (final video in videos ?? []) {
                     interestContents[keys]?.vid?.add(video);
@@ -1060,6 +1077,7 @@ class SearchNotifier with ChangeNotifier {
       }
 
       if (reload) {
+        initAllHasNext();
         isLoading = true;
       }
 
