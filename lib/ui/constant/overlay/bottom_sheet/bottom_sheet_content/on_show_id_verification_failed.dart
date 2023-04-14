@@ -57,6 +57,20 @@ class OnShowIDVerificationFailedBottomSheet extends StatelessWidget {
               buttonStyle:
                   ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
             ),
+            CustomElevatedButton(
+              child: CustomTextWidget(
+                textToDisplay: translate.back ?? "Back",
+                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
+              ),
+              width: double.infinity,
+              height: 50 * SizeConfig.scaleDiagonal,
+              function: () {
+                Routing().moveBack();
+                Routing().moveBack();
+              },
+              // buttonStyle:
+              //     ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
+            ),
           ],
         ),
       ),
