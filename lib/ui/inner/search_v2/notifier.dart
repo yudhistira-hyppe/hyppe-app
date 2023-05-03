@@ -429,8 +429,16 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isFromComplete = false;
+  bool get isFromComplete => _isFromComplete;
+  set isFromComplete(bool state){
+    _isFromComplete = state;
+    notifyListeners();
+  }
+
   startLayout() {
     _layout = SearchLayout.first;
+    _isFromComplete = false;
   }
 
   initDetailHashtag() {
@@ -562,6 +570,7 @@ class SearchNotifier with ChangeNotifier {
   Future onInitialSearchNew(BuildContext context, FeatureType featureType, {bool reload = false}) async {
     focusNode.unfocus();
     _layout = SearchLayout.first;
+    _isFromComplete = false;
     print('reload search');
     print(reload);
     print(reload == false);
@@ -1053,108 +1062,111 @@ class SearchNotifier with ChangeNotifier {
   }
 
   Future getDataSearch(BuildContext context, {SearchLoadData typeSearch = SearchLoadData.all, bool reload = true}) async {
-    try {
-      final lenghtVid = _searchVid?.length ?? limitSearch;
-      final lenghtDiary = _searchDiary?.length ?? limitSearch;
-      final lenghtPic = _searchPic?.length ?? limitSearch;
-      var skipContent = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
+    String search = searchController.text;
+    if(search.isNotEmpty){
+      try {
+        final lenghtVid = _searchVid?.length ?? limitSearch;
+        final lenghtDiary = _searchDiary?.length ?? limitSearch;
+        final lenghtPic = _searchPic?.length ?? limitSearch;
+        var skipContent = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
 
-      final int currentSkip = typeSearch == SearchLoadData.all
-          ? 0
-          : typeSearch == SearchLoadData.hashtag
-              ? (_searchHashtag?.length ?? 0)
-              : typeSearch == SearchLoadData.content
-                  ? skipContent
-                  : typeSearch == SearchLoadData.user
-                      ? _searchUsers?.length ?? 0
-                      : 0;
-      if ((currentSkip != 0 && typeSearch == SearchLoadData.all)) {
-        throw 'Error get all because the state is not from beginning $currentSkip';
-      } else if (currentSkip % limitSearch != 0) {
-        if (!reload) {
-          throw 'Error because we have to prevent the action for refusing wasting action';
+        final int currentSkip = typeSearch == SearchLoadData.all
+            ? 0
+            : typeSearch == SearchLoadData.hashtag
+            ? (_searchHashtag?.length ?? 0)
+            : typeSearch == SearchLoadData.content
+            ? skipContent
+            : typeSearch == SearchLoadData.user
+            ? _searchUsers?.length ?? 0
+            : 0;
+        if ((currentSkip != 0 && typeSearch == SearchLoadData.all)) {
+          throw 'Error get all because the state is not from beginning $currentSkip';
+        } else if (currentSkip % limitSearch != 0) {
+          if (!reload) {
+            throw 'Error because we have to prevent the action for refusing wasting action';
+          }
         }
-      }
 
-      if (reload) {
-        initAllHasNext();
-        isLoading = true;
-      }
+        if (reload) {
+          initAllHasNext();
+          isLoading = true;
+        }
 
-      String email = SharedPreference().readStorage(SpKeys.email);
-      String search = searchController.text;
-      if (search.isHashtag()) {
-        search = search.replaceFirst('#', '');
-      }
-      Map<String, dynamic> param = {};
-      if (typeSearch == SearchLoadData.all) {
-        focusNode.unfocus();
-      }
+        String email = SharedPreference().readStorage(SpKeys.email);
 
-      switch (typeSearch) {
-        case SearchLoadData.all:
-          param = {
-            "email": email,
-            "keys": search,
-            "listuser": true,
-            "listvid": true,
-            "listdiary": true,
-            "listpict": true,
-            "listtag": true,
-            "skip": currentSkip,
-            "limit": limitSearch,
-          };
-          await _hitApiGetSearchData(context, param, typeSearch, reload);
-          insertHistory(context, search);
-          break;
-        case SearchLoadData.user:
-          param = {
-            "email": email,
-            "keys": search,
-            "listuser": true,
-            "listvid": false,
-            "listdiary": false,
-            "listpict": false,
-            "listtag": false,
-            "skip": reload ? 0 :currentSkip,
-            "limit": limitSearch,
-          };
-          await _hitApiGetSearchData(context, param, typeSearch, reload);
-          break;
-        case SearchLoadData.hashtag:
-          param = {
-            "email": email,
-            "keys": search,
-            "listuser": false,
-            "listvid": false,
-            "listdiary": false,
-            "listpict": false,
-            "listtag": true,
-            "skip": reload ? 0 : currentSkip,
-            "limit": limitSearch,
-          };
-          await _hitApiGetSearchData(context, param, typeSearch, reload);
-          break;
-        case SearchLoadData.content:
-          param = {
-            "email": email,
-            "keys": search,
-            "listuser": false,
-            "listvid": true,
-            "listdiary": true,
-            "listpict": true,
-            "listtag": false,
-            "skip": currentSkip,
-            "limit": limitSearch,
-          };
-          await _hitApiGetSearchData(context, param, typeSearch, reload);
-          break;
-      }
-    } catch (e) {
-      'Error getAllDataSearch: $e'.logger();
-    } finally {
-      if (reload) {
-        isLoading = false;
+        if (search.isHashtag()) {
+          search = search.replaceFirst('#', '');
+        }
+        Map<String, dynamic> param = {};
+        if (typeSearch == SearchLoadData.all) {
+          focusNode.unfocus();
+        }
+
+        switch (typeSearch) {
+          case SearchLoadData.all:
+            param = {
+              "email": email,
+              "keys": search,
+              "listuser": true,
+              "listvid": true,
+              "listdiary": true,
+              "listpict": true,
+              "listtag": true,
+              "skip": currentSkip,
+              "limit": limitSearch,
+            };
+            await _hitApiGetSearchData(context, param, typeSearch, reload);
+            insertHistory(context, search);
+            break;
+          case SearchLoadData.user:
+            param = {
+              "email": email,
+              "keys": search,
+              "listuser": true,
+              "listvid": false,
+              "listdiary": false,
+              "listpict": false,
+              "listtag": false,
+              "skip": reload ? 0 :currentSkip,
+              "limit": limitSearch,
+            };
+            await _hitApiGetSearchData(context, param, typeSearch, reload);
+            break;
+          case SearchLoadData.hashtag:
+            param = {
+              "email": email,
+              "keys": search,
+              "listuser": false,
+              "listvid": false,
+              "listdiary": false,
+              "listpict": false,
+              "listtag": true,
+              "skip": reload ? 0 : currentSkip,
+              "limit": limitSearch,
+            };
+            await _hitApiGetSearchData(context, param, typeSearch, reload);
+            break;
+          case SearchLoadData.content:
+            param = {
+              "email": email,
+              "keys": search,
+              "listuser": false,
+              "listvid": true,
+              "listdiary": true,
+              "listpict": true,
+              "listtag": false,
+              "skip": currentSkip,
+              "limit": limitSearch,
+            };
+            await _hitApiGetSearchData(context, param, typeSearch, reload);
+            break;
+        }
+      } catch (e) {
+        'Error getAllDataSearch: $e'.logger();
+      } finally {
+        if (reload) {
+          isLoading = false;
+        }
       }
     }
   }
@@ -1316,14 +1328,32 @@ class SearchNotifier with ChangeNotifier {
 
   void backPage() {
     searchController1.clear();
-    layout = SearchLayout.first;
+    if(isFromComplete){
+      layout = SearchLayout.searchMore;
+      _isFromComplete = false;
+    }else{
+      layout = SearchLayout.first;
+      _isFromComplete = false;
+    }
     // _routing.moveBack();
   }
 
   void backFromSearchMore() {
     searchController1.text = '';
     searchController.clear();
-    layout = SearchLayout.first;
+    if(layout == SearchLayout.searchMore){
+      layout = SearchLayout.first;
+      _isFromComplete = false;
+    }else{
+      if(isFromComplete){
+        layout = SearchLayout.searchMore;
+        _isFromComplete = false;
+      }else{
+        layout = SearchLayout.first;
+        _isFromComplete = false;
+      }
+    }
+
     // _routing.moveBack();
     notifyListeners();
   }
