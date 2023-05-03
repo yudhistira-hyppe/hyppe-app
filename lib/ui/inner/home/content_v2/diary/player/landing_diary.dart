@@ -8,6 +8,7 @@ import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
+import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -557,7 +558,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
+          SelectableText("isApsara : ${notifier.diaryData?[index].isApsara}"),
+          SelectableText("post id : ${notifier.diaryData?[index].postID})"),
+          sixteenPx,
+          SelectableText((notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].mediaThumbEndPoint ?? "") : "${notifier.diaryData?[index].fullThumbPath}"),
+          sixteenPx,
+          SelectableText((notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].apsaraId ?? "") : "${UrlConstants.oldVideo + notifier.diaryData![index].postID!}"),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,

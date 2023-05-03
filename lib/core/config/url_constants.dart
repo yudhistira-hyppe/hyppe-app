@@ -37,11 +37,11 @@ class UrlConstants {
 
   /// Staging v2 Base url
   // static const String stagingBaseApi = "https://prod.hyppe.app";
-  static const String stagingBaseApi = "https://p1.hyppe.cloud";
+  static const String stagingBaseApi = "https://s1.hyppe.cloud";
   // static const String stagingBaseApi = "https://staging.hyppe.app";
   // static const String stagingBaseApi = "http://192.168.0.135:5002";
   // static const String stagingUploadBaseApi = "https://stagingupload.hyppe.app";
-  static const String stagingUploadBaseApi = "https://p1.hyppe.cloud";
+  static const String stagingUploadBaseApi = "https://s1.hyppe.cloud";
 
   // static const String stagingBaseApi = "http://192.168.43.179/erp/";
 

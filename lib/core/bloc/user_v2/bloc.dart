@@ -108,7 +108,7 @@ class UserBloc {
     );
   }
 
-  Future googleSignInBlocV2(BuildContext context, {required Function() function, required String email, latitude, longtitude}) async {
+  Future googleSignInBlocV2(BuildContext context, {required Function() function, required String email, latitude, longtitude, uuid}) async {
     setUserFetch(UserFetch(UserState.loading));
     deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
     realDeviceId = await System().getDeviceIdentifier();
@@ -129,6 +129,7 @@ class UserBloc {
       },
       "devicetype": platForm,
       "lang": lang ?? 'id',
+      "uuid": uuid,
     };
     'Payload in social login referralPayload $payload'.logger();
 

@@ -154,7 +154,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         ..addStatusListener(
           (AnimationStatus status) {
             if (status == AnimationStatus.completed) {
-              storyComplete(notifier);
+              if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
+                storyComplete(notifier);
+              }
             }
           },
         );
@@ -244,7 +246,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
         if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
-          _animationController?.duration = Duration(milliseconds: _videoDuration > 5000 ? 5000 : 3000);
+          _animationController?.duration = Duration(milliseconds: _videoDuration > 5000 ? 15000 : 8000);
         } else {
           _animationController?.duration = Duration(milliseconds: _videoDuration);
         }
@@ -392,7 +394,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     } else {
       setState(() {
         if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
-          _animationController?.duration = const Duration(milliseconds: 5000);
+          _animationController?.duration = const Duration(milliseconds: 8000);
         }
         shown.add(_groupUserStories![_curIdx].story?[_curChildIdx].postID);
         print(shown);
@@ -868,7 +870,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic ?? '');
         fAliplayer?.prepare();
       } else {
-        _animationController?.duration = const Duration(milliseconds: 5000);
+        _animationController?.duration = const Duration(milliseconds: 8000);
         _animationController?.forward();
       }
     }
