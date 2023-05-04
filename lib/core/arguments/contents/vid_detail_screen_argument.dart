@@ -6,9 +6,10 @@ class VidDetailScreenArgument extends ContentScreenArgument {
   final ContentData? vidData;
   final contentPosition? inPosition;
   final bool fromLAnding;
+  final bool fromDeepLink;
 
   @override
   FeatureType get featureType => FeatureType.vid;
 
-  VidDetailScreenArgument({this.vidData, this.inPosition, this.fromLAnding = false});
+  VidDetailScreenArgument({this.vidData, this.inPosition, this.fromLAnding = false, this.fromDeepLink = false});
 }

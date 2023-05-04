@@ -45,6 +45,7 @@ class PlayerPage extends StatefulWidget {
   double? height;
   double? width;
   final bool inLanding;
+  final bool fromDeeplink;
   final Function functionFullTriger;
 
   PlayerPage({
@@ -55,6 +56,7 @@ class PlayerPage extends StatefulWidget {
     this.height,
     this.width,
     this.inLanding = false,
+    final this.fromDeeplink = false,
     required this.functionFullTriger,
   }) : super(key: key);
 
@@ -167,7 +169,11 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     bottomIndex = 0;
 
-    fAliplayer?.setAutoPlay(false);
+    fAliplayer?.setAutoPlay(widget.fromDeeplink);
+    if (widget.fromDeeplink) {
+      isPlay = true;
+    }
+
     _playMode = widget.playMode;
     _dataSourceMap = widget.dataSourceMap;
     _dataSourceAdsMap = {};
@@ -372,7 +378,11 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         });
       }
     });
-    if (widget.playMode == ModeTypeAliPLayer.auth) {
+    print("!=1=1=1==1=1=1");
+    print(widget.playMode);
+    print(widget.data!.isApsara);
+    print(widget.fromDeeplink);
+    if (widget.data!.isApsara ?? false) {
       getAuth();
     } else {
       getOldVideoUrl();
@@ -410,8 +420,9 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         } else {
           _dataSourceMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
           print("-======= auth konten ${_dataSourceMap?[DataSourceRelated.playAuth]}");
+          print("-======= auth konten ${_dataSourceMap?[DataSourceRelated.vidKey]}");
           fAliplayer?.setVidAuth(
-              vid: _dataSourceMap?[DataSourceRelated.vidKey],
+              vid: apsaraId,
               region: _dataSourceMap?[DataSourceRelated.regionKey],
               playAuth: _dataSourceMap?[DataSourceRelated.playAuth],
               definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
@@ -444,7 +455,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           };
           fAliplayer?.setCacheConfig(map);
           fAliplayer?.prepare();
-          print('prepare done');
+          print('=2=2=2=2=2=2=2prepare done');
         }
 
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];

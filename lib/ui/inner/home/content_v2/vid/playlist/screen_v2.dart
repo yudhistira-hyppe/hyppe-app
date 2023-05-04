@@ -148,6 +148,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                                         height: height,
                                         width: width,
                                         inLanding: widget.arguments.fromLAnding,
+                                        fromDeeplink: widget.arguments.fromDeepLink,
                                         functionFullTriger: () {
                                           print('===========hahhahahahaa===========');
                                           fullscreen();

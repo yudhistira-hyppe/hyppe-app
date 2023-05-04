@@ -43,6 +43,7 @@ class DynamicLinkService {
   // To prevent dynamic link from being called multiple times
   static bool _linkProcessed = false;
   static PendingDynamicLinkData? _pendingDynamicLinkData;
+  static bool isOpening = false; // the local bool
 
   static Future handleDynamicLinks() async {
     if (_linkProcessed) {
@@ -86,147 +87,149 @@ class DynamicLinkService {
       if (_userToken != null) {
         // Auto follow user if app is install from a dynamic link
 
-        if (deepLink.queryParameters['referral'] != '1') {
-          try {
-            print('masuk sini dynamic');
-            followSender(Routing.navigatorKey.currentContext!);
-          } catch (e) {
-            'Error in followSender $e'.logger();
+        if (isOpening == false) {
+          await Future.delayed(const Duration(seconds: 1));
+          if (deepLink.queryParameters['referral'] != '1') {
+            try {
+              print('masuk sini dynamic');
+              followSender(Routing.navigatorKey.currentContext!);
+            } catch (e) {
+              'Error in followSender $e'.logger();
+            }
           }
-        }
-        deepLink.path.logger();
-        final path = deepLink.path;
-        isHomeScreen = false;
-        'deepLink isOnHomeScreen $isHomeScreen'.logger();
-        switch (path) {
-          case Routes.storyDetail:
-            '_handleDeepLink storyDetail'.logger();
-            _routing.move(
-              path,
-              argument: StoryDetailScreenArgument()
-                ..postID = deepLink.queryParameters['postID']
-                ..backPage = false,
-            );
-            break;
-          case Routes.vidDetail:
-            '_handleDeepLink vidDetail'.logger();
-            if(isFromSplash){
-              isFromSplash = false;
-              Future.delayed(const Duration(seconds: 10), () async{
-                await _routing.move(
-                  path,
-                  argument: VidDetailScreenArgument()
-                    ..postID = deepLink.queryParameters['postID']
-                    ..backPage = false,
-                );
-              });
-
-            }else{
+          deepLink.path.logger();
+          final path = deepLink.path;
+          isHomeScreen = false;
+          'deepLink isOnHomeScreen $isHomeScreen'.logger();
+          switch (path) {
+            case Routes.storyDetail:
+              '_handleDeepLink storyDetail'.logger();
               _routing.move(
                 path,
-                argument: VidDetailScreenArgument()
+                argument: StoryDetailScreenArgument()
                   ..postID = deepLink.queryParameters['postID']
                   ..backPage = false,
               );
-            }
-
-            break;
-          case Routes.diaryDetail:
-            '_handleDeepLink diaryDetail'.logger();
-            if(isFromSplash){
-              isFromSplash = false;
-              Future.delayed(const Duration(seconds: 10), () async{
-                await _routing.move(
-                  path,
-                  argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
-                    ..postID = deepLink.queryParameters['postID']
-                    ..backPage = false,
-                );
-              });
-            }else{
-              _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
-              Future.delayed(const Duration(milliseconds: 500), (){
-                _routing.move(
-                  path,
-                  argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
-                    ..postID = deepLink.queryParameters['postID']
-                    ..backPage = false,
-                );
-              });
-            }
-
-            break;
-          case Routes.picDetail:
-            '_handleDeepLink picDetail'.logger();
-            if(isFromSplash){
-              isFromSplash = false;
-              Future.delayed(const Duration(seconds: 10), () async{
-                await _routing.move(
-                  path,
-                  argument: PicDetailScreenArgument()
-                    ..postID = deepLink.queryParameters['postID']
-                    ..backPage = false,
-                );
-              });
-            }else{
-              _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
-              Future.delayed(const Duration(milliseconds: 500), (){
-                _routing.move(
-                  path,
-                  argument: PicDetailScreenArgument()
-                    ..postID = deepLink.queryParameters['postID']
-                    ..backPage = false,
-                );
-              });
-            }
-
-            break;
-          case Routes.picSlideDetailPreview:
-            '_handleDeepLink picSlideDetailPreview'.logger();
-            if(isFromSplash){
-              isFromSplash = false;
-              Future.delayed(const Duration(seconds: 10), () async{
-                await _routing.move(
-                  path,
-                  argument: SlidedPicDetailScreenArgument(type: TypePlaylist.none)
-                    ..postID = deepLink.queryParameters['postID']
-                    ..backPage = false,
-                );
+              break;
+            case Routes.vidDetail:
+              '_handleDeepLink vidDetail'.logger();
+              if (isFromSplash) {
                 isFromSplash = false;
-              });
-            }else{
-              _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
-              Future.delayed(const Duration(milliseconds: 500), (){
+                Future.delayed(const Duration(seconds: 10), () async {
+                  await _routing.move(
+                    path,
+                    argument: VidDetailScreenArgument(fromDeepLink: true)
+                      ..postID = deepLink.queryParameters['postID']
+                      ..backPage = false,
+                  );
+                });
+              } else {
                 _routing.move(
                   path,
-                  argument: SlidedPicDetailScreenArgument(type: TypePlaylist.none)
+                  argument: VidDetailScreenArgument(fromDeepLink: true)
                     ..postID = deepLink.queryParameters['postID']
                     ..backPage = false,
                 );
+              }
+
+              break;
+            case Routes.diaryDetail:
+              '_handleDeepLink diaryDetail'.logger();
+              if (isFromSplash) {
+                isFromSplash = false;
+                Future.delayed(const Duration(seconds: 10), () async {
+                  await _routing.move(
+                    path,
+                    argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
+                      ..postID = deepLink.queryParameters['postID']
+                      ..backPage = false,
+                  );
+                });
+              } else {
+                _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  _routing.move(
+                    path,
+                    argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
+                      ..postID = deepLink.queryParameters['postID']
+                      ..backPage = false,
+                  );
+                });
+              }
+
+              break;
+            case Routes.picDetail:
+              '_handleDeepLink picDetail'.logger();
+              if (isFromSplash) {
+                isFromSplash = false;
+                Future.delayed(const Duration(seconds: 10), () async {
+                  await _routing.move(
+                    path,
+                    argument: PicDetailScreenArgument()
+                      ..postID = deepLink.queryParameters['postID']
+                      ..backPage = false,
+                  );
+                });
+              } else {
+                _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  _routing.move(
+                    path,
+                    argument: PicDetailScreenArgument()
+                      ..postID = deepLink.queryParameters['postID']
+                      ..backPage = false,
+                  );
+                });
+              }
+
+              break;
+            case Routes.picSlideDetailPreview:
+              '_handleDeepLink picSlideDetailPreview'.logger();
+              if (isFromSplash) {
+                isFromSplash = false;
+                Future.delayed(const Duration(seconds: 10), () async {
+                  await _routing.move(
+                    path,
+                    argument: SlidedPicDetailScreenArgument(type: TypePlaylist.none)
+                      ..postID = deepLink.queryParameters['postID']
+                      ..backPage = false,
+                  );
+                  isFromSplash = false;
+                });
+              } else {
+                _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  _routing.move(
+                    path,
+                    argument: SlidedPicDetailScreenArgument(type: TypePlaylist.none)
+                      ..postID = deepLink.queryParameters['postID']
+                      ..backPage = false,
+                  );
+                });
+              }
+
+              break;
+            // TO DO: If register from referral link, then hit to backend
+            case Routes.otherProfile:
+              '_handleDeepLink otherProfile'.logger();
+              _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+              Future.delayed(const Duration(milliseconds: 500), () {
+                _routing.move(
+                  path,
+                  argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
+                );
               });
-            }
-
-
-            break;
-          // TO DO: If register from referral link, then hit to backend
-          case Routes.otherProfile:
-            '_handleDeepLink otherProfile'.logger();
-            _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
-            Future.delayed(const Duration(milliseconds: 500), (){
-              _routing.move(
-                path,
-                argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
-              );
-            });
-            break;
+              break;
+          }
+          // SharedPreference().writeStorage(SpKeys.isPreventRoute, false);
+          // Set [_linkProcessed] to true
+          _linkProcessed = true;
+          isOpening = false;
+          '_handleDeepLink | deeplink: $deepLink'.logger();
+        } else {
+          '_handleDeepLink | userToken is null'.logger();
+          '_handleDeepLink | deeplink: $deepLink'.logger();
         }
-        // SharedPreference().writeStorage(SpKeys.isPreventRoute, false);
-        // Set [_linkProcessed] to true
-        _linkProcessed = true;
-        '_handleDeepLink | deeplink: $deepLink'.logger();
-      } else {
-        '_handleDeepLink | userToken is null'.logger();
-        '_handleDeepLink | deeplink: $deepLink'.logger();
       }
     } else {
       'App open not from dynamic link'.logger();

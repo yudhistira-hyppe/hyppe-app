@@ -323,9 +323,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
           incorrect = false;
           await FcmService().initializeFcmIfNot();
           final notifier = UserBloc();
-          print("-1-1-1-1-1-1-1-1-1-1");
-          print(userCredential.user);
-          print(userCredential);
           if (userCredential.credential == null) {
             _googleSignInService.handleSignOut();
             ShowBottomSheet.onShowSomethingWhenWrong(context);

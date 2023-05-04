@@ -1225,36 +1225,35 @@ class System {
           storyController.pause();
           Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
         } else {
-          if(globalAliPlayer != null){
+          if (globalAliPlayer != null) {
             globalAliPlayer?.pause();
           }
-          if(globalAudioPlayer != null){
+          if (globalAudioPlayer != null) {
             globalAudioPlayer?.pause();
           }
           await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-          if(globalAliPlayer != null){
+          if (globalAliPlayer != null) {
             globalAliPlayer?.play();
           }
-          if(globalAudioPlayer != null){
+          if (globalAudioPlayer != null) {
             globalAudioPlayer?.resume();
           }
         }
       } else {
-        if(storyController != null){
+        if (storyController != null) {
           context.read<HomeNotifier>().navigateToProfilePage(context, whenComplete: true, onWhenComplete: () => storyController.play());
-        }else{
-          if(globalAliPlayer != null){
+        } else {
+          if (globalAliPlayer != null) {
             globalAliPlayer?.pause();
           }
-          if(globalAudioPlayer != null){
+          if (globalAudioPlayer != null) {
             globalAudioPlayer?.pause();
           }
           await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
-          if(globalAudioPlayer != null){
+          if (globalAudioPlayer != null) {
             globalAudioPlayer?.resume();
           }
         }
-
       }
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
