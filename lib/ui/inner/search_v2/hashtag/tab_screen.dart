@@ -85,6 +85,9 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
                                       return HashtagItem(
                                           onTap: () {
                                             notifier.selectedHashtag = data;
+                                            if(notifier.layout == SearchLayout.searchMore){
+                                              notifier.isFromComplete = true;
+                                            }
                                             notifier.layout =
                                                 SearchLayout.hashtagDetail;
                                           },

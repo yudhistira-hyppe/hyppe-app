@@ -134,6 +134,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   bool _isBackgroundMode = false;
   int loadImage = 0;
 
+  bool isOnPageTurning = false;
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'StoryPlayerPage');
@@ -142,6 +144,28 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     super.initState();
     context.read<StoriesPlaylistNotifier>().setLoadReaction(false);
     _pageController = PageController(initialPage: widget.argument.peopleIndex);
+    _pageController.addListener(() {
+      final _notifier = context.read<StoriesPlaylistNotifier>();
+      if (isOnPageTurning &&
+          _pageController.page ==
+              _pageController.page?.roundToDouble()) {
+        _notifier.pageIndex = _pageController.page?.toInt() ?? 0;
+        setState(() {
+          // current = _controller.page.toInt();
+          isOnPageTurning = false;
+        });
+      } else if (!isOnPageTurning &&
+          _notifier.currentPage?.toDouble() != _pageController.page) {
+        if (((_notifier.pageIndex.toDouble()) -
+            (_pageController.page ?? 0))
+            .abs() >
+            0.1) {
+          setState(() {
+            isOnPageTurning = true;
+          });
+        }
+      }
+    });
     animationController = AnimationController(vsync: this, duration: const Duration(seconds: 7));
     emojiController = AnimationController(vsync: this, duration: const Duration(seconds: 7));
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -516,8 +540,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     _animationController?.stop();
   }
 
-  void onViewPlayerCreated(viewId) async {
+  void onViewPlayerCreated(viewId, bool isImage) async {
     print('onViewPlayerCreated===');
+
     fAliplayer?.setPlayerView(viewId);
   }
 
@@ -567,12 +592,19 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                 //         height: MediaQuery.of(context).size.height,
                 //       )
                 //     : Container(),
-                AliPlayerView(
-                  onCreated: onViewPlayerCreated,
-                  x: 0,
-                  y: _playerY,
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
+                Builder(
+                  builder: (context) {
+                    return !isOnPageTurning ? AliPlayerView(
+                      onCreated: (id) {
+                        final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
+                        onViewPlayerCreated(id, isImage);
+                      },
+                      x: 0,
+                      y: _playerY,
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                    ): Container(color: Colors.transparent, alignment: Alignment.center, child: const CircularProgressIndicator(),);
+                  }
                 ),
 
                 SizedBox(

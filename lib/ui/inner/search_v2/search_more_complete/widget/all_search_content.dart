@@ -158,6 +158,9 @@ class _AllSearchContentState extends State<AllSearchContent> {
                         return HashtagItem(
                             onTap: () {
                               notifier.selectedHashtag = data;
+                              if(notifier.layout == SearchLayout.searchMore){
+                                notifier.isFromComplete = true;
+                              }
                               notifier.layout = SearchLayout.mainHashtagDetail;
                             },
                             padding: const EdgeInsets.only(top: 10, bottom: 10),

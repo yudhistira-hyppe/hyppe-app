@@ -70,6 +70,9 @@ class _NewAutoCompleteSearchState extends State<NewAutoCompleteSearch> {
                                 return HashtagItem(
                                     onTap: () {
                                       notifier.selectedHashtag = notifier.searchHashtag?[index];
+                                      if(notifier.layout == SearchLayout.searchMore){
+                                        notifier.isFromComplete = true;
+                                      }
                                       notifier.layout = SearchLayout.hashtagDetail;
                                     },
                                     title: hashTag?.tag ?? 'No Tag',

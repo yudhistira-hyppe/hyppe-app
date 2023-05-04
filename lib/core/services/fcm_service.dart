@@ -14,6 +14,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/notification_service.dart';
 
 // handling background message
+@pragma('vm:entry-point')
 Future<void> onBackgroundMessage(RemoteMessage message) async {
   final _notificationService = NotificationService();
 
@@ -32,6 +33,7 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
             Background incoming message tag => ${message.notification?.android?.tag}
             """
       .logger();
+  print('Background incoming message tag => ${message.notification?.android?.tag}');
 
   // notificationData.value = NotificationsData(
   //     type: 'user',
@@ -46,6 +48,7 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
 // listenable value
 // ValueNotifier<NotificationsData?> notificationData = ValueNotifier<NotificationsData?>(null);
 
+// @pragma('vm:entry-point')
 class FcmService {
   FcmService._private();
 
@@ -152,6 +155,7 @@ class FcmService {
           // isHaveNotification.value = true;
 
           _notifyApp(message, () => _eventService.notifyMessageOpenedApp(message));
+          _notificationService.showNotification(message, idNotif: message.notification?.android?.tag);
         }
       });
     } catch (e) {

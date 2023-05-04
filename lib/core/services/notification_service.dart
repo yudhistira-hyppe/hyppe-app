@@ -156,7 +156,8 @@ class NotificationService {
       try {
         await flutterLocalNotificationsPlugin.cancel(0, tag: idNotif);
       } catch (e) {
-        'Error Get rid the notification $e'.logger();
+        print('Error Get rid the notification $e');
+        // 'Error Get rid the notification $e'.logger();
       }
     }
     print('notif message ${message.notification?.body}');
