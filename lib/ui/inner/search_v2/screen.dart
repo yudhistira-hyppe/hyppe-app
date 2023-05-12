@@ -200,7 +200,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
                   focusNode: notifier.focusNode1,
                   controller: notifier.searchController1,
                   onTap: () {
-                    if(notifier.layout == SearchLayout.searchMore){
+                    if (notifier.layout == SearchLayout.searchMore) {
                       notifier.isFromComplete = true;
                     }
                     notifier.layout = SearchLayout.search;
@@ -211,7 +211,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
               InterestScreen(
                 onClick: (value) {
                   notifier.selectedInterest = value;
-                  if(notifier.layout == SearchLayout.searchMore){
+                  if (notifier.layout == SearchLayout.searchMore) {
                     notifier.isFromComplete = true;
                   }
                   notifier.layout = SearchLayout.interestDetail;

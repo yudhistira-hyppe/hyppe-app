@@ -558,12 +558,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SelectableText("isApsara : ${notifier.diaryData?[index].isApsara}"),
-          SelectableText("post id : ${notifier.diaryData?[index].postID})"),
-          sixteenPx,
-          SelectableText((notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].mediaThumbEndPoint ?? "") : "${notifier.diaryData?[index].fullThumbPath}"),
-          sixteenPx,
-          SelectableText((notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].apsaraId ?? "") : "${UrlConstants.oldVideo + notifier.diaryData![index].postID!}"),
+          // SelectableText("isApsara : ${notifier.diaryData?[index].isApsara}"),
+          // SelectableText("post id : ${notifier.diaryData?[index].postID})"),
+          // sixteenPx,
+          // SelectableText((notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].mediaThumbEndPoint ?? "") : "${notifier.diaryData?[index].fullThumbPath}"),
+          // sixteenPx,
+          // SelectableText((notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].apsaraId ?? "") : "${UrlConstants.oldVideo + notifier.diaryData![index].postID!}"),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,

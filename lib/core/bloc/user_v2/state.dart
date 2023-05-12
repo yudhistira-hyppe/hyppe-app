@@ -49,6 +49,8 @@ enum UserState {
 class UserFetch {
   final data;
   final UserState userState;
-  final version;
-  UserFetch(this.userState, {this.data, this.version});
+  final String? version;
+  final String? versionIos;
+
+  UserFetch(this.userState, {this.data, this.version, this.versionIos});
 }

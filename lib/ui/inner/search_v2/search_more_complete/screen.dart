@@ -36,7 +36,6 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
     notifier.initSearchAll();
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
-
       notifier.tabIndex = _tabController.index;
       setState(() {
         _selectedIndex = _tabController.index;
@@ -104,7 +103,7 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                                   final maxLenght = isHashTag ? 4 : 3;
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
-                                  if(lenght >= maxLenght){
+                                  if (lenght >= maxLenght) {
                                     notifier.getDataSearch(context);
                                   }
                                 },
@@ -114,7 +113,7 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                                   final maxLenght = isHashTag ? 4 : 3;
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
-                                  if(lenght >= maxLenght){
+                                  if (lenght >= maxLenght) {
                                     notifier.getDataSearch(context);
                                   }
                                 },
@@ -129,7 +128,6 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                         controller: _tabController,
                         isScrollable: true,
                         indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-
                         tabs: _list.map((e) {
                           return Container(
                             padding: EdgeInsets.fromLTRB(8.0, 0, 8, 13),
@@ -144,29 +142,29 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                       ),
                       context.read<ErrorService>().isInitialError(error, notifier.allContents)
                           ? Center(
-                        child: SizedBox(
-                          height: 198,
-                          child: CustomErrorWidget(
-                            errorType: ErrorType.getPost,
-                            function: () => notifier.onInitialSearch(context),
-                          ),
-                        ),
-                      )
+                              child: SizedBox(
+                                height: 198,
+                                child: CustomErrorWidget(
+                                  errorType: ErrorType.getPost,
+                                  function: () => notifier.onInitialSearch(context),
+                                ),
+                              ),
+                            )
                           : Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 0.0),
-                          child: TabBarView(
-                            // physics: const NeverScrollableScrollPhysics(),
-                            controller: _tabController,
-                            children: [
-                              const AllSearchContent(),
-                              AccountSearchContent(users: notifier.searchUsers),
-                              const SearchContentsTab(),
-                              const HashtagTabScreen(),
-                            ],
-                          ),
-                        ),
-                      ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 0.0),
+                                child: TabBarView(
+                                  // physics: const NeverScrollableScrollPhysics(),
+                                  controller: _tabController,
+                                  children: [
+                                    const AllSearchContent(),
+                                    AccountSearchContent(users: notifier.searchUsers),
+                                    const SearchContentsTab(),
+                                    const HashtagTabScreen(),
+                                  ],
+                                ),
+                              ),
+                            ),
                     ],
                   ),
                 ),
@@ -177,6 +175,4 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
       );
     });
   }
-
-
 }

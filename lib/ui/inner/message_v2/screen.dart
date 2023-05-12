@@ -152,15 +152,18 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                                             featureType: FeatureType.other,
                                             // haveStory: notifier.chatData[index].isHaveStory ?? false,
                                             haveStory: false,
-                                            child: CustomProfileImage(
-                                              following: true,
-                                              onTap: () => System().navigateToProfile(context, discussData?.senderOrReceiverInfo?.email ?? ''),
-                                              // imageUrl: notifier.userID == notifier.chatData[index].senderID
-                                              //     ? '${notifier.chatData[index].picReceiverUrl + SMALL}'
-                                              //     : '${notifier.chatData[index].picSenderUrl + SMALL}',
-                                              imageUrl: System().showUserPicture(discussData?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
-                                              height: 60 * SizeConfig.scaleDiagonal,
-                                              width: 60 * SizeConfig.scaleDiagonal,
+                                            child: ClipOval(
+                                              child: CustomProfileImage(
+                                                forStory: false,
+                                                following: true,
+                                                onTap: () => System().navigateToProfile(context, discussData?.senderOrReceiverInfo?.email ?? ''),
+                                                // imageUrl: notifier.userID == notifier.chatData[index].senderID
+                                                //     ? '${notifier.chatData[index].picReceiverUrl + SMALL}'
+                                                //     : '${notifier.chatData[index].picSenderUrl + SMALL}',
+                                                imageUrl: System().showUserPicture(discussData?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
+                                                height: 50 * SizeConfig.scaleDiagonal,
+                                                width: 50 * SizeConfig.scaleDiagonal,
+                                              ),
                                             ),
                                           ),
                                           title: CustomTextWidget(

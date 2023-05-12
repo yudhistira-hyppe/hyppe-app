@@ -139,7 +139,7 @@ class UserBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], versionIos: onResult.data['version_ios'], data: GenericResponse.fromJson(onResult.data).responseData));
           SharedPreference().removeValue(SpKeys.referralFrom);
         }
       },
@@ -186,7 +186,7 @@ class UserBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], versionIos: onResult.data['version_ios'], data: GenericResponse.fromJson(onResult.data).responseData));
           SharedPreference().removeValue(SpKeys.referralFrom);
         }
       },
@@ -234,7 +234,7 @@ class UserBloc {
           print('salah 1');
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], versionIos: onResult.data['version_ios'], data: GenericResponse.fromJson(onResult.data).responseData));
           SharedPreference().removeValue(SpKeys.referralFrom);
         }
       },

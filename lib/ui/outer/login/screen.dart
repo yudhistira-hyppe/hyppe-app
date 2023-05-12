@@ -12,7 +12,6 @@ import 'package:hyppe/ui/outer/login/widget/sign_in_text.dart';
 import 'package:hyppe/ui/outer/login/widget/sign_up_or_google.dart';
 import 'package:provider/provider.dart';
 
-
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

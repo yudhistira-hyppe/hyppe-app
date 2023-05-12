@@ -93,6 +93,7 @@ import 'package:hyppe/ui/outer/forgot_password/forgot_password/forgot_password_s
 import 'package:hyppe/ui/outer/forgot_password/set_new_password/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_screen.dart';
 import 'package:hyppe/ui/outer/login/screen.dart';
+import 'package:hyppe/ui/outer/login/test_login.dart';
 import 'package:hyppe/ui/outer/opening_logo/screen.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/screen.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/register/register_screen.dart';
@@ -388,6 +389,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => WebviewScreen(url: settings.arguments as String));
       case Routes.testImage:
         return MaterialPageRoute(builder: (_) => const TestPageImage());
+      case Routes.testLogin:
+        return MaterialPageRoute(builder: (_) => const TestLogin());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

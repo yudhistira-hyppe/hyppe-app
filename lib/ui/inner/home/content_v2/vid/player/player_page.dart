@@ -169,10 +169,10 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     bottomIndex = 0;
 
-    fAliplayer?.setAutoPlay(widget.fromDeeplink);
-    if (widget.fromDeeplink) {
-      isPlay = true;
-    }
+    // fAliplayer?.setAutoPlay(widget.fromDeeplink);
+    // if (widget.fromDeeplink) {
+    //   isPlay = true;
+    // }
 
     _playMode = widget.playMode;
     _dataSourceMap = widget.dataSourceMap;

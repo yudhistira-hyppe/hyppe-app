@@ -3,6 +3,8 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/outer/welcome_login/widget/page_bottom.dart';
 import 'package:hyppe/ui/outer/welcome_login/widget/page_top.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:move_to_background/move_to_background.dart';
 
 class WelcomeLoginScreen extends StatefulWidget {
@@ -13,7 +15,6 @@ class WelcomeLoginScreen extends StatefulWidget {
 }
 
 class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'WelcomeLoginScreen');
@@ -39,6 +40,7 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
                   children: [
                     const PageTop(),
                     PageBottom(),
+                    // testLogin(),
                   ],
                 ),
               ),
@@ -49,6 +51,15 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
           if (!FocusScope.of(context).hasPrimaryFocus) FocusScope.of(context).unfocus();
         },
       ),
+    );
+  }
+
+  Widget testLogin() {
+    return GestureDetector(
+      onTap: () {
+        Routing().move(Routes.testLogin);
+      },
+      child: Text('Testlogin'),
     );
   }
 }

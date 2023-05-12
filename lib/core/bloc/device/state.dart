@@ -11,5 +11,6 @@ class DeviceFetch {
   final data;
   final DeviceState deviceState;
   final version;
-  DeviceFetch(this.deviceState, {this.data, this.version});
+  final versionIos;
+  DeviceFetch(this.deviceState, {this.data, this.version, this.versionIos});
 }

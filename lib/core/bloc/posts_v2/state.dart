@@ -18,6 +18,7 @@ enum PostsState {
 class PostsFetch {
   final data;
   final PostsState postsState;
-  final version;
-  PostsFetch(this.postsState, {this.data, this.version});
+  final String? version;
+  final String? versionIos;
+  PostsFetch(this.postsState, {this.data, this.version, this.versionIos});
 }

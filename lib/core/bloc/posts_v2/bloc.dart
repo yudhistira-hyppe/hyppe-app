@@ -104,7 +104,8 @@ class PostsBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.getContentsError));
         } else {
-          setPostsFetch(PostsFetch(PostsState.getContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          setPostsFetch(
+              PostsFetch(PostsState.getContentsSuccess, version: onResult.data['version'], versionIos: onResult.data['version_ios'], data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -183,7 +184,9 @@ class PostsBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.getAllContentsError));
         } else {
-          setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          setPostsFetch(
+            PostsFetch(PostsState.getAllContentsSuccess, version: onResult.data['version'], versionIos: onResult.data['version_ios'], data: GenericResponse.fromJson(onResult.data).responseData),
+          );
         }
       },
       (errorData) {
@@ -214,7 +217,9 @@ class PostsBloc {
           setPostsFetch(PostsFetch(PostsState.getAllContentsError));
         } else {
           print("test2 ${GenericResponse.fromJson(onResult.data).responseData}");
-          setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, version: onResult.data['version'], data: onResult.data));
+          setPostsFetch(
+            PostsFetch(PostsState.getAllContentsSuccess, version: onResult.data['version'], versionIos: onResult.data['version_ios'], data: onResult.data),
+          );
         }
       },
       (errorData) {

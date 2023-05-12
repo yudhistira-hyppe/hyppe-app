@@ -32,7 +32,10 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'MainScreen');
     _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
+    _mainNotifier.pageIndex = 0;
     _mainNotifier.initMain(context, isInitSocket: true);
+    ScrollController(initialScrollOffset: 50.0);
+
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     super.initState();
   }
@@ -78,12 +81,18 @@ class _MainScreenState extends State<MainScreen> {
                       color: notifier.pageIndex == 0 ? kHyppeTextLightPrimary : _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
                       iconData: notifier.pageIndex == 0 ? '${AssetPath.vectorPath}home-active.svg' : '${AssetPath.vectorPath}home.svg',
                     ),
-                    onPressed: () {
-                      if (notifier.pageIndex == 0) {
+                    onPressed: () async {
+                      print(notifier.pageIndex);
+                      // if (notifier.pageIndex == 0) {
+
+                      // } else {
+                      tapMenu(0, notifier, consumerContext);
+                      if (notifier.scrollController.hasClients) {
                         notifier.scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.elasticOut);
-                      } else {
-                        tapMenu(0, notifier, consumerContext);
                       }
+                      Future.delayed(const Duration(milliseconds: 1000), () {});
+
+                      // }
                     },
                   ),
                 ),
@@ -95,6 +104,7 @@ class _MainScreenState extends State<MainScreen> {
                       iconData: notifier.pageIndex == 1 ? '${AssetPath.vectorPath}search-active.svg' : '${AssetPath.vectorPath}search-nav.svg',
                     ),
                     onPressed: () {
+                      print("ke menu search");
                       tapMenu(1, notifier, consumerContext);
                     },
                   ),
@@ -133,6 +143,7 @@ class _MainScreenState extends State<MainScreen> {
                   child: IconButton(
                     icon: const SizedBox(width: 32, child: Profile()),
                     onPressed: () {
+                      print(notifier.pageIndex);
                       tapMenu(4, notifier, consumerContext);
                     },
                   ),
@@ -214,6 +225,7 @@ class _MainScreenState extends State<MainScreen> {
     if (index != 2) {
       setState(() {
         notifier.pageIndex = index;
+        print("ini index ${notifier.pageIndex}");
       });
     } else {
       await notifier.onShowPostContent(consumerContext);

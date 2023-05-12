@@ -972,7 +972,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
             seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
             normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary, fontSize: 12),
             expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
           if (notifier.pic?[index].allowComments ?? true)

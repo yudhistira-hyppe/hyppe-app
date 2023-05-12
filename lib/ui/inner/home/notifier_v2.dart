@@ -178,7 +178,8 @@ class HomeNotifier with ChangeNotifier {
   void onUpdate() => notifyListeners();
 
   Future initNewHome(BuildContext context, bool mounted, {int? forceIndex, bool isreload = true, bool isgetMore = false, bool isNew = false}) async {
-    context.read<ReportNotifier>().inPosition = contentPosition.home;
+    ReportNotifier rp = Provider.of(context, listen: false);
+    rp.inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
 
     if (isConnected) {
@@ -235,9 +236,12 @@ class HomeNotifier with ChangeNotifier {
           data['skip'] = skipvid;
           break;
       }
-      if (isreload) {
-        await stories.initialStories(context);
+      if (stories.peopleStoriesData == null) {
+        stories.initialStories(context);
       }
+      // if (isreload) {
+      //   await stories.initialStories(context);
+      // }
 
       final allContents = await reload(context, data);
 
@@ -256,13 +260,16 @@ class HomeNotifier with ChangeNotifier {
       switch (index) {
         case 0:
           if (!mounted) return;
-          await pic.initialPic(context, reload: isreload || isNew, list: allContents);
-          if (diary.diaryData == null) {
-            initNewHome(context, mounted, forceIndex: 1);
-          }
-          if (vid.vidData == null) {
-            initNewHome(context, mounted, forceIndex: 2);
-          }
+          await pic.initialPic(context, reload: isreload || isNew, list: allContents).then((value) async {
+            if (diary.diaryData == null) {
+              // await initNewHome(context, mounted, forceIndex: 1);
+              diary.initialDiary(context, reload: isreload || isNew, list: allContents);
+            }
+            if (vid.vidData == null) {
+              vid.initialVid(context, reload: isreload || isNew, list: allContents);
+              // await initNewHome(context, mounted, forceIndex: 2);
+            }
+          });
           break;
         case 1:
           if (!mounted) return;
@@ -446,7 +453,7 @@ class HomeNotifier with ChangeNotifier {
         res.add(ContentData.fromJson(v));
       });
 
-      await CheckVersion().check(context, fetch.version);
+      await CheckVersion().check(context, fetch.version, fetch.versionIos);
 
       return res;
     } catch (e) {
@@ -473,7 +480,7 @@ class HomeNotifier with ChangeNotifier {
       final fetch = notifier.postsFetch;
       'AllContents : ${AllContents.fromJson(fetch.data).toJson()}'.logger();
       res = AllContents.fromJson(fetch.data);
-      await CheckVersion().check(context, fetch.version);
+      await CheckVersion().check(context, fetch.version, fetch.versionIos);
 
       return res;
     } catch (e) {

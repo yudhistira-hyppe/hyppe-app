@@ -26,7 +26,9 @@ class DeviceBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setDeviceFetch(DeviceFetch(DeviceState.activityAwakeError, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setDeviceFetch(DeviceFetch(DeviceState.activityAwakeSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          setDeviceFetch(
+            DeviceFetch(DeviceState.activityAwakeSuccess, version: onResult.data['version'], versionIos: onResult.data['version_ios'], data: GenericResponse.fromJson(onResult.data).responseData),
+          );
         }
       },
       (errorData) {

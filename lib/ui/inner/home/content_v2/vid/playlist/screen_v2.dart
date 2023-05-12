@@ -17,6 +17,7 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/user_template.dart';
 import 'package:provider/provider.dart';
@@ -380,146 +381,157 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
   }
 
   Widget _middleDetail(BuildContext context, VidDetailNotifier notifier, LikeNotifier like, ContentData data) {
-    return Container(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GestureDetector(
-            onTap: () {
-              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data.postID, 'VIEW', 'Viewer', data.email);
-            },
-            child: Row(
-              children: [
-                CustomTextWidget(
-                  textToDisplay: System().formatterNumber(data.insight?.views),
-                  textStyle: context.getTextTheme().overline?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
-                ),
-                twoPx,
-                CustomTextWidget(textToDisplay: '${notifier.language.views}', textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary)),
-              ],
-            ),
-          ),
-          sixteenPx,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+    return Column(
+      children: [
+        data.email == SharedPreference().readStorage(SpKeys.email) && (data.reportedStatus == 'OWNED')
+            ? ContentViolationWidget(
+                data: data,
+                text: notifier.language.thisHyppeVidisSubjectToModeration ?? '',
+              )
+            : Container(),
+        Container(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
+              twelvePx,
+              GestureDetector(
+                onTap: () {
+                  Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data.postID, 'VIEW', 'Viewer', data.email);
+                },
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        like.likePost(context, data);
-                      },
-                      child: CustomIconWidget(
-                        width: 20,
-                        height: 20,
-                        color: (data.insight?.isPostLiked ?? false) ? null : Colors.black,
-                        defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'ic_like_red.svg' : 'ic_like_stroke.svg'}',
-                      ),
+                    CustomTextWidget(
+                      textToDisplay: System().formatterNumber(data.insight?.views),
+                      textStyle: context.getTextTheme().overline?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
                     ),
-                    if (data.allowComments ?? false) twentyPx,
-                    if (data.allowComments ?? false)
-                      InkWell(
-                        onTap: () {
-                          notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
-                        },
-                        child: const CustomIconWidget(
-                          width: 20,
-                          height: 20,
-                          color: Colors.black,
-                          defaultColor: false,
-                          iconData: '${AssetPath.vectorPath}comment2.svg',
-                        ),
-                      ),
-                    if (data.isShared ?? false) twentyPx,
-                    if (data.isShared ?? false)
-                      InkWell(
-                        onTap: () {
-                          notifier.createdDynamicLink(context, data: data);
-                        },
-                        child: const CustomIconWidget(
-                          width: 20,
-                          height: 20,
-                          color: Colors.black,
-                          defaultColor: false,
-                          iconData: '${AssetPath.vectorPath}share2.svg',
-                        ),
-                      ),
+                    twoPx,
+                    CustomTextWidget(textToDisplay: '${notifier.language.views}', textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary)),
                   ],
                 ),
               ),
-              if ((data.saleAmount ?? 0) > 0 && data.email != SharedPreference().readStorage(SpKeys.email))
-                Container(
-                  margin: const EdgeInsets.only(left: 10),
-                  child: InkWell(
-                    onTap: () {
-                      ShowBottomSheet.onBuyContent(context, data: data);
-                    },
-                    child: const CustomIconWidget(
-                      width: 25,
-                      height: 25,
-                      color: Colors.black,
-                      defaultColor: false,
-                      iconData: '${AssetPath.vectorPath}cart.svg',
+              sixteenPx,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            like.likePost(context, data);
+                          },
+                          child: CustomIconWidget(
+                            width: 20,
+                            height: 20,
+                            color: (data.insight?.isPostLiked ?? false) ? null : Colors.black,
+                            defaultColor: false,
+                            iconData: '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'ic_like_red.svg' : 'ic_like_stroke.svg'}',
+                          ),
+                        ),
+                        if (data.allowComments ?? false) twentyPx,
+                        if (data.allowComments ?? false)
+                          InkWell(
+                            onTap: () {
+                              notifier.goToComments(CommentsArgument(postID: data.postID ?? '', fromFront: true, data: data));
+                            },
+                            child: const CustomIconWidget(
+                              width: 20,
+                              height: 20,
+                              color: Colors.black,
+                              defaultColor: false,
+                              iconData: '${AssetPath.vectorPath}comment2.svg',
+                            ),
+                          ),
+                        if (data.isShared ?? false) twentyPx,
+                        if (data.isShared ?? false)
+                          InkWell(
+                            onTap: () {
+                              notifier.createdDynamicLink(context, data: data);
+                            },
+                            child: const CustomIconWidget(
+                              width: 20,
+                              height: 20,
+                              color: Colors.black,
+                              defaultColor: false,
+                              iconData: '${AssetPath.vectorPath}share2.svg',
+                            ),
+                          ),
+                      ],
                     ),
                   ),
+                  if ((data.saleAmount ?? 0) > 0 && data.email != SharedPreference().readStorage(SpKeys.email))
+                    Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      child: InkWell(
+                        onTap: () {
+                          ShowBottomSheet.onBuyContent(context, data: data);
+                        },
+                        child: const CustomIconWidget(
+                          width: 25,
+                          height: 25,
+                          color: Colors.black,
+                          defaultColor: false,
+                          iconData: '${AssetPath.vectorPath}cart.svg',
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              sixteenPx,
+              CustomTextWidget(
+                textToDisplay: '${data.insight?.likes ?? 0} ${notifier.language.like}',
+                textStyle: const TextStyle(color: kHyppeTextLightPrimary),
+              ),
+              fourPx,
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomDescContent(
+                      desc: "${data.description}",
+                      trimLines: 3,
+                      textAlign: TextAlign.start,
+                      seeLess: ' ${notifier.language.seeLess}',
+                      seeMore: ' ${notifier.language.seeMoreContent}',
+                      normStyle: Theme.of(context).textTheme.subtitle2,
+                      hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                      expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                    ),
+                  ],
                 ),
+              ),
+              eightPx,
+              if (data.tagPeople != null)
+                Builder(builder: (context) {
+                  final tags = data.tagPeople ?? [];
+                  if (tags.isNotEmpty) {
+                    return TagLabel(
+                      icon: 'tag_people',
+                      label: tags.length > 1 ? '${tags.length} ${notifier.language.people}' : '${data.tagPeople?.first.username}',
+                      function: () {
+                        notifier.showUserTag(context, data.tagPeople, data.postID);
+                        // vidNotifier.showUserTag(context, index, data.postID);
+                      },
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                }),
+              if (data.tagPeople != null) twelvePx,
+              CustomTextWidget(
+                textToDisplay: '${System().readTimestamp(
+                  DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? '')).millisecondsSinceEpoch,
+                  context,
+                  fullCaption: true,
+                )}',
+                textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary),
+              ),
             ],
           ),
-          sixteenPx,
-          CustomTextWidget(
-            textToDisplay: '${data.insight?.likes ?? 0} ${notifier.language.like}',
-            textStyle: const TextStyle(color: kHyppeTextLightPrimary),
-          ),
-          fourPx,
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomDescContent(
-                  desc: "${data.description}",
-                  trimLines: 3,
-                  textAlign: TextAlign.start,
-                  seeLess: ' ${notifier.language.seeLess}',
-                  seeMore: ' ${notifier.language.seeMoreContent}',
-                  normStyle: Theme.of(context).textTheme.subtitle2,
-                  hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                  expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                ),
-              ],
-            ),
-          ),
-          eightPx,
-          if (data.tagPeople != null)
-            Builder(builder: (context) {
-              final tags = data.tagPeople ?? [];
-              if (tags.isNotEmpty) {
-                return TagLabel(
-                  icon: 'tag_people',
-                  label: tags.length > 1 ? '${tags.length} ${notifier.language.people}' : '${data.tagPeople?.first.username}',
-                  function: () {
-                    notifier.showUserTag(context, data.tagPeople, data.postID);
-                    // vidNotifier.showUserTag(context, index, data.postID);
-                  },
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            }),
-          if (data.tagPeople != null) twelvePx,
-          CustomTextWidget(
-            textToDisplay: '${System().readTimestamp(
-              DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? '')).millisecondsSinceEpoch,
-              context,
-              fullCaption: true,
-            )}',
-            textStyle: context.getTextTheme().overline?.copyWith(color: context.getColorScheme().secondary),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

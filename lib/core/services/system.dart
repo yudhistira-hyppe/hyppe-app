@@ -1233,7 +1233,7 @@ class System {
           }
           await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
           if (globalAliPlayer != null) {
-            globalAliPlayer?.play();
+            // globalAliPlayer?.play();
           }
           if (globalAudioPlayer != null) {
             globalAudioPlayer?.resume();

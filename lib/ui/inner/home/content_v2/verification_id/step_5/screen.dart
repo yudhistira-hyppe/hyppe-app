@@ -27,7 +27,6 @@ class VerificationIDStep5 extends StatefulWidget {
 }
 
 class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFirstLayoutMixin {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDStep5');
@@ -319,7 +318,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                       CustomElevatedButton(
                         width: SizeConfig.screenWidth,
                         height: 44.0 * SizeConfig.scaleDiagonal,
-                        function: () => notifier.continueSelfie(context),
+                        function: () => notifier.step5CanNext ? notifier.continueSelfie(context) : null,
                         child: CustomTextWidget(
                           textToDisplay: notifier.language.continueSelfie ?? '',
                           textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),

@@ -132,4 +132,5 @@ class Routes {
   static const String webView = '/web-view';
 
   static const String testImage = '/test-image';
+  static const String testLogin = '/test-login';
 }
