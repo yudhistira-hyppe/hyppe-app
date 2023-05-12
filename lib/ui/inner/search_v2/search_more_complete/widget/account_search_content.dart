@@ -86,7 +86,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
                               ),
                             ),
                             twelvePx,
-                            if (widget.users.isNotNullAndEmpty())
+                            if (widget.users.isNotNullAndEmpty() && !notifier.searchController.text.isHashtag())
                               ...List.generate(
                                 widget.users?.length ?? 0,
                                 (index) => Padding(
@@ -114,8 +114,16 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
                                   ),
                                 ),
                               ),
-                            if (!widget.users.isNotNullAndEmpty()) SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
-                            if ((widget.users?.length ?? 0) % limitSearch == 0 && (widget.users?.isNotEmpty ?? false))
+                            Builder(builder: (context){
+                              if(!widget.users.isNotNullAndEmpty()){
+                                return SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text);
+                              }else if(notifier.searchController.text.isHashtag()){
+                                return SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text);
+                              }else{
+                                return const SizedBox.shrink();
+                              }
+                            }),
+                            if ((widget.users?.length ?? 0) % limitSearch == 0 && (widget.users?.isNotEmpty ?? false) && !notifier.searchController.text.isHashtag())
                               Container(
                                 width: double.infinity,
                                 height: 50,

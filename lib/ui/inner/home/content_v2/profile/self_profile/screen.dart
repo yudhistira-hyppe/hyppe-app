@@ -2,12 +2,10 @@ import 'dart:async';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
-import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
-import 'package:hyppe/core/bloc/ads_video/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
@@ -105,6 +103,7 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {
           if (widget.arguments?.isTrue == null) {
+            'pageIndex now: 0'.logger();
             context.read<MainNotifier>().pageIndex = 0;
             return false;
           } else {

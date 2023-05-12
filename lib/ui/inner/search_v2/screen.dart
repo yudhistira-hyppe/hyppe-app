@@ -143,6 +143,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
             // }
             // notifier.layout = SearchLayout.first;
           } else {
+            'pageIndex now: 0'.logger();
             context.read<MainNotifier>().pageIndex = 0;
           }
           return false;
