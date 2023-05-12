@@ -8,6 +8,8 @@ import 'package:hyppe/initial/hyppe/notifier.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 
+import '../../inner/main/notifier.dart';
+
 class OpeningLogo extends StatefulWidget {
   bool isLaunch;
   OpeningLogo({Key? key, this.isLaunch = true}) : super(key: key);
@@ -27,6 +29,7 @@ class _OpeningLogoState extends State<OpeningLogo> with AfterFirstLayoutMixin {
   @override
   void afterFirstLayout(BuildContext context) {
     if (widget.isLaunch) {
+      context.read<MainNotifier>().pageIndex = 0;
       final notifier = Provider.of<HyppeNotifier>(context, listen: false);
       notifier.handleStartUp(mounted);
     }

@@ -10,13 +10,11 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
-import '../../widget/show_image_profile.dart';
 
 class OtherProfileTop extends StatelessWidget {
   const OtherProfileTop({Key? key}) : super(key: key);
@@ -124,7 +122,7 @@ class OtherProfileTop extends StatelessWidget {
             ),
             notifier.displayBio().length > 2
                 ? Container(
-                    padding: const EdgeInsets.all(2),
+                    padding: const EdgeInsets.symmetric(vertical: 2),
                     constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.2),
                     child: SingleChildScrollView(
                         child: Column(

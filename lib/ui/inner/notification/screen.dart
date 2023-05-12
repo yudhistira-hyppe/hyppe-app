@@ -1,6 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
@@ -37,6 +38,7 @@ class _NotificationScreenState extends State<NotificationScreen> with AfterFirst
     return Consumer<NotificationNotifier>(
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {
+          'pageIndex now: 0'.logger();
           context.read<MainNotifier>().pageIndex = 0;
           return false;
         },

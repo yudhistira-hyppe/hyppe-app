@@ -260,7 +260,7 @@ class SelfProfileTop extends StatelessWidget {
 
             notifier.displayBio().length > 2
                 ? Container(
-                    padding: const EdgeInsets.all(2),
+                    padding: const EdgeInsets.symmetric(vertical: 2),
                     constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.3),
                     // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
                     child: SingleChildScrollView(

@@ -157,6 +157,17 @@ extension StringDefine on String {
       'Error getThumbBlob: $e'.logger();
     }
   }
+
+  String trimNewLines(){
+    final values = split('\n');
+    String result = '';
+    for(final value in values){
+      if(value.isNotEmpty){
+        result += '$value\n';
+      }
+    }
+    return result;
+  }
 }
 
 extension IntegerExtension on int {

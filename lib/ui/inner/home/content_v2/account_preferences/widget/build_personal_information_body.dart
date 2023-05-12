@@ -150,11 +150,11 @@ class BuildPersonalInformationBody extends StatelessWidget {
                 notifier.getListDeleteOption();
                 notifier.navigateToDeleteProfile();
               },
-              leading: CustomIconWidget(
+              leading: const CustomIconWidget(
                 iconData: "${AssetPath.vectorPath}delete.svg",
               ),
               title: CustomTextWidget(
-                textToDisplay: 'Delete Account',
+                textToDisplay: notifier.language.deleteAccount ?? '',
                 textStyle: Theme.of(context).textTheme.bodyText1,
                 textAlign: TextAlign.start,
               ),

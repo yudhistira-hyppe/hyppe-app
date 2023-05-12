@@ -68,7 +68,7 @@ class MainNotifier with ChangeNotifier {
       _connectAndListenToSocket();
       _connectAndListenToSocketAds();
     }
-    _pageIndex = 0;
+    // _pageIndex = 0;
 
     // Auto follow user if app is install from a dynamic link
     // DynamicLinkService.followSender(context);
