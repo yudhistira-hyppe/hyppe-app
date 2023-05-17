@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -188,6 +189,8 @@ class ContentData {
   int? comments;
   bool? isNewFollowing;
   bool isLoading = false;
+  FlutterAliplayer? fAliplayer;
+  FlutterAliplayer? fAliplayerAds;
 
   ContentData({
     this.metadata,
