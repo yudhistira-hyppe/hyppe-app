@@ -262,12 +262,12 @@ class HomeNotifier with ChangeNotifier {
           if (!mounted) return;
           await pic.initialPic(context, reload: isreload || isNew, list: allContents).then((value) async {
             if (diary.diaryData == null) {
-              // await initNewHome(context, mounted, forceIndex: 1);
-              diary.initialDiary(context, reload: isreload || isNew, list: allContents);
+              await initNewHome(context, mounted, forceIndex: 1);
+              // diary.initialDiary(context, reload: isreload || isNew, list: allContents);
             }
             if (vid.vidData == null) {
-              vid.initialVid(context, reload: isreload || isNew, list: allContents);
-              // await initNewHome(context, mounted, forceIndex: 2);
+              // vid.initialVid(context, reload: isreload || isNew, list: allContents);
+              await initNewHome(context, mounted, forceIndex: 2);
             }
           });
           break;

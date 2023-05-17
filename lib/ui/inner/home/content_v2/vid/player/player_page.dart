@@ -47,6 +47,7 @@ class PlayerPage extends StatefulWidget {
   final bool inLanding;
   final bool fromDeeplink;
   final Function functionFullTriger;
+  final Function(FlutterAliplayer, FlutterAliplayer)? getPlayers;
 
   PlayerPage({
     Key? key,
@@ -58,6 +59,7 @@ class PlayerPage extends StatefulWidget {
     this.inLanding = false,
     final this.fromDeeplink = false,
     required this.functionFullTriger,
+    this.getPlayers
   }) : super(key: key);
 
   @override
@@ -628,6 +630,11 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       // await getAdsVideoApsara(adsData?.data?.videoId ?? '');
     } catch (e) {
       'Failed to fetch ads data $e'.logger();
+    }finally{
+      final getPlayers = widget.getPlayers;
+      if(getPlayers != null && fAliplayer != null && fAliplayerAds != null){
+        getPlayers(fAliplayer!, fAliplayerAds!);
+      }
     }
   }
 

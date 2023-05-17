@@ -187,6 +187,7 @@ class ContentData {
   bool? isDiaryPlay;
   int? comments;
   bool? isNewFollowing;
+  bool isLoading = false;
 
   ContentData({
     this.metadata,
@@ -244,6 +245,7 @@ class ContentData {
     this.isDiaryPlay,
     this.comments,
     this.isNewFollowing,
+    this.isLoading = false,
     this.fullContent,
   });
 
@@ -388,6 +390,8 @@ class ContentData {
     if (music != null) {
       data['music'] = music!.toJson();
     }
+
+    data['isLoading'] = isLoading;
 
     return data;
   }
