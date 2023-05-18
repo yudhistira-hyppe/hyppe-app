@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -24,6 +25,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
@@ -69,7 +71,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   // int _currentPosition = 0;
   // int _bufferPosition = 0;
   // int _currentPositionText = 0;
-  int _curIdx = 0;
+  int _curIdx = -1;
   int _lastCurIndex = -1;
 
   String auth = '';
@@ -333,10 +335,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               }else if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
                                 return const CustomLoading(size: 5);
                               }
-                              if (_curIdx == 0 && vidNotifier.vidData?[0].reportedStatus == 'BLURRED') {
-                                isPlay = false;
-                                vidNotifier.vidData?[index].fAliplayer?.stop();
-                              }
+                              // if (_curIdx == 0 && vidNotifier.vidData?[0].reportedStatus == 'BLURRED') {
+                              //   isPlay = false;
+                              //   vidNotifier.vidData?[index].fAliplayer?.stop();
+                              // }
                               final vidData = vidNotifier.vidData?[index];
 
                               return itemVid(vidData ?? ContentData(), vidNotifier, index);
@@ -456,13 +458,18 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
           ),
           tenPx,
           VisibilityDetector(
-            key: Key(vidData.postID ?? index.toString()),
+            key: Key(index.toString()),
             onVisibilityChanged: (info) {
-              if (info.visibleFraction == 1.0) {
-                _curIdx = index;
-                if (_lastCurIndex != _curIdx) {
+              print("visibleFraction: ${info.visibleFraction}");
+              if (info.visibleFraction >= 0.6) {
+                if (_curIdx != index) {
                   Future.delayed(const Duration(milliseconds: 400), () {
-                    finish(vidData);
+                    try{
+                      notifier.vidData?[_curIdx].fAliplayer?.pause();
+                      notifier.vidData?[_curIdx].fAliplayerAds?.pause();
+                    }catch(e){
+                      e.logger();
+                    }
                     System().increaseViewCount2(context, vidData);
                   });
                   if (vidData.certified ?? false) {
@@ -470,14 +477,14 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                   } else {
                     System().disposeBlock();
                   }
-                }else{
-
                 }
+
               }
             },
             child: Container(
               margin: EdgeInsets.only(bottom: 20),
               child: VidPlayerPage(
+                orientation: Orientation.portrait,
                 playMode: (vidData.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                 dataSourceMap: map,
                 data: vidData,
@@ -485,12 +492,43 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                 width: MediaQuery.of(context).size.width,
                 inLanding: true,
                 fromDeeplink: false,
-                functionFullTriger: () {
+                functionFullTriger: (value) {
                   print('===========hahhahahahaa===========');
                   // fullscreen();
+                  // notifier.vidData?[_curIdx].fAliplayer?.pause();
+                  // showDialog(context: context, builder: (context){
+                  //     return VideoFullscreenPage(data: notifier.vidData?[_curIdx] ?? ContentData(), onClose: (){
+                  //       // Routing().moveBack();
+                  //     }, seekValue: value ?? 0);
+                  //   });
                 },
-                fAliplayer: notifier.vidData?[index].fAliplayer,
-                fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
+                onPlay: (exec){
+                  Future.delayed(const Duration(microseconds: 500), (){
+                    try{
+                      if(_curIdx != -1){
+                        notifier.vidData?[_curIdx].fAliplayer?.stop();
+                        notifier.vidData?[_curIdx].fAliplayerAds?.stop();
+
+                      }
+                    }catch(e){
+                      e.logger();
+                    }finally{
+                      setState(() {
+                        _curIdx = index;
+
+                      });
+                    }
+                  });
+                  _lastCurIndex = _curIdx;
+                },
+                getPlayer: (main){
+                  notifier.vidData?[index].fAliplayer = main;
+                },
+                getAdsPlayer: (ads){
+                  notifier.vidData?[index].fAliplayerAds = ads;
+                },
+                // fAliplayer: notifier.vidData?[index].fAliplayer,
+                // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
               ),
             ),
           ),
@@ -1100,38 +1138,38 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         : Container();
   }
 
-  void finish(ContentData data) async {
-
-    data.fAliplayer?.stop();
-    setState(() {
-      dataSelected?.isDiaryPlay = false;
-      isPlay = false;
-    });
-    dataSelected = data;
-  }
-
-  void start(ContentData data) async{
-    finish(data);
-    _lastCurIndex = _curIdx;
-
-    if (data.reportedStatus != 'BLURRED') {
-      if (data.isApsara ?? false) {
-        _playMode = ModeTypeAliPLayer.auth;
-        await getAuth(data);
-      } else {
-        _playMode = ModeTypeAliPLayer.url;
-        await getOldVideoUrl(data);
-      }
-    }
-
-    setState(() {
-      isPause = false;
-    });
-    if (data.reportedStatus == 'BLURRED') {
-    } else {
-      data.fAliplayer?.prepare();
-    }
-  }
+  // void finish(ContentData data) async {
+  //
+  //   data.fAliplayer?.stop();
+  //   setState(() {
+  //     dataSelected?.isDiaryPlay = false;
+  //     isPlay = false;
+  //   });
+  //   dataSelected = data;
+  // }
+  //
+  // void start(ContentData data) async{
+  //   finish(data);
+  //   _lastCurIndex = _curIdx;
+  //
+  //   if (data.reportedStatus != 'BLURRED') {
+  //     if (data.isApsara ?? false) {
+  //       _playMode = ModeTypeAliPLayer.auth;
+  //       await getAuth(data);
+  //     } else {
+  //       _playMode = ModeTypeAliPLayer.url;
+  //       await getOldVideoUrl(data);
+  //     }
+  //   }
+  //
+  //   setState(() {
+  //     isPause = false;
+  //   });
+  //   if (data.reportedStatus == 'BLURRED') {
+  //   } else {
+  //     data.fAliplayer?.prepare();
+  //   }
+  // }
 
   Future getOldVideoUrl(ContentData data) async {
     setState(() {
