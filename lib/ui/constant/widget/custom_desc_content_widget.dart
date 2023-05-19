@@ -27,6 +27,7 @@ class CustomDescContent extends StatefulWidget {
   final bool isReplace;
   final Function()? beforeGone;
   final Function()? afterGone;
+  final bool? isPlay;
 
   final Function(bool val)? callback;
 
@@ -46,7 +47,8 @@ class CustomDescContent extends StatefulWidget {
       this.isReplace = false,
       this.delimiter = '\u2026 ',
       this.beforeGone,
-      this.afterGone})
+      this.afterGone,
+      this.isPlay})
       : super(key: key);
 
   @override
@@ -205,8 +207,11 @@ class _CustomDescContentState extends State<CustomDescContent> {
                       }
                       var fixKeyword = item.desc[0] == '#' ? item.desc.substring(1, item.desc.length) : item.desc;
                       fixKeyword = fixKeyword.replaceAll(',', '');
+                      globalAliPlayer?.pause();
                       if (widget.isReplace) {
-                        Routing().moveReplacement(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
+
+                        await Routing().moveReplacement(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
+
                       } else {
                         if(widget.afterGone != null){
                           widget.beforeGone!();
@@ -216,12 +221,15 @@ class _CustomDescContentState extends State<CustomDescContent> {
                           widget.afterGone!();
                         }
                       }
+                      if(widget.isPlay ?? true){
+                        globalAliPlayer?.play();
+                      }
                     } else {
                       if (callback != null) {
                         callback(true);
                       }
                       final fixUsername = item.desc[0] == '@' ? item.desc.substring(1, item.desc.length) : item.desc;
-                      materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(context, fixUsername, isReplace: widget.isReplace);
+                      materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(context, fixUsername, isReplace: widget.isReplace, isPlay: widget.isPlay ?? true);
                     }
                   })));
       }

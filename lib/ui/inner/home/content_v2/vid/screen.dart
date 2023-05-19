@@ -43,6 +43,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../core/bloc/posts_v2/bloc.dart';
 import '../../../../../core/bloc/posts_v2/state.dart';
 import '../../../../../core/config/ali_config.dart';
+import '../../../../../core/services/route_observer_service.dart';
 import '../../../../../ux/path.dart';
 import '../../../../../ux/routing.dart';
 import '../../../../constant/entities/like/notifier.dart';
@@ -106,6 +107,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     //   _initListener();
     // });
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    super.didChangeDependencies();
   }
 
   // _initListener() {
@@ -280,8 +287,41 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     } catch (e) {
       e.logger();
     }
+    CustomRouteObserver.routeObserver.unsubscribe(this);
 
     super.dispose();
+  }
+
+  @override
+  void deactivate() {
+    print("====== deactivate dari diary");
+
+    super.deactivate();
+  }
+
+  @override
+  void didPop() {
+    print("====== didpop dari diary");
+    super.didPop();
+  }
+
+  @override
+  void didPopNext() {
+    print("======= didPopNext dari diary");
+    final notifier = context.read<PreviewVidNotifier>();
+    notifier.vidData?[_curIdx].fAliplayer?.play();
+
+    // System().disposeBlock();
+
+    super.didPopNext();
+  }
+
+  @override
+  void didPushNext() {
+    print("========= didPushNext dari diary");
+    final notifier = context.read<PreviewVidNotifier>();
+    notifier.vidData?[_curIdx].fAliplayer?.pause();
+    super.didPushNext();
   }
 
   PreviewVidNotifier getNotifier(BuildContext context) {
@@ -436,7 +476,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                     // FlutterAliplayer? fAliplayer
                     context.read<PreviewPicNotifier>().reportContent(context, vidData, fAliplayer: vidData.fAliplayer);
                   } else {
-                    vidData.fAliplayer?.pause();
+                    if (_curIdx != -1) {
+                      notifier.vidData?[_curIdx].fAliplayer?.pause();
+                    }
+
                     ShowBottomSheet().onShowOptionContent(
                       context,
                       contentData: vidData,
@@ -464,8 +507,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                 if (_curIdx != index) {
                   Future.delayed(const Duration(milliseconds: 400), () {
                     try {
-                      notifier.vidData?[_curIdx].fAliplayer?.pause();
-                      notifier.vidData?[_curIdx].fAliplayerAds?.pause();
+                      if (_curIdx != -1) {
+                        notifier.vidData?[_curIdx].fAliplayer?.pause();
+                        notifier.vidData?[_curIdx].fAliplayerAds?.pause();
+                      }
                     } catch (e) {
                       e.logger();
                     }
@@ -480,7 +525,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
               }
             },
             child: Container(
-              margin: EdgeInsets.only(bottom: 20),
+              margin: const EdgeInsets.only(bottom: 20),
               child: VidPlayerPage(
                 orientation: Orientation.portrait,
                 playMode: (vidData.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
@@ -504,8 +549,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                   Future.delayed(const Duration(microseconds: 500), () {
                     try {
                       if (_curIdx != -1) {
-                        notifier.vidData?[_curIdx].fAliplayer?.stop();
-                        notifier.vidData?[_curIdx].fAliplayerAds?.stop();
+                        if (_curIdx != index) {
+                          notifier.vidData?[_curIdx].fAliplayer?.stop();
+                          notifier.vidData?[_curIdx].fAliplayerAds?.stop();
+                        }
                       }
                     } catch (e) {
                       e.logger();
@@ -533,7 +580,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                   (vidData.reportedStatus != 'OWNED' && vidData.reportedStatus != 'BLURRED' && vidData.reportedStatus2 != 'BLURRED') &&
                   vidData.email == email
               ? Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: double.infinity,
                   margin: const EdgeInsets.only(bottom: 16),
                   child: ButtonBoost(
                     onDetail: false,

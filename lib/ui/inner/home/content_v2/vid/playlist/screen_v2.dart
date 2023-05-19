@@ -53,6 +53,7 @@ class NewVideoDetailScreen extends StatefulWidget {
 }
 
 class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterFirstLayoutMixin {
+  bool isPlay = false;
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'NewVideoDetailScreen');
@@ -153,6 +154,16 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                                         functionFullTriger: () {
                                           print('===========hahhahahahaa===========');
                                           fullscreen();
+                                        },
+                                        listenerPlay: (state, isInit){
+                                          if(isInit){
+                                            isPlay = state;
+                                          }else{
+                                            setState(() {
+                                              isPlay = state;
+                                            });
+                                          }
+
                                         },
                                       ),
                                     ),
@@ -328,7 +339,10 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                             adsData: null,
                             onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
                           );
-                          globalAliPlayer?.play();
+                          if(isPlay){
+                            globalAliPlayer?.play();
+                          }
+
                         },
                         child: const CustomIconWidget(
                           defaultColor: false,
@@ -362,7 +376,10 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                             globalAudioPlayer!.resume();
                           }
                           if (globalAliPlayer != null) {
-                            globalAliPlayer?.play();
+                            if(isPlay){
+                              globalAliPlayer?.play();
+                            }
+
                           }
                         },
                         child: const CustomIconWidget(
@@ -497,7 +514,8 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                       seeMore: ' ${notifier.language.seeMoreContent}',
                       normStyle: Theme.of(context).textTheme.subtitle2,
                       hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                      expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                      expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary,),
+                      isPlay: isPlay,
                     ),
                   ],
                 ),

@@ -48,6 +48,7 @@ class PlayerPage extends StatefulWidget {
   final bool fromDeeplink;
   final Function functionFullTriger;
   final Function(FlutterAliplayer, FlutterAliplayer)? getPlayers;
+  final Function(bool, bool)? listenerPlay;
 
   PlayerPage({
     Key? key,
@@ -59,7 +60,8 @@ class PlayerPage extends StatefulWidget {
     this.inLanding = false,
     final this.fromDeeplink = false,
     required this.functionFullTriger,
-    this.getPlayers
+    this.getPlayers,
+    this.listenerPlay
   }) : super(key: key);
 
   @override
@@ -160,6 +162,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     //   getOldVideoUrl();
     // }
     //cek ikaln
+
+    playState(true);
     adsData = context.read<VidDetailNotifier>().adsData;
     print("ini iklan ${adsData?.data?.videoId}");
     print("ini iklan ${adsData?.data?.apsaraAuth}");
@@ -618,6 +622,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           print("========== $isCompleteAds || $isActiveAds");
           // adsData = null;
           isPlay = true;
+          playState(true);
         });
         // fAliplayerAds?.stop();
         // fAliplayerAds?.destroy();
@@ -635,6 +640,12 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       if(getPlayers != null && fAliplayer != null && fAliplayerAds != null){
         getPlayers(fAliplayer!, fAliplayerAds!);
       }
+    }
+  }
+
+  void playState(bool isInit){
+    if(widget.listenerPlay != null){
+      widget.listenerPlay!(isPlay, isInit);
     }
   }
 
@@ -787,6 +798,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                   onTap: () {
                     print("ini play");
                     isPlay = true;
+                    playState(false);
                     if (widget.inLanding) {
                       _initAds(context);
                       context.incrementAdsCount();
@@ -1377,6 +1389,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       print("========== $isCompleteAds || $isActiveAds");
       // adsData = null;
       isPlay = true;
+      playState(true);
     });
     // fAliplayerAds?.stop();
     // fAliplayerAds?.destroy();

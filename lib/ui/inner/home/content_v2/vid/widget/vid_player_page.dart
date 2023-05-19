@@ -180,13 +180,9 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     if (adsData != null && widget.inLanding) {
       initAdsVideo();
     }
-    // if (widget.inLanding) {
-    //   setState(() {
-    //     isPlay = true;
-    //   });
-    // }
     try {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: '${widget.data?.postID}${widget.seekValue ?? ''}' ?? "videoPlayer");
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: '${widget.data?.postID}${widget.seekValue ?? ''}');
+
       final getPlayers = widget.getPlayer;
       if (fAliplayer != null) {
         if (widget.seekValue != null) {
@@ -1096,9 +1092,12 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         // fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
         fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
       },
-      child: const CustomIconWidget(
-        iconData: "${AssetPath.vectorPath}replay10.svg",
-        defaultColor: false,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: const CustomIconWidget(
+          iconData: "${AssetPath.vectorPath}replay10.svg",
+          defaultColor: false,
+        ),
       ),
     );
   }
@@ -1134,9 +1133,12 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         // fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
         fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
       },
-      child: const CustomIconWidget(
-        iconData: "${AssetPath.vectorPath}forward10.svg",
-        defaultColor: false,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: const CustomIconWidget(
+          iconData: "${AssetPath.vectorPath}forward10.svg",
+          defaultColor: false,
+        ),
       ),
     );
   }

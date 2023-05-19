@@ -182,6 +182,7 @@ class HomeNotifier with ChangeNotifier {
     rp.inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
 
+
     if (isConnected) {
       if (!mounted) return;
       final profile = Provider.of<MainNotifier>(context, listen: false);
@@ -231,7 +232,11 @@ class HomeNotifier with ChangeNotifier {
           data['skip'] = skipDiary;
           break;
         case 2:
-          if (isreload) skipvid = 0;
+          if (isreload) {
+            skipvid = 0;
+            _isLoadingVid = true;
+            notifyListeners();
+          }
           data['type'] = 'vid';
           data['skip'] = skipvid;
           break;
@@ -256,6 +261,7 @@ class HomeNotifier with ChangeNotifier {
       isLoadingLoadmore = false;
       _isLoadingPict = false;
       _isLoadingDiary = false;
+      _isLoadingVid = false;
       notifyListeners();
       switch (index) {
         case 0:
