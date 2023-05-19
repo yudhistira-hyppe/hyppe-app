@@ -284,7 +284,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     super.dispose();
   }
 
-  PreviewVidNotifier getNotifier(BuildContext context){
+  PreviewVidNotifier getNotifier(BuildContext context) {
     return context.read<PreviewVidNotifier>();
   }
 
@@ -332,7 +332,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                   height: context.getHeight() / 8,
                                   width: double.infinity,
                                 );
-                              }else if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
+                              } else if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
                                 return const CustomLoading(size: 5);
                               }
                               // if (_curIdx == 0 && vidNotifier.vidData?[0].reportedStatus == 'BLURRED') {
@@ -411,23 +411,22 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                     child: GestureDetector(
                       onTap: () {
                         if (vidData.insight?.isloadingFollow != true) {
-                          picNot.followUser(context, vidData,
-                              isUnFollow: vidData.following, isloading: vidData.insight!.isloadingFollow ?? false);
+                          picNot.followUser(context, vidData, isUnFollow: vidData.following, isloading: vidData.insight!.isloadingFollow ?? false);
                         }
                       },
                       child: vidData.insight?.isloadingFollow ?? false
                           ? Container(
-                        height: 40,
-                        width: 30,
-                        child: const Align(
-                          alignment: Alignment.bottomRight,
-                          child: CustomLoading(),
-                        ),
-                      )
+                              height: 40,
+                              width: 30,
+                              child: const Align(
+                                alignment: Alignment.bottomRight,
+                                child: CustomLoading(),
+                              ),
+                            )
                           : Text(
-                        (vidData.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                        style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                      ),
+                              (vidData.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                              style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                            ),
                     ),
                   ),
                 ),
@@ -464,10 +463,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
               if (info.visibleFraction >= 0.6) {
                 if (_curIdx != index) {
                   Future.delayed(const Duration(milliseconds: 400), () {
-                    try{
+                    try {
                       notifier.vidData?[_curIdx].fAliplayer?.pause();
                       notifier.vidData?[_curIdx].fAliplayerAds?.pause();
-                    }catch(e){
+                    } catch (e) {
                       e.logger();
                     }
                     System().increaseViewCount2(context, vidData);
@@ -478,7 +477,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                     System().disposeBlock();
                   }
                 }
-
               }
             },
             child: Container(
@@ -502,29 +500,27 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                   //     }, seekValue: value ?? 0);
                   //   });
                 },
-                onPlay: (exec){
-                  Future.delayed(const Duration(microseconds: 500), (){
-                    try{
-                      if(_curIdx != -1){
+                onPlay: (exec) {
+                  Future.delayed(const Duration(microseconds: 500), () {
+                    try {
+                      if (_curIdx != -1) {
                         notifier.vidData?[_curIdx].fAliplayer?.stop();
                         notifier.vidData?[_curIdx].fAliplayerAds?.stop();
-
                       }
-                    }catch(e){
+                    } catch (e) {
                       e.logger();
-                    }finally{
+                    } finally {
                       setState(() {
                         _curIdx = index;
-
                       });
                     }
                   });
                   _lastCurIndex = _curIdx;
                 },
-                getPlayer: (main){
+                getPlayer: (main) {
                   notifier.vidData?[index].fAliplayer = main;
                 },
-                getAdsPlayer: (ads){
+                getAdsPlayer: (ads) {
                   notifier.vidData?[index].fAliplayerAds = ads;
                 },
                 // fAliplayer: notifier.vidData?[index].fAliplayer,
@@ -533,24 +529,24 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
             ),
           ),
           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-              (vidData.boosted.isEmpty) &&
-              (vidData.reportedStatus != 'OWNED' && vidData.reportedStatus != 'BLURRED' && vidData.reportedStatus2 != 'BLURRED') &&
-              vidData.email == email
+                  (vidData.boosted.isEmpty) &&
+                  (vidData.reportedStatus != 'OWNED' && vidData.reportedStatus != 'BLURRED' && vidData.reportedStatus2 != 'BLURRED') &&
+                  vidData.email == email
               ? Container(
-            width: MediaQuery.of(context).size.width * 0.8,
-            margin: const EdgeInsets.only(bottom: 16),
-            child: ButtonBoost(
-              onDetail: false,
-              marginBool: true,
-              contentData: vidData,
-              startState: () {
-                SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-              },
-              afterState: () {
-                SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-              },
-            ),
-          )
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: ButtonBoost(
+                    onDetail: false,
+                    marginBool: true,
+                    contentData: vidData,
+                    startState: () {
+                      SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                    },
+                    afterState: () {
+                      SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                    },
+                  ),
+                )
               : Container(),
           if (vidData.email == email && (vidData.boostCount ?? 0) >= 0 && (vidData.boosted.isNotEmpty))
             Container(
@@ -590,26 +586,26 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                         alignment: Alignment.bottomRight,
                         child: vidData.insight?.isloading ?? false
                             ? const SizedBox(
-                          height: 28,
-                          width: 28,
-                          child: CircularProgressIndicator(
-                            color: kHyppePrimary,
-                            strokeWidth: 2,
-                          ),
-                        )
+                                height: 28,
+                                width: 28,
+                                child: CircularProgressIndicator(
+                                  color: kHyppePrimary,
+                                  strokeWidth: 2,
+                                ),
+                              )
                             : InkWell(
-                          child: CustomIconWidget(
-                            defaultColor: false,
-                            color: (vidData.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                            iconData: '${AssetPath.vectorPath}${(vidData.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                            height: 28,
-                          ),
-                          onTap: () {
-                            if (vidData != null) {
-                              likeNotifier.likePost(context, vidData);
-                            }
-                          },
-                        ),
+                                child: CustomIconWidget(
+                                  defaultColor: false,
+                                  color: (vidData.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                                  iconData: '${AssetPath.vectorPath}${(vidData.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                  height: 28,
+                                ),
+                                onTap: () {
+                                  if (vidData != null) {
+                                    likeNotifier.likePost(context, vidData);
+                                  }
+                                },
+                              ),
                       ),
                     ),
                     if (vidData.allowComments ?? true)
@@ -617,8 +613,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                         padding: const EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
                           onTap: () {
-                            Routing().move(Routes.commentsDetail,
-                                argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));
+                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));
                           },
                           child: const CustomIconWidget(
                             defaultColor: false,
@@ -699,30 +694,30 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
           ),
           (vidData.comment?.length ?? 0) > 0
               ? Padding(
-            padding: const EdgeInsets.only(top: 0.0),
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: (vidData.comment?.length ?? 0) >= 2 ? 2 : 1,
-              itemBuilder: (context, indexComment) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 6.0),
-                  child: CustomNewDescContent(
-                    // desc: "${vidData?.description}",
-                    username: vidData.comment?[indexComment].userComment?.username ?? '',
-                    desc: vidData.comment?[indexComment].txtMessages ?? '',
-                    trimLines: 2,
-                    textAlign: TextAlign.start,
-                    seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                    seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                    normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                    hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                    expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                  padding: const EdgeInsets.only(top: 0.0),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: (vidData.comment?.length ?? 0) >= 2 ? 2 : 1,
+                    itemBuilder: (context, indexComment) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 6.0),
+                        child: CustomNewDescContent(
+                          // desc: "${vidData?.description}",
+                          username: vidData.comment?[indexComment].userComment?.username ?? '',
+                          desc: vidData.comment?[indexComment].txtMessages ?? '',
+                          trimLines: 2,
+                          textAlign: TextAlign.start,
+                          seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                          seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                          normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                          hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                          expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          )
+                )
               : Container(),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 4.0),
@@ -1073,68 +1068,68 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     final transnot = Provider.of<TranslateNotifierV2>(context, listen: false);
     return data.reportedStatus == 'BLURRED'
         ? Positioned.fill(
-      child: Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Spacer(),
-                const CustomIconWidget(
-                  iconData: "${AssetPath.vectorPath}eye-off.svg",
-                  defaultColor: false,
-                  height: 30,
-                ),
-                Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                Text("HyppeVid ${transnot.translate.contentContainsSensitiveMaterial}",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                    )),
-                // data.email == SharedPreference().readStorage(SpKeys.email)
-                //     ? GestureDetector(
-                //         onTap: () => Routing().move(Routes.appeal, argument: data),
-                //         child: Container(
-                //             padding: const EdgeInsets.all(8),
-                //             margin: const EdgeInsets.all(18),
-                //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                //       )
-                //     : const SizedBox(),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    data.reportedStatus = '';
-                    // start(data);
-                    // context.read<ReportNotifier>().seeContent(context, data, hyppeVid);
-                    data.fAliplayer?.prepare();
-                    data.fAliplayer?.play();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 8),
-                    margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
-                    width: SizeConfig.screenWidth,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        top: BorderSide(
-                          color: Colors.white,
-                          width: 1,
+            child: Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Spacer(),
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}eye-off.svg",
+                        defaultColor: false,
+                        height: 30,
+                      ),
+                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                      Text("HyppeVid ${transnot.translate.contentContainsSensitiveMaterial}",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                          )),
+                      // data.email == SharedPreference().readStorage(SpKeys.email)
+                      //     ? GestureDetector(
+                      //         onTap: () => Routing().move(Routes.appeal, argument: data),
+                      //         child: Container(
+                      //             padding: const EdgeInsets.all(8),
+                      //             margin: const EdgeInsets.all(18),
+                      //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                      //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                      //       )
+                      //     : const SizedBox(),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          data.reportedStatus = '';
+                          // start(data);
+                          // context.read<ReportNotifier>().seeContent(context, data, hyppeVid);
+                          data.fAliplayer?.prepare();
+                          data.fAliplayer?.play();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.only(top: 8),
+                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                          width: SizeConfig.screenWidth,
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            "${transnot.translate.see} HyppeVid",
+                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
-                    ),
-                    child: Text(
-                      "${transnot.translate.see} HyppeVid",
-                      style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                      textAlign: TextAlign.center,
-                    ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          )),
-    )
+                )),
+          )
         : Container();
   }
 
