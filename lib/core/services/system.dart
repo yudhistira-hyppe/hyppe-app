@@ -1616,4 +1616,18 @@ class System {
       Routing().move(Routes.webView, argument: url);
     });
   }
+
+  void checkMemory() {
+    ImageCache _imageCache = PaintingBinding.instance.imageCache;
+    print("*******");
+    print(_imageCache.currentSizeBytes);
+    print(55 << 20);
+    print(_imageCache.currentSizeBytes >= 55 << 20);
+    print(_imageCache.currentSize);
+    print(_imageCache.maximumSize);
+    // if (_imageCache.currentSizeBytes >= 55 << 20 || _imageCache.currentSize >= _imageCache.maximumSize) {
+    _imageCache.clear();
+    _imageCache.clearLiveImages();
+    // }
+  }
 }

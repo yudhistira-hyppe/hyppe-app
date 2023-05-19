@@ -831,31 +831,34 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
               children: [
                 Row(
                   children: [
-                    Consumer<LikeNotifier>(
-                      builder: (context, likeNotifier, child) => Align(
-                        alignment: Alignment.bottomRight,
-                        child: notifier.diaryData?[index].insight?.isloading ?? false
-                            ? const SizedBox(
-                                height: 28,
-                                width: 28,
-                                child: CircularProgressIndicator(
-                                  color: kHyppePrimary,
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : InkWell(
-                                child: CustomIconWidget(
-                                  defaultColor: false,
-                                  color: (notifier.diaryData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                  iconData: '${AssetPath.vectorPath}${(notifier.diaryData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                    SizedBox(
+                      width: 30,
+                      child: Consumer<LikeNotifier>(
+                        builder: (context, likeNotifier, child) => Align(
+                          alignment: Alignment.bottomRight,
+                          child: notifier.diaryData?[index].insight?.isloading ?? false
+                              ? const SizedBox(
                                   height: 28,
+                                  width: 28,
+                                  child: CircularProgressIndicator(
+                                    color: kHyppePrimary,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : InkWell(
+                                  child: CustomIconWidget(
+                                    defaultColor: false,
+                                    color: (notifier.diaryData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                                    iconData: '${AssetPath.vectorPath}${(notifier.diaryData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                    height: 28,
+                                  ),
+                                  onTap: () {
+                                    if (notifier.diaryData?[index] != null) {
+                                      likeNotifier.likePost(context, notifier.diaryData![index]);
+                                    }
+                                  },
                                 ),
-                                onTap: () {
-                                  if (notifier.diaryData?[index] != null) {
-                                    likeNotifier.likePost(context, notifier.diaryData![index]);
-                                  }
-                                },
-                              ),
+                        ),
                       ),
                     ),
                     if (notifier.diaryData?[index].allowComments ?? true)

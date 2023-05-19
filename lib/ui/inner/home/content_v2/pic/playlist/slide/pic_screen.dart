@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../../core/constants/asset_path.dart';
 import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
@@ -34,11 +35,11 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> with SingleTicker
   void initState() {
     transformationController = TransformationController();
     animationController = AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 200),
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
     )..addListener(() {
-      transformationController.value = animation!.value;
-    });
+        transformationController.value = animation!.value;
+      });
     FirebaseCrashlytics.instance.setCustomKey('layout', 'PicPlaylishScreen');
     context.incrementAdsCount();
 
@@ -66,8 +67,6 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> with SingleTicker
     super.deactivate();
   }
 
-
-
   @override
   void dispose() {
     transformationController.dispose();
@@ -91,17 +90,20 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> with SingleTicker
         panEnabled: false,
         minScale: minScale,
         maxScale: maxScale,
-        onInteractionEnd: (details){
+        onInteractionEnd: (details) {
           resetAnimation();
         },
-        onInteractionStart: (details){
-          if(widget.preventedAction != null){
+        onInteractionStart: (details) {
+          if (widget.preventedAction != null) {
             widget.preventedAction!();
           }
         },
         child: ClipRRect(
-          child: CustomCacheImage(
+          child: CustomBaseCacheImage(
             // imageUrl: picData.content[arguments].contentUrl,
+            memCacheHeight: 50,
+            memCacheWidth: 50,
+
             imageUrl: (widget.contentData.isApsara ?? false) ? (widget.contentData.mediaThumbUri ?? (widget.contentData.media?.imageInfo?[0].url ?? '')) : widget.contentData.fullThumbPath,
             imageBuilder: (ctx, imageProvider) {
               return Container(
@@ -134,15 +136,11 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> with SingleTicker
     );
   }
 
-
-  void resetAnimation(){
-    animation = Matrix4Tween(
-      begin: transformationController.value,
-      end: Matrix4.identity()
-    ).animate(CurvedAnimation(parent: animationController, curve: Curves.linear));
+  void resetAnimation() {
+    animation = Matrix4Tween(begin: transformationController.value, end: Matrix4.identity()).animate(CurvedAnimation(parent: animationController, curve: Curves.linear));
 
     animationController.forward(from: 0);
-    if(widget.afterAction != null){
+    if (widget.afterAction != null) {
       widget.afterAction!();
     }
   }
