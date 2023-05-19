@@ -878,30 +878,33 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               children: [
                 Row(
                   children: [
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: notifier.pic?[index].insight?.isloading ?? false
-                          ? const SizedBox(
-                              height: 28,
-                              width: 28,
-                              child: CircularProgressIndicator(
-                                color: kHyppePrimary,
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : InkWell(
-                              child: CustomIconWidget(
-                                defaultColor: false,
-                                color: (notifier.pic?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                iconData: '${AssetPath.vectorPath}${(notifier.pic?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                    SizedBox(
+                      width: 30,
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: notifier.pic?[index].insight?.isloading ?? false
+                            ? const SizedBox(
                                 height: 28,
+                                width: 28,
+                                child: CircularProgressIndicator(
+                                  color: kHyppePrimary,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : InkWell(
+                                child: CustomIconWidget(
+                                  defaultColor: false,
+                                  color: (notifier.pic?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                                  iconData: '${AssetPath.vectorPath}${(notifier.pic?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                  height: 28,
+                                ),
+                                onTap: () {
+                                  if (notifier.pic?[index] != null) {
+                                    likeNotifier.likePost(context, notifier.pic![index]);
+                                  }
+                                },
                               ),
-                              onTap: () {
-                                if (notifier.pic?[index] != null) {
-                                  likeNotifier.likePost(context, notifier.pic![index]);
-                                }
-                              },
-                            ),
+                      ),
                     ),
                     if (notifier.pic?[index].allowComments ?? true)
                       Padding(
