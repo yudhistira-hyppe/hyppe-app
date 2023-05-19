@@ -181,7 +181,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
       initAdsVideo();
     }
     try {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: '${widget.data?.postID}${widget.seekValue ?? ''}');
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: '${widget.data?.postID}${widget.seekValue ?? 'video_player_landing'}');
 
       final getPlayers = widget.getPlayer;
       if (fAliplayer != null) {
@@ -757,7 +757,16 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
 
     if (widget.data!.isLoading) {
       Future.delayed(const Duration(milliseconds: 50), () {
-        widget.data!.isLoading = false;
+        setState(() {
+          widget.data!.isLoading = false;
+        });
+
+        Future.delayed(const Duration(milliseconds: 50), () {
+          widget.data!.isLoading = true;
+          Future.delayed(const Duration(milliseconds: 50), () {
+            widget.data!.isLoading = false;
+          });
+        });
       });
     }
 
@@ -786,11 +795,22 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         child: Stack(
           children: [
             // Text("${(adsData != null && !widget.inLanding)}"),
-            if (adsData != null && !isCompleteAds && widget.inLanding) Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView) else Container(),
+            if (adsData != null && !isCompleteAds && widget.inLanding)
+              ClipRRect(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(16),
+                  ),
+                  child: Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView))
+            else
+              Container(),
             if (adsData == null || (adsData != null && !widget.inLanding))
               widget.data!.isLoading
                   ? Container(color: Colors.black, width: widget.width, height: widget.height)
-                  : Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink()),
+                  : ClipRRect(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(16),
+                      ),
+                      child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
 
             // Text("${adsData == null}"),
             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
@@ -1399,9 +1419,10 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                           });
                       // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
                       // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
-                      fAliplayer?.requestBitmapAtPosition(value);
-                      fAliplayer?.seekTo(value, FlutterAvpdef.ACCURATE);
-                      fAliplayer?.play();
+
+                      // fAliplayer?.requestBitmapAtPosition(value);
+                      // fAliplayer?.seekTo(value, FlutterAvpdef.ACCURATE);
+                      // fAliplayer?.play();
                     } else {
                       Navigator.pop(context, changevalue);
                     }

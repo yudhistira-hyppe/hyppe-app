@@ -60,12 +60,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
     widget.fAliplayer?.play();
     _videoDuration = widget.vidDuration ?? 0;
     super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
     if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
-      if (Platform.isIOS) {
-        SystemChrome.setEnabledSystemUIOverlays([]);
-      } else {
-        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-      }
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
@@ -78,9 +75,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
           _currentPosition = extraValue ?? 0;
         }
         if (!_inSeek) {
-          setState(() {
-            _currentPositionText = extraValue ?? 0;
-          });
+          // setState(() {
+          _currentPositionText = extraValue ?? 0;
+          // });
         }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
         _bufferPosition = extraValue ?? 0;
@@ -119,6 +116,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
     return WillPopScope(
       onWillPop: () async {
         widget.data.isLoading = true;
+        // widget.fAliplayer?.pause();
+        setState(() {});
         return true;
       },
       child: Scaffold(
@@ -259,6 +258,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
                 GestureDetector(
                   onTap: () async {
                     widget.data.isLoading = true;
+                    setState(() {});
                     Navigator.pop(context);
                   },
                   child: Padding(
