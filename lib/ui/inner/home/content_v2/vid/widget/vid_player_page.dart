@@ -180,7 +180,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
       initAdsVideo();
     }
     try{
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: '${widget.data?.postID}${widget.seekValue ?? ''}' ?? "videoPlayer");
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: '${widget.data?.postID}${widget.seekValue ?? ''}');
 
       final getPlayers = widget.getPlayer;
       if(fAliplayer != null){
@@ -782,8 +782,8 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         child: Stack(
           children: [
             // Text("${(adsData != null && !widget.inLanding)}"),
-            if (adsData != null && !isCompleteAds && widget.inLanding) Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView) else Container(),
-            if (adsData == null || (adsData != null && !widget.inLanding)) Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink()),
+            if (adsData != null && !isCompleteAds && widget.inLanding) ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(16)), child: Container(decoration: const BoxDecoration(color: Colors.black, ), width: widget.width, height: widget.height, child: aliPlayerAdsView)) else Container(),
+            if (adsData == null || (adsData != null && !widget.inLanding)) ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(16)), child: Container(decoration: const BoxDecoration(color: Colors.black,), width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
 
             // Text("${adsData == null}"),
             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
@@ -1070,9 +1070,12 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         // fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
         fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
       },
-      child: const CustomIconWidget(
-        iconData: "${AssetPath.vectorPath}replay10.svg",
-        defaultColor: false,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: const CustomIconWidget(
+          iconData: "${AssetPath.vectorPath}replay10.svg",
+          defaultColor: false,
+        ),
       ),
     );
   }
@@ -1108,9 +1111,12 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         // fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
         fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
       },
-      child: const CustomIconWidget(
-        iconData: "${AssetPath.vectorPath}forward10.svg",
-        defaultColor: false,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: const CustomIconWidget(
+          iconData: "${AssetPath.vectorPath}forward10.svg",
+          defaultColor: false,
+        ),
       ),
     );
   }
@@ -1358,11 +1364,13 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                           // Routing().moveBack();
                         }, seekValue: changevalue);
                       });
-                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-                      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
-                      fAliplayer?.requestBitmapAtPosition(value);
-                      fAliplayer?.seekTo(value, FlutterAvpdef.ACCURATE);
-                      fAliplayer?.play();
+                      Future.delayed(const Duration(milliseconds: 500), (){
+                        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+                        SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+                        fAliplayer?.requestBitmapAtPosition(value);
+                        fAliplayer?.seekTo(value, FlutterAvpdef.ACCURATE);
+                        fAliplayer?.play();
+                      });
                     }else{
                       Navigator.pop(context, changevalue);
                     }

@@ -31,6 +31,7 @@ import 'package:hyppe/core/extension/custom_extension.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 
+import '../../../app.dart';
 import '../../../core/arguments/other_profile_argument.dart';
 import '../../../core/bloc/message_v2/bloc.dart';
 import '../../../core/bloc/user_v2/bloc.dart';
@@ -244,7 +245,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 
-  void checkAndNavigateToProfile(BuildContext context, String? username, {bool isReplace = false}) async {
+  void checkAndNavigateToProfile(BuildContext context, String? username, {bool isReplace = false, bool isPlay = true}) async {
     UserProfileModel? result = null;
     try {
       if (username != null) {
@@ -255,11 +256,16 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
         if (usersFetch.userState == UserState.getUserProfilesSuccess) {
           result = usersFetch.data;
           if (result != null) {
+            globalAliPlayer?.pause();
             if (isReplace) {
-              Routing().moveReplacement(Routes.otherProfile, argument: OtherProfileArgument(profile: result, senderEmail: result.email));
+              await Routing().moveReplacement(Routes.otherProfile, argument: OtherProfileArgument(profile: result, senderEmail: result.email));
             } else {
-              Routing().move(Routes.otherProfile, argument: OtherProfileArgument(profile: result, senderEmail: result.email));
+              await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(profile: result, senderEmail: result.email));
             }
+            if(isPlay){
+              globalAliPlayer?.play();
+            }
+
           } else {
             throw "Couldn't find the user ";
           }
