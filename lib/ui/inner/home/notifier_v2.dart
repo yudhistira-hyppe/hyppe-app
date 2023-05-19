@@ -262,6 +262,7 @@ class HomeNotifier with ChangeNotifier {
           if (!mounted) return;
           await pic.initialPic(context, reload: isreload || isNew, list: allContents).then((value) async {
             if (diary.diaryData == null) {
+<<<<<<< HEAD
               print("masuk diary ga yah ===========================");
               await initNewHome(context, mounted, forceIndex: 1);
               // await diary.initialDiary(context, reload: isreload || isNew, list: allContents);
@@ -269,6 +270,14 @@ class HomeNotifier with ChangeNotifier {
             if (vid.vidData == null) {
               await initNewHome(context, mounted, forceIndex: 2);
               // vid.initialVid(context, reload: isreload || isNew, list: allContents);
+=======
+              await initNewHome(context, mounted, forceIndex: 1);
+              // diary.initialDiary(context, reload: isreload || isNew, list: allContents);
+            }
+            if (vid.vidData == null) {
+              // vid.initialVid(context, reload: isreload || isNew, list: allContents);
+              await initNewHome(context, mounted, forceIndex: 2);
+>>>>>>> ba3dba641e1a68b1fbde3f6d7a3512acbbaed15e
             }
           });
           break;

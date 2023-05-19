@@ -11,9 +11,14 @@ import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../../core/bloc/ads_video/bloc.dart';
+import '../../../../../core/bloc/ads_video/state.dart';
+import '../../../../../core/models/collection/advertising/ads_video_data.dart';
 
 class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -238,5 +243,30 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
 
   set canPlayOpenApps(val) {
     _canPlayOpenApps = val;
+  }
+
+  AdsVideo? _adsData;
+  AdsVideo? get adsData => _adsData;
+
+  set adsData(val) {
+    _adsData = val;
+  }
+
+  Future getAdsVideo(BuildContext context, bool isContent) async {
+    try {
+      final notifier = AdsDataBloc();
+      await notifier.adsVideoBloc(context, isContent);
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        // print('data : ${fetch.data.toString()}');
+        adsData = fetch.data;
+        context.read<VidDetailNotifier>().getAuth(context, videoId: adsData?.data?.videoId ?? '').then((value) => adsData?.data?.apsaraAuth = value);
+
+        // await getAdsVideoApsara(_newClipData?.data?.videoId ?? '');
+      }
+    } catch (e) {
+      'Failed to fetch ads data $e'.logger();
+    }
   }
 }

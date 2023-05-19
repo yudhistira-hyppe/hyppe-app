@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -9,20 +11,21 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
-import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
-import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
-import 'package:hyppe/ui/constant/widget/custom_like_animation.dart';
 import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
@@ -33,10 +36,15 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../../../core/bloc/posts_v2/bloc.dart';
+import '../../../../../core/bloc/posts_v2/state.dart';
+import '../../../../../core/config/ali_config.dart';
+import '../../../../../ux/path.dart';
+import '../../../../../ux/routing.dart';
 import '../../../../constant/entities/like/notifier.dart';
 
 class HyppePreviewVid extends StatefulWidget {
@@ -46,9 +54,32 @@ class HyppePreviewVid extends StatefulWidget {
   _HyppePreviewVidState createState() => _HyppePreviewVidState();
 }
 
-class _HyppePreviewVidState extends State<HyppePreviewVid> {
+class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
+  // FlutterAliplayer? fAliplayer;
+  // FlutterAliplayer? fAliplayerAds;
+  bool isPrepare = false;
+  bool isPlay = false;
+  bool isPause = false;
+  // bool _showLoading = false;
+  // bool _inSeek = false;
+  bool isloading = false;
+  // bool isMute = false;
+
+  // int _loadingPercent = 0;
+  // int _currentPlayerState = 0;
+  // int _videoDuration = 1;
+  // int _currentPosition = 0;
+  // int _bufferPosition = 0;
+  // int _currentPositionText = 0;
+  int _curIdx = -1;
+  int _lastCurIndex = -1;
+
+  String auth = '';
   String email = '';
   LocalizationModelV2? lang;
+  ContentData? dataSelected;
+  ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewVid');
@@ -57,8 +88,189 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
     // notifier.initialVid(context, reload: true);
     notifier.pageController.addListener(() => notifier.scrollListener(context));
     lang = context.read<TranslateNotifierV2>().translate;
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
+    //   WidgetsBinding.instance.addObserver(this);
+    //   fAliplayer?.pause();
+    //   fAliplayer?.setAutoPlay(true);
+    //   fAliplayer?.setLoop(true);
+    //
+    //   //Turn on mix mode
+    //   if (Platform.isIOS) {
+    //     FlutterAliplayer.enableMix(true);
+    //   }
+    //
+    //   //set player
+    //   fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
+    //   fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+    //   _initListener();
+    // });
     super.initState();
   }
+
+  // _initListener() {
+  //   fAliplayer?.setOnEventReportParams((params, playerId) {
+  //     print("EventReportParams=${params}");
+  //   });
+  //   fAliplayer?.setOnPrepared((playerId) {
+  //     // Fluttertoast.showToast(msg: "OnPrepared ");
+  //     fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+  //     fAliplayer?.getMediaInfo().then((value) {
+  //       setState(() {
+  //         isPrepare = true;
+  //         getNotifier(context).vidData?[_lastCurIndex].isLoading = false;
+  //       });
+  //     });
+  //     isPlay = true;
+  //     dataSelected?.isDiaryPlay = true;
+  //     _initAds(context);
+  //   });
+  //   fAliplayer?.setOnRenderingStart((playerId) {
+  //     // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
+  //   });
+  //   fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
+  //   fAliplayer?.setOnStateChanged((newState, playerId) {
+  //     _currentPlayerState = newState;
+  //     print("aliyun : onStateChanged $newState");
+  //     switch (newState) {
+  //       case FlutterAvpdef.AVPStatus_AVPStatusStarted:
+  //         setState(() {
+  //           getNotifier(context).vidData?[_lastCurIndex].isLoading = false;
+  //           isPause = false;
+  //         });
+  //         break;
+  //       case FlutterAvpdef.AVPStatus_AVPStatusPaused:
+  //         isPause = true;
+  //         setState(() {});
+  //         break;
+  //       default:
+  //     }
+  //   });
+  //   fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
+  //     setState(() {
+  //       _loadingPercent = 0;
+  //       getNotifier(context).vidData?[_lastCurIndex].isLoading = true;
+  //     });
+  //   }, loadingProgress: (percent, netSpeed, playerId) {
+  //     _loadingPercent = percent;
+  //     if (percent == 100) {
+  //       getNotifier(context).vidData?[_lastCurIndex].isLoading = false;
+  //     }
+  //     setState(() {});
+  //   }, loadingEnd: (playerId) {
+  //     setState(() {
+  //       getNotifier(context).vidData?[_lastCurIndex].isLoading = false;
+  //     });
+  //   });
+  //   fAliplayer?.setOnSeekComplete((playerId) {
+  //     _inSeek = false;
+  //   });
+  //   fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
+  //     if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
+  //       if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
+  //         _currentPosition = extraValue ?? 0;
+  //       }
+  //       // if (!_inSeek) {
+  //       //   setState(() {
+  //       //     _currentPositionText = extraValue ?? 0;
+  //       //   });
+  //       // }
+  //     } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
+  //       _bufferPosition = extraValue ?? 0;
+  //       // if (mounted) {
+  //       //   setState(() {});
+  //       // }
+  //     } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
+  //       // Fluttertoast.showToast(msg: "AutoPlay");
+  //     } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
+  //     } else if (infoCode == FlutterAvpdef.CACHEERROR) {
+  //     } else if (infoCode == FlutterAvpdef.LOOPINGSTART) {
+  //       // Fluttertoast.showToast(msg: "Looping Start");
+  //     } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
+  //       // Fluttertoast.showToast(msg: "change to soft ware decoder");
+  //       // mOptionsFragment.switchHardwareDecoder();
+  //     }
+  //   });
+  //   fAliplayer?.setOnCompletion((playerId) {
+  //     getNotifier(context).vidData?[_lastCurIndex].isLoading = false;
+  //
+  //     isPause = true;
+  //
+  //     setState(() {
+  //       _currentPosition = _videoDuration;
+  //     });
+  //   });
+  //
+  //   fAliplayer?.setOnSnapShot((path, playerId) {
+  //     print("aliyun : snapShotPath = $path");
+  //     // Fluttertoast.showToast(msg: "SnapShot Save : $path");
+  //   });
+  //   fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
+  //     getNotifier(context).vidData?[_lastCurIndex].isLoading = false;
+  //
+  //     setState(() {});
+  //   });
+  //
+  //   fAliplayer?.setOnTrackChanged((value, playerId) {
+  //     AVPTrackInfo info = AVPTrackInfo.fromJson(value);
+  //     if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
+  //       // trackFragmentKey.currentState.onTrackChanged(info);
+  //       // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
+  //     }
+  //   });
+  //   fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
+  //
+  //   fAliplayer?.setOnThumbnailGetListener(
+  //       onThumbnailGetSuccess: (bitmap, range, playerId) {
+  //         // _thumbnailBitmap = bitmap;
+  //         var provider = MemoryImage(bitmap);
+  //         precacheImage(provider, context).then((_) {
+  //           setState(() {});
+  //         });
+  //       },
+  //       onThumbnailGetFail: (playerId) {});
+  //
+  //   fAliplayer?.setOnSubtitleHide((trackIndex, subtitleID, playerId) {
+  //     if (mounted) {
+  //       setState(() {});
+  //     }
+  //   });
+  //
+  //   fAliplayer?.setOnSubtitleShow((trackIndex, subtitleID, subtitle, playerId) {
+  //     if (mounted) {
+  //       setState(() {});
+  //     }
+  //   });
+  // }
+  //
+  // void onViewPlayerCreated(viewId) async {
+  //   fAliplayer?.setPlayerView(viewId);
+  // }
+
+  // _initAds(BuildContext context) async {
+  //   //for ads
+  //   // getCountVid();
+  //   // await _newInitAds(true);
+  //   context.incrementAdsCount();
+  //   if (context.getAdsCount() == null) {
+  //     context.setAdsCount(0);
+  //   } else {
+  //     final adsNotifier = context.read<PreviewVidNotifier>();
+  //     if (context.getAdsCount() == 2) {
+  //       try {
+  //         context.read<PreviewVidNotifier>().getAdsVideo(context, false);
+  //       } catch (e) {
+  //         'Failed to fetch ads data 0 : $e'.logger();
+  //       }
+  //     }
+  //     if (context.getAdsCount() == 3 && adsNotifier.adsData != null) {
+  //       fAliplayer?.pause();
+  //       System().adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(), adsNotifier.adsData?.data?.apsaraAuth ?? '', isInAppAds: false).whenComplete(() {
+  //         fAliplayer?.play();
+  //       });
+  //     }
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -72,11 +284,15 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
     super.dispose();
   }
 
+  PreviewVidNotifier getNotifier(BuildContext context){
+    return context.read<PreviewVidNotifier>();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     // final vidNotifier = context.watch<PreviewVidNotifier>();
-    final error = context.select((ErrorService value) => value.getError(ErrorType.vid));
+    // final error = context.select((ErrorService value) => value.getError(ErrorType.vid));
     // final likeNotifier = Provider.of<LikeNotifier>(context, listen: false);
 
     return Consumer3<PreviewVidNotifier, TranslateNotifierV2, HomeNotifier>(
@@ -108,19 +324,24 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                             shrinkWrap: true,
                             itemCount: vidNotifier.itemCount,
                             itemBuilder: (BuildContext context, int index) {
-                              if (homeNotifier.isLoadingVid) {
+                              if (vidNotifier.vidData == null || homeNotifier.isLoadingVid) {
+                                vidNotifier.vidData?[index].fAliplayer?.pause();
+                                _lastCurIndex = -1;
                                 return CustomShimmer(
                                   margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
                                   height: context.getHeight() / 8,
                                   width: double.infinity,
                                 );
-                              }
-                              if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
+                              }else if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
                                 return const CustomLoading(size: 5);
                               }
+                              // if (_curIdx == 0 && vidNotifier.vidData?[0].reportedStatus == 'BLURRED') {
+                              //   isPlay = false;
+                              //   vidNotifier.vidData?[index].fAliplayer?.stop();
+                              // }
                               final vidData = vidNotifier.vidData?[index];
 
-                              return itemVid(vidData ?? ContentData(), vidNotifier);
+                              return itemVid(vidData ?? ContentData(), vidNotifier, index);
                             },
                           ),
                         ),
@@ -144,260 +365,635 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
     );
   }
 
-  Widget itemVid(ContentData vidData, PreviewVidNotifier vidNotifier) {
-    return GestureDetector(
-      onTap: () {
-        vidNotifier.navigateToHyppeVidDetail(context, vidData, fromLAnding: true);
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: Colors.white,
-        ),
-        padding: const EdgeInsets.only(top: 20, left: 16, right: 16, bottom: 16),
-        margin: const EdgeInsets.only(bottom: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: ProfileLandingPage(
-                    show: true,
-                    // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
-                    onFollow: () {},
-                    following: true,
-                    haveStory: false,
-                    textColor: kHyppeTextLightPrimary,
-                    username: vidData.username,
-                    featureType: FeatureType.other,
-                    // isCelebrity: vidvidData?.privacy?.isCelebrity,
-                    isCelebrity: false,
-                    imageUrl: '${System().showUserPicture(vidData.avatar?.mediaEndpoint)}',
-                    onTapOnProfileImage: () => System().navigateToProfile(context, vidData.email ?? ''),
-                    createdAt: '2022-02-02',
-                    musicName: vidData.music?.musicTitle ?? '',
-                    location: vidData.location ?? '',
-                    isIdVerified: vidData.privacy?.isIdVerified,
-                  ),
-                ),
-                if (vidData.email != email && (vidData.isNewFollowing ?? false))
-                  Consumer<PreviewPicNotifier>(
-                    builder: (context, picNot, child) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          if (vidData.insight?.isloadingFollow != true) {
-                            picNot.followUser(context, vidData, isUnFollow: vidData.following, isloading: vidData.insight!.isloadingFollow ?? false);
-                          }
-                        },
-                        child: vidData.insight?.isloadingFollow ?? false
-                            ? Container(
-                                height: 40,
-                                width: 30,
-                                child: Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: CustomLoading(),
-                                ),
-                              )
-                            : Text(
-                                (vidData.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                              ),
-                      ),
-                    ),
-                  ),
-                GestureDetector(
-                  onTap: () {
-                    if (vidData.email != SharedPreference().readStorage(SpKeys.email)) {
-                      vidNotifier.reportContent(context, vidData);
-                    } else {
-                      ShowBottomSheet().onShowOptionContent(
-                        context,
-                        contentData: vidData,
-                        captionTitle: hyppeVid,
-                        onDetail: false,
-                        isShare: vidData.isShared,
-                        onUpdate: () => context.read<HomeNotifier>().onUpdate(),
-                      );
-                    }
-                  },
-                  child: const Icon(
-                    Icons.more_vert,
-                    color: kHyppeTextLightPrimary,
-                  ),
-                ),
-              ],
-            ),
-            twelvePx,
-            Stack(
-              children: [
-                AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Colors.black,
-                    ),
-                    child: CustomBaseCacheImage(
-                      memCacheWidth: 100,
-                      memCacheHeight: 100,
-                      widthPlaceHolder: 80,
-                      heightPlaceHolder: 80,
-                      imageUrl: (vidData.isApsara ?? false) ? (vidData.mediaThumbEndPoint ?? "") : "${vidData.fullThumbPath}",
-                      imageBuilder: (context, imageProvider) => Container(
-                        // const EdgeInsets.symmetric(horizontal: 4.5),
-                        width: SizeConfig.screenWidth,
-                        height: SizeConfig.screenWidth! / 1.5,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.contain,
-                          ),
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) {
-                        return Container(
-                          // const EdgeInsets.symmetric(horizontal: 4.5),
-
-                          height: 186,
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                              fit: BoxFit.contain,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        );
-                      },
-                      emptyWidget: Container(
-                        // const EdgeInsets.symmetric(horizontal: 4.5),
-
-                        height: 186,
-                        decoration: BoxDecoration(
-                          image: const DecorationImage(
-                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                            fit: BoxFit.contain,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                AspectRatio(aspectRatio: 16 / 9, child: _buildBody(context, vidData, SizeConfig.screenWidth)),
-              ],
-            ),
-            // (vidData?.tagPeople?.isNotEmpty ?? false) || vidData?.location != ''
-            //     ? Padding(
-            //         padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10.0),
-            //         child: Row(
-            //           children: [
-            //             vidData?.tagPeople?.isNotEmpty ?? false
-            //                 ? TagLabel(
-            //                     icon: 'tag_people',
-            //                     label: '${vidData?.tagPeople?.length} people',
-            //                     function: () {
-            //                       vidNotifier.showUserTag(context, index, vidData?.postID);
-            //                     },
-            //                   )
-            //                 : const SizedBox(),
-            //             vidData?.location == '' || vidData?.location == null
-            //                 ? const SizedBox()
-            //                 : TagLabel(
-            //                     icon: 'maptag',
-            //                     label: "${vidData?.location}",
-            //                     function: () {},
-            //                   ),
-            //           ],
-            //         ),
-            //       )
-            //     : const SizedBox(),
-            SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                    (vidData.boosted.isEmpty) &&
-                    (vidData.reportedStatus != 'OWNED' && vidData.reportedStatus != 'BLURRED' && vidData.reportedStatus2 != 'BLURRED') &&
-                    vidData.email == email
-                ? Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    margin: const EdgeInsets.only(top: 10),
-                    child: ButtonBoost(
-                      onDetail: false,
-                      marginBool: true,
-                      contentData: vidData,
-                      startState: () {
-                        SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                      },
-                      afterState: () {
-                        SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-                      },
-                    ),
-                  )
-                : Container(),
-            if (vidData.email == email && (vidData.boostCount ?? 0) >= 0 && (vidData.boosted.isNotEmpty))
-              Container(
-                padding: const EdgeInsets.all(10),
-                margin: const EdgeInsets.only(top: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: kHyppeGreyLight,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}reach.svg",
-                      defaultColor: false,
-                      height: 24,
-                      color: kHyppeTextLightPrimary,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 13),
-                      child: Text(
-                        "${vidData.boostJangkauan ?? '0'} ${lang?.reach}",
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
-                      ),
-                    )
-                  ],
+  Widget itemVid(ContentData vidData, PreviewVidNotifier notifier, int index) {
+    var map = {
+      DataSourceRelated.vidKey: vidData.apsaraId,
+      DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
+    };
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+      ),
+      padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: ProfileLandingPage(
+                  show: true,
+                  // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
+                  onFollow: () {},
+                  following: true,
+                  haveStory: false,
+                  textColor: kHyppeTextLightPrimary,
+                  username: vidData.username,
+                  featureType: FeatureType.other,
+                  // isCelebrity: vidnotifier.diaryData?[index].privacy?.isCelebrity,
+                  isCelebrity: false,
+                  imageUrl: '${System().showUserPicture(vidData.avatar?.mediaEndpoint)}',
+                  onTapOnProfileImage: () => System().navigateToProfile(context, vidData.email ?? ''),
+                  createdAt: '2022-02-02',
+                  musicName: vidData.music?.musicTitle ?? '',
+                  location: vidData.location ?? '',
+                  isIdVerified: vidData.privacy?.isIdVerified,
                 ),
               ),
-            twelvePx,
-            CustomNewDescContent(
-              // desc: "${data?.description}",
-              username: '',
-              desc: "${vidData.description}",
-              trimLines: 2,
-              textAlign: TextAlign.start,
-              seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-              seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-              normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-              hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-              expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+              if (vidData.email != email && (vidData.isNewFollowing ?? false))
+                Consumer<PreviewPicNotifier>(
+                  builder: (context, picNot, child) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (vidData.insight?.isloadingFollow != true) {
+                          picNot.followUser(context, vidData,
+                              isUnFollow: vidData.following, isloading: vidData.insight!.isloadingFollow ?? false);
+                        }
+                      },
+                      child: vidData.insight?.isloadingFollow ?? false
+                          ? Container(
+                        height: 40,
+                        width: 30,
+                        child: const Align(
+                          alignment: Alignment.bottomRight,
+                          child: CustomLoading(),
+                        ),
+                      )
+                          : Text(
+                        (vidData.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                        style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                      ),
+                    ),
+                  ),
+                ),
+              GestureDetector(
+                onTap: () {
+                  if (vidData.email != email) {
+                    // FlutterAliplayer? fAliplayer
+                    context.read<PreviewPicNotifier>().reportContent(context, vidData, fAliplayer: vidData.fAliplayer);
+                  } else {
+                    vidData.fAliplayer?.pause();
+                    ShowBottomSheet().onShowOptionContent(
+                      context,
+                      contentData: vidData,
+                      captionTitle: hyppeVid,
+                      onDetail: false,
+                      isShare: vidData.isShared,
+                      onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                      fAliplayer: vidData.fAliplayer,
+                    );
+                  }
+                },
+                child: const Icon(
+                  Icons.more_vert,
+                  color: kHyppeTextLightPrimary,
+                ),
+              ),
+            ],
+          ),
+          tenPx,
+          VisibilityDetector(
+            key: Key(index.toString()),
+            onVisibilityChanged: (info) {
+              print("visibleFraction: ${info.visibleFraction}");
+              if (info.visibleFraction >= 0.6) {
+                if (_curIdx != index) {
+                  Future.delayed(const Duration(milliseconds: 400), () {
+                    try{
+                      notifier.vidData?[_curIdx].fAliplayer?.pause();
+                      notifier.vidData?[_curIdx].fAliplayerAds?.pause();
+                    }catch(e){
+                      e.logger();
+                    }
+                    System().increaseViewCount2(context, vidData);
+                  });
+                  if (vidData.certified ?? false) {
+                    System().block(context);
+                  } else {
+                    System().disposeBlock();
+                  }
+                }
+
+              }
+            },
+            child: Container(
+              margin: EdgeInsets.only(bottom: 20),
+              child: VidPlayerPage(
+                orientation: Orientation.portrait,
+                playMode: (vidData.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                dataSourceMap: map,
+                data: vidData,
+                height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                width: MediaQuery.of(context).size.width,
+                inLanding: true,
+                fromDeeplink: false,
+                functionFullTriger: (value) {
+                  print('===========hahhahahahaa===========');
+                  // fullscreen();
+                  // notifier.vidData?[_curIdx].fAliplayer?.pause();
+                  // showDialog(context: context, builder: (context){
+                  //     return VideoFullscreenPage(data: notifier.vidData?[_curIdx] ?? ContentData(), onClose: (){
+                  //       // Routing().moveBack();
+                  //     }, seekValue: value ?? 0);
+                  //   });
+                },
+                onPlay: (exec){
+                  Future.delayed(const Duration(microseconds: 500), (){
+                    try{
+                      if(_curIdx != -1){
+                        notifier.vidData?[_curIdx].fAliplayer?.stop();
+                        notifier.vidData?[_curIdx].fAliplayerAds?.stop();
+
+                      }
+                    }catch(e){
+                      e.logger();
+                    }finally{
+                      setState(() {
+                        _curIdx = index;
+
+                      });
+                    }
+                  });
+                  _lastCurIndex = _curIdx;
+                },
+                getPlayer: (main){
+                  notifier.vidData?[index].fAliplayer = main;
+                },
+                getAdsPlayer: (ads){
+                  notifier.vidData?[index].fAliplayerAds = ads;
+                },
+                // fAliplayer: notifier.vidData?[index].fAliplayer,
+                // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
+              ),
             ),
-            eightPx,
-            Padding(
+          ),
+          SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+              (vidData.boosted.isEmpty) &&
+              (vidData.reportedStatus != 'OWNED' && vidData.reportedStatus != 'BLURRED' && vidData.reportedStatus2 != 'BLURRED') &&
+              vidData.email == email
+              ? Container(
+            width: MediaQuery.of(context).size.width * 0.8,
+            margin: const EdgeInsets.only(bottom: 16),
+            child: ButtonBoost(
+              onDetail: false,
+              marginBool: true,
+              contentData: vidData,
+              startState: () {
+                SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+              },
+              afterState: () {
+                SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+              },
+            ),
+          )
+              : Container(),
+          if (vidData.email == email && (vidData.boostCount ?? 0) >= 0 && (vidData.boosted.isNotEmpty))
+            Container(
+              padding: const EdgeInsets.all(10),
+              margin: EdgeInsets.only(bottom: 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: kHyppeGreyLight,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}reach.svg",
+                    defaultColor: false,
+                    height: 24,
+                    color: kHyppeTextLightPrimary,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 13),
+                    child: Text(
+                      "${vidData.boostJangkauan ?? '0'} ${lang?.reach}",
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          Consumer<LikeNotifier>(
+            builder: (context, likeNotifier, child) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Consumer<LikeNotifier>(
+                      builder: (context, likeNotifier, child) => Align(
+                        alignment: Alignment.bottomRight,
+                        child: vidData.insight?.isloading ?? false
+                            ? const SizedBox(
+                          height: 28,
+                          width: 28,
+                          child: CircularProgressIndicator(
+                            color: kHyppePrimary,
+                            strokeWidth: 2,
+                          ),
+                        )
+                            : InkWell(
+                          child: CustomIconWidget(
+                            defaultColor: false,
+                            color: (vidData.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                            iconData: '${AssetPath.vectorPath}${(vidData.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                            height: 28,
+                          ),
+                          onTap: () {
+                            if (vidData != null) {
+                              likeNotifier.likePost(context, vidData);
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                    if (vidData.allowComments ?? true)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 21.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Routing().move(Routes.commentsDetail,
+                                argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));
+                          },
+                          child: const CustomIconWidget(
+                            defaultColor: false,
+                            color: kHyppeTextLightPrimary,
+                            iconData: '${AssetPath.vectorPath}comment2.svg',
+                            height: 24,
+                          ),
+                        ),
+                      ),
+                    if ((vidData.isShared ?? false))
+                      Padding(
+                        padding: EdgeInsets.only(left: 21.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            context.read<VidDetailNotifier>().createdDynamicLink(context, data: vidData);
+                          },
+                          child: CustomIconWidget(
+                            defaultColor: false,
+                            color: kHyppeTextLightPrimary,
+                            iconData: '${AssetPath.vectorPath}share2.svg',
+                            height: 24,
+                          ),
+                        ),
+                      ),
+                    if ((vidData.saleAmount ?? 0) > 0 && email != vidData.email)
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () async {
+                            vidData.fAliplayer?.pause();
+                            await ShowBottomSheet.onBuyContent(context, data: vidData, fAliplayer: vidData.fAliplayer);
+                            // fAliplayer?.play();
+                          },
+                          child: const Align(
+                            alignment: Alignment.centerRight,
+                            child: CustomIconWidget(
+                              defaultColor: false,
+                              color: kHyppeTextLightPrimary,
+                              iconData: '${AssetPath.vectorPath}cart.svg',
+                              height: 24,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                twelvePx,
+                Text(
+                  "${vidData.insight?.likes}  ${lang?.like}",
+                  style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+          twelvePx,
+          CustomNewDescContent(
+            // desc: "${data?.description}",
+            username: vidData.username ?? '',
+            desc: "${vidData.description}",
+            trimLines: 2,
+            textAlign: TextAlign.start,
+            seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+            seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+            normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+            expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+          ),
+          GestureDetector(
+            onTap: () {
+              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));
+            },
+            child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Text(
-                "${System().readTimestamp(
-                  DateTime.parse(System().dateTimeRemoveT(vidData.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                  context,
-                  fullCaption: true,
-                )}",
+                "${lang?.seeAll} ${vidData.comments} ${lang?.comment}",
                 style: const TextStyle(fontSize: 12, color: kHyppeBurem),
               ),
             ),
-            // vidData?.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: vidData) : Container(),
-          ],
-        ),
+          ),
+          (vidData.comment?.length ?? 0) > 0
+              ? Padding(
+            padding: const EdgeInsets.only(top: 0.0),
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: (vidData.comment?.length ?? 0) >= 2 ? 2 : 1,
+              itemBuilder: (context, indexComment) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 6.0),
+                  child: CustomNewDescContent(
+                    // desc: "${vidData?.description}",
+                    username: vidData.comment?[indexComment].userComment?.username ?? '',
+                    desc: vidData.comment?[indexComment].txtMessages ?? '',
+                    trimLines: 2,
+                    textAlign: TextAlign.start,
+                    seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                    seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                    normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                    hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                    expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                  ),
+                );
+              },
+            ),
+          )
+              : Container(),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 4.0),
+            child: Text(
+              "${System().readTimestamp(
+                DateTime.parse(System().dateTimeRemoveT(vidData.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                context,
+                fullCaption: true,
+              )}",
+              style: TextStyle(fontSize: 12, color: kHyppeBurem),
+            ),
+          ),
+        ],
       ),
     );
   }
 
+  // Widget itemVid(ContentData vidData, PreviewVidNotifier vidNotifier) {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       vidNotifier.navigateToHyppeVidDetail(context, vidData, fromLAnding: true);
+  //     },
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(16),
+  //         color: Colors.white,
+  //       ),
+  //       padding: const EdgeInsets.only(top: 20, left: 16, right: 16, bottom: 16),
+  //       margin: const EdgeInsets.only(bottom: 16),
+  //       child: Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             crossAxisAlignment: CrossAxisAlignment.center,
+  //             children: [
+  //               Expanded(
+  //                 child: ProfileLandingPage(
+  //                   show: true,
+  //                   // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
+  //                   onFollow: () {},
+  //                   following: true,
+  //                   haveStory: false,
+  //                   textColor: kHyppeTextLightPrimary,
+  //                   username: vidData.username,
+  //                   featureType: FeatureType.other,
+  //                   // isCelebrity: vidvidData?.privacy?.isCelebrity,
+  //                   isCelebrity: false,
+  //                   imageUrl: '${System().showUserPicture(vidData.avatar?.mediaEndpoint)}',
+  //                   onTapOnProfileImage: () => System().navigateToProfile(context, vidData.email ?? ''),
+  //                   createdAt: '2022-02-02',
+  //                   musicName: vidData.music?.musicTitle ?? '',
+  //                   location: vidData.location ?? '',
+  //                   isIdVerified: vidData.privacy?.isIdVerified,
+  //                 ),
+  //               ),
+  //               if (vidData.email != email && (vidData.isNewFollowing ?? false))
+  //                 Consumer<PreviewPicNotifier>(
+  //                   builder: (context, picNot, child) => Padding(
+  //                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
+  //                     child: GestureDetector(
+  //                       onTap: () {
+  //                         if (vidData.insight?.isloadingFollow != true) {
+  //                           picNot.followUser(context, vidData, isUnFollow: vidData.following, isloading: vidData.insight!.isloadingFollow ?? false);
+  //                         }
+  //                       },
+  //                       child: vidData.insight?.isloadingFollow ?? false
+  //                           ? Container(
+  //                               height: 40,
+  //                               width: 30,
+  //                               child: Align(
+  //                                 alignment: Alignment.bottomRight,
+  //                                 child: CustomLoading(),
+  //                               ),
+  //                             )
+  //                           : Text(
+  //                               (vidData.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+  //                               style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+  //                             ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               GestureDetector(
+  //                 onTap: () {
+  //                   if (vidData.email != SharedPreference().readStorage(SpKeys.email)) {
+  //                     vidNotifier.reportContent(context, vidData);
+  //                   } else {
+  //                     ShowBottomSheet().onShowOptionContent(
+  //                       context,
+  //                       contentData: vidData,
+  //                       captionTitle: hyppeVid,
+  //                       onDetail: false,
+  //                       isShare: vidData.isShared,
+  //                       onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+  //                     );
+  //                   }
+  //                 },
+  //                 child: const Icon(
+  //                   Icons.more_vert,
+  //                   color: kHyppeTextLightPrimary,
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //           twelvePx,
+  //           Stack(
+  //             children: [
+  //               AspectRatio(
+  //                 aspectRatio: 16 / 9,
+  //                 child: Container(
+  //                   decoration: BoxDecoration(
+  //                     borderRadius: BorderRadius.circular(16),
+  //                     color: Colors.black,
+  //                   ),
+  //                   child: CustomBaseCacheImage(
+  //                     memCacheWidth: 100,
+  //                     memCacheHeight: 100,
+  //                     widthPlaceHolder: 80,
+  //                     heightPlaceHolder: 80,
+  //                     imageUrl: (vidData.isApsara ?? false) ? (vidData.mediaThumbEndPoint ?? "") : "${vidData.fullThumbPath}",
+  //                     imageBuilder: (context, imageProvider) => Container(
+  //                       // const EdgeInsets.symmetric(horizontal: 4.5),
+  //                       width: SizeConfig.screenWidth,
+  //                       height: SizeConfig.screenWidth! / 1.5,
+  //                       decoration: BoxDecoration(
+  //                         image: DecorationImage(
+  //                           image: imageProvider,
+  //                           fit: BoxFit.contain,
+  //                         ),
+  //                         borderRadius: BorderRadius.circular(16.0),
+  //                       ),
+  //                     ),
+  //                     errorWidget: (context, url, error) {
+  //                       return Container(
+  //                         // const EdgeInsets.symmetric(horizontal: 4.5),
+  //
+  //                         height: 186,
+  //                         decoration: BoxDecoration(
+  //                           image: const DecorationImage(
+  //                             image: AssetImage('${AssetPath.pngPath}content-error.png'),
+  //                             fit: BoxFit.contain,
+  //                           ),
+  //                           borderRadius: BorderRadius.circular(8.0),
+  //                         ),
+  //                       );
+  //                     },
+  //                     emptyWidget: Container(
+  //                       // const EdgeInsets.symmetric(horizontal: 4.5),
+  //
+  //                       height: 186,
+  //                       decoration: BoxDecoration(
+  //                         image: const DecorationImage(
+  //                           image: AssetImage('${AssetPath.pngPath}content-error.png'),
+  //                           fit: BoxFit.contain,
+  //                         ),
+  //                         borderRadius: BorderRadius.circular(8.0),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //               AspectRatio(aspectRatio: 16 / 9, child: _buildBody(context, vidData, SizeConfig.screenWidth)),
+  //             ],
+  //           ),
+  //           // (vidData?.tagPeople?.isNotEmpty ?? false) || vidData?.location != ''
+  //           //     ? Padding(
+  //           //         padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10.0),
+  //           //         child: Row(
+  //           //           children: [
+  //           //             vidData?.tagPeople?.isNotEmpty ?? false
+  //           //                 ? TagLabel(
+  //           //                     icon: 'tag_people',
+  //           //                     label: '${vidData?.tagPeople?.length} people',
+  //           //                     function: () {
+  //           //                       vidNotifier.showUserTag(context, index, vidData?.postID);
+  //           //                     },
+  //           //                   )
+  //           //                 : const SizedBox(),
+  //           //             vidData?.location == '' || vidData?.location == null
+  //           //                 ? const SizedBox()
+  //           //                 : TagLabel(
+  //           //                     icon: 'maptag',
+  //           //                     label: "${vidData?.location}",
+  //           //                     function: () {},
+  //           //                   ),
+  //           //           ],
+  //           //         ),
+  //           //       )
+  //           //     : const SizedBox(),
+  //           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+  //                   (vidData.boosted.isEmpty) &&
+  //                   (vidData.reportedStatus != 'OWNED' && vidData.reportedStatus != 'BLURRED' && vidData.reportedStatus2 != 'BLURRED') &&
+  //                   vidData.email == email
+  //               ? Container(
+  //                   width: MediaQuery.of(context).size.width * 0.8,
+  //                   margin: const EdgeInsets.only(top: 10),
+  //                   child: ButtonBoost(
+  //                     onDetail: false,
+  //                     marginBool: true,
+  //                     contentData: vidData,
+  //                     startState: () {
+  //                       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+  //                     },
+  //                     afterState: () {
+  //                       SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+  //                     },
+  //                   ),
+  //                 )
+  //               : Container(),
+  //           if (vidData.email == email && (vidData.boostCount ?? 0) >= 0 && (vidData.boosted.isNotEmpty))
+  //             Container(
+  //               padding: const EdgeInsets.all(10),
+  //               margin: const EdgeInsets.only(top: 10),
+  //               decoration: BoxDecoration(
+  //                 borderRadius: BorderRadius.circular(6),
+  //                 color: kHyppeGreyLight,
+  //               ),
+  //               child: Row(
+  //                 mainAxisAlignment: MainAxisAlignment.start,
+  //                 children: [
+  //                   const CustomIconWidget(
+  //                     iconData: "${AssetPath.vectorPath}reach.svg",
+  //                     defaultColor: false,
+  //                     height: 24,
+  //                     color: kHyppeTextLightPrimary,
+  //                   ),
+  //                   Padding(
+  //                     padding: const EdgeInsets.only(left: 13),
+  //                     child: Text(
+  //                       "${vidData.boostJangkauan ?? '0'} ${lang?.reach}",
+  //                       style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+  //                     ),
+  //                   )
+  //                 ],
+  //               ),
+  //             ),
+  //           twelvePx,
+  //           CustomNewDescContent(
+  //             // desc: "${data?.description}",
+  //             username: '',
+  //             desc: "${vidData.description}",
+  //             trimLines: 2,
+  //             textAlign: TextAlign.start,
+  //             seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+  //             seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+  //             normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+  //             hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+  //             expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+  //           ),
+  //           eightPx,
+  //           Padding(
+  //             padding: const EdgeInsets.symmetric(vertical: 4.0),
+  //             child: Text(
+  //               "${System().readTimestamp(
+  //                 DateTime.parse(System().dateTimeRemoveT(vidData.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+  //                 context,
+  //                 fullCaption: true,
+  //               )}",
+  //               style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+  //             ),
+  //           ),
+  //           // vidData?.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: vidData) : Container(),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Widget _buildBody(context, data, width) {
-    final translate = Provider.of<TranslateNotifierV2>(context, listen: false);
+    // final translate = Provider.of<TranslateNotifierV2>(context, listen: false);
     return Stack(
       children: [
         Padding(
@@ -471,5 +1067,163 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
         //     : Container(),
       ],
     );
+  }
+
+  Widget blurContentWidget(BuildContext context, ContentData data) {
+    final transnot = Provider.of<TranslateNotifierV2>(context, listen: false);
+    return data.reportedStatus == 'BLURRED'
+        ? Positioned.fill(
+      child: Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Spacer(),
+                const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}eye-off.svg",
+                  defaultColor: false,
+                  height: 30,
+                ),
+                Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                Text("HyppeVid ${transnot.translate.contentContainsSensitiveMaterial}",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                    )),
+                // data.email == SharedPreference().readStorage(SpKeys.email)
+                //     ? GestureDetector(
+                //         onTap: () => Routing().move(Routes.appeal, argument: data),
+                //         child: Container(
+                //             padding: const EdgeInsets.all(8),
+                //             margin: const EdgeInsets.all(18),
+                //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                //       )
+                //     : const SizedBox(),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    data.reportedStatus = '';
+                    // start(data);
+                    // context.read<ReportNotifier>().seeContent(context, data, hyppeVid);
+                    data.fAliplayer?.prepare();
+                    data.fAliplayer?.play();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 8),
+                    margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                    width: SizeConfig.screenWidth,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: Colors.white,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      "${transnot.translate.see} HyppeVid",
+                      style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )),
+    )
+        : Container();
+  }
+
+  // void finish(ContentData data) async {
+  //
+  //   data.fAliplayer?.stop();
+  //   setState(() {
+  //     dataSelected?.isDiaryPlay = false;
+  //     isPlay = false;
+  //   });
+  //   dataSelected = data;
+  // }
+  //
+  // void start(ContentData data) async{
+  //   finish(data);
+  //   _lastCurIndex = _curIdx;
+  //
+  //   if (data.reportedStatus != 'BLURRED') {
+  //     if (data.isApsara ?? false) {
+  //       _playMode = ModeTypeAliPLayer.auth;
+  //       await getAuth(data);
+  //     } else {
+  //       _playMode = ModeTypeAliPLayer.url;
+  //       await getOldVideoUrl(data);
+  //     }
+  //   }
+  //
+  //   setState(() {
+  //     isPause = false;
+  //   });
+  //   if (data.reportedStatus == 'BLURRED') {
+  //   } else {
+  //     data.fAliplayer?.prepare();
+  //   }
+  // }
+
+  Future getOldVideoUrl(ContentData data) async {
+    setState(() {
+      isloading = true;
+    });
+    try {
+      final notifier = PostsBloc();
+      await notifier.getOldVideo(context, apsaraId: data.postID ?? '');
+      final fetch = notifier.postsFetch;
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+
+        data.fAliplayer?.setUrl(jsonMap['data']['url']);
+        setState(() {
+          isloading = false;
+        });
+        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      setState(() {
+        isloading = false;
+      });
+      // 'Failed to fetch ads data $e'.logger();
+    }
+  }
+
+  Future getAuth(ContentData data) async {
+    setState(() {
+      isloading = true;
+    });
+    data.isLoading = true;
+    try {
+      final notifier = PostsBloc();
+      await notifier.getAuthApsara(context, apsaraId: data.apsaraId ?? '');
+      final fetch = notifier.postsFetch;
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        auth = jsonMap['PlayAuth'];
+
+        data.fAliplayer?.setVidAuth(
+          vid: data.apsaraId,
+          region: DataSourceRelated.defaultRegion,
+          playAuth: auth,
+        );
+        setState(() {
+          isloading = false;
+        });
+        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      setState(() {
+        isloading = false;
+      });
+      // 'Failed to fetch ads data $e'.logger();
+    }
   }
 }

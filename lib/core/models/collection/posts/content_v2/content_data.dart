@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -187,6 +188,9 @@ class ContentData {
   bool? isDiaryPlay;
   int? comments;
   bool? isNewFollowing;
+  bool isLoading = false;
+  FlutterAliplayer? fAliplayer;
+  FlutterAliplayer? fAliplayerAds;
 
   ContentData({
     this.metadata,
@@ -244,6 +248,7 @@ class ContentData {
     this.isDiaryPlay,
     this.comments,
     this.isNewFollowing,
+    this.isLoading = false,
     this.fullContent,
   });
 
@@ -388,6 +393,8 @@ class ContentData {
     if (music != null) {
       data['music'] = music!.toJson();
     }
+
+    data['isLoading'] = isLoading;
 
     return data;
   }
