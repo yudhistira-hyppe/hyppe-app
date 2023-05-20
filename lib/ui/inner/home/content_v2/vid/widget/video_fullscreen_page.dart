@@ -19,21 +19,17 @@ class VideoFullscreenPage extends StatefulWidget {
   final AliPlayerView aliPlayerView;
   final ContentData data;
   final Function onClose;
-  final int seekValue;
   final FlutterAliplayer? fAliplayer;
   final Widget? slider;
-  final int? vidDuration;
-  final int? currentPositionText;
+  final VideoIndicator videoIndicator;
   const VideoFullscreenPage({
     Key? key,
     required this.aliPlayerView,
     required this.data,
     required this.onClose,
-    required this.seekValue,
     this.fAliplayer,
     this.slider,
-    this.vidDuration,
-    this.currentPositionText,
+    required this.videoIndicator,
   }) : super(key: key);
 
   @override
@@ -55,10 +51,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
 
   @override
   void initState() {
-    _currentPositionText = widget.currentPositionText ?? 0;
-    _currentPosition = widget.seekValue;
+    _currentPositionText = widget.videoIndicator.positionText;
+    _currentPosition = widget.videoIndicator.seekValue;
     widget.fAliplayer?.play();
-    _videoDuration = widget.vidDuration ?? 0;
+    _videoDuration = widget.videoIndicator.videoDuration;
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
@@ -96,6 +92,14 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
         // Fluttertoast.showToast(msg: "change to soft ware decoder");
         // mOptionsFragment.switchHardwareDecoder();
       }
+    });
+
+    widget.fAliplayer?.setOnCompletion((playerId) {
+      _showTipsWidget = true;
+      isPause = true;
+      setState(() {
+        _currentPosition = _videoDuration;
+      });
     });
   }
 
@@ -257,14 +261,25 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
                 ),
                 GestureDetector(
                   onTap: () async {
+                    int changevalue;
+                    changevalue = _currentPosition + 1000;
+                    if (changevalue > _videoDuration) {
+                      changevalue = _videoDuration;
+                    }
                     widget.data.isLoading = true;
                     setState(() {});
-                    Navigator.pop(context);
+                    Navigator.pop(
+                        context,
+                        VideoIndicator(
+                            videoDuration: _videoDuration,
+                            seekValue: changevalue,
+                            positionText: _currentPositionText,
+                            showTipsWidget: _showTipsWidget));
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 12.0),
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 12.0),
                     child: Icon(
-                      orientation == Orientation.portrait ? Icons.fullscreen : Icons.fullscreen_exit,
+                      Icons.fullscreen_exit,
                       color: Colors.white,
                     ),
                   ),
@@ -300,7 +315,21 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
         decoration: BoxDecoration(
           color: backgroundColor,
         ),
-        child: Row(
+        child: _showTipsWidget ? Center(
+          child: GestureDetector(
+            onTap: (){
+              widget.fAliplayer?.prepare();
+              widget.fAliplayer?.play();
+              setState(() {
+                _showTipsWidget = false;
+              });
+            },
+            child: const CustomIconWidget(
+          iconData: "${AssetPath.vectorPath}pause.svg",
+            defaultColor: false,
+          ),
+          ),
+        ) : Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildSkipBack(iconColor, barHeight),
@@ -419,4 +448,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
       ),
     );
   }
+}
+
+class VideoIndicator{
+  final int videoDuration;
+  final int seekValue;
+  final int positionText;
+  final bool showTipsWidget;
+  VideoIndicator({required this.videoDuration, required this.seekValue, required this.positionText, this.showTipsWidget = false});
 }

@@ -98,6 +98,15 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           globalAudioPlayer!.pause();
         }
 
+        if(globalAliPlayer != null){
+          if(isStopVideo){
+            globalAliPlayer?.stop();
+          }else{
+            globalAliPlayer?.pause();
+          }
+
+        }
+
         "App Inactive".logger();
         final _userToken = SharedPreference().readStorage(SpKeys.userToken);
         if (_userToken != null) {

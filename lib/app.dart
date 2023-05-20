@@ -29,6 +29,7 @@ FlutterAliplayer? globalAliPlayer;
 final globalDB = DatabaseHelper();
 bool isHomeScreen = false;
 bool isFromSplash = false;
+bool isStopVideo = false;
 
 void disposeGlobalAudio() async {
   try {

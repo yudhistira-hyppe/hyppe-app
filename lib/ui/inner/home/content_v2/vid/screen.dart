@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -25,7 +24,6 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +38,7 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../../../app.dart';
 import '../../../../../core/bloc/posts_v2/bloc.dart';
 import '../../../../../core/bloc/posts_v2/state.dart';
 import '../../../../../core/config/ali_config.dart';
@@ -83,6 +82,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   @override
   void initState() {
+    isStopVideo = true;
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewVid');
     email = SharedPreference().readStorage(SpKeys.email);
     final notifier = Provider.of<PreviewVidNotifier>(context, listen: false);
@@ -281,6 +281,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   @override
   void dispose() {
+    isStopVideo = false;
     try {
       final notifier = context.read<PreviewVidNotifier>();
       notifier.pageController.dispose();
@@ -295,7 +296,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   @override
   void deactivate() {
     print("====== deactivate dari diary");
-
+    isStopVideo = false;
     super.deactivate();
   }
 

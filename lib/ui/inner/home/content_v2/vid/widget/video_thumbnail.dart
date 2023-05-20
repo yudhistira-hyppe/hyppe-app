@@ -17,8 +17,9 @@ class VideoThumbnail extends StatelessWidget {
   final ContentData? videoData;
   final Function fn;
   final bool onDetail;
+  final bool withMargin;
 
-  const VideoThumbnail({Key? key, this.videoData, required this.fn, required this.onDetail}) : super(key: key);
+  const VideoThumbnail({Key? key, this.videoData, required this.fn, required this.onDetail, this.withMargin = false}) : super(key: key);
 
   static final _system = System();
   static String email = SharedPreference().readStorage(SpKeys.email);
@@ -129,9 +130,10 @@ class VideoThumbnail extends StatelessWidget {
                 // ),
                 Visibility(
                   visible: (videoData?.saleAmount == 0 && (videoData?.certified ?? false)),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: IconOwnership(correct: true),
+                  child: Container(
+                    margin: withMargin ? const EdgeInsets.only(top: 10, right: 10) : null,
+                    padding: const EdgeInsets.all(8.0),
+                    child: const IconOwnership(correct: true),
                   ),
                 ),
               ],
