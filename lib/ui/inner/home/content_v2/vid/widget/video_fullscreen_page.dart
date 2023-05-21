@@ -58,8 +58,15 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
       ]);
+      Future.delayed(const Duration(milliseconds: 1500), (){
+        widget.fAliplayer?.play();
+      });
+    }else{
+      await Future.delayed(const Duration(seconds: 1));
+      widget.fAliplayer?.play();
     }
-    widget.fAliplayer?.play();
+
+
   }
 
   @override
@@ -114,9 +121,15 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    whileDispose();
     super.dispose();
+  }
+
+  whileDispose() async{
+    widget.fAliplayer?.pause();
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    widget.fAliplayer?.play();
   }
 
   @override

@@ -538,7 +538,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>  with WidgetsBindingO
                     } catch (e) {
                       e.logger();
                     }
-                    System().increaseViewCount2(context, vidData);
+                    // System().increaseViewCount2(context, vidData);
                   });
                   if (vidData.certified ?? false) {
                     System().block(context);
