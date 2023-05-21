@@ -853,7 +853,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                 : Container(),
             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
             // if (isPlay && adsData != null) skipAds(),
-            if (!isPlay)
+            if (!isPlay && !_showLoading)
               Center(
                 child: GestureDetector(
                   onTap: () async {
@@ -1457,6 +1457,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                         _currentPosition = value.seekValue;
                         _currentPositionText = value.positionText;
                         _showTipsWidget = value.showTipsWidget;
+                        isMute = value.isMute;
                         isPlay = !_showTipsWidget;
                       });
                       fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
