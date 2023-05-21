@@ -219,18 +219,16 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         }
 
         configAliplayer();
-
       } catch (e) {
         'Error Initialize Ali Player: $e'.logger();
       } finally {}
     });
 
-
     globalAliPlayer = fAliplayer;
   }
 
-  void configAliplayer(){
-    try{
+  void configAliplayer() {
+    try {
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
@@ -433,7 +431,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
       } else {
         getOldVideoUrl();
       }
-    }catch(e){
+    } catch (e) {
       rethrow;
     }
   }
@@ -805,16 +803,14 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           children: [
             // Text("${(adsData != null && !widget.inLanding)}"),
             if (adsData != null && !isCompleteAds && widget.inLanding)
-              Builder(
-                builder: (context) {
-                  print('show content ads');
-                  return ClipRRect(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(16),
-                      ),
-                      child: Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView));
-                }
-              ),
+              Builder(builder: (context) {
+                print('show content ads');
+                return ClipRRect(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(16),
+                    ),
+                    child: Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView));
+              }),
             if (adsData == null || (adsData != null && !widget.inLanding))
               widget.data!.isLoading
                   ? Container(color: Colors.black, width: widget.width, height: widget.height)
@@ -822,7 +818,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                       borderRadius: const BorderRadius.all(
                         Radius.circular(16),
                       ),
-                      child: Container( width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
+                      child: Container(width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
 
             // Text("${adsData == null}"),
             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
@@ -846,8 +842,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                 ),
               ),
             (widget.data?.reportedStatus == "BLURRED")
-                ?
-            Positioned.fill(
+                ? Positioned.fill(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: VideoThumbnailReport(
@@ -1434,7 +1429,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                             );
                           });
 
-                      setState((){
+                      setState(() {
                         _videoDuration = value.videoDuration;
                         _currentPosition = value.seekValue;
                         _currentPositionText = value.positionText;
