@@ -183,7 +183,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
 
         if (getPlayers != null) {
           print('Vid Player1: getPlayer ${fAliplayer}');
-          if(fAliplayer != null){
+          if (fAliplayer != null) {
             getPlayers(fAliplayer!);
           }
         }
@@ -209,18 +209,16 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         }
 
         configAliplayer();
-
       } catch (e) {
         'Error Initialize Ali Player: $e'.logger();
       } finally {}
     });
 
-
     globalAliPlayer = fAliplayer;
   }
 
-  void configAliplayer(){
-    try{
+  void configAliplayer() {
+    try {
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
@@ -311,7 +309,6 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           _showLoading = true;
         });
       }, loadingProgress: (percent, netSpeed, playerId) {
-
         if (percent == 100) {
           _showLoading = false;
         }
@@ -425,7 +422,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
       } else {
         getOldVideoUrl();
       }
-    }catch(e){
+    } catch (e) {
       rethrow;
     }
   }
@@ -814,7 +811,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                       borderRadius: const BorderRadius.all(
                         Radius.circular(16),
                       ),
-                      child: Container( color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
+                      child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
 
             // Text("${adsData == null}"),
             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
@@ -838,8 +835,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                 ),
               ),
             (widget.data?.reportedStatus == "BLURRED")
-                ?
-            Positioned.fill(
+                ? Positioned.fill(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: VideoThumbnailReport(
@@ -859,22 +855,22 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                   onTap: () async {
                     globalAliPlayer = widget.data?.fAliplayer;
                     print("ini play");
+
                     if (widget.onPlay != null) {
                       widget.onPlay!(widget.data ?? ContentData());
                     }
 
                     // if (widget.inLanding) {
-                      // _initAds(context);
+                    // _initAds(context);
                     //   context.incrementAdsCount();
                     // }
                     setState(() {
+                      isPlay = true;
                       _showLoading = true;
                     });
 
-                    await fAliplayer?.prepare().whenComplete(() {
-
-                    }).onError((error, stackTrace) => print('Error Loading video: $error'));
-                    Future.delayed(const Duration(seconds: 1), (){
+                    await fAliplayer?.prepare().whenComplete(() {}).onError((error, stackTrace) => print('Error Loading video: $error'));
+                    Future.delayed(const Duration(seconds: 1), () {
                       fAliplayer?.play();
                       setState(() {
                         isPlay = true;
@@ -957,7 +953,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     final getPlayers = widget.getPlayer;
     if (getPlayers != null) {
       print('Vid Player1: getPlayer ${fAliplayer}');
-      if(fAliplayer != null){
+      if (fAliplayer != null) {
         getPlayers(fAliplayer!);
       }
     }
@@ -1407,7 +1403,8 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                           //   isActiveAds ? _currentAdsPosition = value.ceil() : _currentPosition = value.ceil();
                           // });
                           setState(() {
-                            _currentPosition = value.ceil();;
+                            _currentPosition = value.ceil();
+                            ;
                           });
                         }),
                   ),
@@ -1452,7 +1449,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                             );
                           });
 
-                      setState((){
+                      setState(() {
                         _videoDuration = value.videoDuration;
                         _currentPosition = value.seekValue;
                         _currentPositionText = value.positionText;
