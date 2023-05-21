@@ -50,7 +50,6 @@ class VidPlayerPage extends StatefulWidget {
   final Function(FlutterAliplayer)? getAdsPlayer;
   final Function(ContentData)? onPlay;
   final Orientation orientation;
-  final int? seekValue;
   // FlutterAliplayer? fAliplayer;
   // FlutterAliplayer? fAliplayerAds;
 
@@ -68,7 +67,6 @@ class VidPlayerPage extends StatefulWidget {
     this.getPlayer,
     this.getAdsPlayer,
     required this.orientation,
-    this.seekValue,
     // this.fAliplayer,
     // this.fAliplayerAds
   }) : super(key: key);
@@ -79,7 +77,7 @@ class VidPlayerPage extends StatefulWidget {
 
 class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserver {
   FlutterAliplayer? fAliplayer;
-  FlutterAliplayer? fAliplayerAds;
+  // FlutterAliplayer? fAliplayerAds;
   bool isloading = false;
   bool isPrepare = false;
   bool isPause = false;
@@ -174,30 +172,22 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     adsData = context.read<VidDetailNotifier>().adsData;
     print("ini iklan ${adsData?.data?.videoId}");
     print("ini iklan ${adsData?.data?.apsaraAuth}");
-    if (adsData != null && widget.inLanding) {
-      initAdsVideo();
-    }
+    // if (adsData != null && widget.inLanding) {
+    //   initAdsVideo();
+    // }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
-        fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: '${widget.data?.postID}${widget.seekValue ?? 'video_player_landing'}');
+        fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.postID ?? 'video_player_landing');
 
         final getPlayers = widget.getPlayer;
-        if (fAliplayer != null) {
-          if (widget.seekValue != null) {
-            Future.delayed(const Duration(seconds: 3), () {
-              isPlay = true;
-              fAliplayer?.requestBitmapAtPosition(widget.seekValue!);
-              fAliplayer?.seekTo(widget.seekValue!, FlutterAvpdef.ACCURATE);
-              fAliplayer?.play();
-            });
-          } else {
-            Future.delayed(const Duration(milliseconds: 500), () {
-              if (getPlayers != null) {
-                getPlayers(fAliplayer!);
-              }
-            });
+
+        if (getPlayers != null) {
+          print('Vid Player1: getPlayer ${fAliplayer}');
+          if(fAliplayer != null){
+            getPlayers(fAliplayer!);
           }
         }
+
         WidgetsBinding.instance.addObserver(this);
         bottomIndex = 0;
 
@@ -321,11 +311,13 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           _showLoading = true;
         });
       }, loadingProgress: (percent, netSpeed, playerId) {
-        _loadingPercent = percent;
+
         if (percent == 100) {
           _showLoading = false;
         }
-        setState(() {});
+        setState(() {
+          _loadingPercent = percent;
+        });
       }, loadingEnd: (playerId) {
         setState(() {
           _showLoading = false;
@@ -570,117 +562,117 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     }
   }
 
-  Future initAdsVideo() async {
-    try {
-      // print('data : ${fetch.data.toString()}');
-      fAliplayerAds = FlutterAliPlayerFactory.createAliPlayer(playerId: 'iklanVideo ${adsData?.data?.videoId}');
-      fAliplayerAds?.setAutoPlay(true);
-      '("========== videoId : ${adsData?.data?.videoId}'.logger();
-      secondsSkip = adsData?.data?.adsSkip ?? 0;
-      skipAdsCurent = secondsSkip;
-      print("========== get source ads 1 ${_dataSourceAdsMap?[DataSourceRelated.vidKey]}");
-      fAliplayerAds?.setVidAuth(
-          vid: adsData?.data?.videoId,
-          region: 'ap-southeast-5',
-          playAuth: adsData?.data?.apsaraAuth,
-          definitionList: _dataSourceAdsMap?[DataSourceRelated.definitionList],
-          previewTime: _dataSourceAdsMap?[DataSourceRelated.previewTime]);
-      fAliplayerAds?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayerAds?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-      fAliplayerAds?.setOnPrepared((playerId) {
-        // Fluttertoast.showToast(msg: "OnPrepared ");
-        fAliplayerAds?.getPlayerName().then((value) => print("getPlayerName==${value}"));
-        fAliplayerAds?.getMediaInfo().then((value) {
-          _videoAdsDuration = value['duration'];
-          setState(() {
-            isPrepare = true;
-          });
-        });
-      });
-      fAliplayerAds?.setOnRenderingStart((playerId) {
-        // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
-      });
-      fAliplayerAds?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-        setState(() {
-          _loadingPercent = 0;
-          _showLoading = true;
-        });
-      }, loadingProgress: (percent, netSpeed, playerId) {
-        _loadingPercent = percent;
-        if (percent == 100) {
-          _showLoading = false;
-        }
-        setState(() {});
-      }, loadingEnd: (playerId) {
-        setState(() {
-          _showLoading = false;
-        });
-      });
-      fAliplayerAds?.setOnSeekComplete((playerId) {
-        _inSeek = false;
-      });
-      fAliplayerAds?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
-        if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
-          if (_videoAdsDuration != 0 && (extraValue ?? 0) <= _videoAdsDuration) {
-            _currentAdsPosition = extraValue ?? 0;
-          }
-          if (!_inSeek) {
-            setState(() {
-              _currentAdsPositionText = extraValue ?? 0;
-              if (skipAdsCurent > 0) {
-                skipAdsCurent = (secondsSkip - (_currentAdsPositionText / 1000)).round();
-              }
-              print("============= $_currentAdsPosition");
-            });
-          }
-        } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-          _bufferPosition = extraValue ?? 0;
-          if (mounted) {
-            setState(() {});
-          }
-        } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
-          // Fluttertoast.showToast(msg: "AutoPlay");
-        } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
-          // Fluttertoast.showToast(msg: "Cache Success");
-        } else if (infoCode == FlutterAvpdef.CACHEERROR) {
-          // Fluttertoast.showToast(msg: "Cache Error $extraMsg");
-        } else if (infoCode == FlutterAvpdef.LOOPINGSTART) {
-          // Fluttertoast.showToast(msg: "Looping Start");
-        } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
-          // Fluttertoast.showToast(msg: "change to soft ware decoder");
-          // mOptionsFragment.switchHardwareDecoder();
-        }
-      });
-      fAliplayerAds?.setOnCompletion((playerId) {
-        _showTipsWidget = true;
-        _showLoading = false;
-        _tipsContent = "Play Again";
-        isPause = true;
-        setState(() {
-          // isCompleteAds = true;
-          // isActiveAds = false;
-          _currentAdsPosition = _videoAdsDuration;
-          print("========== $isCompleteAds || $isActiveAds");
-          // adsData = null;
-          isPlay = true;
-        });
-        // fAliplayerAds?.stop();
-        // fAliplayerAds?.destroy();
-        fAliplayer?.prepare().whenComplete(() => _showLoading = false);
-        fAliplayer?.isAutoPlay();
-        fAliplayer?.play();
-        // fAliplayer!.play();
-      });
-
-      // await getAdsVideoApsara(adsData?.data?.videoId ?? '');
-    } catch (e) {
-      'Failed to fetch ads data $e'.logger();
-    } finally {
-      if (widget.getAdsPlayer != null && fAliplayerAds != null) {
-        widget.getAdsPlayer!(fAliplayerAds!);
-      }
-    }
-  }
+  // Future initAdsVideo() async {
+  //   try {
+  //     // print('data : ${fetch.data.toString()}');
+  //     fAliplayerAds = FlutterAliPlayerFactory.createAliPlayer(playerId: 'iklanVideo ${adsData?.data?.videoId}');
+  //     fAliplayerAds?.setAutoPlay(true);
+  //     '("========== videoId : ${adsData?.data?.videoId}'.logger();
+  //     secondsSkip = adsData?.data?.adsSkip ?? 0;
+  //     skipAdsCurent = secondsSkip;
+  //     print("========== get source ads 1 ${_dataSourceAdsMap?[DataSourceRelated.vidKey]}");
+  //     fAliplayerAds?.setVidAuth(
+  //         vid: adsData?.data?.videoId,
+  //         region: 'ap-southeast-5',
+  //         playAuth: adsData?.data?.apsaraAuth,
+  //         definitionList: _dataSourceAdsMap?[DataSourceRelated.definitionList],
+  //         previewTime: _dataSourceAdsMap?[DataSourceRelated.previewTime]);
+  //     fAliplayerAds?.setPreferPlayerName(GlobalSettings.mPlayerName);
+  //     fAliplayerAds?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+  //     fAliplayerAds?.setOnPrepared((playerId) {
+  //       // Fluttertoast.showToast(msg: "OnPrepared ");
+  //       fAliplayerAds?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+  //       fAliplayerAds?.getMediaInfo().then((value) {
+  //         _videoAdsDuration = value['duration'];
+  //         setState(() {
+  //           isPrepare = true;
+  //         });
+  //       });
+  //     });
+  //     fAliplayerAds?.setOnRenderingStart((playerId) {
+  //       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
+  //     });
+  //     fAliplayerAds?.setOnLoadingStatusListener(loadingBegin: (playerId) {
+  //       setState(() {
+  //         _loadingPercent = 0;
+  //         _showLoading = true;
+  //       });
+  //     }, loadingProgress: (percent, netSpeed, playerId) {
+  //       _loadingPercent = percent;
+  //       if (percent == 100) {
+  //         _showLoading = false;
+  //       }
+  //       setState(() {});
+  //     }, loadingEnd: (playerId) {
+  //       setState(() {
+  //         _showLoading = false;
+  //       });
+  //     });
+  //     fAliplayerAds?.setOnSeekComplete((playerId) {
+  //       _inSeek = false;
+  //     });
+  //     fAliplayerAds?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
+  //       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
+  //         if (_videoAdsDuration != 0 && (extraValue ?? 0) <= _videoAdsDuration) {
+  //           _currentAdsPosition = extraValue ?? 0;
+  //         }
+  //         if (!_inSeek) {
+  //           setState(() {
+  //             _currentAdsPositionText = extraValue ?? 0;
+  //             if (skipAdsCurent > 0) {
+  //               skipAdsCurent = (secondsSkip - (_currentAdsPositionText / 1000)).round();
+  //             }
+  //             print("============= $_currentAdsPosition");
+  //           });
+  //         }
+  //       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
+  //         _bufferPosition = extraValue ?? 0;
+  //         if (mounted) {
+  //           setState(() {});
+  //         }
+  //       } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
+  //         // Fluttertoast.showToast(msg: "AutoPlay");
+  //       } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
+  //         // Fluttertoast.showToast(msg: "Cache Success");
+  //       } else if (infoCode == FlutterAvpdef.CACHEERROR) {
+  //         // Fluttertoast.showToast(msg: "Cache Error $extraMsg");
+  //       } else if (infoCode == FlutterAvpdef.LOOPINGSTART) {
+  //         // Fluttertoast.showToast(msg: "Looping Start");
+  //       } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
+  //         // Fluttertoast.showToast(msg: "change to soft ware decoder");
+  //         // mOptionsFragment.switchHardwareDecoder();
+  //       }
+  //     });
+  //     fAliplayerAds?.setOnCompletion((playerId) {
+  //       _showTipsWidget = true;
+  //       _showLoading = false;
+  //       _tipsContent = "Play Again";
+  //       isPause = true;
+  //       setState(() {
+  //         // isCompleteAds = true;
+  //         // isActiveAds = false;
+  //         _currentAdsPosition = _videoAdsDuration;
+  //         print("========== $isCompleteAds || $isActiveAds");
+  //         // adsData = null;
+  //         isPlay = true;
+  //       });
+  //       // fAliplayerAds?.stop();
+  //       // fAliplayerAds?.destroy();
+  //       fAliplayer?.prepare().whenComplete(() => _showLoading = false);
+  //       fAliplayer?.isAutoPlay();
+  //       fAliplayer?.play();
+  //       // fAliplayer!.play();
+  //     });
+  //
+  //     // await getAdsVideoApsara(adsData?.data?.videoId ?? '');
+  //   } catch (e) {
+  //     'Failed to fetch ads data $e'.logger();
+  //   } finally {
+  //     if (widget.getAdsPlayer != null && fAliplayerAds != null) {
+  //       widget.getAdsPlayer!(fAliplayerAds!);
+  //     }
+  //   }
+  // }
 
   Future adsView(AdsData data, int time) async {
     try {
@@ -740,10 +732,10 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
 
     fAliplayer?.stop();
     fAliplayer?.destroy();
-    if (adsData != null) {
-      fAliplayerAds?.stop();
-      fAliplayerAds?.destroy();
-    }
+    // if (adsData != null) {
+    //   fAliplayerAds?.stop();
+    //   fAliplayerAds?.destroy();
+    // }
 
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
@@ -788,7 +780,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
       );
     } else {
       aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
-      AliPlayerView aliPlayerAdsView = AliPlayerView(onCreated: onViewPlayerAdsCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
+      // AliPlayerView aliPlayerAdsView = AliPlayerView(onCreated: onViewPlayerAdsCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
 
       return GestureDetector(
         onTap: () {
@@ -804,17 +796,17 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         child: Stack(
           children: [
             // Text("${(adsData != null && !widget.inLanding)}"),
-            if (adsData != null && !isCompleteAds && widget.inLanding)
-              Builder(
-                builder: (context) {
-                  print('show content ads');
-                  return ClipRRect(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(16),
-                      ),
-                      child: Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView));
-                }
-              ),
+            // if (adsData != null && !isCompleteAds && widget.inLanding)
+            //   Builder(
+            //     builder: (context) {
+            //       print('show content ads');
+            //       return ClipRRect(
+            //           borderRadius: const BorderRadius.all(
+            //             Radius.circular(16),
+            //           ),
+            //           child: Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView));
+            //     }
+            //   ),
             if (adsData == null || (adsData != null && !widget.inLanding))
               widget.data!.isLoading
                   ? Container(color: Colors.black, width: widget.width, height: widget.height)
@@ -822,7 +814,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                       borderRadius: const BorderRadius.all(
                         Radius.circular(16),
                       ),
-                      child: Container( width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
+                      child: Container( color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
 
             // Text("${adsData == null}"),
             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
@@ -860,44 +852,56 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                   )
                 : Container(),
             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
-            if (isPlay && adsData != null) skipAds(),
+            // if (isPlay && adsData != null) skipAds(),
             if (!isPlay)
               Center(
                 child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     globalAliPlayer = widget.data?.fAliplayer;
                     print("ini play");
                     if (widget.onPlay != null) {
                       widget.onPlay!(widget.data ?? ContentData());
                     }
-                    isPlay = true;
-                    if (widget.inLanding) {
-                      _initAds(context);
-                      context.incrementAdsCount();
-                    }
+
+                    // if (widget.inLanding) {
+                      // _initAds(context);
+                    //   context.incrementAdsCount();
+                    // }
                     setState(() {
                       _showLoading = true;
                     });
 
-                    if (adsData != null && widget.inLanding) {
-                      fAliplayerAds?.prepare().whenComplete(() {
-                        setState(() {
-                          _showLoading = false;
-                        });
-                      }).onError((error, stackTrace) => print('Error Loading video: $error'));
-                      fAliplayerAds?.play();
-                      setState(() {
-                        isActiveAds = true;
-                      });
-                    } else {
-                      fAliplayer?.prepare().whenComplete(() {
-                        setState(() {
-                          _showLoading = false;
-                        });
-                      }).onError((error, stackTrace) => print('Error Loading video: $error'));
+                    await fAliplayer?.prepare().whenComplete(() {
+
+                    }).onError((error, stackTrace) => print('Error Loading video: $error'));
+                    Future.delayed(const Duration(seconds: 1), (){
                       fAliplayer?.play();
-                      System().increaseViewCount2(context, widget.data ?? ContentData());
-                    }
+                      setState(() {
+                        isPlay = true;
+                        // _showLoading = false;
+                      });
+                    });
+
+                    System().increaseViewCount2(context, widget.data ?? ContentData());
+                    // if (adsData != null && widget.inLanding) {
+                    //   fAliplayerAds?.prepare().whenComplete(() {
+                    //     setState(() {
+                    //       _showLoading = false;
+                    //     });
+                    //   }).onError((error, stackTrace) => print('Error Loading video: $error'));
+                    //   fAliplayerAds?.play();
+                    //   setState(() {
+                    //     isActiveAds = true;
+                    //   });
+                    // } else {
+                    //   fAliplayer?.prepare().whenComplete(() {
+                    //     setState(() {
+                    //       _showLoading = false;
+                    //     });
+                    //   }).onError((error, stackTrace) => print('Error Loading video: $error'));
+                    //   fAliplayer?.play();
+                    //   System().increaseViewCount2(context, widget.data ?? ContentData());
+                    // }
                   },
                   child: Visibility(
                     visible: (widget.data?.reportedStatus != "BLURRED"),
@@ -931,7 +935,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
 
             _buildProgressBar(widget.width ?? 0, widget.height ?? 0),
             // _buildTipsWidget(widget.width ?? 0, widget.height ?? 0),
-            if (isPlay && (adsData == null || (adsData != null && !widget.inLanding)))
+            if (isPlay)
               Align(
                 alignment: Alignment.topCenter,
                 child: _buildController(
@@ -949,7 +953,14 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
   }
 
   void onViewPlayerCreated(viewId) async {
-    fAliplayer?.setPlayerView(viewId);
+    await fAliplayer?.setPlayerView(viewId);
+    final getPlayers = widget.getPlayer;
+    if (getPlayers != null) {
+      print('Vid Player1: getPlayer ${fAliplayer}');
+      if(fAliplayer != null){
+        getPlayers(fAliplayer!);
+      }
+    }
     switch (_playMode) {
       case ModeTypeAliPLayer.url:
         fAliplayer?.setUrl(urlVid);
@@ -979,9 +990,9 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     }
   }
 
-  void onViewPlayerAdsCreated(viewId) async {
-    fAliplayerAds?.setPlayerView(viewId);
-  }
+  // void onViewPlayerAdsCreated(viewId) async {
+  //   fAliplayerAds?.setPlayerView(viewId);
+  // }
 
   void _onPlayerHide() {
     Future.delayed(const Duration(seconds: 4), () {
@@ -1054,11 +1065,11 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           color: backgroundColor,
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildSkipBack(iconColor, barHeight),
+            Expanded(child: _buildSkipBack(iconColor, height)),
             _buildPlayPause(iconColor, barHeight),
-            _buildSkipForward(iconColor, barHeight),
+            Expanded(child: _buildSkipForward(iconColor, height)),
           ],
         ),
       ),
@@ -1098,10 +1109,10 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     );
   }
 
-  GestureDetector _buildSkipBack(Color iconColor, double barHeight) {
+  Widget _buildSkipBack(Color iconColor, double barHeight) {
     return GestureDetector(
       onTap: () {
-        if (!onTapCtrl) return;
+        // if (!onTapCtrl) return;
         int value;
         int changevalue;
         if (_videoDuration > 60000) {
@@ -1130,8 +1141,9 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         // fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
         fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
       },
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
+      child: Container(
+        // color: Colors.blue,
+        padding: const EdgeInsets.all(20.0),
         child: const CustomIconWidget(
           iconData: "${AssetPath.vectorPath}replay10.svg",
           defaultColor: false,
@@ -1140,10 +1152,10 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     );
   }
 
-  GestureDetector _buildSkipForward(Color iconColor, double barHeight) {
+  Widget _buildSkipForward(Color iconColor, double barHeight) {
     return GestureDetector(
       onTap: () {
-        if (!onTapCtrl) return;
+        // if (!onTapCtrl) return;
         int value;
         int changevalue;
         if (_videoDuration > 60000) {
@@ -1171,8 +1183,9 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         // fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
         fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
       },
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
+      child: Container(
+        // color: Colors.red,
+        padding: const EdgeInsets.all(20.0),
         child: const CustomIconWidget(
           iconData: "${AssetPath.vectorPath}forward10.svg",
           defaultColor: false,
@@ -1381,15 +1394,20 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                           // isActiveAds
                           //     ? fAliplayerAds?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE)
                           //     : fAliplayer?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
-                          isActiveAds ? fAliplayerAds?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE) : fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
+                          // isActiveAds ? fAliplayerAds?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE) : fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
+                          fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
                         },
                         onChanged: (value) {
                           print('on change');
                           if (_thumbnailSuccess) {
-                            isActiveAds ? fAliplayerAds?.requestBitmapAtPosition(value.ceil()) : fAliplayer?.requestBitmapAtPosition(value.ceil());
+                            // isActiveAds ? fAliplayerAds?.requestBitmapAtPosition(value.ceil()) : fAliplayer?.requestBitmapAtPosition(value.ceil());
+                            fAliplayer?.requestBitmapAtPosition(value.ceil());
                           }
+                          // setState(() {
+                          //   isActiveAds ? _currentAdsPosition = value.ceil() : _currentPosition = value.ceil();
+                          // });
                           setState(() {
-                            isActiveAds ? _currentAdsPosition = value.ceil() : _currentPosition = value.ceil();
+                            _currentPosition = value.ceil();;
                           });
                         }),
                   ),
@@ -1430,7 +1448,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                                 // Routing().moveBack();
                               },
                               slider: _buildContentWidget(context, widget.orientation),
-                              videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText),
+                              videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
                             );
                           });
 
@@ -1577,7 +1595,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     fAliplayer?.play();
 
     ///
-    fAliplayerAds?.stop();
+    // fAliplayerAds?.stop();
     isActiveAds = false;
     adsData = null;
     context.read<VidDetailNotifier>().adsData = null;

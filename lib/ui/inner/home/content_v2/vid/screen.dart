@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -80,6 +81,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>  with WidgetsBindingO
   ContentData? dataSelected;
   ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
 
+  Map<int, FlutterAliplayer> dataAli = {};
+
   @override
   void initState() {
     isStopVideo = true;
@@ -89,7 +92,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>  with WidgetsBindingO
     // notifier.initialVid(context, reload: true);
     notifier.pageController.addListener(() => notifier.scrollListener(context));
     lang = context.read<TranslateNotifierV2>().translate;
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+
+    });
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     //   fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
     //   WidgetsBinding.instance.addObserver(this);
@@ -485,6 +490,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>  with WidgetsBindingO
                     context.read<PreviewPicNotifier>().reportContent(context, vidData, fAliplayer: vidData.fAliplayer);
                   } else {
                     if (_curIdx != -1) {
+                      print('Vid Landing Page: pause $_curIdx');
                       notifier.vidData?[_curIdx].fAliplayer?.pause();
                     }
 
@@ -516,8 +522,15 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>  with WidgetsBindingO
                   Future.delayed(const Duration(milliseconds: 400), () {
                     try {
                       if (_curIdx != -1) {
-                        notifier.vidData?[_curIdx].fAliplayer?.pause();
-                        notifier.vidData?[_curIdx].fAliplayerAds?.pause();
+
+                        print('Vid Landing Page: pause $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                        if(notifier.vidData?[_curIdx].fAliplayer != null){
+                          notifier.vidData?[_curIdx].fAliplayer?.pause();
+                        }else{
+                          dataAli[_curIdx]?.pause();
+                        }
+
+                        // notifier.vidData?[_curIdx].fAliplayerAds?.pause();
                         // setState(() {
                         //   _curIdx = -1;
                         // });
@@ -563,8 +576,17 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>  with WidgetsBindingO
                         try {
                           if (_curIdx != -1) {
                             if (_curIdx != index) {
-                              notifier.vidData?[_curIdx].fAliplayer?.stop();
-                              notifier.vidData?[_curIdx].fAliplayerAds?.stop();
+                              print('Vid Landing Page: stop $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                              if(notifier.vidData?[_curIdx].fAliplayer != null){
+                                notifier.vidData?[_curIdx].fAliplayer?.stop();
+                              }else{
+                                final player = dataAli[_curIdx];
+                                if(player != null){
+                                  // notifier.vidData?[_curIdx].fAliplayer = player;
+                                  player.stop();
+                                }
+                              }
+                              // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
                             }
                           }
                         } catch (e) {
@@ -575,13 +597,18 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>  with WidgetsBindingO
                           });
                         }
                       });
-                      _lastCurIndex = _curIdx;
+                      // _lastCurIndex = _curIdx;
                     },
                     getPlayer: (main) {
-                      notifier.vidData?[index].fAliplayer = main;
+                      print('Vid Player1: screen ${main}');
+                      notifier.setAliPlayer(index, main);
+                      setState(() {
+                        dataAli[index] = main;
+                      });
+                      print('Vid Player1: after $index ${globalAliPlayer} : ${notifier.vidData?[index].fAliplayer}');
                     },
                     getAdsPlayer: (ads) {
-                      notifier.vidData?[index].fAliplayerAds = ads;
+                      // notifier.vidData?[index].fAliplayerAds = ads;
                     },
                     // fAliplayer: notifier.vidData?[index].fAliplayer,
                     // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
