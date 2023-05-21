@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -201,6 +202,11 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }
+  }
+
+  void setAliPlayer(int index, FlutterAliplayer player){
+    vidData?[index].fAliplayer = player;
+    notifyListeners();
   }
 
   void reportContent(BuildContext context, ContentData data) {

@@ -249,7 +249,7 @@ class ContentData {
     this.comments,
     this.isNewFollowing,
     this.isLoading = false,
-    this.fullContent,
+    this.fullContent
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {

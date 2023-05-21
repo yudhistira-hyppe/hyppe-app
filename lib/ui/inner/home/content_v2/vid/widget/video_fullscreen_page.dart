@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
 
 import '../../../../../../core/config/ali_config.dart';
 import '../../../../../../core/models/collection/posts/content_v2/content_data.dart';
@@ -36,7 +35,7 @@ class VideoFullscreenPage extends StatefulWidget {
   State<VideoFullscreenPage> createState() => _VideoFullscreenPageState();
 }
 
-class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
+class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFirstLayoutMixin {
   int seekValue = 0;
   bool isMute = false;
   bool _inSeek = false;
@@ -50,20 +49,32 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
   int _currentPlayerState = 0;
 
   @override
+  void afterFirstLayout(BuildContext context) {
+    landscape();
+  }
+
+  void landscape() async{
+    widget.fAliplayer?.pause();
+    if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
+      await SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    }
+    widget.fAliplayer?.play();
+  }
+
+  @override
   void initState() {
     _currentPositionText = widget.videoIndicator.positionText;
     _currentPosition = widget.videoIndicator.seekValue;
     widget.fAliplayer?.play();
     _videoDuration = widget.videoIndicator.videoDuration;
+    isMute = widget.videoIndicator.isMute;
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
-    if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
-    }
+
 
     widget.fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
@@ -275,7 +286,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
                             videoDuration: _videoDuration,
                             seekValue: changevalue,
                             positionText: _currentPositionText,
-                            showTipsWidget: _showTipsWidget));
+                            showTipsWidget: _showTipsWidget, isMute: isMute));
                   },
                   child: const Padding(
                     padding: EdgeInsets.only(right: 12.0),
@@ -450,6 +461,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
       ),
     );
   }
+
+
 }
 
 class VideoIndicator{
@@ -457,5 +470,6 @@ class VideoIndicator{
   final int seekValue;
   final int positionText;
   final bool showTipsWidget;
-  VideoIndicator({required this.videoDuration, required this.seekValue, required this.positionText, this.showTipsWidget = false});
+  final bool isMute;
+  VideoIndicator({required this.videoDuration, required this.seekValue, required this.positionText, this.showTipsWidget = false, required this.isMute});
 }
