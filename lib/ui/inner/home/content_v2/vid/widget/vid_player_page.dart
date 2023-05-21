@@ -13,13 +13,11 @@ import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -38,7 +36,6 @@ import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 
 import '../../../../../../app.dart';
-import '../../../../../constant/entities/like/notifier.dart';
 
 class VidPlayerPage extends StatefulWidget {
   final ModeTypeAliPLayer playMode;
@@ -180,51 +177,54 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     if (adsData != null && widget.inLanding) {
       initAdsVideo();
     }
-    try {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: '${widget.data?.postID}${widget.seekValue ?? 'video_player_landing'}');
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      try {
+        fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: '${widget.data?.postID}${widget.seekValue ?? 'video_player_landing'}');
 
-      final getPlayers = widget.getPlayer;
-      if (fAliplayer != null) {
-        if (widget.seekValue != null) {
-          Future.delayed(const Duration(seconds: 3), () {
-            isPlay = true;
-            fAliplayer?.requestBitmapAtPosition(widget.seekValue!);
-            fAliplayer?.seekTo(widget.seekValue!, FlutterAvpdef.ACCURATE);
-            fAliplayer?.play();
-          });
-        } else {
-          Future.delayed(const Duration(milliseconds: 500), () {
-            if (getPlayers != null) {
-              getPlayers(fAliplayer!);
-            }
-          });
+        final getPlayers = widget.getPlayer;
+        if (fAliplayer != null) {
+          if (widget.seekValue != null) {
+            Future.delayed(const Duration(seconds: 3), () {
+              isPlay = true;
+              fAliplayer?.requestBitmapAtPosition(widget.seekValue!);
+              fAliplayer?.seekTo(widget.seekValue!, FlutterAvpdef.ACCURATE);
+              fAliplayer?.play();
+            });
+          } else {
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (getPlayers != null) {
+                getPlayers(fAliplayer!);
+              }
+            });
+          }
         }
-      }
-      WidgetsBinding.instance.addObserver(this);
-      bottomIndex = 0;
+        WidgetsBinding.instance.addObserver(this);
+        bottomIndex = 0;
 
-      // fAliplayer?.setAutoPlay(widget.fromDeeplink);
-      // if (widget.fromDeeplink) {
-      //   isPlay = true;
-      // }
+        // fAliplayer?.setAutoPlay(widget.fromDeeplink);
+        // if (widget.fromDeeplink) {
+        //   isPlay = true;
+        // }
 
-      _playMode = widget.playMode;
-      _dataSourceMap = widget.dataSourceMap;
-      _dataSourceAdsMap = {};
-      // isPlay = false;
-      // isPrepare = false;
-      setState(() {});
+        _playMode = widget.playMode;
+        _dataSourceMap = widget.dataSourceMap;
+        _dataSourceAdsMap = {};
+        // isPlay = false;
+        // isPrepare = false;
+        setState(() {});
 
-      //Turn on mix mode
-      if (Platform.isIOS) {
-        FlutterAliplayer.enableMix(true);
-      }
+        //Turn on mix mode
+        if (Platform.isIOS) {
+          FlutterAliplayer.enableMix(true);
+        }
 
-      configAliplayer();
+        configAliplayer();
 
-    } catch (e) {
-      'Error Initialize Ali Player: $e'.logger();
-    } finally {}
+      } catch (e) {
+        'Error Initialize Ali Player: $e'.logger();
+      } finally {}
+    });
+
 
     globalAliPlayer = fAliplayer;
   }
@@ -545,16 +545,16 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
   _initAds(BuildContext context) async {
     //for ads
     // getCountVid();
-    // await _newInitAds(true);
-    if (context.getAdsCount() == null) {
-      context.setAdsCount(0);
-    } else {
-      if (context.getAdsCount() == 5) {
-        await _newInitAds(context, true);
-      } else if (context.getAdsCount() == 2) {
-        // await _newInitAds(false);
-      }
-    }
+    await _newInitAds(context, true);
+    // if (context.getAdsCount() == null) {
+    //   context.setAdsCount(0);
+    // } else {
+    //   if (context.getAdsCount() == 5) {
+    //     await _newInitAds(context, true);
+    //   } else if (context.getAdsCount() == 2) {
+    //     // await _newInitAds(false);
+    //   }
+    // }
   }
 
   Future _newInitAds(BuildContext context, bool isContent) async {
@@ -805,13 +805,16 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           children: [
             // Text("${(adsData != null && !widget.inLanding)}"),
             if (adsData != null && !isCompleteAds && widget.inLanding)
-              ClipRRect(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(16),
-                  ),
-                  child: Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView))
-            else
-              Container(),
+              Builder(
+                builder: (context) {
+                  print('show content ads');
+                  return ClipRRect(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(16),
+                      ),
+                      child: Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView));
+                }
+              ),
             if (adsData == null || (adsData != null && !widget.inLanding))
               widget.data!.isLoading
                   ? Container(color: Colors.black, width: widget.width, height: widget.height)
@@ -819,7 +822,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                       borderRadius: const BorderRadius.all(
                         Radius.circular(16),
                       ),
-                      child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
+                      child: Container( width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
 
             // Text("${adsData == null}"),
             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
@@ -843,12 +846,16 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                 ),
               ),
             (widget.data?.reportedStatus == "BLURRED")
-                ? Positioned.fill(
-                    child: VideoThumbnailReport(
-                      videoData: widget.data,
-                      function: () {
-                        changeStatusBlur();
-                      },
+                ?
+            Positioned.fill(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: VideoThumbnailReport(
+                        videoData: widget.data,
+                        function: () {
+                          changeStatusBlur();
+                        },
+                      ),
                     ),
                   )
                 : Container(),
@@ -1548,7 +1555,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
   }
 
   void adsComleteOrSkip() {
-    adsView(adsData?.data ?? AdsData(), _currentAdsPosition);
+    // adsView(adsData?.data ?? AdsData(), _currentAdsPosition);
 
     /////
     _showTipsWidget = true;

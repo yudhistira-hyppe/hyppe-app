@@ -40,22 +40,25 @@ class VideoThumbnailReport extends StatelessWidget {
         Positioned.fill(
           child: Center(
               child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                twelvePx,
                 const CustomIconWidget(
                   iconData: "${AssetPath.vectorPath}eye-off.svg",
                   defaultColor: false,
-                  height: 20,
+                  height: 24,
                   color: Colors.white,
                 ),
-                Text(translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                Text("HyppeVid ${translate.contentContainsSensitiveMaterial}",
+                fourPx,
+                Text(translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
+                fourPx,
+                Text("${translate.contentContainsSensitiveMaterial}",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 11,
+                      fontSize: 14,
                     )),
                 videoData?.email == SharedPreference().readStorage(SpKeys.email)
                     ? GestureDetector(
@@ -84,7 +87,7 @@ class VideoThumbnailReport extends StatelessWidget {
                       context.read<ReportNotifier>().seeContent(context, videoData!, hyppeVid);
                     },
                     child: Container(
-                      padding: const EdgeInsets.only(top: 8),
+                      padding: const EdgeInsets.only(top: 8, bottom: 8),
                       margin: const EdgeInsets.all(8),
                       width: SizeConfig.screenWidth,
                       decoration: const BoxDecoration(
@@ -96,7 +99,7 @@ class VideoThumbnailReport extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        "${translate.see} HyppeVid",
+                        "${translate.see} Vid",
                         style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center,
                       ),

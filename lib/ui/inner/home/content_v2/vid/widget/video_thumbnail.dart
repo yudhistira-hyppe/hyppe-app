@@ -19,7 +19,12 @@ class VideoThumbnail extends StatelessWidget {
   final bool onDetail;
   final bool withMargin;
 
-  const VideoThumbnail({Key? key, this.videoData, required this.fn, required this.onDetail, this.withMargin = false}) : super(key: key);
+  const VideoThumbnail({
+    Key? key,
+    this.videoData,
+    required this.fn,
+    required this.onDetail,
+    this.withMargin = false,}) : super(key: key);
 
   static final _system = System();
   static String email = SharedPreference().readStorage(SpKeys.email);
@@ -31,7 +36,8 @@ class VideoThumbnail extends StatelessWidget {
     return Stack(
       children: [
         /// Thumbnail
-        Center(
+        Align(
+          alignment: Alignment.center,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
             child: CustomThumbImage(

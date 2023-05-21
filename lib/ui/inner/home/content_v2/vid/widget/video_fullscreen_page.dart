@@ -133,6 +133,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
           child: Stack(
             children: [
               Container(width: context.getWidth(), height: SizeConfig.screenHeight, decoration: const BoxDecoration(color: Colors.black), child: widget.aliPlayerView),
+              if(!_showTipsWidget)
               SizedBox(
                 width: context.getWidth(),
                 height: SizeConfig.screenHeight,
@@ -230,7 +231,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
                           // isActiveAds
                           //     ? fAliplayerAds?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE)
                           //     : fAliplayer?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
-                          // isActiveAds ? fAliplayerAds?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE) : fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
+                          widget.fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
                         },
                         onChanged: (value) {
                           print('on change');
@@ -321,6 +322,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> {
               widget.fAliplayer?.prepare();
               widget.fAliplayer?.play();
               setState(() {
+                isPause = false;
                 _showTipsWidget = false;
               });
             },

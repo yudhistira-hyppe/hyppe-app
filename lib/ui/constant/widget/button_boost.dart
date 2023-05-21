@@ -170,7 +170,7 @@ class _ButtonBoostState extends State<ButtonBoost> {
                       size: 3,
                     )
                   : Text(
-                      'Boost',
+                      language.postBoost ?? 'Boost Post',
                       style: Theme.of(context).primaryTextTheme.subtitle2?.copyWith(color: Colors.white, fontWeight: FontWeight.w700),
                       textAlign: TextAlign.center,
                     ),

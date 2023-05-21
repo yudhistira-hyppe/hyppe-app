@@ -29,37 +29,28 @@ class CustomThumbImage extends StatelessWidget {
         widthPlaceHolder: 100,
         heightPlaceHolder: 100,
         imageBuilder: (context, imageProvider) {
-          return AspectRatio(
-            aspectRatio: 16 / 9,
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: boxFit,
-                  image: imageProvider,
-                ),
+          return Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: boxFit,
+                image: imageProvider,
               ),
             ),
           );
         },
-        errorWidget: (context, url, error) => AspectRatio(
-          aspectRatio: 16 / 9,
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.contain,
-                image: AssetImage('${AssetPath.pngPath}content-error.png'),
-              ),
+        errorWidget: (context, url, error) => Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              image: AssetImage('${AssetPath.pngPath}content-error.png'),
             ),
           ),
         ),
-        emptyWidget: AspectRatio(
-          aspectRatio: 16 / 9,
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.contain,
-                image: AssetImage('${AssetPath.pngPath}content-error.png'),
-              ),
+        emptyWidget: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              image: AssetImage('${AssetPath.pngPath}content-error.png'),
             ),
           ),
         ),

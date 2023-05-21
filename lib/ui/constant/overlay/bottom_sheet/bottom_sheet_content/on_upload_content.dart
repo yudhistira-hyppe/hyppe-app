@@ -174,6 +174,13 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                     if(tempIsHome){
                       isHomeScreen = true;
                     }
+                    // Future.delayed(const Duration(seconds: 1), (){
+                    //   Routing().moveAndPop(Routes.makeContent);
+                    //   if(tempIsHome){
+                    //     isHomeScreen = true;
+                    //   }
+                    // });
+
                   },
                   dense: true,
                   minLeadingWidth: 20,
