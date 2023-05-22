@@ -51,22 +51,20 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     landscape();
   }
 
-  void landscape() async{
+  void landscape() async {
     widget.fAliplayer?.pause();
     if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
       await SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
       ]);
-      Future.delayed(const Duration(milliseconds: 1500), (){
+      Future.delayed(const Duration(milliseconds: 1500), () {
         widget.fAliplayer?.play();
       });
-    }else{
+    } else {
       await Future.delayed(const Duration(seconds: 1));
       widget.fAliplayer?.play();
     }
-
-
   }
 
   @override
@@ -78,9 +76,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     isMute = widget.videoIndicator.isMute;
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-
-
-
+    if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    }
     widget.fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
@@ -125,7 +126,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     super.dispose();
   }
 
-  whileDispose() async{
+  whileDispose() async {
     widget.fAliplayer?.pause();
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -155,13 +156,13 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
           child: Stack(
             children: [
               Container(width: context.getWidth(), height: SizeConfig.screenHeight, decoration: const BoxDecoration(color: Colors.black), child: widget.aliPlayerView),
-              if(!_showTipsWidget)
-              SizedBox(
-                width: context.getWidth(),
-                height: SizeConfig.screenHeight,
-                // padding: EdgeInsets.only(bottom: 25.0),
-                child: Offstage(offstage: false, child: _buildContentWidget(context, Orientation.portrait)),
-              ),
+              if (!_showTipsWidget)
+                SizedBox(
+                  width: context.getWidth(),
+                  height: SizeConfig.screenHeight,
+                  // padding: EdgeInsets.only(bottom: 25.0),
+                  child: Offstage(offstage: false, child: _buildContentWidget(context, Orientation.portrait)),
+                ),
               Align(
                 alignment: Alignment.topCenter,
                 child: _buildController(
@@ -291,13 +292,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                     }
                     widget.data.isLoading = true;
                     setState(() {});
-                    Navigator.pop(
-                        context,
-                        VideoIndicator(
-                            videoDuration: _videoDuration,
-                            seekValue: changevalue,
-                            positionText: _currentPositionText,
-                            showTipsWidget: _showTipsWidget, isMute: isMute));
+                    Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
                   },
                   child: const Padding(
                     padding: EdgeInsets.only(right: 12.0),
@@ -338,29 +333,31 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         decoration: BoxDecoration(
           color: backgroundColor,
         ),
-        child: _showTipsWidget ? Center(
-          child: GestureDetector(
-            onTap: (){
-              widget.fAliplayer?.prepare();
-              widget.fAliplayer?.play();
-              setState(() {
-                isPause = false;
-                _showTipsWidget = false;
-              });
-            },
-            child: const CustomIconWidget(
-          iconData: "${AssetPath.vectorPath}pause.svg",
-            defaultColor: false,
-          ),
-          ),
-        ) : Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildSkipBack(iconColor, barHeight),
-            _buildPlayPause(iconColor, barHeight),
-            _buildSkipForward(iconColor, barHeight),
-          ],
-        ),
+        child: _showTipsWidget
+            ? Center(
+                child: GestureDetector(
+                  onTap: () {
+                    widget.fAliplayer?.prepare();
+                    widget.fAliplayer?.play();
+                    setState(() {
+                      isPause = false;
+                      _showTipsWidget = false;
+                    });
+                  },
+                  child: const CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}pause.svg",
+                    defaultColor: false,
+                  ),
+                ),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildSkipBack(iconColor, barHeight),
+                  _buildPlayPause(iconColor, barHeight),
+                  _buildSkipForward(iconColor, barHeight),
+                ],
+              ),
       ),
     );
   }
@@ -472,11 +469,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       ),
     );
   }
-
-
 }
 
-class VideoIndicator{
+class VideoIndicator {
   final int videoDuration;
   final int seekValue;
   final int positionText;
