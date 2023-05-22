@@ -54,11 +54,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   void landscape() async {
     widget.fAliplayer?.pause();
     if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
-      await SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
-      Future.delayed(const Duration(milliseconds: 1500), () {
+      // await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+      // await SystemChrome.setPreferredOrientations([
+      //   DeviceOrientation.landscapeLeft,
+      //   DeviceOrientation.landscapeRight,
+      // ]);
+      Future.delayed(const Duration(milliseconds: 5), () {
         widget.fAliplayer?.play();
       });
     } else {
@@ -71,17 +72,19 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   void initState() {
     _currentPositionText = widget.videoIndicator.positionText;
     _currentPosition = widget.videoIndicator.seekValue;
-    widget.fAliplayer?.play();
+    // widget.fAliplayer?.play();
     _videoDuration = widget.videoIndicator.videoDuration;
     isMute = widget.videoIndicator.isMute;
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
     if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
       ]);
     }
+
     widget.fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
@@ -143,9 +146,15 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     return WillPopScope(
       onWillPop: () async {
         widget.data.isLoading = true;
+        int changevalue;
+        changevalue = _currentPosition + 1000;
+        if (changevalue > _videoDuration) {
+          changevalue = _videoDuration;
+        }
         // widget.fAliplayer?.pause();
         setState(() {});
-        return true;
+        Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+        return false;
       },
       child: Scaffold(
         body: GestureDetector(

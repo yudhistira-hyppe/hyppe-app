@@ -257,22 +257,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                   physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
                   children: [
                     // Pict
-                    GestureDetector(
-                      // onScaleStart: (details) {
-                      //   print("---------------- tangan ${details.pointerCount}");
-                      //   zoom();
-                      // },
-                      // onScaleEnd: (details) {
-                      //   print("---------------- tangan ${details.pointerCount}");
-                      //   zoom();
-                      // },
-                      child: Container(
-                        padding: const EdgeInsets.only(left: 6.0, right: 6),
-                        color: kHyppeLightSurface,
-                        child: HyppePreviewPic(functionZoomTriger: () {
-                          zoom();
-                        }),
-                      ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 6.0, right: 6),
+                      color: kHyppeLightSurface,
+                      child: HyppePreviewPic(functionZoomTriger: () {
+                        zoom();
+                      }),
                     ),
                     Container(
                       padding: const EdgeInsets.only(left: 6.0, right: 6),

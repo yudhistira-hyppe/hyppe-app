@@ -291,6 +291,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             isPlay = false;
+            _showLoading = false;
             Wakelock.disable();
             setState(() {});
             break;
@@ -489,7 +490,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
 
             /// Specify whether to enable the cache feature.
           };
-          fAliplayer?.setCacheConfig(map);
+          // fAliplayer?.setCacheConfig(map);
           fAliplayer?.prepare();
           print('=2=2=2=2=2=2=2prepare done');
         }

@@ -844,6 +844,8 @@ class PreUploadContentNotifier with ChangeNotifier {
       } else {
         _isCompress = false;
       }
+    } else {
+      _isCompress = false;
     }
   }
 

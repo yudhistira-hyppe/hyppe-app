@@ -73,8 +73,8 @@ class CustomBaseCacheImage extends StatelessWidget {
             memCacheHeight: memCacheHeight,
             memCacheWidth: memCacheWidth,
             imageBuilder: imageBuilder,
-            maxHeightDiskCache: 500,
-            maxWidthDiskCache: 500,
+            // maxHeightDiskCache: 500,
+            // maxWidthDiskCache: 500,
             errorWidget: errorWidget,
             placeholder: (context, url) =>
                 placeHolderWidget ??
