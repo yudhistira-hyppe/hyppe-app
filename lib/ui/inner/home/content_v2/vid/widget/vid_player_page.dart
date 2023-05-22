@@ -291,6 +291,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             isPlay = false;
+            _showLoading = false;
             Wakelock.disable();
             setState(() {});
             break;

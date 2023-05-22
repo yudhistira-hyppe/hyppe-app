@@ -26,12 +26,14 @@ import '../../../../../../app.dart';
 import '../../../../../../core/arguments/contents/vid_detail_screen_argument.dart';
 import '../../../../../../core/config/ali_config.dart';
 import '../../../../../../core/constants/enum.dart';
+import '../../../../../../core/constants/kyc_status.dart';
 import '../../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../core/constants/utils.dart';
 import '../../../../../../core/services/shared_preference.dart';
 import '../../../../../../core/services/system.dart';
 import '../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import '../../../../../constant/widget/button_boost.dart';
 import '../../../../../constant/widget/custom_follow_button.dart';
 import '../../../../../constant/widget/custom_profile_image.dart';
 import '../../../../../constant/widget/custom_text_button.dart';
@@ -54,8 +56,11 @@ class NewVideoDetailScreen extends StatefulWidget {
 
 class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterFirstLayoutMixin {
   bool isPlay = false;
+  String email = '';
+
   @override
   void initState() {
+    email = SharedPreference().readStorage(SpKeys.email);
     FirebaseCrashlytics.instance.setCustomKey('layout', 'NewVideoDetailScreen');
     context.read<VidDetailNotifier>().initialize();
     super.initState();
@@ -428,6 +433,26 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                 ),
               ),
               sixteenPx,
+              SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                  (data.boosted.isEmpty) &&
+                  (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&
+                  data.email == email
+                  ? Container(
+                width: double.infinity,
+                margin: const EdgeInsets.only(bottom: 16),
+                child: ButtonBoost(
+                  onDetail: false,
+                  marginBool: true,
+                  contentData: data,
+                  startState: () {
+                    SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                  },
+                  afterState: () {
+                    SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                  },
+                ),
+              )
+                  : const SizedBox.shrink(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
