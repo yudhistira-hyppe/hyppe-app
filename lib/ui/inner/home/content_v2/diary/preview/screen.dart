@@ -115,17 +115,17 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
                                   },
                                 ),
                                 (notifier.diaryData?[index].saleAmount ?? 0) > 0
-                                    ? Positioned(
+                                    ? const Positioned(
                                         top: 3,
                                         right: 8,
-                                        child: const CustomIconWidget(
+                                        child: CustomIconWidget(
                                           iconData: "${AssetPath.vectorPath}sale.svg",
                                           height: 22,
                                           defaultColor: false,
                                         ))
                                     : Container(),
                                 if ((notifier.diaryData?[index].certified ?? false) && (notifier.diaryData?[index].saleAmount ?? 0) == 0)
-                                  Positioned(
+                                  const Positioned(
                                       top: 3,
                                       right: 8,
                                       child: IconOwnership(

@@ -53,7 +53,6 @@ class VideoThumbnail extends StatelessWidget {
             ),
           ),
         ),
-
         /// Back Button & More Options
         Align(
           alignment: Alignment.topLeft,
@@ -78,7 +77,8 @@ class VideoThumbnail extends StatelessWidget {
 
                 Visibility(
                   visible: (videoData?.saleAmount ?? 0) > 0,
-                  child: Padding(
+                  child: Container(
+                    margin: withMargin ? const EdgeInsets.only(top: 10, right: 10) : null,
                     padding: EdgeInsets.all(videoData?.email == SharedPreference().readStorage(SpKeys.email) ? 2.0 : 13),
                     child: const CustomIconWidget(
                       iconData: "${AssetPath.vectorPath}sale.svg",
