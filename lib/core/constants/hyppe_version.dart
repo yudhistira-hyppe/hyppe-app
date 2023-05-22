@@ -1,3 +1,3 @@
-const version = 69;
-const versionIos = 69;
+const version = 70;
+const versionIos = 70;
 const dynamic window = null;
