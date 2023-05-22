@@ -8,6 +8,8 @@ class CustomThumbImage extends StatelessWidget {
   final String? imageUrl;
   final String? postId;
   final BoxFit boxFit;
+  final int? memCacheWidth;
+  final int? memCacheHeight;
 
   const CustomThumbImage({
     Key? key,
@@ -15,6 +17,8 @@ class CustomThumbImage extends StatelessWidget {
     this.postId,
     required this.imageUrl,
     this.boxFit = BoxFit.contain,
+    this.memCacheWidth = 100,
+    this.memCacheHeight = 100,
   }) : super(key: key);
 
   @override
@@ -24,8 +28,8 @@ class CustomThumbImage extends StatelessWidget {
       onTap: onTap as void Function()?,
       child: CustomBaseCacheImage(
         imageUrl: "$imageUrl",
-        memCacheHeight: 100,
-        memCacheWidth: 100,
+        memCacheHeight: memCacheHeight,
+        memCacheWidth: memCacheWidth,
         widthPlaceHolder: 100,
         heightPlaceHolder: 100,
         imageBuilder: (context, imageProvider) {

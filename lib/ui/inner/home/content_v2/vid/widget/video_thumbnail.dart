@@ -24,7 +24,8 @@ class VideoThumbnail extends StatelessWidget {
     this.videoData,
     required this.fn,
     required this.onDetail,
-    this.withMargin = false,}) : super(key: key);
+    this.withMargin = false,
+  }) : super(key: key);
 
   static final _system = System();
   static String email = SharedPreference().readStorage(SpKeys.email);
@@ -42,9 +43,11 @@ class VideoThumbnail extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
             child: CustomThumbImage(
+              memCacheHeight: 30,
+              memCacheWidth: 30,
               onTap: () {},
               postId: videoData?.postID,
-              boxFit: isHorizon ? BoxFit.fill: BoxFit.contain,
+              boxFit: isHorizon ? BoxFit.fill : BoxFit.contain,
               // imageUrl: 'https://vod.hyppe.cloud/00f120afbe2741be938a93053643c7a2/snapshots/11d8097848ff457b833e5bb0b8bfb482-00004.jpg',
               imageUrl: (videoData?.isApsara ?? false) ? (videoData?.mediaThumbEndPoint ?? '') : '${videoData?.fullThumbPath}',
             ),

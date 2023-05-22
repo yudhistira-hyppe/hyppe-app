@@ -46,6 +46,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   bool _showTipsWidget = false;
   int _currentPlayerState = 0;
 
+  bool isloading = true;
+
   @override
   void afterFirstLayout(BuildContext context) {
     landscape();
@@ -61,10 +63,16 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       // ]);
       Future.delayed(const Duration(milliseconds: 5), () {
         widget.fAliplayer?.play();
+        setState(() {
+          isloading = false;
+        });
       });
     } else {
       await Future.delayed(const Duration(seconds: 1));
       widget.fAliplayer?.play();
+      setState(() {
+        isloading = false;
+      });
     }
   }
 
@@ -84,6 +92,27 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         DeviceOrientation.landscapeRight,
       ]);
     }
+
+    int changevalue;
+    changevalue = _currentPosition + 1000;
+    if (changevalue > _videoDuration) {
+      changevalue = _videoDuration;
+    }
+    print("currSeek: " + _currentPosition.toString() + ", changeSeek: " + changevalue.toString());
+    widget.fAliplayer?.requestBitmapAtPosition(changevalue);
+    setState(() {
+      _currentPosition = changevalue;
+    });
+    _inSeek = false;
+    setState(() {
+      if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+        setState(() {
+          _showTipsWidget = false;
+        });
+      }
+    });
+    // fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
+    widget.fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
 
     widget.fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
@@ -157,34 +186,41 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         return false;
       },
       child: Scaffold(
-        body: GestureDetector(
-          onTap: () {
-            onTapCtrl = true;
-            setState(() {});
-          },
-          child: Stack(
-            children: [
-              Container(width: context.getWidth(), height: SizeConfig.screenHeight, decoration: const BoxDecoration(color: Colors.black), child: widget.aliPlayerView),
-              if (!_showTipsWidget)
-                SizedBox(
-                  width: context.getWidth(),
-                  height: SizeConfig.screenHeight,
-                  // padding: EdgeInsets.only(bottom: 25.0),
-                  child: Offstage(offstage: false, child: _buildContentWidget(context, Orientation.portrait)),
+        body: isloading
+            ? Container(
+                color: Colors.black,
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: _buildController(
-                  Colors.transparent,
-                  Colors.white,
-                  100,
-                  context.getWidth(),
-                  SizeConfig.screenHeight ?? 0,
+              )
+            : GestureDetector(
+                onTap: () {
+                  onTapCtrl = true;
+                  setState(() {});
+                },
+                child: Stack(
+                  children: [
+                    Container(width: context.getWidth(), height: SizeConfig.screenHeight, decoration: const BoxDecoration(color: Colors.black), child: widget.aliPlayerView),
+                    if (!_showTipsWidget)
+                      SizedBox(
+                        width: context.getWidth(),
+                        height: SizeConfig.screenHeight,
+                        // padding: EdgeInsets.only(bottom: 25.0),
+                        child: Offstage(offstage: false, child: _buildContentWidget(context, Orientation.portrait)),
+                      ),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: _buildController(
+                        Colors.transparent,
+                        Colors.white,
+                        100,
+                        context.getWidth(),
+                        SizeConfig.screenHeight ?? 0,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
       ),
     );
     // return WillPopScope(
