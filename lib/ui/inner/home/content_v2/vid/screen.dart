@@ -567,31 +567,29 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                     //   });
                   },
                   onPlay: (exec) {
-                    Future.delayed(const Duration(microseconds: 500), () {
-                      try {
-                        if (_curIdx != -1) {
-                          if (_curIdx != index) {
-                            print('Vid Landing Page: stop $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
-                            if (notifier.vidData?[_curIdx].fAliplayer != null) {
-                              notifier.vidData?[_curIdx].fAliplayer?.stop();
-                            } else {
-                              final player = dataAli[_curIdx];
-                              if (player != null) {
-                                // notifier.vidData?[_curIdx].fAliplayer = player;
-                                player.stop();
-                              }
+                    try {
+                      if (_curIdx != -1) {
+                        if (_curIdx != index) {
+                          print('Vid Landing Page: stop $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                          if (notifier.vidData?[_curIdx].fAliplayer != null) {
+                            notifier.vidData?[_curIdx].fAliplayer?.stop();
+                          } else {
+                            final player = dataAli[_curIdx];
+                            if (player != null) {
+                              // notifier.vidData?[_curIdx].fAliplayer = player;
+                              player.stop();
                             }
-                            // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
                           }
+                          // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
                         }
-                      } catch (e) {
-                        e.logger();
-                      } finally {
-                        setState(() {
-                          _curIdx = index;
-                        });
                       }
-                    });
+                    } catch (e) {
+                      e.logger();
+                    } finally {
+                      setState(() {
+                        _curIdx = index;
+                      });
+                    }
                     // _lastCurIndex = _curIdx;
                   },
                   getPlayer: (main) {

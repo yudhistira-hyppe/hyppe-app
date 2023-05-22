@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
@@ -65,6 +66,7 @@ class _ButtonBoostState extends State<ButtonBoost> {
                       });
                     });
                     if (isPanding) {
+                      globalAliPlayer?.pause();
                       await ShowBottomSheet().onShowColouredSheet(
                         context,
                         language.otherPostsInProcessOfPayment ?? '',
@@ -77,6 +79,7 @@ class _ButtonBoostState extends State<ButtonBoost> {
                           Routing().moveAndPop(Routes.transaction);
                         },
                       );
+                      globalAliPlayer?.play();
                       return;
                     }
 
@@ -145,6 +148,7 @@ class _ButtonBoostState extends State<ButtonBoost> {
                       widget.startState!();
                     }
 
+                    globalAliPlayer?.pause();
                     await Routing()
                         .move(
                       Routes.preUploadContent,
@@ -156,6 +160,8 @@ class _ButtonBoostState extends State<ButtonBoost> {
                       }
                       if (widget.onDetail) Routing().moveBack();
                     });
+
+                    globalAliPlayer?.play();
                   }
                 : null,
             child: Container(
