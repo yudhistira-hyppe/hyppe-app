@@ -2,11 +2,11 @@ PODS:
   - AliPlayerSDK_iOS (5.4.9.1-26507944):
     - AliPlayerSDK_iOS/AliPlayerSDK (= 5.4.9.1-26507944)
   - AliPlayerSDK_iOS/AliPlayerSDK (5.4.9.1-26507944)
-  - AppAuth (1.6.1):
-    - AppAuth/Core (= 1.6.1)
-    - AppAuth/ExternalUserAgent (= 1.6.1)
-  - AppAuth/Core (1.6.1)
-  - AppAuth/ExternalUserAgent (1.6.1):
+  - AppAuth (1.6.2):
+    - AppAuth/Core (= 1.6.2)
+    - AppAuth/ExternalUserAgent (= 1.6.2)
+  - AppAuth/Core (1.6.2)
+  - AppAuth/ExternalUserAgent (1.6.2):
     - AppAuth/Core
   - audioplayers_darwin (0.0.1):
     - Flutter
@@ -78,7 +78,7 @@ PODS:
   - Firebase/Messaging (9.6.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 9.6.0)
-  - firebase_auth (4.4.0):
+  - firebase_auth (4.2.5):
     - Firebase/Auth (= 9.6.0)
     - firebase_core
     - Flutter
@@ -174,7 +174,7 @@ PODS:
   - google_sign_in_ios (0.0.1):
     - Flutter
     - GoogleSignIn (~> 6.2)
-  - GoogleDataTransport (9.2.2):
+  - GoogleDataTransport (9.2.3):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
@@ -297,14 +297,14 @@ PODS:
     - PINOperation (~> 1.2.1)
   - PINOperation (1.2.2)
   - PromisesObjC (2.2.0)
-  - Protobuf (3.22.3)
+  - Protobuf (3.23.0)
   - screen_protector (1.2.0):
     - Flutter
     - ScreenProtectorKit (~> 1.3.0)
   - ScreenProtectorKit (1.3.0)
-  - SDWebImage (5.15.5):
-    - SDWebImage/Core (= 5.15.5)
-  - SDWebImage/Core (5.15.5)
+  - SDWebImage (5.15.7):
+    - SDWebImage/Core (= 5.15.7)
+  - SDWebImage/Core (5.15.7)
   - SDWebImageWebPCoder (0.11.0):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.15)
@@ -502,7 +502,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AliPlayerSDK_iOS: e6a135eea616e85e4aea6fde5aaa7c6afa258229
-  AppAuth: e48b432bb4ba88b10cb2bcc50d7f3af21e78b9c2
+  AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   better_player: 2406bfe8175203c7a46fa15f9d778d73b12e1646
   Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
@@ -515,7 +515,7 @@ SPEC CHECKSUMS:
   ffmpeg_kit_flutter: 17e9f35a4ec996ac55051c20be05240f2a0b53e8
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
   Firebase: 5ae8b7cf8efce559a653aef0ad95bab3f427c351
-  firebase_auth: 217f91454fef3f8ed9fb6b2e282b405539432eb0
+  firebase_auth: aa41092a9db430f98e655a8a34ca9d58a39b19de
   firebase_core: 02d6f04422528f65d2ed9e8b5fbf78aa0561db6d
   firebase_crashlytics: 0f69458402ad1a81b380bf5b3373868b659e2dc4
   firebase_dynamic_links: 20d40a82e7ac7e0ab5a8134bc074859b71ddce07
@@ -539,7 +539,7 @@ SPEC CHECKSUMS:
   google_mlkit_commons: e9070f57232c3a3e4bd42fdfa621bb1f4bb3e709
   google_mlkit_text_recognition: 9967360384e93b09686aca67fc9f13f9a957d770
   google_sign_in_ios: 1256ff9d941db546373826966720b0c24804bcdd
-  GoogleDataTransport: 8378d1fa8ac49753ea6ce70d65a7cb70ce5f66e6
+  GoogleDataTransport: f0308f5905a745f94fb91fea9c6cbaf3831cb1bd
   GoogleMLKit: 0017a6a8372e1a182139b9def4d89be5d87ca5a7
   GoogleSignIn: 5651ce3a61e56ca864160e79b484cd9ed3f49b7a
   GoogleToolboxForMac: 8bef7c7c5cf7291c687cf5354f39f9db6399ad34
@@ -570,10 +570,10 @@ SPEC CHECKSUMS:
   PINCache: 7a8fc1a691173d21dbddbf86cd515de6efa55086
   PINOperation: daa34d4aa1d8449089be7d405b9d974abc4724c6
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
-  Protobuf: d03938d5f7e974a97964fb0567771e36fbe9ecce
+  Protobuf: 43e3764cdf3609fdd00417649561565703437fdc
   screen_protector: e2bf297dd1b12760776fe7f918d96efd9e6cd823
   ScreenProtectorKit: dd84c9635d5e4b941c5c0dedfcb910d08f532a6b
-  SDWebImage: fd7e1a22f00303e058058278639bf6196ee431fe
+  SDWebImage: 25bac438318faf37e35650619ebc288a9061d292
   SDWebImageWebPCoder: 295a6573c512f54ad2dd58098e64e17dcf008499
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472

@@ -167,7 +167,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
             DynamicLinkService.hitReferralBackend(context);
             hide = true;
             final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
-            _validateUserData(context, _result, false, onlineVersion: fetch.version);
+            _validateUserData(context, _result, false, onlineVersion: fetch.version, onlineIosVersion: fetch.versionIos);
           }
           if (fetch.userState == UserState.LoginError) {
             if (fetch.data != null) {
@@ -340,6 +340,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
             if (fetch.userState == UserState.LoginSuccess) {
               hide = true;
               final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
+              print("===== version ${fetch.versionIos}");
               _validateUserData(context, _result, true, onlineVersion: fetch.version, onlineIosVersion: fetch.versionIos);
             }
             if (fetch.userState == UserState.LoginError) {
@@ -444,7 +445,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
             if (fetch.userState == UserState.LoginSuccess) {
               hide = true;
               final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
-              _validateUserData(context, _result, true, onlineVersion: fetch.version);
+              _validateUserData(context, _result, true, onlineVersion: fetch.version, onlineIosVersion: fetch.versionIos);
             }
             if (fetch.userState == UserState.LoginError) {
               if (fetch.data != null) {

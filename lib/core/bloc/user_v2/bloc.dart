@@ -139,6 +139,7 @@ class UserBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
+          print("/////// ${onResult.data['version_ios']}");
           setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], versionIos: onResult.data['version_ios'], data: GenericResponse.fromJson(onResult.data).responseData));
           SharedPreference().removeValue(SpKeys.referralFrom);
         }

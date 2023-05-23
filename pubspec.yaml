@@ -19,7 +19,7 @@ dependencies:
   firebase_dynamic_links: ^5.0.11 # For using dynamic link feature
   firebase_messaging: ^14.2.1 # A Flutter plugin to use the Firebase Cloud Messaging (FCM) API
   google_sign_in: ^5.2.4 # A secure authentication system for signing in with a Google account on Android and iOS.
-  firebase_auth: ^4.2.5
+  firebase_auth: 4.2.5
   firebase_crashlytics: ^3.0.10
 
   cached_network_image: ^3.2.3 # Untuk keperluan cache image

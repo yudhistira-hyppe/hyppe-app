@@ -9,6 +9,8 @@ class CheckVersion {
     if (onlineVersion != null) {
       var deviceVersion = Platform.isAndroid ? version : versionIos;
       var versionOnline = Platform.isAndroid ? onlineVersion : onlineVersionIos;
+      print("version $versionOnline");
+      print("version $onlineVersionIos");
       if (int.parse(versionOnline) > deviceVersion) {
         return ShowGeneralDialog.oldVersion(context);
       }
