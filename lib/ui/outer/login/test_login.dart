@@ -87,6 +87,51 @@ class _TestLoginState extends State<TestLogin> {
                     //   }
                     // },
                   ),
+                  CustomTextFormField(
+                    focusNode: notifier.emailFocus,
+                    inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
+                    inputAreaWidth: SizeConfig.screenWidth!,
+                    textEditingController: notifier.emailController,
+                    style: Theme.of(context).textTheme.bodyText1,
+                    textInputType: TextInputType.emailAddress,
+                    onChanged: (v) {
+                      notifier.email = v;
+                    },
+                    inputDecoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
+                      labelText: notifier.incorrect ? notifier.language.notAValidEmailAddress : notifier.language.email,
+                      labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          color: notifier.emailValidator(notifier.emailController.text) != ''
+                              ? Theme.of(context).colorScheme.error
+                              : notifier.emailFocus.hasFocus
+                                  ? Theme.of(context).colorScheme.primary
+                                  : null),
+                      prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!)),
+                      prefixIcon: Transform.translate(
+                        offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!), 0.0),
+                        child: Transform.scale(
+                          scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                          child: Icon(Icons.email_outlined, color: Theme.of(context).iconTheme.color),
+                        ),
+                      ),
+                      border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: notifier.emailFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
+                      errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
+                    ),
+                    readOnly: notifier.isLoading
+                        ? true
+                        : notifier.loadingForObject(LoginNotifier.loadingForgotPasswordKey)
+                            ? true
+                            : false,
+                    // validator: (v) {
+                    //   if (notifier.emailValidator(v!) == '') {
+                    //     return 'asdasd';
+                    //   } else {
+                    //     return null;
+                    //   }
+                    // },
+                  ),
                   fourPx,
                   CustomTextWidget(
                     textToDisplay: "${notifier.emailValidator(notifier.emailController.text)}",
