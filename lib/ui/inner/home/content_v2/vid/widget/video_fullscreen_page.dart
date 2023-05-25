@@ -62,7 +62,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       //   DeviceOrientation.landscapeLeft,
       //   DeviceOrientation.landscapeRight,
       // ]);
-      Future.delayed(const Duration(milliseconds: 5), () {
+      Future.delayed(const Duration(seconds: 1), () {
         widget.fAliplayer?.play();
         setState(() {
           isloading = false;
@@ -86,14 +86,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     isMute = widget.videoIndicator.isMute;
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-
     if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
       ]);
     }
-
     int changevalue;
     changevalue = _currentPosition + 1000;
     if (changevalue > _videoDuration) {

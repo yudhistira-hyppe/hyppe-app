@@ -872,7 +872,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
 
                     await fAliplayer?.prepare().whenComplete(() {}).onError((error, stackTrace) => print('Error Loading video: $error'));
                     Future.delayed(const Duration(seconds: 1), () {
-                      if(isPlay){
+                      if (isPlay) {
                         fAliplayer?.play();
                         setState(() {
                           isPlay = true;
