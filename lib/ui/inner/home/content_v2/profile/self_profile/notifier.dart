@@ -16,6 +16,8 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/profile/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_diaries.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_pics.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_vids.dart';
@@ -150,15 +152,17 @@ class SelfProfileNotifier with ChangeNotifier {
       switch (pageIndex) {
         case 0:
           {
-            if (!vidContentsQuery.loading && vidHasNext) {
+            if (!picContentsQuery.loading && picHasNext) {
               _scollLoading = true;
               notifyListeners();
-              List<ContentData> _res = await vidContentsQuery.loadNext(context, myContent: true);
-              // _scollLoading = false;
+              List<ContentData> _res = await picContentsQuery.loadNext(context, myContent: true);
               if (_res.isNotEmpty) {
-                user.vids = [...(user.vids ?? []), ..._res];
+                user.pics = [...(user.pics ?? []), ..._res];
+                // if (user.pics != null) {
+                //   await Future.wait(user.pics!.map((e) => cacheImage(context, e.mediaThumbEndPoint!)));
+                // }
               } else {
-                "Post Vid Dah Mentok".logger();
+                print("Post Pic Dah Mentok");
               }
               _scollLoading = false;
               notifyListeners();
@@ -183,17 +187,15 @@ class SelfProfileNotifier with ChangeNotifier {
           break;
         case 2:
           {
-            if (!picContentsQuery.loading && picHasNext) {
+            if (!vidContentsQuery.loading && vidHasNext) {
               _scollLoading = true;
               notifyListeners();
-              List<ContentData> _res = await picContentsQuery.loadNext(context, myContent: true);
+              List<ContentData> _res = await vidContentsQuery.loadNext(context, myContent: true);
+              // _scollLoading = false;
               if (_res.isNotEmpty) {
-                user.pics = [...(user.pics ?? []), ..._res];
-                // if (user.pics != null) {
-                //   await Future.wait(user.pics!.map((e) => cacheImage(context, e.mediaThumbEndPoint!)));
-                // }
+                user.vids = [...(user.vids ?? []), ..._res];
               } else {
-                print("Post Pic Dah Mentok");
+                "Post Vid Dah Mentok".logger();
               }
               _scollLoading = false;
               notifyListeners();
@@ -208,17 +210,17 @@ class SelfProfileNotifier with ChangeNotifier {
     // pageIndex = 0;
     _statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
-    vidContentsQuery.featureType = FeatureType.vid;
-    diaryContentsQuery.featureType = FeatureType.diary;
     picContentsQuery.featureType = FeatureType.pic;
+    diaryContentsQuery.featureType = FeatureType.diary;
+    vidContentsQuery.featureType = FeatureType.vid;
 
-    vidContentsQuery.limit = 12;
-    diaryContentsQuery.limit = 12;
     picContentsQuery.limit = 12;
+    diaryContentsQuery.limit = 12;
+    vidContentsQuery.limit = 12;
 
-    vidContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
-    diaryContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
     picContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
+    diaryContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
+    vidContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
 
     final usersNotifier = UserBloc();
     await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
@@ -232,7 +234,10 @@ class SelfProfileNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.userID, user.profile?.idUser);
       notifyListeners();
     }
-    user.vids = await vidContentsQuery.reload(context, myContent: true);
+    // user.vids = await vidContentsQuery.reload(context, myContent: true);
+    user.pics = await picContentsQuery.reload(context, myContent: true);
+
+    context.read<ProfilePicNotifier>().pics = user.pics;
 
     // if (user.vids != null) {
     //   await Future.wait(user.vids!.map((e) => cacheImage(context, e.mediaThumbEndPoint!)));
@@ -283,8 +288,11 @@ class SelfProfileNotifier with ChangeNotifier {
     switch (pageIndex) {
       case 0:
         {
-          if (user.vids == null || isReload) {
-            user.vids = await vidContentsQuery.reload(context, myContent: true);
+          if (user.pics == null || isReload) {
+            user.pics = await picContentsQuery.reload(context, myContent: true);
+            // if (user.pics != null) {
+            //   await Future.wait(user.pics!.map((e) => cacheImage(context, e.mediaThumbEndPoint!)));
+            // }
             notifyListeners();
           }
         }
@@ -299,11 +307,8 @@ class SelfProfileNotifier with ChangeNotifier {
         break;
       case 2:
         {
-          if (user.pics == null || isReload) {
-            user.pics = await picContentsQuery.reload(context, myContent: true);
-            // if (user.pics != null) {
-            //   await Future.wait(user.pics!.map((e) => cacheImage(context, e.mediaThumbEndPoint!)));
-            // }
+          if (user.vids == null || isReload) {
+            user.vids = await vidContentsQuery.reload(context, myContent: true);
             notifyListeners();
           }
         }
@@ -313,9 +318,9 @@ class SelfProfileNotifier with ChangeNotifier {
 
   Widget optionButton() {
     List pages = [
-      !isLoading ? const SelfProfileVids() : BothProfileContentShimmer(),
+      !isLoading ? const SelfProfilePics() : BothProfileContentShimmer(),
       !isLoading ? const SelfProfileDiaries() : BothProfileContentShimmer(),
-      !isLoading ? const SelfProfilePics() : BothProfileContentShimmer()
+      !isLoading ? const SelfProfileVids() : BothProfileContentShimmer(),
     ];
     return pages[pageIndex];
   }
@@ -324,15 +329,16 @@ class SelfProfileNotifier with ChangeNotifier {
     context.read<ReportNotifier>().inPosition = contentPosition.myprofile;
     final connect = await _system.checkConnections();
     if (connect) {
-      if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
+      if (pageIndex == 0) {
+        _routing.move(Routes.profilePic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine));
+        // _routing.move(Routes.picSlideDetailPreview,
+        //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
+      }
       if (pageIndex == 1) {
         _routing.move(Routes.diaryDetail,
             argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
       }
-      if (pageIndex == 2) {
-        _routing.move(Routes.picSlideDetailPreview,
-            argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
-      }
+      if (pageIndex == 2) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }

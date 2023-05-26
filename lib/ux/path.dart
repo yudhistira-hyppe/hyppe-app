@@ -133,4 +133,7 @@ class Routes {
 
   static const String testImage = '/test-image';
   static const String testLogin = '/test-login';
+
+  //======================== new page ============
+  static const String profilePic = '/profile-page';
 }

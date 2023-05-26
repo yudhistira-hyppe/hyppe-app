@@ -16,7 +16,6 @@ class SelfProfileBottom extends StatefulWidget {
 }
 
 class _SelfProfileBottomState extends State<SelfProfileBottom> {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SelfProfileBottom');
@@ -35,7 +34,7 @@ class _SelfProfileBottomState extends State<SelfProfileBottom> {
                 child: Row(
                   children: [
                     CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}pause.svg",
+                      iconData: "${AssetPath.vectorPath}pic.svg",
                       width: 20 * SizeConfig.scaleDiagonal,
                       height: 20 * SizeConfig.scaleDiagonal,
                       defaultColor: false,
@@ -43,7 +42,7 @@ class _SelfProfileBottomState extends State<SelfProfileBottom> {
                     ),
                     SizedBox(width: 8 * SizeConfig.scaleDiagonal),
                     CustomTextWidget(
-                      textToDisplay: "Vids",
+                      textToDisplay: "Pics",
                       textStyle: TextStyle(fontSize: 14, color: notifier.pageIndex == 0 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor),
                     ),
                   ],
@@ -57,7 +56,7 @@ class _SelfProfileBottomState extends State<SelfProfileBottom> {
                 height: 2 * SizeConfig.scaleDiagonal,
                 width: 125 * SizeConfig.scaleDiagonal,
                 child: Container(color: notifier.pageIndex == 0 ? Theme.of(context).colorScheme.primary : null),
-              ),
+              )
             ],
           ),
           Column(
@@ -97,7 +96,7 @@ class _SelfProfileBottomState extends State<SelfProfileBottom> {
                 child: Row(
                   children: [
                     CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}pic.svg",
+                      iconData: "${AssetPath.vectorPath}pause.svg",
                       width: 20 * SizeConfig.scaleDiagonal,
                       height: 20 * SizeConfig.scaleDiagonal,
                       defaultColor: false,
@@ -105,7 +104,7 @@ class _SelfProfileBottomState extends State<SelfProfileBottom> {
                     ),
                     SizedBox(width: 8 * SizeConfig.scaleDiagonal),
                     CustomTextWidget(
-                      textToDisplay: "Pics",
+                      textToDisplay: "Vids",
                       textStyle: TextStyle(fontSize: 14, color: notifier.pageIndex == 2 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor),
                     ),
                   ],
@@ -119,7 +118,7 @@ class _SelfProfileBottomState extends State<SelfProfileBottom> {
                 height: 2 * SizeConfig.scaleDiagonal,
                 width: 125 * SizeConfig.scaleDiagonal,
                 child: Container(color: notifier.pageIndex == 2 ? Theme.of(context).colorScheme.primary : null),
-              )
+              ),
             ],
           ),
         ],

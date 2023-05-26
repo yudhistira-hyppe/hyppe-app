@@ -35,6 +35,7 @@ import 'package:hyppe/ui/inner/home/content_v2/help/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/profile/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/test.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/confirm_pin/screen.dart';
@@ -391,6 +392,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const TestPageImage());
       case Routes.testLogin:
         return MaterialPageRoute(builder: (_) => const TestLogin());
+      case Routes.profilePic:
+        return MaterialPageRoute(builder: (_) => ProfilePic(arguments: settings.arguments as SlidedPicDetailScreenArgument));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

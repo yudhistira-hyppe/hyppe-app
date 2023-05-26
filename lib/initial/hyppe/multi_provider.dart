@@ -15,6 +15,7 @@ import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/list_boost/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.dart';
@@ -233,6 +234,7 @@ class AppDependencies {
         ChangeNotifierProvider<AppealNotifier>(create: (context) => AppealNotifier()),
         ChangeNotifierProvider<PaymentBoostSummaryNotifier>(create: (context) => PaymentBoostSummaryNotifier()),
         ChangeNotifierProvider<ListBoostNotifier>(create: (context) => ListBoostNotifier()),
-        ChangeNotifierProvider<CommentNotifierV2>(create: (context) => CommentNotifierV2())
+        ChangeNotifierProvider<CommentNotifierV2>(create: (context) => CommentNotifierV2()),
+        ChangeNotifierProvider<ProfilePicNotifier>(create: (context) => ProfilePicNotifier())
       ];
 }
