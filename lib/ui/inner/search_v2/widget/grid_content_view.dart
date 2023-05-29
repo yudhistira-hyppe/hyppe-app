@@ -46,7 +46,7 @@ class _GridContentViewState extends State<GridContentView> {
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
               crossAxisCount: 3,
-              childAspectRatio: 1.0,
+              childAspectRatio: widget.type == HyppeType.HyppeDiary ? 0.67 : 1.0,
               children: List.generate(widget.data.length, (index) {
                 final dataitem = widget.data[index];
                 String thumb = System().showUserPicture(dataitem.mediaThumbEndPoint) ?? '';
@@ -132,7 +132,7 @@ class _GridContentViewState extends State<GridContentView> {
                                     child: CustomContentModeratedWidget(
                                       width: double.infinity,
                                       height: double.infinity,
-                                      featureType: FeatureType.vid,
+                                      featureType: FeatureType.diary,
                                       isSale: false,
                                       isSafe: true, //notifier.postData.data.listVid[index].isSafe,
                                       thumbnail: ImageUrl(dataitem.postID, url: thumb),

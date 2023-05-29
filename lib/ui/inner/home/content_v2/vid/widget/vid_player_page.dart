@@ -279,11 +279,16 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
             Wakelock.enable();
-            setState(() {
-              _showTipsWidget = false;
-              _showLoading = false;
-              isPause = false;
-            });
+            try{
+              setState(() {
+                _showTipsWidget = false;
+                _showLoading = false;
+                isPause = false;
+              });
+            }catch(e){
+              print('error AVPStatus_AVPStatusStarted: $e');
+            }
+
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusPaused:
             isPause = true;
@@ -305,21 +310,39 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         }
       });
       fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-        setState(() {
-          _loadingPercent = 0;
-          _showLoading = true;
-        });
+        if(mounted){
+          try{
+            setState(() {
+              _loadingPercent = 0;
+              _showLoading = true;
+            });
+          }catch(e){
+            print('error setOnLoadingStatusListener: $e');
+          }
+        }
+
+
       }, loadingProgress: (percent, netSpeed, playerId) {
         if (percent == 100) {
           _showLoading = false;
         }
-        setState(() {
-          _loadingPercent = percent;
-        });
+        try{
+          setState(() {
+            _loadingPercent = percent;
+          });
+        }catch(e){
+          print('error loadingProgress: $e');
+        }
+
       }, loadingEnd: (playerId) {
-        setState(() {
-          _showLoading = false;
-        });
+        try{
+          setState(() {
+            _showLoading = false;
+          });
+        }catch(e){
+          print('error loadingEnd: $e');
+        }
+
       });
       fAliplayer?.setOnSeekComplete((playerId) {
         _inSeek = false;
@@ -330,9 +353,14 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
             _currentPosition = extraValue ?? 0;
           }
           if (!_inSeek) {
-            setState(() {
-              _currentPositionText = extraValue ?? 0;
-            });
+            try{
+              setState(() {
+                _currentPositionText = extraValue ?? 0;
+              });
+            }catch(e){
+              print('error setOnInfo: $e');
+            }
+
           }
         } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
           _bufferPosition = extraValue ?? 0;
@@ -881,7 +909,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                       }
                     });
 
-                    System().increaseViewCount2(context, widget.data ?? ContentData());
+                    // System().increaseViewCount2(context, widget.data ?? ContentData());
                     // if (adsData != null && widget.inLanding) {
                     //   fAliplayerAds?.prepare().whenComplete(() {
                     //     setState(() {
@@ -1454,24 +1482,38 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                                     videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
                                   );
                                 });
-
-                            setState(() {
+                            if(mounted){
+                              setState(() {
+                                _videoDuration = value.videoDuration;
+                                _currentPosition = value.seekValue;
+                                _currentPositionText = value.positionText;
+                                _showTipsWidget = value.showTipsWidget;
+                                isMute = value.isMute;
+                                isPlay = !_showTipsWidget;
+                              });
+                            }else{
                               _videoDuration = value.videoDuration;
                               _currentPosition = value.seekValue;
                               _currentPositionText = value.positionText;
                               _showTipsWidget = value.showTipsWidget;
                               isMute = value.isMute;
                               isPlay = !_showTipsWidget;
-                            });
+                            }
+
                             fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
                               if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
                                 if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
                                   _currentPosition = extraValue ?? 0;
                                 }
                                 if (!_inSeek) {
-                                  setState(() {
-                                    _currentPositionText = extraValue ?? 0;
-                                  });
+                                  try{
+                                    setState(() {
+                                      _currentPositionText = extraValue ?? 0;
+                                    });
+                                  }catch(e){
+                                    print(e);
+                                  }
+
                                 }
                               } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
                                 _bufferPosition = extraValue ?? 0;

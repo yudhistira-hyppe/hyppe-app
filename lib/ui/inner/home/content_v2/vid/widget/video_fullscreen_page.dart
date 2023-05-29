@@ -8,7 +8,6 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:wakelock/wakelock.dart';
 
 import '../../../../../../core/config/ali_config.dart';
 import '../../../../../../core/models/collection/posts/content_v2/content_data.dart';
@@ -62,7 +61,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       //   DeviceOrientation.landscapeLeft,
       //   DeviceOrientation.landscapeRight,
       // ]);
-      Future.delayed(const Duration(milliseconds: 5), () {
+      Future.delayed(const Duration(seconds: 2), () {
         widget.fAliplayer?.play();
         setState(() {
           isloading = false;
