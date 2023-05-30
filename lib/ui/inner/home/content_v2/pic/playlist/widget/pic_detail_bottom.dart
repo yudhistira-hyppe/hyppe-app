@@ -102,7 +102,7 @@ class PicDetailBottom extends StatelessWidget {
                         children: [
                           CustomDescContent(
                             desc: "${data?.description}",
-                            trimLines: 2,
+                            trimLines: 3,
                             textAlign: TextAlign.start,
                             seeLess: ' ${notifier2.translate.seeLess}',
                             seeMore: ' ${notifier2.translate.seeMoreContent}',

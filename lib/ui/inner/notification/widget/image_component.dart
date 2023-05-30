@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 
-class ImageComponent extends StatelessWidget {
+class ImageComponent extends StatefulWidget {
   final double width;
   final double height;
   final Content? data;
@@ -24,15 +24,20 @@ class ImageComponent extends StatelessWidget {
   final String? postID;
 
   final BorderRadiusGeometry? borderRadiusGeometry;
-
   const ImageComponent({Key? key, required this.data, this.width = 50, this.height = 50, this.borderRadiusGeometry, this.postType, this.postID}) : super(key: key);
+
+  @override
+  State<ImageComponent> createState() => _ImageComponentState();
+}
+
+class _ImageComponentState extends State<ImageComponent> {
 
   Future onGetContentData(BuildContext context, FeatureType featureType, Function(dynamic) callback) async {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ImageComponent');
     print('ini imagecomponen');
     final getStory = PostsBloc();
     final List<ContentData> _listContentData = [];
-    await getStory.getContentsBlocV2(context, pageNumber: 0, type: featureType, postID: postID ?? '');
+    await getStory.getContentsBlocV2(context, pageNumber: 0, type: featureType, postID: widget.postID ?? '');
     final fetch = getStory.postsFetch;
     if (fetch.postsState == PostsState.getContentsSuccess) {
       if (fetch.data.isNotEmpty) {
@@ -45,58 +50,71 @@ class ImageComponent extends StatelessWidget {
     }
   }
 
+  var isLoading = false;
+
   @override
   Widget build(BuildContext context) {
+
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ComponentShimmer');
     SizeConfig().init(context);
-    print('notifikasi data ${data}');
-    if (data != null) {
-      return InkWell(
+    print('notifikasi data ${widget.data}');
+    if (widget.data != null) {
+      return isLoading ? const CircularProgressIndicator() : InkWell(
         onTap: () async {
           print('klklklklkl');
-          final featureType = System().getFeatureTypeV2(postType ?? '');
+          final featureType = System().getFeatureTypeV2(widget.postType ?? '');
           print(featureType);
-          switch (featureType) {
-            case FeatureType.vid:
-              onGetContentData(context, featureType, (v) => Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v)));
-              break;
-            case FeatureType.diary:
-              onGetContentData(context, featureType, (v) => Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v, type: TypePlaylist.none)));
-              break;
-            case FeatureType.pic:
-              onGetContentData(context, featureType, (v) => Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v)));
-              // context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, 0);
-              break;
-            case FeatureType.story:
-              onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)));
-              break;
-            case FeatureType.txtMsg:
-              return;
-            case FeatureType.other:
-              return;
+          if(!isLoading){
+            setState(() {
+              isLoading = true;
+            });
+            switch (featureType) {
+              case FeatureType.vid:
+                onGetContentData(context, featureType, (v) => Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v)));
+                break;
+              case FeatureType.diary:
+                onGetContentData(context, featureType, (v) => Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v, type: TypePlaylist.none)));
+                break;
+              case FeatureType.pic:
+                onGetContentData(context, featureType, (v) => Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v)));
+                // context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, 0);
+                break;
+              case FeatureType.story:
+                onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)));
+                break;
+              case FeatureType.txtMsg:
+                // return;
+              case FeatureType.other:
+                return;
+            }
           }
+          setState(() {
+            isLoading = false;
+          });
+
         },
         child: CustomBaseCacheImage(
-          imageUrl: (data?.isApsara ?? false) ? '${data?.mediaThumbEndpoint}' : '${data?.fullThumbPath}',
+          imageUrl: (widget.data?.isApsara ?? false) ? '${widget.data?.mediaThumbEndpoint}' : '${widget.data?.fullThumbPath}',
           errorWidget: (_, __, ___) {
             return Container(
-                width: width * SizeConfig.scaleDiagonal,
-                height: height * SizeConfig.scaleDiagonal,
-                decoration: BoxDecoration(image: const DecorationImage(image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.cover), borderRadius: borderRadiusGeometry));
+                width: widget.width * SizeConfig.scaleDiagonal,
+                height: widget.height * SizeConfig.scaleDiagonal,
+                decoration: BoxDecoration(image: const DecorationImage(image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.cover), borderRadius: widget.borderRadiusGeometry));
           },
           imageBuilder: (_, imageProvider) {
             return Container(
-                width: width * SizeConfig.scaleDiagonal,
-                height: height * SizeConfig.scaleDiagonal,
-                decoration: BoxDecoration(image: DecorationImage(image: imageProvider, fit: BoxFit.cover), borderRadius: borderRadiusGeometry));
+                width: widget.width * SizeConfig.scaleDiagonal,
+                height: widget.height * SizeConfig.scaleDiagonal,
+                decoration: BoxDecoration(image: DecorationImage(image: imageProvider, fit: BoxFit.cover), borderRadius: widget.borderRadiusGeometry));
           },
           emptyWidget: Container(
-              width: width * SizeConfig.scaleDiagonal,
-              height: height * SizeConfig.scaleDiagonal,
-              decoration: BoxDecoration(image: const DecorationImage(image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.cover), borderRadius: borderRadiusGeometry)),
+              width: widget.width * SizeConfig.scaleDiagonal,
+              height: widget.height * SizeConfig.scaleDiagonal,
+              decoration: BoxDecoration(image: const DecorationImage(image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.cover), borderRadius: widget.borderRadiusGeometry)),
         ),
       );
     }
     return const SizedBox.shrink();
   }
 }
+

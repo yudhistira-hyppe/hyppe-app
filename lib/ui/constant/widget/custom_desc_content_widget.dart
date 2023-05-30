@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/hashtag_argument.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -65,6 +66,36 @@ class _CustomDescContentState extends State<CustomDescContent> {
       _readMore = !_readMore;
     });
   }
+  var desc = '';
+
+  @override
+  void initState() {
+    desc = widget.desc;
+    final values = desc.split('\n');
+    for (var i = 0; i < values.length; i++ ) {
+      try{
+        final last = values[i].split(' ').last;
+        print('has Emoji: $last');
+        if(last.hasEmoji()){
+          print('has Emoji ke detect');
+          values[i] += ' ';
+        }
+      }catch(e){
+        e.logger();
+      }
+    }
+    if(values.isNotEmpty){
+      desc = '';
+      for(var i = 0; i < values.length; i++ ){
+        if(i == (values.length - 1)){
+          desc += values[i];
+        }else{
+          desc += '${values[i]}\n';
+        }
+      }
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +137,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
       final maxWidth = constraints.maxWidth;
 
       final text = TextSpan(
-        children: [TextSpan(text: widget.desc, style: effectiveTextStyle)],
+        children: [TextSpan(text: desc, style: effectiveTextStyle)],
       );
 
       final textPainter = TextPainter(
@@ -239,9 +270,9 @@ class _CustomDescContentState extends State<CustomDescContent> {
   List<ItemDesc> getDescItems({int? lastIndex, required bool linkLongerThanLine}) {
     var fixDesc = _readMore
         ? lastIndex != null
-            ? widget.desc.substring(0, lastIndex + 1) + (linkLongerThanLine ? _kLineSeparator : '')
-            : widget.desc
-        : widget.desc;
+            ? desc.substring(0, lastIndex + 1) + (linkLongerThanLine ? _kLineSeparator : '')
+            : desc
+        : desc;
     fixDesc = fixDesc.replaceAll('\n@', '\n @');
     fixDesc = fixDesc.replaceAll('\n#', '\n #');
     fixDesc = fixDesc.replaceAll('\n', ' \n');
