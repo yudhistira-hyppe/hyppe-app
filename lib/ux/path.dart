@@ -135,5 +135,7 @@ class Routes {
   static const String testLogin = '/test-login';
 
   //======================== new page ============
-  static const String profilePic = '/profile-page';
+  static const String scrollPic = '/scroll-pict';
+  static const String scrollDiary = '/scroll-diary';
+  static const String scrollVid = '/scroll-vid';
 }

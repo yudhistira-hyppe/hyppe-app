@@ -6,6 +6,7 @@ import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -16,12 +17,14 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/profile/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_diaries.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_pics.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_vids.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
@@ -247,7 +250,7 @@ class SelfProfileNotifier with ChangeNotifier {
     // user.vids = await vidContentsQuery.reload(context, myContent: true);
     user.pics = await picContentsQuery.reload(context, myContent: true);
 
-    context.read<ProfilePicNotifier>().pics = user.pics;
+    context.read<ScrollPicNotifier>().pics = user.pics;
 
     // if (user.vids != null) {
     //   await Future.wait(user.vids!.map((e) => cacheImage(context, e.mediaThumbEndPoint!)));
@@ -311,6 +314,7 @@ class SelfProfileNotifier with ChangeNotifier {
         {
           if (user.diaries == null || isReload) {
             user.diaries = await diaryContentsQuery.reload(context, myContent: true);
+            context.read<ScrollDiaryNotifier>().diaryData = user.diaries;
             notifyListeners();
           }
         }
@@ -319,6 +323,7 @@ class SelfProfileNotifier with ChangeNotifier {
         {
           if (user.vids == null || isReload) {
             user.vids = await vidContentsQuery.reload(context, myContent: true);
+            context.read<ScrollVidNotifier>().vidData = user.vids;
             notifyListeners();
           }
         }
@@ -335,33 +340,52 @@ class SelfProfileNotifier with ChangeNotifier {
     return pages[pageIndex];
   }
 
-  navigateToSeeAllScreen(BuildContext context, int index) async {
+  navigateToSeeAllScreen(BuildContext context, int index, Widget title) async {
     context.read<ReportNotifier>().inPosition = contentPosition.myprofile;
     final connect = await _system.checkConnections();
     if (connect) {
+      var result;
       if (pageIndex == 0) {
-        var result = await _routing.move(Routes.profilePic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine));
+        result = await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title));
         // _routing.move(Routes.picSlideDetailPreview,
         //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
-        print("================= result $result");
-        var indexHei = int.parse(result) + 1;
-        var hasilBagi = indexHei / 3;
-        heightIndex = 1;
-        if (hasilBagi % 3 != 0) {
-        } else {
-          hasilBagi += 1;
-        }
-        heightIndex = heightBox * hasilBagi.toInt();
+        scrollAuto(result);
       }
       if (pageIndex == 1) {
-        _routing.move(Routes.diaryDetail,
-            argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
+        result = await _routing.move(Routes.scrollDiary, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title));
+        // _routing.move(Routes.diaryDetail,
+        //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
+        scrollAuto(result);
       }
-      if (pageIndex == 2) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
+      if (pageIndex == 2) {
+        result = await _routing.move(Routes.scrollVid, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title));
+        // result = await _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
+        scrollAuto(result);
+      }
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }
   }
+
+  scrollAuto(String index) {
+    var indexHei = int.parse(index) + 1;
+    print(indexHei);
+    var hasilBagi = indexHei / 3;
+    heightIndex = 0;
+    print(hasilBagi);
+    print(isInteger(hasilBagi));
+    if (isInteger(hasilBagi)) {
+      hasilBagi = hasilBagi;
+    } else {
+      hasilBagi += 1;
+    }
+    print("========== height box ${heightBox}");
+    print("========== height box ${hasilBagi.toInt()}");
+    heightIndex = (heightBox * hasilBagi.toInt() - heightBox);
+    print("========== height box ${heightIndex}");
+  }
+
+  bool isInteger(num value) => value is int || value == value.roundToDouble();
 
   void onDeleteSelfPostContent(BuildContext context, {required String postID, required String content}) {
     switch (content) {

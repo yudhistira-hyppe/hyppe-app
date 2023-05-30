@@ -35,7 +35,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
@@ -57,11 +57,11 @@ import 'package:zoom_pinch_overlay/zoom_pinch_overlay.dart';
 
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-class ProfilePic extends StatefulWidget {
+class ScrollPic extends StatefulWidget {
   final SlidedPicDetailScreenArgument? arguments;
   // final ScrollController? scrollController;
   // final Function functionZoomTriger;
-  const ProfilePic({
+  const ScrollPic({
     Key? key,
     this.arguments,
     // this.scrollController,
@@ -69,10 +69,10 @@ class ProfilePic extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ProfilePicState createState() => _ProfilePicState();
+  _ScrollPicState createState() => _ScrollPicState();
 }
 
-class _ProfilePicState extends State<ProfilePic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   FlutterAliplayer? fAliplayer;
   TransformationController _transformationController = TransformationController();
 
@@ -109,13 +109,12 @@ class _ProfilePicState extends State<ProfilePic> with WidgetsBindingObserver, Ti
 
   /// Listener that reports the position of items when the list is scrolled.
   final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
-
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPic');
-    final notifier = Provider.of<ProfilePicNotifier>(context, listen: false);
+    final notifier = Provider.of<ScrollPicNotifier>(context, listen: false);
     lang = context.read<TranslateNotifierV2>().translate;
 
     email = SharedPreference().readStorage(SpKeys.email);
@@ -509,79 +508,83 @@ class _ProfilePicState extends State<ProfilePic> with WidgetsBindingObserver, Ti
     AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
     return Scaffold(
       backgroundColor: kHyppeLightSurface,
-      body: Consumer2<ProfilePicNotifier, HomeNotifier>(
-        builder: (_, notifier, home, __) => SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListTile(
-                title: const Text(
-                  "Pic",
-                  style: TextStyle(color: kHyppeTextLightPrimary),
-                ),
-                leading: IconButton(
-                    icon: const Icon(
-                      Icons.chevron_left,
-                      color: kHyppeTextLightPrimary,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context, '$_curIdx');
-                    }),
-              ),
-              Expanded(
-                child: notifier.pics?.isEmpty ?? [].isEmpty
-                    ? const NoResultFound()
-                    : NotificationListener<OverscrollIndicatorNotification>(
-                        onNotification: (overscroll) {
-                          overscroll.disallowIndicator();
-
-                          return false;
-                        },
-                        child: ScrollablePositionedList.builder(
-                          scrollDirection: Axis.vertical,
-                          itemScrollController: itemScrollController,
-                          itemPositionsListener: itemPositionsListener,
-                          scrollOffsetController: scrollOffsetController,
-
-                          // scrollDirection: Axis.horizontal,
-                          // physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: false,
-                          itemCount: notifier.pics?.length ?? 0,
-                          padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                          itemBuilder: (context, index) {
-                            if (notifier.pics == null || home.isLoadingPict) {
-                              fAliplayer?.pause();
-                              _lastCurIndex = -1;
-                              return CustomShimmer(
-                                width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                                height: 168,
-                                radius: 8,
-                                margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                              );
-                            } else if (index == notifier.pics?.length) {
-                              return UnconstrainedBox(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: 80 * SizeConfig.scaleDiagonal,
-                                  height: 80 * SizeConfig.scaleDiagonal,
-                                  child: const CustomLoading(),
-                                ),
-                              );
-                            }
-
-                            return itemPict(notifier, index);
-                          },
-                        ),
+      body: WillPopScope(
+        onWillPop: () async {
+          Navigator.pop(context, '$_curIdx');
+          return false;
+        },
+        child: Consumer2<ScrollPicNotifier, HomeNotifier>(
+          builder: (_, notifier, home, __) => SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTile(
+                  title: widget.arguments?.titleAppbar ?? Container(),
+                  leading: IconButton(
+                      icon: const Icon(
+                        Icons.chevron_left,
+                        color: kHyppeTextLightPrimary,
                       ),
-              ),
-              home.isLoadingLoadmore
-                  ? const SizedBox(
-                      height: 50,
-                      child: Center(child: CustomLoading()),
-                    )
-                  : Container(),
-            ],
+                      onPressed: () {
+                        print('_curIdx _curIdx $_curIdx');
+                        Navigator.pop(context, '$_curIdx');
+                      }),
+                ),
+                Expanded(
+                  child: notifier.pics?.isEmpty ?? [].isEmpty
+                      ? const NoResultFound()
+                      : NotificationListener<OverscrollIndicatorNotification>(
+                          onNotification: (overscroll) {
+                            overscroll.disallowIndicator();
+
+                            return false;
+                          },
+                          child: ScrollablePositionedList.builder(
+                            scrollDirection: Axis.vertical,
+                            itemScrollController: itemScrollController,
+                            itemPositionsListener: itemPositionsListener,
+                            scrollOffsetController: scrollOffsetController,
+
+                            // scrollDirection: Axis.horizontal,
+                            // physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: false,
+                            itemCount: notifier.pics?.length ?? 0,
+                            padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                            itemBuilder: (context, index) {
+                              if (notifier.pics == null || home.isLoadingPict) {
+                                fAliplayer?.pause();
+                                _lastCurIndex = -1;
+                                return CustomShimmer(
+                                  width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                  height: 168,
+                                  radius: 8,
+                                  margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                                  padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                );
+                              } else if (index == notifier.pics?.length) {
+                                return UnconstrainedBox(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 80 * SizeConfig.scaleDiagonal,
+                                    height: 80 * SizeConfig.scaleDiagonal,
+                                    child: const CustomLoading(),
+                                  ),
+                                );
+                              }
+
+                              return itemPict(notifier, index);
+                            },
+                          ),
+                        ),
+                ),
+                home.isLoadingLoadmore
+                    ? const SizedBox(
+                        height: 50,
+                        child: Center(child: CustomLoading()),
+                      )
+                    : Container(),
+              ],
+            ),
           ),
         ),
       ),
@@ -590,7 +593,7 @@ class _ProfilePicState extends State<ProfilePic> with WidgetsBindingObserver, Ti
 
   var initialControllerValue;
 
-  Widget itemPict(ProfilePicNotifier notifier, int index) {
+  Widget itemPict(ScrollPicNotifier notifier, int index) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),

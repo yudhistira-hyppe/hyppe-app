@@ -222,6 +222,7 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
                           ? MeasuredSize(
                               onChange: (Size size) {
                                 heightProfileCard = size.height.toInt();
+                                print("@@@@@@@@@@@@ $heightProfileCard");
                               },
                               child: SelfProfileTop())
                           : BothProfileTopShimmer()),

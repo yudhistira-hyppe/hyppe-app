@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/contents/content_screen_argument.dart';
 
 import '../../constants/enum.dart';
@@ -9,9 +10,10 @@ class SlidedPicDetailScreenArgument extends ContentScreenArgument {
   final int? page;
   final int? limit;
   final TypePlaylist type;
+  final Widget? titleAppbar;
 
   @override
   FeatureType get featureType => FeatureType.pic;
 
-  SlidedPicDetailScreenArgument({this.index = 0, this.picData, this.page, this.limit, required this.type});
+  SlidedPicDetailScreenArgument({this.index = 0, this.picData, this.page, this.limit, required this.type, this.titleAppbar});
 }

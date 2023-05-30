@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -40,10 +41,18 @@ class SelfProfilePics extends StatelessWidget {
                         // }
 
                         return GestureDetector(
-                          onTap: () => context.read<SelfProfileNotifier>().navigateToSeeAllScreen(context, index),
+                          onTap: () => context.read<SelfProfileNotifier>().navigateToSeeAllScreen(
+                              context,
+                              index,
+                              const Text(
+                                "Pic",
+                                style: TextStyle(color: kHyppeTextLightPrimary),
+                              )),
                           child: MeasuredSize(
                             onChange: (size) {
-                              notifier.heightBox = size.height.toInt();
+                              if (index == 0) {
+                                notifier.heightBox = size.height.toInt();
+                              }
                             },
                             child: Padding(
                               padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
