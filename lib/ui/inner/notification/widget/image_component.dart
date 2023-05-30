@@ -70,17 +70,17 @@ class _ImageComponentState extends State<ImageComponent> {
             });
             switch (featureType) {
               case FeatureType.vid:
-                onGetContentData(context, featureType, (v) => Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v)));
+                await onGetContentData(context, featureType, (v) => Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v)));
                 break;
               case FeatureType.diary:
-                onGetContentData(context, featureType, (v) => Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v, type: TypePlaylist.none)));
+                await onGetContentData(context, featureType, (v) => Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v, type: TypePlaylist.none)));
                 break;
               case FeatureType.pic:
-                onGetContentData(context, featureType, (v) => Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v)));
+                await onGetContentData(context, featureType, (v) => Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v)));
                 // context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, 0);
                 break;
               case FeatureType.story:
-                onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)));
+                await onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)));
                 break;
               case FeatureType.txtMsg:
                 // return;
