@@ -32,7 +32,7 @@ class OnUserTagBottomSheet extends StatefulWidget {
 class _OnUserTagBottomSheetState extends State<OnUserTagBottomSheet> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final _notifier = PreUploadContentNotifier();
+  // final _notifier = PreUploadContentNotifier();
   String? lastInputValue;
 
   @override
@@ -92,7 +92,7 @@ class _OnUserTagBottomSheetState extends State<OnUserTagBottomSheet> {
                   }),
               NotificationListener<ScrollUpdateNotification>(
                 child: Expanded(
-                  child: notifier.searchPeolpleData != null
+                  child: notifier.searchPeolpleData != []
                       ? notifier.isLoading
                           ? SizedBox(height: 30, child: CustomLoading())
                           : ListView.builder(

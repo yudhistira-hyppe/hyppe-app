@@ -161,7 +161,7 @@ class NotificationService {
       }
     }
     print('notif message ${message.notification?.body}');
-    String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    // String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
 
     try {
       if (data != null) {

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:deepar_flutter/deepar_flutter.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -268,7 +266,7 @@ class _CameraViewState extends State<CameraView> {
             IconButton(
                 onPressed: () async {
                   if (_controller.isRecording) {
-                    File? file = await _controller.stopVideoRecording();
+                    // File? file = await _controller.stopVideoRecording();
                     // OpenFile.open(file.path);
                   } else {
                     await _controller.startVideoRecording();

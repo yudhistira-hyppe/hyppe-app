@@ -1,9 +1,7 @@
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import '../../../core/constants/asset_path.dart';
 import 'custom_base_cache_image.dart';
 
 class CustomCacheImage extends StatelessWidget {

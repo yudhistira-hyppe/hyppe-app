@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/ui/constant/widget/custom_appbar_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../core/constants/asset_path.dart';

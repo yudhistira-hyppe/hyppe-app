@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/music_type_item.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../inner/upload/preview_content/notifier.dart';

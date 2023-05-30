@@ -1,11 +1,6 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/models/collection/report/report.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

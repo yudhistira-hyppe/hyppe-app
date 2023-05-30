@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:collection/collection.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';

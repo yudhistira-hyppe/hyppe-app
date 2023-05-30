@@ -110,7 +110,7 @@ class CommentTextField extends StatelessWidget {
     return Container(
       height: MediaQuery.of(context).size.height / 2,
       color: Theme.of(context).colorScheme.background,
-      child: notifier.searchPeolpleData != null
+      child: notifier.searchPeolpleData != []
           ? notifier.isLoading
               ? Row(
                   mainAxisSize: MainAxisSize.max,

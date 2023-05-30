@@ -1314,7 +1314,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                     if ((widget.data?.metadata?.height ?? 0) > (widget.data?.metadata?.width ?? 0)) {
                       if (isPotraitFull) {
                         if (Platform.isIOS) {
-                          SystemChrome.setEnabledSystemUIOverlays([]);
+                          SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
                         }
                         SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
                       } else {

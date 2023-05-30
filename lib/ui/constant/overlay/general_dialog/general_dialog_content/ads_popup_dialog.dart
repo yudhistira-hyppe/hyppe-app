@@ -59,7 +59,7 @@ class AdsPopUpDialog extends StatefulWidget {
 
 class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObserver, TickerProviderStateMixin {
   FlutterAliplayer? fAliplayer;
-  final _sharedPrefs = SharedPreference();
+  // final _sharedPrefs = SharedPreference();
   var secondsSkip = 0;
   var secondsVideo = 0;
   bool loadingAction = false;

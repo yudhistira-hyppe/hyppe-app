@@ -442,22 +442,29 @@ class SearchNotifier with ChangeNotifier {
   }
 
   initDetailHashtag() {
-    _hashtagTab = HyppeType.HyppeVid;
+    _hashtagTab = HyppeType.HyppePic;
     _loadTagDetail = true;
   }
 
   initSearchAll() {
-    _contentTab = HyppeType.HyppeVid;
+    _contentTab = HyppeType.HyppePic;
   }
 
-  HyppeType _contentTab = HyppeType.HyppeVid;
+  HyppeType _mainContentTab = HyppeType.HyppePic;
+  HyppeType get mainContentTab => _mainContentTab;
+  set mainContentTab(HyppeType type) {
+    _mainContentTab = type;
+    notifyListeners();
+  }
+
+  HyppeType _contentTab = HyppeType.HyppePic;
   HyppeType get contentTab => _contentTab;
   set contentTab(HyppeType type) {
     _contentTab = type;
     notifyListeners();
   }
 
-  HyppeType _hashtagTab = HyppeType.HyppeVid;
+  HyppeType _hashtagTab = HyppeType.HyppePic;
   HyppeType get hashtagTab => _hashtagTab;
   set hashtagTab(HyppeType type) {
     _hashtagTab = type;

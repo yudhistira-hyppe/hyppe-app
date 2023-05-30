@@ -8,7 +8,6 @@ import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
-import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -926,7 +925,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
             // desc: "${data?.description}",
             username: notifier.diaryData?[index].username ?? '',
             desc: "${notifier.diaryData?[index].description}",
-            trimLines: 2,
+            trimLines: 3,
             textAlign: TextAlign.start,
             seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
             seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
@@ -960,7 +959,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           // desc: "${notifier.diaryData?[index]?.description}",
                           username: notifier.diaryData?[index].comment?[indexComment].userComment?.username ?? '',
                           desc: notifier.diaryData?[index].comment?[indexComment].txtMessages ?? '',
-                          trimLines: 2,
+                          trimLines: 3,
                           textAlign: TextAlign.start,
                           seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
                           seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',

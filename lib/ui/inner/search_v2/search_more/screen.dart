@@ -144,6 +144,12 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                                                 child: Row(
                                                   mainAxisSize: MainAxisSize.max,
                                                   children: [
+                                                    const CustomIconWidget(
+                                                      iconData: '${AssetPath.vectorPath}ic_history.svg',
+                                                      height: 24,
+                                                      width: 24,
+                                                    ),
+                                                    tenPx,
                                                     Expanded(
                                                       child: CustomTextWidget(
                                                           textToDisplay: values[index].keyword ?? '',

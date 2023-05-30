@@ -14,31 +14,46 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class Component extends StatelessWidget {
+class Component extends StatefulWidget {
   final Widget rightWidget;
   final NotificationModel? data;
 
   const Component({Key? key, required this.rightWidget, this.data}) : super(key: key);
 
   @override
+  State<Component> createState() => _ComponentState();
+}
+
+class _ComponentState extends State<Component> {
+  var isLoading = false;
+
+  @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'Component');
     SizeConfig().init(context);
     return InkWell(
-      onTap: () {
-        context.read<NotificationNotifier>().markAsRead(context, data ?? NotificationModel());
-        final eventType = System().getNotificationCategory(data?.eventType ?? '');
-        var listTransacation = [
-          NotificationCategory.transactions,
-          NotificationCategory.adsClick,
-          NotificationCategory.adsView,
-        ];
+      onTap: () async {
+        if(!isLoading){
+          setState(() {
+            isLoading = true;
+          });
+          context.read<NotificationNotifier>().markAsRead(context, widget.data ?? NotificationModel());
+          final eventType = System().getNotificationCategory(widget.data?.eventType ?? '');
+          var listTransacation = [
+            NotificationCategory.transactions,
+            NotificationCategory.adsClick,
+            NotificationCategory.adsView,
+          ];
 
-        if (listTransacation.contains(eventType)) {
-          Routing().move(Routes.transaction);
-        } else {
-          context.read<NotificationNotifier>().navigateToContent(context, data?.postType, data?.postID);
+          if (listTransacation.contains(eventType)) {
+            await Routing().move(Routes.transaction);
+          } else {
+            await context.read<NotificationNotifier>().navigateToContent(context, widget.data?.postType, widget.data?.postID);
+          }
         }
+        setState(() {
+          isLoading = false;
+        });
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
@@ -54,8 +69,8 @@ class Component extends StatelessWidget {
                 following: true,
                 width: 50 * SizeConfig.scaleDiagonal,
                 height: 50 * SizeConfig.scaleDiagonal,
-                onTap: () => System().navigateToProfile(context, data?.mate ?? ''),
-                imageUrl: '${System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint)}',
+                onTap: () => System().navigateToProfile(context, widget.data?.mate ?? ''),
+                imageUrl: '${System().showUserPicture(widget.data?.senderOrReceiverInfo?.avatar?.mediaEndpoint)}',
               ),
             ),
             sixteenPx,
@@ -68,7 +83,7 @@ class Component extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextWidget(
-                        textToDisplay: data?.senderOrReceiverInfo?.username ?? '',
+                        textToDisplay: widget.data?.senderOrReceiverInfo?.username ?? '',
                         textAlign: TextAlign.start,
                         textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
                       ),
@@ -84,7 +99,7 @@ class Component extends StatelessWidget {
                         //         : null,
                         child: CustomTextWidget(
                           //textToDisplay: data?.body ?? '',
-                          textToDisplay: System().bodyMultiLang(bodyEn: data?.body ?? data?.bodyId, bodyId: data?.bodyId) ?? '',
+                          textToDisplay: System().bodyMultiLang(bodyEn: widget.data?.body ?? widget.data?.bodyId, bodyId: widget.data?.bodyId) ?? '',
                           textStyle: Theme.of(context).textTheme.caption,
                           maxLines: 4,
                           textAlign: TextAlign.start,
@@ -93,12 +108,12 @@ class Component extends StatelessWidget {
                       sixPx,
                       CustomTextWidget(
                         textToDisplay:
-                            data?.createdAt != null ? System().readTimestamp(DateFormat("yyyy-MM-dd hh:mm:ss").parse(data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true) : '',
+                        widget.data?.createdAt != null ? System().readTimestamp(DateFormat("yyyy-MM-dd hh:mm:ss").parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true) : '',
                         textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
                       ),
                     ],
                   ),
-                  rightWidget
+                  isLoading ? const CircularProgressIndicator() : widget.rightWidget
                 ],
               ),
             )
@@ -108,3 +123,4 @@ class Component extends StatelessWidget {
     );
   }
 }
+

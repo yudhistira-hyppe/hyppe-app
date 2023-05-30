@@ -35,6 +35,8 @@ class SignInData {
         return UserType.notVerified;
       case true:
         return UserType.verified;
+      default:
+        return null;
     }
   }
 }

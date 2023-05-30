@@ -4,7 +4,6 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:provider/provider.dart';
 

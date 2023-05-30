@@ -972,7 +972,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             // desc: "${data?.description}",
             username: notifier.pic?[index].username ?? '',
             desc: "${notifier.pic?[index].description}",
-            trimLines: 2,
+            trimLines: 3,
             textAlign: TextAlign.start,
             seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
             seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',

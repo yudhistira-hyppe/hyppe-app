@@ -32,7 +32,6 @@ class OnSearchPeopleBottomSheet extends StatefulWidget {
 class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final _notifier = PreUploadContentNotifier();
   String? lastInputValue;
 
   @override
@@ -98,7 +97,7 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
                   }),
               NotificationListener<ScrollUpdateNotification>(
                 child: Expanded(
-                  child: notifier.searchPeolpleData != null
+                  child: notifier.searchPeolpleData != []
                       ? notifier.isLoading
                           ? SizedBox(height: 30, child: CustomLoading())
                           : ListView.builder(

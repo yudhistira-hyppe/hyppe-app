@@ -14,15 +14,11 @@ import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/notifier.dart';
 import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../../../../core/constants/shared_preference_keys.dart';
-import '../../../../../core/services/shared_preference.dart';
 
 class PaymentBoostSummaryScreen extends StatefulWidget {
   const PaymentBoostSummaryScreen({Key? key}) : super(key: key);

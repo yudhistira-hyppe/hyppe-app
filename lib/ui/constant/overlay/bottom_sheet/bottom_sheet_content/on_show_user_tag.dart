@@ -36,7 +36,7 @@ class OnShowUserTagBottomSheet extends StatefulWidget {
 }
 
 class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> with AfterFirstLayoutMixin {
-  final TextEditingController _controller = TextEditingController();
+  // final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
   String? lastInputValue;

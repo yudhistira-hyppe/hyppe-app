@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/hashtag_argument.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -53,6 +54,7 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
   bool _readMore = true;
 
   final String _kLineSeparator = '\u2028';
+  var desc = '';
 
   void _onSeeMore() {
     (_readMore ? 'test click seeMore' : 'test click seeLess ').logger();
@@ -63,6 +65,31 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
 
   @override
   Widget build(BuildContext context) {
+    desc = widget.desc;
+    final values = desc.split('\n');
+    for (var i = 0; i < values.length; i++ ) {
+      try{
+        final last = values[i].split(' ').last;
+        print('has Emoji: $last');
+        if(last.hasEmoji()){
+          print('has Emoji ini');
+          values[i] += ' ';
+        }
+      }catch(e){
+        e.logger();
+      }
+    }
+    if(values.isNotEmpty){
+      desc = '';
+      for(var i = 0; i < values.length; i++ ){
+        if(i == (values.length - 1)){
+          desc += values[i];
+        }else{
+          desc += '${values[i]}\n';
+        }
+      }
+    }
+
     // descItems.add(ItemDesc())
     return fixDescLayout(context);
   }
@@ -101,7 +128,7 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
       final maxWidth = constraints.maxWidth;
 
       final text = TextSpan(
-        children: [TextSpan(text: widget.desc, style: effectiveTextStyle)],
+        children: [TextSpan(text: desc, style: effectiveTextStyle)],
       );
 
       final textPainter = TextPainter(
@@ -225,9 +252,9 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
   List<ItemDesc> getDescItems({int? lastIndex, required bool linkLongerThanLine}) {
     var fixDesc = _readMore
         ? lastIndex != null
-            ? widget.desc.substring(0, lastIndex + 1) + (linkLongerThanLine ? _kLineSeparator : '')
-            : widget.desc
-        : widget.desc;
+            ? desc.substring(0, lastIndex + 1) + (linkLongerThanLine ? _kLineSeparator : '')
+            : desc
+        : desc;
     fixDesc = fixDesc.replaceAll('\n@', '\n @');
     fixDesc = fixDesc.replaceAll('\n#', '\n #');
     fixDesc = fixDesc.replaceAll('\n', ' \n');
@@ -271,10 +298,10 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
     }
 
     ///only for check the results
-    // for (var check in descItems) {
-    // print('CaptionType.seeMore ${check.type}');
-    // print('check descItems ${check.desc}');
-    // }
+    for (var i = 0; i < descItems.length; i++ ) {
+      print('CaptionType.seeMore ${descItems[i].type}');
+      print('check descItems ${descItems[i].desc}');
+    }
     return descItems;
   }
 
@@ -289,7 +316,7 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
 }
 
 class ItemDesc {
-  final String desc;
-  final CaptionType type;
-  const ItemDesc({required this.desc, required this.type});
+  String desc;
+  CaptionType type;
+  ItemDesc({required this.desc, required this.type});
 }

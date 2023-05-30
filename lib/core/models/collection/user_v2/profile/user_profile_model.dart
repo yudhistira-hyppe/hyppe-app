@@ -158,6 +158,8 @@ class UserProfileModel {
         return UserType.notVerified;
       case true:
         return UserType.verified;
+      default:
+        return null;
     }
   }
 
@@ -171,6 +173,8 @@ class UserProfileModel {
         return IdProofStatus.complete;
       case 'REVOKE':
         return IdProofStatus.revoke;
+      default:
+        return null;
     }
   }
 }

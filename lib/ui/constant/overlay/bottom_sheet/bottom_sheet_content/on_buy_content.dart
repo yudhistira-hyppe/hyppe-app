@@ -10,7 +10,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class OnBuyContentBottomSheet extends StatelessWidget {
@@ -20,7 +19,7 @@ class OnBuyContentBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(data?.saleAmount);
-    var f = NumberFormat.decimalPattern('id');
+    // var f = NumberFormat.decimalPattern('id');
 
     return Consumer<TranslateNotifierV2>(
       builder: (_, notifier, __) => Padding(

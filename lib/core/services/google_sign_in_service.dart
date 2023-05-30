@@ -33,6 +33,7 @@ class GoogleSignInService {
     } catch (error) {
       error.logger();
       _showAlert(context, error);
+      return null;
     }
   }
 

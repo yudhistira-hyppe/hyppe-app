@@ -7,7 +7,6 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_switch_button.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
@@ -34,7 +33,7 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
   var privacy = [];
   final _language = TranslateNotifierV2();
   String _currentPrivacy = "";
-  static final _routing = Routing();
+  // static final _routing = Routing();
   BuildContext? scaffoldContext;
   @override
   void initState() {

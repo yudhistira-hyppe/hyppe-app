@@ -23,7 +23,7 @@ class SignUpPin extends StatefulWidget {
 }
 
 class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
-  late SignUpPinNotifier _notifier;
+  // late SignUpPinNotifier _notifier;
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
 
   @override
   void afterFirstLayout(BuildContext context) {
-    _notifier = Provider.of<SignUpPinNotifier>(context, listen: false);
+    // _notifier = Provider.of<SignUpPinNotifier>(context, listen: false);
   }
 
   @override

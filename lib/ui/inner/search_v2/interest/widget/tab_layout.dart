@@ -31,7 +31,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'InterestTabLayout');
-    currentType = HyppeType.HyppeVid;
+    currentType = HyppeType.HyppePic;
     final notifier = context.read<SearchNotifier>();
     notifier.initDetailInterest();
     _scrollController.addListener(() {
@@ -66,7 +66,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
 
   @override
   Widget build(BuildContext context) {
-    final listTab = [HyppeType.HyppeVid, HyppeType.HyppeDiary, HyppeType.HyppePic];
+    final listTab = [HyppeType.HyppePic, HyppeType.HyppeDiary, HyppeType.HyppeVid];
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final data = notifier.interestContents[widget.interest.id];
       return !notifier.loadIntDetail

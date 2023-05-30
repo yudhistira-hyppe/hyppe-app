@@ -150,6 +150,7 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
   @override
   void deactivate() {
     print('deactive music item');
+    super.deactivate();
   }
 
 }

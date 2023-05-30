@@ -1,9 +1,4 @@
-import 'dart:math';
-
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
-
 import 'custom_icon_widget.dart';
-import 'custom_base_cache_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
