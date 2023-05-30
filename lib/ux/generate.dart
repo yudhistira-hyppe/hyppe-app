@@ -28,6 +28,7 @@ import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delet
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/delete_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/diary_player.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen_lama.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
@@ -35,6 +36,7 @@ import 'package:hyppe/ui/inner/home/content_v2/help/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/test.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/confirm_pin/screen.dart';
@@ -73,6 +75,7 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_docume
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/preview.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/screen.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
@@ -391,6 +394,12 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const TestPageImage());
       case Routes.testLogin:
         return MaterialPageRoute(builder: (_) => const TestLogin());
+      case Routes.scrollPic:
+        return MaterialPageRoute(builder: (_) => ScrollPic(arguments: settings.arguments as SlidedPicDetailScreenArgument));
+      case Routes.scrollDiary:
+        return MaterialPageRoute(builder: (_) => ScrollDiary(arguments: settings.arguments as SlidedPicDetailScreenArgument));
+      case Routes.scrollVid:
+        return MaterialPageRoute(builder: (_) => ScrollVid(arguments: settings.arguments as SlidedPicDetailScreenArgument));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

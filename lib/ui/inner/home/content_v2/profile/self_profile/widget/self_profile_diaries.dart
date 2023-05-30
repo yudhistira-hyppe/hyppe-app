@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/empty_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/sensitive_content.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
+import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 
 class SelfProfileDiaries extends StatelessWidget {
@@ -22,9 +24,14 @@ class SelfProfileDiaries extends StatelessWidget {
       return notifier.user.diaries != null
           ? notifier.user.diaries!.isEmpty
               ? const EmptyWidget()
-              : SliverGrid(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
+              : SliverGrid.count(
+                  crossAxisSpacing: 0,
+                  mainAxisSpacing: 0,
+                  crossAxisCount: 3,
+                  childAspectRatio: 0.67,
+                  children: List.generate(
+                    notifier.user.diaries?.length ?? 0,
+                    (index) {
                       try {
                         if (index == notifier.user.diaries?.length) {
                           return Container();
@@ -37,55 +44,68 @@ class SelfProfileDiaries extends StatelessWidget {
                         // }
 
                         return GestureDetector(
-                          onTap: () => context.read<SelfProfileNotifier>().navigateToSeeAllScreen(context, index),
-                          child: Padding(
-                            padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                            child: notifier.user.diaries?[index].reportedStatus == 'BLURRED' || notifier.user.diaries?[index].reportedStatus == 'OWNED'
-                                ? SensitiveContentProfile(data: notifier.user.diaries?[index])
-                                : Stack(
-                                    children: [
-                                      Center(
-                                        child: CustomContentModeratedWidget(
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                          featureType: FeatureType.vid,
-                                          isSale: false,
-                                          isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                          thumbnail: ImageUrl(notifier.user.diaries?[index].postID,
-                                              url: (notifier.user.diaries?[index].isApsara ?? false)
-                                                  ? (notifier.user.diaries?[index].mediaThumbEndPoint ?? '')
-                                                  : System().showUserPicture(notifier.user.diaries?[index].mediaThumbEndPoint) ?? ''),
+                          onTap: () => context.read<SelfProfileNotifier>().navigateToSeeAllScreen(
+                              context,
+                              index,
+                              const Text(
+                                "Diary",
+                                style: TextStyle(color: kHyppeTextLightPrimary),
+                              )),
+                          child: MeasuredSize(
+                            onChange: (size) {
+                              if (index == 0) {
+                                notifier.heightBox = size.height.toInt();
+                              }
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
+                              child: notifier.user.diaries?[index].reportedStatus == 'BLURRED' || notifier.user.diaries?[index].reportedStatus == 'OWNED'
+                                  ? SensitiveContentProfile(data: notifier.user.diaries?[index])
+                                  : Stack(
+                                      children: [
+                                        Center(
+                                          child: CustomContentModeratedWidget(
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            featureType: FeatureType.vid,
+                                            isSale: false,
+                                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                                            thumbnail: ImageUrl(notifier.user.diaries?[index].postID,
+                                                url: (notifier.user.diaries?[index].isApsara ?? false)
+                                                    ? (notifier.user.diaries?[index].mediaThumbEndPoint ?? '')
+                                                    : System().showUserPicture(notifier.user.diaries?[index].mediaThumbEndPoint) ?? ''),
+                                          ),
                                         ),
-                                      ),
-                                      // SelectableText(notifier.iw tem1?.diaries?[index].isApsara ?? false
-                                      //     ? (notifier.user?.diaries?[index].mediaThumbEndPoint ?? '')
-                                      //     : System().showUserPicture(notifier.user?.diaries?[index].mediaThumbEndPoint) ?? ''),
-                                      (notifier.user.diaries?[index].saleAmount ?? 0) > 0
-                                          ? const Align(
-                                              alignment: Alignment.topRight,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(4.0),
-                                                child: CustomIconWidget(
-                                                  iconData: "${AssetPath.vectorPath}sale.svg",
-                                                  height: 22,
-                                                  defaultColor: false,
-                                                ),
-                                              ))
-                                          : Container(),
-                                      (notifier.user.diaries?[index].certified ?? false) && (notifier.user.diaries?[index].saleAmount ?? 0) == 0
-                                          ? Align(
-                                              alignment: Alignment.topRight,
-                                              child: Padding(
-                                                  padding: const EdgeInsets.all(2.0),
-                                                  child: Container(
-                                                      padding: const EdgeInsets.all(4),
-                                                      child: const CustomIconWidget(
-                                                        iconData: '${AssetPath.vectorPath}ownership.svg',
-                                                        defaultColor: false,
-                                                      ))))
-                                          : Container()
-                                    ],
-                                  ),
+                                        // SelectableText(notifier.iw tem1?.diaries?[index].isApsara ?? false
+                                        //     ? (notifier.user?.diaries?[index].mediaThumbEndPoint ?? '')
+                                        //     : System().showUserPicture(notifier.user?.diaries?[index].mediaThumbEndPoint) ?? ''),
+                                        (notifier.user.diaries?[index].saleAmount ?? 0) > 0
+                                            ? const Align(
+                                                alignment: Alignment.topRight,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(4.0),
+                                                  child: CustomIconWidget(
+                                                    iconData: "${AssetPath.vectorPath}sale.svg",
+                                                    height: 22,
+                                                    defaultColor: false,
+                                                  ),
+                                                ))
+                                            : Container(),
+                                        (notifier.user.diaries?[index].certified ?? false) && (notifier.user.diaries?[index].saleAmount ?? 0) == 0
+                                            ? Align(
+                                                alignment: Alignment.topRight,
+                                                child: Padding(
+                                                    padding: const EdgeInsets.all(2.0),
+                                                    child: Container(
+                                                        padding: const EdgeInsets.all(4),
+                                                        child: const CustomIconWidget(
+                                                          iconData: '${AssetPath.vectorPath}ownership.svg',
+                                                          defaultColor: false,
+                                                        ))))
+                                            : Container()
+                                      ],
+                                    ),
+                            ),
                           ),
                         );
                       } catch (e) {
@@ -99,10 +119,14 @@ class SelfProfileDiaries extends StatelessWidget {
                         );
                       }
                     },
-                    childCount: notifier.user.diaries?.length,
-                  ),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                )
+                    // delegate: SliverChildBuilderDelegate(
+                    //   (BuildContext context, int index) {
+
+                    //   },
+                    //   childCount: notifier.user.diaries?.length,
+                    // ),
+                    // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                  ))
           : BothProfileContentShimmer();
     });
 

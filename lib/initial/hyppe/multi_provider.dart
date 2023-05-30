@@ -9,12 +9,15 @@ import 'package:hyppe/ui/constant/entities/stories/notifier.dart';
 import 'package:hyppe/ui/constant/entities/web_view/notifier.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/list_boost/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.dart';
@@ -25,6 +28,7 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
@@ -233,6 +237,9 @@ class AppDependencies {
         ChangeNotifierProvider<AppealNotifier>(create: (context) => AppealNotifier()),
         ChangeNotifierProvider<PaymentBoostSummaryNotifier>(create: (context) => PaymentBoostSummaryNotifier()),
         ChangeNotifierProvider<ListBoostNotifier>(create: (context) => ListBoostNotifier()),
-        ChangeNotifierProvider<CommentNotifierV2>(create: (context) => CommentNotifierV2())
+        ChangeNotifierProvider<CommentNotifierV2>(create: (context) => CommentNotifierV2()),
+        ChangeNotifierProvider<ScrollPicNotifier>(create: (context) => ScrollPicNotifier()),
+        ChangeNotifierProvider<ScrollDiaryNotifier>(create: (context) => ScrollDiaryNotifier()),
+        ChangeNotifierProvider<ScrollVidNotifier>(create: (context) => ScrollVidNotifier())
       ];
 }

@@ -6,6 +6,7 @@ import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -16,10 +17,14 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_diaries.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_pics.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_vids.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +80,16 @@ class SelfProfileNotifier with ChangeNotifier {
 
   bool _scollLoading = false;
   bool get scollLoading => _scollLoading;
+
+  int _heightBox = 0;
+  int get heightBox => _heightBox;
+
+  int heightIndex = 0;
+
+  set heightBox(val) {
+    _heightBox = val;
+    notifyListeners();
+  }
 
   set user(UserInfoModel val) {
     _user = val;
@@ -145,20 +160,22 @@ class SelfProfileNotifier with ChangeNotifier {
 
   navigateToEditProfile() => Routing().move(Routes.accountPreferences).whenComplete(() => notifyListeners());
 
-  onScrollListener(BuildContext context, ScrollController scrollController) async {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+  onScrollListener(BuildContext context, ScrollController scrollController, {bool isLoad = false}) async {
+    if (isLoad || (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange)) {
       switch (pageIndex) {
         case 0:
           {
-            if (!vidContentsQuery.loading && vidHasNext) {
+            if (!picContentsQuery.loading && picHasNext) {
               _scollLoading = true;
               notifyListeners();
-              List<ContentData> _res = await vidContentsQuery.loadNext(context, myContent: true);
-              // _scollLoading = false;
+              List<ContentData> _res = await picContentsQuery.loadNext(context, myContent: true);
               if (_res.isNotEmpty) {
-                user.vids = [...(user.vids ?? []), ..._res];
+                user.pics = [...(user.pics ?? []), ..._res];
+                // if (user.pics != null) {
+                //   await Future.wait(user.pics!.map((e) => cacheImage(context, e.mediaThumbEndPoint!)));
+                // }
               } else {
-                "Post Vid Dah Mentok".logger();
+                print("Post Pic Dah Mentok");
               }
               _scollLoading = false;
               notifyListeners();
@@ -183,17 +200,15 @@ class SelfProfileNotifier with ChangeNotifier {
           break;
         case 2:
           {
-            if (!picContentsQuery.loading && picHasNext) {
+            if (!vidContentsQuery.loading && vidHasNext) {
               _scollLoading = true;
               notifyListeners();
-              List<ContentData> _res = await picContentsQuery.loadNext(context, myContent: true);
+              List<ContentData> _res = await vidContentsQuery.loadNext(context, myContent: true);
+              // _scollLoading = false;
               if (_res.isNotEmpty) {
-                user.pics = [...(user.pics ?? []), ..._res];
-                // if (user.pics != null) {
-                //   await Future.wait(user.pics!.map((e) => cacheImage(context, e.mediaThumbEndPoint!)));
-                // }
+                user.vids = [...(user.vids ?? []), ..._res];
               } else {
-                print("Post Pic Dah Mentok");
+                "Post Vid Dah Mentok".logger();
               }
               _scollLoading = false;
               notifyListeners();
@@ -208,17 +223,17 @@ class SelfProfileNotifier with ChangeNotifier {
     // pageIndex = 0;
     _statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
-    vidContentsQuery.featureType = FeatureType.vid;
-    diaryContentsQuery.featureType = FeatureType.diary;
     picContentsQuery.featureType = FeatureType.pic;
+    diaryContentsQuery.featureType = FeatureType.diary;
+    vidContentsQuery.featureType = FeatureType.vid;
 
-    vidContentsQuery.limit = 12;
-    diaryContentsQuery.limit = 12;
     picContentsQuery.limit = 12;
+    diaryContentsQuery.limit = 12;
+    vidContentsQuery.limit = 12;
 
-    vidContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
-    diaryContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
     picContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
+    diaryContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
+    vidContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
 
     final usersNotifier = UserBloc();
     await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
@@ -232,7 +247,10 @@ class SelfProfileNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.userID, user.profile?.idUser);
       notifyListeners();
     }
-    user.vids = await vidContentsQuery.reload(context, myContent: true);
+    // user.vids = await vidContentsQuery.reload(context, myContent: true);
+    user.pics = await picContentsQuery.reload(context, myContent: true);
+
+    context.read<ScrollPicNotifier>().pics = user.pics;
 
     // if (user.vids != null) {
     //   await Future.wait(user.vids!.map((e) => cacheImage(context, e.mediaThumbEndPoint!)));
@@ -283,22 +301,6 @@ class SelfProfileNotifier with ChangeNotifier {
     switch (pageIndex) {
       case 0:
         {
-          if (user.vids == null || isReload) {
-            user.vids = await vidContentsQuery.reload(context, myContent: true);
-            notifyListeners();
-          }
-        }
-        break;
-      case 1:
-        {
-          if (user.diaries == null || isReload) {
-            user.diaries = await diaryContentsQuery.reload(context, myContent: true);
-            notifyListeners();
-          }
-        }
-        break;
-      case 2:
-        {
           if (user.pics == null || isReload) {
             user.pics = await picContentsQuery.reload(context, myContent: true);
             // if (user.pics != null) {
@@ -308,35 +310,82 @@ class SelfProfileNotifier with ChangeNotifier {
           }
         }
         break;
+      case 1:
+        {
+          if (user.diaries == null || isReload) {
+            user.diaries = await diaryContentsQuery.reload(context, myContent: true);
+            context.read<ScrollDiaryNotifier>().diaryData = user.diaries;
+            notifyListeners();
+          }
+        }
+        break;
+      case 2:
+        {
+          if (user.vids == null || isReload) {
+            user.vids = await vidContentsQuery.reload(context, myContent: true);
+            context.read<ScrollVidNotifier>().vidData = user.vids;
+            notifyListeners();
+          }
+        }
+        break;
     }
   }
 
   Widget optionButton() {
     List pages = [
-      !isLoading ? const SelfProfileVids() : BothProfileContentShimmer(),
+      !isLoading ? const SelfProfilePics() : BothProfileContentShimmer(),
       !isLoading ? const SelfProfileDiaries() : BothProfileContentShimmer(),
-      !isLoading ? const SelfProfilePics() : BothProfileContentShimmer()
+      !isLoading ? const SelfProfileVids() : BothProfileContentShimmer(),
     ];
     return pages[pageIndex];
   }
 
-  navigateToSeeAllScreen(BuildContext context, int index) async {
+  navigateToSeeAllScreen(BuildContext context, int index, Widget title) async {
     context.read<ReportNotifier>().inPosition = contentPosition.myprofile;
     final connect = await _system.checkConnections();
     if (connect) {
-      if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
+      var result;
+      if (pageIndex == 0) {
+        result = await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title));
+        // _routing.move(Routes.picSlideDetailPreview,
+        //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
+        scrollAuto(result);
+      }
       if (pageIndex == 1) {
-        _routing.move(Routes.diaryDetail,
-            argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
+        result = await _routing.move(Routes.scrollDiary, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title));
+        // _routing.move(Routes.diaryDetail,
+        //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
+        scrollAuto(result);
       }
       if (pageIndex == 2) {
-        _routing.move(Routes.picSlideDetailPreview,
-            argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
+        result = await _routing.move(Routes.scrollVid, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title));
+        // result = await _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
+        scrollAuto(result);
       }
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }
   }
+
+  scrollAuto(String index) {
+    var indexHei = int.parse(index) + 1;
+    print(indexHei);
+    var hasilBagi = indexHei / 3;
+    heightIndex = 0;
+    print(hasilBagi);
+    print(isInteger(hasilBagi));
+    if (isInteger(hasilBagi)) {
+      hasilBagi = hasilBagi;
+    } else {
+      hasilBagi += 1;
+    }
+    print("========== height box ${heightBox}");
+    print("========== height box ${hasilBagi.toInt()}");
+    heightIndex = (heightBox * hasilBagi.toInt() - heightBox);
+    print("========== height box ${heightIndex}");
+  }
+
+  bool isInteger(num value) => value is int || value == value.roundToDouble();
 
   void onDeleteSelfPostContent(BuildContext context, {required String postID, required String content}) {
     switch (content) {

@@ -1,19 +1,23 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
+import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
@@ -21,20 +25,24 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -45,33 +53,28 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'package:pinch_zoom/pinch_zoom.dart';
-import '../../../../../ux/path.dart';
-import '../../../../constant/entities/report/notifier.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-class HyppePreviewPic extends StatefulWidget {
-  final ScrollController? scrollController;
-  final Function functionZoomTriger;
-  const HyppePreviewPic({
+class ScrollDiary extends StatefulWidget {
+  final SlidedPicDetailScreenArgument? arguments;
+  const ScrollDiary({
     Key? key,
-    this.scrollController,
-    required this.functionZoomTriger,
+    this.arguments,
   }) : super(key: key);
 
   @override
-  _HyppePreviewPicState createState() => _HyppePreviewPicState();
+  _ScrollDiaryState createState() => _ScrollDiaryState();
 }
 
-class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
   FlutterAliplayer? fAliplayer;
-  TransformationController _transformationController = TransformationController();
-
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
   bool _showLoading = false;
   bool _inSeek = false;
   bool isloading = false;
+  bool isMute = false;
 
   int _loadingPercent = 0;
   int _currentPlayerState = 0;
@@ -88,26 +91,29 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
   LocalizationModelV2? lang;
   ContentData? dataSelected;
-  bool isMute = false;
   String email = '';
-  // String statusKyc = '';
-  bool isInPage = true;
-  bool _scroolEnabled = true;
+  String statusKyc = '';
+
+  final ItemScrollController itemScrollController = ItemScrollController();
+  final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
+
+  /// Listener that reports the position of items when the list is scrolled.
+  final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPic');
-    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'ScrollDiary');
+    final notifier = Provider.of<ScrollDiaryNotifier>(context, listen: false);
     lang = context.read<TranslateNotifierV2>().translate;
-    notifier.scrollController.addListener(() => notifier.scrollListener(context));
     email = SharedPreference().readStorage(SpKeys.email);
-    // statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+    statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     // stopwatch = new Stopwatch()..start();
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
       WidgetsBinding.instance.addObserver(this);
-
+      fAliplayer?.pause();
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(true);
 
@@ -119,7 +125,20 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      itemScrollController.jumpTo(index: widget.arguments!.page!);
       _initListener();
+    });
+    var index = 0;
+    var lastIndex = 0;
+    itemPositionsListener.itemPositions.addListener(() {
+      index = itemPositionsListener.itemPositions.value.first.index;
+      if (lastIndex != index) {
+        if (index == notifier.diaryData!.length - 2) {
+          print("ini reload harusnya");
+          notifier.loadMore(context, _scrollController);
+        }
+      }
+      lastIndex = index;
     });
 
     super.initState();
@@ -131,19 +150,16 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      if (SharedPreference().readStorage(SpKeys.isShowPopAds)) {
-        isMute = true;
-        fAliplayer?.pause();
-      }
-
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         setState(() {
           isPrepare = true;
+          _showLoading = false;
         });
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;
+      _initAds(context);
     });
     fAliplayer?.setOnRenderingStart((playerId) {
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
@@ -197,9 +213,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         // }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
         _bufferPosition = extraValue ?? 0;
-        if (mounted) {
-          setState(() {});
-        }
+        // if (mounted) {
+        //   setState(() {});
+        // }
       } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
         // Fluttertoast.showToast(msg: "AutoPlay");
       } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
@@ -277,12 +293,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     //   playAuth:
     //       "eyJTZWN1cml0eVRva2VuIjoiQ0FJU2lBTjFxNkZ0NUIyeWZTaklyNURISnUvWnJvZFIrb1d2VlY2SmdHa0RPdFZjaDZMRG96ejJJSDFLZlhadEJPQWN0ZlF3bFdwVDdQNGJsckl1RjhJWkdoR2ZONU10dE1RUHJGL3dKb0hidk5ldTBic0hoWnY5bGNNTHJaaWpqcUhvZU96Y1lJNzMwWjdQQWdtMlEwWVJySkwrY1RLOUphYk1VL21nZ29KbWFkSTZSeFN4YVNFOGF2NWRPZ3BscnIwSVZ4elBNdnIvSFJQMnVtN1pIV3R1dEEwZTgzMTQ1ZmFRejlHaTZ4YlRpM2I5ek9FVXFPYVhKNFMvUGZGb05ZWnlTZjZvd093VUVxL2R5M3hvN3hGYjFhRjRpODRpL0N2YzdQMlFDRU5BK3dtbFB2dTJpOE5vSUYxV2E3UVdJWXRncmZQeGsrWjEySmJOa0lpbDVCdFJFZHR3ZUNuRldLR216c3krYjRIUEROc2ljcXZoTUhuZ3k4MkdNb0tQMHprcGVuVUdMZ2hIQ2JGRFF6MVNjVUZ3RjIyRmQvVDlvQTJRTWwvK0YvbS92ZnRvZ2NvbC9UTEI1c0dYSWxXRGViS2QzQnNETjRVMEIwRlNiRU5JaERPOEwvOWNLRndUSWdrOFhlN01WL2xhYUJGUHRLWFdtaUgrV3lOcDAzVkxoZnI2YXVOcGJnUHIxVVFwTlJxQUFaT3kybE5GdndoVlFObjZmbmhsWFpsWVA0V3paN24wTnVCbjlILzdWZHJMOGR5dHhEdCtZWEtKNWI4SVh2c0lGdGw1cmFCQkF3ZC9kakhYTjJqZkZNVFJTekc0T3pMS1dKWXVzTXQycXcwMSt4SmNHeE9iMGtKZjRTcnFpQ1RLWVR6UHhwakg0eDhvQTV6Z0cvZjVIQ3lFV3pISmdDYjhEeW9EM3NwRUh4RGciLCJBdXRoSW5mbyI6IntcIkNJXCI6XCJmOUc0eExxaHg2Tkk3YThaY1Q2N3hObmYrNlhsM05abmJXR1VjRmxTelljS0VKVTN1aVRjQ29Hd3BrcitqL2phVVRXclB2L2xxdCs3MEkrQTJkb3prd0IvKzc5ZlFyT2dLUzN4VmtFWUt6TT1cIixcIkNhbGxlclwiOlwiV2NKTEpvUWJHOXR5UmM2ZXg3LzNpQXlEcS9ya3NvSldhcXJvTnlhTWs0Yz1cIixcIkV4cGlyZVRpbWVcIjpcIjIwMjMtMDMtMTZUMDk6NDE6MzdaXCIsXCJNZWRpYUlkXCI6XCJjMWIyNGQzMGIyYzY3MWVkYmZjYjU0MjI4MGU5MDEwMlwiLFwiUGxheURvbWFpblwiOlwidm9kLmh5cHBlLmNsb3VkXCIsXCJTaWduYXR1cmVcIjpcIk9pbHhxelNyaVVhOGlRZFhaVEVZZEJpbUhJUT1cIn0iLCJWaWRlb01ldGEiOnsiU3RhdHVzIjoiTm9ybWFsIiwiVmlkZW9JZCI6ImMxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyIiwiVGl0bGUiOiIyODg4MTdkYi1jNzdjLWM0ZTQtNjdmYi0zYjk1MTlmNTc0ZWIiLCJDb3ZlclVSTCI6Imh0dHBzOi8vdm9kLmh5cHBlLmNsb3VkL2MxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyL3NuYXBzaG90cy9jYzM0MjVkNzJiYjM0YTE3OWU5NmMzZTA3NTViZjJjNi0wMDAwNC5qcGciLCJEdXJhdGlvbiI6NTkuMDQ5fSwiQWNjZXNzS2V5SWQiOiJTVFMuTlNybVVtQ1hwTUdEV3g4ZGlWNlpwaGdoQSIsIlBsYXlEb21haW4iOiJ2b2QuaHlwcGUuY2xvdWQiLCJBY2Nlc3NLZXlTZWNyZXQiOiIzU1NRUkdkOThGMU04TkZ0b00xa2NlU01IZlRLNkJvZm93VXlnS1Y5aEpQdyIsIlJlZ2lvbiI6ImFwLXNvdXRoZWFzdC01IiwiQ3VzdG9tZXJJZCI6NTQ1NDc1MzIwNTI4MDU0OX0=",
     // );
-
-    _playMode = ModeTypeAliPLayer.auth;
-    // await getAuth(data.music?.apsaraMusic ?? '');
     if (data.reportedStatus != 'BLURRED') {
-      _playMode = ModeTypeAliPLayer.auth;
-      await getAuth(data.music?.apsaraMusic ?? '');
+      if (data.isApsara ?? false) {
+        _playMode = ModeTypeAliPLayer.auth;
+        await getAuth(data.apsaraId ?? '');
+      } else {
+        _playMode = ModeTypeAliPLayer.url;
+        await getOldVideoUrl(data.postID ?? '');
+      }
     }
 
     setState(() {
@@ -317,18 +335,18 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     //   /// Specify whether to enable the cache feature.
     // };
     // fAliplayer?.setCacheConfig(map);
-    print("sedang prepare");
-    print("sedang prepare $isMute");
-    fAliplayer?.prepare();
-    if (isMute) {
-      fAliplayer?.setMuted(true);
+    if (data.reportedStatus == 'BLURRED') {
+    } else {
+      fAliplayer?.prepare();
     }
+
     // fAliplayer?.play();
   }
 
   Future getAuth(String apsaraId) async {
     setState(() {
       isloading = true;
+      _showLoading = true;
     });
     try {
       final notifier = PostsBloc();
@@ -385,6 +403,31 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     fAliplayer?.setPlayerView(viewId);
   }
 
+  _initAds(BuildContext context) async {
+    //for ads
+    // getCountVid();
+    // await _newInitAds(true);
+    context.incrementAdsCount();
+    if (context.getAdsCount() == null) {
+      context.setAdsCount(0);
+    } else {
+      final adsNotifier = context.read<PreviewDiaryNotifier>();
+      if (context.getAdsCount() == 2) {
+        try {
+          context.read<PreviewDiaryNotifier>().getAdsVideo(context, false);
+        } catch (e) {
+          'Failed to fetch ads data 0 : $e'.logger();
+        }
+      }
+      if (context.getAdsCount() == 3 && adsNotifier.adsData != null) {
+        fAliplayer?.pause();
+        System().adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(), adsNotifier.adsData?.data?.apsaraAuth ?? '', isInAppAds: false).whenComplete(() {
+          fAliplayer?.play();
+        });
+      }
+    }
+  }
+
   @override
   void didChangeDependencies() {
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
@@ -393,53 +436,44 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   @override
   void dispose() {
-    print("---=-=-=-=--===-=-=-=-DiSPOSE--=-=-=-=-=-=-=-=-=-=-=----==-=");
-
+    if (Platform.isIOS) {
+      FlutterAliplayer.enableMix(false);
+    }
+    fAliplayer?.stop();
+    // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
+    //   fAliplayer?.destroy();
+    // }
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
   void deactivate() {
-    print("====== deactivate ");
-    fAliplayer?.stop();
-    System().disposeBlock();
-    if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
-      fAliplayer?.destroy();
-    }
-    if (Platform.isIOS) {
-      FlutterAliplayer.enableMix(false);
-    }
+    print("====== deactivate dari diary");
+
     super.deactivate();
   }
 
   @override
   void didPop() {
-    print("====== didpop ");
+    print("====== didpop dari diary");
     super.didPop();
   }
 
   @override
   void didPopNext() {
-    print("======= didPopNext");
-    isInPage = true;
+    print("======= didPopNext dari diary");
     fAliplayer?.play();
+
     // System().disposeBlock();
+
     super.didPopNext();
   }
 
   @override
-  void didPush() {
-    print("========= didPush");
-    super.didPush();
-  }
-
-  @override
   void didPushNext() {
-    print("========= didPushNext");
+    print("========= didPushNext dari diary");
     fAliplayer?.pause();
-    System().disposeBlock();
-    isInPage = false;
     super.didPushNext();
   }
 
@@ -449,20 +483,18 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
     switch (state) {
       case AppLifecycleState.inactive:
-        print("========= inactive");
+        fAliplayer?.pause();
         break;
       case AppLifecycleState.resumed:
-        print("========= resumed");
-        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
+        if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
           fAliplayer?.play();
         }
         break;
       case AppLifecycleState.paused:
-        print("========= paused");
         fAliplayer?.pause();
         break;
       case AppLifecycleState.detached:
-        print("========= detached");
+        fAliplayer?.pause();
         break;
     }
   }
@@ -474,72 +506,97 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     SizeConfig().init(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
     AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
-    return Consumer2<PreviewPicNotifier, HomeNotifier>(
-      builder: (_, notifier, home, __) => Container(
-        width: SizeConfig.screenWidth,
-        height: SizeWidget.barHyppePic,
-        // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: notifier.itemCount == 0
-                  ? const NoResultFound()
-                  : NotificationListener<OverscrollIndicatorNotification>(
-                      onNotification: (overscroll) {
-                        overscroll.disallowIndicator();
-                        return false;
-                      },
-                      child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        controller: widget.scrollController,
-                        // scrollDirection: Axis.horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: false,
-                        itemCount: notifier.pic?.length,
-                        padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                        itemBuilder: (context, index) {
-                          if (notifier.pic == null || home.isLoadingPict) {
-                            fAliplayer?.pause();
-                            _lastCurIndex = -1;
-                            return CustomShimmer(
-                              width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                              height: 168,
-                              radius: 8,
-                              margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                            );
-                          } else if (index == notifier.pic?.length && notifier.hasNext) {
-                            return UnconstrainedBox(
-                              child: Container(
-                                alignment: Alignment.center,
-                                width: 80 * SizeConfig.scaleDiagonal,
-                                height: 80 * SizeConfig.scaleDiagonal,
-                                child: const CustomLoading(),
-                              ),
-                            );
-                          }
+    return Scaffold(
+      backgroundColor: kHyppeLightSurface,
+      body: WillPopScope(
+        onWillPop: () async {
+          Navigator.pop(context, '$_curIdx');
+          return false;
+        },
+        child: Consumer2<ScrollDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
+          return SafeArea(
+            child: SizedBox(
+              // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListTile(
+                    title: widget.arguments?.titleAppbar ?? Container(),
+                    leading: IconButton(
+                        icon: const Icon(
+                          Icons.chevron_left,
+                          color: kHyppeTextLightPrimary,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context, '$_curIdx');
+                        }),
+                  ),
+                  Expanded(
+                    child: notifier.diaryData?.isEmpty ?? [].isEmpty
+                        ? const NoResultFound()
+                        : NotificationListener<OverscrollIndicatorNotification>(
+                            onNotification: (overscroll) {
+                              overscroll.disallowIndicator();
+                              return false;
+                            },
+                            child: ScrollablePositionedList.builder(
+                              scrollDirection: Axis.vertical,
+                              itemScrollController: itemScrollController,
+                              itemPositionsListener: itemPositionsListener,
+                              scrollOffsetController: scrollOffsetController,
+                              // controller: notifier.scrollController,
+                              // scrollDirection: Axis.horizontal,
+                              // physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: false,
+                              itemCount: notifier.diaryData?.length ?? 0,
+                              padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                              itemBuilder: (context, index) {
+                                if (notifier.diaryData == null || home.isLoadingDiary) {
+                                  fAliplayer?.pause();
+                                  _lastCurIndex = -1;
+                                  return CustomShimmer(
+                                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                    height: 168,
+                                    radius: 8,
+                                    margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                  );
+                                } else if (index == notifier.diaryData?.length) {
+                                  return UnconstrainedBox(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      width: 80 * SizeConfig.scaleDiagonal,
+                                      height: 80 * SizeConfig.scaleDiagonal,
+                                      child: const CustomLoading(),
+                                    ),
+                                  );
+                                }
+                                if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                                  isPlay = false;
+                                  fAliplayer?.stop();
+                                }
 
-                          return itemPict(notifier, index);
-                        },
-                      ),
-                    ),
+                                return itemDiary(notifier, index);
+                              },
+                            ),
+                          ),
+                  ),
+                  home.isLoadingLoadmore
+                      ? const SizedBox(
+                          height: 50,
+                          child: Center(child: CustomLoading()),
+                        )
+                      : Container(),
+                ],
+              ),
             ),
-            home.isLoadingLoadmore
-                ? const SizedBox(
-                    height: 50,
-                    child: Center(child: CustomLoading()),
-                  )
-                : Container(),
-          ],
-        ),
+          );
+        }),
       ),
     );
   }
 
-  var initialControllerValue;
-
-  Widget itemPict(PreviewPicNotifier notifier, int index) {
+  Widget itemDiary(ScrollDiaryNotifier notifier, int index) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -550,30 +607,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Text("$_lastCurIndex"),
-          // Text("$_curIdx"),
-          // GestureDetector(
-          //   onScaleStart: (details) {
-          //     widget.functionZoomTriger();
-          //     print("***************** dua jari ***************");
-          //     print(details.pointerCount);
-          //   },
-          //   onScaleEnd: (details) {
-          //     print("***************** satu jari ***************");
-          //   },
-
-          //   child: Container(
-          //     width: 500,
-          //     height: 200,
-          //     color: Colors.red,
-          //   ),
-          // ),
-          // GestureDetector(
-          //   onTap: () {
-          //     Routing().move(Routes.testImage);
-          //   },
-          //   child: Text('hahahah'),
-          // ),
+          // SelectableText("isApsara : ${notifier.diaryData?[index].isApsara}"),
+          // SelectableText("post id : ${notifier.diaryData?[index].postID})"),
+          // sixteenPx,
+          // SelectableText((notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].mediaThumbEndPoint ?? "") : "${notifier.diaryData?[index].fullThumbPath}"),
+          // sixteenPx,
+          // SelectableText((notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].apsaraId ?? "") : "${UrlConstants.oldVideo + notifier.diaryData![index].postID!}"),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -586,30 +625,30 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   following: true,
                   haveStory: false,
                   textColor: kHyppeTextLightPrimary,
-                  username: notifier.pic?[index].username,
+                  username: notifier.diaryData?[index].username,
                   featureType: FeatureType.other,
-                  // isCelebrity: vidnotifier.pic?[index].privacy?.isCelebrity,
+                  // isCelebrity: vidnotifier.diaryData?[index].privacy?.isCelebrity,
                   isCelebrity: false,
-                  imageUrl: '${System().showUserPicture(notifier.pic?[index].avatar?.mediaEndpoint)}',
-                  onTapOnProfileImage: () => System().navigateToProfile(context, notifier.pic?[index].email ?? ''),
+                  imageUrl: '${System().showUserPicture(notifier.diaryData?[index].avatar?.mediaEndpoint)}',
+                  onTapOnProfileImage: () => System().navigateToProfile(context, notifier.diaryData?[index].email ?? ''),
                   createdAt: '2022-02-02',
-                  musicName: notifier.pic?[index].music?.musicTitle ?? '',
-                  location: notifier.pic?[index].location ?? '',
-                  isIdVerified: notifier.pic?[index].privacy?.isIdVerified,
+                  musicName: notifier.diaryData?[index].music?.musicTitle ?? '',
+                  location: notifier.diaryData?[index].location ?? '',
+                  isIdVerified: notifier.diaryData?[index].privacy?.isIdVerified,
                 ),
               ),
-              if (notifier.pic?[index].email != email && (notifier.pic?[index].isNewFollowing ?? false))
+              if (notifier.diaryData?[index].email != email && (notifier.diaryData?[index].isNewFollowing ?? false))
                 Consumer<PreviewPicNotifier>(
                   builder: (context, picNot, child) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: GestureDetector(
                       onTap: () {
-                        if (notifier.pic?[index].insight?.isloadingFollow != true) {
-                          picNot.followUser(context, notifier.pic?[index] ?? ContentData(),
-                              isUnFollow: notifier.pic?[index].following, isloading: notifier.pic?[index].insight!.isloadingFollow ?? false);
+                        if (notifier.diaryData?[index].insight?.isloadingFollow != true) {
+                          picNot.followUser(context, notifier.diaryData?[index] ?? ContentData(),
+                              isUnFollow: notifier.diaryData?[index].following, isloading: notifier.diaryData?[index].insight!.isloadingFollow ?? false);
                         }
                       },
-                      child: notifier.pic?[index].insight?.isloadingFollow ?? false
+                      child: notifier.diaryData?[index].insight?.isloadingFollow ?? false
                           ? Container(
                               height: 40,
                               width: 30,
@@ -619,7 +658,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               ),
                             )
                           : Text(
-                              (notifier.pic?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                              (notifier.diaryData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
                               style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
                             ),
                     ),
@@ -627,17 +666,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 ),
               GestureDetector(
                 onTap: () {
-                  // fAliplayer?.pause();
-                  if (notifier.pic?[index].email != email) {
-                    context.read<PreviewPicNotifier>().reportContent(context, notifier.pic?[index] ?? ContentData(), fAliplayer: fAliplayer);
+                  if (notifier.diaryData?[index].email != email) {
+                    // FlutterAliplayer? fAliplayer
+                    context.read<PreviewPicNotifier>().reportContent(context, notifier.diaryData?[index] ?? ContentData(), fAliplayer: fAliplayer);
                   } else {
                     fAliplayer?.pause();
                     ShowBottomSheet().onShowOptionContent(
                       context,
-                      contentData: notifier.pic?[index] ?? ContentData(),
-                      captionTitle: hyppePic,
+                      contentData: notifier.diaryData?[index] ?? ContentData(),
+                      captionTitle: hyppeDiary,
                       onDetail: false,
-                      isShare: notifier.pic?[index].isShared,
+                      isShare: notifier.diaryData?[index].isShared,
                       onUpdate: () => context.read<HomeNotifier>().onUpdate(),
                       fAliplayer: fAliplayer,
                     );
@@ -651,40 +690,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             ],
           ),
           tenPx,
-          // Stack(
-          //   children: [
-          //     Positioned.fill(
-          //       child: InteractiveViewer(
-          //         child: Image.network(
-          //           'https://flutterservice.com/wp-content/uploads/2022/10/3-1.jpg',
-          //           height: 300,
-          //           width: double.infinity,
-          //           fit: BoxFit.cover,
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
-
           VisibilityDetector(
             key: Key(index.toString()),
             onVisibilityChanged: (info) {
-              print("ada musiknya ${info.visibleFraction}");
               if (info.visibleFraction >= 0.6) {
                 _curIdx = index;
                 if (_lastCurIndex != _curIdx) {
-                  if (notifier.pic?[index].music != null) {
-                    print("ada musiknya ${notifier.pic?[index].music}");
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      start(notifier.pic?[index] ?? ContentData());
-                    });
-                  } else {
-                    fAliplayer?.stop();
-                  }
-                  Future.delayed(const Duration(milliseconds: 100), () {
-                    System().increaseViewCount2(context, notifier.pic?[index] ?? ContentData());
+                  Future.delayed(const Duration(milliseconds: 400), () {
+                    start(notifier.diaryData?[index] ?? ContentData());
+                    System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData());
                   });
-                  if (notifier.pic?[index].certified ?? false) {
+                  if (notifier.diaryData?[index].certified ?? false) {
                     System().block(context);
                   } else {
                     System().disposeBlock();
@@ -694,119 +710,87 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               }
             },
             child: Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              width: SizeConfig.screenWidth,
+              margin: EdgeInsets.only(bottom: 20),
+              width: MediaQuery.of(context).size.width,
+              height: 500,
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-                  color: Colors.white,
+                  // color: Colors.yellow,
                 ),
                 child: Stack(
                   children: [
-                    Center(
-                      child: CustomBaseCacheImage(
-                        memCacheWidth: 100,
-                        memCacheHeight: 100,
-                        widthPlaceHolder: 80,
-                        heightPlaceHolder: 80,
-                        imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
-                        imageBuilder: (context, imageProvider) => ClipRRect(
-                          borderRadius: BorderRadius.circular(20), // Image border
-                          child: notifier.pic?[index].reportedStatus == 'BLURRED'
-                              ? ImageFiltered(
-                                  imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                  child: Image(
-                                    image: imageProvider,
-                                    fit: BoxFit.fitHeight,
-                                    width: SizeConfig.screenWidth,
-                                  ),
-                                )
-                              : Image(
-                                  image: imageProvider,
-                                  fit: BoxFit.fitHeight,
-                                  width: SizeConfig.screenWidth,
-                                ),
-                        ),
-                        errorWidget: (context, url, error) {
-                          return Container(
-                            // const EdgeInsets.symmetric(horizontal: 4.5),
-                            // height: 500,
-                            decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
+                    _curIdx == index
+                        ? ClipRRect(
+                            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                            child: AliPlayerView(
+                              onCreated: onViewPlayerCreated,
+                              x: 0,
+                              y: 0,
+                              height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                              width: MediaQuery.of(context).size.width,
                             ),
-                          );
-                        },
-                        emptyWidget: Container(
-                          // const EdgeInsets.symmetric(horizontal: 4.5),
-
-                          // height: 500,
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                      ),
-                    ),
+                          )
+                        : Container(),
+                    // _buildProgressBar(SizeConfig.screenWidth!, 500),
                     Positioned.fill(
                       child: GestureDetector(
                         onTap: () {
-                          if (notifier.pic?[index].reportedStatus != 'BLURRED') {
-                            fAliplayer?.play();
-                            setState(() {
-                              isMute = !isMute;
-                            });
-                            fAliplayer?.setMuted(isMute);
-                          }
+                          fAliplayer?.play();
+                          setState(() {
+                            isMute = !isMute;
+                          });
+                          fAliplayer?.setMuted(isMute);
                         },
                         onDoubleTap: () {
                           final _likeNotifier = context.read<LikeNotifier>();
-                          if (notifier.pic?[index] != null) {
-                            _likeNotifier.likePost(context, notifier.pic![index]);
+                          if (notifier.diaryData?[index] != null) {
+                            _likeNotifier.likePost(context, notifier.diaryData![index]);
                           }
                         },
                         child: Container(
                           color: Colors.transparent,
                           width: SizeConfig.screenWidth,
                           height: SizeConfig.screenHeight,
-                          child: PinchZoom(
-                            onZoomStart: () {
-                              widget.functionZoomTriger();
-                            },
-                            onZoomEnd: () {
-                              widget.functionZoomTriger();
-                            },
-                            child: CustomBaseCacheImage(
-                              memCacheWidth: 100,
-                              memCacheHeight: 100,
-                              widthPlaceHolder: 80,
-                              heightPlaceHolder: 80,
-                              imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
-                              imageBuilder: (context, imageProvider) => ClipRRect(
-                                borderRadius: BorderRadius.circular(20), // Image border
-                                child: notifier.pic?[index].reportedStatus == 'BLURRED'
-                                    ? ImageFiltered(
-                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                        child: Image(
-                                          image: imageProvider,
-                                        ),
-                                      )
-                                    : Image(
-                                        image: imageProvider,
-                                        fit: BoxFit.fitHeight,
+                        ),
+                      ),
+                    ),
+                    dataSelected?.postID == notifier.diaryData?[index].postID && isPlay
+                        ? Container()
+                        : CustomBaseCacheImage(
+                            memCacheWidth: 100,
+                            memCacheHeight: 100,
+                            widthPlaceHolder: 80,
+                            heightPlaceHolder: 80,
+                            placeHolderWidget: Container(),
+                            imageUrl: (notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].mediaThumbEndPoint ?? "") : "${notifier.diaryData?[index].fullThumbPath}",
+                            imageBuilder: (context, imageProvider) => notifier.diaryData?[index].reportedStatus == 'BLURRED'
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(20), // Image border
+                                    child: ImageFiltered(
+                                      imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                      child: Image(
                                         width: SizeConfig.screenWidth,
+                                        image: imageProvider,
                                       ),
-                              ),
-                              emptyWidget: Container(
+                                    ),
+                                  )
+                                : Container(
+                                    // const EdgeInsets.symmetric(horizontal: 4.5),
+                                    width: SizeConfig.screenWidth,
+                                    height: 500,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      borderRadius: BorderRadius.circular(16.0),
+                                    ),
+                                  ),
+                            errorWidget: (context, url, error) {
+                              return Container(
                                 // const EdgeInsets.symmetric(horizontal: 4.5),
-
-                                // height: 500,
+                                height: 500,
                                 decoration: BoxDecoration(
                                   image: const DecorationImage(
                                     image: AssetImage('${AssetPath.pngPath}content-error.png'),
@@ -814,30 +798,46 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   ),
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
+                              );
+                            },
+                            emptyWidget: Container(
+                              // const EdgeInsets.symmetric(horizontal: 4.5),
+
+                              height: 500,
+                              decoration: BoxDecoration(
+                                image: const DecorationImage(
+                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                    _buildBody(context, SizeConfig.screenWidth, notifier.pic?[index] ?? ContentData()),
-                    blurContentWidget(context, notifier.pic?[index] ?? ContentData()),
+                    _showLoading
+                        ? Positioned.fill(
+                            child: Align(
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator(),
+                          ))
+                        : Container(),
+                    _buildBody(context, SizeConfig.screenWidth, notifier.diaryData?[index] ?? ContentData()),
+                    blurContentWidget(context, notifier.diaryData?[index] ?? ContentData()),
                   ],
                 ),
               ),
             ),
           ),
           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                  (notifier.pic?[index].boosted.isEmpty ?? [].isEmpty) &&
-                  (notifier.pic?[index].reportedStatus != 'OWNED' && notifier.pic?[index].reportedStatus != 'BLURRED' && notifier.pic?[index].reportedStatus2 != 'BLURRED') &&
-                  notifier.pic?[index].email == email
+                  (notifier.diaryData?[index].boosted.isEmpty ?? [].isEmpty) &&
+                  (notifier.diaryData?[index].reportedStatus != 'OWNED' && notifier.diaryData?[index].reportedStatus != 'BLURRED' && notifier.diaryData?[index].reportedStatus2 != 'BLURRED') &&
+                  notifier.diaryData?[index].email == email
               ? Container(
                   width: MediaQuery.of(context).size.width * 0.8,
                   margin: const EdgeInsets.only(bottom: 16),
                   child: ButtonBoost(
                     onDetail: false,
                     marginBool: true,
-                    contentData: notifier.pic?[index],
+                    contentData: notifier.diaryData?[index],
                     startState: () {
                       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                     },
@@ -847,7 +847,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   ),
                 )
               : Container(),
-          if (notifier.pic?[index].email == email && (notifier.pic?[index].boostCount ?? 0) >= 0 && (notifier.pic?[index].boosted.isNotEmpty ?? [].isEmpty))
+          if (notifier.diaryData?[index].email == email && (notifier.diaryData?[index].boostCount ?? 0) >= 0 && (notifier.diaryData?[index].boosted.isNotEmpty ?? [].isEmpty))
             Container(
               padding: const EdgeInsets.all(10),
               margin: EdgeInsets.only(bottom: 10),
@@ -866,9 +866,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 13),
-                    child: CustomTextWidget(
-                      textToDisplay: "${notifier.pic?[index].boostJangkauan ?? '0'} ${lang?.reach}",
-                      textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                    child: Text(
+                      "${notifier.diaryData?[index].boostJangkauan ?? '0'} ${lang?.reach}",
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
                     ),
                   )
                 ],
@@ -882,39 +882,41 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   children: [
                     SizedBox(
                       width: 30,
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: notifier.pic?[index].insight?.isloading ?? false
-                            ? const SizedBox(
-                                height: 28,
-                                width: 28,
-                                child: CircularProgressIndicator(
-                                  color: kHyppePrimary,
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : InkWell(
-                                child: CustomIconWidget(
-                                  defaultColor: false,
-                                  color: (notifier.pic?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                  iconData: '${AssetPath.vectorPath}${(notifier.pic?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                      child: Consumer<LikeNotifier>(
+                        builder: (context, likeNotifier, child) => Align(
+                          alignment: Alignment.bottomRight,
+                          child: notifier.diaryData?[index].insight?.isloading ?? false
+                              ? const SizedBox(
                                   height: 28,
+                                  width: 28,
+                                  child: CircularProgressIndicator(
+                                    color: kHyppePrimary,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : InkWell(
+                                  child: CustomIconWidget(
+                                    defaultColor: false,
+                                    color: (notifier.diaryData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                                    iconData: '${AssetPath.vectorPath}${(notifier.diaryData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                    height: 28,
+                                  ),
+                                  onTap: () {
+                                    if (notifier.diaryData?[index] != null) {
+                                      likeNotifier.likePost(context, notifier.diaryData![index]);
+                                    }
+                                  },
                                 ),
-                                onTap: () {
-                                  if (notifier.pic?[index] != null) {
-                                    likeNotifier.likePost(context, notifier.pic![index]);
-                                  }
-                                },
-                              ),
+                        ),
                       ),
                     ),
-                    if (notifier.pic?[index].allowComments ?? true)
+                    if (notifier.diaryData?[index].allowComments ?? true)
                       Padding(
-                        padding: EdgeInsets.only(left: 21.0),
+                        padding: const EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
                           onTap: () {
-                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: notifier.pic?[index].postID ?? '', fromFront: true, data: notifier.pic?[index] ?? ContentData()));
-                            // ShowBottomSheet.onShowCommentV2(context, postID: notifier.pic?[index].postID);
+                            Routing().move(Routes.commentsDetail,
+                                argument: CommentsArgument(postID: notifier.diaryData?[index].postID ?? '', fromFront: true, data: notifier.diaryData?[index] ?? ContentData()));
                           },
                           child: const CustomIconWidget(
                             defaultColor: false,
@@ -924,13 +926,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           ),
                         ),
                       ),
-                    if ((notifier.pic?[index].isShared ?? false))
-                      GestureDetector(
-                        onTap: () {
-                          context.read<PicDetailNotifier>().createdDynamicLink(context, data: notifier.pic?[index]);
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.only(left: 21.0),
+                    if ((notifier.diaryData?[index].isShared ?? false))
+                      Padding(
+                        padding: EdgeInsets.only(left: 21.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            context.read<DiariesPlaylistNotifier>().createdDynamicLink(context, data: notifier.diaryData?[index]);
+                          },
                           child: CustomIconWidget(
                             defaultColor: false,
                             color: kHyppeTextLightPrimary,
@@ -939,12 +941,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           ),
                         ),
                       ),
-                    if ((notifier.pic?[index].saleAmount ?? 0) > 0 && email != notifier.pic?[index].email)
+                    if ((notifier.diaryData?[index].saleAmount ?? 0) > 0 && email != notifier.diaryData?[index].email)
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
                             fAliplayer?.pause();
-                            await ShowBottomSheet.onBuyContent(context, data: notifier.pic?[index], fAliplayer: fAliplayer);
+                            await ShowBottomSheet.onBuyContent(context, data: notifier.diaryData?[index], fAliplayer: fAliplayer);
+                            // fAliplayer?.play();
                           },
                           child: const Align(
                             alignment: Alignment.centerRight,
@@ -961,56 +964,55 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 ),
                 twelvePx,
                 Text(
-                  "${notifier.pic?[index].insight?.likes}  ${notifier.language.like}",
+                  "${notifier.diaryData?[index].insight?.likes}  ${lang?.like}",
                   style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                 ),
               ],
             ),
           ),
-          fourPx,
+          twelvePx,
           CustomNewDescContent(
             // desc: "${data?.description}",
-            username: notifier.pic?[index].username ?? '',
-            desc: "${notifier.pic?[index].description}",
-            trimLines: 3,
+            username: notifier.diaryData?[index].username ?? '',
+            desc: "${notifier.diaryData?[index].description}",
+            trimLines: 2,
             textAlign: TextAlign.start,
             seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
             seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
             normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary, fontSize: 12),
+            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
             expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
-          if (notifier.pic?[index].allowComments ?? true)
-            GestureDetector(
-              onTap: () {
-                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: notifier.pic?[index].postID ?? '', fromFront: true, data: notifier.pic?[index] ?? ContentData()));
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Text(
-                  "${lang?.seeAll} ${notifier.pic?[index].comments} ${lang?.comment}",
-                  style: const TextStyle(fontSize: 12, color: kHyppeBurem),
-                ),
+          GestureDetector(
+            onTap: () {
+              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: notifier.diaryData?[index].postID ?? '', fromFront: true, data: notifier.diaryData?[index] ?? ContentData()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Text(
+                "${lang?.seeAll} ${notifier.diaryData?[index].comments} ${lang?.comment}",
+                style: const TextStyle(fontSize: 12, color: kHyppeBurem),
               ),
             ),
-          (notifier.pic?[index].comment?.length ?? 0) > 0
+          ),
+          (notifier.diaryData?[index].comment?.length ?? 0) > 0
               ? Padding(
                   padding: const EdgeInsets.only(top: 0.0),
                   child: ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: (notifier.pic?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
+                    itemCount: (notifier.diaryData?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
                     itemBuilder: (context, indexComment) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 6.0),
                         child: CustomNewDescContent(
-                          // desc: "${notifier.pic?[index]?.description}",
-                          username: notifier.pic?[index].comment?[indexComment].userComment?.username ?? '',
-                          desc: notifier.pic?[index].comment?[indexComment].txtMessages ?? '',
+                          // desc: "${notifier.diaryData?[index]?.description}",
+                          username: notifier.diaryData?[index].comment?[indexComment].userComment?.username ?? '',
+                          desc: notifier.diaryData?[index].comment?[indexComment].txtMessages ?? '',
                           trimLines: 2,
                           textAlign: TextAlign.start,
-                          seeLess: ' seeLess', // ${notifier2.translate.seeLess}',
-                          seeMore: '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
+                          seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                          seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
                           normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
                           hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                           expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
@@ -1024,7 +1026,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             padding: EdgeInsets.symmetric(vertical: 4.0),
             child: Text(
               "${System().readTimestamp(
-                DateTime.parse(System().dateTimeRemoveT(notifier.pic?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                DateTime.parse(System().dateTimeRemoveT(notifier.diaryData?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
                 context,
                 fullCaption: true,
               )}",
@@ -1034,6 +1036,32 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         ],
       ),
     );
+  }
+
+  _buildProgressBar(double width, double height) {
+    if (_showLoading) {
+      return Positioned(
+        left: width / 2 - 20,
+        top: height / 2 - 20,
+        child: Column(
+          children: [
+            const CircularProgressIndicator(
+              backgroundColor: Colors.white,
+              strokeWidth: 3.0,
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            Text(
+              "$_loadingPercent%",
+              style: const TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return const SizedBox();
+    }
   }
 
   Widget _buildBody(BuildContext context, width, ContentData data) {
@@ -1059,26 +1087,25 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 ),
               ),
             ),
-          if (data.music != null)
-            Align(
-              alignment: Alignment.bottomRight,
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isMute = !isMute;
-                  });
-                  fAliplayer?.setMuted(isMute);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: CustomIconWidget(
-                    iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
-                    defaultColor: false,
-                    height: 24,
-                  ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  isMute = !isMute;
+                });
+                fAliplayer?.setMuted(isMute);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: CustomIconWidget(
+                  iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                  defaultColor: false,
+                  height: 24,
                 ),
               ),
             ),
+          ),
         ],
       ),
     );
@@ -1102,7 +1129,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         height: 30,
                       ),
                       Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                      Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
+                      Text("HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
@@ -1121,8 +1148,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          System().increaseViewCount2(context, data);
-                          context.read<ReportNotifier>().seeContent(context, data, hyppePic);
+                          data.reportedStatus = '';
+                          start(data);
+                          context.read<ReportNotifier>().seeContent(context, data, hyppeDiary);
+                          fAliplayer?.prepare();
+                          fAliplayer?.play();
                         },
                         child: Container(
                           padding: const EdgeInsets.only(top: 8),
@@ -1137,7 +1167,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             ),
                           ),
                           child: Text(
-                            "${transnot.translate.see} HyppePic",
+                            "${transnot.translate.see} HyppeDiary",
                             style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           ),
