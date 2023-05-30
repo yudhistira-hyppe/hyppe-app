@@ -110,13 +110,14 @@ class _ProfilePicState extends State<ProfilePic> with WidgetsBindingObserver, Ti
   /// Listener that reports the position of items when the list is scrolled.
   final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
 
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPic');
-    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+    final notifier = Provider.of<ProfilePicNotifier>(context, listen: false);
     lang = context.read<TranslateNotifierV2>().translate;
 
-    notifier.scrollController.addListener(() => notifier.scrollListener(context));
     email = SharedPreference().readStorage(SpKeys.email);
     // statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     // stopwatch = new Stopwatch()..start();
@@ -138,6 +139,19 @@ class _ProfilePicState extends State<ProfilePic> with WidgetsBindingObserver, Ti
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
       itemScrollController.jumpTo(index: widget.arguments!.page!);
       _initListener();
+    });
+    var index = 0;
+    var lastIndex = 0;
+
+    itemPositionsListener.itemPositions.addListener(() {
+      index = itemPositionsListener.itemPositions.value.first.index;
+      if (lastIndex != index) {
+        if (index == notifier.pics!.length - 2) {
+          print("ini reload harusnya");
+          notifier.loadMore(context, _scrollController);
+        }
+      }
+      lastIndex = index;
     });
 
     super.initState();
@@ -511,7 +525,7 @@ class _ProfilePicState extends State<ProfilePic> with WidgetsBindingObserver, Ti
                       color: kHyppeTextLightPrimary,
                     ),
                     onPressed: () {
-                      Routing().moveBack();
+                      Navigator.pop(context, '$_curIdx');
                     }),
               ),
               Expanded(

@@ -7,6 +7,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
+import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
@@ -23,18 +24,20 @@ import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+import 'package:measured_size/measured_size.dart';
 
 class SelfProfileScreen extends StatefulWidget {
   final GeneralArgument? arguments;
   const SelfProfileScreen({super.key, this.arguments});
 
   @override
-  _SelfProfileScreenState createState() => _SelfProfileScreenState();
+  State<SelfProfileScreen> createState() => _SelfProfileScreenState();
 }
 
 class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, AfterFirstLayoutMixin {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
+  int heightProfileCard = 0;
 
   @override
   void initState() {
@@ -43,6 +46,7 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
     final notifier = context.read<SelfProfileNotifier>();
     notifier.setPageIndex(0);
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
+
     // ShowGeneralDialog.adsRewardPop(context);
     super.initState();
   }
@@ -55,9 +59,36 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
   }
 
   @override
+  void didChangeDependencies() {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    super.didChangeDependencies();
+  }
+
+  @override
   void didPopNext() {
     System().disposeBlock();
+    final notifier = context.read<SelfProfileNotifier>();
+    Future.delayed(Duration(milliseconds: 500), () {
+      var jumpTo = heightProfileCard + notifier.heightIndex;
+      print("jumpt ====== ${jumpTo}");
+      print("jumpt ====== ${heightProfileCard}");
+      print("jumpt ====== ${notifier.heightIndex}");
+      _scrollController.jumpTo(jumpTo.toDouble());
+    });
+
     super.didPopNext();
+  }
+
+  @override
+  void didPop() {
+    print("==========pop===========");
+    super.didPop();
+  }
+
+  @override
+  void didPushNext() {
+    print("========= didPushNext prfile =====");
+    super.didPushNext();
   }
 
   @override
@@ -186,7 +217,14 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
                 //           : BothProfileTopShimmer()),
                 // ),
                 SliverToBoxAdapter(
-                  child: Container(child: notifier.user.profile != null ? const SelfProfileTop() : BothProfileTopShimmer()),
+                  child: Container(
+                      child: notifier.user.profile != null
+                          ? MeasuredSize(
+                              onChange: (Size size) {
+                                heightProfileCard = size.height.toInt();
+                              },
+                              child: SelfProfileTop())
+                          : BothProfileTopShimmer()),
                 ),
 
                 SliverAppBar(

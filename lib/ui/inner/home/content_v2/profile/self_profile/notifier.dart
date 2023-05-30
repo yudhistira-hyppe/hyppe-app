@@ -78,6 +78,16 @@ class SelfProfileNotifier with ChangeNotifier {
   bool _scollLoading = false;
   bool get scollLoading => _scollLoading;
 
+  int _heightBox = 0;
+  int get heightBox => _heightBox;
+
+  int heightIndex = 0;
+
+  set heightBox(val) {
+    _heightBox = val;
+    notifyListeners();
+  }
+
   set user(UserInfoModel val) {
     _user = val;
     notifyListeners();
@@ -147,8 +157,8 @@ class SelfProfileNotifier with ChangeNotifier {
 
   navigateToEditProfile() => Routing().move(Routes.accountPreferences).whenComplete(() => notifyListeners());
 
-  onScrollListener(BuildContext context, ScrollController scrollController) async {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+  onScrollListener(BuildContext context, ScrollController scrollController, {bool isLoad = false}) async {
+    if (isLoad || (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange)) {
       switch (pageIndex) {
         case 0:
           {
@@ -330,9 +340,18 @@ class SelfProfileNotifier with ChangeNotifier {
     final connect = await _system.checkConnections();
     if (connect) {
       if (pageIndex == 0) {
-        _routing.move(Routes.profilePic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine));
+        var result = await _routing.move(Routes.profilePic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine));
         // _routing.move(Routes.picSlideDetailPreview,
         //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
+        print("================= result $result");
+        var indexHei = int.parse(result) + 1;
+        var hasilBagi = indexHei / 3;
+        heightIndex = 1;
+        if (hasilBagi % 3 != 0) {
+        } else {
+          hasilBagi += 1;
+        }
+        heightIndex = heightBox * hasilBagi.toInt();
       }
       if (pageIndex == 1) {
         _routing.move(Routes.diaryDetail,
