@@ -1,7 +1,5 @@
 // ignore: unused_import
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:hyppe/ui/constant/widget/custom_hovered_button.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/outer/welcome_login/notifier.dart';

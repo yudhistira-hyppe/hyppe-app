@@ -1,5 +1,4 @@
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 

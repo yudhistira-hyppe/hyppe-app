@@ -10,7 +10,6 @@ import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ux/routing.dart';
 
 class TransactionBloc {
   final _repos = Repos();
@@ -177,7 +176,7 @@ class TransactionBloc {
   }
 
   Future sendVerificationPin(BuildContext context, {required Map? params}) async {
-    var type = FeatureType.other;
+    // var type = FeatureType.other;
     setTransactionFetch(TransactionFetch(TransactionState.loading));
 
     await _repos.reposPost(

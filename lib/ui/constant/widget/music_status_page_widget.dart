@@ -6,9 +6,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:marquee/marquee.dart';
-import 'package:provider/provider.dart';
 
 import '../../../app.dart';
 import '../../../core/constants/asset_path.dart';

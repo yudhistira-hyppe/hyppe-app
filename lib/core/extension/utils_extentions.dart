@@ -39,7 +39,7 @@ extension ContextScreen on BuildContext {
     try {
       int _countAds = SharedPreference().readStorage(SpKeys.countAds);
       print('================== success get count $_countAds');
-      if (_countAds == null) {
+      if (_countAds == 0) {
         SharedPreference().writeStorage(SpKeys.countAds, 0);
         return 0;
       } else {
@@ -155,6 +155,7 @@ extension StringDefine on String {
       return bytes;
     }catch(e){
       'Error getThumbBlob: $e'.logger();
+      return null;
     }
   }
 

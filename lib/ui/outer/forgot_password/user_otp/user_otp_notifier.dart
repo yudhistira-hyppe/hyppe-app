@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:hyppe/core/bloc/device/bloc.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
 import 'package:hyppe/core/services/fcm_service.dart';

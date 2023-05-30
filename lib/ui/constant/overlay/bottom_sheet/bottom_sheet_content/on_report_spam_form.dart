@@ -5,7 +5,6 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -31,8 +30,8 @@ class OnReportSpamFormBottomSheet extends StatefulWidget {
 
 class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomSheet> {
   Map<String, int> report = {};
-  int _currentReport = 1;
-  static final _routing = Routing();
+  // int _currentReport = 1;
+  // static final _routing = Routing();
   BuildContext? scaffoldContext;
 
   @override

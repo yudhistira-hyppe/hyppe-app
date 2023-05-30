@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/device/state.dart';
-import 'package:hyppe/core/constants/hyppe_version.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import 'package:hyppe/core/bloc/device/bloc.dart';

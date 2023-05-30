@@ -4,8 +4,6 @@ import 'package:hyppe/core/bloc/search_content/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/status_code.dart';
-import 'package:hyppe/core/constants/shared_preference_keys.dart';
-import 'package:hyppe/core/services/shared_preference.dart';
 
 import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -16,7 +14,7 @@ class SearchContentBloc {
   setSearchContentFetch(SearchContentFetch val) => _searchContentFetch = val;
 
   Future getSearchContent(BuildContext context, param, {TypeApiSearch type = TypeApiSearch.normal}) async {
-    String email = SharedPreference().readStorage(SpKeys.email);
+    // String email = SharedPreference().readStorage(SpKeys.email);
     final isNormal = type == TypeApiSearch.normal;
     print('_hitApiGetSearchData#2 ${System().getCurrentDate()}');
     await Repos().reposPost(

@@ -32,8 +32,8 @@ class OnReportAccountBottomSheet extends StatefulWidget {
 
 class _OnReportAccountBottomSheetState extends State<OnReportAccountBottomSheet> {
   Map<String, int> report = {};
-  int _currentReport = 1;
-  static final _routing = Routing();
+  // int _currentReport = 1;
+  // static final _routing = Routing();
   BuildContext? scaffoldContext;
 
   @override

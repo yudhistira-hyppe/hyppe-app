@@ -28,6 +28,7 @@ class DatabaseHelper {
       return _db;
     } else {
       _db = await initDb();
+      return _db;
     }
   }
 
@@ -60,8 +61,8 @@ class DatabaseHelper {
   }
 
   Future _createDB(Database db, int version) async {
-    const idType = 'INTEGER PRIMARY KEY AUTOINCREAMENT';
-    const textType = 'TEXT NOT NULL';
+    // const idType = 'INTEGER PRIMARY KEY AUTOINCREAMENT';
+    // const textType = 'TEXT NOT NULL';
     print('ini test database');
 
     try {

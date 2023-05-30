@@ -12,9 +12,7 @@ import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
-import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
-import 'package:provider/provider.dart';
 
 class PostsBloc {
   final _repos = Repos();

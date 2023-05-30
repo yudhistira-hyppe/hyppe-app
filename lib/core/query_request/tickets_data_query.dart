@@ -67,7 +67,6 @@ class TicketsDataQuery extends PaginationQueryInterface{
   }
 
 
-  @override
   Future<List<AppealModel>> loadReportNext(BuildContext context) async {
     List<AppealModel>? res;
 
@@ -92,7 +91,6 @@ class TicketsDataQuery extends PaginationQueryInterface{
     return res ?? [];
   }
 
-  @override
   Future<List<AppealModel>> reloadReport(BuildContext context) async {
     List<AppealModel>? res;
 

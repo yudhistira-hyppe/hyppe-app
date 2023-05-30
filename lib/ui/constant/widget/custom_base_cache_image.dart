@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:optimized_cached_image/optimized_cached_image.dart';
 

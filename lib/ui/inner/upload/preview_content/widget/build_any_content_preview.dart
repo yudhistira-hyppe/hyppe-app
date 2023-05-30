@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/preview_image_content.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';

@@ -1,7 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:hyppe/core/constants/shared_preference_keys.dart';
-import 'package:hyppe/core/services/shared_preference.dart';
-
 class UserProfileAvatarModel {
   String? createdAt;
 

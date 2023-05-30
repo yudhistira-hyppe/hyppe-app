@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
 import 'package:hyppe/core/arguments/progress_upload_argument.dart';

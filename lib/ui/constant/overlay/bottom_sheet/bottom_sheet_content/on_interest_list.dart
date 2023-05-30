@@ -29,7 +29,6 @@ class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
   var privacy = [];
   TextEditingController controller = TextEditingController();
   BuildContext? scaffoldContext;
-  var _notifier;
 
   @override
   void initState() {

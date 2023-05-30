@@ -1,7 +1,6 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/models/collection/notification_v2/notification.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/services/system.dart';
 
 extension CustomDateTimeExtentision on DateTime {
   bool get isFirstMonth => month == DateTime.january;

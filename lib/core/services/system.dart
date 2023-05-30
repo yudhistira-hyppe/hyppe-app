@@ -733,7 +733,7 @@ class System {
     Uint8List imageBytes = await image.readAsBytes();
     Map<String, IfdTag> exifData = await readExifFromBytes(imageBytes);
 
-    if (exifData != null && exifData.isNotEmpty && exifData.containsKey("Image Orientation")) {
+    if (exifData.isNotEmpty && exifData.containsKey("Image Orientation")) {
       IfdTag orientation = exifData["Image Orientation"]!;
       int orientationValue = orientation.tag;
 
@@ -1503,7 +1503,7 @@ class System {
 
   ///格式化毫秒数为 xx:xx:xx这样的时间格式。
   static String getTimeformatByMs(int ms) {
-    if (ms == null) {
+    if (ms == 0) {
       return "00:00";
     }
     int seconds = (ms / 1000).round();

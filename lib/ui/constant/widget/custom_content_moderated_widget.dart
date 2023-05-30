@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'dart:ui';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';

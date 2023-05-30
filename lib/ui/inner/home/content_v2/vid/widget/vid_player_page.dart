@@ -327,18 +327,28 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           _showLoading = false;
         }
         try{
-          setState(() {
+          if(mounted){
+            setState(() {
+              _loadingPercent = percent;
+            });
+          }else{
             _loadingPercent = percent;
-          });
+          }
+
         }catch(e){
           print('error loadingProgress: $e');
         }
 
       }, loadingEnd: (playerId) {
         try{
-          setState(() {
+          if(mounted){
+            setState(() {
+              _showLoading = false;
+            });
+          }else{
             _showLoading = false;
-          });
+          }
+
         }catch(e){
           print('error loadingEnd: $e');
         }
@@ -354,9 +364,14 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           }
           if (!_inSeek) {
             try{
-              setState(() {
+              if(mounted){
+                setState(() {
+                  _currentPositionText = extraValue ?? 0;
+                });
+              }else{
                 _currentPositionText = extraValue ?? 0;
-              });
+              }
+
             }catch(e){
               print('error setOnInfo: $e');
             }

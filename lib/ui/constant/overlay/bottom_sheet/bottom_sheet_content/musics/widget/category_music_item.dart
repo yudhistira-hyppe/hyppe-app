@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../../../../../../../core/constants/asset_path.dart';
 import '../../../../../../../core/constants/enum.dart';
-import '../../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../../core/models/collection/music/music_type.dart';
 import '../../../../../../inner/upload/preview_content/notifier.dart';
 import '../../../../../widget/custom_icon_widget.dart';

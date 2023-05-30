@@ -4,7 +4,6 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musi
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../../core/models/collection/music/music_type.dart';
 import '../../../../../../inner/upload/preview_content/notifier.dart';
 import '../../../../../widget/custom_text_button.dart';

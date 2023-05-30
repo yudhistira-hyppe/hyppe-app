@@ -1,12 +1,10 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
-import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../inner/upload/preview_content/notifier.dart';
-import '../../../../../widget/custom_text_widget.dart';
 import '../../../../../widget/no_result_found.dart';
 import 'music_item.dart';
 

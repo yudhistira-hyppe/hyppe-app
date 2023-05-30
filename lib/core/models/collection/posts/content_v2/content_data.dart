@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
-import 'package:hyppe/app.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';

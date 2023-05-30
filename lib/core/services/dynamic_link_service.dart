@@ -83,7 +83,7 @@ class DynamicLinkService {
       _pendingDynamicLinkData ??= data;
       _sharedPrefs.writeStorage(SpKeys.referralFrom, _pendingDynamicLinkData?.link.queryParameters['sender_email']);
       final _userToken = _sharedPrefs.readStorage(SpKeys.userToken);
-      final email = _sharedPrefs.readStorage(SpKeys.email);
+      // final email = _sharedPrefs.readStorage(SpKeys.email);
       if (_userToken != null) {
         // Auto follow user if app is install from a dynamic link
 

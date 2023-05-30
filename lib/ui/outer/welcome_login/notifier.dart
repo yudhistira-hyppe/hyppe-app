@@ -28,7 +28,6 @@ import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -39,7 +38,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   final _googleSignInService = GoogleSignInService();
   final signOutGoogle = GoogleSignInService();
   LocalizationModelV2 language = LocalizationModelV2();
-  late PermissionStatus _permissionGranted;
+  // late PermissionStatus _permissionGranted;
   translate(LocalizationModelV2 translate) {
     language = translate;
     notifyListeners();

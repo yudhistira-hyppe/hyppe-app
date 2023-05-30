@@ -12,7 +12,6 @@ import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/query_request/users_data_query.dart';
 
 import 'package:hyppe/core/models/collection/follow/interactive_follow.dart';
-import 'package:hyppe/core/services/system.dart';
 
 class FollowerNotifier extends ChangeNotifier {
   final UsersDataQuery _usersFollowersQuery = UsersDataQuery()
