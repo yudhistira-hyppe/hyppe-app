@@ -182,7 +182,6 @@ class HomeNotifier with ChangeNotifier {
     rp.inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
 
-
     if (isConnected) {
       if (!mounted) return;
       final profile = Provider.of<MainNotifier>(context, listen: false);

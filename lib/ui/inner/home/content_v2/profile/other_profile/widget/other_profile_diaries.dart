@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
@@ -12,6 +13,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/sensi
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
+import 'package:measured_size/measured_size.dart';
 
 import '../../../../../../constant/widget/custom_loading.dart';
 
@@ -24,20 +26,35 @@ class OtherProfileDiaries extends StatelessWidget {
     return Selector<OtherProfileNotifier, Tuple3<UserInfoModel?, int, bool>>(
       selector: (_, select) => Tuple3(select.user, select.diaryCount, select.diaryHasNext),
       builder: (_, notifier, __) => notifier.item1 != null
-          ? SliverGrid(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  try {
-                    if (index == notifier.item1?.diaries?.length) {
-                      return Container();
-                    } else if (index == (notifier.item1?.diaries?.length ?? 0) + 1 && notifier.item3) {
-                      return const Padding(
-                        padding: EdgeInsets.only(left: 40.0, right: 30.0, bottom: 40.0),
-                        child: CustomLoading(size: 4),
-                      );
-                    }
-                    return GestureDetector(
-                      onTap: () => context.read<OtherProfileNotifier>().navigateToSeeAllScreen(context, index),
+          ? SliverGrid.count(
+              crossAxisSpacing: 0,
+              mainAxisSpacing: 0,
+              crossAxisCount: 3,
+              childAspectRatio: 0.67,
+              children: List.generate(notifier.item1?.diaries?.length ?? 0, (index) {
+                try {
+                  if (index == notifier.item1?.diaries?.length) {
+                    return Container();
+                  } else if (index == (notifier.item1?.diaries?.length ?? 0) + 1 && notifier.item3) {
+                    return const Padding(
+                      padding: EdgeInsets.only(left: 40.0, right: 30.0, bottom: 40.0),
+                      child: CustomLoading(size: 4),
+                    );
+                  }
+                  return GestureDetector(
+                    onTap: () => context.read<OtherProfileNotifier>().navigateToSeeAllScreen(context, index,
+                        title: const Text(
+                          "Diary",
+                          style: TextStyle(color: kHyppeTextLightPrimary),
+                        )),
+                    child: MeasuredSize(
+                      onChange: (size) {
+                        if (index == 0) {
+                          print("------height ${size.height}");
+                          final op = context.read<OtherProfileNotifier>();
+                          op.heightBox = size.height.toInt();
+                        }
+                      },
                       child: Padding(
                         padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
                         child: notifier.item1?.diaries?[index].reportedStatus == 'BLURRED'
@@ -51,9 +68,10 @@ class OtherProfileDiaries extends StatelessWidget {
                                       featureType: FeatureType.diary,
                                       isSafe: true, //notifier.postData.data.listDiary[index].isSafe,
                                       isSale: false,
-                                      thumbnail: ImageUrl(notifier.item1?.diaries?[index].postID, url: (notifier.item1?.diaries?[index].isApsara ?? false)
-                                          ? (notifier.item1?.diaries?[index].mediaThumbEndPoint ?? '')
-                                          : System().showUserPicture(notifier.item1?.diaries?[index].mediaThumbEndPoint) ?? ''),
+                                      thumbnail: ImageUrl(notifier.item1?.diaries?[index].postID,
+                                          url: (notifier.item1?.diaries?[index].isApsara ?? false)
+                                              ? (notifier.item1?.diaries?[index].mediaThumbEndPoint ?? '')
+                                              : System().showUserPicture(notifier.item1?.diaries?[index].mediaThumbEndPoint) ?? ''),
                                     ),
                                   ),
                                   (notifier.item1?.diaries?[index].saleAmount ?? 0) > 0
@@ -87,21 +105,24 @@ class OtherProfileDiaries extends StatelessWidget {
                                 ],
                               ),
                       ),
-                    );
-                  } catch (e) {
-                    print('[DevError] => ${e.toString()}');
-                    return Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.fill),
-                      ),
-                    );
-                  }
-                },
-                childCount: notifier.item2,
-              ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                    ),
+                  );
+                } catch (e) {
+                  print('[DevError] => ${e.toString()}');
+                  return Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.fill),
+                    ),
+                  );
+                }
+              }),
+              // delegate: SliverChildBuilderDelegate(
+              //   (BuildContext context, int index) {},
+              //   childCount: notifier.item2,
+              // ),
+              // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
             )
           : BothProfileContentShimmer(),
     );

@@ -31,12 +31,12 @@ class SelfProfileScreen extends StatefulWidget {
   const SelfProfileScreen({super.key, this.arguments});
 
   @override
-  State<SelfProfileScreen> createState() => _SelfProfileScreenState();
+  State<SelfProfileScreen> createState() => SelfProfileScreenState();
 }
 
-class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, AfterFirstLayoutMixin {
-  final ScrollController _scrollController = ScrollController();
-  final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
+class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, AfterFirstLayoutMixin {
+  ScrollController _scrollController = ScrollController();
+  final GlobalKey<NestedScrollViewState> _globalKey = GlobalKey<NestedScrollViewState>();
   int heightProfileCard = 0;
 
   @override
@@ -48,6 +48,11 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
 
     // ShowGeneralDialog.adsRewardPop(context);
+
+    _globalKey.currentState?.innerController.addListener(() {
+      setState(() {});
+    });
+
     super.initState();
   }
 
@@ -68,12 +73,22 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
   void didPopNext() {
     System().disposeBlock();
     final notifier = context.read<SelfProfileNotifier>();
-    Future.delayed(Duration(milliseconds: 500), () {
-      var jumpTo = heightProfileCard + notifier.heightIndex;
-      print("jumpt ====== ${jumpTo}");
-      print("jumpt ====== ${heightProfileCard}");
-      print("jumpt ====== ${notifier.heightIndex}");
-      _scrollController.jumpTo(jumpTo.toDouble());
+    Future.delayed(const Duration(milliseconds: 200), () {
+      print("height dari bloc ${notifier.heightIndex}");
+      if (notifier.heightIndex != 0) {
+        if (notifier.pageIndex == 0 && notifier.picCount < 9) {
+          return false;
+        }
+        if (notifier.pageIndex == 1 && notifier.diaryCount < 9) {
+          return false;
+        }
+        if (notifier.pageIndex == 2 && notifier.vidCount < 9) {
+          return false;
+        }
+        var jumpTo = heightProfileCard + notifier.heightIndex;
+        _scrollController.jumpTo(jumpTo.toDouble());
+        notifier.heightIndex = 0;
+      }
     });
 
     super.didPopNext();
@@ -93,8 +108,25 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
 
   @override
   void dispose() {
+    print("========= dispose prfile =====");
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void scrollAuto() {
+    print("=-=-=-=- jump");
+    try {
+      _scrollController = ScrollController(initialScrollOffset: 10000);
+
+      _scrollController.jumpTo(10000);
+    } catch (e) {
+      print(e);
+    }
+
+    // final notifier = context.read<SelfProfileNotifier>();
+    // var jumpTo = heightProfileCard + notifier.heightIndex;
+    // _scrollController.jumpTo(jumpTo.toDouble());
+    // _scrollController.jumpTo(10000);
   }
 
   Future adsView(BuildContext context, {bool isClick = false}) async {
@@ -222,7 +254,6 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, 
                           ? MeasuredSize(
                               onChange: (Size size) {
                                 heightProfileCard = size.height.toInt();
-                                print("@@@@@@@@@@@@ $heightProfileCard");
                               },
                               child: SelfProfileTop())
                           : BothProfileTopShimmer()),

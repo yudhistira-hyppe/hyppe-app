@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/follower_screen_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -7,6 +9,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
@@ -52,22 +55,24 @@ class SelfProfileTop extends StatelessWidget {
                 CustomProfileImage(
                   cacheKey: notifier.user.profile?.avatar?.imageKey,
                   following: true,
-                  width: 80 * SizeConfig.scaleDiagonal,
-                  height: 80 * SizeConfig.scaleDiagonal,
+                  forStory: true,
+                  width: 65 * SizeConfig.scaleDiagonal,
+                  height: 65 * SizeConfig.scaleDiagonal,
                   imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
-                  onTap: (){
-                    // print('test show image profile');
-                    // final imageUrl = notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}");
-                    // if(imageUrl?.isNotEmpty ?? false){
-                    //   showDialog(
-                    //       context: context,
-                    //       builder: (context) {
-                    //         return ShowImageProfile(imageUrl: imageUrl!);
-                    //       },
-                    //       barrierColor: Colors.transparent);
-                    // }
+                  onTap: () {
+                    final imageUrl = notifier.displayPhotoProfileOriginal();
+                    if (imageUrl?.isNotEmpty ?? false) {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return ShowImageProfile(imageUrl: imageUrl!);
+                        },
+                        // barrierColor: Colors.red,
+                      );
+                    }
                   },
                 ),
+                twentyPx,
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,

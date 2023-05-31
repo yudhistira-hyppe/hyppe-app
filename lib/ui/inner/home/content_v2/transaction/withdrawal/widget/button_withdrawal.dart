@@ -23,7 +23,9 @@ class ButtonWithdrawalWidget extends StatelessWidget {
         child: CustomTextButton(
           onPressed: notifier.withdrawalButton()
               ? () {
-                  notifier.summaryWithdrawal(context);
+                  if (!notifier.isLoadingSummaryWithdraw) {
+                    notifier.summaryWithdrawal(context);
+                  }
                 }
               : null,
           style: ButtonStyle(backgroundColor: notifier.withdrawalButton() ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),

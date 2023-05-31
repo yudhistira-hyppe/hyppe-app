@@ -21,11 +21,14 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_diaries.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_pics.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_vids.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
@@ -81,6 +84,16 @@ class OtherProfileNotifier with ChangeNotifier {
 
   int get picCount => picContentsQuery.hasNext ? (user.pics?.length ?? 0) + 2 : (user.pics?.length ?? 0);
   bool get picHasNext => picContentsQuery.hasNext;
+
+  int _heightBox = 0;
+  int get heightBox => _heightBox;
+
+  int heightIndex = 0;
+
+  set heightBox(val) {
+    _heightBox = val;
+    notifyListeners();
+  }
 
   setReportPeople(UserInfoModel val) => _user = val;
 
@@ -139,6 +152,12 @@ class OtherProfileNotifier with ChangeNotifier {
 
   String? displayPhotoProfile() => _system.showUserPicture(user.profile?.avatar?.mediaEndpoint);
 
+  String? displayPhotoProfileOriginal() {
+    var orginial = user.profile?.avatar?.mediaEndpoint!.split('/');
+    var endpoint = "/profilepict/orignal/${orginial?.last}";
+    return _system.showUserPicture(endpoint);
+  }
+
   String displayPostsCount() => user.profile?.insight != null ? _system.formatterNumber((user.profile?.insight?.posts ?? 0).toInt()) : "0";
 
   String displayFollowers() => user.profile?.insight != null ? _system.formatterNumber((user.profile?.insight?.followers ?? 0).toInt()) : "0";
@@ -163,17 +182,17 @@ class OtherProfileNotifier with ChangeNotifier {
     }
   }
 
-  onScrollListener(BuildContext context, ScrollController scrollController) async {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+  onScrollListener(BuildContext context, ScrollController scrollController, {bool isLoad = false}) async {
+    if (isLoad || (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange)) {
       switch (pageIndex) {
         case 0:
           {
-            if (!vidContentsQuery.loading && vidHasNext) {
-              List<ContentData> _res = await vidContentsQuery.loadNext(context, otherContent: true);
+            if (!picContentsQuery.loading && picHasNext) {
+              List<ContentData> _res = await picContentsQuery.loadNext(context, otherContent: true);
               if (_res.isNotEmpty) {
-                user.vids = [...(user.vids ?? []), ..._res];
+                user.pics = [...(user.pics ?? []), ..._res];
               } else {
-                print("Post Vid Dah Mentok");
+                print("Post Pic Dah Mentok");
               }
               notifyListeners();
             }
@@ -194,16 +213,17 @@ class OtherProfileNotifier with ChangeNotifier {
           break;
         case 2:
           {
-            if (!picContentsQuery.loading && picHasNext) {
-              List<ContentData> _res = await picContentsQuery.loadNext(context, otherContent: true);
+            if (!vidContentsQuery.loading && vidHasNext) {
+              List<ContentData> _res = await vidContentsQuery.loadNext(context, otherContent: true);
               if (_res.isNotEmpty) {
-                user.pics = [...(user.pics ?? []), ..._res];
+                user.vids = [...(user.vids ?? []), ..._res];
               } else {
-                print("Post Pic Dah Mentok");
+                print("Post Vid Dah Mentok");
               }
               notifyListeners();
             }
           }
+
           break;
       }
     }
@@ -247,9 +267,11 @@ class OtherProfileNotifier with ChangeNotifier {
     if (refresh) {
       checkFollowingToUser(context, userEmail ?? '');
     }
-    user.vids ??= await vidContentsQuery.reload(context, otherContent: true);
+    // user.vids ??= await vidContentsQuery.reload(context, otherContent: true);
+    user.pics = await picContentsQuery.reload(context, otherContent: true);
+
+    context.read<ScrollPicNotifier>().pics = user.pics;
     // user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
-    // user.pics = await picContentsQuery.reload(context, otherContent: true);
     _isLoading = false;
     notifyListeners();
   }
@@ -258,10 +280,10 @@ class OtherProfileNotifier with ChangeNotifier {
     switch (pageIndex) {
       case 0:
         {
-          if (user.vids == null) {
+          if (user.pics == null) {
             isLoading = true;
             notifyListeners();
-            user.vids = await vidContentsQuery.reload(context, otherContent: true);
+            user.pics = await picContentsQuery.reload(context, otherContent: true);
             isLoading = false;
             notifyListeners();
           }
@@ -273,6 +295,7 @@ class OtherProfileNotifier with ChangeNotifier {
             isLoading = true;
             notifyListeners();
             user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
+            context.read<ScrollDiaryNotifier>().diaryData = user.diaries;
             isLoading = false;
             notifyListeners();
           }
@@ -280,14 +303,16 @@ class OtherProfileNotifier with ChangeNotifier {
         break;
       case 2:
         {
-          if (user.pics == null) {
+          if (user.vids == null) {
             isLoading = true;
             notifyListeners();
-            user.pics = await picContentsQuery.reload(context, otherContent: true);
+            user.vids = await vidContentsQuery.reload(context, otherContent: true);
+            context.read<ScrollVidNotifier>().vidData = user.vids;
             isLoading = false;
             notifyListeners();
           }
         }
+
         break;
     }
   }
@@ -309,12 +334,12 @@ class OtherProfileNotifier with ChangeNotifier {
       );
       final fetch = notifier.followFetch;
       if (fetch.followState == FollowState.followUserSuccess) {
-        if(isUnFollow){
+        if (isUnFollow) {
           statusFollowing = StatusFollowing.none;
-        }else{
+        } else {
           statusFollowing = StatusFollowing.following;
         }
-      }else if(statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following){
+      } else if (statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following) {
         statusFollowing = StatusFollowing.none;
       }
       // else {
@@ -334,28 +359,57 @@ class OtherProfileNotifier with ChangeNotifier {
 
   Widget optionButton() {
     List pages = [
-      !isLoading ? const OtherProfileVids() : BothProfileContentShimmer(),
+      !isLoading ? const OtherProfilePics() : BothProfileContentShimmer(),
       !isLoading ? const OtherProfileDiaries() : BothProfileContentShimmer(),
-      !isLoading ? const OtherProfilePics() : BothProfileContentShimmer()
+      !isLoading ? const OtherProfileVids() : BothProfileContentShimmer(),
     ];
     return pages[pageIndex];
   }
 
-  navigateToSeeAllScreen(BuildContext context, int index, {contentPosition? inPosition}) async {
+  navigateToSeeAllScreen(BuildContext context, int index, {contentPosition? inPosition, Widget? title}) async {
     context.read<ReportNotifier>().inPosition = contentPosition.otherprofile;
     final connect = await _system.checkConnections();
     if (connect) {
-      if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
-      if (pageIndex == 1)
-        _routing.move(Routes.diaryDetail,
-            argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.other));
-      if (pageIndex == 2)
-        _routing.move(Routes.picSlideDetailPreview,
-            argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.other));
+      var result;
+      if (pageIndex == 0) {
+        result = await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title, pageSrc: PageSrc.otherProfile));
+
+        // _routing.move(Routes.picSlideDetailPreview,
+        //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.other));
+        scrollAuto(result);
+      }
+      if (pageIndex == 1) {
+        result = await _routing.move(Routes.scrollDiary, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title, pageSrc: PageSrc.otherProfile));
+
+        // _routing.move(Routes.diaryDetail,
+        //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.other));
+        scrollAuto(result);
+      }
+      if (pageIndex == 2) {
+        result = await _routing.move(Routes.scrollVid, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title, pageSrc: PageSrc.otherProfile));
+
+        // _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
+        scrollAuto(result);
+      }
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }
   }
+
+  scrollAuto(String index) {
+    print("========>>>> $index");
+    var indexHei = int.parse(index) + 1;
+    var hasilBagi = indexHei / 3;
+    heightIndex = 0;
+    if (isInteger(hasilBagi)) {
+      hasilBagi = hasilBagi;
+    } else {
+      hasilBagi += 1;
+    }
+    heightIndex = (heightBox * hasilBagi.toInt() - heightBox);
+  }
+
+  bool isInteger(num value) => value is int || value == value.roundToDouble();
 
   // create generic function that can be detect profile is have story or not
   bool checkHaveStory(BuildContext context) {

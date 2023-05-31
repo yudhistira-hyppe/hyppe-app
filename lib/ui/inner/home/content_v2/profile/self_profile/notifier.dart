@@ -134,6 +134,12 @@ class SelfProfileNotifier with ChangeNotifier {
     return _system.showUserPicture(image);
   }
 
+  String? displayPhotoProfileOriginal() {
+    var orginial = user.profile?.avatar?.mediaEndpoint!.split('/');
+    var endpoint = "/profilepict/orignal/${orginial?.last}";
+    return _system.showUserPicture(endpoint);
+  }
+
   String displayPostsCount() => user.profile?.insight != null ? _system.formatterNumber(user.profile?.insight?.posts?.toInt()) : "0";
 
   String displayFollowers() => user.profile?.insight != null ? _system.formatterNumber(user.profile?.insight?.followers?.toInt()) : "0";
@@ -346,19 +352,19 @@ class SelfProfileNotifier with ChangeNotifier {
     if (connect) {
       var result;
       if (pageIndex == 0) {
-        result = await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title));
+        result = await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title, pageSrc: PageSrc.selfProfile));
         // _routing.move(Routes.picSlideDetailPreview,
         //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
         scrollAuto(result);
       }
       if (pageIndex == 1) {
-        result = await _routing.move(Routes.scrollDiary, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title));
+        result = await _routing.move(Routes.scrollDiary, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title, pageSrc: PageSrc.selfProfile));
         // _routing.move(Routes.diaryDetail,
         //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
         scrollAuto(result);
       }
       if (pageIndex == 2) {
-        result = await _routing.move(Routes.scrollVid, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title));
+        result = await _routing.move(Routes.scrollVid, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title, pageSrc: PageSrc.selfProfile));
         // result = await _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
         scrollAuto(result);
       }
@@ -369,20 +375,14 @@ class SelfProfileNotifier with ChangeNotifier {
 
   scrollAuto(String index) {
     var indexHei = int.parse(index) + 1;
-    print(indexHei);
     var hasilBagi = indexHei / 3;
     heightIndex = 0;
-    print(hasilBagi);
-    print(isInteger(hasilBagi));
     if (isInteger(hasilBagi)) {
       hasilBagi = hasilBagi;
     } else {
       hasilBagi += 1;
     }
-    print("========== height box ${heightBox}");
-    print("========== height box ${hasilBagi.toInt()}");
     heightIndex = (heightBox * hasilBagi.toInt() - heightBox);
-    print("========== height box ${heightIndex}");
   }
 
   bool isInteger(num value) => value is int || value == value.roundToDouble();

@@ -661,13 +661,14 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
             },
             child: Container(
               margin: EdgeInsets.only(bottom: 20),
-              width: MediaQuery.of(context).size.width,
-              height: 500,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  // color: Colors.yellow,
-                ),
+              // width: MediaQuery.of(context).size.width,
+              // height: MediaQuery.of(context).size.width * 16.0 / 10.8,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                // color: Colors.yellow,
+              ),
+              child: AspectRatio(
+                aspectRatio: 9 / 16,
                 child: Stack(
                   children: [
                     _curIdx == index
@@ -721,14 +722,16 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                       imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                                       child: Image(
                                         width: SizeConfig.screenWidth,
+                                        height: MediaQuery.of(context).size.width * 16.0 / 11.0,
                                         image: imageProvider,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   )
                                 : Container(
                                     // const EdgeInsets.symmetric(horizontal: 4.5),
                                     width: SizeConfig.screenWidth,
-                                    height: 500,
+                                    height: MediaQuery.of(context).size.width * 16.0 / 11.0,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                         image: imageProvider,
