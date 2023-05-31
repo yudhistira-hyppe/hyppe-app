@@ -61,7 +61,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       //   DeviceOrientation.landscapeLeft,
       //   DeviceOrientation.landscapeRight,
       // ]);
-      Future.delayed(const Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 1), () {
         widget.fAliplayer?.play();
         setState(() {
           isloading = false;

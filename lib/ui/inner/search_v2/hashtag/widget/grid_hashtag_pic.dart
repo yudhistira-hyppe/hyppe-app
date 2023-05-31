@@ -18,7 +18,8 @@ import '../../notifier.dart';
 import '../../widget/search_no_result_image.dart';
 
 class GridHashtagPic extends StatelessWidget {
-  const GridHashtagPic({Key? key}) : super(key: key);
+  final String tag;
+  const GridHashtagPic({Key? key, required this.tag}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,7 @@ class GridHashtagPic extends StatelessWidget {
                     // }
 
                     return GestureDetector(
-                      onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.pict ?? [], index, HyppeType.HyppePic),
+                      onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.pict ?? [], index, HyppeType.HyppePic, TypeApiSearch.detailHashTag, tag),
                       child: MeasuredSize(
                         onChange: (size) {
                           if (index == 0) {

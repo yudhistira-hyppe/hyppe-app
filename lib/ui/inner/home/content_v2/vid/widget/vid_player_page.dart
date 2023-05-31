@@ -1489,10 +1489,13 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                             fAliplayer?.pause();
                             SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
                             if ((widget.data?.metadata?.height ?? 0) < (widget.data?.metadata?.width ?? 0)) {
+                              print('Landscape VidPlayerPage');
                               SystemChrome.setPreferredOrientations([
                                 DeviceOrientation.landscapeLeft,
                                 DeviceOrientation.landscapeRight,
                               ]);
+                            }else{
+                              print('Portrait VidPlayerPage');
                             }
                             VideoIndicator value = await Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(builder: (_) =>VideoFullscreenPage(
                               aliPlayerView: aliPlayerView!,

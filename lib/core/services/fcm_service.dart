@@ -100,8 +100,7 @@ class FcmService {
       // foreground incoming message
       FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
         RemoteNotification? notification = message.notification;
-        if (notification != null) {
-          """ 
+        """ 
             Foreground incoming message data => ${message.data},
             Foreground incoming message category => ${message.category},
             Foreground incoming message category => ${message.category},
@@ -113,26 +112,27 @@ class FcmService {
             Foreground incoming message ttl => ${message.ttl},
             Foreground incoming message notification => ${message.notification?.title} ${message.notification?.body}
             """
-              .logger();
+            .logger();
 
-          // notificationData.value = NotificationsData(
-          //     type: 'user',
-          //     isRead: false,
-          //     notificationCategory: NotificationCategory.user,
-          //     timestamp: message.sentTime?.millisecondsSinceEpoch.toString() ?? null,
-          //     message: '${message.notification?.title ?? ''} ${message.notification?.body ?? ''}');
-          // isHaveNotification.value = true;
+        // notificationData.value = NotificationsData(
+        //     type: 'user',
+        //     isRead: false,
+        //     notificationCategory: NotificationCategory.user,
+        //     timestamp: message.sentTime?.millisecondsSinceEpoch.toString() ?? null,
+        //     message: '${message.notification?.title ?? ''} ${message.notification?.body ?? ''}');
+        // isHaveNotification.value = true;
 
-          _notifyApp(message, () => _eventService.notifyForegroundMessage(message));
-          _notificationService.showNotification(message);
-        }
+        _notifyApp(message, () => _eventService.notifyForegroundMessage(message));
+        _notificationService.showNotification(message);
+        // if (notification != null) {
+        //
+        // }
       });
 
       // when app opened from tapping message
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
         RemoteNotification? notification = message.notification;
-        if (notification != null) {
-          """ 
+        """ 
             When app opened from tapping message data => ${message.data},
             When app opened from tapping message category => ${message.category},
             When app opened from tapping message category => ${message.category},
@@ -144,19 +144,18 @@ class FcmService {
             When app opened from tapping message ttl => ${message.ttl},
             When app opened from tapping message notification => ${message.notification?.title} ${message.notification?.body}
             """
-              .logger();
+            .logger();
 
-          // notificationData.value = NotificationsData(
-          //     type: 'user',
-          //     isRead: false,
-          //     notificationCategory: NotificationCategory.user,
-          //     timestamp: message.sentTime?.millisecondsSinceEpoch.toString() ?? null,
-          //     message: '${message.notification?.title ?? ''} ${message.notification?.body ?? ''}');
-          // isHaveNotification.value = true;
+        // notificationData.value = NotificationsData(
+        //     type: 'user',
+        //     isRead: false,
+        //     notificationCategory: NotificationCategory.user,
+        //     timestamp: message.sentTime?.millisecondsSinceEpoch.toString() ?? null,
+        //     message: '${message.notification?.title ?? ''} ${message.notification?.body ?? ''}');
+        // isHaveNotification.value = true;
 
-          _notifyApp(message, () => _eventService.notifyMessageOpenedApp(message));
-          _notificationService.showNotification(message, idNotif: message.notification?.android?.tag);
-        }
+        _notifyApp(message, () => _eventService.notifyMessageOpenedApp(message));
+        _notificationService.showNotification(message, idNotif: message.notification?.android?.tag);
       });
     } catch (e) {
       '[INFO] => Failed to initialize [firebaseCloudMessagingListeners] with error ${e.toString()}'.logger();

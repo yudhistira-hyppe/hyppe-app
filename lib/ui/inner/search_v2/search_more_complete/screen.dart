@@ -157,9 +157,9 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                                   // physics: const NeverScrollableScrollPhysics(),
                                   controller: _tabController,
                                   children: [
-                                    AllSearchContent(tabController: _tabController,),
+                                    AllSearchContent(tabController: _tabController, keyword: notifier.searchController.text,),
                                     AccountSearchContent(users: notifier.searchUsers),
-                                    const SearchContentsTab(),
+                                    SearchContentsTab(keyword: notifier.searchController.text),
                                     const HashtagTabScreen(),
                                   ],
                                 ),

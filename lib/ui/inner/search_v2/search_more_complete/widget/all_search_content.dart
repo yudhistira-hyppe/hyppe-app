@@ -24,8 +24,9 @@ import '../../hashtag/widget/hashtag_item.dart';
 import '../../widget/grid_content_view.dart';
 
 class AllSearchContent extends StatefulWidget {
+  String keyword;
   TabController tabController;
-  AllSearchContent({Key? key, required this.tabController}) : super(key: key);
+  AllSearchContent({Key? key, required this.tabController, required this.keyword}) : super(key: key);
 
   @override
   State<AllSearchContent> createState() => _AllSearchContentState();
@@ -183,13 +184,19 @@ class _AllSearchContentState extends State<AllSearchContent> {
                 switch(type){
                   case HyppeType.HyppePic:
                     return fixPic.isNotNullAndEmpty() ? GridContentView(type: type, data: fixPic ?? [],
-                      isLoading: false,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,);
+                      isLoading: false,
+                      keyword: widget.keyword ?? '',
+                      api: TypeApiSearch.normal,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,);
                   case HyppeType.HyppeDiary:
                     return fixDiary.isNotNullAndEmpty() ? GridContentView(type: type, data: fixDiary ?? [],
-                      isLoading: false,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                      isLoading: false,
+                      keyword: widget.keyword ?? '',
+                      api: TypeApiSearch.normal,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
                   case HyppeType.HyppeVid:
                     return fixVid.isNotNullAndEmpty() ? GridContentView(type: type, data: fixVid ?? [],
-                      isLoading: false,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                      isLoading: false,
+                      keyword: widget.keyword ?? '',
+                      api: TypeApiSearch.normal,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
                 }
               }
           )

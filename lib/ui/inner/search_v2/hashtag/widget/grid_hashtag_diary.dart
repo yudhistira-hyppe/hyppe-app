@@ -18,7 +18,8 @@ import '../../notifier.dart';
 import '../../widget/search_no_result_image.dart';
 
 class GridHashtagDiary extends StatelessWidget {
-  const GridHashtagDiary({Key? key}) : super(key: key);
+  final String tag;
+  const GridHashtagDiary({Key? key, required this.tag}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,7 @@ class GridHashtagDiary extends StatelessWidget {
                           '';
                     }
                     return GestureDetector(
-                      onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.diary ?? [], index, HyppeType.HyppeDiary),
+                      onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.diary ?? [], index, HyppeType.HyppeDiary, TypeApiSearch.detailHashTag, tag),
                       child: MeasuredSize(
                         onChange: (size) {
                           if (index == 0) {

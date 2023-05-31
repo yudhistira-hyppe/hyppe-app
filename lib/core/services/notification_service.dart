@@ -176,11 +176,11 @@ class NotificationService {
         }
       } else {
         final Map<String, dynamic> jsonNotif = json.decode(message.notification?.body ?? "{}");
-        final data = NotificationBody.fromJson(jsonNotif);
+        final value = NotificationBody.fromJson(jsonNotif);
         await flutterLocalNotificationsPlugin.show(
           message.hashCode,
-          message.notification?.title ?? '',
-          data.message ?? message.notification?.body,
+          value.title ?? message.notification?.title,
+          value.message ?? message.notification?.body,
           platformChannelSpecifics,
           payload: message.notification?.body ?? "{}",
         );
@@ -204,13 +204,16 @@ class NotificationBody {
   String? postId;
   String? postType;
   String? message;
+  String? title;
 
   NotificationBody({this.postId, this.postType, this.message});
 
   NotificationBody.fromJson(Map<String, dynamic> json) {
     postId = json['postID'];
     postType = json['postType'];
-    message = json['message'];
+    message = json['body'];
+    title = json['title'];
+
   }
 
   Map<String, dynamic> toJson() {

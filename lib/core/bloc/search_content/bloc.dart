@@ -41,6 +41,33 @@ class SearchContentBloc {
     );
   }
 
+  Future getDetailContents(BuildContext context, param, {TypeApiSearch type = TypeApiSearch.normal}) async {
+    print('_hitApiGetSearchData#2 ${System().getCurrentDate()}');
+    final isNormal = type == TypeApiSearch.normal;
+    await Repos().reposPost(
+      context,
+          (onResult) {
+        print('_hitApiGetSearchData#5 ${System().getCurrentDate()}');
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setSearchContentFetch(SearchContentFetch(SearchContentState.getSearchContentBlocError));
+        } else {
+          setSearchContentFetch(SearchContentFetch(
+            SearchContentState.getSearchContentBlocSuccess,
+            data: GenericResponse.fromJson(onResult.data).responseData,
+          ));
+        }
+      },
+          (errorData) {
+        setSearchContentFetch(SearchContentFetch(SearchContentState.getSearchContentBlocError));
+      },
+      data: param,
+      withAlertMessage: true,
+      withCheckConnection: true,
+      host: isNormal ? UrlConstants.getSearchContentV5 : type == TypeApiSearch.detailHashTag ? UrlConstants.getDetailHashtagV2 : UrlConstants.getDetailInterestV2,
+      methodType: MethodType.post,
+    );
+  }
+
   Future landingPageSearch(BuildContext context) async {
     await Repos().reposPost(
       context,

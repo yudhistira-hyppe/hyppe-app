@@ -10,6 +10,7 @@ import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/hashtag/detail_screen.dart';
@@ -22,7 +23,9 @@ import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import '../../../core/constants/asset_path.dart';
+import '../../../core/constants/shared_preference_keys.dart';
 import '../../../core/constants/themes/hyppe_colors.dart';
+import '../../../core/services/shared_preference.dart';
 import '../../../ux/path.dart';
 import '../../../ux/routing.dart';
 import '../../constant/widget/custom_icon_widget.dart';
@@ -47,6 +50,9 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
 
   @override
   void initState() {
+
+    final fcmToken = SharedPreference().readStorage(SpKeys.fcmToken);
+    print('my Fcm Token: $fcmToken');
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SearchScreen');
     _tabController = TabController(length: 3, vsync: this);
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
@@ -148,7 +154,16 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
           }
           return false;
         },
-        child: _searchLayout(notifier.layout, notifier),
+        child: Stack(
+          children: [
+            Positioned.fill(child: _searchLayout(notifier.layout, notifier)),
+            if(notifier.loadPlaylist)
+              Positioned.fill(child:
+              Container(
+                decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                alignment: Alignment.center, child: CustomLoading(),))
+          ],
+        ),
       ),
     );
   }

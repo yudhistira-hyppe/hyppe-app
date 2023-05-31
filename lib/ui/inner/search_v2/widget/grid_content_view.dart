@@ -20,7 +20,9 @@ class GridContentView extends StatefulWidget {
   HyppeType type;
   List<ContentData> data;
   bool isLoading;
-  GridContentView({Key? key, required this.type, required this.data, required this.isLoading}) : super(key: key);
+  String keyword;
+  TypeApiSearch api;
+  GridContentView({Key? key, required this.type, required this.data, required this.isLoading, required this.keyword, required this.api}) : super(key: key);
 
   @override
   State<GridContentView> createState() => _GridContentViewState();
@@ -70,7 +72,7 @@ class _GridContentViewState extends State<GridContentView> {
                   case HyppeType.HyppePic:
                     return GestureDetector(
                       onTap: () {
-                        context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type);
+                        context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword);
                       },
                       child: MeasuredSize(
                         onChange: (size) {
@@ -128,7 +130,7 @@ class _GridContentViewState extends State<GridContentView> {
                   case HyppeType.HyppeDiary:
                     return GestureDetector(
                       onTap: () {
-                        context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type);
+                        context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword);
                       },
                       child: MeasuredSize(
                         onChange: (size) {
@@ -184,7 +186,7 @@ class _GridContentViewState extends State<GridContentView> {
                   case HyppeType.HyppeVid:
                     return GestureDetector(
                       onTap: () {
-                        context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type);
+                        context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword);
                       },
                       child: MeasuredSize(
                         onChange: (size) {

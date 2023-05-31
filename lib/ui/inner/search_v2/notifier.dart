@@ -1035,7 +1035,7 @@ class SearchNotifier with ChangeNotifier {
   List<Widget> getGridHashtag(String hashtag, bool fromRoute) {
     Map<String, List<Widget>> map = {
       'HyppeVid': [
-        const GridHashtagVid(),
+        GridHashtagVid(tag: hashtag,),
         if ((_detailHashTag?.vid ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty && isHasNextVid)
           SliverToBoxAdapter(
             child: Container(
@@ -1043,7 +1043,7 @@ class SearchNotifier with ChangeNotifier {
           )
       ],
       'HyppeDiary': [
-        const GridHashtagDiary(),
+        GridHashtagDiary(tag: hashtag),
         if ((_detailHashTag?.diary ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty && isHasNextDiary)
           SliverToBoxAdapter(
             child: Container(
@@ -1051,7 +1051,7 @@ class SearchNotifier with ChangeNotifier {
           )
       ],
       'HyppePic': [
-        const GridHashtagPic(),
+        GridHashtagPic(tag: hashtag),
         if ((_detailHashTag?.pict ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty && isHasNextPic)
           SliverToBoxAdapter(
             child: Container(
@@ -1062,7 +1062,7 @@ class SearchNotifier with ChangeNotifier {
     final key = System().getTitleHyppe(hashtagTab);
     return map[key] ??
         [
-          const GridHashtagVid(),
+          GridHashtagVid(tag: hashtag),
           if ((hashtagVid ?? []).length % limitSearch == 0)
             SliverToBoxAdapter(
               child: Container(
@@ -1113,6 +1113,45 @@ class SearchNotifier with ChangeNotifier {
     } catch (e) {
       'Error _hitApiGetDetail: $e'.logger();
       return null;
+    }
+  }
+
+  Future<List<ContentData>> getDetailContents(BuildContext context, String keys, HyppeType type, TypeApiSearch api, int limit) async {
+    try {
+      loadPlaylist = true;
+      String email = SharedPreference().readStorage(SpKeys.email);
+      var param = <String, dynamic>{};
+      param = {
+        "email": email,
+        "keys": keys,
+        "listvid": type == HyppeType.HyppeVid ? true : false,
+        "listdiary": type == HyppeType.HyppeDiary ? true : false,
+        "listpict": type == HyppeType.HyppePic ? true : false,
+        "skip": 0,
+        "limit": limit,
+      };
+
+      if(api == TypeApiSearch.normal){
+        param['listtag'] = false;
+        param['listuser'] = false;
+      }
+
+      final notifier = SearchContentBloc();
+      await notifier.getDetailContents(context, param, type: api);
+      final fetch = notifier.searchContentFetch;
+      if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
+        final _res = SearchContentModel.fromJson(fetch.data[0]);
+        return type == HyppeType.HyppePic ? (_res.pict ?? []) : type == HyppeType.HyppeDiary ? (_res.diary ?? []) : (_res.vid ?? []);
+      } else if (fetch.searchContentState == SearchContentState.getSearchContentBlocError) {
+        throw 'getDetailContents failed';
+      } else {
+        throw 'undefined';
+      }
+    } catch (e) {
+      'Error getDetailContents: $e'.logger();
+      return [];
+    }finally{
+      loadPlaylist = false;
     }
   }
 
@@ -1485,6 +1524,13 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _loadPlaylist = false;
+  bool get loadPlaylist => _loadPlaylist;
+  set loadPlaylist(bool state){
+    _loadPlaylist = state;
+    notifyListeners();
+  }
+
   scrollAuto(String index) {
     var indexHei = int.parse(index) + 1;
     print(indexHei);
@@ -1502,7 +1548,7 @@ class SearchNotifier with ChangeNotifier {
     print("========== height box ${heightIndex}");
   }
 
-  navigateToSeeAllScreen4(BuildContext context, List<ContentData> data, int index, HyppeType type) async {
+  navigateToSeeAllScreen4(BuildContext context, List<ContentData> data, int index, HyppeType type, TypeApiSearch api, String keys) async {
     context.read<ReportNotifier>().inPosition = contentPosition.myprofile;
     final connect = await System().checkConnections();
     if (connect) {
@@ -1510,7 +1556,7 @@ class SearchNotifier with ChangeNotifier {
 
       switch(type){
         case HyppeType.HyppePic:
-          context.read<ScrollPicNotifier>().pics = data;
+          context.read<ScrollPicNotifier>().pics = await getDetailContents(context, keys, type, api, data.length);
           result = await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: const Text(
             "Pic",
             style: TextStyle(color: kHyppeTextLightPrimary),
@@ -1520,7 +1566,7 @@ class SearchNotifier with ChangeNotifier {
           scrollAuto(result);
           break;
         case HyppeType.HyppeDiary:
-          context.read<ScrollDiaryNotifier>().diaryData = data;
+          context.read<ScrollDiaryNotifier>().diaryData = await getDetailContents(context, keys, type, api, data.length);
           result = await _routing.move(Routes.scrollDiary, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: const Text(
             "Diary",
             style: TextStyle(color: kHyppeTextLightPrimary),
@@ -1530,7 +1576,7 @@ class SearchNotifier with ChangeNotifier {
           scrollAuto(result);
           break;
         case HyppeType.HyppeVid:
-          context.read<ScrollVidNotifier>().vidData = data;
+          context.read<ScrollVidNotifier>().vidData = await getDetailContents(context, keys, type, api, data.length);
           result = await _routing.move(Routes.scrollVid, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: const Text(
             "Vid",
             style: TextStyle(color: kHyppeTextLightPrimary),

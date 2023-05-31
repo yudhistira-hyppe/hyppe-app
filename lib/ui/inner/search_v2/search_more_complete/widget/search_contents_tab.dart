@@ -17,7 +17,8 @@ import '../../widget/search_no_result_image.dart';
 import 'all_search_shimmer.dart';
 
 class SearchContentsTab extends StatefulWidget {
-  const SearchContentsTab({Key? key}) : super(key: key);
+  final String keyword;
+  const SearchContentsTab({Key? key, required this.keyword}) : super(key: key);
 
   @override
   State<SearchContentsTab> createState() => _SearchContentsTabState();
@@ -181,13 +182,19 @@ class _SearchContentsTabState extends State<SearchContentsTab> with RouteAware{
                           switch(type){
                             case HyppeType.HyppeVid:
                               return notifier.searchVid.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchVid ?? [],
-                                isLoading: notifier.isHasNextVid,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,);
+                                isLoading: notifier.isHasNextVid,
+                                keyword: widget.keyword ?? '',
+                                api: TypeApiSearch.normal,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,);
                             case HyppeType.HyppeDiary:
                               return notifier.searchDiary.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchDiary ?? [],
-                                isLoading: notifier.isHasNextDiary,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                                isLoading: notifier.isHasNextDiary,
+                                keyword: widget.keyword ?? '',
+                                api: TypeApiSearch.normal,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
                             case HyppeType.HyppePic:
                               return notifier.searchPic.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchPic ?? [],
-                                isLoading: notifier.isHasNextPic,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                                isLoading: notifier.isHasNextPic,
+                                keyword: widget.keyword ?? '',
+                                api: TypeApiSearch.normal,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
                           }
                         }
                     ),

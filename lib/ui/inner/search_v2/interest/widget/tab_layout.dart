@@ -136,17 +136,23 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                                           type: type,
                                           data: data.vid ?? [],
                                     isLoading: notifier.isHasNextVid,
+                                    keyword: widget.interest.id ?? '',
+                                    api: TypeApiSearch.detailInterest,
                                         )
                                       : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                                 case HyppeType.HyppeDiary:
                                   return data.diary.isNotNullAndEmpty()
                                       ? GridContentView(type: type, data: data.diary ?? [],
-                                    isLoading: notifier.isHasNextDiary,)
+                                    isLoading: notifier.isHasNextDiary,
+                                    keyword: widget.interest.id ?? '',
+                                    api: TypeApiSearch.detailInterest,)
                                       : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                                 case HyppeType.HyppePic:
                                   return data.pict.isNotNullAndEmpty()
                                       ?  GridContentView(type: type, data: data.pict ?? [],
-                                    isLoading: notifier.isHasNextPic,)
+                                    isLoading: notifier.isHasNextPic,
+                                    keyword: widget.interest.id ?? '',
+                                    api: TypeApiSearch.detailInterest,)
                                       : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                               }
                             } else {
