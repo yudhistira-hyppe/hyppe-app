@@ -8,8 +8,10 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/grid_content_view.dart';
+import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../core/services/route_observer_service.dart';
 import '../../widget/search_no_result.dart';
 import '../../widget/search_no_result_image.dart';
 import 'all_search_shimmer.dart';
@@ -21,8 +23,9 @@ class SearchContentsTab extends StatefulWidget {
   State<SearchContentsTab> createState() => _SearchContentsTabState();
 }
 
-class _SearchContentsTabState extends State<SearchContentsTab> {
+class _SearchContentsTabState extends State<SearchContentsTab> with RouteAware{
   final ScrollController _scrollController = ScrollController();
+  int heightTab = 0;
 
   @override
   void initState() {
@@ -41,6 +44,40 @@ class _SearchContentsTabState extends State<SearchContentsTab> {
       }
     });
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didPopNext() {
+
+    final notifier = context.read<SearchNotifier>();
+    Future.delayed(Duration(milliseconds: 500), () {
+
+      var jumpTo = heightTab + notifier.heightIndex - 10;
+      print("jumpt ====== ${jumpTo}");
+      print("jumpt ====== ${heightTab}");
+      print("jumpt ====== ${notifier.heightIndex}");
+      _scrollController.jumpTo(jumpTo.toDouble());
+    });
+
+    super.didPopNext();
+  }
+
+  @override
+  void didPop() {
+    print("==========pop===========");
+    super.didPop();
+  }
+
+  @override
+  void didPushNext() {
+    print("========= didPushNext prfile =====");
+    super.didPushNext();
   }
 
   @override
@@ -72,59 +109,64 @@ class _SearchContentsTabState extends State<SearchContentsTab> {
             child: SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text,),
           ) : Column(
             children: [
-              Container(
-                margin: const EdgeInsets.only(left: 16),
-                child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: listTab.map((e) {
-                      final isActive = e == notifier.contentTab;
-                      return Expanded(
-                        child: Container(
-                          margin:
-                          const EdgeInsets.only(right: 12, top: 10, bottom: 16),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: Ink(
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: isActive
-                                    ? context.getColorScheme().primary
-                                    : context.getColorScheme().background,
-                                borderRadius:
-                                const BorderRadius.all(Radius.circular(18)),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  notifier.contentTab = e;
-                                },
-                                borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                splashColor: context.getColorScheme().primary,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 36,
-                                  padding: const EdgeInsets.symmetric( horizontal: 16),
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                      const BorderRadius.all(Radius.circular(18)),
-                                      border: !isActive
-                                          ? Border.all(
-                                          color:
-                                          context.getColorScheme().secondary,
-                                          width: 1)
-                                          : null),
-                                  child: CustomTextWidget(
-                                    textToDisplay:
-                                    System().getTitleHyppe(e),
-                                    textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
+              MeasuredSize(
+                onChange: (Size size) {
+                  heightTab = size.height.toInt();
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(left: 16),
+                  child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: listTab.map((e) {
+                        final isActive = e == notifier.contentTab;
+                        return Expanded(
+                          child: Container(
+                            margin:
+                            const EdgeInsets.only(right: 12, top: 10, bottom: 16),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: Ink(
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  color: isActive
+                                      ? context.getColorScheme().primary
+                                      : context.getColorScheme().background,
+                                  borderRadius:
+                                  const BorderRadius.all(Radius.circular(18)),
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+                                    notifier.contentTab = e;
+                                  },
+                                  borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                  splashColor: context.getColorScheme().primary,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 36,
+                                    padding: const EdgeInsets.symmetric( horizontal: 16),
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                        const BorderRadius.all(Radius.circular(18)),
+                                        border: !isActive
+                                            ? Border.all(
+                                            color:
+                                            context.getColorScheme().secondary,
+                                            width: 1)
+                                            : null),
+                                    child: CustomTextWidget(
+                                      textToDisplay:
+                                      System().getTitleHyppe(e),
+                                      textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    }).toList()),
+                        );
+                      }).toList()),
+                ),
               ),
               Expanded(
                 child: RefreshIndicator(

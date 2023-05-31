@@ -84,13 +84,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     _videoDuration = widget.videoIndicator.videoDuration;
     isMute = widget.videoIndicator.isMute;
     super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-    if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
-    }
+
     int changevalue;
     changevalue = _currentPosition + 1000;
     if (changevalue > _videoDuration) {

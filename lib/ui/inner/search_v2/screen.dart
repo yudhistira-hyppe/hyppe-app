@@ -98,7 +98,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
       (materialAppKey.currentContext ?? context).read<ReportNotifier>().inPosition = contentPosition.searchFirst;
       final notifier = context.read<SearchNotifier>();
       if (notifier.layout == SearchLayout.searchMore) {
-        notifier.getDataSearch(context);
+        // notifier.getDataSearch(context);
       }
     });
 

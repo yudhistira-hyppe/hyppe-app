@@ -543,9 +543,14 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     } catch (e) {
       // 'Failed to fetch ads data $e'.logger();
     }
-    setState(() {
+    if(mounted){
+      setState(() {
+        isloading = false;
+      });
+    }else{
       isloading = false;
-    });
+    }
+
   }
 
   Future getOldVideoUrl() async {
@@ -1482,21 +1487,37 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                           }
                           if (widget.orientation == Orientation.portrait) {
                             fAliplayer?.pause();
-
-                            VideoIndicator value = await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return VideoFullscreenPage(
-                                    aliPlayerView: aliPlayerView!,
-                                    fAliplayer: fAliplayer,
-                                    data: widget.data ?? ContentData(),
-                                    onClose: () {
-                                      // Routing().moveBack();
-                                    },
-                                    slider: _buildContentWidget(context, widget.orientation),
-                                    videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
-                                  );
-                                });
+                            SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+                            if ((widget.data?.metadata?.height ?? 0) < (widget.data?.metadata?.width ?? 0)) {
+                              SystemChrome.setPreferredOrientations([
+                                DeviceOrientation.landscapeLeft,
+                                DeviceOrientation.landscapeRight,
+                              ]);
+                            }
+                            VideoIndicator value = await Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(builder: (_) =>VideoFullscreenPage(
+                              aliPlayerView: aliPlayerView!,
+                              fAliplayer: fAliplayer,
+                              data: widget.data ?? ContentData(),
+                              onClose: () {
+                                // Routing().moveBack();
+                              },
+                              slider: _buildContentWidget(context, widget.orientation),
+                              videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
+                            ), settings: const RouteSettings()));
+                            // VideoIndicator value = await showDialog(
+                            //     context: context,
+                            //     builder: (context) {
+                            //       return VideoFullscreenPage(
+                            //         aliPlayerView: aliPlayerView!,
+                            //         fAliplayer: fAliplayer,
+                            //         data: widget.data ?? ContentData(),
+                            //         onClose: () {
+                            //           // Routing().moveBack();
+                            //         },
+                            //         slider: _buildContentWidget(context, widget.orientation),
+                            //         videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
+                            //       );
+                            //     });
                             if(mounted){
                               setState(() {
                                 _videoDuration = value.videoDuration;

@@ -1,6 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -46,52 +47,59 @@ class GridHashtagDiary extends StatelessWidget {
                           '';
                     }
                     return GestureDetector(
-                      onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen3(context, ref.item1?.diary ?? [], index, HyppeType.HyppeDiary),
-                      child: Padding(
-                        padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                        child: dataitem?.reportedStatus == 'BLURRED'
-                            ? SensitiveContentProfile(data:dataitem)
-                            : Stack(
-                          children: [
-                            Center(
-                              child: CustomContentModeratedWidget(
-                                width: double.infinity,
-                                height: double.infinity,
-                                featureType: FeatureType.diary,
-                                isSafe: true, //notifier.postData.data.listDiary[index].isSafe,
-                                isSale: false,
-                                thumbnail: ImageUrl(dataitem?.postID, url: thumb),
+                      onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.diary ?? [], index, HyppeType.HyppeDiary),
+                      child: MeasuredSize(
+                        onChange: (size) {
+                          if (index == 0) {
+                            context.read<SearchNotifier>().heightBox = size.height.toInt();
+                          }
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
+                          child: dataitem?.reportedStatus == 'BLURRED'
+                              ? SensitiveContentProfile(data:dataitem)
+                              : Stack(
+                            children: [
+                              Center(
+                                child: CustomContentModeratedWidget(
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  featureType: FeatureType.diary,
+                                  isSafe: true, //notifier.postData.data.listDiary[index].isSafe,
+                                  isSale: false,
+                                  thumbnail: ImageUrl(dataitem?.postID, url: thumb),
+                                ),
                               ),
-                            ),
-                            (dataitem?.saleAmount ?? 0) > 0
-                                ? const Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
-                                  padding: EdgeInsets.all(4.0),
-                                  child: CustomIconWidget(
-                                    iconData: "${AssetPath.vectorPath}sale.svg",
-                                    height: 22,
-                                    defaultColor: false,
-                                  ),
-                                ))
-                                : Container(),
-                            (dataitem?.certified ?? false) && (dataitem?.saleAmount ?? 0) == 0
-                                ? Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(4),
-                                          color: Colors.black.withOpacity(0.3),
-                                        ),
-                                        child: const CustomIconWidget(
-                                          iconData: '${AssetPath.vectorPath}ownership.svg',
-                                          defaultColor: false,
-                                        ))))
-                                : Container()
-                          ],
+                              (dataitem?.saleAmount ?? 0) > 0
+                                  ? const Align(
+                                  alignment: Alignment.topRight,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(4.0),
+                                    child: CustomIconWidget(
+                                      iconData: "${AssetPath.vectorPath}sale.svg",
+                                      height: 22,
+                                      defaultColor: false,
+                                    ),
+                                  ))
+                                  : Container(),
+                              (dataitem?.certified ?? false) && (dataitem?.saleAmount ?? 0) == 0
+                                  ? Align(
+                                  alignment: Alignment.topRight,
+                                  child: Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: Container(
+                                          padding: const EdgeInsets.all(4),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(4),
+                                            color: Colors.black.withOpacity(0.3),
+                                          ),
+                                          child: const CustomIconWidget(
+                                            iconData: '${AssetPath.vectorPath}ownership.svg',
+                                            defaultColor: false,
+                                          ))))
+                                  : Container()
+                            ],
+                          ),
                         ),
                       ),
                     );

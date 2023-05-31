@@ -11,24 +11,24 @@ import 'hastag_tab.dart';
 class BottomDetail extends StatefulWidget {
   Tags hashtag;
   bool fromRoute;
-  BottomDetail({Key? key, required this.hashtag, this.fromRoute = false}) : super(key: key);
+  ScrollController scrollController;
+  BottomDetail({Key? key, required this.hashtag, this.fromRoute = false, required this.scrollController}) : super(key: key);
 
   @override
   State<BottomDetail> createState() => _BottomDetailState();
 }
 
 class _BottomDetailState extends State<BottomDetail> {
-  final _scrollController = ScrollController();
 
   @override
   void initState() {
     final notif = context.read<SearchNotifier>();
     notif.initAllHasNext();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'BottomDetail');
-    _scrollController.addListener(() {
-      if (_scrollController.offset >=
-              _scrollController.position.maxScrollExtent &&
-          !_scrollController.position.outOfRange) {
+    widget.scrollController.addListener(() {
+      if (widget.scrollController.offset >=
+          widget.scrollController.position.maxScrollExtent &&
+          !widget.scrollController.position.outOfRange) {
         final notifier = context.read<SearchNotifier>();
         final key = widget.hashtag.tag ?? ' ';
         final type = notifier.hashtagTab;
@@ -41,7 +41,7 @@ class _BottomDetailState extends State<BottomDetail> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    // widget.scrollController.dispose();
     super.dispose();
   }
 
@@ -91,7 +91,7 @@ class _BottomDetailState extends State<BottomDetail> {
               onRefresh: () => notifier.getDetailHashtag(
                   context, widget.hashtag.tag ?? 'tag'),
               child: CustomScrollView(
-                controller: _scrollController,
+                controller: widget.scrollController,
                 scrollDirection: Axis.vertical,
                 physics: const AlwaysScrollableScrollPhysics(),
                 slivers: notifier.getGridHashtag(widget.hashtag.tag ?? '-', widget.fromRoute),

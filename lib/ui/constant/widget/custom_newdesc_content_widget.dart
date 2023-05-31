@@ -278,7 +278,7 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
           }
           // print('hit prepare username: ${splitDesc[i].substring(0, 1)} , ${splitDesc[i].substring(1, splitDesc[i].length)}');
           descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
-        } else if (firstChar == '#') {
+        } else if (firstChar == '#' && splitDesc[i].length > 1) {
           if (tempDesc.isNotEmpty) {
             descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
             tempDesc = '';

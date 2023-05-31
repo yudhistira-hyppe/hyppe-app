@@ -191,6 +191,10 @@ extension IntegerExtension on int {
   }
 }
 
+extension NumExtension on num {
+  bool isInteger() => this is int || this == roundToDouble();
+}
+
 extension ListExtentsion on List? {
   bool isNotNullAndEmpty() {
     if (this == null) {

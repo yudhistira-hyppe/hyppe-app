@@ -17,8 +17,9 @@ import '../../widget/search_no_result_image.dart';
 class InterestTabLayout extends StatefulWidget {
   // SearchContentModel data;
   Interest interest;
+  ScrollController scrollController;
 
-  InterestTabLayout({Key? key, required this.interest}) : super(key: key);
+  InterestTabLayout({Key? key, required this.interest, required this.scrollController}) : super(key: key);
 
   @override
   State<InterestTabLayout> createState() => _InterestTabLayoutState();
@@ -26,7 +27,7 @@ class InterestTabLayout extends StatefulWidget {
 
 class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLayoutMixin {
   HyppeType currentType = HyppeType.HyppeVid;
-  final _scrollController = ScrollController();
+  // final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -34,9 +35,9 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
     currentType = HyppeType.HyppePic;
     final notifier = context.read<SearchNotifier>();
     notifier.initDetailInterest();
-    _scrollController.addListener(() {
-      print(_scrollController.position.maxScrollExtent);
-      if (_scrollController.offset >= (_scrollController.position.maxScrollExtent)) {
+    widget.scrollController.addListener(() {
+      print(widget.scrollController.position.maxScrollExtent);
+      if (widget.scrollController.offset >= (widget.scrollController.position.maxScrollExtent)) {
         final notifier = context.read<SearchNotifier>();
         final key = widget.interest.id ?? ' ';
         notifier.getDetailInterest(context, key.replaceAll(' ', ''), reload: false, hyppe: currentType);
@@ -95,7 +96,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                                     onTap: () {
                                       setState(() {
                                         currentType = e;
-                                        _scrollController..animateTo(0, duration: Duration(milliseconds: 70), curve: Curves.fastOutSlowIn);
+                                        widget.scrollController..animateTo(0, duration: Duration(milliseconds: 70), curve: Curves.fastOutSlowIn);
                                       });
                                     },
                                     borderRadius: const BorderRadius.all(Radius.circular(18)),
@@ -121,7 +122,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                     color: context.getColorScheme().primary,
                     onRefresh: () => notifier.getDetailInterest(context, widget.interest.id ?? ''),
                     child: SingleChildScrollView(
-                      controller: _scrollController,
+                      controller: widget.scrollController,
                       physics: const ClampingScrollPhysics(),
                       child: Column(
                         children: [
@@ -144,7 +145,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                                       : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                                 case HyppeType.HyppePic:
                                   return data.pict.isNotNullAndEmpty()
-                                      ? GridContentView(type: type, data: data.pict ?? [],
+                                      ?  GridContentView(type: type, data: data.pict ?? [],
                                     isLoading: notifier.isHasNextPic,)
                                       : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                               }

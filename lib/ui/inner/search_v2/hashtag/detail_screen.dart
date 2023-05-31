@@ -8,6 +8,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/hashtag/widget/bottom_detail.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/arguments/hashtag_argument.dart';
@@ -29,7 +30,9 @@ class DetailHashtagScreen extends StatefulWidget {
 
 class _DetailHashtagScreenState extends State<DetailHashtagScreen>
     with RouteAware, AfterFirstLayoutMixin {
-
+  final ScrollController _scrollController = ScrollController();
+  // final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
+  int heightTab = 0;
 
   @override
   void didPop() {
@@ -57,7 +60,16 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
     'DetailHashtagScreen didPopNext'.logger();
     final notifier = context.read<SearchNotifier>();
     notifier.getDetailHashtag(
-        context, widget.argument.hashtag.tag?.replaceAll(' ', '') ?? ' ');
+        context, widget.argument.hashtag.tag?.replaceAll(' ', '') ?? ' ').whenComplete((){
+      Future.delayed(Duration(milliseconds: 500), () {
+        var jumpTo = heightTab + notifier.heightIndex - 10;
+        print("jumpt ====== ${jumpTo}");
+        print("jumpt ====== ${heightTab}");
+        print("jumpt ====== ${notifier.heightIndex}");
+        _scrollController.jumpTo(jumpTo.toDouble());
+      });
+    });
+
     super.didPopNext();
   }
 
@@ -68,7 +80,19 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
   }
 
   @override
+  void deactivate() {
+    final tag = widget.argument.hashtag.tag;
+    if(tag != null){
+      context.read<SearchNotifier>().deleteMapHashtag(tag);
+    }
+
+    print('Deactivate Hashtag Detail');
+    super.deactivate();
+  }
+
+  @override
   void dispose() {
+    _scrollController.dispose();
     CustomRouteObserver.routeObserver.unsubscribe(this);
     super.dispose();
   }
@@ -124,33 +148,48 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
         child: Column(
           children: [
             Consumer<SearchNotifier>(builder: (context, notifier, _){
-              return Container(
-                padding: const EdgeInsets.only(
-                    left: 16, top: 16, right: 16, bottom: 12),
-                child: Column(
-                  children: [
-                    !notifier.loadTagDetail ? Row(
-                      children: [Builder(builder: (context) {
+              return MeasuredSize(
+                onChange: (Size size) {
+                  heightTab = size.height.toInt();
+                },
+                child: Container(
+                  padding: const EdgeInsets.only(
+                      left: 16, top: 16, right: 16, bottom: 12),
+                  child: Column(
+                    children: [
+                      !notifier.loadTagDetail ? Row(
+                        children: [Builder(builder: (context) {
 
-                        return CustomBaseCacheImage(
-                          imageUrl: notifier.tagImageMain,
-                          memCacheWidth: 70,
-                          memCacheHeight: 70,
-                          imageBuilder: (_, imageProvider) {
-                            return Container(
-                              width: 56,
-                              height: 56,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(28)),
-                                image: DecorationImage(
-                                  fit: BoxFit.contain,
-                                  image: imageProvider,
+                          return CustomBaseCacheImage(
+                            imageUrl: notifier.tagImageMain,
+                            memCacheWidth: 70,
+                            memCacheHeight: 70,
+                            imageBuilder: (_, imageProvider) {
+                              return Container(
+                                width: 56,
+                                height: 56,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(28)),
+                                  image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: imageProvider,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          errorWidget: (_, __, ___) {
-                            return Container(
+                              );
+                            },
+                            errorWidget: (_, __, ___) {
+                              return Container(
+                                width: 56,
+                                height: 56,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
+                                  ),
+                                ),
+                              );
+                            },
+                            emptyWidget: Container(
                               width: 56,
                               height: 56,
                               decoration: BoxDecoration(
@@ -159,66 +198,56 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                                   image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
                                 ),
                               ),
-                            );
-                          },
-                          emptyWidget: Container(
-                            width: 56,
-                            height: 56,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                fit: BoxFit.contain,
-                                image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
-                              ),
                             ),
-                          ),
-                        );
-                      }),
-                        twelvePx,
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomTextWidget(
-                                textToDisplay: '#${widget.argument.hashtag.tag}',
-                                textStyle: context
-                                    .getTextTheme()
-                                    .bodyText1
-                                    ?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: context
-                                        .getColorScheme()
-                                        .onBackground),
-                                textAlign: TextAlign.start,
-                              ),
-                              fourPx,
-                              Text(
-                                "${notifier.countTag} ${notifier.language.posts}",
-                                style: const TextStyle(
-                                    fontSize: 12, color: kHyppeGrey),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ): Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CustomShimmer(height: 50, width: 50, radius: 25,),
-                          tenPx,
-                          Expanded(child: Column(
-                            children: [
-                              CustomShimmer(height: 20, width: double.infinity, radius: 5,),
-                              sixteenPx,
-                              CustomShimmer(height: 20, width: double.infinity, radius: 5,)
-                            ],
-                          ))
+                          );
+                        }),
+                          twelvePx,
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomTextWidget(
+                                  textToDisplay: '#${widget.argument.hashtag.tag}',
+                                  textStyle: context
+                                      .getTextTheme()
+                                      .bodyText1
+                                      ?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                      color: context
+                                          .getColorScheme()
+                                          .onBackground),
+                                  textAlign: TextAlign.start,
+                                ),
+                                fourPx,
+                                Text(
+                                  "${notifier.countTag} ${notifier.language.posts}",
+                                  style: const TextStyle(
+                                      fontSize: 12, color: kHyppeGrey),
+                                )
+                              ],
+                            ),
+                          )
                         ],
-                      ),
-                    )
-                  ],
+                      ): Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CustomShimmer(height: 50, width: 50, radius: 25,),
+                            tenPx,
+                            Expanded(child: Column(
+                              children: [
+                                CustomShimmer(height: 20, width: double.infinity, radius: 5,),
+                                sixteenPx,
+                                CustomShimmer(height: 20, width: double.infinity, radius: 5,)
+                              ],
+                            ))
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               );
             }),
@@ -231,6 +260,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                 child: BottomDetail(
                   hashtag: widget.argument.hashtag,
                   fromRoute: widget.argument.fromRoute,
+                  scrollController: _scrollController,
                 ))
           ],
         ),

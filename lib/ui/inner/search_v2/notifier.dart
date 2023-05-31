@@ -23,7 +23,9 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +34,10 @@ import 'package:story_view/controller/story_controller.dart';
 
 import '../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import '../../../core/bloc/posts_v2/bloc.dart';
+import '../../../core/constants/themes/hyppe_colors.dart';
 import '../../../core/models/collection/database/search_history.dart';
 import '../../constant/widget/custom_loading.dart';
+import '../home/content_v2/diary/scroll/notifier.dart';
 import 'hashtag/widget/grid_hashtag_diary.dart';
 import 'hashtag/widget/grid_hashtag_pic.dart';
 import 'hashtag/widget/grid_hashtag_vid.dart';
@@ -104,6 +108,17 @@ class SearchNotifier with ChangeNotifier {
   set searchUsers(List<DataUser>? values) {
     _searchUsers = values;
     notifyListeners();
+  }
+
+  Map<String, SearchContentModel?> mapDetailHashtag = {};
+  SearchContentModel? getMapHashtag(String tag){
+    return mapDetailHashtag[tag];
+  }
+  setMapHashtag(SearchContentModel value, String tag){
+    mapDetailHashtag[tag] = value;
+  }
+  deleteMapHashtag(String tag){
+    mapDetailHashtag[tag] = null;
   }
 
   SearchContentModel? _detailHashTag;
@@ -737,21 +752,63 @@ class SearchNotifier with ChangeNotifier {
   }
 
   Future getDetailHashtag(BuildContext context, String keys, {reload = true, HyppeType? hyppe}) async{
+    print('getDetailHashtag keys: $keys');
+    final detail = mapDetailHashtag[keys];
     try {
-      final lenghtVid = _detailHashTag?.vid?.length ?? 0;
-      final lenghtDiary = _detailHashTag?.diary?.length ?? 0;
-      final lenghtPic = _detailHashTag?.pict?.length ?? 0;
+      final lenghtVid = mapDetailHashtag[keys]?.vid?.length ?? 0;
+      final lenghtDiary = mapDetailHashtag[keys]?.diary?.length ?? 0;
+      final lenghtPic = mapDetailHashtag[keys]?.pict?.length ?? 0;
       if (reload) {
-        initAllHasNext();
-        loadTagDetail = true;
-        final _res = await _hitApiGetDetail(context, keys.replaceAll(' ', ''), TypeApiSearch.detailHashTag, 0, type: hyppe);
-        if (_res != null) {
-          _detailHashTag = _res;
-          final videos = _detailHashTag?.vid ?? [];
-          final diaries = _detailHashTag?.diary ?? [];
-          final pics = _detailHashTag?.pict ?? [];
-          final hashtags = _detailHashTag?.tags ?? [];
+        if(detail == null){
+          initAllHasNext();
+          loadTagDetail = true;
+          final _res = await _hitApiGetDetail(context, keys.replaceAll(' ', ''), TypeApiSearch.detailHashTag, 0, type: hyppe);
+          if (_res != null) {
+            mapDetailHashtag[keys] = _res;
+            final videos = mapDetailHashtag[keys]?.vid ?? [];
+            final diaries = mapDetailHashtag[keys]?.diary ?? [];
+            final pics = mapDetailHashtag[keys]?.pict ?? [];
+            final hashtags = mapDetailHashtag[keys]?.tags ?? [];
 
+            if (hashtags.isNotNullAndEmpty()) {
+              _currentHashtag = hashtags.first;
+              final extraTag = _currentHashtag;
+              final count = (extraTag != null ? (extraTag.total ?? 0) : 0);
+              if ((pics.isEmpty) && (diaries.isEmpty) && (videos.isEmpty)) {
+                _countTag = 0;
+              } else {
+                _countTag = count;
+              }
+            }else{
+              _countTag = 0;
+            }
+            // for(int i = 0; pics.length > i; i++){
+            //   final _pic = pics[i];
+            //   await pics[i].getBlob();
+            //   if(_pic.blob == null){
+            //     saveThumb(_pic);
+            //   }
+            // }
+            mapDetailHashtag[keys]?.vid = videos;
+            mapDetailHashtag[keys]?.diary = diaries;
+            mapDetailHashtag[keys]?.pict = pics;
+            detailHashTag = mapDetailHashtag[keys];
+            if (pics.isNotNullAndEmpty()) {
+              final data = pics[0];
+              final url = data != null ? ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
+              _tagImageMain = url;
+            }else{
+              _tagImageMain = '';
+            }
+
+          }
+          loadTagDetail = false;
+        }else{
+          detailHashTag = mapDetailHashtag[keys];
+          final videos = mapDetailHashtag[keys]?.vid ?? [];
+          final diaries = mapDetailHashtag[keys]?.diary ?? [];
+          final pics = mapDetailHashtag[keys]?.pict ?? [];
+          final hashtags = mapDetailHashtag[keys]?.tags ?? [];
           if (hashtags.isNotNullAndEmpty()) {
             _currentHashtag = hashtags.first;
             final extraTag = _currentHashtag;
@@ -764,16 +821,6 @@ class SearchNotifier with ChangeNotifier {
           }else{
             _countTag = 0;
           }
-          // for(int i = 0; pics.length > i; i++){
-          //   final _pic = pics[i];
-          //   await pics[i].getBlob();
-          //   if(_pic.blob == null){
-          //     saveThumb(_pic);
-          //   }
-          // }
-          _detailHashTag?.vid = videos;
-          _detailHashTag?.diary = diaries;
-          _detailHashTag?.pict = pics;
           if (pics.isNotNullAndEmpty()) {
             final data = pics[0];
             final url = data != null ? ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
@@ -781,9 +828,8 @@ class SearchNotifier with ChangeNotifier {
           }else{
             _tagImageMain = '';
           }
-
         }
-        loadTagDetail = false;
+        notifyListeners();
       } else {
         final currentSkip = hyppe == HyppeType.HyppeVid
             ? lenghtVid
@@ -819,18 +865,18 @@ class SearchNotifier with ChangeNotifier {
 
                 if (hyppe == HyppeType.HyppeVid) {
                   for (final video in videos ?? []) {
-                    _detailHashTag?.vid?.add(video);
+                    mapDetailHashtag[keys]?.vid?.add(video);
                   }
                   // _hashtagVid = [...(_hashtagVid ?? []), ...(videos ?? [])];
                 } else if (hyppe == HyppeType.HyppeDiary) {
                   for (final diary in diaries ?? []) {
-                    _detailHashTag?.diary?.add(diary);
+                    mapDetailHashtag[keys]?.diary?.add(diary);
                   }
                   // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
                 } else if (hyppe == HyppeType.HyppePic){
                   for (ContentData pic in pics ?? []) {
                     // await pic.getBlob();
-                    _detailHashTag?.pict?.add(pic);
+                    mapDetailHashtag[keys]?.pict?.add(pic);
                     // if(pic.blob == null){
                     //   saveThumb(pic);
                     // }
@@ -842,6 +888,7 @@ class SearchNotifier with ChangeNotifier {
             }
           }
         }
+        detailHashTag = mapDetailHashtag[keys];
         hasNext = false;
       }
     } catch (e) {
@@ -861,6 +908,7 @@ class SearchNotifier with ChangeNotifier {
         hasNext = false;
       }
     }
+
   }
 
   Future saveThumb(ContentData dataitem) async{
@@ -1425,5 +1473,74 @@ class SearchNotifier with ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  int _heightBox = 0;
+  int get heightBox => _heightBox;
+
+  int heightIndex = 0;
+
+  set heightBox(val) {
+    _heightBox = val;
+    notifyListeners();
+  }
+
+  scrollAuto(String index) {
+    var indexHei = int.parse(index) + 1;
+    print(indexHei);
+    var hasilBagi = indexHei / 3;
+    heightIndex = 0;
+    print(hasilBagi);
+    if (hasilBagi.isInteger()) {
+      hasilBagi = hasilBagi;
+    } else {
+      hasilBagi += 1;
+    }
+    print("========== height box ${heightBox}");
+    print("========== height box ${hasilBagi.toInt()}");
+    heightIndex = (heightBox * hasilBagi.toInt() - heightBox);
+    print("========== height box ${heightIndex}");
+  }
+
+  navigateToSeeAllScreen4(BuildContext context, List<ContentData> data, int index, HyppeType type) async {
+    context.read<ReportNotifier>().inPosition = contentPosition.myprofile;
+    final connect = await System().checkConnections();
+    if (connect) {
+      var result;
+
+      switch(type){
+        case HyppeType.HyppePic:
+          context.read<ScrollPicNotifier>().pics = data;
+          result = await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: const Text(
+            "Pic",
+            style: TextStyle(color: kHyppeTextLightPrimary),
+          )));
+          // _routing.move(Routes.picSlideDetailPreview,
+          //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
+          scrollAuto(result);
+          break;
+        case HyppeType.HyppeDiary:
+          context.read<ScrollDiaryNotifier>().diaryData = data;
+          result = await _routing.move(Routes.scrollDiary, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: const Text(
+            "Diary",
+            style: TextStyle(color: kHyppeTextLightPrimary),
+          )));
+          // _routing.move(Routes.diaryDetail,
+          //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
+          scrollAuto(result);
+          break;
+        case HyppeType.HyppeVid:
+          context.read<ScrollVidNotifier>().vidData = data;
+          result = await _routing.move(Routes.scrollVid, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: const Text(
+            "Vid",
+            style: TextStyle(color: kHyppeTextLightPrimary),
+          )));
+          // result = await _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
+          scrollAuto(result);
+          break;
+      }
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context);
+    }
   }
 }

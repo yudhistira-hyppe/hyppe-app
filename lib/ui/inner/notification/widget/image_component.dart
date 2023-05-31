@@ -70,17 +70,39 @@ class _ImageComponentState extends State<ImageComponent> {
             });
             switch (featureType) {
               case FeatureType.vid:
-                await onGetContentData(context, featureType, (v) => Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v)));
+                onGetContentData(context, featureType, (v) async{
+                  await Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v));
+                  setState(() {
+                    isLoading = false;
+                  });
+                });
+
                 break;
               case FeatureType.diary:
-                await onGetContentData(context, featureType, (v) => Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v, type: TypePlaylist.none)));
+                onGetContentData(context, featureType, (v) async{
+                  await Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v, type: TypePlaylist.none));
+                  setState(() {
+                    isLoading = false;
+                  });
+                });
+
                 break;
               case FeatureType.pic:
-                await onGetContentData(context, featureType, (v) => Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v)));
+                onGetContentData(context, featureType, (v) async{
+                  Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v));
+                  setState(() {
+                    isLoading = false;
+                  });
+                });
                 // context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, 0);
                 break;
               case FeatureType.story:
-                await onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)));
+                onGetContentData(context, featureType, (v) async {
+                  Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v));
+                  setState(() {
+                    isLoading = false;
+                  });
+                });
                 break;
               case FeatureType.txtMsg:
                 // return;
@@ -88,9 +110,7 @@ class _ImageComponentState extends State<ImageComponent> {
                 return;
             }
           }
-          setState(() {
-            isLoading = false;
-          });
+
 
         },
         child: CustomBaseCacheImage(
