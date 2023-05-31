@@ -929,7 +929,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                       }
                     });
 
-                    // System().increaseViewCount2(context, widget.data ?? ContentData());
+                    System().increaseViewCount2(context, widget.data ?? ContentData());
                     // if (adsData != null && widget.inLanding) {
                     //   fAliplayerAds?.prepare().whenComplete(() {
                     //     setState(() {
