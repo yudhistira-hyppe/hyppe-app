@@ -14,6 +14,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
@@ -703,117 +704,111 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 ),
                 child: Stack(
                   children: [
-                    Center(
-                      child: CustomBaseCacheImage(
-                        memCacheWidth: 100,
-                        memCacheHeight: 100,
-                        widthPlaceHolder: 80,
-                        heightPlaceHolder: 80,
-                        imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
-                        imageBuilder: (context, imageProvider) => ClipRRect(
-                          borderRadius: BorderRadius.circular(20), // Image border
-                          child: notifier.pic?[index].reportedStatus == 'BLURRED'
-                              ? ImageFiltered(
-                                  imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                  child: Image(
-                                    image: imageProvider,
-                                    fit: BoxFit.fitHeight,
-                                    width: SizeConfig.screenWidth,
-                                  ),
-                                )
-                              : Image(
-                                  image: imageProvider,
-                                  fit: BoxFit.fitHeight,
-                                  width: SizeConfig.screenWidth,
-                                ),
-                        ),
-                        errorWidget: (context, url, error) {
-                          return Container(
-                            // const EdgeInsets.symmetric(horizontal: 4.5),
-                            // height: 500,
-                            decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          );
-                        },
-                        emptyWidget: Container(
-                          // const EdgeInsets.symmetric(horizontal: 4.5),
+                    // Center(
+                    //   child: CustomBaseCacheImage(
+                    //     memCacheWidth: 100,
+                    //     memCacheHeight: 100,
+                    //     widthPlaceHolder: 80,
+                    //     heightPlaceHolder: 80,
+                    //     imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
+                    //     imageBuilder: (context, imageProvider) => ClipRRect(
+                    //       borderRadius: BorderRadius.circular(20), // Image border
+                    //       child: notifier.pic?[index].reportedStatus == 'BLURRED'
+                    //           ? ImageFiltered(
+                    //               imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                    //               child: Image(
+                    //                 image: imageProvider,
+                    //                 fit: BoxFit.fitHeight,
+                    //                 width: SizeConfig.screenWidth,
+                    //               ),
+                    //             )
+                    //           : Image(
+                    //               image: imageProvider,
+                    //               fit: BoxFit.fitHeight,
+                    //               width: SizeConfig.screenWidth,
+                    //             ),
+                    //     ),
+                    //     errorWidget: (context, url, error) {
+                    //       return Container(
+                    //         // const EdgeInsets.symmetric(horizontal: 4.5),
+                    //         // height: 500,
+                    //         decoration: BoxDecoration(
+                    //           image: const DecorationImage(
+                    //             image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                    //             fit: BoxFit.cover,
+                    //           ),
+                    //           borderRadius: BorderRadius.circular(8.0),
+                    //         ),
+                    //       );
+                    //     },
+                    //     emptyWidget: Container(
+                    //       // const EdgeInsets.symmetric(horizontal: 4.5),
 
-                          // height: 500,
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned.fill(
-                      child: GestureDetector(
-                        onTap: () {
-                          if (notifier.pic?[index].reportedStatus != 'BLURRED') {
-                            fAliplayer?.play();
-                            setState(() {
-                              isMute = !isMute;
-                            });
-                            fAliplayer?.setMuted(isMute);
-                          }
-                        },
-                        onDoubleTap: () {
-                          final _likeNotifier = context.read<LikeNotifier>();
-                          if (notifier.pic?[index] != null) {
-                            _likeNotifier.likePost(context, notifier.pic![index]);
-                          }
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          width: SizeConfig.screenWidth,
-                          height: SizeConfig.screenHeight,
-                          child: PinchZoom(
-                            onZoomStart: () {
-                              widget.functionZoomTriger();
-                            },
-                            onZoomEnd: () {
-                              widget.functionZoomTriger();
-                            },
-                            child: CustomBaseCacheImage(
-                              memCacheWidth: 100,
-                              memCacheHeight: 100,
-                              widthPlaceHolder: 80,
-                              heightPlaceHolder: 80,
-                              imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
-                              imageBuilder: (context, imageProvider) => ClipRRect(
-                                borderRadius: BorderRadius.circular(20), // Image border
-                                child: notifier.pic?[index].reportedStatus == 'BLURRED'
-                                    ? ImageFiltered(
-                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                        child: Image(
-                                          image: imageProvider,
-                                        ),
-                                      )
-                                    : Image(
+                    //       // height: 500,
+                    //       decoration: BoxDecoration(
+                    //         image: const DecorationImage(
+                    //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                    //           fit: BoxFit.cover,
+                    //         ),
+                    //         borderRadius: BorderRadius.circular(8.0),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    GestureDetector(
+                      onTap: () {
+                        if (notifier.pic?[index].reportedStatus != 'BLURRED') {
+                          fAliplayer?.play();
+                          setState(() {
+                            isMute = !isMute;
+                          });
+                          fAliplayer?.setMuted(isMute);
+                        }
+                      },
+                      onDoubleTap: () {
+                        final _likeNotifier = context.read<LikeNotifier>();
+                        if (notifier.pic?[index] != null) {
+                          _likeNotifier.likePost(context, notifier.pic![index]);
+                        }
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        // width: SizeConfig.screenWidth,
+                        // height: SizeConfig.screenHeight,
+                        child: ZoomableImage(
+                          child: CustomBaseCacheImage(
+                            memCacheWidth: 100,
+                            memCacheHeight: 100,
+                            widthPlaceHolder: 80,
+                            heightPlaceHolder: 80,
+                            imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
+                            imageBuilder: (context, imageProvider) => ClipRRect(
+                              borderRadius: BorderRadius.circular(20), // Image border
+                              child: notifier.pic?[index].reportedStatus == 'BLURRED'
+                                  ? ImageFiltered(
+                                      imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                      child: Image(
                                         image: imageProvider,
                                         fit: BoxFit.fitHeight,
                                         width: SizeConfig.screenWidth,
                                       ),
-                              ),
-                              emptyWidget: Container(
-                                // const EdgeInsets.symmetric(horizontal: 4.5),
+                                    )
+                                  : Image(
+                                      image: imageProvider,
+                                      fit: BoxFit.fitHeight,
+                                      width: SizeConfig.screenWidth,
+                                    ),
+                            ),
+                            emptyWidget: Container(
+                              // const EdgeInsets.symmetric(horizontal: 4.5),
 
-                                // height: 500,
-                                decoration: BoxDecoration(
-                                  image: const DecorationImage(
-                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
+                              // height: 500,
+                              decoration: BoxDecoration(
+                                image: const DecorationImage(
+                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  fit: BoxFit.cover,
                                 ),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
                           ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -42,49 +43,49 @@ class CustomBaseCacheImage extends StatelessWidget {
   Widget build(BuildContext context) {
     // System().checkMemory();
     SizeConfig().init(context);
-    // return (imageUrl ?? '').isNotEmpty
-    //     ? CachedNetworkImage(
-    //         cacheKey: cacheKey, // "$imageUrl${DateTime.now().minute}",
-    //         imageUrl: "$imageUrl",
-    //         httpHeaders: headers,
-    //         errorWidget: errorWidget,
-    //         imageBuilder: imageBuilder,
-    //         memCacheWidth: memCacheWidth,
-    //         memCacheHeight: memCacheHeight,
-    //         filterQuality: FilterQuality.none,
-    //         // cacheManager: CustomCacheManager.instance,
-    //         placeholder: (context, url) =>
-    //             placeHolderWidget ??
-    //             UnconstrainedBox(
-    //               child: Container(
-    //                 alignment: Alignment.center,
-    //                 child: const CustomLoading(),
-    //                 width: widthPlaceHolder * SizeConfig.scaleDiagonal,
-    //                 height: heightPlaceHolder * SizeConfig.scaleDiagonal,
-    //               ),
-    //             ),
-    //       )
-    //     : emptyWidget;
     return (imageUrl ?? '').isNotEmpty
-        ? OptimizedCacheImage(
+        ? CachedNetworkImage(
+            cacheKey: cacheKey, // "$imageUrl${DateTime.now().minute}",
             imageUrl: "$imageUrl",
-            memCacheHeight: memCacheHeight,
-            memCacheWidth: memCacheWidth,
-            imageBuilder: imageBuilder,
-            // maxHeightDiskCache: 500,
-            // maxWidthDiskCache: 500,
+            httpHeaders: headers,
             errorWidget: errorWidget,
+            imageBuilder: imageBuilder,
+            memCacheWidth: memCacheWidth,
+            memCacheHeight: memCacheHeight,
+            filterQuality: FilterQuality.none,
+            // cacheManager: CustomCacheManager.instance,
             placeholder: (context, url) =>
                 placeHolderWidget ??
                 UnconstrainedBox(
                   child: Container(
                     alignment: Alignment.center,
+                    child: const CustomLoading(),
                     width: widthPlaceHolder * SizeConfig.scaleDiagonal,
                     height: heightPlaceHolder * SizeConfig.scaleDiagonal,
-                    child: const CustomLoading(),
                   ),
                 ),
           )
         : emptyWidget;
+    // return (imageUrl ?? '').isNotEmpty
+    //     ? OptimizedCacheImage(
+    //         imageUrl: "$imageUrl",
+    //         memCacheHeight: memCacheHeight,
+    //         memCacheWidth: memCacheWidth,
+    //         imageBuilder: imageBuilder,
+    //         // maxHeightDiskCache: 500,
+    //         // maxWidthDiskCache: 500,
+    //         errorWidget: errorWidget,
+    //         placeholder: (context, url) =>
+    //             placeHolderWidget ??
+    //             UnconstrainedBox(
+    //               child: Container(
+    //                 alignment: Alignment.center,
+    //                 width: widthPlaceHolder * SizeConfig.scaleDiagonal,
+    //                 height: heightPlaceHolder * SizeConfig.scaleDiagonal,
+    //                 child: const CustomLoading(),
+    //               ),
+    //             ),
+    //       )
+    //     : emptyWidget;
   }
 }

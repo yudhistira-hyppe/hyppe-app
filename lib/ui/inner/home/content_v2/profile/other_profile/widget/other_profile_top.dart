@@ -9,9 +9,11 @@ import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/widget/show_image_profile.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
@@ -44,22 +46,25 @@ class OtherProfileTop extends StatelessWidget {
                 // ),
                 CustomProfileImage(
                   following: true,
-                  width: 80 * SizeConfig.scaleDiagonal,
-                  height: 80 * SizeConfig.scaleDiagonal,
+                  width: 65 * SizeConfig.scaleDiagonal,
+                  height: 65 * SizeConfig.scaleDiagonal,
+                  forStory: true,
                   imageUrl: notifier.displayPhotoProfile(),
-                  onTap: (){
-                    // print('test show other image profile');
-                    // final imageUrl = notifier.displayPhotoProfile();
-                    // if(imageUrl?.isNotEmpty ?? false){
-                    //   showDialog(
-                    //       context: context,
-                    //       builder: (context) {
-                    //         return ShowImageProfile(imageUrl: imageUrl!);
-                    //       },
-                    //       barrierColor: Colors.transparent);
-                    // }
+                  onTap: () {
+                    final imageUrl = notifier.displayPhotoProfileOriginal();
+                    print("hahahaha $imageUrl");
+                    if (imageUrl?.isNotEmpty ?? false) {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return ShowImageProfile(imageUrl: imageUrl!);
+                        },
+                        // barrierColor: Colors.red,
+                      );
+                    }
                   },
                 ),
+                twentyPx,
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20),

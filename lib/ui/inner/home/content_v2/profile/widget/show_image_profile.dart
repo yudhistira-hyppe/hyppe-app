@@ -1,8 +1,13 @@
+import 'dart:ui';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
+import 'package:hyppe/ux/routing.dart';
 
 import '../../../../../../../core/constants/asset_path.dart';
 import '../../../../../constant/widget/custom_icon_widget.dart';
@@ -31,39 +36,55 @@ class _ShowImageProfileState extends State<ShowImageProfile> {
     return Stack(
       fit: StackFit.expand,
       children: [
+        GestureDetector(
+          onTap: () => Routing().moveBack(),
+          child: Stack(
+            children: [
+              Image.asset(
+                '${AssetPath.pngPath}abstrak.jpg',
+                height: SizeConfig.screenHeight,
+                fit: BoxFit.fitHeight,
+              ),
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+                child: Container(
+                  color: Colors.black.withOpacity(0),
+                ),
+              ),
+            ],
+          ),
+        ),
         // Positioned.fill(child: Container(
         //   decoration: BoxDecoration(color: context.getColorScheme().secondary.withOpacity(0.5)),
         // )),
-        Positioned(
-          top: 150,
-          right: 20,
-          child: GestureDetector(
-            onTap: (){
-              Navigator.pop(context);
-            },
-            child: const CustomIconWidget(
-              width: 50,
-              height: 50,
-              iconData: "${AssetPath.vectorPath}close.svg",
-              defaultColor: false,
-              color: kHyppePrimary,
-            ),
-          ),
-        ),
+        // Positioned(
+        //   top: 150,
+        //   right: 20,
+        //   child: GestureDetector(
+        //     onTap: () {
+        //       Navigator.pop(context);
+        //     },
+        //     child: const CustomIconWidget(
+        //       width: 50,
+        //       height: 50,
+        //       iconData: "${AssetPath.vectorPath}close.svg",
+        //       defaultColor: false,
+        //       color: kHyppePrimary,
+        //     ),
+        //   ),
+        // ),
         Align(
           alignment: Alignment.center,
-          child: Container(
-            color: Colors.transparent,
-            width: context.getWidth(),
+          child: Center(
             child: CustomCacheImage(
               imageUrl: widget.imageUrl,
               imageBuilder: (_, imageProvider) {
-                return Container(
-                  height: context.getWidth() * 0.8,
-                  width: context.getWidth() * 0.8,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Image(
+                    image: imageProvider,
+                    fit: BoxFit.fitHeight,
+                    width: context.getWidth() * 0.8,
                   ),
                 );
               },
@@ -86,11 +107,11 @@ class _ShowImageProfileState extends State<ShowImageProfile> {
                     image: AssetImage('${AssetPath.pngPath}content-error.png'),
                   ),
                 ),
-              ),),
+              ),
+            ),
           ),
         ),
       ],
     );
   }
 }
-

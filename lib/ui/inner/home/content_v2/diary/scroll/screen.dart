@@ -135,7 +135,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       if (lastIndex != index) {
         if (index == notifier.diaryData!.length - 2) {
           print("ini reload harusnya");
-          notifier.loadMore(context, _scrollController);
+          notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!);
         }
       }
       lastIndex = index;
@@ -711,13 +711,14 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
             },
             child: Container(
               margin: EdgeInsets.only(bottom: 20),
-              width: MediaQuery.of(context).size.width,
-              height: 500,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  // color: Colors.yellow,
-                ),
+              // width: MediaQuery.of(context).size.width,
+              // height: 500,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                // color: Colors.yellow,
+              ),
+              child: AspectRatio(
+                aspectRatio: 9 / 16,
                 child: Stack(
                   children: [
                     _curIdx == index

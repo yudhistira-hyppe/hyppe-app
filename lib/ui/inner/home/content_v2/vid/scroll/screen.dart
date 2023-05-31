@@ -115,7 +115,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
         if (lastIndex != index) {
           if (index == notifier.vidData!.length - 2) {
             print("ini reload harusnya");
-            notifier.loadMore(context, _scrollController);
+            notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!);
           }
         }
         lastIndex = index;

@@ -17,6 +17,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
@@ -37,9 +38,11 @@ import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -51,10 +54,7 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:flutter/gestures.dart';
-import 'package:zoom_pinch_overlay/zoom_pinch_overlay.dart';
-
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ScrollPic extends StatefulWidget {
@@ -75,6 +75,8 @@ class ScrollPic extends StatefulWidget {
 class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   FlutterAliplayer? fAliplayer;
   TransformationController _transformationController = TransformationController();
+  final scrollGlobal = GlobalKey<SelfProfileScreenState>();
+  final a = SelfProfileScreenState();
 
   bool isPrepare = false;
   bool isPlay = false;
@@ -146,8 +148,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       index = itemPositionsListener.itemPositions.value.first.index;
       if (lastIndex != index) {
         if (index == notifier.pics!.length - 2) {
-          print("ini reload harusnya");
-          notifier.loadMore(context, _scrollController);
+          notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!);
         }
       }
       lastIndex = index;
@@ -526,7 +527,6 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         color: kHyppeTextLightPrimary,
                       ),
                       onPressed: () {
-                        print('_curIdx _curIdx $_curIdx');
                         Navigator.pop(context, '$_curIdx');
                       }),
                 ),
@@ -699,16 +699,22 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
             ],
           ),
           tenPx,
-          // ZoomableCachedNetworkImage(url: (notifier.pics?[index].isApsara ?? false) ? (notifier.pics?[index].mediaThumbEndPoint ?? "") : "${notifier.pics?[index].fullThumbPath}"),
+          // ZoomableCachedNetworkImage(
+          //   url: (notifier.pics?[index].isApsara ?? false) ? (notifier.pics?[index].mediaThumbEndPoint ?? "") : "${notifier.pics?[index].fullThumbPath}",
+          // ),
           VisibilityDetector(
             key: Key(index.toString()),
             onVisibilityChanged: (info) {
-              print("ada musiknya ${info.visibleFraction}");
+              // print("ada musiknya ${info.visibleFraction}");
+              // a.scrollAuto();
               if (info.visibleFraction >= 0.6) {
                 _curIdx = index;
+                //=============
+
+                //=============
                 if (_lastCurIndex != _curIdx) {
                   if (notifier.pics?[index].music?.musicTitle != null) {
-                    print("ada musiknya ${notifier.pics?[index].music}");
+                    // print("ada musiknya ${notifier.pics?[index].music}");
                     Future.delayed(const Duration(milliseconds: 100), () {
                       start(notifier.pics?[index] ?? ContentData());
                     });
@@ -737,117 +743,113 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                 ),
                 child: Stack(
                   children: [
-                    Center(
-                      child: CustomBaseCacheImage(
-                        memCacheWidth: 100,
-                        memCacheHeight: 100,
-                        widthPlaceHolder: 80,
-                        heightPlaceHolder: 80,
-                        imageUrl: (notifier.pics?[index].isApsara ?? false) ? (notifier.pics?[index].mediaThumbEndPoint ?? "") : "${notifier.pics?[index].fullThumbPath}",
-                        imageBuilder: (context, imageProvider) => ClipRRect(
-                          borderRadius: BorderRadius.circular(20), // Image border
-                          child: notifier.pics?[index].reportedStatus == 'BLURRED'
-                              ? ImageFiltered(
-                                  imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                  child: Image(
-                                    image: imageProvider,
-                                    fit: BoxFit.fitHeight,
-                                    width: SizeConfig.screenWidth,
-                                  ),
-                                )
-                              : Image(
-                                  image: imageProvider,
-                                  fit: BoxFit.fitHeight,
-                                  width: SizeConfig.screenWidth,
-                                ),
-                        ),
-                        errorWidget: (context, url, error) {
-                          return Container(
-                            // const EdgeInsets.symmetric(horizontal: 4.5),
-                            // height: 500,
-                            decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          );
-                        },
-                        emptyWidget: Container(
-                          // const EdgeInsets.symmetric(horizontal: 4.5),
+                    // Center(
+                    //   child: CustomBaseCacheImage(
+                    //     memCacheWidth: 100,
+                    //     memCacheHeight: 100,
+                    //     widthPlaceHolder: 80,
+                    //     heightPlaceHolder: 80,
+                    //     imageUrl: (notifier.pics?[index].isApsara ?? false) ? (notifier.pics?[index].mediaThumbEndPoint ?? "") : "${notifier.pics?[index].fullThumbPath}",
+                    //     imageBuilder: (context, imageProvider) => ClipRRect(
+                    //       borderRadius: BorderRadius.circular(20), // Image border
+                    //       child: notifier.pics?[index].reportedStatus == 'BLURRED'
+                    //           ? ImageFiltered(
+                    //               imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                    //               child: Image(
+                    //                 image: imageProvider,
+                    //                 fit: BoxFit.fitHeight,
+                    //                 width: SizeConfig.screenWidth,
+                    //               ),
+                    //             )
+                    //           : Image(
+                    //               image: imageProvider,
+                    //               fit: BoxFit.fitHeight,
+                    //               width: SizeConfig.screenWidth,
+                    //             ),
+                    //     ),
+                    //     errorWidget: (context, url, error) {
+                    //       return Container(
+                    //         // const EdgeInsets.symmetric(horizontal: 4.5),
+                    //         // height: 500,
+                    //         decoration: BoxDecoration(
+                    //           image: const DecorationImage(
+                    //             image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                    //             fit: BoxFit.cover,
+                    //           ),
+                    //           borderRadius: BorderRadius.circular(8.0),
+                    //         ),
+                    //       );
+                    //     },
+                    //     emptyWidget: Container(
+                    //       // const EdgeInsets.symmetric(horizontal: 4.5),
 
-                          // height: 500,
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned.fill(
-                      child: GestureDetector(
-                        onTap: () {
-                          if (notifier.pics?[index].reportedStatus != 'BLURRED') {
-                            fAliplayer?.play();
-                            setState(() {
-                              isMute = !isMute;
-                            });
-                            fAliplayer?.setMuted(isMute);
-                          }
-                        },
-                        onDoubleTap: () {
-                          final _likeNotifier = context.read<LikeNotifier>();
-                          if (notifier.pics?[index] != null) {
-                            _likeNotifier.likePost(context, notifier.pics![index]);
-                          }
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          width: SizeConfig.screenWidth,
-                          height: SizeConfig.screenHeight,
-                          child: PinchZoom(
-                            onZoomStart: () {
-                              // widget.functionZoomTriger();
-                            },
-                            onZoomEnd: () {
-                              // widget.functionZoomTriger();
-                            },
-                            child: CustomBaseCacheImage(
-                              memCacheWidth: 100,
-                              memCacheHeight: 100,
-                              widthPlaceHolder: 80,
-                              heightPlaceHolder: 80,
-                              imageUrl: (notifier.pics?[index].isApsara ?? false) ? (notifier.pics?[index].mediaThumbEndPoint ?? "") : "${notifier.pics?[index].fullThumbPath}",
-                              imageBuilder: (context, imageProvider) => ClipRRect(
-                                borderRadius: BorderRadius.circular(20), // Image border
-                                child: notifier.pics?[index].reportedStatus == 'BLURRED'
-                                    ? ImageFiltered(
-                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                        child: Image(
-                                          image: imageProvider,
-                                        ),
-                                      )
-                                    : Image(
+                    //       // height: 500,
+                    //       decoration: BoxDecoration(
+                    //         image: const DecorationImage(
+                    //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                    //           fit: BoxFit.cover,
+                    //         ),
+                    //         borderRadius: BorderRadius.circular(8.0),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    GestureDetector(
+                      onTap: () {
+                        if (notifier.pics?[index].reportedStatus != 'BLURRED') {
+                          fAliplayer?.play();
+                          setState(() {
+                            isMute = !isMute;
+                          });
+                          fAliplayer?.setMuted(isMute);
+                        }
+                      },
+                      onDoubleTap: () {
+                        final _likeNotifier = context.read<LikeNotifier>();
+                        if (notifier.pics?[index] != null) {
+                          _likeNotifier.likePost(context, notifier.pics![index]);
+                        }
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        // width: SizeConfig.screenWidth,
+                        // height: SizeConfig.screenHeight,
+                        child: ZoomableImage(
+                          child: CustomBaseCacheImage(
+                            memCacheWidth: 100,
+                            memCacheHeight: 100,
+                            widthPlaceHolder: 80,
+                            heightPlaceHolder: 80,
+
+                            imageUrl: (notifier.pics?[index].isApsara ?? false) ? (notifier.pics?[index].mediaThumbEndPoint ?? "") : "${notifier.pics?[index].fullThumbPath}",
+                            // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
+                            imageBuilder: (context, imageProvider) => ClipRRect(
+                              borderRadius: BorderRadius.circular(20), // Image border
+                              child: notifier.pics?[index].reportedStatus == 'BLURRED'
+                                  ? ImageFiltered(
+                                      imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                      child: Image(
                                         image: imageProvider,
                                         fit: BoxFit.fitHeight,
                                         width: SizeConfig.screenWidth,
                                       ),
-                              ),
-                              emptyWidget: Container(
-                                // const EdgeInsets.symmetric(horizontal: 4.5),
+                                    )
+                                  : Image(
+                                      image: imageProvider,
+                                      fit: BoxFit.fitHeight,
+                                      width: SizeConfig.screenWidth,
+                                    ),
+                            ),
+                            emptyWidget: Container(
+                              // const EdgeInsets.symmetric(horizontal: 4.5),
 
-                                // height: 500,
-                                decoration: BoxDecoration(
-                                  image: const DecorationImage(
-                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
+                              // height: 500,
+                              decoration: BoxDecoration(
+                                image: const DecorationImage(
+                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  fit: BoxFit.cover,
                                 ),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
                           ),
@@ -1190,421 +1192,5 @@ class AllowMultipleScaleRecognizer extends ScaleGestureRecognizer {
   @override
   void rejectGesture(int pointer) {
     acceptGesture(pointer);
-  }
-}
-
-//==============================================================================================
-
-class ZoomableCachedNetworkImage extends StatelessWidget {
-  final String? url;
-  final bool? closeOnZoomOut;
-  final Offset? focalPoint;
-  final double? initialScale;
-  final bool? animateToInitScale;
-
-  const ZoomableCachedNetworkImage({
-    this.url,
-    this.closeOnZoomOut = false,
-    this.focalPoint,
-    this.initialScale,
-    this.animateToInitScale,
-  });
-
-  // Widget loadImage() {}
-
-  Widget build(BuildContext context) {
-    return ZoomablePhotoViewer(
-      url: url!,
-      closeOnZoomOut: closeOnZoomOut ?? false,
-      focalPoint: focalPoint ?? Offset(0, 0),
-      initialScale: initialScale ?? 0,
-      animateToInitScale: animateToInitScale ?? false,
-    );
-  }
-}
-
-//==============================================================================================
-
-class ZoomablePhotoViewer extends StatefulWidget {
-  const ZoomablePhotoViewer({
-    Key? key,
-    this.url,
-    this.closeOnZoomOut,
-    this.focalPoint,
-    this.initialScale,
-    this.animateToInitScale,
-  }) : super(key: key);
-
-  final String? url;
-  final bool? closeOnZoomOut;
-  final Offset? focalPoint;
-  final double? initialScale;
-  final bool? animateToInitScale;
-
-  @override
-  State<ZoomablePhotoViewer> createState() => _ZoomablePhotoViewerState();
-}
-
-class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerProviderStateMixin {
-  static const double _minScale = 0.99;
-  static const double _maxScale = 4.0;
-  AnimationController? _flingAnimationController;
-  Animation<Offset>? _flingAnimation;
-  AnimationController? _zoomAnimationController;
-  Animation<double>? _zoomAnimation;
-  Offset? _offset;
-  double? _scale;
-  Offset? _normalizedOffset;
-  double? _previousScale;
-  AllowMultipleHorizontalDragRecognizer? _allowMultipleHorizontalDragRecognizer;
-  AllowMultipleVerticalDragRecognizer? _allowMultipleVerticalDragRecognizer;
-  Offset? _tapDownGlobalPosition;
-  String? _url;
-  bool? _closeOnZoomOut;
-  Offset? _focalPoint;
-  bool? _animateToInitScale;
-  double? _initialScale;
-  bool _isZooming = false;
-  OverlayEntry? _overlayEntry;
-
-  final _transformWidget = GlobalKey<_TransformWidgetState>();
-  Matrix4 _transformMatrix = Matrix4.identity();
-
-  @override
-  void initState() {
-    super.initState();
-    _url = widget.url ?? '';
-    _closeOnZoomOut = widget.closeOnZoomOut ?? false;
-    _offset = Offset.zero;
-    _scale = 1.0;
-    _initialScale = widget.initialScale;
-    _focalPoint = widget.focalPoint;
-    _animateToInitScale = widget.animateToInitScale;
-    if (_animateToInitScale!) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _zoom(_focalPoint!, _initialScale!, context));
-    }
-    _flingAnimationController = AnimationController(vsync: this)
-      ..addListener(_handleFlingAnimation)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) hide();
-      });
-    ;
-    _zoomAnimationController = AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _flingAnimationController!.dispose();
-    _zoomAnimationController!.dispose();
-    super.dispose();
-  }
-
-  // The maximum offset value is 0,0. If the size of this renderer's box is w,h
-  // then the minimum offset value is w - _scale * w, h - _scale * h.
-  Offset _clampOffset(Offset offset) {
-    final Size size = context.size!;
-    final Offset minOffset = Offset(size.width, size.height) * (1.0 - _scale!);
-    return Offset(offset.dx.clamp(minOffset.dx, 0.0), offset.dy.clamp(minOffset.dy, 0.0));
-  }
-
-  void _handleFlingAnimation() {
-    _transformWidget.currentState?.setMatrix(
-      Matrix4.identity()
-        ..translate(_flingAnimation!.value)
-        ..scale(_scale),
-    );
-    setState(() {
-      _offset = _flingAnimation!.value;
-    });
-  }
-
-  Widget _build(BuildContext context) {
-    return IgnorePointer(
-      child: Stack(
-        children: [
-          ModalBarrier(
-            color: Colors.black12,
-          ),
-          _TransformWidget(
-            key: _transformWidget,
-            offset: _offset,
-            scale: _scale,
-            child: _buildTransitionToImage(),
-          )
-        ],
-      ),
-    );
-  }
-
-  Future<void> show() async {
-    if (!_isZooming) {
-      final overlayState = Overlay.of(context);
-      _overlayEntry = OverlayEntry(builder: _build);
-      overlayState.insert(_overlayEntry!);
-    }
-  }
-
-  Future<void> hide() async {
-    setState(() {
-      _isZooming = false;
-    });
-
-    _overlayEntry?.remove();
-    _overlayEntry = null;
-  }
-
-  void _handleOnScaleStart(ScaleStartDetails details) {
-    setState(() {
-      _previousScale = _scale;
-      _normalizedOffset = (details.focalPoint - _offset!) / _scale!;
-      // The fling animation stops if an input gesture starts.
-      _flingAnimationController!.stop();
-    });
-    // show();
-    setState(() {
-      _isZooming = true;
-    });
-  }
-
-  void _handleOnScaleUpdate(ScaleUpdateDetails details) {
-    if (_scale! < 1.0 && _closeOnZoomOut!) {
-      print("kakakakakaka");
-      _zoom(Offset.zero, 1.0, context);
-      Navigator.pop(context);
-      return;
-    }
-    setState(() {
-      _scale = (_previousScale! * details.scale).clamp(_minScale, _maxScale);
-      // Ensure that image location under the focal point stays in the same place despite scaling.
-      _offset = _clampOffset(details.focalPoint - _normalizedOffset! * _scale!);
-    });
-    if (_transformWidget.currentState != null) {
-      _transformWidget.currentState!.setMatrix(
-        Matrix4.identity()
-          ..translate(_offset!.dx, _offset!.dy)
-          ..scale(_scale),
-      );
-    }
-  }
-
-  void _handleOnScaleEnd(ScaleEndDetails details) {
-    const double _kMinFlingVelocity = 2000.0;
-    final double magnitude = details.velocity.pixelsPerSecond.distance;
-
-//    print('magnitude: ' + magnitude.toString());
-    // if (magnitude < _kMinFlingVelocity) return;
-
-    final Offset direction = details.velocity.pixelsPerSecond / magnitude;
-    final double distance = (Offset.zero & context.size!).shortestSide;
-    setState(() {
-      _scale = _previousScale;
-    });
-    _flingAnimation = Tween<Offset>(begin: _offset, end: _clampOffset(_offset! + direction * distance)).animate(_flingAnimationController!);
-    _flingAnimationController!
-      ..value = 0.0
-      ..fling(velocity: magnitude / 2000.0);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return RawGestureDetector(
-      gestures: {
-        AllowMultipleScaleRecognizer: GestureRecognizerFactoryWithHandlers<AllowMultipleScaleRecognizer>(
-          () => AllowMultipleScaleRecognizer(), //constructor
-          (AllowMultipleScaleRecognizer instance) {
-            //initializer
-            instance.onStart = (details) => _handleOnScaleStart(details);
-            instance.onEnd = (details) => _handleOnScaleEnd(details);
-            instance.onUpdate = (details) => _handleOnScaleUpdate(details);
-          },
-        ),
-        AllowMultipleHorizontalDragRecognizer: GestureRecognizerFactoryWithHandlers<AllowMultipleHorizontalDragRecognizer>(
-          () => AllowMultipleHorizontalDragRecognizer(),
-          (AllowMultipleHorizontalDragRecognizer instance) {
-            _allowMultipleHorizontalDragRecognizer = instance;
-            instance.onStart = (details) => this._handleHorizontalDragAcceptPolicy(instance);
-            instance.onUpdate = (details) => this._handleHorizontalDragAcceptPolicy(instance);
-          },
-        ),
-        AllowMultipleVerticalDragRecognizer: GestureRecognizerFactoryWithHandlers<AllowMultipleVerticalDragRecognizer>(
-          () => AllowMultipleVerticalDragRecognizer(),
-          (AllowMultipleVerticalDragRecognizer instance) {
-            _allowMultipleVerticalDragRecognizer = instance;
-            instance.onStart = (details) => this._handleVerticalDragAcceptPolicy(instance);
-            instance.onUpdate = (details) => this._handleVerticalDragAcceptPolicy(instance);
-          },
-        ),
-        // AllowMultipleDoubleTapRecognizer: GestureRecognizerFactoryWithHandlers<AllowMultipleDoubleTapRecognizer>(
-        //   () => AllowMultipleDoubleTapRecognizer(),
-        //   (AllowMultipleDoubleTapRecognizer instance) {
-        //     instance.onDoubleTap = () => this._handleDoubleTap();
-        //   },
-        // ),
-        // AllowMultipleTapRecognizer: GestureRecognizerFactoryWithHandlers<AllowMultipleTapRecognizer>(
-        //   () => AllowMultipleTapRecognizer(),
-        //   (AllowMultipleTapRecognizer instance) {
-        //     instance.onTapDown = (details) => this._handleTapDown(details.globalPosition);
-        //   },
-        // ),
-      },
-      //Creates the nested container within the first.
-      behavior: HitTestBehavior.opaque,
-      child: Transform(
-        transform: Matrix4.identity()
-          ..translate(_offset!.dx, _offset!.dy)
-          ..scale(_scale),
-        child: _buildTransitionToImage(),
-      ),
-    );
-  }
-
-  Widget _buildTransitionToImage() {
-    return CachedNetworkImage(
-      imageUrl: _url!,
-      // fit: BoxFit.contain,
-      fit: BoxFit.fitHeight,
-      width: SizeConfig.screenWidth,
-      fadeOutDuration: Duration(milliseconds: 0),
-      fadeInDuration: Duration(milliseconds: 0),
-    );
-  }
-
-  void _handleHorizontalDragAcceptPolicy(AllowMultipleHorizontalDragRecognizer instance) {
-    _scale != 1.0 ? instance.alwaysAccept = true : instance.alwaysAccept = false;
-  }
-
-  void _handleVerticalDragAcceptPolicy(AllowMultipleVerticalDragRecognizer instance) {
-    _scale != 1.0 ? instance.alwaysAccept = true : instance.alwaysAccept = false;
-  }
-
-  void _handleDoubleTap() {
-    setState(() {
-      if (_scale! >= 1.0 && _scale! <= 1.2) {
-        _previousScale = _scale!;
-        _normalizedOffset = (_tapDownGlobalPosition! - _offset!) / _scale!;
-        _scale = 2.75;
-        _offset = _clampOffset(context.size!.center(Offset.zero) - _normalizedOffset! * _scale!);
-        _allowMultipleVerticalDragRecognizer!.alwaysAccept = true;
-        _allowMultipleHorizontalDragRecognizer!.alwaysAccept = true;
-      } else {
-        if (_closeOnZoomOut!) {
-          _zoom(Offset.zero, 1.0, context);
-          _zoomAnimation!.addListener(() {
-            if (_zoomAnimation!.isCompleted) {
-              Navigator.pop(context);
-            }
-          });
-          return;
-        }
-        _scale = 1.0;
-        _offset = _clampOffset(Offset.zero - _normalizedOffset! * _scale!);
-        _allowMultipleVerticalDragRecognizer!.alwaysAccept = false;
-        _allowMultipleHorizontalDragRecognizer!.alwaysAccept = false;
-      }
-    });
-  }
-
-  _handleTapDown(Offset globalPosition) {
-    final RenderBox referenceBox = context.findRenderObject() as RenderBox;
-    _tapDownGlobalPosition = referenceBox.globalToLocal(globalPosition);
-  }
-
-  _zoom(Offset focalPoint, double scale, BuildContext context) {
-    final RenderBox referenceBox = context.findRenderObject() as RenderBox;
-    focalPoint = referenceBox.globalToLocal(focalPoint);
-    _previousScale = _scale;
-    _normalizedOffset = (focalPoint - _offset!) / _scale!;
-    _allowMultipleVerticalDragRecognizer!.alwaysAccept = true;
-    _allowMultipleHorizontalDragRecognizer!.alwaysAccept = true;
-    _zoomAnimation = Tween<double>(begin: _scale, end: scale).animate(_zoomAnimationController!);
-    _zoomAnimation!.addListener(() {
-      setState(() {
-        _scale = _zoomAnimation!.value;
-        _offset = scale < _scale! ? _clampOffset(Offset.zero - _normalizedOffset! * _scale!) : _clampOffset(context.size!.center(Offset.zero) - _normalizedOffset! * _scale!);
-      });
-    });
-    _zoomAnimationController!.forward(from: 0.0);
-  }
-}
-
-abstract class ScaleDownHandler {
-  void handleScaleDown();
-}
-
-//==============================================================================================
-
-class AllowMultipleHorizontalDragRecognizer extends HorizontalDragGestureRecognizer {
-  bool alwaysAccept = false;
-
-  @override
-  void rejectGesture(int pointer) {
-    acceptGesture(pointer);
-  }
-
-  @override
-  void resolve(GestureDisposition disposition) {
-    if (alwaysAccept) {
-      super.resolve(GestureDisposition.accepted);
-    } else {
-      super.resolve(GestureDisposition.rejected);
-    }
-  }
-}
-
-//==============================================================================================
-
-class AllowMultipleVerticalDragRecognizer extends VerticalDragGestureRecognizer {
-  bool alwaysAccept = false;
-
-  @override
-  void rejectGesture(int pointer) {
-    acceptGesture(pointer);
-  }
-
-  @override
-  void resolve(GestureDisposition disposition) {
-    if (alwaysAccept) {
-      super.resolve(GestureDisposition.accepted);
-    } else {
-      super.resolve(GestureDisposition.rejected);
-    }
-  }
-}
-
-//==============================================================================================
-
-class _TransformWidget extends StatefulWidget {
-  const _TransformWidget({
-    Key? key,
-    required this.child,
-    required this.offset,
-    required this.scale,
-  }) : super(key: key);
-
-  final Widget child;
-  final Offset? offset;
-  final double? scale;
-
-  @override
-  _TransformWidgetState createState() => _TransformWidgetState();
-}
-
-class _TransformWidgetState extends State<_TransformWidget> {
-  Matrix4? _matrix = Matrix4.identity();
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform(
-      transform: Matrix4.identity()
-        ..translate(widget.offset!.dx, widget.offset!.dy)
-        ..scale(widget.scale),
-      child: widget.child,
-    );
-  }
-
-  void setMatrix(Matrix4? matrix) {
-    setState(() {
-      _matrix = matrix;
-    });
   }
 }

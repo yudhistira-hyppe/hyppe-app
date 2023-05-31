@@ -27,7 +27,7 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                 child: Row(
                   children: [
                     CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}pause.svg",
+                      iconData: "${AssetPath.vectorPath}pic.svg",
                       width: 20 * SizeConfig.scaleDiagonal,
                       height: 20 * SizeConfig.scaleDiagonal,
                       defaultColor: false,
@@ -35,7 +35,7 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                     ),
                     SizedBox(width: 8 * SizeConfig.scaleDiagonal),
                     CustomTextWidget(
-                      textToDisplay: "Vids",
+                      textToDisplay: "Pics",
                       textStyle: TextStyle(
                         fontSize: 14,
                         color: notifier.pageIndex == 0 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
@@ -52,7 +52,7 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                 height: 2 * SizeConfig.scaleDiagonal,
                 width: 125 * SizeConfig.scaleDiagonal,
                 child: Container(color: notifier.pageIndex == 0 ? Theme.of(context).colorScheme.primary : null),
-              ),
+              )
             ],
           ),
           Column(
@@ -95,7 +95,7 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                 child: Row(
                   children: [
                     CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}pic.svg",
+                      iconData: "${AssetPath.vectorPath}pause.svg",
                       width: 20 * SizeConfig.scaleDiagonal,
                       height: 20 * SizeConfig.scaleDiagonal,
                       defaultColor: false,
@@ -103,7 +103,7 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                     ),
                     SizedBox(width: 8 * SizeConfig.scaleDiagonal),
                     CustomTextWidget(
-                      textToDisplay: "Pics",
+                      textToDisplay: "Vids",
                       textStyle: TextStyle(
                         fontSize: 14,
                         color: notifier.pageIndex == 2 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
@@ -120,7 +120,7 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                 height: 2 * SizeConfig.scaleDiagonal,
                 width: 125 * SizeConfig.scaleDiagonal,
                 child: Container(color: notifier.pageIndex == 2 ? Theme.of(context).colorScheme.primary : null),
-              )
+              ),
             ],
           ),
         ],

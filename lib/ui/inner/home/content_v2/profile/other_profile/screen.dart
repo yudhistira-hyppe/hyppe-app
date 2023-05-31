@@ -3,6 +3,7 @@ import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -14,6 +15,8 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/othe
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_top_shimmer.dart';
 import 'package:provider/provider.dart';
 
+import 'package:measured_size/measured_size.dart';
+
 class OtherProfileScreen extends StatefulWidget {
   final OtherProfileArgument arguments;
   const OtherProfileScreen({Key? key, required this.arguments}) : super(key: key);
@@ -22,9 +25,10 @@ class OtherProfileScreen extends StatefulWidget {
   _OtherProfileScreenState createState() => _OtherProfileScreenState();
 }
 
-class _OtherProfileScreenState extends State<OtherProfileScreen> {
+class _OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
+  int heightProfileCard = 0;
 
   @override
   void initState() {
@@ -35,6 +39,27 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
     System().disposeBlock();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didPopNext() {
+    System().disposeBlock();
+    final notifier = context.read<OtherProfileNotifier>();
+    Future.delayed(const Duration(milliseconds: 500), () {
+      var jumpTo = heightProfileCard + notifier.heightIndex;
+      print("---------- $jumpTo");
+      print("---------- $heightProfileCard");
+      print("---------- ${notifier.heightIndex}");
+      _scrollController.jumpTo(jumpTo.toDouble());
+    });
+
+    super.didPopNext();
   }
 
   @override
@@ -114,7 +139,11 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                   child: Container(
                     child: notifier.user.profile != null
                         ? notifier.statusFollowing == StatusFollowing.following
-                            ? const OtherProfileTop()
+                            ? MeasuredSize(
+                                onChange: (Size size) {
+                                  heightProfileCard = size.height.toInt();
+                                },
+                                child: const OtherProfileTop())
                             : const OtherProfileTop()
                         : BothProfileTopShimmer(),
                   ),

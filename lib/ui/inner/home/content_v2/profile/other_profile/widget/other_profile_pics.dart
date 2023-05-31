@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
@@ -11,7 +12,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_conte
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
-
+import 'package:measured_size/measured_size.dart';
 import '../../../../../../constant/widget/custom_loading.dart';
 
 class OtherProfilePics extends StatelessWidget {
@@ -36,50 +37,64 @@ class OtherProfilePics extends StatelessWidget {
                       );
                     }
                     return GestureDetector(
-                      onTap: () => context.read<OtherProfileNotifier>().navigateToSeeAllScreen(context, index),
-                      child: Padding(
-                        padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                        child: notifier.item1?.pics?[index].reportedStatus == 'BLURRED'
-                            ? SensitiveContentProfile(data: notifier.item1?.pics?[index])
-                            : Stack(
-                                children: [
-                                  Center(
-                                    child: CustomContentModeratedWidget(
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      isSale: false,
-                                      isSafe: true, //notifier.postData.data.listPic[index].isSafe,
-                                      thumbnail: ImageUrl(notifier.item1?.pics?[index].postID, url: (notifier.item1?.pics?[index].isApsara ?? false)
-                                          ? (notifier.item1?.pics?[index].mediaThumbEndPoint ?? '')
-                                          : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint) ?? ''),
+                      onTap: () => context.read<OtherProfileNotifier>().navigateToSeeAllScreen(context, index,
+                          title: const Text(
+                            "Pic",
+                            style: TextStyle(color: kHyppeTextLightPrimary),
+                          )),
+                      child: MeasuredSize(
+                        onChange: (size) {
+                          if (index == 0) {
+                            print("------height ${size.height}");
+                            final op = context.read<OtherProfileNotifier>();
+                            op.heightBox = size.height.toInt();
+                          }
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
+                          child: notifier.item1?.pics?[index].reportedStatus == 'BLURRED'
+                              ? SensitiveContentProfile(data: notifier.item1?.pics?[index])
+                              : Stack(
+                                  children: [
+                                    Center(
+                                      child: CustomContentModeratedWidget(
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        isSale: false,
+                                        isSafe: true, //notifier.postData.data.listPic[index].isSafe,
+                                        thumbnail: ImageUrl(notifier.item1?.pics?[index].postID,
+                                            url: (notifier.item1?.pics?[index].isApsara ?? false)
+                                                ? (notifier.item1?.pics?[index].mediaThumbEndPoint ?? '')
+                                                : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint) ?? ''),
+                                      ),
                                     ),
-                                  ),
-                                  (notifier.item1?.pics?[index].saleAmount ?? 0) > 0
-                                      ? const Align(
-                                          alignment: Alignment.topRight,
-                                          child: Padding(
-                                            padding: EdgeInsets.all(4.0),
-                                            child: CustomIconWidget(
-                                              iconData: "${AssetPath.vectorPath}sale.svg",
-                                              height: 22,
-                                              defaultColor: false,
-                                            ),
-                                          ))
-                                      : Container(),
-                                  (notifier.item1?.pics?[index].certified ?? false) && (notifier.item1?.pics?[index].saleAmount ?? 0) == 0
-                                      ? Align(
-                                          alignment: Alignment.topRight,
-                                          child: Padding(
-                                              padding: const EdgeInsets.all(2.0),
-                                              child: Container(
-                                                  padding: const EdgeInsets.all(4),
-                                                  child: const CustomIconWidget(
-                                                    iconData: '${AssetPath.vectorPath}ownership.svg',
-                                                    defaultColor: false,
-                                                  ))))
-                                      : Container()
-                                ],
-                              ),
+                                    (notifier.item1?.pics?[index].saleAmount ?? 0) > 0
+                                        ? const Align(
+                                            alignment: Alignment.topRight,
+                                            child: Padding(
+                                              padding: EdgeInsets.all(4.0),
+                                              child: CustomIconWidget(
+                                                iconData: "${AssetPath.vectorPath}sale.svg",
+                                                height: 22,
+                                                defaultColor: false,
+                                              ),
+                                            ))
+                                        : Container(),
+                                    (notifier.item1?.pics?[index].certified ?? false) && (notifier.item1?.pics?[index].saleAmount ?? 0) == 0
+                                        ? Align(
+                                            alignment: Alignment.topRight,
+                                            child: Padding(
+                                                padding: const EdgeInsets.all(2.0),
+                                                child: Container(
+                                                    padding: const EdgeInsets.all(4),
+                                                    child: const CustomIconWidget(
+                                                      iconData: '${AssetPath.vectorPath}ownership.svg',
+                                                      defaultColor: false,
+                                                    ))))
+                                        : Container()
+                                  ],
+                                ),
+                        ),
                       ),
                     );
                   } catch (e) {

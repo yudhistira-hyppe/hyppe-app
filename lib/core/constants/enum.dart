@@ -28,13 +28,13 @@ enum TicketStatus { newest, inProgress, solved, notSolved }
 
 enum AppealStatus { newest, flaging, notSuspended, suspend, removed }
 
-enum SearchLayout { first, search, searchMore, mainHashtagDetail, hashtagDetail, interestDetail}
+enum SearchLayout { first, search, searchMore, mainHashtagDetail, hashtagDetail, interestDetail }
 
-enum HyppeType {HyppeVid, HyppeDiary, HyppePic}
+enum HyppeType { HyppeVid, HyppeDiary, HyppePic }
 
-enum SearchLoadData {all, content, user, hashtag}
+enum SearchLoadData { all, content, user, hashtag }
 
-enum TypeApiSearch {normal, detailHashTag, detailInterest}
+enum TypeApiSearch { normal, detailHashTag, detailInterest }
 
 enum ErrorType {
   myStory,
@@ -96,3 +96,5 @@ enum SpeedInternet { fast, medium, slow }
 enum ModeTypeAliPLayer { url, sts, auth, mps }
 
 enum VideoShowMode { grid, screen }
+
+enum PageSrc { selfProfile, otherProfile }
