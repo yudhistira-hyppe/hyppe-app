@@ -141,6 +141,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
 
   late PageController _pageController;
 
+  var loadLaunch = false;
+
   @override
   void initState() {
     print("======================ke initstate");
@@ -703,29 +705,44 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
               if (secondsSkip < 1) {
                 if (data.adsUrlLink?.isEmail() ?? false) {
                   final email = data.adsUrlLink!.replaceAll('email:', '');
-                  adsView(widget.data, secondsVideo, isClick: true);
-                  Navigator.pop(context);
-                  Future.delayed(const Duration(milliseconds: 500), () {
-                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                  setState(() {
+                    loadLaunch = true;
                   });
+                  adsView(widget.data, secondsVideo, isClick: true).whenComplete((){
+                    Navigator.pop(context);
+                    Future.delayed(const Duration(milliseconds: 800), () {
+                      Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                    });
+                  });
+
                 } else {
                   try {
                     final uri = Uri.parse(data.adsUrlLink ?? '');
                     print('bottomAdsLayout ${data.adsUrlLink}');
                     if (await canLaunchUrl(uri)) {
-                      adsView(widget.data, secondsVideo, isClick: true);
-                      Navigator.pop(context);
-                      await launchUrl(
+                      setState(() {
+                        loadLaunch = true;
+                      });
+                      adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async{
+                        Navigator.pop(context);
+                        await launchUrl(
                         uri,
                         mode: LaunchMode.externalApplication,
-                      );
+                        );
+                      });
+
                     } else {
                       throw "Could not launch $uri";
                     }
                     // can't launch url, there is some error
                   } catch (e) {
-                    adsView(widget.data, secondsVideo, isClick: true);
-                    System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                    setState(() {
+                      loadLaunch = true;
+                    });
+                    adsView(widget.data, secondsVideo, isClick: true).whenComplete((){
+                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                    });
+
                   }
                 }
               }
@@ -736,7 +753,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
                 decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: secondsSkip < 1 ? KHyppeButtonAds : context.getColorScheme().secondary),
-                child: Text(
+                child: loadLaunch ? const SizedBox(width: 40, height: 20, child: CustomLoading()) : Text(
                   learnMore,
                   style: const TextStyle(
                     color: Colors.white,

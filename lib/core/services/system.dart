@@ -1608,11 +1608,11 @@ class System {
     return formatter.format(now);
   }
 
-  void goToWebScreen(String url, {bool isPop = false}) {
+  void goToWebScreen(String url, {bool isPop = false}) async{
     if (isPop) {
       Routing().moveBack();
     }
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 800), () {
       Routing().move(Routes.webView, argument: url);
     });
   }

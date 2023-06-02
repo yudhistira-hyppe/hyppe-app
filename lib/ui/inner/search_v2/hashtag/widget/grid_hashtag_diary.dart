@@ -121,7 +121,7 @@ class GridHashtagDiary extends StatelessWidget {
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
                 crossAxisCount: 3,
-                childAspectRatio: 1.0,),
+                childAspectRatio: 0.67,),
             ),
           ) : BothProfileContentShimmer();
           // return CustomScrollView(
