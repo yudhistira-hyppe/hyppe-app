@@ -45,7 +45,7 @@ class ScrollDiaryNotifier with ChangeNotifier {
     }
 
     if(pageSrc == PageSrc.interest){
-      final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailHashTag, 12, skip: searchNotifier.interestContents[key]?.diary?.length ?? 0);
+      final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailInterest, 12, skip: searchNotifier.interestContents[key]?.diary?.length ?? 0);
       searchNotifier.interestContents[key]?.diary?.addAll(data);
       diaryData = searchNotifier.interestContents[key]?.diary;
       isLoadingLoadmore = false;

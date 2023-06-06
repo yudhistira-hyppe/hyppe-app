@@ -49,7 +49,7 @@ class ScrollVidNotifier with ChangeNotifier {
     }
 
     if(pageSrc == PageSrc.interest){
-      final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.detailHashTag, 12, skip: searchNotifier.interestContents[key]?.vid?.length ?? 0);
+      final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.detailInterest, 12, skip: searchNotifier.interestContents[key]?.vid?.length ?? 0);
       searchNotifier.interestContents[key]?.vid?.addAll(data);
       vidData = searchNotifier.interestContents[key]?.vid;
       isLoadingLoadmore = false;
