@@ -32,7 +32,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/controller/story_controller.dart';
 
+import '../../../core/arguments/contents/slided_diary_detail_screen_argument.dart';
 import '../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
+import '../../../core/arguments/contents/slided_vid_detail_screen_argument.dart';
 import '../../../core/bloc/posts_v2/bloc.dart';
 import '../../../core/constants/themes/hyppe_colors.dart';
 import '../../../core/models/collection/database/search_history.dart';
@@ -1116,7 +1118,8 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  Future<List<ContentData>> getDetailContents(BuildContext context, String keys, HyppeType type, TypeApiSearch api, int limit) async {
+  Future<List<ContentData>> getDetailContents(BuildContext context, String keys, HyppeType type, TypeApiSearch api, int limit,
+      {int? skip}) async {
     try {
       loadPlaylist = true;
       String email = SharedPreference().readStorage(SpKeys.email);
@@ -1127,7 +1130,7 @@ class SearchNotifier with ChangeNotifier {
         "listvid": type == HyppeType.HyppeVid ? true : false,
         "listdiary": type == HyppeType.HyppeDiary ? true : false,
         "listpict": type == HyppeType.HyppePic ? true : false,
-        "skip": 0,
+        "skip": skip ?? 0,
         "limit": limit,
       };
 
@@ -1548,7 +1551,7 @@ class SearchNotifier with ChangeNotifier {
     print("========== height box ${heightIndex}");
   }
 
-  navigateToSeeAllScreen4(BuildContext context, List<ContentData> data, int index, HyppeType type, TypeApiSearch api, String keys) async {
+  navigateToSeeAllScreen4(BuildContext context, List<ContentData> data, int index, HyppeType type, TypeApiSearch api, String keys, PageSrc pageSrc) async {
     context.read<ReportNotifier>().inPosition = contentPosition.myprofile;
     final connect = await System().checkConnections();
     if (connect) {
@@ -1556,31 +1559,52 @@ class SearchNotifier with ChangeNotifier {
 
       switch(type){
         case HyppeType.HyppePic:
-          context.read<ScrollPicNotifier>().pics = await getDetailContents(context, keys, type, api, data.length);
-          result = await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: const Text(
-            "Pic",
-            style: TextStyle(color: kHyppeTextLightPrimary),
-          )));
+          final pics = await getDetailContents(context, keys, type, api, data.length);
+          result = await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(
+            page: index,
+            type: TypePlaylist.search,
+            titleAppbar: const Text(
+              "Pic",
+              style: TextStyle(color: kHyppeTextLightPrimary),
+            ),
+            pageSrc: pageSrc,
+            picData: pics,
+            key: keys
+          ));
           // _routing.move(Routes.picSlideDetailPreview,
           //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
           scrollAuto(result);
           break;
         case HyppeType.HyppeDiary:
-          context.read<ScrollDiaryNotifier>().diaryData = await getDetailContents(context, keys, type, api, data.length);
-          result = await _routing.move(Routes.scrollDiary, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: const Text(
-            "Diary",
-            style: TextStyle(color: kHyppeTextLightPrimary),
-          )));
+          final diaries = await getDetailContents(context, keys, type, api, data.length);
+          result = await _routing.move(Routes.scrollDiary, argument: SlidedDiaryDetailScreenArgument(
+            page: index,
+            type: TypePlaylist.search,
+            titleAppbar: const Text(
+              "Diary",
+              style: TextStyle(color: kHyppeTextLightPrimary),
+            ),
+            pageSrc: pageSrc,
+            diaryData: diaries,
+              key: keys
+          ));
           // _routing.move(Routes.diaryDetail,
           //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
           scrollAuto(result);
           break;
         case HyppeType.HyppeVid:
-          context.read<ScrollVidNotifier>().vidData = await getDetailContents(context, keys, type, api, data.length);
-          result = await _routing.move(Routes.scrollVid, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: const Text(
-            "Vid",
-            style: TextStyle(color: kHyppeTextLightPrimary),
-          )));
+          final vids = await getDetailContents(context, keys, type, api, data.length);
+          result = await _routing.move(Routes.scrollVid, argument: SlidedVidDetailScreenArgument(
+            page: index,
+            type: TypePlaylist.search,
+            titleAppbar: const Text(
+              "Vid",
+              style: TextStyle(color: kHyppeTextLightPrimary),
+            ),
+            pageSrc: pageSrc,
+            vidData: vids,
+              key: keys
+          ));
           // result = await _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
           scrollAuto(result);
           break;

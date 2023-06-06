@@ -97,4 +97,4 @@ enum ModeTypeAliPLayer { url, sts, auth, mps }
 
 enum VideoShowMode { grid, screen }
 
-enum PageSrc { selfProfile, otherProfile }
+enum PageSrc { selfProfile, otherProfile, interest, hashtag, searchData }

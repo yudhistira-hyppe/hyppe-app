@@ -5,11 +5,13 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.da
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../search_v2/notifier.dart';
+
 class ScrollDiaryNotifier with ChangeNotifier {
   bool isLoadingLoadmore = false;
   List<ContentData>? diaryData = [];
 
-  Future loadMore(BuildContext context, ScrollController scrollController, PageSrc pageSrc) async {
+  Future loadMore(BuildContext context, ScrollController scrollController, PageSrc pageSrc, String key) async {
     if (pageSrc == PageSrc.selfProfile) {
       final sp = context.read<SelfProfileNotifier>();
       sp.pageIndex = 1;
@@ -25,9 +27,32 @@ class ScrollDiaryNotifier with ChangeNotifier {
       diaryData = op.user.diaries;
       notifyListeners();
     }
+
+    final searchNotifier = context.read<SearchNotifier>();
+
+    if(pageSrc == PageSrc.searchData){
+      final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.normal, 12, skip: searchNotifier.searchDiary?.length ?? 0);
+      searchNotifier.searchDiary?.addAll(data);
+      diaryData = searchNotifier.searchDiary;
+      isLoadingLoadmore = false;
+    }
+
+    if(pageSrc == PageSrc.hashtag){
+      final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailHashTag, 12, skip: searchNotifier.mapDetailHashtag[key]?.diary?.length ?? 0);
+      searchNotifier.mapDetailHashtag[key]?.diary?.addAll(data);
+      diaryData = searchNotifier.mapDetailHashtag[key]?.diary;
+      isLoadingLoadmore = false;
+    }
+
+    if(pageSrc == PageSrc.interest){
+      final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailHashTag, 12, skip: searchNotifier.interestContents[key]?.diary?.length ?? 0);
+      searchNotifier.interestContents[key]?.diary?.addAll(data);
+      diaryData = searchNotifier.interestContents[key]?.diary;
+      isLoadingLoadmore = false;
+    }
   }
 
-  Future reload(BuildContext context, PageSrc pageSrc) async {
+  Future reload(BuildContext context, PageSrc pageSrc, {String key = ""}) async {
     if (pageSrc == PageSrc.selfProfile) {
       final sp = context.read<SelfProfileNotifier>();
       sp.pageIndex = 0;
@@ -44,6 +69,29 @@ class ScrollDiaryNotifier with ChangeNotifier {
       diaryData = op.user.diaries;
       isLoadingLoadmore = false;
       notifyListeners();
+    }
+
+    final searchNotifier = context.read<SearchNotifier>();
+
+    if(pageSrc == PageSrc.searchData){
+      final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.normal, 12);
+      searchNotifier.searchDiary = data;
+      diaryData = searchNotifier.searchDiary;
+      isLoadingLoadmore = false;
+    }
+
+    if(pageSrc == PageSrc.hashtag){
+      final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailHashTag, 12);
+      searchNotifier.mapDetailHashtag[key]?.diary = data;
+      diaryData = searchNotifier.mapDetailHashtag[key]?.diary;
+      isLoadingLoadmore = false;
+    }
+
+    if(pageSrc == PageSrc.interest){
+      final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailHashTag, 12);
+      searchNotifier.interestContents[key]?.diary = data;
+      diaryData = searchNotifier.interestContents[key]?.diary;
+      isLoadingLoadmore = false;
     }
   }
 }

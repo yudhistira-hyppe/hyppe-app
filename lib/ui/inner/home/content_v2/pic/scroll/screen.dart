@@ -146,15 +146,20 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     });
     var index = 0;
     var lastIndex = 0;
+    final pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
+
 
     itemPositionsListener.itemPositions.addListener(() async {
       index = itemPositionsListener.itemPositions.value.first.index;
       if (lastIndex != index) {
         if (index == pics!.length - 2) {
-          await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!);
-          setState(() {
-            pics = notifier.pics;
-          });
+          if(!notifier.isLoadingLoadmore){
+            await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
+            setState(() {
+              pics = notifier.pics;
+            });
+          }
+
         }
       }
       lastIndex = index;
@@ -546,7 +551,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                             setState(() {
                               isloading = true;
                             });
-                            await notifier.reload(context, widget.arguments!.pageSrc!);
+                            await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
                             setState(() {
                               pics = notifier.pics;
                             });
@@ -562,7 +567,6 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               itemScrollController: itemScrollController,
                               itemPositionsListener: itemPositionsListener,
                               scrollOffsetController: scrollOffsetController,
-
                               // scrollDirection: Axis.horizontal,
                               // physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: false,

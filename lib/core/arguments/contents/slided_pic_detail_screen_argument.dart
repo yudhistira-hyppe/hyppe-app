@@ -12,9 +12,10 @@ class SlidedPicDetailScreenArgument extends ContentScreenArgument {
   final TypePlaylist type;
   final Widget? titleAppbar;
   final PageSrc? pageSrc;
+  final String? key;
 
   @override
   FeatureType get featureType => FeatureType.pic;
 
-  SlidedPicDetailScreenArgument({this.index = 0, this.picData, this.page, this.limit, required this.type, this.titleAppbar, this.pageSrc});
+  SlidedPicDetailScreenArgument({this.index = 0, this.picData, this.page, this.limit, required this.type, this.titleAppbar, this.pageSrc, this.key});
 }

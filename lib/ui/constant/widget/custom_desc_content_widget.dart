@@ -4,6 +4,7 @@ import 'package:hyppe/core/arguments/hashtag_argument.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -298,11 +299,22 @@ class _CustomDescContentState extends State<CustomDescContent> {
           // print('hit prepare username: ${splitDesc[i].substring(0, 1)} , ${splitDesc[i].substring(1, splitDesc[i].length)}');
           descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
         } else if (firstChar == '#' && splitDesc[i].length > 1) {
-          if (tempDesc.isNotEmpty) {
-            descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
-            tempDesc = '';
+          final lenght = splitDesc[i].length;
+          final content = splitDesc[i].substring(1, lenght -1);
+          final isSpecialChar = System().specialCharPass(content);
+          if(isSpecialChar){
+            tempDesc = '$tempDesc ${splitDesc[i]}';
+            if (i == (splitDesc.length - 1)) {
+              descItems.add(ItemDesc(desc: getWithoutSpaces(tempDesc), type: CaptionType.normal));
+            }
+          }else{
+            if (tempDesc.isNotEmpty) {
+              descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
+              tempDesc = '';
+            }
+            descItems.add(ItemDesc(desc: '${splitDesc[i]}  ', type: CaptionType.hashtag));
           }
-          descItems.add(ItemDesc(desc: '${splitDesc[i]}  ', type: CaptionType.hashtag));
+
         } else {
           tempDesc = '$tempDesc ${splitDesc[i]}';
           if (i == (splitDesc.length - 1)) {
