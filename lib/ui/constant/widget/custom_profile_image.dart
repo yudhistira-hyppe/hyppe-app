@@ -46,14 +46,14 @@ class CustomProfileImage extends StatelessWidget {
                     '$imageUrl',
                     key: cacheKey != null ? ValueKey(cacheKey) : null,
                     errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                      return Image.asset('${AssetPath.pngPath}profile-error.png', fit: BoxFit.fitWidth);
+                      return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
                     },
                     fit: BoxFit.cover,
                   )
                 : Image.network(
                     '$imageUrl',
                     errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                      return Image.asset('${AssetPath.pngPath}profile-error.png', fit: BoxFit.fitWidth);
+                      return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
                     },
                     fit: BoxFit.cover,
                   ),
@@ -89,7 +89,7 @@ class CustomProfileImage extends StatelessWidget {
       //       borderRadius: BorderRadius.circular(20),
       //       image: const DecorationImage(
       //         fit: BoxFit.contain,
-      //         image: AssetImage('${AssetPath.pngPath}profile-error.png'),
+      //         image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
       //       ),
       //       // shape: BoxShape.circle,
       //     ),
@@ -103,7 +103,7 @@ class CustomProfileImage extends StatelessWidget {
       //       borderRadius: BorderRadius.circular(20),
       //       image: DecorationImage(
       //         fit: BoxFit.contain,
-      //         image: AssetImage('${AssetPath.pngPath}profile-error.png'),
+      //         image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
       //       ),
       //       // shape: BoxShape.circle,
       //     ),

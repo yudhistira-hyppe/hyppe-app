@@ -230,8 +230,6 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
       // Ensure that image location under the focal point stays in the same place despite scaling.
       _offset = _clampOffset(details.focalPoint - _normalizedOffset! * _scale!);
     });
-    print("======scale $_scale");
-    print("======scale==== $_previousScale");
     if (_scale! > _previousScale!) {
       show();
       setState(() {

@@ -50,7 +50,6 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
 
   @override
   void initState() {
-
     final fcmToken = SharedPreference().readStorage(SpKeys.fcmToken);
     print('my Fcm Token: $fcmToken');
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SearchScreen');
@@ -157,11 +156,13 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
         child: Stack(
           children: [
             Positioned.fill(child: _searchLayout(notifier.layout, notifier)),
-            if(notifier.loadPlaylist)
-              Positioned.fill(child:
-              Container(
+            if (notifier.loadPlaylist)
+              Positioned.fill(
+                  child: Container(
                 decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
-                alignment: Alignment.center, child: CustomLoading(),))
+                alignment: Alignment.center,
+                child: CustomLoading(),
+              ))
           ],
         ),
       ),

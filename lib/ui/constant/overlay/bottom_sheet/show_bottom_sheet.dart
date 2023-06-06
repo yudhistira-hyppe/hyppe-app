@@ -1023,6 +1023,7 @@ class ShowBottomSheet {
     required Function() function,
     required postId,
     StoryController? storyController,
+    FlutterAliplayer? fAliplayer,
   }) {
     showModalBottomSheet<dynamic>(
         isScrollControlled: true,
@@ -1053,7 +1054,9 @@ class ShowBottomSheet {
               ),
             )
           ]);
-        });
+        }).whenComplete(() {
+      if (fAliplayer != null) fAliplayer.play();
+    });
   }
 
   static onShowUserViewContent(

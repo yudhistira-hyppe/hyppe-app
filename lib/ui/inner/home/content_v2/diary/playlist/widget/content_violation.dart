@@ -31,8 +31,11 @@ class ContentViolationWidget extends StatelessWidget {
         Routing().move(Routes.appeal, argument: data);
       },
       child: Container(
-        color: Colors.red,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Color(0xFFE6094B),
+        ),
         child: Row(
           children: [
             const CustomIconWidget(
@@ -44,8 +47,8 @@ class ContentViolationWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTextWidget(
-                  textToDisplay: text != '' ? text : (translate.thisHyppeDiaryisSubjectToModeration ?? ''),
-                  textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white),
+                  textToDisplay: (translate.thisContentIsSubjectToModeration ?? ''),
+                  textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),
                 ),
                 CustomTextWidget(
                   textToDisplay: translate.thisMessagecanOnlyBeSeenByYou ?? '',

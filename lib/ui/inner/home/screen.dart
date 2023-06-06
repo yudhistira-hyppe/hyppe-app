@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       globalKey.currentState?.innerController.addListener(() {
         setState(() {
           offset = globalKey.currentState?.innerController.position.pixels ?? 0;
-          print(offset);
+          // print(offset);
         });
         if ((globalKey.currentState?.innerController.position.pixels ?? 0) >= (globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
             !(globalKey.currentState?.innerController.position.outOfRange ?? true)) {

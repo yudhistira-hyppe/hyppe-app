@@ -50,14 +50,14 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware
   @override
   void didPopNext() {
     System().disposeBlock();
-    final notifier = context.read<OtherProfileNotifier>();
-    Future.delayed(const Duration(milliseconds: 500), () {
-      var jumpTo = heightProfileCard + notifier.heightIndex;
-      print("---------- $jumpTo");
-      print("---------- $heightProfileCard");
-      print("---------- ${notifier.heightIndex}");
-      _scrollController.jumpTo(jumpTo.toDouble());
-    });
+    // final notifier = context.read<OtherProfileNotifier>();
+    // Future.delayed(const Duration(milliseconds: 500), () {
+    // var jumpTo = heightProfileCard + notifier.heightIndex;
+    // print("---------- $jumpTo");
+    // print("---------- $heightProfileCard");
+    // print("---------- ${notifier.heightIndex}");
+    // _scrollController.jumpTo(jumpTo.toDouble());
+    // });
 
     super.didPopNext();
   }
@@ -139,11 +139,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware
                   child: Container(
                     child: notifier.user.profile != null
                         ? notifier.statusFollowing == StatusFollowing.following
-                            ? MeasuredSize(
-                                onChange: (Size size) {
-                                  heightProfileCard = size.height.toInt();
-                                },
-                                child: const OtherProfileTop())
+                            ? const OtherProfileTop()
                             : const OtherProfileTop()
                         : BothProfileTopShimmer(),
                   ),

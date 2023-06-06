@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -97,14 +98,14 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
       'pic playlist'.logger();
 
       await _initialPic(context, _routeArgument?.postID ?? '', _routeArgument?.picData?.visibility ?? 'PUBLIC');
-    }else {
+    } else {
       _data = _routeArgument?.picData;
       data?.isLiked.logger();
       notifyListeners();
 
       _checkFollowingToUser(context, autoFollow: false);
       _increaseViewCount(context);
-      if(_data?.username?.isEmpty ?? true){
+      if (_data?.username?.isEmpty ?? true) {
         await initDetailPost(context, _data?.postID ?? '', _routeArgument?.picData?.visibility ?? 'PUBLIC');
       }
     }
@@ -128,7 +129,6 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
       isLoadMusic = false;
       "Error Init Video $e".logger();
     } finally {
-
       // Future.delayed(const Duration(milliseconds: 400), () {
       //   isLoadMusic = false;
       // });
@@ -154,7 +154,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<ContentData?> getDetailPost(BuildContext context, String postID, String visibility) async {
-    try{
+    try {
       loadPic = true;
       final notifier = PostsBloc();
       await notifier.getContentsBlocV2(context, postID: postID, pageRows: 1, pageNumber: 1, type: FeatureType.pic, visibility: visibility);
@@ -170,13 +170,11 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
       } else {
         return null;
       }
-
-    }catch(e){
+    } catch (e) {
       e.logger();
-    }finally{
+    } finally {
       loadPic = false;
     }
-
   }
 
   Future initDetailPost(BuildContext context, String postID, String visibility) async {
@@ -186,19 +184,16 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   bool _loadPic = false;
   bool get loadPic => _loadPic;
-  set loadPic(bool state){
+  set loadPic(bool state) {
     _loadPic = state;
     notifyListeners();
   }
-  setLoadPic(bool state){
+
+  setLoadPic(bool state) {
     _loadPic = true;
   }
 
-  Future<void> _initialPic(
-    BuildContext context,
-      String postID,
-      String visibility
-  ) async {
+  Future<void> _initialPic(BuildContext context, String postID, String visibility) async {
     Future<List<ContentData>> _resFuture;
 
     contentsQuery.postID = postID;
@@ -362,8 +357,15 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     return true;
   }
 
-  void showUserTag(BuildContext context, data, postId, {final StoryController? storyController}) {
-    ShowBottomSheet.onShowUserTag(context, value: data, function: () {}, postId: postId, storyController: storyController);
+  void showUserTag(BuildContext context, data, postId, {final StoryController? storyController, FlutterAliplayer? fAliplayer}) {
+    ShowBottomSheet.onShowUserTag(
+      context,
+      value: data,
+      function: () {},
+      postId: postId,
+      storyController: storyController,
+      fAliplayer: fAliplayer,
+    );
   }
 
   void showContentSensitive() {

@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/slided_vid_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
@@ -26,6 +27,7 @@ import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
@@ -51,7 +53,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ScrollVid extends StatefulWidget {
-  final SlidedPicDetailScreenArgument? arguments;
+  final SlidedVidDetailScreenArgument? arguments;
   const ScrollVid({
     Key? key,
     this.arguments,
@@ -62,6 +64,7 @@ class ScrollVid extends StatefulWidget {
 }
 
 class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+  List<ContentData>? vidData = [];
   // FlutterAliplayer? fAliplayer;
   // FlutterAliplayer? fAliplayerAds;
   bool isPrepare = false;
@@ -101,6 +104,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   void initState() {
     isStopVideo = true;
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ScrollVid');
+    vidData = widget.arguments?.vidData;
     email = SharedPreference().readStorage(SpKeys.email);
     final notifier = Provider.of<ScrollVidNotifier>(context, listen: false);
     // notifier.initialVid(context, reload: true);
@@ -110,12 +114,15 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
       var index = 0;
       var lastIndex = 0;
 
-      itemPositionsListener.itemPositions.addListener(() {
+      itemPositionsListener.itemPositions.addListener(() async {
         index = itemPositionsListener.itemPositions.value.first.index;
         if (lastIndex != index) {
-          if (index == notifier.vidData!.length - 2) {
+          if (index == vidData!.length - 2) {
             print("ini reload harusnya");
-            notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!);
+            await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!);
+            setState(() {
+              vidData = notifier.vidData;
+            });
           }
         }
         lastIndex = index;
@@ -344,7 +351,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     print("======= didPopNext dari diary");
     final notifier = context.read<ScrollVidNotifier>();
     if (_curIdx != -1) {
-      notifier.vidData?[_curIdx].fAliplayer?.play();
+      vidData?[_curIdx].fAliplayer?.play();
     }
 
     // System().disposeBlock();
@@ -357,7 +364,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     print("========= didPushNext dari diary");
     final notifier = context.read<ScrollVidNotifier>();
     if (_curIdx != -1) {
-      notifier.vidData?[_curIdx].fAliplayer?.pause();
+      vidData?[_curIdx].fAliplayer?.pause();
     }
 
     super.didPushNext();
@@ -397,53 +404,64 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           Navigator.pop(context, '$_cardIndex');
                         }),
                   ),
-                  (vidNotifier.vidData != null)
-                      ? (vidNotifier.vidData?.isEmpty ?? true)
+                  (vidData != null)
+                      ? (vidData?.isEmpty ?? true)
                           ? const NoResultFound()
                           : Expanded(
-                              child: NotificationListener<OverscrollIndicatorNotification>(
-                                onNotification: (overscroll) {
-                                  overscroll.disallowIndicator();
-                                  return false;
+                              child: RefreshIndicator(
+                                onRefresh: () async {
+                                  setState(() {
+                                    isloading = true;
+                                  });
+                                  await vidNotifier.reload(context, widget.arguments!.pageSrc!);
+                                  setState(() {
+                                    vidData = vidNotifier.vidData;
+                                  });
                                 },
-                                child: ScrollablePositionedList.builder(
-                                  itemScrollController: itemScrollController,
-                                  itemPositionsListener: itemPositionsListener,
-                                  scrollOffsetController: scrollOffsetController,
-                                  // controller: vidNotifier.pageController,
-                                  // onPageChanged: (index) async {
-                                  //   print('ScrollVid index : $index');
-                                  //   if (index == (vidNotifier.itemCount - 1)) {
-                                  //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
-                                  //     if (values.isNotEmpty) {
-                                  //       vidNotifier.vidData = [...(vidNotifier.vidData ?? [] as List<ContentData>)] + values;
-                                  //     }
-                                  //   }
-                                  //   // context.read<ScrollVidNotifier>().nextVideo = false;
-                                  //   // context.read<ScrollVidNotifier>().initializeVideo = false;
-                                  // },
-                                  shrinkWrap: false,
-                                  itemCount: vidNotifier.vidData?.length ?? 0,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    if (vidNotifier.vidData == null || homeNotifier.isLoadingVid) {
-                                      vidNotifier.vidData?[index].fAliplayer?.pause();
-                                      _lastCurIndex = -1;
-                                      return CustomShimmer(
-                                        margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
-                                        height: context.getHeight() / 8,
-                                        width: double.infinity,
-                                      );
-                                    } else if (index == vidNotifier.vidData?.length) {
-                                      return const CustomLoading(size: 5);
-                                    }
-                                    // if (_curIdx == 0 && vidNotifier.vidData?[0].reportedStatus == 'BLURRED') {
-                                    //   isPlay = false;
-                                    //   vidNotifier.vidData?[index].fAliplayer?.stop();
-                                    // }
-                                    final vidData = vidNotifier.vidData?[index];
-
-                                    return itemVid(vidData ?? ContentData(), vidNotifier, index);
+                                child: NotificationListener<OverscrollIndicatorNotification>(
+                                  onNotification: (overscroll) {
+                                    overscroll.disallowIndicator();
+                                    return false;
                                   },
+                                  child: ScrollablePositionedList.builder(
+                                    itemScrollController: itemScrollController,
+                                    itemPositionsListener: itemPositionsListener,
+                                    scrollOffsetController: scrollOffsetController,
+                                    // controller: vidNotifier.pageController,
+                                    // onPageChanged: (index) async {
+                                    //   print('ScrollVid index : $index');
+                                    //   if (index == (vidNotifier.itemCount - 1)) {
+                                    //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
+                                    //     if (values.isNotEmpty) {
+                                    //       vidData = [...(vidData ?? [] as List<ContentData>)] + values;
+                                    //     }
+                                    //   }
+                                    //   // context.read<ScrollVidNotifier>().nextVideo = false;
+                                    //   // context.read<ScrollVidNotifier>().initializeVideo = false;
+                                    // },
+                                    shrinkWrap: false,
+                                    itemCount: vidData?.length ?? 0,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      if (vidData == null || homeNotifier.isLoadingVid) {
+                                        vidData?[index].fAliplayer?.pause();
+                                        _lastCurIndex = -1;
+                                        return CustomShimmer(
+                                          margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
+                                          height: context.getHeight() / 8,
+                                          width: double.infinity,
+                                        );
+                                      } else if (index == vidData?.length) {
+                                        return const CustomLoading(size: 5);
+                                      }
+                                      // if (_curIdx == 0 && vidData?[0].reportedStatus == 'BLURRED') {
+                                      //   isPlay = false;
+                                      //   vidData?[index].fAliplayer?.stop();
+                                      // }
+                                      // final vidData = vidData?[index];
+
+                                      return itemVid(vidNotifier, index);
+                                    },
+                                  ),
                                 ),
                               ),
                             )
@@ -469,9 +487,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     );
   }
 
-  Widget itemVid(ContentData vidData, ScrollVidNotifier notifier, int index) {
+  Widget itemVid(ScrollVidNotifier notifier, int index) {
     var map = {
-      DataSourceRelated.vidKey: vidData.apsaraId,
+      DataSourceRelated.vidKey: vidData?[index].apsaraId,
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
     };
     return Container(
@@ -496,29 +514,29 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   following: true,
                   haveStory: false,
                   textColor: kHyppeTextLightPrimary,
-                  username: vidData.username,
+                  username: vidData?[index].username,
                   featureType: FeatureType.other,
                   // isCelebrity: vidnotifier.diaryData?[index].privacy?.isCelebrity,
                   isCelebrity: false,
-                  imageUrl: '${System().showUserPicture(vidData.avatar?.mediaEndpoint)}',
-                  onTapOnProfileImage: () => System().navigateToProfile(context, vidData.email ?? ''),
+                  imageUrl: '${System().showUserPicture(vidData?[index].avatar?.mediaEndpoint)}',
+                  onTapOnProfileImage: () => System().navigateToProfile(context, vidData?[index].email ?? ''),
                   createdAt: '2022-02-02',
-                  musicName: vidData.music?.musicTitle ?? '',
-                  location: vidData.location ?? '',
-                  isIdVerified: vidData.privacy?.isIdVerified,
+                  musicName: vidData?[index].music?.musicTitle ?? '',
+                  location: vidData?[index].location ?? '',
+                  isIdVerified: vidData?[index].privacy?.isIdVerified,
                 ),
               ),
-              if (vidData.email != email && (vidData.isNewFollowing ?? false))
+              if (vidData?[index].email != email && (vidData?[index].isNewFollowing ?? false))
                 Consumer<PreviewPicNotifier>(
                   builder: (context, picNot, child) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: GestureDetector(
                       onTap: () {
-                        if (vidData.insight?.isloadingFollow != true) {
-                          picNot.followUser(context, vidData, isUnFollow: vidData.following, isloading: vidData.insight!.isloadingFollow ?? false);
+                        if (vidData?[index].insight?.isloadingFollow != true) {
+                          picNot.followUser(context, vidData![index], isUnFollow: vidData?[index].following, isloading: vidData?[index].insight!.isloadingFollow ?? false);
                         }
                       },
-                      child: vidData.insight?.isloadingFollow ?? false
+                      child: vidData?[index].insight?.isloadingFollow ?? false
                           ? Container(
                               height: 40,
                               width: 30,
@@ -528,7 +546,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                               ),
                             )
                           : Text(
-                              (vidData.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                              (vidData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
                               style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
                             ),
                     ),
@@ -536,23 +554,23 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                 ),
               GestureDetector(
                 onTap: () {
-                  if (vidData.email != email) {
+                  if (vidData?[index].email != email) {
                     // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>().reportContent(context, vidData, fAliplayer: vidData.fAliplayer);
+                    context.read<PreviewPicNotifier>().reportContent(context, vidData?[index] ?? ContentData(), fAliplayer: vidData?[index].fAliplayer);
                   } else {
                     if (_curIdx != -1) {
                       print('Vid Landing Page: pause $_curIdx');
-                      notifier.vidData?[_curIdx].fAliplayer?.pause();
+                      vidData?[_curIdx].fAliplayer?.pause();
                     }
 
                     ShowBottomSheet().onShowOptionContent(
                       context,
-                      contentData: vidData,
+                      contentData: vidData?[index] ?? ContentData(),
                       captionTitle: hyppeVid,
                       onDetail: false,
-                      isShare: vidData.isShared,
+                      isShare: vidData?[index].isShared,
                       onUpdate: () => context.read<HomeNotifier>().onUpdate(),
-                      fAliplayer: vidData.fAliplayer,
+                      fAliplayer: vidData?[index].fAliplayer,
                     );
                   }
                 },
@@ -574,14 +592,14 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   Future.delayed(const Duration(milliseconds: 400), () {
                     try {
                       if (_curIdx != -1) {
-                        print('Vid Landing Page: pause $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
-                        if (notifier.vidData?[_curIdx].fAliplayer != null) {
-                          notifier.vidData?[_curIdx].fAliplayer?.pause();
+                        print('Vid Landing Page: pause $_curIdx ${vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                        if (vidData?[_curIdx].fAliplayer != null) {
+                          vidData?[_curIdx].fAliplayer?.pause();
                         } else {
                           dataAli[_curIdx]?.pause();
                         }
 
-                        // notifier.vidData?[_curIdx].fAliplayerAds?.pause();
+                        // vidData?[_curIdx].fAliplayerAds?.pause();
                         // setState(() {
                         //   _curIdx = -1;
                         // });
@@ -591,7 +609,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                     }
                     // System().increaseViewCount2(context, vidData);
                   });
-                  if (vidData.certified ?? false) {
+                  if (vidData?[index].certified ?? false) {
                     System().block(context);
                   } else {
                     System().disposeBlock();
@@ -604,9 +622,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
               child: Builder(builder: (context) {
                 return VidPlayerPage(
                   orientation: Orientation.portrait,
-                  playMode: (vidData.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                  playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                   dataSourceMap: map,
-                  data: vidData,
+                  data: vidData?[index] ?? ContentData(),
                   height: MediaQuery.of(context).size.width * 9.0 / 16.0,
                   width: MediaQuery.of(context).size.width,
                   inLanding: true,
@@ -614,9 +632,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   functionFullTriger: (value) {
                     print('===========hahhahahahaa===========');
                     // fullscreen();
-                    // notifier.vidData?[_curIdx].fAliplayer?.pause();
+                    // vidData?[_curIdx].fAliplayer?.pause();
                     // showDialog(context: context, builder: (context){
-                    //     return VideoFullscreenPage(data: notifier.vidData?[_curIdx] ?? ContentData(), onClose: (){
+                    //     return VideoFullscreenPage(data: vidData?[_curIdx] ?? ContentData(), onClose: (){
                     //       // Routing().moveBack();
                     //     }, seekValue: value ?? 0);
                     //   });
@@ -625,17 +643,17 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                     try {
                       if (_curIdx != -1) {
                         if (_curIdx != index) {
-                          print('Vid Landing Page: stop $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
-                          if (notifier.vidData?[_curIdx].fAliplayer != null) {
-                            notifier.vidData?[_curIdx].fAliplayer?.stop();
+                          print('Vid Landing Page: stop $_curIdx ${vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                          if (vidData?[_curIdx].fAliplayer != null) {
+                            vidData?[_curIdx].fAliplayer?.stop();
                           } else {
                             final player = dataAli[_curIdx];
                             if (player != null) {
-                              // notifier.vidData?[_curIdx].fAliplayer = player;
+                              // vidData?[_curIdx].fAliplayer = player;
                               player.stop();
                             }
                           }
-                          // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
+                          // vidData?[_curIdx].fAliplayerAds?.stop();
                         }
                       }
                     } catch (e) {
@@ -653,28 +671,28 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                     setState(() {
                       dataAli[index] = main;
                     });
-                    print('Vid Player1: after $index ${globalAliPlayer} : ${notifier.vidData?[index].fAliplayer}');
+                    print('Vid Player1: after $index ${globalAliPlayer} : ${vidData?[index].fAliplayer}');
                   },
                   getAdsPlayer: (ads) {
-                    // notifier.vidData?[index].fAliplayerAds = ads;
+                    // vidData?[index].fAliplayerAds = ads;
                   },
-                  // fAliplayer: notifier.vidData?[index].fAliplayer,
-                  // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
+                  // fAliplayer: vidData?[index].fAliplayer,
+                  // fAliplayerAds: vidData?[index].fAliplayerAds,
                 );
               }),
             ),
           ),
           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                  (vidData.boosted.isEmpty) &&
-                  (vidData.reportedStatus != 'OWNED' && vidData.reportedStatus != 'BLURRED' && vidData.reportedStatus2 != 'BLURRED') &&
-                  vidData.email == email
+                  (vidData![index].boosted.isEmpty) &&
+                  (vidData?[index].reportedStatus != 'OWNED' && vidData?[index].reportedStatus != 'BLURRED' && vidData?[index].reportedStatus2 != 'BLURRED') &&
+                  vidData?[index].email == email
               ? Container(
                   width: double.infinity,
                   margin: const EdgeInsets.only(bottom: 16),
                   child: ButtonBoost(
                     onDetail: false,
                     marginBool: true,
-                    contentData: vidData,
+                    contentData: vidData?[index] ?? ContentData(),
                     startState: () {
                       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                     },
@@ -684,7 +702,16 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   ),
                 )
               : Container(),
-          if (vidData.email == email && (vidData.boostCount ?? 0) >= 0 && (vidData.boosted.isNotEmpty))
+          vidData?[index].email == SharedPreference().readStorage(SpKeys.email) && (vidData?[index].reportedStatus == 'OWNED')
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 11.0),
+                  child: ContentViolationWidget(
+                    data: vidData?[index] ?? ContentData(),
+                    text: lang?.thisHyppeVidisSubjectToModeration ?? '',
+                  ),
+                )
+              : Container(),
+          if (vidData?[index].email == email && (vidData?[index].boostCount ?? 0) >= 0 && (vidData?[index].boosted.isNotEmpty ?? [].isEmpty))
             Container(
               padding: const EdgeInsets.all(10),
               margin: EdgeInsets.only(bottom: 10),
@@ -704,7 +731,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   Padding(
                     padding: const EdgeInsets.only(left: 13),
                     child: Text(
-                      "${vidData.boostJangkauan ?? '0'} ${lang?.reach}",
+                      "${vidData?[index].boostJangkauan ?? '0'} ${lang?.reach}",
                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
                     ),
                   )
@@ -720,7 +747,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                     Consumer<LikeNotifier>(
                       builder: (context, likeNotifier, child) => Align(
                         alignment: Alignment.bottomRight,
-                        child: vidData.insight?.isloading ?? false
+                        child: vidData?[index].insight?.isloading ?? false
                             ? const SizedBox(
                                 height: 28,
                                 width: 28,
@@ -732,24 +759,24 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             : InkWell(
                                 child: CustomIconWidget(
                                   defaultColor: false,
-                                  color: (vidData.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                  iconData: '${AssetPath.vectorPath}${(vidData.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                  color: (vidData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                                  iconData: '${AssetPath.vectorPath}${(vidData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                   height: 28,
                                 ),
                                 onTap: () {
                                   if (vidData != null) {
-                                    likeNotifier.likePost(context, vidData);
+                                    likeNotifier.likePost(context, vidData?[index] ?? ContentData());
                                   }
                                 },
                               ),
                       ),
                     ),
-                    if (vidData.allowComments ?? true)
+                    if (vidData?[index].allowComments ?? true)
                       Padding(
                         padding: const EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
                           onTap: () {
-                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));
+                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData?[index].postID ?? '', fromFront: true, data: vidData?[index] ?? ContentData()));
                           },
                           child: const CustomIconWidget(
                             defaultColor: false,
@@ -759,12 +786,12 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           ),
                         ),
                       ),
-                    if ((vidData.isShared ?? false))
+                    if ((vidData?[index].isShared ?? false))
                       Padding(
                         padding: EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
                           onTap: () {
-                            context.read<VidDetailNotifier>().createdDynamicLink(context, data: vidData);
+                            context.read<VidDetailNotifier>().createdDynamicLink(context, data: vidData?[index] ?? ContentData());
                           },
                           child: CustomIconWidget(
                             defaultColor: false,
@@ -774,12 +801,12 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           ),
                         ),
                       ),
-                    if ((vidData.saleAmount ?? 0) > 0 && email != vidData.email)
+                    if ((vidData?[index].saleAmount ?? 0) > 0 && email != vidData?[index].email)
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
-                            vidData.fAliplayer?.pause();
-                            await ShowBottomSheet.onBuyContent(context, data: vidData, fAliplayer: vidData.fAliplayer);
+                            vidData?[index].fAliplayer?.pause();
+                            await ShowBottomSheet.onBuyContent(context, data: vidData?[index] ?? ContentData(), fAliplayer: vidData?[index].fAliplayer);
                             // fAliplayer?.play();
                           },
                           child: const Align(
@@ -797,7 +824,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                 ),
                 twelvePx,
                 Text(
-                  "${vidData.insight?.likes}  ${lang?.like}",
+                  "${vidData?[index].insight?.likes}  ${lang?.like}",
                   style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                 ),
               ],
@@ -806,8 +833,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
           twelvePx,
           CustomNewDescContent(
             // desc: "${data?.description}",
-            username: vidData.username ?? '',
-            desc: "${vidData.description}",
+            username: vidData?[index].username ?? '',
+            desc: "${vidData?[index].description}",
             trimLines: 2,
             textAlign: TextAlign.start,
             seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
@@ -818,30 +845,30 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
           ),
           GestureDetector(
             onTap: () {
-              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));
+              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData?[index].postID ?? '', fromFront: true, data: vidData?[index] ?? ContentData()));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Text(
-                "${lang?.seeAll} ${vidData.comments} ${lang?.comment}",
+                "${lang?.seeAll} ${vidData?[index].comments} ${lang?.comment}",
                 style: const TextStyle(fontSize: 12, color: kHyppeBurem),
               ),
             ),
           ),
-          (vidData.comment?.length ?? 0) > 0
+          (vidData?[index].comment?.length ?? 0) > 0
               ? Padding(
                   padding: const EdgeInsets.only(top: 0.0),
                   child: ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: (vidData.comment?.length ?? 0) >= 2 ? 2 : 1,
+                    itemCount: (vidData?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
                     itemBuilder: (context, indexComment) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 6.0),
                         child: CustomNewDescContent(
                           // desc: "${vidData?.description}",
-                          username: vidData.comment?[indexComment].userComment?.username ?? '',
-                          desc: vidData.comment?[indexComment].txtMessages ?? '',
+                          username: vidData?[index].comment?[indexComment].userComment?.username ?? '',
+                          desc: vidData?[index].comment?[indexComment].txtMessages ?? '',
                           trimLines: 2,
                           textAlign: TextAlign.start,
                           seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
@@ -859,7 +886,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             padding: EdgeInsets.symmetric(vertical: 4.0),
             child: Text(
               "${System().readTimestamp(
-                DateTime.parse(System().dateTimeRemoveT(vidData.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                DateTime.parse(System().dateTimeRemoveT(vidData?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
                 context,
                 fullCaption: true,
               )}",
@@ -899,29 +926,29 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   //                   following: true,
   //                   haveStory: false,
   //                   textColor: kHyppeTextLightPrimary,
-  //                   username: vidData.username,
+  //                   username: vidData?[index].username,
   //                   featureType: FeatureType.other,
   //                   // isCelebrity: vidvidData?.privacy?.isCelebrity,
   //                   isCelebrity: false,
-  //                   imageUrl: '${System().showUserPicture(vidData.avatar?.mediaEndpoint)}',
-  //                   onTapOnProfileImage: () => System().navigateToProfile(context, vidData.email ?? ''),
+  //                   imageUrl: '${System().showUserPicture(vidData?[index].avatar?.mediaEndpoint)}',
+  //                   onTapOnProfileImage: () => System().navigateToProfile(context, vidData?[index].email ?? ''),
   //                   createdAt: '2022-02-02',
-  //                   musicName: vidData.music?.musicTitle ?? '',
-  //                   location: vidData.location ?? '',
-  //                   isIdVerified: vidData.privacy?.isIdVerified,
+  //                   musicName: vidData?[index].music?.musicTitle ?? '',
+  //                   location: vidData?[index].location ?? '',
+  //                   isIdVerified: vidData?[index].privacy?.isIdVerified,
   //                 ),
   //               ),
-  //               if (vidData.email != email && (vidData.isNewFollowing ?? false))
+  //               if (vidData?[index].email != email && (vidData?[index].isNewFollowing ?? false))
   //                 Consumer<PreviewPicNotifier>(
   //                   builder: (context, picNot, child) => Padding(
   //                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
   //                     child: GestureDetector(
   //                       onTap: () {
-  //                         if (vidData.insight?.isloadingFollow != true) {
-  //                           picNot.followUser(context, vidData, isUnFollow: vidData.following, isloading: vidData.insight!.isloadingFollow ?? false);
+  //                         if (vidData?[index].insight?.isloadingFollow != true) {
+  //                           picNot.followUser(context, vidData, isUnFollow: vidData?[index].following, isloading: vidData?[index].insight!.isloadingFollow ?? false);
   //                         }
   //                       },
-  //                       child: vidData.insight?.isloadingFollow ?? false
+  //                       child: vidData?[index].insight?.isloadingFollow ?? false
   //                           ? Container(
   //                               height: 40,
   //                               width: 30,
@@ -931,7 +958,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   //                               ),
   //                             )
   //                           : Text(
-  //                               (vidData.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+  //                               (vidData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
   //                               style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
   //                             ),
   //                     ),
@@ -939,7 +966,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   //                 ),
   //               GestureDetector(
   //                 onTap: () {
-  //                   if (vidData.email != SharedPreference().readStorage(SpKeys.email)) {
+  //                   if (vidData?[index].email != SharedPreference().readStorage(SpKeys.email)) {
   //                     vidNotifier.reportContent(context, vidData);
   //                   } else {
   //                     ShowBottomSheet().onShowOptionContent(
@@ -947,7 +974,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   //                       contentData: vidData,
   //                       captionTitle: hyppeVid,
   //                       onDetail: false,
-  //                       isShare: vidData.isShared,
+  //                       isShare: vidData?[index].isShared,
   //                       onUpdate: () => context.read<HomeNotifier>().onUpdate(),
   //                     );
   //                   }
@@ -974,7 +1001,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   //                     memCacheHeight: 100,
   //                     widthPlaceHolder: 80,
   //                     heightPlaceHolder: 80,
-  //                     imageUrl: (vidData.isApsara ?? false) ? (vidData.mediaThumbEndPoint ?? "") : "${vidData.fullThumbPath}",
+  //                     imageUrl: (vidData?[index].isApsara ?? false) ? (vidData?[index].mediaThumbEndPoint ?? "") : "${vidData?[index].fullThumbPath}",
   //                     imageBuilder: (context, imageProvider) => Container(
   //                       // const EdgeInsets.symmetric(horizontal: 4.5),
   //                       width: SizeConfig.screenWidth,
@@ -1045,9 +1072,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   //           //       )
   //           //     : const SizedBox(),
   //           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-  //                   (vidData.boosted.isEmpty) &&
-  //                   (vidData.reportedStatus != 'OWNED' && vidData.reportedStatus != 'BLURRED' && vidData.reportedStatus2 != 'BLURRED') &&
-  //                   vidData.email == email
+  //                   (vidData?[index].boosted.isEmpty) &&
+  //                   (vidData?[index].reportedStatus != 'OWNED' && vidData?[index].reportedStatus != 'BLURRED' && vidData?[index].reportedStatus2 != 'BLURRED') &&
+  //                   vidData?[index].email == email
   //               ? Container(
   //                   width: MediaQuery.of(context).size.width * 0.8,
   //                   margin: const EdgeInsets.only(top: 10),
@@ -1064,7 +1091,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   //                   ),
   //                 )
   //               : Container(),
-  //           if (vidData.email == email && (vidData.boostCount ?? 0) >= 0 && (vidData.boosted.isNotEmpty))
+  //           if (vidData?[index].email == email && (vidData?[index].boostCount ?? 0) >= 0 && (vidData?[index].boosted.isNotEmpty))
   //             Container(
   //               padding: const EdgeInsets.all(10),
   //               margin: const EdgeInsets.only(top: 10),
@@ -1084,7 +1111,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   //                   Padding(
   //                     padding: const EdgeInsets.only(left: 13),
   //                     child: Text(
-  //                       "${vidData.boostJangkauan ?? '0'} ${lang?.reach}",
+  //                       "${vidData?[index].boostJangkauan ?? '0'} ${lang?.reach}",
   //                       style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
   //                     ),
   //                   )
@@ -1095,7 +1122,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   //           CustomNewDescContent(
   //             // desc: "${data?.description}",
   //             username: '',
-  //             desc: "${vidData.description}",
+  //             desc: "${vidData?[index].description}",
   //             trimLines: 2,
   //             textAlign: TextAlign.start,
   //             seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
@@ -1109,7 +1136,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   //             padding: const EdgeInsets.symmetric(vertical: 4.0),
   //             child: Text(
   //               "${System().readTimestamp(
-  //                 DateTime.parse(System().dateTimeRemoveT(vidData.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+  //                 DateTime.parse(System().dateTimeRemoveT(vidData?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
   //                 context,
   //                 fullCaption: true,
   //               )}",

@@ -64,7 +64,7 @@ class OtherProfileTop extends StatelessWidget {
                     }
                   },
                 ),
-                twentyPx,
+                twentyFourPx,
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20),
@@ -127,7 +127,7 @@ class OtherProfileTop extends StatelessWidget {
             ),
             notifier.displayBio().length > 2
                 ? Container(
-                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    padding: const EdgeInsets.symmetric(vertical: 6),
                     constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.2),
                     child: SingleChildScrollView(
                         child: Column(
@@ -155,11 +155,11 @@ class OtherProfileTop extends StatelessWidget {
                         const CustomIconWidget(
                           iconData: "${AssetPath.vectorPath}pin.svg",
                           defaultColor: false,
-                          color: kHyppePrimary,
+                          color: kHyppeTextLightPrimary,
                         ),
                         CustomTextWidget(
                           textToDisplay: notifier.displayPlace() ?? '',
-                          textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppePrimary),
+                          textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(),
                         )
                       ],
                     ),

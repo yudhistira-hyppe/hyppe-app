@@ -25,7 +25,6 @@ class UrlConstants {
   static const String apiV7 = '/v7/';
 
   /// Production Base url
-  // static const String productionBaseApi = "https://prod.hyppe.app";
   static const String productionBaseApi = "https://p1.hyppe.cloud";
   static const String productionUploadBaseApi = "https://p1.hyppe.cloud";
   // static const String productionBaseApi = "https://prod.hyppe.app"; //lama

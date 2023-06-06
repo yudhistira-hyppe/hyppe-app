@@ -324,7 +324,7 @@ TextTheme _lightTextTheme() {
           button: base.button?.copyWith(fontSize: 14, fontStyle: FontStyle.normal, fontWeight: FontWeight.bold),
           caption: base.caption?.copyWith(fontSize: 12, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
           overline: base.overline?.copyWith(fontSize: 10, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400, letterSpacing: -0.3))
-      .apply(fontFamily: 'Lato', displayColor: kHyppeLightSecondary, bodyColor: kHyppeLightSecondary);
+      .apply(fontFamily: 'Lato', displayColor: kHyppeLightSecondary, bodyColor: kHyppeTextLightPrimary);
 }
 
 TextTheme _darkTextTheme() {

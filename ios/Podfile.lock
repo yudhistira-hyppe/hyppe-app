@@ -1,7 +1,4 @@
 PODS:
-  - AliPlayerSDK_iOS (5.4.9.1-26507944):
-    - AliPlayerSDK_iOS/AliPlayerSDK (= 5.4.9.1-26507944)
-  - AliPlayerSDK_iOS/AliPlayerSDK (5.4.9.1-26507944)
   - AppAuth (1.6.2):
     - AppAuth/Core (= 1.6.2)
     - AppAuth/ExternalUserAgent (= 1.6.2)
@@ -139,9 +136,7 @@ PODS:
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - Flutter (1.0.0)
   - flutter_aliplayer (0.0.1):
-    - AliPlayerSDK_iOS (= 5.4.9.1-26507944)
     - Flutter
-    - MJExtension
   - flutter_image_compress (1.0.0):
     - Flutter
     - Mantle
@@ -246,7 +241,6 @@ PODS:
   - Mantle (2.2.0):
     - Mantle/extobjc (= 2.2.0)
   - Mantle/extobjc (2.2.0)
-  - MJExtension (3.4.1)
   - MLImage (1.0.0-beta3)
   - MLKitCommon (8.0.0):
     - GoogleDataTransport (~> 9.0)
@@ -374,7 +368,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - AliPlayerSDK_iOS
     - AppAuth
     - Cache
     - DKImagePickerController
@@ -402,7 +395,6 @@ SPEC REPOS:
     - HLSCachingReverseProxyServer
     - libwebp
     - Mantle
-    - MJExtension
     - MLImage
     - MLKitCommon
     - MLKitTextRecognition
@@ -501,7 +493,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
-  AliPlayerSDK_iOS: e6a135eea616e85e4aea6fde5aaa7c6afa258229
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   better_player: 2406bfe8175203c7a46fa15f9d778d73b12e1646
@@ -529,7 +520,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 0a115432c4e223c5ab20b0dbbe4cbefa793a0e8e
   FirebaseMessaging: a4d7910e4af663c9cbfc1071c5bef34651690949
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_aliplayer: ade3b95c37b64e61b2f23a590937d8e61fe47bdc
+  flutter_aliplayer: 8e16ca63a36208d76c3920498f81324fd2de19c9
   flutter_image_compress: 5a5e9aee05b6553048b8df1c3bc456d0afaac433
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
@@ -554,7 +545,6 @@ SPEC CHECKSUMS:
   light_compressor: 789ed7df289f0cd43f1dae8a6eed5d932b214c59
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
-  MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   MLImage: 489dfec109f21da8621b28d476401aaf7a0d4ff4
   MLKitCommon: f6da6c5659618c070b50a80db01248ebe2964175
   MLKitTextRecognition: f6fda8923564f6cebe2bb952a1adb0414e1d731b

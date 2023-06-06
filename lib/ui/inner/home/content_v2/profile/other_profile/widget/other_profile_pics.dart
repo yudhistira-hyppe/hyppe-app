@@ -42,59 +42,50 @@ class OtherProfilePics extends StatelessWidget {
                             "Pic",
                             style: TextStyle(color: kHyppeTextLightPrimary),
                           )),
-                      child: MeasuredSize(
-                        onChange: (size) {
-                          if (index == 0) {
-                            print("------height ${size.height}");
-                            final op = context.read<OtherProfileNotifier>();
-                            op.heightBox = size.height.toInt();
-                          }
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                          child: notifier.item1?.pics?[index].reportedStatus == 'BLURRED'
-                              ? SensitiveContentProfile(data: notifier.item1?.pics?[index])
-                              : Stack(
-                                  children: [
-                                    Center(
-                                      child: CustomContentModeratedWidget(
-                                        width: double.infinity,
-                                        height: double.infinity,
-                                        isSale: false,
-                                        isSafe: true, //notifier.postData.data.listPic[index].isSafe,
-                                        thumbnail: ImageUrl(notifier.item1?.pics?[index].postID,
-                                            url: (notifier.item1?.pics?[index].isApsara ?? false)
-                                                ? (notifier.item1?.pics?[index].mediaThumbEndPoint ?? '')
-                                                : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint) ?? ''),
-                                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
+                        child: notifier.item1?.pics?[index].reportedStatus == 'BLURRED'
+                            ? SensitiveContentProfile(data: notifier.item1?.pics?[index])
+                            : Stack(
+                                children: [
+                                  Center(
+                                    child: CustomContentModeratedWidget(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      isSale: false,
+                                      isSafe: true, //notifier.postData.data.listPic[index].isSafe,
+                                      thumbnail: ImageUrl(notifier.item1?.pics?[index].postID,
+                                          url: (notifier.item1?.pics?[index].isApsara ?? false)
+                                              ? (notifier.item1?.pics?[index].mediaThumbEndPoint ?? '')
+                                              : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint) ?? ''),
                                     ),
-                                    (notifier.item1?.pics?[index].saleAmount ?? 0) > 0
-                                        ? const Align(
-                                            alignment: Alignment.topRight,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(4.0),
-                                              child: CustomIconWidget(
-                                                iconData: "${AssetPath.vectorPath}sale.svg",
-                                                height: 22,
-                                                defaultColor: false,
-                                              ),
-                                            ))
-                                        : Container(),
-                                    (notifier.item1?.pics?[index].certified ?? false) && (notifier.item1?.pics?[index].saleAmount ?? 0) == 0
-                                        ? Align(
-                                            alignment: Alignment.topRight,
-                                            child: Padding(
-                                                padding: const EdgeInsets.all(2.0),
-                                                child: Container(
-                                                    padding: const EdgeInsets.all(4),
-                                                    child: const CustomIconWidget(
-                                                      iconData: '${AssetPath.vectorPath}ownership.svg',
-                                                      defaultColor: false,
-                                                    ))))
-                                        : Container()
-                                  ],
-                                ),
-                        ),
+                                  ),
+                                  (notifier.item1?.pics?[index].saleAmount ?? 0) > 0
+                                      ? const Align(
+                                          alignment: Alignment.topRight,
+                                          child: Padding(
+                                            padding: EdgeInsets.all(4.0),
+                                            child: CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}sale.svg",
+                                              height: 22,
+                                              defaultColor: false,
+                                            ),
+                                          ))
+                                      : Container(),
+                                  (notifier.item1?.pics?[index].certified ?? false) && (notifier.item1?.pics?[index].saleAmount ?? 0) == 0
+                                      ? Align(
+                                          alignment: Alignment.topRight,
+                                          child: Padding(
+                                              padding: const EdgeInsets.all(2.0),
+                                              child: Container(
+                                                  padding: const EdgeInsets.all(4),
+                                                  child: const CustomIconWidget(
+                                                    iconData: '${AssetPath.vectorPath}ownership.svg',
+                                                    defaultColor: false,
+                                                  ))))
+                                      : Container()
+                                ],
+                              ),
                       ),
                     );
                   } catch (e) {

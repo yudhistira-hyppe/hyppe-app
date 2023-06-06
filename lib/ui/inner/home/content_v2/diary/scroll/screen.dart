@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -35,6 +36,7 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
@@ -56,7 +58,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ScrollDiary extends StatefulWidget {
-  final SlidedPicDetailScreenArgument? arguments;
+  final SlidedDiaryDetailScreenArgument? arguments;
   const ScrollDiary({
     Key? key,
     this.arguments,
@@ -67,6 +69,7 @@ class ScrollDiary extends StatefulWidget {
 }
 
 class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
+  List<ContentData>? diaryData = [];
   FlutterAliplayer? fAliplayer;
   bool isPrepare = false;
   bool isPlay = false;
@@ -105,6 +108,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ScrollDiary');
     final notifier = Provider.of<ScrollDiaryNotifier>(context, listen: false);
+    diaryData = widget.arguments?.diaryData;
     lang = context.read<TranslateNotifierV2>().translate;
     email = SharedPreference().readStorage(SpKeys.email);
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
@@ -130,12 +134,15 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
     });
     var index = 0;
     var lastIndex = 0;
-    itemPositionsListener.itemPositions.addListener(() {
+    itemPositionsListener.itemPositions.addListener(() async {
       index = itemPositionsListener.itemPositions.value.first.index;
       if (lastIndex != index) {
-        if (index == notifier.diaryData!.length - 2) {
+        if (index == diaryData!.length - 2) {
           print("ini reload harusnya");
-          notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!);
+          await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!);
+          setState(() {
+            diaryData = notifier.diaryData;
+          });
         }
       }
       lastIndex = index;
@@ -532,52 +539,66 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                         }),
                   ),
                   Expanded(
-                    child: notifier.diaryData?.isEmpty ?? [].isEmpty
+                    child: diaryData?.isEmpty ?? [].isEmpty
                         ? const NoResultFound()
-                        : NotificationListener<OverscrollIndicatorNotification>(
-                            onNotification: (overscroll) {
-                              overscroll.disallowIndicator();
-                              return false;
+                        : RefreshIndicator(
+                            onRefresh: () async {
+                              setState(() {
+                                isloading = true;
+                              });
+                              await notifier.reload(context, widget.arguments!.pageSrc!);
+                              setState(() {
+                                diaryData = notifier.diaryData;
+                              });
                             },
-                            child: ScrollablePositionedList.builder(
-                              scrollDirection: Axis.vertical,
-                              itemScrollController: itemScrollController,
-                              itemPositionsListener: itemPositionsListener,
-                              scrollOffsetController: scrollOffsetController,
-                              // controller: notifier.scrollController,
-                              // scrollDirection: Axis.horizontal,
-                              // physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: false,
-                              itemCount: notifier.diaryData?.length ?? 0,
-                              padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                              itemBuilder: (context, index) {
-                                if (notifier.diaryData == null || home.isLoadingDiary) {
-                                  fAliplayer?.pause();
-                                  _lastCurIndex = -1;
-                                  return CustomShimmer(
-                                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                                    height: 168,
-                                    radius: 8,
-                                    margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                                  );
-                                } else if (index == notifier.diaryData?.length) {
-                                  return UnconstrainedBox(
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      width: 80 * SizeConfig.scaleDiagonal,
-                                      height: 80 * SizeConfig.scaleDiagonal,
-                                      child: const CustomLoading(),
-                                    ),
-                                  );
-                                }
-                                if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                                  isPlay = false;
-                                  fAliplayer?.stop();
-                                }
-
-                                return itemDiary(notifier, index);
+                            child: NotificationListener<OverscrollIndicatorNotification>(
+                              onNotification: (overscroll) {
+                                overscroll.disallowIndicator();
+                                return false;
                               },
+                              child: RefreshIndicator(
+                                onRefresh: () async {},
+                                child: ScrollablePositionedList.builder(
+                                  scrollDirection: Axis.vertical,
+                                  itemScrollController: itemScrollController,
+                                  itemPositionsListener: itemPositionsListener,
+                                  scrollOffsetController: scrollOffsetController,
+                                  // controller: notifier.scrollController,
+                                  // scrollDirection: Axis.horizontal,
+                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  shrinkWrap: false,
+                                  itemCount: diaryData?.length ?? 0,
+                                  padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                                  itemBuilder: (context, index) {
+                                    if (diaryData == null || home.isLoadingDiary) {
+                                      fAliplayer?.pause();
+                                      _lastCurIndex = -1;
+                                      return CustomShimmer(
+                                        width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                        height: 168,
+                                        radius: 8,
+                                        margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                      );
+                                    } else if (index == diaryData?.length) {
+                                      return UnconstrainedBox(
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width: 80 * SizeConfig.scaleDiagonal,
+                                          height: 80 * SizeConfig.scaleDiagonal,
+                                          child: const CustomLoading(),
+                                        ),
+                                      );
+                                    }
+                                    if (_curIdx == 0 && diaryData?[0].reportedStatus == 'BLURRED') {
+                                      isPlay = false;
+                                      fAliplayer?.stop();
+                                    }
+
+                                    return itemDiary(notifier, index);
+                                  },
+                                ),
+                              ),
                             ),
                           ),
                   ),
@@ -607,12 +628,12 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // SelectableText("isApsara : ${notifier.diaryData?[index].isApsara}"),
-          // SelectableText("post id : ${notifier.diaryData?[index].postID})"),
+          // SelectableText("isApsara : ${diaryData?[index].isApsara}"),
+          // SelectableText("post id : ${diaryData?[index].postID})"),
           // sixteenPx,
-          // SelectableText((notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].mediaThumbEndPoint ?? "") : "${notifier.diaryData?[index].fullThumbPath}"),
+          // SelectableText((diaryData?[index].isApsara ?? false) ? (diaryData?[index].mediaThumbEndPoint ?? "") : "${diaryData?[index].fullThumbPath}"),
           // sixteenPx,
-          // SelectableText((notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].apsaraId ?? "") : "${UrlConstants.oldVideo + notifier.diaryData![index].postID!}"),
+          // SelectableText((diaryData?[index].isApsara ?? false) ? (diaryData?[index].apsaraId ?? "") : "${UrlConstants.oldVideo + diaryData![index].postID!}"),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -625,30 +646,29 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                   following: true,
                   haveStory: false,
                   textColor: kHyppeTextLightPrimary,
-                  username: notifier.diaryData?[index].username,
+                  username: diaryData?[index].username,
                   featureType: FeatureType.other,
-                  // isCelebrity: vidnotifier.diaryData?[index].privacy?.isCelebrity,
+                  // isCelebrity: viddiaryData?[index].privacy?.isCelebrity,
                   isCelebrity: false,
-                  imageUrl: '${System().showUserPicture(notifier.diaryData?[index].avatar?.mediaEndpoint)}',
-                  onTapOnProfileImage: () => System().navigateToProfile(context, notifier.diaryData?[index].email ?? ''),
+                  imageUrl: '${System().showUserPicture(diaryData?[index].avatar?.mediaEndpoint)}',
+                  onTapOnProfileImage: () => System().navigateToProfile(context, diaryData?[index].email ?? ''),
                   createdAt: '2022-02-02',
-                  musicName: notifier.diaryData?[index].music?.musicTitle ?? '',
-                  location: notifier.diaryData?[index].location ?? '',
-                  isIdVerified: notifier.diaryData?[index].privacy?.isIdVerified,
+                  musicName: diaryData?[index].music?.musicTitle ?? '',
+                  location: diaryData?[index].location ?? '',
+                  isIdVerified: diaryData?[index].privacy?.isIdVerified,
                 ),
               ),
-              if (notifier.diaryData?[index].email != email && (notifier.diaryData?[index].isNewFollowing ?? false))
+              if (diaryData?[index].email != email && (diaryData?[index].isNewFollowing ?? false))
                 Consumer<PreviewPicNotifier>(
                   builder: (context, picNot, child) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: GestureDetector(
                       onTap: () {
-                        if (notifier.diaryData?[index].insight?.isloadingFollow != true) {
-                          picNot.followUser(context, notifier.diaryData?[index] ?? ContentData(),
-                              isUnFollow: notifier.diaryData?[index].following, isloading: notifier.diaryData?[index].insight!.isloadingFollow ?? false);
+                        if (diaryData?[index].insight?.isloadingFollow != true) {
+                          picNot.followUser(context, diaryData?[index] ?? ContentData(), isUnFollow: diaryData?[index].following, isloading: diaryData?[index].insight!.isloadingFollow ?? false);
                         }
                       },
-                      child: notifier.diaryData?[index].insight?.isloadingFollow ?? false
+                      child: diaryData?[index].insight?.isloadingFollow ?? false
                           ? Container(
                               height: 40,
                               width: 30,
@@ -658,7 +678,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                               ),
                             )
                           : Text(
-                              (notifier.diaryData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                              (diaryData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
                               style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
                             ),
                     ),
@@ -666,17 +686,17 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                 ),
               GestureDetector(
                 onTap: () {
-                  if (notifier.diaryData?[index].email != email) {
+                  if (diaryData?[index].email != email) {
                     // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>().reportContent(context, notifier.diaryData?[index] ?? ContentData(), fAliplayer: fAliplayer);
+                    context.read<PreviewPicNotifier>().reportContent(context, diaryData?[index] ?? ContentData(), fAliplayer: fAliplayer);
                   } else {
                     fAliplayer?.pause();
                     ShowBottomSheet().onShowOptionContent(
                       context,
-                      contentData: notifier.diaryData?[index] ?? ContentData(),
+                      contentData: diaryData?[index] ?? ContentData(),
                       captionTitle: hyppeDiary,
                       onDetail: false,
-                      isShare: notifier.diaryData?[index].isShared,
+                      isShare: diaryData?[index].isShared,
                       onUpdate: () => context.read<HomeNotifier>().onUpdate(),
                       fAliplayer: fAliplayer,
                     );
@@ -697,10 +717,10 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                 _curIdx = index;
                 if (_lastCurIndex != _curIdx) {
                   Future.delayed(const Duration(milliseconds: 400), () {
-                    start(notifier.diaryData?[index] ?? ContentData());
-                    System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData());
+                    start(diaryData?[index] ?? ContentData());
+                    System().increaseViewCount2(context, diaryData?[index] ?? ContentData());
                   });
-                  if (notifier.diaryData?[index].certified ?? false) {
+                  if (diaryData?[index].certified ?? false) {
                     System().block(context);
                   } else {
                     System().disposeBlock();
@@ -728,7 +748,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                               onCreated: onViewPlayerCreated,
                               x: 0,
                               y: 0,
-                              height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                              height: MediaQuery.of(context).size.width * 16.0 / 9.0,
                               width: MediaQuery.of(context).size.width,
                             ),
                           )
@@ -745,8 +765,8 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                         },
                         onDoubleTap: () {
                           final _likeNotifier = context.read<LikeNotifier>();
-                          if (notifier.diaryData?[index] != null) {
-                            _likeNotifier.likePost(context, notifier.diaryData![index]);
+                          if (diaryData?[index] != null) {
+                            _likeNotifier.likePost(context, diaryData![index]);
                           }
                         },
                         child: Container(
@@ -756,7 +776,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                         ),
                       ),
                     ),
-                    dataSelected?.postID == notifier.diaryData?[index].postID && isPlay
+                    dataSelected?.postID == diaryData?[index].postID && isPlay
                         ? Container()
                         : CustomBaseCacheImage(
                             memCacheWidth: 100,
@@ -764,22 +784,23 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                             widthPlaceHolder: 80,
                             heightPlaceHolder: 80,
                             placeHolderWidget: Container(),
-                            imageUrl: (notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].mediaThumbEndPoint ?? "") : "${notifier.diaryData?[index].fullThumbPath}",
-                            imageBuilder: (context, imageProvider) => notifier.diaryData?[index].reportedStatus == 'BLURRED'
+                            imageUrl: (diaryData?[index].isApsara ?? false) ? (diaryData?[index].mediaThumbEndPoint ?? "") : "${diaryData?[index].fullThumbPath}",
+                            imageBuilder: (context, imageProvider) => diaryData?[index].reportedStatus == 'BLURRED'
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(20), // Image border
                                     child: ImageFiltered(
                                       imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                                       child: Image(
-                                        width: SizeConfig.screenWidth,
+                                        height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                        width: MediaQuery.of(context).size.width,
                                         image: imageProvider,
                                       ),
                                     ),
                                   )
                                 : Container(
                                     // const EdgeInsets.symmetric(horizontal: 4.5),
-                                    width: SizeConfig.screenWidth,
-                                    height: 500,
+                                    height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                    width: MediaQuery.of(context).size.width,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                         image: imageProvider,
@@ -821,24 +842,24 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                             child: CircularProgressIndicator(),
                           ))
                         : Container(),
-                    _buildBody(context, SizeConfig.screenWidth, notifier.diaryData?[index] ?? ContentData()),
-                    blurContentWidget(context, notifier.diaryData?[index] ?? ContentData()),
+                    _buildBody(context, SizeConfig.screenWidth, diaryData?[index] ?? ContentData()),
+                    blurContentWidget(context, diaryData?[index] ?? ContentData()),
                   ],
                 ),
               ),
             ),
           ),
           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                  (notifier.diaryData?[index].boosted.isEmpty ?? [].isEmpty) &&
-                  (notifier.diaryData?[index].reportedStatus != 'OWNED' && notifier.diaryData?[index].reportedStatus != 'BLURRED' && notifier.diaryData?[index].reportedStatus2 != 'BLURRED') &&
-                  notifier.diaryData?[index].email == email
+                  (diaryData?[index].boosted.isEmpty ?? [].isEmpty) &&
+                  (diaryData?[index].reportedStatus != 'OWNED' && diaryData?[index].reportedStatus != 'BLURRED' && diaryData?[index].reportedStatus2 != 'BLURRED') &&
+                  diaryData?[index].email == email
               ? Container(
                   width: MediaQuery.of(context).size.width * 0.8,
                   margin: const EdgeInsets.only(bottom: 16),
                   child: ButtonBoost(
                     onDetail: false,
                     marginBool: true,
-                    contentData: notifier.diaryData?[index],
+                    contentData: diaryData?[index],
                     startState: () {
                       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                     },
@@ -848,7 +869,16 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                   ),
                 )
               : Container(),
-          if (notifier.diaryData?[index].email == email && (notifier.diaryData?[index].boostCount ?? 0) >= 0 && (notifier.diaryData?[index].boosted.isNotEmpty ?? [].isEmpty))
+          diaryData?[index].email == SharedPreference().readStorage(SpKeys.email) && (diaryData?[index].reportedStatus == 'OWNED')
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 11.0),
+                  child: ContentViolationWidget(
+                    data: diaryData?[index] ?? ContentData(),
+                    text: lang?.thisHyppeVidisSubjectToModeration ?? '',
+                  ),
+                )
+              : Container(),
+          if (diaryData?[index].email == email && (diaryData?[index].boostCount ?? 0) >= 0 && (diaryData?[index].boosted.isNotEmpty ?? [].isEmpty))
             Container(
               padding: const EdgeInsets.all(10),
               margin: EdgeInsets.only(bottom: 10),
@@ -868,7 +898,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                   Padding(
                     padding: const EdgeInsets.only(left: 13),
                     child: Text(
-                      "${notifier.diaryData?[index].boostJangkauan ?? '0'} ${lang?.reach}",
+                      "${diaryData?[index].boostJangkauan ?? '0'} ${lang?.reach}",
                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
                     ),
                   )
@@ -886,7 +916,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                       child: Consumer<LikeNotifier>(
                         builder: (context, likeNotifier, child) => Align(
                           alignment: Alignment.bottomRight,
-                          child: notifier.diaryData?[index].insight?.isloading ?? false
+                          child: diaryData?[index].insight?.isloading ?? false
                               ? const SizedBox(
                                   height: 28,
                                   width: 28,
@@ -898,26 +928,25 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                               : InkWell(
                                   child: CustomIconWidget(
                                     defaultColor: false,
-                                    color: (notifier.diaryData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                    iconData: '${AssetPath.vectorPath}${(notifier.diaryData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                    color: (diaryData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                                    iconData: '${AssetPath.vectorPath}${(diaryData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                     height: 28,
                                   ),
                                   onTap: () {
-                                    if (notifier.diaryData?[index] != null) {
-                                      likeNotifier.likePost(context, notifier.diaryData![index]);
+                                    if (diaryData?[index] != null) {
+                                      likeNotifier.likePost(context, diaryData![index]);
                                     }
                                   },
                                 ),
                         ),
                       ),
                     ),
-                    if (notifier.diaryData?[index].allowComments ?? true)
+                    if (diaryData?[index].allowComments ?? true)
                       Padding(
                         padding: const EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
                           onTap: () {
-                            Routing().move(Routes.commentsDetail,
-                                argument: CommentsArgument(postID: notifier.diaryData?[index].postID ?? '', fromFront: true, data: notifier.diaryData?[index] ?? ContentData()));
+                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: diaryData?[index].postID ?? '', fromFront: true, data: diaryData?[index] ?? ContentData()));
                           },
                           child: const CustomIconWidget(
                             defaultColor: false,
@@ -927,12 +956,12 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           ),
                         ),
                       ),
-                    if ((notifier.diaryData?[index].isShared ?? false))
+                    if ((diaryData?[index].isShared ?? false))
                       Padding(
                         padding: EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
                           onTap: () {
-                            context.read<DiariesPlaylistNotifier>().createdDynamicLink(context, data: notifier.diaryData?[index]);
+                            context.read<DiariesPlaylistNotifier>().createdDynamicLink(context, data: diaryData?[index]);
                           },
                           child: CustomIconWidget(
                             defaultColor: false,
@@ -942,12 +971,12 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           ),
                         ),
                       ),
-                    if ((notifier.diaryData?[index].saleAmount ?? 0) > 0 && email != notifier.diaryData?[index].email)
+                    if ((diaryData?[index].saleAmount ?? 0) > 0 && email != diaryData?[index].email)
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
                             fAliplayer?.pause();
-                            await ShowBottomSheet.onBuyContent(context, data: notifier.diaryData?[index], fAliplayer: fAliplayer);
+                            await ShowBottomSheet.onBuyContent(context, data: diaryData?[index], fAliplayer: fAliplayer);
                             // fAliplayer?.play();
                           },
                           child: const Align(
@@ -965,7 +994,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                 ),
                 twelvePx,
                 Text(
-                  "${notifier.diaryData?[index].insight?.likes}  ${lang?.like}",
+                  "${diaryData?[index].insight?.likes}  ${lang?.like}",
                   style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                 ),
               ],
@@ -974,8 +1003,8 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
           twelvePx,
           CustomNewDescContent(
             // desc: "${data?.description}",
-            username: notifier.diaryData?[index].username ?? '',
-            desc: "${notifier.diaryData?[index].description}",
+            username: diaryData?[index].username ?? '',
+            desc: "${diaryData?[index].description}",
             trimLines: 2,
             textAlign: TextAlign.start,
             seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
@@ -986,30 +1015,30 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
           ),
           GestureDetector(
             onTap: () {
-              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: notifier.diaryData?[index].postID ?? '', fromFront: true, data: notifier.diaryData?[index] ?? ContentData()));
+              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: diaryData?[index].postID ?? '', fromFront: true, data: diaryData?[index] ?? ContentData()));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Text(
-                "${lang?.seeAll} ${notifier.diaryData?[index].comments} ${lang?.comment}",
+                "${lang?.seeAll} ${diaryData?[index].comments} ${lang?.comment}",
                 style: const TextStyle(fontSize: 12, color: kHyppeBurem),
               ),
             ),
           ),
-          (notifier.diaryData?[index].comment?.length ?? 0) > 0
+          (diaryData?[index].comment?.length ?? 0) > 0
               ? Padding(
                   padding: const EdgeInsets.only(top: 0.0),
                   child: ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: (notifier.diaryData?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
+                    itemCount: (diaryData?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
                     itemBuilder: (context, indexComment) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 6.0),
                         child: CustomNewDescContent(
-                          // desc: "${notifier.diaryData?[index]?.description}",
-                          username: notifier.diaryData?[index].comment?[indexComment].userComment?.username ?? '',
-                          desc: notifier.diaryData?[index].comment?[indexComment].txtMessages ?? '',
+                          // desc: "${diaryData?[index]?.description}",
+                          username: diaryData?[index].comment?[indexComment].userComment?.username ?? '',
+                          desc: diaryData?[index].comment?[indexComment].txtMessages ?? '',
                           trimLines: 2,
                           textAlign: TextAlign.start,
                           seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
@@ -1027,7 +1056,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
             padding: EdgeInsets.symmetric(vertical: 4.0),
             child: Text(
               "${System().readTimestamp(
-                DateTime.parse(System().dateTimeRemoveT(notifier.diaryData?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                DateTime.parse(System().dateTimeRemoveT(diaryData?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
                 context,
                 fullCaption: true,
               )}",

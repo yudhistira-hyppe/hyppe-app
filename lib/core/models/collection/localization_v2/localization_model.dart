@@ -889,6 +889,9 @@ class LocalizationModelV2 {
   String? searchHistory;
   String? messageNoResult;
   String? fullNameCannotContainLeadingSpace;
+  String? noPostsYet;
+  String? youDontHaveAnyPostsHereYet;
+  String? thisContentIsSubjectToModeration;
 
   LocalizationModelV2({
     this.login,
@@ -1781,6 +1784,9 @@ class LocalizationModelV2 {
     this.searchHistory,
     this.messageNoResult,
     this.fullNameCannotContainLeadingSpace,
+    this.noPostsYet,
+    this.youDontHaveAnyPostsHereYet,
+    this.thisContentIsSubjectToModeration,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2692,5 +2698,8 @@ class LocalizationModelV2 {
     searchHistory = json['searchHistory'];
     messageNoResult = json['messageNoResult'];
     fullNameCannotContainLeadingSpace = json['fullNameCannotContainLeadingSpace'];
+    noPostsYet = json['noPostsYet'];
+    youDontHaveAnyPostsHereYet = json['youDontHaveAnyPostsHereYet'];
+    thisContentIsSubjectToModeration = json['thisContentIsSubjectToModeration'];
   }
 }
