@@ -270,7 +270,7 @@ class OtherProfileNotifier with ChangeNotifier {
     // user.vids ??= await vidContentsQuery.reload(context, otherContent: true);
     user.pics = await picContentsQuery.reload(context, otherContent: true);
 
-    context.read<ScrollPicNotifier>().pics = user.pics;
+    // context.read<ScrollPicNotifier>().pics = user.pics;
     // user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
     _isLoading = false;
     notifyListeners();
@@ -372,7 +372,8 @@ class OtherProfileNotifier with ChangeNotifier {
     if (connect) {
       var result;
       if (pageIndex == 0) {
-        result = await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title, pageSrc: PageSrc.otherProfile));
+        result =
+            await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title, pageSrc: PageSrc.otherProfile, picData: user.pics));
 
         // _routing.move(Routes.picSlideDetailPreview,
         //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.other));
@@ -397,16 +398,15 @@ class OtherProfileNotifier with ChangeNotifier {
   }
 
   scrollAuto(String index) {
-    print("========>>>> $index");
-    var indexHei = int.parse(index) + 1;
-    var hasilBagi = indexHei / 3;
-    heightIndex = 0;
-    if (isInteger(hasilBagi)) {
-      hasilBagi = hasilBagi;
-    } else {
-      hasilBagi += 1;
-    }
-    heightIndex = (heightBox * hasilBagi.toInt() - heightBox);
+    // var indexHei = int.parse(index) + 1;
+    // var hasilBagi = indexHei / 3;
+    // heightIndex = 0;
+    // if (isInteger(hasilBagi)) {
+    //   hasilBagi = hasilBagi;
+    // } else {
+    //   hasilBagi += 1;
+    // }
+    // heightIndex = (heightBox * hasilBagi.toInt() - heightBox);
   }
 
   bool isInteger(num value) => value is int || value == value.roundToDouble();

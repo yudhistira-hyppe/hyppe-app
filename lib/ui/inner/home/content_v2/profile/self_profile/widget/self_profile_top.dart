@@ -72,7 +72,7 @@ class SelfProfileTop extends StatelessWidget {
                     }
                   },
                 ),
-                twentyPx,
+                twentyFourPx,
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -265,7 +265,7 @@ class SelfProfileTop extends StatelessWidget {
 
             notifier.displayBio().length > 2
                 ? Container(
-                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    padding: const EdgeInsets.symmetric(vertical: 6),
                     constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.3),
                     // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
                     child: SingleChildScrollView(
@@ -295,11 +295,11 @@ class SelfProfileTop extends StatelessWidget {
                         const CustomIconWidget(
                           iconData: "${AssetPath.vectorPath}pin.svg",
                           defaultColor: false,
-                          color: kHyppePrimary,
+                          color: kHyppeTextLightPrimary,
                         ),
                         CustomTextWidget(
                           textToDisplay: notifier.displayPlace() ?? '',
-                          textStyle: const TextStyle(color: kHyppePrimary),
+                          textStyle: const TextStyle(),
                         )
                       ],
                     ),

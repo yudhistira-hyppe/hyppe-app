@@ -2,7 +2,9 @@ import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
 import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/slided_vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
@@ -397,9 +399,9 @@ class Generate {
       case Routes.scrollPic:
         return MaterialPageRoute(builder: (_) => ScrollPic(arguments: settings.arguments as SlidedPicDetailScreenArgument));
       case Routes.scrollDiary:
-        return MaterialPageRoute(builder: (_) => ScrollDiary(arguments: settings.arguments as SlidedPicDetailScreenArgument));
+        return MaterialPageRoute(builder: (_) => ScrollDiary(arguments: settings.arguments as SlidedDiaryDetailScreenArgument));
       case Routes.scrollVid:
-        return MaterialPageRoute(builder: (_) => ScrollVid(arguments: settings.arguments as SlidedPicDetailScreenArgument));
+        return MaterialPageRoute(builder: (_) => ScrollVid(arguments: settings.arguments as SlidedVidDetailScreenArgument));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

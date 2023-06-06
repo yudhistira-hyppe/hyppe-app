@@ -6,23 +6,47 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dar
 import 'package:provider/provider.dart';
 
 class ScrollPicNotifier with ChangeNotifier {
+  bool isLoadingLoadmore = false;
   List<ContentData>? pics = [];
 
   Future loadMore(BuildContext context, ScrollController scrollController, PageSrc pageSrc) async {
+    isLoadingLoadmore = true;
+    notifyListeners();
     if (pageSrc == PageSrc.selfProfile) {
       final sp = context.read<SelfProfileNotifier>();
       sp.pageIndex = 0;
       await sp.onScrollListener(context, scrollController, isLoad: true);
       pics = sp.user.pics;
+      isLoadingLoadmore = false;
       notifyListeners();
     }
 
     if (pageSrc == PageSrc.otherProfile) {
-      print('+!+_!+_!+_!+_!+_+_+!_@+_!+#_+!#_+!_@+_');
       final op = context.read<OtherProfileNotifier>();
       op.pageIndex = 0;
       await op.onScrollListener(context, scrollController, isLoad: true);
       pics = op.user.pics;
+      isLoadingLoadmore = false;
+      notifyListeners();
+    }
+  }
+
+  Future reload(BuildContext context, PageSrc pageSrc) async {
+    if (pageSrc == PageSrc.selfProfile) {
+      final sp = context.read<SelfProfileNotifier>();
+      sp.pageIndex = 0;
+      await sp.getDataPerPgage(context, isReload: true);
+      pics = sp.user.pics;
+      isLoadingLoadmore = false;
+      notifyListeners();
+    }
+
+    if (pageSrc == PageSrc.otherProfile) {
+      final op = context.read<OtherProfileNotifier>();
+      op.pageIndex = 0;
+      await op.initialOtherProfile(context, refresh: true);
+      pics = op.user.pics;
+      isLoadingLoadmore = false;
       notifyListeners();
     }
   }

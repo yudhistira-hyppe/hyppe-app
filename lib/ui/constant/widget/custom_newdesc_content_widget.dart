@@ -67,24 +67,24 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
   Widget build(BuildContext context) {
     desc = widget.desc;
     final values = desc.split('\n');
-    for (var i = 0; i < values.length; i++ ) {
-      try{
+    for (var i = 0; i < values.length; i++) {
+      try {
         final last = values[i].split(' ').last;
-        print('has Emoji: $last');
-        if(last.hasEmoji()){
-          print('has Emoji ini');
+        // print('has Emoji: $last');
+        if (last.hasEmoji()) {
+          // print('has Emoji ini');
           values[i] += ' ';
         }
-      }catch(e){
+      } catch (e) {
         e.logger();
       }
     }
-    if(values.isNotEmpty){
+    if (values.isNotEmpty) {
       desc = '';
-      for(var i = 0; i < values.length; i++ ){
-        if(i == (values.length - 1)){
+      for (var i = 0; i < values.length; i++) {
+        if (i == (values.length - 1)) {
           desc += values[i];
-        }else{
+        } else {
           desc += '${values[i]}\n';
         }
       }
@@ -298,9 +298,9 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
     }
 
     ///only for check the results
-    for (var i = 0; i < descItems.length; i++ ) {
-      print('CaptionType.seeMore ${descItems[i].type}');
-      print('check descItems ${descItems[i].desc}');
+    for (var i = 0; i < descItems.length; i++) {
+      // print('CaptionType.seeMore ${descItems[i].type}');
+      // print('check descItems ${descItems[i].desc}');
     }
     return descItems;
   }

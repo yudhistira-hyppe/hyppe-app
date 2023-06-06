@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 class ScrollVidNotifier with ChangeNotifier {
   List<ContentData>? vidData = [];
+  bool isLoadingLoadmore = false;
 
   Future loadMore(BuildContext context, ScrollController scrollController, PageSrc pageSrc) async {
     if (pageSrc == PageSrc.selfProfile) {
@@ -23,6 +24,26 @@ class ScrollVidNotifier with ChangeNotifier {
       op.pageIndex = 2;
       await op.onScrollListener(context, scrollController, isLoad: true);
       vidData = op.user.vids;
+      notifyListeners();
+    }
+  }
+
+  Future reload(BuildContext context, PageSrc pageSrc) async {
+    if (pageSrc == PageSrc.selfProfile) {
+      final sp = context.read<SelfProfileNotifier>();
+      sp.pageIndex = 0;
+      await sp.getDataPerPgage(context, isReload: true);
+      vidData = sp.user.vids;
+      isLoadingLoadmore = false;
+      notifyListeners();
+    }
+
+    if (pageSrc == PageSrc.otherProfile) {
+      final op = context.read<OtherProfileNotifier>();
+      op.pageIndex = 0;
+      await op.initialOtherProfile(context, refresh: true);
+      vidData = op.user.vids;
+      isLoadingLoadmore = false;
       notifyListeners();
     }
   }

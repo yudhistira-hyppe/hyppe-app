@@ -15,11 +15,14 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_bottom.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_top.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_top_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -42,16 +45,15 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SelfProfileScreen');
-    print('asdasdad');
     final notifier = context.read<SelfProfileNotifier>();
     notifier.setPageIndex(0);
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
 
     // ShowGeneralDialog.adsRewardPop(context);
 
-    _globalKey.currentState?.innerController.addListener(() {
-      setState(() {});
-    });
+    // _globalKey.currentState?.innerController.addListener(() {
+    //   setState(() {});
+    // });
 
     super.initState();
   }
@@ -72,24 +74,44 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
   @override
   void didPopNext() {
     System().disposeBlock();
-    final notifier = context.read<SelfProfileNotifier>();
-    Future.delayed(const Duration(milliseconds: 200), () {
-      print("height dari bloc ${notifier.heightIndex}");
-      if (notifier.heightIndex != 0) {
-        if (notifier.pageIndex == 0 && notifier.picCount < 9) {
-          return false;
+    try {
+      if(mounted){
+        final sp = context.read<ScrollPicNotifier>();
+        final sd = context.read<ScrollDiaryNotifier>();
+        final sv = context.read<ScrollVidNotifier>();
+        final spn = context.read<SelfProfileNotifier>();
+        if (spn.user.pics != null) {
+          sp.pics = spn.user.pics;
         }
-        if (notifier.pageIndex == 1 && notifier.diaryCount < 9) {
-          return false;
+        if (spn.user.diaries != null) {
+          sd.diaryData = spn.user.diaries;
         }
-        if (notifier.pageIndex == 2 && notifier.vidCount < 9) {
-          return false;
+        if (spn.user.vids != null) {
+          sv.vidData = spn.user.vids;
         }
-        var jumpTo = heightProfileCard + notifier.heightIndex;
-        _scrollController.jumpTo(jumpTo.toDouble());
-        notifier.heightIndex = 0;
       }
-    });
+
+    } catch (e) {
+      print(e);
+    }
+
+    // Future.delayed(const Duration(milliseconds: 200), () {
+    //   print("height dari bloc ${notifier.heightIndex}");
+    //   if (notifier.heightIndex != 0) {
+    //     if (notifier.pageIndex == 0 && notifier.picCount < 9) {
+    //       return false;
+    //     }
+    //     if (notifier.pageIndex == 1 && notifier.diaryCount < 9) {
+    //       return false;
+    //     }
+    //     if (notifier.pageIndex == 2 && notifier.vidCount < 9) {
+    //       return false;
+    //     }
+    //     var jumpTo = heightProfileCard + notifier.heightIndex;
+    //     _scrollController.jumpTo(jumpTo.toDouble());
+    //     notifier.heightIndex = 0;
+    //   }
+    // });
 
     super.didPopNext();
   }
@@ -249,14 +271,7 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                 //           : BothProfileTopShimmer()),
                 // ),
                 SliverToBoxAdapter(
-                  child: Container(
-                      child: notifier.user.profile != null
-                          ? MeasuredSize(
-                              onChange: (Size size) {
-                                heightProfileCard = size.height.toInt();
-                              },
-                              child: SelfProfileTop())
-                          : BothProfileTopShimmer()),
+                  child: Container(child: notifier.user.profile != null ? SelfProfileTop() : BothProfileTopShimmer()),
                 ),
 
                 SliverAppBar(

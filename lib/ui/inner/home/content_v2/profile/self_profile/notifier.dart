@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/slided_vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
@@ -256,7 +258,7 @@ class SelfProfileNotifier with ChangeNotifier {
     // user.vids = await vidContentsQuery.reload(context, myContent: true);
     user.pics = await picContentsQuery.reload(context, myContent: true);
 
-    context.read<ScrollPicNotifier>().pics = user.pics;
+    // context.read<ScrollPicNotifier>().pics = user.pics;
 
     // if (user.vids != null) {
     //   await Future.wait(user.vids!.map((e) => cacheImage(context, e.mediaThumbEndPoint!)));
@@ -320,7 +322,6 @@ class SelfProfileNotifier with ChangeNotifier {
         {
           if (user.diaries == null || isReload) {
             user.diaries = await diaryContentsQuery.reload(context, myContent: true);
-            context.read<ScrollDiaryNotifier>().diaryData = user.diaries;
             notifyListeners();
           }
         }
@@ -329,7 +330,6 @@ class SelfProfileNotifier with ChangeNotifier {
         {
           if (user.vids == null || isReload) {
             user.vids = await vidContentsQuery.reload(context, myContent: true);
-            context.read<ScrollVidNotifier>().vidData = user.vids;
             notifyListeners();
           }
         }
@@ -352,19 +352,40 @@ class SelfProfileNotifier with ChangeNotifier {
     if (connect) {
       var result;
       if (pageIndex == 0) {
-        result = await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title, pageSrc: PageSrc.selfProfile));
+        result = await _routing.move(Routes.scrollPic,
+            argument: SlidedPicDetailScreenArgument(
+              page: index,
+              type: TypePlaylist.mine,
+              titleAppbar: title,
+              pageSrc: PageSrc.selfProfile,
+              picData: user.pics,
+            ));
         // _routing.move(Routes.picSlideDetailPreview,
         //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
         scrollAuto(result);
       }
       if (pageIndex == 1) {
-        result = await _routing.move(Routes.scrollDiary, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title, pageSrc: PageSrc.selfProfile));
+        result = await _routing.move(Routes.scrollDiary,
+            argument: SlidedDiaryDetailScreenArgument(
+              page: index,
+              type: TypePlaylist.mine,
+              titleAppbar: title,
+              pageSrc: PageSrc.selfProfile,
+              diaryData: user.diaries,
+            ));
         // _routing.move(Routes.diaryDetail,
         //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
         scrollAuto(result);
       }
       if (pageIndex == 2) {
-        result = await _routing.move(Routes.scrollVid, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title, pageSrc: PageSrc.selfProfile));
+        result = await _routing.move(Routes.scrollVid,
+            argument: SlidedVidDetailScreenArgument(
+              page: index,
+              type: TypePlaylist.mine,
+              titleAppbar: title,
+              pageSrc: PageSrc.selfProfile,
+              vidData: user.vids,
+            ));
         // result = await _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
         scrollAuto(result);
       }
@@ -374,15 +395,15 @@ class SelfProfileNotifier with ChangeNotifier {
   }
 
   scrollAuto(String index) {
-    var indexHei = int.parse(index) + 1;
-    var hasilBagi = indexHei / 3;
-    heightIndex = 0;
-    if (isInteger(hasilBagi)) {
-      hasilBagi = hasilBagi;
-    } else {
-      hasilBagi += 1;
-    }
-    heightIndex = (heightBox * hasilBagi.toInt() - heightBox);
+    // var indexHei = int.parse(index) + 1;
+    // var hasilBagi = indexHei / 3;
+    // heightIndex = 0;
+    // if (isInteger(hasilBagi)) {
+    //   hasilBagi = hasilBagi;
+    // } else {
+    //   hasilBagi += 1;
+    // }
+    // heightIndex = (heightBox * hasilBagi.toInt() - heightBox);
   }
 
   bool isInteger(num value) => value is int || value == value.roundToDouble();

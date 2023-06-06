@@ -1,9 +1,10 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,7 @@ class EmptyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'EmptyWidget');
     return SliverFillRemaining(
       hasScrollBody: false,
@@ -19,26 +21,34 @@ class EmptyWidget extends StatelessWidget {
         children: <Widget>[
           Expanded(
               child: SizedBox(
-            width: 200,
+            // width: 200,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Consumer<TranslateNotifierV2>(
-                  builder: (_, notifier, __) => CustomTextWidget(
-                    textToDisplay: notifier.translate.youDontHaveAnyPostsYetCreateOneNow ?? '',
-                    maxLines: 2,
+                CustomTextWidget(
+                  textToDisplay: tn.translate.noPostsYet ?? '',
+                  maxLines: 2,
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                eightPx,
+                CustomTextWidget(
+                  textToDisplay: tn.translate.youDontHaveAnyPostsHereYet ?? '',
+                  maxLines: 2,
+                  textStyle: const TextStyle(color: kHyppeSecondary),
+                ),
+                thirtySixPx,
+                CustomTextButton(
+                  onPressed: () => ShowBottomSheet.onUploadContent(context),
+                  style: ButtonStyle(side: MaterialStateProperty.all(const BorderSide(color: kHyppePrimary, width: 1.0, style: BorderStyle.solid))),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                    child: CustomTextWidget(
+                      textToDisplay: tn.translate.upload ?? '',
+                      textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
+                    ),
                   ),
                 ),
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                      onTap: () => ShowBottomSheet.onUploadContent(context),
-                      child: const CustomIconWidget(
-                        iconData: "${AssetPath.vectorPath}add-content.svg",
-                        defaultColor: false,
-                      ),
-                    ))
               ],
             ),
           )),

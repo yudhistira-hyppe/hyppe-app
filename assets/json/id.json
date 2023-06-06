@@ -889,5 +889,8 @@
   "trendsForYou": "Tren Buat Kamu",
   "searchHistory": "Riwayat Pencarian",
   "messageNoResult": "Cobalah gunakan kata kunci\nyang lebih relevan.",
-  "fullNameCannotContainLeadingSpace": "Nama lengkap tidak boleh mengandung spasi di awal"
+  "fullNameCannotContainLeadingSpace": "Nama lengkap tidak boleh mengandung spasi di awal",
+  "noPostsYet": "Belum ada postingan",
+  "youDontHaveAnyPostsHereYet": "Kamu belum memiliki postingan apapun di sini.",
+  "thisContentIsSubjectToModeration": "Konten ini terkena moderasi!"
 }

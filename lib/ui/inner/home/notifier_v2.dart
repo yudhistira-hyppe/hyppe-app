@@ -19,8 +19,11 @@ import 'package:hyppe/core/services/SqliteData.dart';
 import 'package:hyppe/core/services/check_version.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -895,10 +898,18 @@ class HomeNotifier with ChangeNotifier {
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
 
+    final vidScroll = Provider.of<ScrollVidNotifier>(context, listen: false);
+    final diaryScroll = Provider.of<ScrollDiaryNotifier>(context, listen: false);
+    final picScroll = Provider.of<ScrollPicNotifier>(context, listen: false);
+
     ContentData? _updatedData;
     _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
     _updatedData ??= diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
     _updatedData ??= pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+
+    _updatedData ??= vidScroll.vidData?.firstWhereOrNull((element) => element.postID == postID);
+    _updatedData ??= diaryScroll.diaryData?.firstWhereOrNull((element) => element.postID == postID);
+    _updatedData ??= picScroll.pics?.firstWhereOrNull((element) => element.postID == postID);
 
     if (add) {
       _updatedData?.comments = (_updatedData.comments ?? 0) + 1;
