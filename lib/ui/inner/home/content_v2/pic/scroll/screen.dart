@@ -527,7 +527,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         color: kHyppeTextLightPrimary,
                       ),
                       onPressed: () {
-                        Navigator.pop(context, '$_curIdx');
+                        Future.delayed(Duration.zero, (){
+                          Navigator.pop(context, '$_curIdx');
+                        });
                       }),
                 ),
                 Expanded(

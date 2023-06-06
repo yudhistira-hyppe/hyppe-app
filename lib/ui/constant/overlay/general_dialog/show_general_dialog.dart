@@ -300,22 +300,27 @@ class ShowGeneralDialog {
     if (isInAppAds) {
       SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, context.getCurrentDate());
     }
-    await showGeneralDialog(
-      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
-      context: Routing.navigatorKey.currentState!.overlay!.context,
-      barrierLabel: 'Barrier',
-      barrierDismissible: false,
-      transitionDuration: const Duration(milliseconds: 500),
-      pageBuilder: (context, animation, secondAnimation) => AdsPopUpDialog(
-        data: data,
-        auth: auth,
-        isSponsored: isSponsored,
-      ),
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
-        return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
-      },
-    );
+    try{
+      await showGeneralDialog(
+        //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+        context: Routing.navigatorKey.currentState!.overlay!.context,
+        barrierLabel: 'Barrier',
+        barrierDismissible: false,
+        transitionDuration: const Duration(milliseconds: 500),
+        pageBuilder: (context, animation, secondAnimation) => AdsPopUpDialog(
+          data: data,
+          auth: auth,
+          isSponsored: isSponsored,
+        ),
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+          return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
+        },
+      );
+    }catch(e){
+      print('Error Pop Ads: $e');
+    }
+
   }
 
   static Future remarkWidthdrawal(BuildContext context) async {
