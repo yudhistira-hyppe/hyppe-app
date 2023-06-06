@@ -56,22 +56,10 @@ class HyppePreviewVid extends StatefulWidget {
 }
 
 class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
-  // FlutterAliplayer? fAliplayer;
-  // FlutterAliplayer? fAliplayerAds;
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
-  // bool _showLoading = false;
-  // bool _inSeek = false;
   bool isloading = false;
-  // bool isMute = false;
-
-  // int _loadingPercent = 0;
-  // int _currentPlayerState = 0;
-  // int _videoDuration = 1;
-  // int _currentPosition = 0;
-  // int _bufferPosition = 0;
-  // int _currentPositionText = 0;
   int _curIdx = -1;
   int _lastCurIndex = -1;
 
@@ -93,23 +81,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     notifier.pageController.addListener(() => notifier.scrollListener(context));
     lang = context.read<TranslateNotifierV2>().translate;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
-    //   WidgetsBinding.instance.addObserver(this);
-    //   fAliplayer?.pause();
-    //   fAliplayer?.setAutoPlay(true);
-    //   fAliplayer?.setLoop(true);
-    //
-    //   //Turn on mix mode
-    //   if (Platform.isIOS) {
-    //     FlutterAliplayer.enableMix(true);
-    //   }
-    //
-    //   //set player
-    //   fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-    //   fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-    //   _initListener();
-    // });
+
     super.initState();
   }
 
@@ -119,169 +91,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     super.didChangeDependencies();
   }
 
-  // _initListener() {
-  //   fAliplayer?.setOnEventReportParams((params, playerId) {
-  //     print("EventReportParams=${params}");
-  //   });
-  //   fAliplayer?.setOnPrepared((playerId) {
-  //     // Fluttertoast.showToast(msg: "OnPrepared ");
-  //     fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
-  //     fAliplayer?.getMediaInfo().then((value) {
-  //       setState(() {
-  //         isPrepare = true;
-  //         getNotifier(context).vidData?[_lastCurIndex].isLoading = false;
-  //       });
-  //     });
-  //     isPlay = true;
-  //     dataSelected?.isDiaryPlay = true;
-  //     _initAds(context);
-  //   });
-  //   fAliplayer?.setOnRenderingStart((playerId) {
-  //     // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
-  //   });
-  //   fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
-  //   fAliplayer?.setOnStateChanged((newState, playerId) {
-  //     _currentPlayerState = newState;
-  //     print("aliyun : onStateChanged $newState");
-  //     switch (newState) {
-  //       case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-  //         setState(() {
-  //           getNotifier(context).vidData?[_lastCurIndex].isLoading = false;
-  //           isPause = false;
-  //         });
-  //         break;
-  //       case FlutterAvpdef.AVPStatus_AVPStatusPaused:
-  //         isPause = true;
-  //         setState(() {});
-  //         break;
-  //       default:
-  //     }
-  //   });
-  //   fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-  //     setState(() {
-  //       _loadingPercent = 0;
-  //       getNotifier(context).vidData?[_lastCurIndex].isLoading = true;
-  //     });
-  //   }, loadingProgress: (percent, netSpeed, playerId) {
-  //     _loadingPercent = percent;
-  //     if (percent == 100) {
-  //       getNotifier(context).vidData?[_lastCurIndex].isLoading = false;
-  //     }
-  //     setState(() {});
-  //   }, loadingEnd: (playerId) {
-  //     setState(() {
-  //       getNotifier(context).vidData?[_lastCurIndex].isLoading = false;
-  //     });
-  //   });
-  //   fAliplayer?.setOnSeekComplete((playerId) {
-  //     _inSeek = false;
-  //   });
-  //   fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
-  //     if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
-  //       if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
-  //         _currentPosition = extraValue ?? 0;
-  //       }
-  //       // if (!_inSeek) {
-  //       //   setState(() {
-  //       //     _currentPositionText = extraValue ?? 0;
-  //       //   });
-  //       // }
-  //     } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-  //       _bufferPosition = extraValue ?? 0;
-  //       // if (mounted) {
-  //       //   setState(() {});
-  //       // }
-  //     } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
-  //       // Fluttertoast.showToast(msg: "AutoPlay");
-  //     } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
-  //     } else if (infoCode == FlutterAvpdef.CACHEERROR) {
-  //     } else if (infoCode == FlutterAvpdef.LOOPINGSTART) {
-  //       // Fluttertoast.showToast(msg: "Looping Start");
-  //     } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
-  //       // Fluttertoast.showToast(msg: "change to soft ware decoder");
-  //       // mOptionsFragment.switchHardwareDecoder();
-  //     }
-  //   });
-  //   fAliplayer?.setOnCompletion((playerId) {
-  //     getNotifier(context).vidData?[_lastCurIndex].isLoading = false;
-  //
-  //     isPause = true;
-  //
-  //     setState(() {
-  //       _currentPosition = _videoDuration;
-  //     });
-  //   });
-  //
-  //   fAliplayer?.setOnSnapShot((path, playerId) {
-  //     print("aliyun : snapShotPath = $path");
-  //     // Fluttertoast.showToast(msg: "SnapShot Save : $path");
-  //   });
-  //   fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-  //     getNotifier(context).vidData?[_lastCurIndex].isLoading = false;
-  //
-  //     setState(() {});
-  //   });
-  //
-  //   fAliplayer?.setOnTrackChanged((value, playerId) {
-  //     AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-  //     if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
-  //       // trackFragmentKey.currentState.onTrackChanged(info);
-  //       // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
-  //     }
-  //   });
-  //   fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
-  //
-  //   fAliplayer?.setOnThumbnailGetListener(
-  //       onThumbnailGetSuccess: (bitmap, range, playerId) {
-  //         // _thumbnailBitmap = bitmap;
-  //         var provider = MemoryImage(bitmap);
-  //         precacheImage(provider, context).then((_) {
-  //           setState(() {});
-  //         });
-  //       },
-  //       onThumbnailGetFail: (playerId) {});
-  //
-  //   fAliplayer?.setOnSubtitleHide((trackIndex, subtitleID, playerId) {
-  //     if (mounted) {
-  //       setState(() {});
-  //     }
-  //   });
-  //
-  //   fAliplayer?.setOnSubtitleShow((trackIndex, subtitleID, subtitle, playerId) {
-  //     if (mounted) {
-  //       setState(() {});
-  //     }
-  //   });
-  // }
-  //
-  // void onViewPlayerCreated(viewId) async {
-  //   fAliplayer?.setPlayerView(viewId);
-  // }
-
-  // _initAds(BuildContext context) async {
-  //   //for ads
-  //   // getCountVid();
-  //   // await _newInitAds(true);
-  //   context.incrementAdsCount();
-  //   if (context.getAdsCount() == null) {
-  //     context.setAdsCount(0);
-  //   } else {
-  //     final adsNotifier = context.read<PreviewVidNotifier>();
-  //     if (context.getAdsCount() == 2) {
-  //       try {
-  //         context.read<PreviewVidNotifier>().getAdsVideo(context, false);
-  //       } catch (e) {
-  //         'Failed to fetch ads data 0 : $e'.logger();
-  //       }
-  //     }
-  //     if (context.getAdsCount() == 3 && adsNotifier.adsData != null) {
-  //       fAliplayer?.pause();
-  //       System().adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(), adsNotifier.adsData?.data?.apsaraAuth ?? '', isInAppAds: false).whenComplete(() {
-  //         fAliplayer?.play();
-  //       });
-  //     }
-  //   }
-  // }
 
   @override
   void dispose() {
