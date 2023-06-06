@@ -823,9 +823,22 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   ],
                 ),
                 twelvePx,
-                Text(
-                  "${vidData?[index].insight?.likes}  ${lang?.like}",
-                  style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      "${vidData?[index].insight?.likes}  ${lang?.like}",
+                      style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                    ),
+                    const Text(
+                      " . ",
+                      style: TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    Text(
+                      " ${System().formatterNumber(vidData?[index].insight?.views)}  ${lang?.views}",
+                      style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                    ),
+                  ],
                 ),
               ],
             ),

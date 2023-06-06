@@ -1,5 +1,7 @@
 //==============================================================================================
 
+import 'dart:ui';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/screen.dart';
@@ -11,6 +13,8 @@ class ZoomableImage extends StatelessWidget {
   final double? initialScale;
   final bool? animateToInitScale;
   final Widget child;
+  final VoidCallback? onScaleStart;
+  final VoidCallback? onScaleStop;
 
   const ZoomableImage({
     super.key,
@@ -19,6 +23,8 @@ class ZoomableImage extends StatelessWidget {
     this.focalPoint,
     this.initialScale,
     this.animateToInitScale,
+    this.onScaleStart,
+    this.onScaleStop,
   });
 
   // Widget loadImage() {}
@@ -30,6 +36,8 @@ class ZoomableImage extends StatelessWidget {
       focalPoint: focalPoint ?? Offset(0, 0),
       initialScale: initialScale ?? 0,
       animateToInitScale: animateToInitScale ?? false,
+      onScaleStart: onScaleStart,
+      onScaleStop: onScaleStop,
       child: child,
     );
   }
@@ -44,6 +52,8 @@ class ZoomablePhotoViewer extends StatefulWidget {
     this.focalPoint,
     this.initialScale,
     this.animateToInitScale,
+    this.onScaleStart,
+    this.onScaleStop,
   }) : super(key: key);
 
   final Widget child;
@@ -52,6 +62,8 @@ class ZoomablePhotoViewer extends StatefulWidget {
   final Offset? focalPoint;
   final double? initialScale;
   final bool? animateToInitScale;
+  final VoidCallback? onScaleStart;
+  final VoidCallback? onScaleStop;
 
   @override
   State<ZoomablePhotoViewer> createState() => _ZoomablePhotoViewerState();
@@ -232,6 +244,7 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
     });
     if (_scale! > _previousScale!) {
       show();
+      widget.onScaleStart?.call();
       setState(() {
         _isZooming = true;
       });
@@ -289,6 +302,7 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
 //     _flingAnimationController!
 //       ..value = 0.0
 //       ..fling(velocity: magnitude / 2000.0);
+    widget.onScaleStop?.call();
 
     if (!_isZooming || _controllerReset.isAnimating) return;
     _animationReset = Matrix4Tween(
@@ -305,7 +319,6 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
       ..forward();
 
     // call end callback function when scale ends
-    // widget.onScaleStop?.call();
   }
 
   @override

@@ -37,12 +37,12 @@ class EmptyWidget extends StatelessWidget {
                   maxLines: 2,
                   textStyle: const TextStyle(color: kHyppeSecondary),
                 ),
-                thirtySixPx,
+                twentyPx,
                 CustomTextButton(
                   onPressed: () => ShowBottomSheet.onUploadContent(context),
                   style: ButtonStyle(side: MaterialStateProperty.all(const BorderSide(color: kHyppePrimary, width: 1.0, style: BorderStyle.solid))),
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                    padding: const EdgeInsets.only(left: 40.0, right: 40.0),
                     child: CustomTextWidget(
                       textToDisplay: tn.translate.upload ?? '',
                       textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),

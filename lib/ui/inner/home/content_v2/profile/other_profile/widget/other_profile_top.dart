@@ -64,7 +64,7 @@ class OtherProfileTop extends StatelessWidget {
                     }
                   },
                 ),
-                twentyFourPx,
+                fourteenPx,
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20),

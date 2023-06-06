@@ -15,6 +15,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/show_image_profile.dart';
 import 'package:hyppe/ux/path.dart';
@@ -52,27 +53,34 @@ class SelfProfileTop extends StatelessWidget {
                 //     onTap: () => notifier.viewStory(context),
                 //   ),
                 // ),
-                CustomProfileImage(
-                  cacheKey: notifier.user.profile?.avatar?.imageKey,
-                  following: true,
-                  forStory: true,
-                  width: 65 * SizeConfig.scaleDiagonal,
-                  height: 65 * SizeConfig.scaleDiagonal,
-                  imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
-                  onTap: () {
-                    final imageUrl = notifier.displayPhotoProfileOriginal();
-                    if (imageUrl?.isNotEmpty ?? false) {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return ShowImageProfile(imageUrl: imageUrl!);
-                        },
-                        // barrierColor: Colors.red,
-                      );
-                    }
-                  },
+                StoryColorValidator(
+                  haveStory: true,
+                  featureType: FeatureType.story,
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: CustomProfileImage(
+                      cacheKey: notifier.user.profile?.avatar?.imageKey,
+                      following: true,
+                      forStory: true,
+                      width: 55 * SizeConfig.scaleDiagonal,
+                      height: 55 * SizeConfig.scaleDiagonal,
+                      imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
+                      onTap: () {
+                        final imageUrl = notifier.displayPhotoProfileOriginal();
+                        if (notifier.user.profile?.avatar?.mediaEndpoint?.isNotEmpty ?? false) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return ShowImageProfile(imageUrl: imageUrl!);
+                            },
+                            // barrierColor: Colors.red,
+                          );
+                        }
+                      },
+                    ),
+                  ),
                 ),
-                twentyFourPx,
+                fourteenPx,
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,

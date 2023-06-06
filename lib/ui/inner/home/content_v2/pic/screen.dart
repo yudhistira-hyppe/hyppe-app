@@ -52,11 +52,14 @@ import '../../../../constant/entities/report/notifier.dart';
 
 class HyppePreviewPic extends StatefulWidget {
   final ScrollController? scrollController;
-  final Function functionZoomTriger;
+  final VoidCallback? onScaleStart;
+  final VoidCallback? onScaleStop;
+
   const HyppePreviewPic({
     Key? key,
     this.scrollController,
-    required this.functionZoomTriger,
+    this.onScaleStart,
+    this.onScaleStop,
   }) : super(key: key);
 
   @override
@@ -492,11 +495,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         return false;
                       },
                       child: ListView.builder(
-                        scrollDirection: Axis.vertical,
                         controller: widget.scrollController,
                         // scrollDirection: Axis.horizontal,
                         physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: false,
+
                         itemCount: notifier.pic?.length,
                         padding: const EdgeInsets.symmetric(horizontal: 11.5),
                         itemBuilder: (context, index) {
@@ -776,6 +778,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         // width: SizeConfig.screenWidth,
                         // height: SizeConfig.screenHeight,
                         child: ZoomableImage(
+                          onScaleStart: () {
+                            widget.onScaleStart?.call();
+                          }, // optional
+                          onScaleStop: () {
+                            widget.onScaleStop?.call();
+                          }, // opt
                           child: CustomBaseCacheImage(
                             memCacheWidth: 100,
                             memCacheHeight: 100,
