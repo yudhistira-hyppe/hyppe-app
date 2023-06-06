@@ -57,6 +57,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:flutter/gestures.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:zoom_pinch_overlay/zoom_pinch_overlay.dart';
 
 class ScrollPic extends StatefulWidget {
   final SlidedPicDetailScreenArgument? arguments;
@@ -80,6 +81,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   final scrollGlobal = GlobalKey<SelfProfileScreenState>();
   final a = SelfProfileScreenState();
 
+  bool isZoom = false;
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
@@ -510,6 +512,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     }
   }
 
+  void zoom(val) {
+    setState(() {
+      isZoom = val;
+    });
+  }
+
   int _currentItem = 0;
 
   @override
@@ -568,7 +576,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               itemPositionsListener: itemPositionsListener,
                               scrollOffsetController: scrollOffsetController,
                               // scrollDirection: Axis.horizontal,
-                              // physics: const NeverScrollableScrollPhysics(),
+                              physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
                               shrinkWrap: false,
                               itemCount: pics?.length ?? 0,
                               padding: const EdgeInsets.symmetric(horizontal: 11.5),
@@ -838,6 +846,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         // width: SizeConfig.screenWidth,
                         // height: SizeConfig.screenHeight,
                         child: ZoomableImage(
+                          onScaleStart: () {
+                            zoom(true);
+                          },
+                          onScaleStop: () {
+                            zoom(false);
+                          },
                           child: CustomBaseCacheImage(
                             memCacheWidth: 100,
                             memCacheHeight: 100,

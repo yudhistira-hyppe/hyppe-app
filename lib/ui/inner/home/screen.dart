@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/gestures.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -154,10 +155,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   bool isZoom = false;
 
-  void zoom() {
+  void zoom(val) {
     setState(() {
-      isZoom = !isZoom;
-      print("*************** $isZoom");
+      isZoom = val;
     });
   }
 
@@ -192,9 +192,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                 await notifier.initNewHome(context, mounted, isreload: true);
               },
               child: NestedScrollView(
-                key: globalKey,
-                controller: context.read<MainNotifier>().scrollController,
+                // key: globalKey,
+                // controller: context.read<MainNotifier>().scrollController,
                 physics: const NeverScrollableScrollPhysics(),
+                // dragStartBehavior: DragStartBehavior.start,
                 headerSliverBuilder: (context, bool innerBoxIsScrolled) {
                   return [
                     SliverOverlapAbsorber(
@@ -258,11 +259,17 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                   children: [
                     // Pict
                     Container(
+                      height: 40,
                       padding: const EdgeInsets.only(left: 6.0, right: 6),
                       color: kHyppeLightSurface,
-                      child: HyppePreviewPic(functionZoomTriger: () {
-                        zoom();
-                      }),
+                      child: HyppePreviewPic(
+                        onScaleStart: () {
+                          zoom(true);
+                        },
+                        onScaleStop: () {
+                          zoom(false);
+                        },
+                      ),
                     ),
                     Container(
                       padding: const EdgeInsets.only(left: 6.0, right: 6),

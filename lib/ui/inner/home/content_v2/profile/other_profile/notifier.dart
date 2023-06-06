@@ -1,4 +1,6 @@
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/slided_vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
@@ -372,22 +374,42 @@ class OtherProfileNotifier with ChangeNotifier {
     if (connect) {
       var result;
       if (pageIndex == 0) {
-        result =
-            await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title, pageSrc: PageSrc.otherProfile, picData: user.pics));
+        result = await _routing.move(Routes.scrollPic,
+            argument: SlidedPicDetailScreenArgument(
+              page: index,
+              type: TypePlaylist.mine,
+              titleAppbar: title,
+              pageSrc: PageSrc.otherProfile,
+              picData: user.pics,
+            ));
 
         // _routing.move(Routes.picSlideDetailPreview,
         //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.other));
         scrollAuto(result);
       }
       if (pageIndex == 1) {
-        result = await _routing.move(Routes.scrollDiary, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title, pageSrc: PageSrc.otherProfile));
+        result = await _routing.move(Routes.scrollDiary,
+            argument: SlidedDiaryDetailScreenArgument(
+              page: index,
+              type: TypePlaylist.mine,
+              titleAppbar: title,
+              pageSrc: PageSrc.otherProfile,
+              diaryData: user.diaries,
+            ));
 
         // _routing.move(Routes.diaryDetail,
         //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.other));
         scrollAuto(result);
       }
       if (pageIndex == 2) {
-        result = await _routing.move(Routes.scrollVid, argument: SlidedPicDetailScreenArgument(page: index, type: TypePlaylist.mine, titleAppbar: title, pageSrc: PageSrc.otherProfile));
+        result = await _routing.move(Routes.scrollVid,
+            argument: SlidedVidDetailScreenArgument(
+              page: index,
+              type: TypePlaylist.mine,
+              titleAppbar: title,
+              pageSrc: PageSrc.otherProfile,
+              vidData: user.vids,
+            ));
 
         // _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
         scrollAuto(result);

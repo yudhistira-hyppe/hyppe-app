@@ -19,11 +19,11 @@ import '../../../core/constants/shared_preference_keys.dart';
 import '../../../core/services/shared_preference.dart';
 
 class MainScreen extends StatefulWidget {
-  MainArgument? args;
-  MainScreen({Key? key, this.args}) : super(key: key);
+  final MainArgument? args;
+  const MainScreen({Key? key, this.args}) : super(key: key);
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
@@ -56,21 +56,25 @@ class _MainScreenState extends State<MainScreen> {
               child: notifier.mainScreen(context, canShowAds),
             ),
           ),
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: () {},
-          //   tooltip: 'Increment',
-          //   elevation: 4.0,
-          //   child: CustomIconWidget(
-          //     defaultColor: false,
-          //     // color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
-          //     iconData: '${AssetPath.vectorPath}hyppe-button.svg',
-          //     height: 50,
-          //   ),
-          // ),
-          // floatingActionButtonLocation: FloatingActionButtonLocation.miniStartDocked,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              tapMenu(2, notifier, consumerContext);
+            },
+            // shape: RoundedRectangleBorder(),
+            tooltip: 'Increment',
+            // elevation: 4.0,
+            backgroundColor: Colors.white,
+            child: const CustomIconWidget(
+              defaultColor: false,
+              // color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+              iconData: '${AssetPath.vectorPath}hyppe-button.svg',
+              height: 50,
+            ),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           bottomNavigationBar: BottomAppBar(
             color: kHyppeLightSurface,
-            height: Platform.isIOS ? 135 : 100,
+            height: Platform.isIOS ? 135 : 60,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -113,14 +117,14 @@ class _MainScreenState extends State<MainScreen> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      tapMenu(2, notifier, consumerContext);
+                      // tapMenu(2, notifier, consumerContext);
                     },
                     child: Container(
-                      margin: EdgeInsets.only(bottom: 20),
-                      child: CustomIconWidget(
-                        defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}hyppe-button.svg',
-                      ),
+                      margin: const EdgeInsets.only(bottom: 20),
+                      // child: CustomIconWidget(
+                      //   defaultColor: false,
+                      //   iconData: '${AssetPath.vectorPath}hyppe-button.svg',
+                      // ),
                     ),
                   ),
                 ),
