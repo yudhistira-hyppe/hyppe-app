@@ -4,6 +4,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/interest/widget/tab_layout.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 
@@ -45,7 +46,7 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
   @override
   void didPopNext() {
 
-    final notifier = context.read<SearchNotifier>();
+    final notifier = Routing.navigatorKey.currentContext!.read<SearchNotifier>();
     Future.delayed(Duration(milliseconds: 500), () {
 
       var jumpTo = heightTab + notifier.heightIndex - 10;

@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../../app.dart';
 import '../../../core/constants/enum.dart';
+import '../../../core/services/system.dart';
 import '../../inner/notification/notifier.dart';
 
 class CustomNewDescContent extends StatefulWidget {
@@ -279,11 +280,21 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
           // print('hit prepare username: ${splitDesc[i].substring(0, 1)} , ${splitDesc[i].substring(1, splitDesc[i].length)}');
           descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
         } else if (firstChar == '#' && splitDesc[i].length > 1) {
-          if (tempDesc.isNotEmpty) {
-            descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
-            tempDesc = '';
+          final lenght = splitDesc[i].length;
+          final content = splitDesc[i].substring(1, lenght -1);
+          final isSpecialChar = System().specialCharPass(content);
+          if(isSpecialChar){
+            tempDesc = '$tempDesc ${splitDesc[i]}';
+            if (i == (splitDesc.length - 1)) {
+              descItems.add(ItemDesc(desc: getWithoutSpaces(tempDesc), type: CaptionType.normal));
+            }
+          }else{
+            if (tempDesc.isNotEmpty) {
+              descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
+              tempDesc = '';
+            }
+            descItems.add(ItemDesc(desc: '${splitDesc[i]}  ', type: CaptionType.hashtag));
           }
-          descItems.add(ItemDesc(desc: '${splitDesc[i]}  ', type: CaptionType.hashtag));
         } else {
           tempDesc = '$tempDesc ${splitDesc[i]}';
           if (i == (splitDesc.length - 1)) {

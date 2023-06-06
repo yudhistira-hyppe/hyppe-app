@@ -49,7 +49,7 @@ class GridHashtagVid extends StatelessWidget {
                     }
 
                     return GestureDetector(
-                      onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.vid ?? [], index, HyppeType.HyppeVid, TypeApiSearch.detailHashTag, tag),
+                      onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.vid ?? [], index, HyppeType.HyppeVid, TypeApiSearch.detailHashTag, tag, PageSrc.hashtag),
                       child: MeasuredSize(
                         onChange: (size) {
                           if (index == 0) {

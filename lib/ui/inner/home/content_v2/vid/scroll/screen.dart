@@ -119,10 +119,12 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
         if (lastIndex != index) {
           if (index == vidData!.length - 2) {
             print("ini reload harusnya");
-            await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!);
-            setState(() {
-              vidData = notifier.vidData;
-            });
+            if(!notifier.isLoadingLoadmore){
+              await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
+              setState(() {
+                vidData = notifier.vidData;
+              });
+            }
           }
         }
         lastIndex = index;
@@ -413,7 +415,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                   setState(() {
                                     isloading = true;
                                   });
-                                  await vidNotifier.reload(context, widget.arguments!.pageSrc!);
+                                  await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
                                   setState(() {
                                     vidData = vidNotifier.vidData;
                                   });

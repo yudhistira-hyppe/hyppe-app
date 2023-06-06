@@ -67,7 +67,7 @@ class GridHashtagPic extends StatelessWidget {
                     // }
 
                     return GestureDetector(
-                      onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.pict ?? [], index, HyppeType.HyppePic, TypeApiSearch.detailHashTag, tag),
+                      onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.pict ?? [], index, HyppeType.HyppePic, TypeApiSearch.detailHashTag, tag, PageSrc.hashtag),
                       child: MeasuredSize(
                         onChange: (size) {
                           if (index == 0) {

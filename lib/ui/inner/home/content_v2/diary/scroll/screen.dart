@@ -139,10 +139,12 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       if (lastIndex != index) {
         if (index == diaryData!.length - 2) {
           print("ini reload harusnya");
-          await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!);
-          setState(() {
-            diaryData = notifier.diaryData;
-          });
+          if(!notifier.isLoadingLoadmore){
+            await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
+            setState(() {
+              diaryData = notifier.diaryData;
+            });
+          }
         }
       }
       lastIndex = index;
@@ -546,7 +548,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                               setState(() {
                                 isloading = true;
                               });
-                              await notifier.reload(context, widget.arguments!.pageSrc!);
+                              await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
                               setState(() {
                                 diaryData = notifier.diaryData;
                               });
