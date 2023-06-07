@@ -67,7 +67,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
                 ? RefreshIndicator(
                     strokeWidth: 2.0,
                     color: context.getColorScheme().primary,
-                    onRefresh: () => notifier.getDataSearch(context),
+                    onRefresh: () => notifier.getDataSearch(context, forceLoad: true),
                     child: SingleChildScrollView(
                       controller: _scrollController,
                       child: Padding(

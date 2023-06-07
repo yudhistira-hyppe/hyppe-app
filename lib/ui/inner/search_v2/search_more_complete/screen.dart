@@ -130,11 +130,11 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                         indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
                         tabs: _list.map((e) {
                           return Container(
-                            padding: EdgeInsets.fromLTRB(8.0, 0, 8, 13),
+                            padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 13),
                             child: Center(
                               child: Text(
                                 e,
-                                style: TextStyle(fontSize: 14),
+                                style: const TextStyle(fontSize: 14),
                               ),
                             ),
                           );

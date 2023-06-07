@@ -89,7 +89,7 @@ class _BottomDetailState extends State<BottomDetail> {
               strokeWidth: 2.0,
               color: context.getColorScheme().primary,
               onRefresh: () => notifier.getDetailHashtag(
-                  context, widget.hashtag.tag ?? 'tag'),
+                  context, widget.hashtag.tag ?? 'tag', force: true),
               child: CustomScrollView(
                 controller: widget.scrollController,
                 scrollDirection: Axis.vertical,

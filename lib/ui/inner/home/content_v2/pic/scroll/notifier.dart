@@ -91,7 +91,7 @@ class ScrollPicNotifier with ChangeNotifier {
     }
 
     if(pageSrc == PageSrc.interest){
-      final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppePic, TypeApiSearch.detailHashTag, 12);
+      final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppePic, TypeApiSearch.detailInterest, 12);
       searchNotifier.interestContents[key]?.pict = data;
       pics = searchNotifier.interestContents[key]?.pict;
       isLoadingLoadmore = false;

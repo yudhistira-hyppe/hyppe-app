@@ -604,7 +604,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                             ),
                           ),
                   ),
-                  home.isLoadingLoadmore
+                  notifier.isLoadingLoadmore
                       ? const SizedBox(
                           height: 50,
                           child: Center(child: CustomLoading()),

@@ -175,14 +175,14 @@ class NotificationService {
           );
         }
       } else {
-        final Map<String, dynamic> jsonNotif = json.decode(message.notification?.body ?? "{}");
+        final Map<String, dynamic> jsonNotif = message.data;
         final value = NotificationBody.fromJson(jsonNotif);
         await flutterLocalNotificationsPlugin.show(
           message.hashCode,
           value.title ?? message.notification?.title,
           value.message ?? message.notification?.body,
           platformChannelSpecifics,
-          payload: message.notification?.body ?? "{}",
+          payload: json.encode(message.data),
         );
       }
     } catch (e) {
