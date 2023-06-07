@@ -76,7 +76,7 @@ class UserProfileModel {
     mobileNumber = json['mobileNumber'];
     roles = json['roles'] != null ? json['roles'].cast<String>() : [];
     fullName = json['fullName'];
-    bio = json['bio'];
+    bio = json['bio'] ?? '';
     avatar = json['avatar'] != null ? UserProfileAvatarModel.fromJson(json['avatar']) : null;
     insight = json['insight'] != null ? UserProfileInsightModel.fromJson(json['insight']) : null;
     isEmailVerified = json["isEmailVerified"] is bool

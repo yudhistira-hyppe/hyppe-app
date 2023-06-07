@@ -352,9 +352,18 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             currentFocus.unfocus();
           }
 
+          // FilteringTextInputFormatter.deny(new RegExp(r"\s\b|\b\s"))
+          // String bio = bioController.text.contains(RegExp(r'^[a-zA-Z0-9._]+$'));
+
+          String bio = bioController.text.trimRight();
+          bio = bio.trimNewLines();
+          bio = bio.trimLeft();
+
+          print("======== bio $bio");
+
           SignUpCompleteProfiles _dataBio = SignUpCompleteProfiles(
             email: emailController.text,
-            bio: bioController.text,
+            bio: bio,
             fullName: fullNameController.text,
             username: userNameController.text,
           );
@@ -385,6 +394,16 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           if (fetch.userState == UserState.completeProfileSuccess) {
             hold = true;
             progress = "${language.finishingUp}...";
+            try {
+              SelfProfileNotifier userNotifier = context.read<SelfProfileNotifier>();
+              userNotifier.isLoadingBio = true;
+
+              // userNotifier.user.profile?.bio = bio;
+
+              userNotifier.onUpdate();
+            } catch (e) {
+              print("======== bio ${e}}");
+            }
 
             if (_argument.fromSignUpFlow) {
               hold = false;

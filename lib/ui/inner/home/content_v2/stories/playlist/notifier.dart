@@ -470,7 +470,13 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   void initStateGroup(BuildContext context, StoryDetailScreenArgument routeArgument) {
     // final myEmail = _sharedPrefs.readStorage(SpKeys.email);
     _routeArgument = _routeArgument;
-    final _email = SharedPreference().readStorage(SpKeys.email);
+    String email = '';
+    if (routeArgument.email == null) {
+      email = SharedPreference().readStorage(SpKeys.email);
+    } else {
+      email = routeArgument.email ?? '';
+    }
+
     _currentPage = routeArgument.peopleIndex.toDouble();
     _currentIndex = routeArgument.peopleIndex;
     final groups = routeArgument.groupStories;
@@ -478,7 +484,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     if (groups != null) {
       _groupUserStories = groups;
     } else if (myGroup != null) {
-      _groupUserStories.add(StoriesGroup(email: myGroup[_email]?[0].email, username: myGroup[_email]?[0].username, story: myGroup[_email]));
+      _groupUserStories.add(StoriesGroup(email: myGroup[email]?[0].email, username: myGroup[email]?[0].username, story: myGroup[email]));
     }
   }
 
@@ -542,7 +548,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     if (_data != null) {
       // storyController?.pause();
       if (!mounted) return;
-      if(!loadReaction){
+      if (!loadReaction) {
         isPreventedEmoji = false;
         showGeneralDialog(
           barrierLabel: "Barrier",
@@ -562,8 +568,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
                         reaction = _data?.data[index].icon;
                         _routing.moveBack();
                         final emoji = _data?.data[index];
-                        if(emoji != null){
-
+                        if (emoji != null) {
                           loadReaction = true;
                           // emojiActions.add(sendMessageReaction(
                           //   materialAppKey.currentContext!,
@@ -571,14 +576,14 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
                           //   reaction: _data?.data[index],
                           // ));
                           final tempLength = emojiActions.length;
-                          Future.delayed(const Duration(seconds: 3), (){
-                            try{
+                          Future.delayed(const Duration(seconds: 3), () {
+                            try {
                               sendMessageReaction(
                                 materialAppKey.currentContext!,
                                 contentData: data,
                                 reaction: _data?.data[index],
                               );
-                            }catch(e){
+                            } catch (e) {
                               e.logger();
                             }
 
@@ -601,7 +606,6 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
                         // Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
                         // Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
-
                       },
                       child: Material(
                         color: Colors.transparent,
@@ -621,11 +625,10 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
             return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
           },
-        ).whenComplete(() => Future.delayed(const Duration(seconds: 3), (){
-          isReactAction = false;
-        }));
+        ).whenComplete(() => Future.delayed(const Duration(seconds: 3), () {
+              isReactAction = false;
+            }));
       }
-
     }
     //   },
     //   uploadContentAction: false,
@@ -760,12 +763,12 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   bool _loadReaction = false;
   bool get loadReaction => _loadReaction;
-  set loadReaction(bool state){
+  set loadReaction(bool state) {
     _loadReaction = state;
     notifyListeners();
   }
 
-  setLoadReaction(bool state){
+  setLoadReaction(bool state) {
     _loadReaction = state;
   }
 

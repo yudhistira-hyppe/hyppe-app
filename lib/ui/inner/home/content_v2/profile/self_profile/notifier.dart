@@ -60,6 +60,9 @@ class SelfProfileNotifier with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  bool _isLoadingBio = false;
+  bool get isLoadingBio => _isLoadingBio;
+
   UserInfoModel get user => _user;
   Routing get routing => _routing;
 
@@ -100,6 +103,11 @@ class SelfProfileNotifier with ChangeNotifier {
 
   set isLoading(bool val) {
     _isLoading = val;
+    notifyListeners();
+  }
+
+  set isLoadingBio(bool val) {
+    _isLoadingBio = val;
     notifyListeners();
   }
 
@@ -155,6 +163,11 @@ class SelfProfileNotifier with ChangeNotifier {
           ? '${user.profile?.bio}'
           : ""
       : "";
+
+  void changeBio(String bio) {
+    _user.profile?.bio = bio;
+    notifyListeners();
+  }
 
   String? displayPlace() {
     String? _area = user.profile?.area;

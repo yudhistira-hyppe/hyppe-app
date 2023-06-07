@@ -33,13 +33,15 @@ class StoryColorValidator extends StatelessWidget {
         borderRadius: BorderRadius.circular(27),
         border: Border.all(
             width: width,
-            color: !isMy
-                ? (isView)
-                    ? theme.colorScheme.secondary
-                    : featureType == FeatureType.story
-                        ? theme.colorScheme.primary
-                        : kHyppeBorderTab
-                : kHyppeBorderTab),
+            color: haveStory
+                ? !isMy
+                    ? (isView)
+                        ? theme.colorScheme.secondary
+                        : featureType == FeatureType.story
+                            ? theme.colorScheme.primary
+                            : kHyppeBorderTab
+                    : kHyppeBorderTab
+                : kHyppeLightBackground),
       ),
       child: child,
     );

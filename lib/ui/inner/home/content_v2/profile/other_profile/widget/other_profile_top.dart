@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -11,18 +12,43 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/show_image_profile.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
 class OtherProfileTop extends StatelessWidget {
-  const OtherProfileTop({Key? key}) : super(key: key);
+  final String? email;
+  const OtherProfileTop({Key? key, this.email}) : super(key: key);
+
+  void showTap(BuildContext context, List<ContentData> dataStory, OtherProfileNotifier notifier) {
+    if (dataStory.isNotEmpty) {
+      context.read<PreviewStoriesNotifier>().navigateToOtherStoryGroup(context, dataStory, email ?? '');
+    } else {
+      showPict(context, notifier);
+    }
+  }
+
+  void showPict(BuildContext context, OtherProfileNotifier notifier) {
+    final imageUrl = notifier.displayPhotoProfileOriginal();
+    if (notifier.user.profile?.avatar?.mediaEndpoint?.isNotEmpty ?? false) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ShowImageProfile(imageUrl: imageUrl!);
+        },
+        // barrierColor: Colors.red,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final sn = Provider.of<PreviewStoriesNotifier>(context);
     FirebaseCrashlytics.instance.setCustomKey('layout', 'OtherProfileTop');
     return Consumer<OtherProfileNotifier>(
       builder: (_, notifier, __) => Padding(
@@ -44,25 +70,29 @@ class OtherProfileTop extends StatelessWidget {
                 //     onTap: () => notifier.viewStory(context),
                 //   ),
                 // ),
-                CustomProfileImage(
-                  following: true,
-                  width: 65 * SizeConfig.scaleDiagonal,
-                  height: 65 * SizeConfig.scaleDiagonal,
-                  forStory: true,
-                  imageUrl: notifier.displayPhotoProfile(),
-                  onTap: () {
-                    final imageUrl = notifier.displayPhotoProfileOriginal();
-                    print("hahahaha $imageUrl");
-                    if (imageUrl?.isNotEmpty ?? false) {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return ShowImageProfile(imageUrl: imageUrl!);
-                        },
-                        // barrierColor: Colors.red,
-                      );
-                    }
-                  },
+                StoryColorValidator(
+                  isMy: false,
+                  haveStory: sn.otherStoryGroup[email]!.isNotEmpty,
+                  featureType: sn.otherStoryGroup[email]!.isNotEmpty ? FeatureType.story : FeatureType.other,
+                  isView: sn.otherStoryGroup[email]!.isNotEmpty ? sn.otherStoryGroup[email]?.last.isViewed ?? false : false,
+                  child: GestureDetector(
+                    onTap: () {
+                      showTap(context, sn.otherStoryGroup[email] ?? [], notifier);
+                    },
+                    onLongPress: () {
+                      showPict(context, notifier);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: CustomProfileImage(
+                        following: true,
+                        forStory: true,
+                        width: 55 * SizeConfig.scaleDiagonal,
+                        height: 55 * SizeConfig.scaleDiagonal,
+                        imageUrl: notifier.displayPhotoProfile(),
+                      ),
+                    ),
+                  ),
                 ),
                 fourteenPx,
                 Expanded(
