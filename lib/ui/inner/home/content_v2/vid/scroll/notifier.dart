@@ -18,6 +18,7 @@ class ScrollVidNotifier with ChangeNotifier {
   }
 
   Future loadMore(BuildContext context, ScrollController scrollController, PageSrc pageSrc, String key) async {
+    isLoadingLoadmore = true;
     if (pageSrc == PageSrc.selfProfile) {
       final sp = context.read<SelfProfileNotifier>();
       sp.pageIndex = 2;
@@ -90,7 +91,7 @@ class ScrollVidNotifier with ChangeNotifier {
     }
 
     if(pageSrc == PageSrc.interest){
-      final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.detailHashTag, 12);
+      final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.detailInterest, 12);
       searchNotifier.interestContents[key]?.vid = data;
       vidData = searchNotifier.interestContents[key]?.vid;
       isLoadingLoadmore = false;

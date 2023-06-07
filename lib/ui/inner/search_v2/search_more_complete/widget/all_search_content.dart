@@ -73,7 +73,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
           ? RefreshIndicator(
         strokeWidth: 2.0,
         color: context.getColorScheme().primary,
-        onRefresh: () => notifier.getDataSearch(context),
+        onRefresh: () => notifier.getDataSearch(context, forceLoad: true),
             child: SingleChildScrollView(
         child: isAllEmpty ? SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,) :Column(
           crossAxisAlignment: CrossAxisAlignment.start,

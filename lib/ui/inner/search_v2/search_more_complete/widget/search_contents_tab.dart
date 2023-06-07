@@ -173,7 +173,7 @@ class _SearchContentsTabState extends State<SearchContentsTab> with RouteAware{
                 child: RefreshIndicator(
                   strokeWidth: 2.0,
                   color: context.getColorScheme().primary,
-                  onRefresh: () => notifier.getDataSearch(context),
+                  onRefresh: () => notifier.getDataSearch(context, forceLoad: true),
                   child: SingleChildScrollView(
                     controller: _scrollController,
                     child: Builder(

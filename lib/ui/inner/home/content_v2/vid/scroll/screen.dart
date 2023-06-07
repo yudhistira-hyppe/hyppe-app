@@ -283,7 +283,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             width: double.infinity,
                           ),
                         ),
-                  homeNotifier.isLoadingLoadmore
+                  vidNotifier.isLoadingLoadmore
                       ? const SizedBox(
                           height: 50,
                           child: CustomLoading(),
