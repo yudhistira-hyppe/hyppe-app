@@ -148,48 +148,33 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
         child: Column(
           children: [
             Consumer<SearchNotifier>(builder: (context, notifier, _){
-              return MeasuredSize(
-                onChange: (Size size) {
-                  heightTab = size.height.toInt();
-                },
-                child: Container(
-                  padding: const EdgeInsets.only(
-                      left: 16, top: 16, right: 16, bottom: 12),
-                  child: Column(
-                    children: [
-                      !notifier.loadTagDetail ? Row(
-                        children: [Builder(builder: (context) {
+              return Container(
+                padding: const EdgeInsets.only(
+                    left: 16, top: 16, right: 16, bottom: 12),
+                child: Column(
+                  children: [
+                    !notifier.loadTagDetail ? Row(
+                      children: [Builder(builder: (context) {
 
-                          return CustomBaseCacheImage(
-                            imageUrl: notifier.tagImageMain,
-                            memCacheWidth: 70,
-                            memCacheHeight: 70,
-                            imageBuilder: (_, imageProvider) {
-                              return Container(
-                                width: 56,
-                                height: 56,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(28)),
-                                  image: DecorationImage(
-                                    fit: BoxFit.contain,
-                                    image: imageProvider,
-                                  ),
+                        return CustomBaseCacheImage(
+                          imageUrl: notifier.tagImageMain,
+                          memCacheWidth: 70,
+                          memCacheHeight: 70,
+                          imageBuilder: (_, imageProvider) {
+                            return Container(
+                              width: 56,
+                              height: 56,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(Radius.circular(28)),
+                                image: DecorationImage(
+                                  fit: BoxFit.contain,
+                                  image: imageProvider,
                                 ),
-                              );
-                            },
-                            errorWidget: (_, __, ___) {
-                              return Container(
-                                width: 56,
-                                height: 56,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.contain,
-                                    image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
-                                  ),
-                                ),
-                              );
-                            },
-                            emptyWidget: Container(
+                              ),
+                            );
+                          },
+                          errorWidget: (_, __, ___) {
+                            return Container(
                               width: 56,
                               height: 56,
                               decoration: BoxDecoration(
@@ -198,56 +183,66 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                                   image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
                                 ),
                               ),
+                            );
+                          },
+                          emptyWidget: Container(
+                            width: 56,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.contain,
+                                image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
+                              ),
                             ),
-                          );
-                        }),
-                          twelvePx,
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomTextWidget(
-                                  textToDisplay: '#${widget.argument.hashtag.tag}',
-                                  textStyle: context
-                                      .getTextTheme()
-                                      .bodyText1
-                                      ?.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      color: context
-                                          .getColorScheme()
-                                          .onBackground),
-                                  textAlign: TextAlign.start,
-                                ),
-                                fourPx,
-                                Text(
-                                  "${notifier.countTag} ${notifier.language.posts}",
-                                  style: const TextStyle(
-                                      fontSize: 12, color: kHyppeGrey),
-                                )
-                              ],
-                            ),
-                          )
+                          ),
+                        );
+                      }),
+                        twelvePx,
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomTextWidget(
+                                textToDisplay: '#${widget.argument.hashtag.tag}',
+                                textStyle: context
+                                    .getTextTheme()
+                                    .bodyText1
+                                    ?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: context
+                                        .getColorScheme()
+                                        .onBackground),
+                                textAlign: TextAlign.start,
+                              ),
+                              fourPx,
+                              Text(
+                                "${notifier.countTag} ${notifier.language.posts}",
+                                style: const TextStyle(
+                                    fontSize: 12, color: kHyppeGrey),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ): Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CustomShimmer(height: 50, width: 50, radius: 25,),
+                          tenPx,
+                          Expanded(child: Column(
+                            children: [
+                              CustomShimmer(height: 20, width: double.infinity, radius: 5,),
+                              sixteenPx,
+                              CustomShimmer(height: 20, width: double.infinity, radius: 5,)
+                            ],
+                          ))
                         ],
-                      ): Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CustomShimmer(height: 50, width: 50, radius: 25,),
-                            tenPx,
-                            Expanded(child: Column(
-                              children: [
-                                CustomShimmer(height: 20, width: double.infinity, radius: 5,),
-                                sixteenPx,
-                                CustomShimmer(height: 20, width: double.infinity, radius: 5,)
-                              ],
-                            ))
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
               );
             }),

@@ -175,6 +175,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     // if (adsData != null && widget.inLanding) {
     //   initAdsVideo();
     // }
+    _playMode = widget.playMode;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
         fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.postID ?? 'video_player_landing');
@@ -196,7 +197,6 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         //   isPlay = true;
         // }
 
-        _playMode = widget.playMode;
         _dataSourceMap = widget.dataSourceMap;
         _dataSourceAdsMap = {};
         // isPlay = false;
@@ -297,7 +297,12 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             isPlay = false;
             _showLoading = false;
-            Wakelock.disable();
+            try {
+              Wakelock.disable();
+            } catch (e) {
+              e.logger();
+            }
+
             setState(() {});
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
@@ -794,6 +799,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     var x = 0.0;
     var y = 0.0;
     var width = MediaQuery.of(context).size.width;
+    print('postID Video: ${widget.data?.postID} mode: ${widget.playMode}');
 
     if (widget.data!.isLoading) {
       Future.delayed(const Duration(milliseconds: 50), () {

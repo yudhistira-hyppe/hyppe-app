@@ -92,7 +92,6 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   void initState() {
     isStopVideo = true;
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ScrollVid');
-    vidData = widget.arguments?.vidData;
     email = SharedPreference().readStorage(SpKeys.email);
     final notifier = Provider.of<ScrollVidNotifier>(context, listen: false);
     // notifier.initialVid(context, reload: true);
@@ -120,6 +119,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     });
 
     super.initState();
+    vidData = widget.arguments?.vidData;
   }
 
   @override

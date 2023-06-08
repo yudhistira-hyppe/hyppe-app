@@ -118,27 +118,22 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
           ),
           body: Column(
             children: [
-              MeasuredSize(
-                onChange: (Size size) {
-                  heightTab = size.height.toInt();
-                },
-                child: TabBar(
-                  controller: _tabController,
-                  isScrollable: true,
-                  indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+              TabBar(
+                controller: _tabController,
+                isScrollable: true,
+                indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
 
-                  tabs: (notifier.listInterest ?? []).map((e) {
-                    return Container(
-                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 13),
-                      child: Center(
-                        child: Text(
-                            context.isIndo() ? (e.interestNameId ?? '') : (e.interestName ?? ''),
-                          style: const TextStyle(fontSize: 14),
-                        ),
+                tabs: (notifier.listInterest ?? []).map((e) {
+                  return Container(
+                    padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 13),
+                    child: Center(
+                      child: Text(
+                          context.isIndo() ? (e.interestNameId ?? '') : (e.interestName ?? ''),
+                        style: const TextStyle(fontSize: 14),
                       ),
-                    );
-                  }).toList().sublist(0, (notifier.listInterest ?? []).length > 6 ? 6 : (notifier.listInterest ?? []).length),
-                ),
+                    ),
+                  );
+                }).toList().sublist(0, (notifier.listInterest ?? []).length > 6 ? 6 : (notifier.listInterest ?? []).length),
               ),
               Expanded(
                 child: Padding(

@@ -1148,10 +1148,14 @@ class System {
   }
 
   bool specialCharPass(String text) {
-    final result = text.contains(RegExp(r'[!@#$%^&*_()-]'));
+    final result = text.contains(RegExp(r'[!@#$%^&*_<>"()/?-]'));
     'specialCharPass:  $result'.logger();
     return result;
   }
+
+  // bool specialCharNotForTag(String text){
+  //   final result = text.contains(RegExp(r'[()*+,-./:;<=>?@[\]^_`{|}~]'));
+  // }
 
   bool canSpecialCharPass(String text) {
     return text.contains(RegExp(r'[a-zA-Z0-9!@#$%^&*_]+$'));
