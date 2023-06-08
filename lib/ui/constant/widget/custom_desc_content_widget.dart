@@ -75,11 +75,9 @@ class _CustomDescContentState extends State<CustomDescContent> {
 
   @override
   void initState() {
-    print("isloading initState ====-=-=-=-=-= $isloading");
     desc = widget.desc;
     setState(() {
-      // isloading = widget.isloading ?? false;
-      isloading = true;
+      isloading = widget.isloading ?? false;
     });
 
     final values = desc.split('\n');
@@ -118,7 +116,6 @@ class _CustomDescContentState extends State<CustomDescContent> {
   @override
   Widget build(BuildContext context) {
     // descItems.add(ItemDesc())
-    print("isloading ====-=-=-=-=-= $isloading");
     return isloading ? Container() : fixDescLayout(context);
   }
 

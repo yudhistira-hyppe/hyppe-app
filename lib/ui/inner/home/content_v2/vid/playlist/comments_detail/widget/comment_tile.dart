@@ -60,6 +60,7 @@ class CommentTile extends StatelessWidget {
                       children: [
                         Expanded(
                           child: CustomDescContent(
+                              isloading: true,
                               desc: comment?.txtMessages ?? '',
                               trimLines: 5,
                               textAlign: TextAlign.start,
