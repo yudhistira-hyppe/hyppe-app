@@ -29,28 +29,30 @@ class CustomDescContent extends StatefulWidget {
   final Function()? beforeGone;
   final Function()? afterGone;
   final bool? isPlay;
+  final bool? isloading;
 
   final Function(bool val)? callback;
 
-  CustomDescContent(
-      {Key? key,
-      required this.desc,
-      this.trimLines = 2,
-      this.trimLength = 240,
-      this.textAlign,
-      this.callback,
-      this.hrefStyle,
-      this.normStyle,
-      this.expandStyle,
-      this.seeMore,
-      this.seeLess,
-      this.textOverflow,
-      this.isReplace = false,
-      this.delimiter = '\u2026 ',
-      this.beforeGone,
-      this.afterGone,
-      this.isPlay})
-      : super(key: key);
+  CustomDescContent({
+    Key? key,
+    required this.desc,
+    this.trimLines = 2,
+    this.trimLength = 240,
+    this.textAlign,
+    this.callback,
+    this.hrefStyle,
+    this.normStyle,
+    this.expandStyle,
+    this.seeMore,
+    this.seeLess,
+    this.textOverflow,
+    this.isReplace = false,
+    this.delimiter = '\u2026 ',
+    this.beforeGone,
+    this.afterGone,
+    this.isPlay,
+    this.isloading,
+  }) : super(key: key);
 
   @override
   State<CustomDescContent> createState() => _CustomDescContentState();
@@ -58,6 +60,7 @@ class CustomDescContent extends StatefulWidget {
 
 class _CustomDescContentState extends State<CustomDescContent> {
   bool _readMore = true;
+  bool isloading = false;
 
   final String _kLineSeparator = '\u2028';
 
@@ -67,43 +70,65 @@ class _CustomDescContentState extends State<CustomDescContent> {
       _readMore = !_readMore;
     });
   }
+
   var desc = '';
 
   @override
   void initState() {
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    desc = widget.desc;
+    setState(() {
+      // isloading = widget.isloading ?? false;
+      isloading = true;
+    });
+
+    final values = desc.split('\n');
+    for (var i = 0; i < values.length; i++) {
+      try {
+        final last = values[i].split(' ').last;
+        print('has Emoji: $last');
+        if (last.hasEmoji()) {
+          print('has Emoji ke detect');
+          values[i] += ' ';
+        }
+      } catch (e) {
+        e.logger();
+      }
+    }
+    if (values.isNotEmpty) {
+      desc = '';
+      for (var i = 0; i < values.length; i++) {
+        if (i == (values.length - 1)) {
+          desc += values[i];
+        } else {
+          desc += '${values[i]}\n';
+        }
+      }
+    }
+<<<<<<< HEAD
+    print('CustomDescContent Desc: ${widget.desc}');
+    return fixDescLayout(context);
+=======
+    if (isloading) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          isloading = false;
+        });
+      });
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     // descItems.add(ItemDesc())
-    desc = widget.desc;
-    final values = desc.split('\n');
-    for (var i = 0; i < values.length; i++ ) {
-      try{
-        final last = values[i].split(' ').last;
-        print('has Emoji: $last');
-        if(last.hasEmoji()){
-          print('has Emoji ke detect');
-          values[i] += ' ';
-        }
-      }catch(e){
-        e.logger();
-      }
-    }
-    if(values.isNotEmpty){
-      desc = '';
-      for(var i = 0; i < values.length; i++ ){
-        if(i == (values.length - 1)){
-          desc += values[i];
-        }else{
-          desc += '${values[i]}\n';
-        }
-      }
-    }
-    print('CustomDescContent Desc: ${widget.desc}');
-    return fixDescLayout(context);
+    print("isloading ====-=-=-=-=-= $isloading");
+    return isloading ? Container() : fixDescLayout(context);
+>>>>>>> v130
   }
 
   Widget fixDescLayout(BuildContext context) {
@@ -242,19 +267,17 @@ class _CustomDescContentState extends State<CustomDescContent> {
                       fixKeyword = fixKeyword.replaceAll(',', '');
                       globalAliPlayer?.pause();
                       if (widget.isReplace) {
-
                         await Routing().moveReplacement(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
-
                       } else {
-                        if(widget.afterGone != null){
+                        if (widget.afterGone != null) {
                           widget.beforeGone!();
                         }
                         await Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
-                        if(widget.afterGone != null){
+                        if (widget.afterGone != null) {
                           widget.afterGone!();
                         }
                       }
-                      if(widget.isPlay ?? true){
+                      if (widget.isPlay ?? true) {
                         globalAliPlayer?.play();
                       }
                     } else {
@@ -302,22 +325,25 @@ class _CustomDescContentState extends State<CustomDescContent> {
           descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
         } else if (firstChar == '#' && splitDesc[i].length > 1) {
           final lenght = splitDesc[i].length;
+<<<<<<< HEAD
           final content = splitDesc[i].substring(1, lenght);
           print('content: $content');
+=======
+          final content = splitDesc[i].substring(1, lenght - 1);
+>>>>>>> v130
           final isSpecialChar = System().specialCharPass(content);
-          if(isSpecialChar){
+          if (isSpecialChar) {
             tempDesc = '$tempDesc ${splitDesc[i]}';
             if (i == (splitDesc.length - 1)) {
               descItems.add(ItemDesc(desc: getWithoutSpaces(tempDesc), type: CaptionType.normal));
             }
-          }else{
+          } else {
             if (tempDesc.isNotEmpty) {
               descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
               tempDesc = '';
             }
             descItems.add(ItemDesc(desc: '${splitDesc[i]}  ', type: CaptionType.hashtag));
           }
-
         } else {
           tempDesc = '$tempDesc ${splitDesc[i]}';
           if (i == (splitDesc.length - 1)) {

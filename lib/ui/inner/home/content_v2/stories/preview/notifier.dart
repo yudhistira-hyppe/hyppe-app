@@ -48,6 +48,8 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   Map<String, List<ContentData>> _myStoryGroup = {};
 
+  Map<String, List<ContentData>> _otherStoryGroup = {};
+
   int _totalViews = 0;
 
   List<ContentData>? get peopleStoriesData => _peopleStoriesData;
@@ -59,6 +61,8 @@ class PreviewStoriesNotifier with ChangeNotifier {
   List<ContentData>? get myStoriesData => _myStoriesData;
 
   Map<String, List<ContentData>> get myStoryGroup => _myStoryGroup;
+
+  Map<String, List<ContentData>> get otherStoryGroup => _otherStoryGroup;
 
   int get totalViews => _totalViews;
 
@@ -91,6 +95,11 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   set myStoryGroup(Map<String, List<ContentData>> map) {
     _myStoryGroup = map;
+    notifyListeners();
+  }
+
+  set otherStoryGroup(Map<String, List<ContentData>> map) {
+    _otherStoryGroup = map;
     notifyListeners();
   }
 
@@ -332,6 +341,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   void navigateToMyStoryGroup(BuildContext context, List stories) {
     print('navigateToStoryGroup: ${myStoryGroup.isNotEmpty} : $myStoryGroup');
+    print(myStoryGroup);
     if (stories.isNotEmpty) {
       _routing.move(
         Routes.showStories,
@@ -370,5 +380,32 @@ class PreviewStoriesNotifier with ChangeNotifier {
         index: index.toDouble(),
       ),
     );
+  }
+
+  Future initialOtherStoryGroup(BuildContext context, String email) async {
+    try {
+      myContentsQuery.searchText = email;
+      final res = await myContentsQuery.reload(context, otherContent: true);
+      otherStoryGroup[email] = res;
+      notifyListeners();
+    } catch (e) {
+      'load my story list: ERROR: $e'.logger();
+    }
+  }
+
+  void navigateToOtherStoryGroup(BuildContext context, List stories, String email) {
+    print('navigateToStoryGroup: ${otherStoryGroup.isNotEmpty} : $otherStoryGroup');
+    print(otherStoryGroup);
+    if (stories.isNotEmpty) {
+      _routing.move(
+        Routes.showStories,
+        argument: StoryDetailScreenArgument(
+          myStories: otherStoryGroup,
+          email: email,
+        ),
+      );
+    } else {
+      uploadStories(context);
+    }
   }
 }

@@ -8,6 +8,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
@@ -18,6 +19,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/show_image_profile.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +28,38 @@ import 'package:provider/provider.dart';
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
 class SelfProfileTop extends StatelessWidget {
-  const SelfProfileTop({Key? key}) : super(key: key);
+  const SelfProfileTop({
+    Key? key,
+  }) : super(key: key);
+
+  void showTap(BuildContext context, List<ContentData> dataStory, SelfProfileNotifier notifier) {
+    if (dataStory.isNotEmpty) {
+      context.read<PreviewStoriesNotifier>().navigateToMyStoryGroup(context, dataStory);
+    } else {
+      showPict(context, notifier);
+    }
+  }
+
+  void showPict(BuildContext context, SelfProfileNotifier notifier) {
+    final imageUrl = notifier.displayPhotoProfileOriginal();
+    print("gambar profil $imageUrl");
+    if (notifier.user.profile?.avatar?.mediaEndpoint?.isNotEmpty ?? false) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ShowImageProfile(imageUrl: imageUrl!);
+        },
+        // barrierColor: Colors.red,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final sn = Provider.of<PreviewStoriesNotifier>(context);
+    final email = SharedPreference().readStorage(SpKeys.email);
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SelfProfileTop');
+
     return Consumer<SelfProfileNotifier>(
       builder: (_, notifier, __) => Padding(
         padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
@@ -53,30 +82,28 @@ class SelfProfileTop extends StatelessWidget {
                 //     onTap: () => notifier.viewStory(context),
                 //   ),
                 // ),
-                StoryColorValidator(
-                  haveStory: true,
-                  featureType: FeatureType.story,
-                  child: Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: CustomProfileImage(
-                      cacheKey: notifier.user.profile?.avatar?.imageKey,
-                      following: true,
-                      forStory: true,
-                      width: 55 * SizeConfig.scaleDiagonal,
-                      height: 55 * SizeConfig.scaleDiagonal,
-                      imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
-                      onTap: () {
-                        final imageUrl = notifier.displayPhotoProfileOriginal();
-                        if (notifier.user.profile?.avatar?.mediaEndpoint?.isNotEmpty ?? false) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return ShowImageProfile(imageUrl: imageUrl!);
-                            },
-                            // barrierColor: Colors.red,
-                          );
-                        }
-                      },
+                GestureDetector(
+                  onTap: () {
+                    showTap(context, sn.myStoryGroup[email] ?? [], notifier);
+                  },
+                  onLongPress: () {
+                    showPict(context, notifier);
+                  },
+                  child: StoryColorValidator(
+                    isMy: true,
+                    haveStory: sn.myStoryGroup[email]!.isNotEmpty,
+                    featureType: sn.myStoryGroup[email]!.isNotEmpty ? FeatureType.story : FeatureType.other,
+                    isView: sn.myStoryGroup[email]!.isNotEmpty ? sn.myStoryGroup[email]?.last.isViewed ?? false : false,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: CustomProfileImage(
+                        cacheKey: notifier.user.profile?.avatar?.imageKey,
+                        following: true,
+                        forStory: true,
+                        width: 55 * SizeConfig.scaleDiagonal,
+                        height: 55 * SizeConfig.scaleDiagonal,
+                        imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
+                      ),
                     ),
                   ),
                 ),
@@ -272,28 +299,36 @@ class SelfProfileTop extends StatelessWidget {
             ),
 
             notifier.displayBio().length > 2
-                ? Container(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.3),
-                    // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
-                    child: SingleChildScrollView(
-                        child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomDescContent(
-                            desc: notifier.displayBio(),
-                            trimLines: 3,
-                            textAlign: TextAlign.start,
-                            seeLess: ' ${notifier.language.seeLess}',
-                            seeMore: ' ${notifier.language.seeMoreContent}',
-                            normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
-                            hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
-                            expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
-                                  color: Theme.of(context).colorScheme.primary,
-                                )),
-                      ],
-                    )),
-                  )
+                ? notifier.isLoadingBio
+                    ? Builder(builder: (context) {
+                        Future.delayed(Duration(milliseconds: 500), () {
+                          notifier.isLoadingBio = false;
+                        });
+                        return Container();
+                      })
+                    : Container(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.3),
+                        // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
+                        child: SingleChildScrollView(
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomDescContent(
+                                desc: notifier.user.profile?.bio ?? '',
+                                trimLines: 3,
+                                isloading: notifier.isLoadingBio,
+                                textAlign: TextAlign.start,
+                                seeLess: ' ${notifier.language.seeLess}',
+                                seeMore: ' ${notifier.language.seeMoreContent}',
+                                normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
+                                hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
+                                expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                      color: Theme.of(context).colorScheme.primary,
+                                    )),
+                          ],
+                        )),
+                      )
                 : const SizedBox.shrink(),
             notifier.displayPlace() != null
                 ? Padding(

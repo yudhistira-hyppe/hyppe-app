@@ -30,6 +30,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/othe
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_vids.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -256,6 +257,9 @@ class OtherProfileNotifier with ChangeNotifier {
       user.profile = argument?.profile;
       notifyListeners();
     } else {
+      PreviewStoriesNotifier storyNotifier = context.read<PreviewStoriesNotifier>();
+      storyNotifier.otherStoryGroup = {};
+      await storyNotifier.initialOtherStoryGroup(context, userEmail ?? '');
       final usersNotifier = UserBloc();
       await usersNotifier.getUserProfilesBloc(context, search: userEmail, withAlertMessage: true);
       final usersFetch = usersNotifier.userFetch;

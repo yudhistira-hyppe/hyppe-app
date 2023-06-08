@@ -139,8 +139,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware
                   child: Container(
                     child: notifier.user.profile != null
                         ? notifier.statusFollowing == StatusFollowing.following
-                            ? const OtherProfileTop()
-                            : const OtherProfileTop()
+                            ? OtherProfileTop(email: widget.arguments.senderEmail ?? '')
+                            : OtherProfileTop(email: widget.arguments.senderEmail ?? '')
                         : BothProfileTopShimmer(),
                   ),
                 ),
