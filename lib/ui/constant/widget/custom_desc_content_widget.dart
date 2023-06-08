@@ -81,10 +81,6 @@ class _CustomDescContentState extends State<CustomDescContent> {
   @override
   Widget build(BuildContext context) {
     desc = widget.desc;
-    setState(() {
-      // isloading = widget.isloading ?? false;
-      isloading = true;
-    });
 
     final values = desc.split('\n');
     for (var i = 0; i < values.length; i++) {
@@ -109,26 +105,8 @@ class _CustomDescContentState extends State<CustomDescContent> {
         }
       }
     }
-<<<<<<< HEAD
     print('CustomDescContent Desc: ${widget.desc}');
     return fixDescLayout(context);
-=======
-    if (isloading) {
-      Future.delayed(const Duration(milliseconds: 500), () {
-        setState(() {
-          isloading = false;
-        });
-      });
-    }
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // descItems.add(ItemDesc())
-    print("isloading ====-=-=-=-=-= $isloading");
-    return isloading ? Container() : fixDescLayout(context);
->>>>>>> v130
   }
 
   Widget fixDescLayout(BuildContext context) {
@@ -325,12 +303,8 @@ class _CustomDescContentState extends State<CustomDescContent> {
           descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
         } else if (firstChar == '#' && splitDesc[i].length > 1) {
           final lenght = splitDesc[i].length;
-<<<<<<< HEAD
           final content = splitDesc[i].substring(1, lenght);
           print('content: $content');
-=======
-          final content = splitDesc[i].substring(1, lenght - 1);
->>>>>>> v130
           final isSpecialChar = System().specialCharPass(content);
           if (isSpecialChar) {
             tempDesc = '$tempDesc ${splitDesc[i]}';
