@@ -355,11 +355,17 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           // FilteringTextInputFormatter.deny(new RegExp(r"\s\b|\b\s"))
           // String bio = bioController.text.contains(RegExp(r'^[a-zA-Z0-9._]+$'));
 
-          String bio = bioController.text.trimRight();
+          String bio = bioController.text.trimNewLines();
           bio = bio.trimNewLines();
           bio = bio.trimLeft();
+          bio = bio.trim();
 
           print("======== bio $bio");
+
+          final trimmed = '\nDart\n\n\n\n\n is fun\n\n'.trimRight();
+          print('-');
+          print(trimmed);
+          print('-');
 
           SignUpCompleteProfiles _dataBio = SignUpCompleteProfiles(
             email: emailController.text,

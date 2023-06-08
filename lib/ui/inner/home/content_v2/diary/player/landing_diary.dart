@@ -620,6 +620,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                     // FlutterAliplayer? fAliplayer
                     context.read<PreviewPicNotifier>().reportContent(context, notifier.diaryData?[index] ?? ContentData(), fAliplayer: fAliplayer);
                   } else {
+                    fAliplayer?.setMuted(true);
                     fAliplayer?.pause();
                     ShowBottomSheet().onShowOptionContent(
                       context,
@@ -646,7 +647,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
               if (info.visibleFraction >= 0.6) {
                 _curIdx = index;
                 if (_lastCurIndex != _curIdx) {
-                  Future.delayed(const Duration(milliseconds: 400), () {
+                  fAliplayer?.stop();
+                  Future.delayed(const Duration(milliseconds: 700), () {
                     start(notifier.diaryData?[index] ?? ContentData());
                     System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData());
                   });

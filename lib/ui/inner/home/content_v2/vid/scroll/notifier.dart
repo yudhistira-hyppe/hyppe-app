@@ -12,7 +12,7 @@ class ScrollVidNotifier with ChangeNotifier {
   List<ContentData>? vidData = [];
   bool _isLoadingLoadmore = false;
   bool get isLoadingLoadmore => _isLoadingLoadmore;
-  set isLoadingLoadmore(bool state){
+  set isLoadingLoadmore(bool state) {
     _isLoadingLoadmore = state;
     notifyListeners();
   }
@@ -24,6 +24,8 @@ class ScrollVidNotifier with ChangeNotifier {
       sp.pageIndex = 2;
       await sp.onScrollListener(context, scrollController, isLoad: true);
       vidData = sp.user.vids;
+      isLoadingLoadmore = false;
+      notifyListeners();
     }
 
     if (pageSrc == PageSrc.otherProfile) {
@@ -31,25 +33,27 @@ class ScrollVidNotifier with ChangeNotifier {
       op.pageIndex = 2;
       await op.onScrollListener(context, scrollController, isLoad: true);
       vidData = op.user.vids;
+      isLoadingLoadmore = false;
+      notifyListeners();
     }
 
     final searchNotifier = context.read<SearchNotifier>();
 
-    if(pageSrc == PageSrc.searchData){
+    if (pageSrc == PageSrc.searchData) {
       final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.normal, 12, skip: searchNotifier.searchVid?.length ?? 0);
       searchNotifier.searchVid?.addAll(data);
       vidData = searchNotifier.searchVid;
       isLoadingLoadmore = false;
     }
 
-    if(pageSrc == PageSrc.hashtag){
+    if (pageSrc == PageSrc.hashtag) {
       final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.detailHashTag, 12, skip: searchNotifier.mapDetailHashtag[key]?.vid?.length ?? 0);
       searchNotifier.mapDetailHashtag[key]?.vid?.addAll(data);
       vidData = searchNotifier.mapDetailHashtag[key]?.vid;
       isLoadingLoadmore = false;
     }
 
-    if(pageSrc == PageSrc.interest){
+    if (pageSrc == PageSrc.interest) {
       final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.detailInterest, 12, skip: searchNotifier.interestContents[key]?.vid?.length ?? 0);
       searchNotifier.interestContents[key]?.vid?.addAll(data);
       vidData = searchNotifier.interestContents[key]?.vid;
@@ -60,7 +64,7 @@ class ScrollVidNotifier with ChangeNotifier {
   Future reload(BuildContext context, PageSrc pageSrc, {String key = ""}) async {
     if (pageSrc == PageSrc.selfProfile) {
       final sp = context.read<SelfProfileNotifier>();
-      sp.pageIndex = 0;
+      sp.pageIndex = 2;
       await sp.getDataPerPgage(context, isReload: true);
       vidData = sp.user.vids;
       isLoadingLoadmore = false;
@@ -68,7 +72,7 @@ class ScrollVidNotifier with ChangeNotifier {
 
     if (pageSrc == PageSrc.otherProfile) {
       final op = context.read<OtherProfileNotifier>();
-      op.pageIndex = 0;
+      op.pageIndex = 2;
       await op.initialOtherProfile(context, refresh: true);
       vidData = op.user.vids;
       isLoadingLoadmore = false;
@@ -76,21 +80,21 @@ class ScrollVidNotifier with ChangeNotifier {
 
     final searchNotifier = context.read<SearchNotifier>();
 
-    if(pageSrc == PageSrc.searchData){
+    if (pageSrc == PageSrc.searchData) {
       final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.normal, 12);
       searchNotifier.searchVid = data;
       vidData = searchNotifier.searchVid;
       isLoadingLoadmore = false;
     }
 
-    if(pageSrc == PageSrc.hashtag){
+    if (pageSrc == PageSrc.hashtag) {
       final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.detailHashTag, 12);
       searchNotifier.mapDetailHashtag[key]?.vid = data;
       vidData = searchNotifier.mapDetailHashtag[key]?.vid;
       isLoadingLoadmore = false;
     }
 
-    if(pageSrc == PageSrc.interest){
+    if (pageSrc == PageSrc.interest) {
       final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.detailInterest, 12);
       searchNotifier.interestContents[key]?.vid = data;
       vidData = searchNotifier.interestContents[key]?.vid;

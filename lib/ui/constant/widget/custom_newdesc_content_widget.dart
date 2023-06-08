@@ -281,7 +281,8 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
           descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
         } else if (firstChar == '#' && splitDesc[i].length > 1) {
           final lenght = splitDesc[i].length;
-          final content = splitDesc[i].substring(1, lenght -1);
+          final content = splitDesc[i].substring(1, lenght);
+          print('content: $content');
           final isSpecialChar = System().specialCharPass(content);
           if(isSpecialChar){
             tempDesc = '$tempDesc ${splitDesc[i]}';

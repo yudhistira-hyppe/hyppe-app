@@ -132,13 +132,8 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                     return const CustomLoading();
                                   }
                                   final comments = notifier.commentData?[index];
-
-                                  if (index == (notifier.itemCount) && notifier.loading) {
-                                    print("1112121212121212");
-                                    return CircularProgressIndicator();
-                                  } else {
-                                    return CommentTile(logs: comments, fromFront: fromFront, notifier: notifier);
-                                  }
+                                  print('all comments: ${comments?.comment?.txtMessages}');
+                                  return CommentTile(logs: comments, fromFront: fromFront, notifier: notifier);
                                 },
                               ),
                             ))

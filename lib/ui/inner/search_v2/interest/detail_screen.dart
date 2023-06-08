@@ -48,12 +48,16 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
 
     final notifier = Routing.navigatorKey.currentContext!.read<SearchNotifier>();
     Future.delayed(Duration(milliseconds: 500), () {
+      try{
+        var jumpTo = heightTab + notifier.heightIndex - 10;
+        print("jumpt ====== ${jumpTo}");
+        print("jumpt ====== ${heightTab}");
+        print("jumpt ====== ${notifier.heightIndex}");
+        _scrollController.jumpTo(jumpTo.toDouble());
+      }catch(e){
+        print('jumpt error: $e');
+      }
 
-      var jumpTo = heightTab + notifier.heightIndex - 10;
-      print("jumpt ====== ${jumpTo}");
-      print("jumpt ====== ${heightTab}");
-      print("jumpt ====== ${notifier.heightIndex}");
-      _scrollController.jumpTo(jumpTo.toDouble());
     });
 
     super.didPopNext();

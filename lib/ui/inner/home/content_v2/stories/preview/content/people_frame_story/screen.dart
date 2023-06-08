@@ -48,7 +48,7 @@ class PeopleFrameStory extends StatelessWidget {
           child: StoryColorValidator(
             isView: isView,
             // haveStory: data[index].story.map((e) => e.isView).contains(0),
-            haveStory: index.isEven,
+            haveStory: true,
             contentData: getData,
             child: Padding(
               padding: const EdgeInsets.all(6.0),

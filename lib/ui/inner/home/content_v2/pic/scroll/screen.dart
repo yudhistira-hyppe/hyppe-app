@@ -150,18 +150,20 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     var lastIndex = 0;
     final pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
 
-
     itemPositionsListener.itemPositions.addListener(() async {
       index = itemPositionsListener.itemPositions.value.first.index;
       if (lastIndex != index) {
         if (index == pics!.length - 2) {
-          if(!notifier.isLoadingLoadmore){
+          if (!notifier.isLoadingLoadmore) {
             await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
-            setState(() {
+            if (mounted) {
+              setState(() {
+                pics = notifier.pics;
+              });
+            } else {
               pics = notifier.pics;
-            });
+            }
           }
-
         }
       }
       lastIndex = index;
@@ -546,7 +548,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         color: kHyppeTextLightPrimary,
                       ),
                       onPressed: () {
-                        Future.delayed(Duration.zero, (){
+                        Future.delayed(Duration.zero, () {
                           Navigator.pop(context, '$_curIdx');
                         });
                       }),
@@ -710,6 +712,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                   if (pics?[index].email != email) {
                     context.read<PreviewPicNotifier>().reportContent(context, pics?[index] ?? ContentData(), fAliplayer: fAliplayer);
                   } else {
+                    fAliplayer?.setMuted(true);
                     fAliplayer?.pause();
                     ShowBottomSheet().onShowOptionContent(
                       context,

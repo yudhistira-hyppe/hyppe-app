@@ -75,6 +75,11 @@ class _CustomDescContentState extends State<CustomDescContent> {
 
   @override
   void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     desc = widget.desc;
     setState(() {
       isloading = widget.isloading ?? false;
@@ -110,11 +115,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
         });
       });
     }
-    super.initState();
-  }
 
-  @override
-  Widget build(BuildContext context) {
     // descItems.add(ItemDesc())
     return isloading ? Container() : fixDescLayout(context);
   }

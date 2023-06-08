@@ -36,7 +36,7 @@ class StoryColorValidator extends StatelessWidget {
             color: haveStory
                 ? !isMy
                     ? (isView)
-                        ? theme.colorScheme.secondary
+                        ? kHyppeBorderTab
                         : featureType == FeatureType.story
                             ? theme.colorScheme.primary
                             : kHyppeBorderTab

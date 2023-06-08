@@ -632,7 +632,11 @@ class ShowBottomSheet {
       },
     ).whenComplete(() {
       if (storyController != null) storyController.play();
-      if (fAliplayer != null) fAliplayer.play();
+      if (fAliplayer != null) {
+        fAliplayer.play();
+        fAliplayer.setMuted(false);
+      }
+
       if (onUpdate != null) onUpdate();
     });
   }

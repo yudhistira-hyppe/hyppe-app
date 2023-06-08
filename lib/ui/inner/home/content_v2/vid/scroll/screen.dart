@@ -107,7 +107,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
         if (lastIndex != index) {
           if (index == vidData!.length - 2) {
             print("ini reload harusnya");
-            if(!notifier.isLoadingLoadmore){
+            if (!notifier.isLoadingLoadmore) {
               await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
               setState(() {
                 vidData = notifier.vidData;
@@ -127,8 +127,6 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
-
-
 
   @override
   void dispose() {

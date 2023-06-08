@@ -115,7 +115,8 @@ class DynamicLinkService {
               '_handleDeepLink vidDetail'.logger();
               if (isFromSplash) {
                 isFromSplash = false;
-                Future.delayed(const Duration(seconds: 10), () async {
+                _routing.moveAndRemoveUntil(Routes.lobby, Routes.lobby);
+                Future.delayed(const Duration(seconds: 1), () async {
                   await _routing.move(
                     path,
                     argument: VidDetailScreenArgument(fromDeepLink: true)
@@ -124,12 +125,15 @@ class DynamicLinkService {
                   );
                 });
               } else {
-                _routing.move(
-                  path,
-                  argument: VidDetailScreenArgument(fromDeepLink: true)
-                    ..postID = deepLink.queryParameters['postID']
-                    ..backPage = false,
-                );
+                _routing.moveAndRemoveUntil(Routes.lobby, Routes.lobby);
+                Future.delayed(const Duration(seconds: 1), () async {
+                  _routing.move(
+                    path,
+                    argument: VidDetailScreenArgument(fromDeepLink: true)
+                      ..postID = deepLink.queryParameters['postID']
+                      ..backPage = false,
+                  );
+                });
               }
 
               break;

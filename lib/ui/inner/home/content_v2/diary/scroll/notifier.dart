@@ -10,10 +10,11 @@ import '../../../../search_v2/notifier.dart';
 class ScrollDiaryNotifier with ChangeNotifier {
   bool _isLoadingLoadmore = false;
   bool get isLoadingLoadmore => _isLoadingLoadmore;
-  set isLoadingLoadmore(bool state){
+  set isLoadingLoadmore(bool state) {
     _isLoadingLoadmore = state;
     notifyListeners();
   }
+
   List<ContentData>? diaryData = [];
 
   Future loadMore(BuildContext context, ScrollController scrollController, PageSrc pageSrc, String key) async {
@@ -36,21 +37,21 @@ class ScrollDiaryNotifier with ChangeNotifier {
 
     final searchNotifier = context.read<SearchNotifier>();
 
-    if(pageSrc == PageSrc.searchData){
+    if (pageSrc == PageSrc.searchData) {
       final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.normal, 12, skip: searchNotifier.searchDiary?.length ?? 0);
       searchNotifier.searchDiary?.addAll(data);
       diaryData = searchNotifier.searchDiary;
       isLoadingLoadmore = false;
     }
 
-    if(pageSrc == PageSrc.hashtag){
+    if (pageSrc == PageSrc.hashtag) {
       final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailHashTag, 12, skip: searchNotifier.mapDetailHashtag[key]?.diary?.length ?? 0);
       searchNotifier.mapDetailHashtag[key]?.diary?.addAll(data);
       diaryData = searchNotifier.mapDetailHashtag[key]?.diary;
       isLoadingLoadmore = false;
     }
 
-    if(pageSrc == PageSrc.interest){
+    if (pageSrc == PageSrc.interest) {
       final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailInterest, 12, skip: searchNotifier.interestContents[key]?.diary?.length ?? 0);
       searchNotifier.interestContents[key]?.diary?.addAll(data);
       diaryData = searchNotifier.interestContents[key]?.diary;
@@ -61,7 +62,7 @@ class ScrollDiaryNotifier with ChangeNotifier {
   Future reload(BuildContext context, PageSrc pageSrc, {String key = ""}) async {
     if (pageSrc == PageSrc.selfProfile) {
       final sp = context.read<SelfProfileNotifier>();
-      sp.pageIndex = 0;
+      sp.pageIndex = 1;
       await sp.getDataPerPgage(context, isReload: true);
       diaryData = sp.user.diaries;
       isLoadingLoadmore = false;
@@ -70,7 +71,7 @@ class ScrollDiaryNotifier with ChangeNotifier {
 
     if (pageSrc == PageSrc.otherProfile) {
       final op = context.read<OtherProfileNotifier>();
-      op.pageIndex = 0;
+      op.pageIndex = 1;
       await op.initialOtherProfile(context, refresh: true);
       diaryData = op.user.diaries;
       isLoadingLoadmore = false;
@@ -79,21 +80,21 @@ class ScrollDiaryNotifier with ChangeNotifier {
 
     final searchNotifier = context.read<SearchNotifier>();
 
-    if(pageSrc == PageSrc.searchData){
+    if (pageSrc == PageSrc.searchData) {
       final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.normal, 12);
       searchNotifier.searchDiary = data;
       diaryData = searchNotifier.searchDiary;
       isLoadingLoadmore = false;
     }
 
-    if(pageSrc == PageSrc.hashtag){
+    if (pageSrc == PageSrc.hashtag) {
       final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailHashTag, 12);
       searchNotifier.mapDetailHashtag[key]?.diary = data;
       diaryData = searchNotifier.mapDetailHashtag[key]?.diary;
       isLoadingLoadmore = false;
     }
 
-    if(pageSrc == PageSrc.interest){
+    if (pageSrc == PageSrc.interest) {
       final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailInterest, 12);
       searchNotifier.interestContents[key]?.diary = data;
       diaryData = searchNotifier.interestContents[key]?.diary;
