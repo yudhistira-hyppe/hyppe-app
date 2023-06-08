@@ -157,9 +157,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         if (index == pics!.length - 2) {
           if(!notifier.isLoadingLoadmore){
             await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
-            setState(() {
+            if(mounted){
+              setState(() {
+                pics = notifier.pics;
+              });
+            }else{
               pics = notifier.pics;
-            });
+            }
+
           }
 
         }

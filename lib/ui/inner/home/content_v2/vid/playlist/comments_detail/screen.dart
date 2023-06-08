@@ -132,6 +132,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                     return const CustomLoading();
                                   }
                                   final comments = notifier.commentData?[index];
+                                  print('all comments: ${comments?.comment?.txtMessages}');
                                   return CommentTile(logs: comments, fromFront: fromFront, notifier: notifier);
                                 },
                               ),

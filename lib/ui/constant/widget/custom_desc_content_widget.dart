@@ -71,6 +71,13 @@ class _CustomDescContentState extends State<CustomDescContent> {
 
   @override
   void initState() {
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // descItems.add(ItemDesc())
     desc = widget.desc;
     final values = desc.split('\n');
     for (var i = 0; i < values.length; i++ ) {
@@ -95,12 +102,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
         }
       }
     }
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // descItems.add(ItemDesc())
+    print('CustomDescContent Desc: ${widget.desc}');
     return fixDescLayout(context);
   }
 
@@ -300,7 +302,8 @@ class _CustomDescContentState extends State<CustomDescContent> {
           descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
         } else if (firstChar == '#' && splitDesc[i].length > 1) {
           final lenght = splitDesc[i].length;
-          final content = splitDesc[i].substring(1, lenght -1);
+          final content = splitDesc[i].substring(1, lenght);
+          print('content: $content');
           final isSpecialChar = System().specialCharPass(content);
           if(isSpecialChar){
             tempDesc = '$tempDesc ${splitDesc[i]}';
