@@ -110,12 +110,15 @@ class SearchNotifier with ChangeNotifier {
   }
 
   Map<String, SearchContentModel?> mapDetailHashtag = {};
+
   SearchContentModel? getMapHashtag(String tag){
     return mapDetailHashtag[tag];
   }
+
   setMapHashtag(SearchContentModel value, String tag){
     mapDetailHashtag[tag] = value;
   }
+
   deleteMapHashtag(String tag){
     mapDetailHashtag[tag] = null;
   }

@@ -15,7 +15,7 @@ class ViewBloc {
 
   final _repos = Repos();
 
-  Future viewPostUserBloc(BuildContext context, {required String postId, required String emailOwner}) async {
+  Future viewPostUserBloc(BuildContext context, {required String postId, required String emailOwner, bool check = true}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
     final Map<String, String> _data = {
       "eventType" : "VIEW",
@@ -41,7 +41,7 @@ class ViewBloc {
       data: _data,
       host: UrlConstants.interactive,
       methodType: MethodType.post,
-      withAlertMessage: false,
+      withAlertMessage: check,
       withCheckConnection: true,
     );
   }

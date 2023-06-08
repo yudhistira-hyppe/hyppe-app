@@ -412,6 +412,9 @@ class LocalizationModelV2 {
   String? ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies;
   String? noInternetConnection;
   String? pleaseCheckYourInternetConnectionAgain;
+  String? internetConnectionLost;
+  String? couldntLoadVideo;
+  String? couldntLoadImage;
   String? back;
   String? tryAgain;
   String? somethingWentWrong;
@@ -1307,6 +1310,9 @@ class LocalizationModelV2 {
     this.ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies,
     this.noInternetConnection,
     this.pleaseCheckYourInternetConnectionAgain,
+    this.internetConnectionLost,
+    this.couldntLoadVideo,
+    this.couldntLoadImage,
     this.back,
     this.tryAgain,
     this.somethingWentWrong,
@@ -2204,6 +2210,9 @@ class LocalizationModelV2 {
     ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies = json['ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies'];
     noInternetConnection = json['noInternetConnection'];
     pleaseCheckYourInternetConnectionAgain = json['pleaseCheckYourInternetConnectionAgain'];
+    internetConnectionLost = json['internetConnectionLost'];
+    couldntLoadVideo = json['couldntLoadVideo'];
+    couldntLoadImage = json['couldntLoadImage'];
     back = json['back'];
     tryAgain = json['tryAgain'];
     somethingWentWrong = json['somethingWentWrong'];

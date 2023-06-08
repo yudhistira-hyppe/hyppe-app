@@ -9,7 +9,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../initial/hyppe/translate_v2.dart';
+import '../../ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../constants/shared_preference_keys.dart';
+import '../constants/themes/hyppe_colors.dart';
 import '../models/collection/localization_v2/localization_model.dart';
 import '../services/shared_preference.dart';
 import '../services/system.dart';
@@ -79,6 +81,18 @@ extension ContextScreen on BuildContext {
   }
 
   bool isIndo() => SharedPreference().readStorage(SpKeys.isoCode) == 'id';
+
+  showErrorConnection(LocalizationModelV2 language){
+    ShowBottomSheet().onShowColouredSheet(
+      this,
+      language.internetConnectionLost ?? ' ',
+      maxLines: 3,
+      borderRadius: 8,
+      color: kHyppeTextLightPrimary,
+      padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
+      margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
+    );
+  }
 }
 
 extension StringDefine on String {

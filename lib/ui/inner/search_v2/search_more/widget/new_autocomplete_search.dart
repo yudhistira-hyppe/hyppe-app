@@ -118,11 +118,12 @@ class _NewAutoCompleteSearchState extends State<NewAutoCompleteSearch> {
                         notifier.insertHistory(context, notifier.searchController.text);
                         notifier.limit = 5;
                         notifier.tabIndex = 0;
+                        notifier.setEmptyLastKey();
                         notifier.layout = SearchLayout.searchMore;
                         // notifier.getDataSearch(context, isMove: true);
                       },
                       title: CustomTextWidget(
-                        textToDisplay: 'See More',
+                        textToDisplay: notifier.language.seeMore ?? 'See More',
                         textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(color: kHyppePrimary),
                       ),
                     )

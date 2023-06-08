@@ -30,6 +30,13 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
   int _selectedIndex = 0;
 
   @override
+  void deactivate() {
+    final notifier = context.read<SearchNotifier>();
+    notifier.setEmptyLastKey();
+    super.deactivate();
+  }
+
+  @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SearchMoreCompleteScreenV2');
     final notifier = Provider.of<SearchNotifier>(context, listen: false);

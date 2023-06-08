@@ -50,54 +50,47 @@ class GridHashtagVid extends StatelessWidget {
 
                     return GestureDetector(
                       onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.vid ?? [], index, HyppeType.HyppeVid, TypeApiSearch.detailHashTag, tag, PageSrc.hashtag),
-                      child: MeasuredSize(
-                        onChange: (size) {
-                          if (index == 0) {
-                            context.read<SearchNotifier>().heightBox = size.height.toInt();
-                          }
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                          child: dataitem?.reportedStatus == 'BLURRED'
-                              ? SensitiveContentProfile(data: dataitem)
-                              : Stack(
-                            children: [
-                              Center(
-                                child: CustomContentModeratedWidget(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  isSale: false,
-                                  featureType: FeatureType.vid,
-                                  isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                  thumbnail: ImageUrl(dataitem?.postID, url: thumb),
-                                ),
+                      child: Padding(
+                        padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
+                        child: dataitem?.reportedStatus == 'BLURRED'
+                            ? SensitiveContentProfile(data: dataitem)
+                            : Stack(
+                          children: [
+                            Center(
+                              child: CustomContentModeratedWidget(
+                                width: double.infinity,
+                                height: double.infinity,
+                                isSale: false,
+                                featureType: FeatureType.vid,
+                                isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                                thumbnail: ImageUrl(dataitem?.postID, url: thumb),
                               ),
-                              (dataitem?.saleAmount ?? 0) > 0
-                                  ? const Align(
-                                  alignment: Alignment.topRight,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(4.0),
-                                    child: CustomIconWidget(
-                                      iconData: "${AssetPath.vectorPath}sale.svg",
-                                      height: 22,
-                                      defaultColor: false,
-                                    ),
-                                  ))
-                                  : Container(),
-                              (dataitem?.certified ?? false) && (dataitem?.saleAmount ?? 0) == 0
-                                  ? Align(
-                                  alignment: Alignment.topRight,
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: Container(
-                                          padding: const EdgeInsets.all(4),
-                                          child: const CustomIconWidget(
-                                            iconData: '${AssetPath.vectorPath}ownership.svg',
-                                            defaultColor: false,
-                                          ))))
-                                  : Container()
-                            ],
-                          ),
+                            ),
+                            (dataitem?.saleAmount ?? 0) > 0
+                                ? const Align(
+                                alignment: Alignment.topRight,
+                                child: Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: CustomIconWidget(
+                                    iconData: "${AssetPath.vectorPath}sale.svg",
+                                    height: 22,
+                                    defaultColor: false,
+                                  ),
+                                ))
+                                : Container(),
+                            (dataitem?.certified ?? false) && (dataitem?.saleAmount ?? 0) == 0
+                                ? Align(
+                                alignment: Alignment.topRight,
+                                child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        child: const CustomIconWidget(
+                                          iconData: '${AssetPath.vectorPath}ownership.svg',
+                                          defaultColor: false,
+                                        ))))
+                                : Container()
+                          ],
                         ),
                       ),
                     );

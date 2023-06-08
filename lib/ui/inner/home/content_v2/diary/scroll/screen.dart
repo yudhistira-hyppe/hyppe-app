@@ -108,12 +108,13 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ScrollDiary');
     final notifier = Provider.of<ScrollDiaryNotifier>(context, listen: false);
-    diaryData = widget.arguments?.diaryData;
+
     lang = context.read<TranslateNotifierV2>().translate;
     email = SharedPreference().readStorage(SpKeys.email);
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     // stopwatch = new Stopwatch()..start();
     super.initState();
+    diaryData = widget.arguments?.diaryData;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
       WidgetsBinding.instance.addObserver(this);

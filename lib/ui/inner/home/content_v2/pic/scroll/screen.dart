@@ -121,13 +121,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPic');
     final notifier = Provider.of<ScrollPicNotifier>(context, listen: false);
-    pics = widget.arguments?.picData;
     lang = context.read<TranslateNotifierV2>().translate;
 
     email = SharedPreference().readStorage(SpKeys.email);
     // statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     // stopwatch = new Stopwatch()..start();
     super.initState();
+    pics = widget.arguments?.picData;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
       WidgetsBinding.instance.addObserver(this);
