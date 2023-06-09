@@ -305,8 +305,8 @@ class _CustomDescContentState extends State<CustomDescContent> {
           final lenght = splitDesc[i].length;
           final content = splitDesc[i].substring(1, lenght);
           print('content: $content');
-          final isSpecialChar = System().specialCharPass(content);
-          if (isSpecialChar) {
+          final isSpecialChar = System().charForTag(content);
+          if (!isSpecialChar) {
             tempDesc = '$tempDesc ${splitDesc[i]}';
             if (i == (splitDesc.length - 1)) {
               descItems.add(ItemDesc(desc: getWithoutSpaces(tempDesc), type: CaptionType.normal));

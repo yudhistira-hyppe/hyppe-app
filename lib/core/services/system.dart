@@ -1153,9 +1153,10 @@ class System {
     return result;
   }
 
-  // bool specialCharNotForTag(String text){
-  //   final result = text.contains(RegExp(r'[()*+,-./:;<=>?@[\]^_`{|}~]'));
-  // }
+  bool charForTag(String text){
+    final result = RegExp(r'^[a-zA-Z0-9]+$').hasMatch(text);
+    return result;
+  }
 
   bool canSpecialCharPass(String text) {
     return text.contains(RegExp(r'[a-zA-Z0-9!@#$%^&*_]+$'));
