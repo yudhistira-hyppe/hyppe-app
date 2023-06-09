@@ -844,52 +844,54 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           _likeNotifier.likePost(context, pics![index]);
                         }
                       },
-                      child: Container(
-                        color: Colors.transparent,
-                        // width: SizeConfig.screenWidth,
-                        // height: SizeConfig.screenHeight,
-                        child: ZoomableImage(
-                          onScaleStart: () {
-                            zoom(true);
-                          },
-                          onScaleStop: () {
-                            zoom(false);
-                          },
-                          child: CustomBaseCacheImage(
-                            memCacheWidth: 100,
-                            memCacheHeight: 100,
-                            widthPlaceHolder: 80,
-                            heightPlaceHolder: 80,
+                      child: Center(
+                        child: Container(
+                          color: Colors.transparent,
+                          // width: SizeConfig.screenWidth,
+                          // height: SizeConfig.screenHeight,
+                          child: ZoomableImage(
+                            onScaleStart: () {
+                              zoom(true);
+                            },
+                            onScaleStop: () {
+                              zoom(false);
+                            },
+                            child: CustomBaseCacheImage(
+                              memCacheWidth: 100,
+                              memCacheHeight: 100,
+                              widthPlaceHolder: 80,
+                              heightPlaceHolder: 80,
 
-                            imageUrl: (pics?[index].isApsara ?? false) ? (pics?[index].mediaThumbEndPoint ?? "") : "${pics?[index].fullThumbPath}",
-                            // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
-                            imageBuilder: (context, imageProvider) => ClipRRect(
-                              borderRadius: BorderRadius.circular(20), // Image border
-                              child: pics?[index].reportedStatus == 'BLURRED'
-                                  ? ImageFiltered(
-                                      imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                      child: Image(
+                              imageUrl: (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}",
+                              // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
+                              imageBuilder: (context, imageProvider) => ClipRRect(
+                                borderRadius: BorderRadius.circular(20), // Image borderr
+                                child: pics?[index].reportedStatus == 'BLURRED'
+                                    ? ImageFiltered(
+                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                        child: Image(
+                                          image: imageProvider,
+                                          fit: BoxFit.fitHeight,
+                                          width: SizeConfig.screenWidth,
+                                        ),
+                                      )
+                                    : Image(
                                         image: imageProvider,
                                         fit: BoxFit.fitHeight,
                                         width: SizeConfig.screenWidth,
                                       ),
-                                    )
-                                  : Image(
-                                      image: imageProvider,
-                                      fit: BoxFit.fitHeight,
-                                      width: SizeConfig.screenWidth,
-                                    ),
-                            ),
-                            emptyWidget: Container(
-                              // const EdgeInsets.symmetric(horizontal: 4.5),
+                              ),
+                              emptyWidget: Container(
+                                // const EdgeInsets.symmetric(horizontal: 4.5),
 
-                              // height: 500,
-                              decoration: BoxDecoration(
-                                image: const DecorationImage(
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                  fit: BoxFit.cover,
+                                // height: 500,
+                                decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
                                 ),
-                                borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
                           ),
@@ -908,7 +910,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                   (pics?[index].reportedStatus != 'OWNED' && pics?[index].reportedStatus != 'BLURRED' && pics?[index].reportedStatus2 != 'BLURRED') &&
                   pics?[index].email == email
               ? Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery.of(context).size.width,
                   margin: const EdgeInsets.only(bottom: 16),
                   child: ButtonBoost(
                     onDetail: false,

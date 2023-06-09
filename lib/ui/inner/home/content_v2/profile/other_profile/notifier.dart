@@ -233,7 +233,7 @@ class OtherProfileNotifier with ChangeNotifier {
   }
 
   initialOtherProfile(BuildContext context, {OtherProfileArgument? argument, bool refresh = false}) async {
-    pageIndex = 0;
+    // pageIndex = 0;
     user = UserInfoModel();
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
 
@@ -274,7 +274,9 @@ class OtherProfileNotifier with ChangeNotifier {
       checkFollowingToUser(context, userEmail ?? '');
     }
     // user.vids ??= await vidContentsQuery.reload(context, otherContent: true);
-    user.pics = await picContentsQuery.reload(context, otherContent: true);
+    // user.pics = await picContentsQuery.reload(context, otherContent: true);
+
+    await getDataPerPgage(context);
 
     // context.read<ScrollPicNotifier>().pics = user.pics;
     // user.diaries = await diaryContentsQuery.reload(context, otherContent: true);

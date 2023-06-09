@@ -9,6 +9,8 @@ import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/widget/qr_block.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/widget/share_block.dart';
+import 'package:hyppe/ui/inner/home/content_v2/referral/widget/shimmer_referral.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/widget/shimmer_all_transaction_history.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
@@ -54,69 +56,71 @@ class _ReferralState extends State<Referral> {
           slivers: [
             SliverFillRemaining(
               hasScrollBody: false,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const ShareBlock(),
-                    const Spacer(),
-                    const QRBlock(),
-                    const Spacer(),
-                    notifier.modelReferral?.parent == null
-                        ? GestureDetector(
-                            onTap: () {
-                              Routing().move(Routes.insertReferral);
-                            },
-                            child: const Text('Masukkan Referral', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppePrimary)),
-                          )
-                        : notifier.modelReferral?.parent == null || notifier.modelReferral?.parent == ""
-                            ? GestureDetector(
-                                onTap: () {
-                                  Routing().move(Routes.insertReferral);
-                                },
-                                child: const Text('Masukkan Referral', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppePrimary)),
-                              )
-                            : Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Diundang oleh: ', style: Theme.of(context).textTheme.subtitle1),
-                                  Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: kHyppeLightSurface),
-                                    child: Text(
-                                      '${notifier.modelReferral?.parent}',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.primary),
-                                    ),
-                                  ),
-                                ],
-                              )
+              child: notifier.loading
+                  ? const ShimmerReferral()
+                  : Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const ShareBlock(),
+                          const Spacer(),
+                          const QRBlock(),
+                          const Spacer(),
+                          notifier.modelReferral?.parent == null
+                              ? GestureDetector(
+                                  onTap: () {
+                                    Routing().move(Routes.insertReferral);
+                                  },
+                                  child: const Text('Masukkan Referral', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppePrimary)),
+                                )
+                              : notifier.modelReferral?.parent == null || notifier.modelReferral?.parent == ""
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        Routing().move(Routes.insertReferral);
+                                      },
+                                      child: const Text('Masukkan Referral', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppePrimary)),
+                                    )
+                                  : Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text('Diundang oleh: ', style: Theme.of(context).textTheme.subtitle1),
+                                        Container(
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: kHyppeLightSurface),
+                                          child: Text(
+                                            '${notifier.modelReferral?.parent}',
+                                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.primary),
+                                          ),
+                                        ),
+                                      ],
+                                    )
 
-                    // CustomElevatedButton(
-                    //   width: 375.0 * SizeConfig.scaleDiagonal,
-                    //   height: 44.0 * SizeConfig.scaleDiagonal,
-                    //   function: () => null,
-                    //   child: CustomTextWidget(
-                    //     textToDisplay: notifier.language.downloadQRCode,
-                    //     textStyle: Theme.of(context)
-                    //         .textTheme
-                    //         .button
-                    //         ?.copyWith(color: kHyppeLightButtonText),
-                    //   ),
-                    //   buttonStyle: ButtonStyle(
-                    //     foregroundColor: MaterialStateProperty.all(
-                    //         Theme.of(context).colorScheme.primary),
-                    //     shadowColor: MaterialStateProperty.all(
-                    //         Theme.of(context).colorScheme.primary),
-                    //     overlayColor: MaterialStateProperty.all(
-                    //         Theme.of(context).colorScheme.primary),
-                    //     backgroundColor: MaterialStateProperty.all(
-                    //         Theme.of(context).colorScheme.primary),
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ),
+                          // CustomElevatedButton(
+                          //   width: 375.0 * SizeConfig.scaleDiagonal,
+                          //   height: 44.0 * SizeConfig.scaleDiagonal,
+                          //   function: () => null,
+                          //   child: CustomTextWidget(
+                          //     textToDisplay: notifier.language.downloadQRCode,
+                          //     textStyle: Theme.of(context)
+                          //         .textTheme
+                          //         .button
+                          //         ?.copyWith(color: kHyppeLightButtonText),
+                          //   ),
+                          //   buttonStyle: ButtonStyle(
+                          //     foregroundColor: MaterialStateProperty.all(
+                          //         Theme.of(context).colorScheme.primary),
+                          //     shadowColor: MaterialStateProperty.all(
+                          //         Theme.of(context).colorScheme.primary),
+                          //     overlayColor: MaterialStateProperty.all(
+                          //         Theme.of(context).colorScheme.primary),
+                          //     backgroundColor: MaterialStateProperty.all(
+                          //         Theme.of(context).colorScheme.primary),
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                    ),
             )
           ],
         ),

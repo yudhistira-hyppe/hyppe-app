@@ -414,7 +414,7 @@
   "ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies": "If you think goes against our Media Social Community Policies, please let us know",
   "noInternetConnection": "No Internet Connection",
   "pleaseCheckYourInternetConnectionAgain": "Please check your internet connection again",
-  "internetConnectionLost" : "Internet connection lost",
+  "internetConnectionLost": "Internet connection lost",
   "couldntLoadVideo": "Couldn't load the video. Tap to retry.",
   "couldntLoadImage": "Couldn't load the image. Tap to retry.",
   "back": "Back",
@@ -894,5 +894,6 @@
   "fullNameCannotContainLeadingSpace": "Full name cannot contain a leading space",
   "noPostsYet": "No posts yet",
   "youDontHaveAnyPostsHereYet": "You don't have any posts here yet.",
-  "thisContentIsSubjectToModeration": "This content is moderated!"
+  "thisContentIsSubjectToModeration": "This content is moderated!",
+  "thisAccountHasNoPostsYet": "This account has no posts yet."
 }

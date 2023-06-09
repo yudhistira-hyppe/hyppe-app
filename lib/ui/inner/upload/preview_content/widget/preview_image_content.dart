@@ -89,13 +89,22 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                                             sourcePath: pathFile,
                                             compressFormat: ImageCompressFormat.jpg,
                                             compressQuality: 100,
+                                            aspectRatioPresets: [
+                                              CropAspectRatioPreset.square,
+                                              CropAspectRatioPreset.ratio3x2,
+                                              CropAspectRatioPreset.original,
+                                              CropAspectRatioPreset.ratio4x3,
+                                              // CropAspectRatioPreset.ratio16x9
+                                            ],
                                             uiSettings: [
                                               AndroidUiSettings(
-                                                  toolbarTitle: notifier.language.editImage,
-                                                  toolbarColor: kHyppePrimary,
-                                                  toolbarWidgetColor: Colors.white,
-                                                  initAspectRatio: CropAspectRatioPreset.original,
-                                                  lockAspectRatio: false),
+                                                toolbarTitle: notifier.language.editImage,
+                                                toolbarColor: kHyppePrimary,
+                                                toolbarWidgetColor: Colors.white,
+                                                initAspectRatio: CropAspectRatioPreset.original,
+                                                lockAspectRatio: true,
+                                                showCropGrid: true,
+                                              ),
                                               IOSUiSettings(
                                                 title: notifier.language.editImage,
                                               ),
@@ -143,7 +152,7 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                             ),
                             twentyFourPx,
                             InkWell(
-                              onTap: () async{
+                              onTap: () async {
                                 notifier.audioPreviewPlayer.pause();
                                 final tempMusic = notifier.fixSelectedMusic;
                                 notifier.fixSelectedMusic = null;
@@ -251,13 +260,22 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                                             sourcePath: pathFile,
                                             compressFormat: ImageCompressFormat.jpg,
                                             compressQuality: 100,
+                                            aspectRatioPresets: [
+                                              CropAspectRatioPreset.square,
+                                              CropAspectRatioPreset.ratio3x2,
+                                              CropAspectRatioPreset.original,
+                                              CropAspectRatioPreset.ratio4x3,
+                                              // CropAspectRatioPreset.ratio16x9
+                                            ],
                                             uiSettings: [
                                               AndroidUiSettings(
-                                                  toolbarTitle: notifier.language.editImage,
-                                                  toolbarColor: kHyppePrimary,
-                                                  toolbarWidgetColor: Colors.white,
-                                                  initAspectRatio: CropAspectRatioPreset.original,
-                                                  lockAspectRatio: false),
+                                                toolbarTitle: notifier.language.editImage,
+                                                toolbarColor: kHyppePrimary,
+                                                toolbarWidgetColor: Colors.white,
+                                                initAspectRatio: CropAspectRatioPreset.original,
+                                                lockAspectRatio: true,
+                                                showCropGrid: true,
+                                              ),
                                               IOSUiSettings(
                                                 title: notifier.language.editImage,
                                               ),

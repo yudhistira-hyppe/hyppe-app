@@ -774,50 +774,52 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           _likeNotifier.likePost(context, notifier.pic![index]);
                         }
                       },
-                      child: Container(
-                        color: Colors.transparent,
-                        // width: SizeConfig.screenWidth,
-                        // height: SizeConfig.screenHeight,
-                        child: ZoomableImage(
-                          onScaleStart: () {
-                            widget.onScaleStart?.call();
-                          }, // optional
-                          onScaleStop: () {
-                            widget.onScaleStop?.call();
-                          }, // opt
-                          child: CustomBaseCacheImage(
-                            memCacheWidth: 100,
-                            memCacheHeight: 100,
-                            widthPlaceHolder: 80,
-                            heightPlaceHolder: 80,
-                            imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
-                            imageBuilder: (context, imageProvider) => ClipRRect(
-                              borderRadius: BorderRadius.circular(20), // Image border
-                              child: notifier.pic?[index].reportedStatus == 'BLURRED'
-                                  ? ImageFiltered(
-                                      imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                      child: Image(
+                      child: Center(
+                        child: Container(
+                          color: Colors.transparent,
+                          // width: SizeConfig.screenWidth,
+                          // height: SizeConfig.screenHeight,
+                          child: ZoomableImage(
+                            onScaleStart: () {
+                              widget.onScaleStart?.call();
+                            }, // optional
+                            onScaleStop: () {
+                              widget.onScaleStop?.call();
+                            }, // opt
+                            child: CustomBaseCacheImage(
+                              memCacheWidth: 100,
+                              memCacheHeight: 100,
+                              widthPlaceHolder: 80,
+                              heightPlaceHolder: 80,
+                              imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
+                              imageBuilder: (context, imageProvider) => ClipRRect(
+                                borderRadius: BorderRadius.circular(20), // Image border
+                                child: notifier.pic?[index].reportedStatus == 'BLURRED'
+                                    ? ImageFiltered(
+                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                        child: Image(
+                                          image: imageProvider,
+                                          fit: BoxFit.fitHeight,
+                                          width: SizeConfig.screenWidth,
+                                        ),
+                                      )
+                                    : Image(
                                         image: imageProvider,
                                         fit: BoxFit.fitHeight,
                                         width: SizeConfig.screenWidth,
                                       ),
-                                    )
-                                  : Image(
-                                      image: imageProvider,
-                                      fit: BoxFit.fitHeight,
-                                      width: SizeConfig.screenWidth,
-                                    ),
-                            ),
-                            emptyWidget: Container(
-                              // const EdgeInsets.symmetric(horizontal: 4.5),
+                              ),
+                              emptyWidget: Container(
+                                // const EdgeInsets.symmetric(horizontal: 4.5),
 
-                              // height: 500,
-                              decoration: BoxDecoration(
-                                image: const DecorationImage(
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                  fit: BoxFit.cover,
+                                // height: 500,
+                                decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
                                 ),
-                                borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
                           ),

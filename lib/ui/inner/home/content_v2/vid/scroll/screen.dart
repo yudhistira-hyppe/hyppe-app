@@ -249,6 +249,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                     //   // context.read<ScrollVidNotifier>().initializeVideo = false;
                                     // },
                                     shrinkWrap: false,
+                                    padding: const EdgeInsets.symmetric(horizontal: 11.5),
                                     itemCount: vidData?.length ?? 0,
                                     itemBuilder: (BuildContext context, int index) {
                                       if (vidData == null || homeNotifier.isLoadingVid) {
@@ -307,7 +308,11 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
         color: Colors.white,
       ),
       padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(
+        top: 18,
+        left: 6,
+        right: 6,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

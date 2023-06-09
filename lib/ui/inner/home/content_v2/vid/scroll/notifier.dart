@@ -37,6 +37,7 @@ class ScrollVidNotifier with ChangeNotifier {
         sp.pageIndex = 2;
         await sp.onScrollListener(context, scrollController, isLoad: true);
         vidData = sp.user.vids;
+        isLoadingLoadmore = false;
       }
 
       if (pageSrc == PageSrc.otherProfile) {
@@ -44,6 +45,7 @@ class ScrollVidNotifier with ChangeNotifier {
         op.pageIndex = 2;
         await op.onScrollListener(context, scrollController, isLoad: true);
         vidData = op.user.vids;
+        isLoadingLoadmore = false;
       }
 
       final searchNotifier = context.read<SearchNotifier>();
@@ -81,7 +83,7 @@ class ScrollVidNotifier with ChangeNotifier {
     if (connect) {
       if (pageSrc == PageSrc.selfProfile) {
         final sp = context.read<SelfProfileNotifier>();
-        sp.pageIndex = 0;
+        sp.pageIndex = 2;
         await sp.getDataPerPgage(context, isReload: true);
         vidData = sp.user.vids;
         isLoadingLoadmore = false;
@@ -89,8 +91,8 @@ class ScrollVidNotifier with ChangeNotifier {
 
       if (pageSrc == PageSrc.otherProfile) {
         final op = context.read<OtherProfileNotifier>();
-        op.pageIndex = 0;
-        await op.initialOtherProfile(context, refresh: true);
+        op.pageIndex = 2;
+        await op.getDataPerPgage(context);
         vidData = op.user.vids;
         isLoadingLoadmore = false;
       }

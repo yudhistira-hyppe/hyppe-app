@@ -858,7 +858,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                   (diaryData?[index].reportedStatus != 'OWNED' && diaryData?[index].reportedStatus != 'BLURRED' && diaryData?[index].reportedStatus2 != 'BLURRED') &&
                   diaryData?[index].email == email
               ? Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery.of(context).size.width,
                   margin: const EdgeInsets.only(bottom: 16),
                   child: ButtonBoost(
                     onDetail: false,
