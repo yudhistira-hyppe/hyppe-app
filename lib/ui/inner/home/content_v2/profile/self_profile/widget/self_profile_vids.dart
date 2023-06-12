@@ -47,61 +47,54 @@ class SelfProfileVids extends StatelessWidget {
                                 "Vid",
                                 style: TextStyle(color: kHyppeTextLightPrimary),
                               )),
-                          child: MeasuredSize(
-                            onChange: (size) {
-                              if (index == 0) {
-                                notifier.heightBox = size.height.toInt();
-                              }
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                              child: notifier.user.vids?[index].reportedStatus == 'BLURRED' || notifier.user.vids?[index].reportedStatus == 'OWNED'
-                                  ? SensitiveContentProfile(data: notifier.user.vids?[index])
-                                  : Stack(
-                                      children: [
-                                        Center(
-                                          child: CustomContentModeratedWidget(
-                                            width: double.infinity,
-                                            height: double.infinity,
-                                            featureType: FeatureType.vid,
-                                            isSale: false,
-                                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                            thumbnail: ImageUrl(notifier.user.vids?[index].postID,
-                                                url: (notifier.user.vids?[index].isApsara ?? false)
-                                                    ? (notifier.user.vids?[index].mediaThumbEndPoint ?? '')
-                                                    : System().showUserPicture(notifier.user.vids?[index].mediaThumbEndPoint) ?? ''),
-                                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
+                            child: notifier.user.vids?[index].reportedStatus == 'BLURRED' || notifier.user.vids?[index].reportedStatus == 'OWNED'
+                                ? SensitiveContentProfile(data: notifier.user.vids?[index])
+                                : Stack(
+                                    children: [
+                                      Center(
+                                        child: CustomContentModeratedWidget(
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          featureType: FeatureType.vid,
+                                          isSale: false,
+                                          isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                                          thumbnail: ImageUrl(notifier.user.vids?[index].postID,
+                                              url: (notifier.user.vids?[index].isApsara ?? false)
+                                                  ? (notifier.user.vids?[index].mediaThumbEndPoint ?? '')
+                                                  : System().showUserPicture(notifier.user.vids?[index].mediaThumbEndPoint) ?? ''),
                                         ),
-                                        // SelectableText(notifier.iw tem1?.vids?[index].isApsara ?? false
-                                        //     ? (notifier.user?.vids?[index].mediaThumbEndPoint ?? '')
-                                        //     : System().showUserPicture(notifier.user?.vids?[index].mediaThumbEndPoint) ?? ''),
-                                        (notifier.user.vids?[index].saleAmount ?? 0) > 0
-                                            ? const Align(
-                                                alignment: Alignment.topRight,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(4.0),
-                                                  child: CustomIconWidget(
-                                                    iconData: "${AssetPath.vectorPath}sale.svg",
-                                                    height: 22,
-                                                    defaultColor: false,
-                                                  ),
-                                                ))
-                                            : Container(),
-                                        (notifier.user.vids?[index].certified ?? false) && (notifier.user.vids?[index].saleAmount ?? 0) == 0
-                                            ? Align(
-                                                alignment: Alignment.topRight,
-                                                child: Padding(
-                                                    padding: const EdgeInsets.all(2.0),
-                                                    child: Container(
-                                                        padding: const EdgeInsets.all(4),
-                                                        child: const CustomIconWidget(
-                                                          iconData: '${AssetPath.vectorPath}ownership.svg',
-                                                          defaultColor: false,
-                                                        ))))
-                                            : Container()
-                                      ],
-                                    ),
-                            ),
+                                      ),
+                                      // SelectableText(notifier.iw tem1?.vids?[index].isApsara ?? false
+                                      //     ? (notifier.user?.vids?[index].mediaThumbEndPoint ?? '')
+                                      //     : System().showUserPicture(notifier.user?.vids?[index].mediaThumbEndPoint) ?? ''),
+                                      (notifier.user.vids?[index].saleAmount ?? 0) > 0
+                                          ? const Align(
+                                              alignment: Alignment.topRight,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(4.0),
+                                                child: CustomIconWidget(
+                                                  iconData: "${AssetPath.vectorPath}sale.svg",
+                                                  height: 22,
+                                                  defaultColor: false,
+                                                ),
+                                              ))
+                                          : Container(),
+                                      (notifier.user.vids?[index].certified ?? false) && (notifier.user.vids?[index].saleAmount ?? 0) == 0
+                                          ? Align(
+                                              alignment: Alignment.topRight,
+                                              child: Padding(
+                                                  padding: const EdgeInsets.all(2.0),
+                                                  child: Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      child: const CustomIconWidget(
+                                                        iconData: '${AssetPath.vectorPath}ownership.svg',
+                                                        defaultColor: false,
+                                                      ))))
+                                          : Container()
+                                    ],
+                                  ),
                           ),
                         );
                       } catch (e) {

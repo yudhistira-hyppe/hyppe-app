@@ -15,14 +15,14 @@ class ScrollVidNotifier with ChangeNotifier {
   List<ContentData>? vidData = [];
   bool _isLoadingLoadmore = false;
   bool get isLoadingLoadmore => _isLoadingLoadmore;
-  set isLoadingLoadmore(bool state){
+  set isLoadingLoadmore(bool state) {
     _isLoadingLoadmore = state;
     notifyListeners();
   }
 
   bool _connectionError = false;
   bool get connectionError => _connectionError;
-  set connectionError (bool state){
+  set connectionError(bool state) {
     _connectionError = state;
     notifyListeners();
   }
@@ -37,7 +37,7 @@ class ScrollVidNotifier with ChangeNotifier {
     bool connect = await System().checkConnections();
     final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
-    if(connect){
+    if (connect) {
       if (pageSrc == PageSrc.selfProfile) {
         final sp = context.read<SelfProfileNotifier>();
         sp.pageIndex = 2;
@@ -52,57 +52,40 @@ class ScrollVidNotifier with ChangeNotifier {
         vidData = op.user.vids;
       }
 
-      if(pageSrc == PageSrc.searchData){
+      final searchNotifier = context.read<SearchNotifier>();
+
+      if (pageSrc == PageSrc.searchData) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.normal, 12, skip: searchNotifier.searchVid?.length ?? 0);
         searchNotifier.searchVid?.addAll(data);
         vidData = searchNotifier.searchVid;
         isLoadingLoadmore = false;
       }
 
-      if(pageSrc == PageSrc.hashtag){
+      if (pageSrc == PageSrc.hashtag) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.detailHashTag, 12, skip: searchNotifier.mapDetailHashtag[key]?.vid?.length ?? 0);
         searchNotifier.mapDetailHashtag[key]?.vid?.addAll(data);
         vidData = searchNotifier.mapDetailHashtag[key]?.vid;
         isLoadingLoadmore = false;
       }
 
-      if(pageSrc == PageSrc.interest){
+      if (pageSrc == PageSrc.interest) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.detailInterest, 12, skip: searchNotifier.interestContents[key]?.vid?.length ?? 0);
         searchNotifier.interestContents[key]?.vid?.addAll(data);
         vidData = searchNotifier.interestContents[key]?.vid;
         isLoadingLoadmore = false;
       }
-    }else{
-      if(pageSrc == PageSrc.interest){
-        vidData = searchNotifier.interestContents[key]?.vid;
-      }
-      if(pageSrc == PageSrc.hashtag){
-        vidData = searchNotifier.mapDetailHashtag[key]?.vid;
-      }
-      if(pageSrc == PageSrc.searchData){
-        vidData = searchNotifier.searchVid;
-      }
-      if (pageSrc == PageSrc.selfProfile) {
-        final sp = context.read<SelfProfileNotifier>();
-        vidData = sp.user.vids;
-      }
-      if (pageSrc == PageSrc.otherProfile) {
-        final op = context.read<OtherProfileNotifier>();
-        vidData = op.user.vids;
-      }
-      connectionError = true;
+    } else {
       isLoadingLoadmore = false;
       final language = context.read<TranslateNotifierV2>().translate;
       context.showErrorConnection(language);
     }
-
   }
 
   Future reload(BuildContext context, PageSrc pageSrc, {String key = ""}) async {
     bool connect = await System().checkConnections();
     final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
-    if(connect){
+    if (connect) {
       if (pageSrc == PageSrc.selfProfile) {
         final sp = context.read<SelfProfileNotifier>();
         sp.pageIndex = 0;
@@ -121,50 +104,31 @@ class ScrollVidNotifier with ChangeNotifier {
 
 
 
-      if(pageSrc == PageSrc.searchData){
+      if (pageSrc == PageSrc.searchData) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.normal, 12);
         searchNotifier.searchVid = data;
         vidData = searchNotifier.searchVid;
         isLoadingLoadmore = false;
       }
 
-      if(pageSrc == PageSrc.hashtag){
+      if (pageSrc == PageSrc.hashtag) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.detailHashTag, 12);
         searchNotifier.mapDetailHashtag[key]?.vid = data;
         vidData = searchNotifier.mapDetailHashtag[key]?.vid;
         isLoadingLoadmore = false;
       }
 
-      if(pageSrc == PageSrc.interest){
+      if (pageSrc == PageSrc.interest) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.detailInterest, 12);
         searchNotifier.interestContents[key]?.vid = data;
         vidData = searchNotifier.interestContents[key]?.vid;
         isLoadingLoadmore = false;
       }
-    }else{
-      if(pageSrc == PageSrc.interest){
-        vidData = searchNotifier.interestContents[key]?.vid;
-      }
-      if(pageSrc == PageSrc.hashtag){
-        vidData = searchNotifier.mapDetailHashtag[key]?.vid;
-      }
-      if(pageSrc == PageSrc.searchData){
-        vidData = searchNotifier.searchVid;
-      }
-      if (pageSrc == PageSrc.selfProfile) {
-        final sp = context.read<SelfProfileNotifier>();
-        vidData = sp.user.vids;
-      }
-      if (pageSrc == PageSrc.otherProfile) {
-        final op = context.read<OtherProfileNotifier>();
-        vidData = op.user.vids;
-      }
-      connectionError = true;
+    } else {
       isLoadingLoadmore = false;
       final language = context.read<TranslateNotifierV2>().translate;
       context.showErrorConnection(language);
     }
-
   }
 
   void setAliPlayer(int index, FlutterAliplayer player) {

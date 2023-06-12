@@ -192,8 +192,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                 await notifier.initNewHome(context, mounted, isreload: true);
               },
               child: NestedScrollView(
-                // key: globalKey,
-                // controller: context.read<MainNotifier>().scrollController,
+                key: globalKey,
+                controller: context.read<MainNotifier>().scrollController,
                 physics: const NeverScrollableScrollPhysics(),
                 // dragStartBehavior: DragStartBehavior.start,
                 headerSliverBuilder: (context, bool innerBoxIsScrolled) {

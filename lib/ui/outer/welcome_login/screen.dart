@@ -40,7 +40,7 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
                   children: [
                     const PageTop(),
                     PageBottom(),
-                    // testLogin(),
+                    testLogin(),
                   ],
                 ),
               ),

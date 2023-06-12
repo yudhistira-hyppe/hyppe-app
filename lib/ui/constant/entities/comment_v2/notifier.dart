@@ -180,6 +180,7 @@ class CommentNotifierV2 with ChangeNotifier {
     }
 
     loading = true;
+    notifyListeners();
 
     final _tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
 
@@ -206,12 +207,12 @@ class CommentNotifierV2 with ChangeNotifier {
           final _parentIndex = _commentData?.indexWhere((element) => element.comment?.lineID == parentID);
           _commentData?[_parentIndex ?? 0].comment?.detailDisquss?.insert(0, res.comment ?? DisqusLogs());
           final dataMap = repliesComments[parentID];
-          if(dataMap != null){
+          if (dataMap != null) {
             repliesComments[parentID]?.insertAll(0, [
               // const SizedBox(height: 16),
               SubCommentTile(logs: res.comment, parentID: parentID, fromFront: fromFront),
             ]);
-          }else{
+          } else {
             repliesComments[parentID] = [];
             repliesComments[parentID]?.addAll([
               // const SizedBox(height: 16),
@@ -230,6 +231,7 @@ class CommentNotifierV2 with ChangeNotifier {
     } finally {
       parentID = null;
       loading = false;
+      notifyListeners();
     }
   }
 

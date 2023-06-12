@@ -91,7 +91,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     super.didChangeDependencies();
   }
 
-
   @override
   void dispose() {
     isStopVideo = false;
@@ -322,13 +321,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
           VisibilityDetector(
             key: Key(index.toString()),
             onVisibilityChanged: (info) {
-              print("visibleFraction: ${info.visibleFraction}");
               if (info.visibleFraction >= 0.6) {
                 if (_curIdx != index) {
                   Future.delayed(const Duration(milliseconds: 400), () {
                     try {
                       if (_curIdx != -1) {
-                        print('Vid Landing Page: pause $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
                         if (notifier.vidData?[_curIdx].fAliplayer != null) {
                           notifier.vidData?[_curIdx].fAliplayer?.pause();
                         } else {
@@ -625,7 +622,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     );
   }
 
-
   Widget _buildBody(context, data, width) {
     // final translate = Provider.of<TranslateNotifierV2>(context, listen: false);
     return Stack(
@@ -805,59 +801,59 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   //   }
   // }
 
-  Future getOldVideoUrl(ContentData data) async {
-    setState(() {
-      isloading = true;
-    });
-    try {
-      final notifier = PostsBloc();
-      await notifier.getOldVideo(context, apsaraId: data.postID ?? '');
-      final fetch = notifier.postsFetch;
-      if (fetch.postsState == PostsState.videoApsaraSuccess) {
-        Map jsonMap = json.decode(fetch.data.toString());
+  // Future getOldVideoUrl(ContentData data) async {
+  //   setState(() {
+  //     isloading = true;
+  //   });
+  //   try {
+  //     final notifier = PostsBloc();
+  //     await notifier.getOldVideo(context, apsaraId: data.postID ?? '');
+  //     final fetch = notifier.postsFetch;
+  //     if (fetch.postsState == PostsState.videoApsaraSuccess) {
+  //       Map jsonMap = json.decode(fetch.data.toString());
 
-        data.fAliplayer?.setUrl(jsonMap['data']['url']);
-        setState(() {
-          isloading = false;
-        });
-        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
-      }
-    } catch (e) {
-      setState(() {
-        isloading = false;
-      });
-      // 'Failed to fetch ads data $e'.logger();
-    }
-  }
+  //       data.fAliplayer?.setUrl(jsonMap['data']['url']);
+  //       setState(() {
+  //         isloading = false;
+  //       });
+  //       // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+  //     }
+  //   } catch (e) {
+  //     setState(() {
+  //       isloading = false;
+  //     });
+  //     // 'Failed to fetch ads data $e'.logger();
+  //   }
+  // }
 
-  Future getAuth(ContentData data) async {
-    setState(() {
-      isloading = true;
-    });
-    data.isLoading = true;
-    try {
-      final notifier = PostsBloc();
-      await notifier.getAuthApsara(context, apsaraId: data.apsaraId ?? '');
-      final fetch = notifier.postsFetch;
-      if (fetch.postsState == PostsState.videoApsaraSuccess) {
-        Map jsonMap = json.decode(fetch.data.toString());
-        auth = jsonMap['PlayAuth'];
+  // Future getAuth(ContentData data) async {
+  //   setState(() {
+  //     isloading = true;
+  //   });
+  //   data.isLoading = true;
+  //   try {
+  //     final notifier = PostsBloc();
+  //     await notifier.getAuthApsara(context, apsaraId: data.apsaraId ?? '');
+  //     final fetch = notifier.postsFetch;
+  //     if (fetch.postsState == PostsState.videoApsaraSuccess) {
+  //       Map jsonMap = json.decode(fetch.data.toString());
+  //       auth = jsonMap['PlayAuth'];
 
-        data.fAliplayer?.setVidAuth(
-          vid: data.apsaraId,
-          region: DataSourceRelated.defaultRegion,
-          playAuth: auth,
-        );
-        setState(() {
-          isloading = false;
-        });
-        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
-      }
-    } catch (e) {
-      setState(() {
-        isloading = false;
-      });
-      // 'Failed to fetch ads data $e'.logger();
-    }
-  }
+  //       data.fAliplayer?.setVidAuth(
+  //         vid: data.apsaraId,
+  //         region: DataSourceRelated.defaultRegion,
+  //         playAuth: auth,
+  //       );
+  //       setState(() {
+  //         isloading = false;
+  //       });
+  //       // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+  //     }
+  //   } catch (e) {
+  //     setState(() {
+  //       isloading = false;
+  //     });
+  //     // 'Failed to fetch ads data $e'.logger();
+  //   }
+  // }
 }

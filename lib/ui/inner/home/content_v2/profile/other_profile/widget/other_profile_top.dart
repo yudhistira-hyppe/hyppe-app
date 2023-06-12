@@ -72,9 +72,9 @@ class OtherProfileTop extends StatelessWidget {
                 // ),
                 StoryColorValidator(
                   isMy: false,
-                  haveStory: sn.otherStoryGroup[email]!.isNotEmpty,
-                  featureType: sn.otherStoryGroup[email]!.isNotEmpty ? FeatureType.story : FeatureType.other,
-                  isView: sn.otherStoryGroup[email]!.isNotEmpty ? sn.otherStoryGroup[email]?.last.isViewed ?? false : false,
+                  haveStory: (sn.otherStoryGroup[email]?.isNotEmpty ?? [].isEmpty),
+                  featureType: (sn.otherStoryGroup[email]?.isNotEmpty ?? [].isEmpty) ? FeatureType.story : FeatureType.other,
+                  isView: (sn.otherStoryGroup[email]?.isNotEmpty ?? [].isEmpty) ? sn.otherStoryGroup[email]?.last.isViewed ?? false : false,
                   child: GestureDetector(
                     onTap: () {
                       showTap(context, sn.otherStoryGroup[email] ?? [], notifier);

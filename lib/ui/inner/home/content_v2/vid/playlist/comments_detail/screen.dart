@@ -278,7 +278,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
             onTap: () => System().navigateToProfile(context, data.email ?? ''),
             imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint),
             following: true,
-            onFollow: (){},
+            onFollow: () {},
           ),
           twelvePx,
           Expanded(

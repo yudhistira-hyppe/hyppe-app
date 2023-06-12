@@ -138,7 +138,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       if (lastIndex != index) {
         if (index == diaryData!.length - 2) {
           print("ini reload harusnya");
-          if(!notifier.isLoadingLoadmore){
+          if (!notifier.isLoadingLoadmore) {
             await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
             setState(() {
               diaryData = notifier.diaryData;
@@ -691,6 +691,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                     // FlutterAliplayer? fAliplayer
                     context.read<PreviewPicNotifier>().reportContent(context, diaryData?[index] ?? ContentData(), fAliplayer: fAliplayer);
                   } else {
+                    fAliplayer?.setMuted(true);
                     fAliplayer?.pause();
                     ShowBottomSheet().onShowOptionContent(
                       context,

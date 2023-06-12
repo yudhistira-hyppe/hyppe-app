@@ -394,8 +394,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
   }
 
   void navigateToOtherStoryGroup(BuildContext context, List stories, String email) {
-    print('navigateToStoryGroup: ${otherStoryGroup.isNotEmpty} : $otherStoryGroup');
-    print(otherStoryGroup);
     if (stories.isNotEmpty) {
       _routing.move(
         Routes.showStories,

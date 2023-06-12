@@ -634,6 +634,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   if (notifier.pic?[index].email != email) {
                     context.read<PreviewPicNotifier>().reportContent(context, notifier.pic?[index] ?? ContentData(), fAliplayer: fAliplayer);
                   } else {
+                    fAliplayer?.setMuted(true);
                     fAliplayer?.pause();
                     ShowBottomSheet().onShowOptionContent(
                       context,

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/follower_screen_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -10,7 +8,6 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
@@ -24,7 +21,6 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
 class SelfProfileTop extends StatelessWidget {
@@ -90,7 +86,7 @@ class SelfProfileTop extends StatelessWidget {
                     showPict(context, notifier);
                   },
                   child: StoryColorValidator(
-                    isMy: true,
+                    isMy: false,
                     haveStory: sn.myStoryGroup[email]!.isNotEmpty,
                     featureType: sn.myStoryGroup[email]!.isNotEmpty ? FeatureType.story : FeatureType.other,
                     isView: sn.myStoryGroup[email]!.isNotEmpty ? sn.myStoryGroup[email]?.last.isViewed ?? false : false,

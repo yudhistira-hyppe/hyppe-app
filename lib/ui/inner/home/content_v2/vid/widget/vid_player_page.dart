@@ -197,7 +197,6 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         //   isPlay = true;
         // }
 
-
         _dataSourceMap = widget.dataSourceMap;
         _dataSourceAdsMap = {};
         // isPlay = false;
@@ -298,9 +297,9 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             isPlay = false;
             _showLoading = false;
-            try{
+            try {
               Wakelock.disable();
-            }catch(e){
+            } catch (e) {
               e.logger();
             }
 
@@ -455,10 +454,10 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           });
         }
       });
-      print("!=1=1=1==1=1=1");
+      print("!=1=1=1==================================================1=1=1");
       print(widget.playMode);
       print(widget.data!.isApsara);
-      print(widget.fromDeeplink);
+      print(widget.data?.postID);
       if (widget.data!.isApsara ?? false) {
         getAuth();
       } else {
@@ -541,14 +540,13 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     } catch (e) {
       // 'Failed to fetch ads data $e'.logger();
     }
-    if(mounted){
+    if (mounted) {
       setState(() {
         isloading = false;
       });
-    }else{
+    } else {
       isloading = false;
     }
-
   }
 
   Future getOldVideoUrl() async {
@@ -562,12 +560,14 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
         print("iyyiyiyiyiyi $jsonMap");
-        print("iyyiyiyiyiyi ${jsonMap['data']['url']}");
-        urlVid = jsonMap['data']['url'];
+        print("iyyiyiyiyiyi $jsonMap['data']['url]");
 
         setState(() {
+          urlVid = jsonMap['data']['url'];
+          fAliplayer?.setUrl(urlVid);
           isloading = false;
         });
+
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
@@ -824,6 +824,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         child: Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),
       );
     } else {
+      print("onViewPlayerCreated ${onViewPlayerCreated}");
       aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
       // AliPlayerView aliPlayerAdsView = AliPlayerView(onCreated: onViewPlayerAdsCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
 
@@ -903,6 +904,10 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                   onTap: () async {
                     globalAliPlayer = widget.data?.fAliplayer;
                     print("ini play");
+                    print("=========================================");
+                    print(urlVid);
+                    print(widget.data?.description);
+                    print(widget.data?.postID);
 
                     if (widget.onPlay != null) {
                       widget.onPlay!(widget.data ?? ContentData());
@@ -916,7 +921,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                       isPlay = true;
                       _showLoading = true;
                     });
-
+                    fAliplayer?.play();
                     await fAliplayer?.prepare().whenComplete(() {}).onError((error, stackTrace) => print('Error Loading video: $error'));
                     Future.delayed(const Duration(seconds: 1), () {
                       if (isPlay) {
@@ -1007,21 +1012,11 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         getPlayers(fAliplayer!);
       }
     }
-    switch (_playMode) {
-      case ModeTypeAliPLayer.url:
+    switch (widget.data?.apsara) {
+      case false:
         fAliplayer?.setUrl(urlVid);
         break;
-      case ModeTypeAliPLayer.sts:
-        fAliplayer?.setVidSts(
-            vid: _dataSourceMap?[DataSourceRelated.vidKey],
-            region: _dataSourceMap?[DataSourceRelated.regionKey],
-            accessKeyId: _dataSourceMap?[DataSourceRelated.accessKeyId],
-            accessKeySecret: _dataSourceMap?[DataSourceRelated.accessKeySecret],
-            securityToken: _dataSourceMap?[DataSourceRelated.securityToken],
-            definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
-            previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
-        break;
-      case ModeTypeAliPLayer.auth:
+      case true:
         fAliplayer?.setVidAuth(
             vid: _dataSourceMap?[DataSourceRelated.vidKey],
             region: _dataSourceMap?[DataSourceRelated.regionKey],
@@ -1029,10 +1024,6 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
             definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
             previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
         break;
-      case ModeTypeAliPLayer.mps:
-        fAliplayer?.setVidMps(_dataSourceMap!);
-        break;
-      default:
     }
   }
 
@@ -1493,19 +1484,21 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                                 DeviceOrientation.landscapeLeft,
                                 DeviceOrientation.landscapeRight,
                               ]);
-                            }else{
+                            } else {
                               print('Portrait VidPlayerPage');
                             }
-                            VideoIndicator value = await Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(builder: (_) =>VideoFullscreenPage(
-                              aliPlayerView: aliPlayerView!,
-                              fAliplayer: fAliplayer,
-                              data: widget.data ?? ContentData(),
-                              onClose: () {
-                                // Routing().moveBack();
-                              },
-                              slider: _buildContentWidget(context, widget.orientation),
-                              videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
-                            ), settings: const RouteSettings()));
+                            VideoIndicator value = await Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+                                builder: (_) => VideoFullscreenPage(
+                                      aliPlayerView: aliPlayerView!,
+                                      fAliplayer: fAliplayer,
+                                      data: widget.data ?? ContentData(),
+                                      onClose: () {
+                                        // Routing().moveBack();
+                                      },
+                                      slider: _buildContentWidget(context, widget.orientation),
+                                      videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
+                                    ),
+                                settings: const RouteSettings()));
                             // VideoIndicator value = await showDialog(
                             //     context: context,
                             //     builder: (context) {
@@ -1520,7 +1513,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                             //         videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
                             //       );
                             //     });
-                            if(mounted){
+                            if (mounted) {
                               setState(() {
                                 _videoDuration = value.videoDuration;
                                 _currentPosition = value.seekValue;

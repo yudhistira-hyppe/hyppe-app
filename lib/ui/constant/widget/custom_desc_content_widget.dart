@@ -81,6 +81,9 @@ class _CustomDescContentState extends State<CustomDescContent> {
   @override
   Widget build(BuildContext context) {
     desc = widget.desc;
+    setState(() {
+      isloading = widget.isloading ?? false;
+    });
 
     final values = desc.split('\n');
     for (var i = 0; i < values.length; i++) {
@@ -105,8 +108,16 @@ class _CustomDescContentState extends State<CustomDescContent> {
         }
       }
     }
-    print('CustomDescContent Desc: ${widget.desc}');
-    return fixDescLayout(context);
+    if (isloading) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          isloading = false;
+        });
+      });
+    }
+
+    // descItems.add(ItemDesc())
+    return isloading ? Container() : fixDescLayout(context);
   }
 
   Widget fixDescLayout(BuildContext context) {

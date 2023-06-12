@@ -13,14 +13,14 @@ import '../../../../search_v2/notifier.dart';
 class ScrollDiaryNotifier with ChangeNotifier {
   bool _isLoadingLoadmore = false;
   bool get isLoadingLoadmore => _isLoadingLoadmore;
-  set isLoadingLoadmore(bool state){
+  set isLoadingLoadmore(bool state) {
     _isLoadingLoadmore = state;
     notifyListeners();
   }
 
   bool _connectionError = false;
   bool get connectionError => _connectionError;
-  set connectionError (bool state){
+  set connectionError(bool state) {
     _connectionError = state;
     notifyListeners();
   }
@@ -37,7 +37,7 @@ class ScrollDiaryNotifier with ChangeNotifier {
     bool connect = await System().checkConnections();
     final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
-    if(connect){
+    if (connect) {
       if (pageSrc == PageSrc.selfProfile) {
         final sp = context.read<SelfProfileNotifier>();
         sp.pageIndex = 1;
@@ -54,60 +54,43 @@ class ScrollDiaryNotifier with ChangeNotifier {
         isLoadingLoadmore = false;
       }
 
-      if(pageSrc == PageSrc.searchData){
+      final searchNotifier = context.read<SearchNotifier>();
+
+      if (pageSrc == PageSrc.searchData) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.normal, 12, skip: searchNotifier.searchDiary?.length ?? 0);
         searchNotifier.searchDiary?.addAll(data);
         diaryData = searchNotifier.searchDiary;
         isLoadingLoadmore = false;
       }
 
-      if(pageSrc == PageSrc.hashtag){
+      if (pageSrc == PageSrc.hashtag) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailHashTag, 12, skip: searchNotifier.mapDetailHashtag[key]?.diary?.length ?? 0);
         searchNotifier.mapDetailHashtag[key]?.diary?.addAll(data);
         diaryData = searchNotifier.mapDetailHashtag[key]?.diary;
         isLoadingLoadmore = false;
       }
 
-      if(pageSrc == PageSrc.interest){
+      if (pageSrc == PageSrc.interest) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailInterest, 12, skip: searchNotifier.interestContents[key]?.diary?.length ?? 0);
         searchNotifier.interestContents[key]?.diary?.addAll(data);
         diaryData = searchNotifier.interestContents[key]?.diary;
         isLoadingLoadmore = false;
       }
-    }else{
-      if(pageSrc == PageSrc.interest){
-        diaryData = searchNotifier.interestContents[key]?.diary;
-      }
-      if(pageSrc == PageSrc.hashtag){
-        diaryData = searchNotifier.mapDetailHashtag[key]?.diary;
-      }
-      if(pageSrc == PageSrc.searchData){
-        diaryData = searchNotifier.searchDiary;
-      }
-      if (pageSrc == PageSrc.selfProfile) {
-        final sp = context.read<SelfProfileNotifier>();
-        diaryData = sp.user.diaries;
-      }
-      if (pageSrc == PageSrc.otherProfile) {
-        final op = context.read<OtherProfileNotifier>();
-        diaryData = op.user.diaries;
-      }
-      connectionError = true;
+    } else {
       isLoadingLoadmore = false;
       final language = context.read<TranslateNotifierV2>().translate;
       context.showErrorConnection(language);
     }
-
   }
 
   Future reload(BuildContext context, PageSrc pageSrc, {String key = ""}) async {
     bool connect = await System().checkConnections();
     final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
-    if(connect){
+    if (connect) {
       if (pageSrc == PageSrc.selfProfile) {
         final sp = context.read<SelfProfileNotifier>();
-        sp.pageIndex = 0;
+        sp.pageIndex = 1;
         await sp.getDataPerPgage(context, isReload: true);
         diaryData = sp.user.diaries;
         isLoadingLoadmore = false;
@@ -116,56 +99,39 @@ class ScrollDiaryNotifier with ChangeNotifier {
 
       if (pageSrc == PageSrc.otherProfile) {
         final op = context.read<OtherProfileNotifier>();
-        op.pageIndex = 0;
+        op.pageIndex = 1;
         await op.initialOtherProfile(context, refresh: true);
         diaryData = op.user.diaries;
         isLoadingLoadmore = false;
         notifyListeners();
       }
 
-      if(pageSrc == PageSrc.searchData){
+      final searchNotifier = context.read<SearchNotifier>();
+
+      if (pageSrc == PageSrc.searchData) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.normal, 12);
         searchNotifier.searchDiary = data;
         diaryData = searchNotifier.searchDiary;
         isLoadingLoadmore = false;
       }
 
-      if(pageSrc == PageSrc.hashtag){
+      if (pageSrc == PageSrc.hashtag) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailHashTag, 12);
         searchNotifier.mapDetailHashtag[key]?.diary = data;
         diaryData = searchNotifier.mapDetailHashtag[key]?.diary;
         isLoadingLoadmore = false;
       }
 
-      if(pageSrc == PageSrc.interest){
+      if (pageSrc == PageSrc.interest) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.detailInterest, 12);
         searchNotifier.interestContents[key]?.diary = data;
         diaryData = searchNotifier.interestContents[key]?.diary;
         isLoadingLoadmore = false;
       }
-    }else{
-      if(pageSrc == PageSrc.interest){
-        diaryData = searchNotifier.interestContents[key]?.diary;
-      }
-      if(pageSrc == PageSrc.hashtag){
-        diaryData = searchNotifier.mapDetailHashtag[key]?.diary;
-      }
-      if(pageSrc == PageSrc.searchData){
-        diaryData = searchNotifier.searchDiary;
-      }
-      if (pageSrc == PageSrc.selfProfile) {
-        final sp = context.read<SelfProfileNotifier>();
-        diaryData = sp.user.diaries;
-      }
-      if (pageSrc == PageSrc.otherProfile) {
-        final op = context.read<OtherProfileNotifier>();
-        diaryData = op.user.diaries;
-      }
-      connectionError = true;
+    } else {
       isLoadingLoadmore = false;
       final language = context.read<TranslateNotifierV2>().translate;
       context.showErrorConnection(language);
     }
-
   }
 }
