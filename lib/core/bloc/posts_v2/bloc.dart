@@ -480,7 +480,7 @@ class PostsBloc {
 
   Future getAuthApsara(
     BuildContext context, {
-    required String apsaraId,
+    required String apsaraId, bool check = true
   }) async {
     final email = SharedPreference().readStorage(SpKeys.email);
 
@@ -503,7 +503,7 @@ class PostsBloc {
         'x-auth-user': email,
       },
       withAlertMessage: false,
-      withCheckConnection: true,
+      withCheckConnection: check,
       host: url,
       methodType: MethodType.get,
     );
@@ -511,7 +511,7 @@ class PostsBloc {
 
   Future getOldVideo(
     BuildContext context, {
-    required String apsaraId,
+    required String apsaraId, bool check = true
   }) async {
     setPostsFetch(PostsFetch(PostsState.loading));
     var url = UrlConstants.oldVideo + apsaraId;
@@ -529,7 +529,7 @@ class PostsBloc {
         setPostsFetch(PostsFetch(PostsState.videoApsaraError));
       },
       withAlertMessage: false,
-      withCheckConnection: true,
+      withCheckConnection: check,
       host: url,
       methodType: MethodType.get,
     );

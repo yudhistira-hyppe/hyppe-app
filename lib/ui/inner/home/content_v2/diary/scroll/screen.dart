@@ -6,11 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
-import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
-import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -33,6 +31,7 @@ import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
@@ -49,7 +48,6 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
@@ -360,7 +358,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
     });
     try {
       final notifier = PostsBloc();
-      await notifier.getAuthApsara(context, apsaraId: apsaraId);
+      await notifier.getAuthApsara(context, apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
@@ -390,7 +388,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
     });
     try {
       final notifier = PostsBloc();
-      await notifier.getOldVideo(context, apsaraId: postId);
+      await notifier.getOldVideo(context, apsaraId: postId,check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
@@ -721,7 +719,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                 if (_lastCurIndex != _curIdx) {
                   Future.delayed(const Duration(milliseconds: 400), () {
                     start(diaryData?[index] ?? ContentData());
-                    System().increaseViewCount2(context, diaryData?[index] ?? ContentData());
+                    System().increaseViewCount2(context, diaryData?[index] ?? ContentData(), check: false);
                   });
                   if (diaryData?[index].certified ?? false) {
                     System().block(context);
@@ -757,7 +755,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           )
                         : Container(),
                     // _buildProgressBar(SizeConfig.screenWidth!, 500),
-                    Positioned.fill(
+                    !notifier.connectionError ? Positioned.fill(
                       child: GestureDetector(
                         onTap: () {
                           fAliplayer?.play();
@@ -778,10 +776,26 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           height: SizeConfig.screenHeight,
                         ),
                       ),
+                    ) : Positioned.fill(
+                      child: GestureDetector(
+                        onTap: () {
+                          notifier.checkConnection();
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: kHyppeNotConnect,
+                              borderRadius: BorderRadius.circular(16)
+                          ),
+                          width: SizeConfig.screenWidth,
+                          height: SizeConfig.screenHeight,
+                          alignment: Alignment.center,
+                          child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo?? 'Error')
+                        ),
+                      ),
                     ),
                     dataSelected?.postID == diaryData?[index].postID && isPlay
                         ? Container()
-                        : CustomBaseCacheImage(
+                        : !notifier.connectionError ? CustomBaseCacheImage(
                             memCacheWidth: 100,
                             memCacheHeight: 100,
                             widthPlaceHolder: 80,
@@ -837,7 +851,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
-                          ),
+                          ): Container(),
                     _showLoading
                         ? Positioned.fill(
                             child: Align(

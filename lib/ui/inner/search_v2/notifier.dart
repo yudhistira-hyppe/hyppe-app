@@ -980,6 +980,7 @@ class SearchNotifier with ChangeNotifier {
       final lenghtVid = currentVid.length;
       final lenghtDiary = currentDairy.length;
       final lenghtPic = currentPic.length;
+      print('the interest id: $keys');
       if (reload) {
         initAllHasNext();
         loadIntDetail = true;
@@ -1055,6 +1056,7 @@ class SearchNotifier with ChangeNotifier {
                   }
                   // _hashtagPic = [...(_hashtagPic ?? []), ...(pics ?? [])];
                 }
+                notifyListeners();
               }
 
             }

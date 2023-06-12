@@ -25,11 +25,17 @@ class ScrollDiaryNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  Future checkConnection() async {
+    bool connect = await System().checkConnections();
+    connectionError = !connect;
+  }
+
   List<ContentData>? diaryData = [];
 
   Future loadMore(BuildContext context, ScrollController scrollController, PageSrc pageSrc, String key) async {
     isLoadingLoadmore = true;
     bool connect = await System().checkConnections();
+    final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
     if(connect){
       if (pageSrc == PageSrc.selfProfile) {
@@ -47,8 +53,6 @@ class ScrollDiaryNotifier with ChangeNotifier {
         diaryData = op.user.diaries;
         isLoadingLoadmore = false;
       }
-
-      final searchNotifier = context.read<SearchNotifier>();
 
       if(pageSrc == PageSrc.searchData){
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.normal, 12, skip: searchNotifier.searchDiary?.length ?? 0);
@@ -71,6 +75,24 @@ class ScrollDiaryNotifier with ChangeNotifier {
         isLoadingLoadmore = false;
       }
     }else{
+      if(pageSrc == PageSrc.interest){
+        diaryData = searchNotifier.interestContents[key]?.diary;
+      }
+      if(pageSrc == PageSrc.hashtag){
+        diaryData = searchNotifier.mapDetailHashtag[key]?.diary;
+      }
+      if(pageSrc == PageSrc.searchData){
+        diaryData = searchNotifier.searchDiary;
+      }
+      if (pageSrc == PageSrc.selfProfile) {
+        final sp = context.read<SelfProfileNotifier>();
+        diaryData = sp.user.diaries;
+      }
+      if (pageSrc == PageSrc.otherProfile) {
+        final op = context.read<OtherProfileNotifier>();
+        diaryData = op.user.diaries;
+      }
+      connectionError = true;
       isLoadingLoadmore = false;
       final language = context.read<TranslateNotifierV2>().translate;
       context.showErrorConnection(language);
@@ -80,6 +102,7 @@ class ScrollDiaryNotifier with ChangeNotifier {
 
   Future reload(BuildContext context, PageSrc pageSrc, {String key = ""}) async {
     bool connect = await System().checkConnections();
+    final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
     if(connect){
       if (pageSrc == PageSrc.selfProfile) {
@@ -99,8 +122,6 @@ class ScrollDiaryNotifier with ChangeNotifier {
         isLoadingLoadmore = false;
         notifyListeners();
       }
-
-      final searchNotifier = context.read<SearchNotifier>();
 
       if(pageSrc == PageSrc.searchData){
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeDiary, TypeApiSearch.normal, 12);
@@ -123,6 +144,24 @@ class ScrollDiaryNotifier with ChangeNotifier {
         isLoadingLoadmore = false;
       }
     }else{
+      if(pageSrc == PageSrc.interest){
+        diaryData = searchNotifier.interestContents[key]?.diary;
+      }
+      if(pageSrc == PageSrc.hashtag){
+        diaryData = searchNotifier.mapDetailHashtag[key]?.diary;
+      }
+      if(pageSrc == PageSrc.searchData){
+        diaryData = searchNotifier.searchDiary;
+      }
+      if (pageSrc == PageSrc.selfProfile) {
+        final sp = context.read<SelfProfileNotifier>();
+        diaryData = sp.user.diaries;
+      }
+      if (pageSrc == PageSrc.otherProfile) {
+        final op = context.read<OtherProfileNotifier>();
+        diaryData = op.user.diaries;
+      }
+      connectionError = true;
       isLoadingLoadmore = false;
       final language = context.read<TranslateNotifierV2>().translate;
       context.showErrorConnection(language);

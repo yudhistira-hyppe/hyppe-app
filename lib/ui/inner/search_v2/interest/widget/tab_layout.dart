@@ -18,9 +18,9 @@ import '../../widget/search_no_result_image.dart';
 class InterestTabLayout extends StatefulWidget {
   // SearchContentModel data;
   Interest interest;
-  ScrollController scrollController;
+  // ScrollController scrollController;
 
-  InterestTabLayout({Key? key, required this.interest, required this.scrollController}) : super(key: key);
+  InterestTabLayout({Key? key, required this.interest}) : super(key: key);
 
   @override
   State<InterestTabLayout> createState() => _InterestTabLayoutState();
@@ -29,20 +29,21 @@ class InterestTabLayout extends StatefulWidget {
 class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLayoutMixin {
   HyppeType currentType = HyppeType.HyppeVid;
   // final _scrollController = ScrollController();
-
+  final ScrollController scrollController = ScrollController();
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'InterestTabLayout');
     currentType = HyppeType.HyppePic;
     final notifier = context.read<SearchNotifier>();
     notifier.initDetailInterest();
-    widget.scrollController.addListener(() {
-      print(widget.scrollController.position.maxScrollExtent);
-      if (widget.scrollController.offset >= (widget.scrollController.position.maxScrollExtent)) {
+    super.initState();
+    scrollController.addListener(() {
+      print(scrollController.position.maxScrollExtent);
+      if (scrollController.offset >= (scrollController.position.maxScrollExtent)) {
         final fixContext = Routing.navigatorKey.currentContext ?? context;
         final notifier = fixContext.read<SearchNotifier>();
-        final key = widget.interest.id ?? ' ';
-        notifier.getDetailInterest(fixContext, key.replaceAll(' ', ''), reload: false, hyppe: currentType);
+        final key = widget.interest.id ?? '';
+        notifier.getDetailInterest(fixContext, key, reload: false, hyppe: currentType);
 
         // final key = widget.interest.id;
         // final lenghtVid = notifier.interestContents[key]?.vid?.length ?? 0;
@@ -58,7 +59,6 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
         // }
       }
     });
-    super.initState();
   }
 
   @override
@@ -72,6 +72,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
     final listTab = [HyppeType.HyppePic, HyppeType.HyppeDiary, HyppeType.HyppeVid];
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final data = notifier.interestContents[widget.interest.id];
+      print('size pic (${widget.interest.id}): ${data?.pict?.length}');
       return !notifier.loadIntDetail
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +99,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                                     onTap: () {
                                       setState(() {
                                         currentType = e;
-                                        widget.scrollController..animateTo(0, duration: Duration(milliseconds: 70), curve: Curves.fastOutSlowIn);
+                                        scrollController..animateTo(0, duration: Duration(milliseconds: 70), curve: Curves.fastOutSlowIn);
                                       });
                                     },
                                     borderRadius: const BorderRadius.all(Radius.circular(18)),
@@ -124,7 +125,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                     color: context.getColorScheme().primary,
                     onRefresh: () => notifier.getDetailInterest(context, widget.interest.id ?? ''),
                     child: SingleChildScrollView(
-                      controller: widget.scrollController,
+                      controller: scrollController,
                       physics: const ClampingScrollPhysics(),
                       child: Column(
                         children: [

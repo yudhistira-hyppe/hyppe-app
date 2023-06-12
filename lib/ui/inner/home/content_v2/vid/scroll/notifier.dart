@@ -27,9 +27,15 @@ class ScrollVidNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  Future checkConnection() async {
+    bool connect = await System().checkConnections();
+    connectionError = !connect;
+  }
+
   Future loadMore(BuildContext context, ScrollController scrollController, PageSrc pageSrc, String key) async {
     isLoadingLoadmore = true;
     bool connect = await System().checkConnections();
+    final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
     if(connect){
       if (pageSrc == PageSrc.selfProfile) {
@@ -45,8 +51,6 @@ class ScrollVidNotifier with ChangeNotifier {
         await op.onScrollListener(context, scrollController, isLoad: true);
         vidData = op.user.vids;
       }
-
-      final searchNotifier = context.read<SearchNotifier>();
 
       if(pageSrc == PageSrc.searchData){
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.normal, 12, skip: searchNotifier.searchVid?.length ?? 0);
@@ -69,6 +73,24 @@ class ScrollVidNotifier with ChangeNotifier {
         isLoadingLoadmore = false;
       }
     }else{
+      if(pageSrc == PageSrc.interest){
+        vidData = searchNotifier.interestContents[key]?.vid;
+      }
+      if(pageSrc == PageSrc.hashtag){
+        vidData = searchNotifier.mapDetailHashtag[key]?.vid;
+      }
+      if(pageSrc == PageSrc.searchData){
+        vidData = searchNotifier.searchVid;
+      }
+      if (pageSrc == PageSrc.selfProfile) {
+        final sp = context.read<SelfProfileNotifier>();
+        vidData = sp.user.vids;
+      }
+      if (pageSrc == PageSrc.otherProfile) {
+        final op = context.read<OtherProfileNotifier>();
+        vidData = op.user.vids;
+      }
+      connectionError = true;
       isLoadingLoadmore = false;
       final language = context.read<TranslateNotifierV2>().translate;
       context.showErrorConnection(language);
@@ -78,6 +100,7 @@ class ScrollVidNotifier with ChangeNotifier {
 
   Future reload(BuildContext context, PageSrc pageSrc, {String key = ""}) async {
     bool connect = await System().checkConnections();
+    final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
     if(connect){
       if (pageSrc == PageSrc.selfProfile) {
@@ -96,7 +119,7 @@ class ScrollVidNotifier with ChangeNotifier {
         isLoadingLoadmore = false;
       }
 
-      final searchNotifier = context.read<SearchNotifier>();
+
 
       if(pageSrc == PageSrc.searchData){
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.normal, 12);
@@ -119,6 +142,24 @@ class ScrollVidNotifier with ChangeNotifier {
         isLoadingLoadmore = false;
       }
     }else{
+      if(pageSrc == PageSrc.interest){
+        vidData = searchNotifier.interestContents[key]?.vid;
+      }
+      if(pageSrc == PageSrc.hashtag){
+        vidData = searchNotifier.mapDetailHashtag[key]?.vid;
+      }
+      if(pageSrc == PageSrc.searchData){
+        vidData = searchNotifier.searchVid;
+      }
+      if (pageSrc == PageSrc.selfProfile) {
+        final sp = context.read<SelfProfileNotifier>();
+        vidData = sp.user.vids;
+      }
+      if (pageSrc == PageSrc.otherProfile) {
+        final op = context.read<OtherProfileNotifier>();
+        vidData = op.user.vids;
+      }
+      connectionError = true;
       isLoadingLoadmore = false;
       final language = context.read<TranslateNotifierV2>().translate;
       context.showErrorConnection(language);

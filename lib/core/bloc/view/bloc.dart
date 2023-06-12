@@ -41,8 +41,8 @@ class ViewBloc {
       data: _data,
       host: UrlConstants.interactive,
       methodType: MethodType.post,
-      withAlertMessage: check,
-      withCheckConnection: true,
+      withAlertMessage: false,
+      withCheckConnection: check,
     );
   }
 }

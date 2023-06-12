@@ -52,6 +52,8 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../../../constant/widget/custom_text_widget.dart';
+
 class ScrollVid extends StatefulWidget {
   final SlidedVidDetailScreenArgument? arguments;
   const ScrollVid({
@@ -428,7 +430,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                 }
               }
             },
-            child: Container(
+            child: !notifier.connectionError ? Container(
               margin: const EdgeInsets.only(bottom: 20),
               child: Builder(builder: (context) {
                 return VidPlayerPage(
@@ -450,7 +452,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                     //     }, seekValue: value ?? 0);
                     //   });
                   },
-                  onPlay: (exec) {
+                  onPlay: (exec) async {
+                    await notifier.checkConnection();
                     try {
                       if (_curIdx != -1) {
                         if (_curIdx != index) {
@@ -492,6 +495,20 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   // fAliplayerAds: vidData?[index].fAliplayerAds,
                 );
               }),
+            ) : GestureDetector(
+              onTap: () {
+                notifier.checkConnection();
+              },
+              child: Container(
+                  decoration: BoxDecoration(
+                      color: kHyppeNotConnect,
+                      borderRadius: BorderRadius.circular(16)
+                  ),
+                  width: SizeConfig.screenWidth,
+                  height: 250,
+                  alignment: Alignment.center,
+                  child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo?? 'Error')
+              ),
             ),
           ),
           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&

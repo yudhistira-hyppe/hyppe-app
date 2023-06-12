@@ -758,7 +758,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                     fAliplayer?.stop();
                   }
                   Future.delayed(const Duration(milliseconds: 100), () {
-                    System().increaseViewCount2(context, pics?[index] ?? ContentData());
+                    System().increaseViewCount2(context, pics?[index] ?? ContentData(), check: false);
                   });
                   if (pics?[index].certified ?? false) {
                     System().block(context);
@@ -830,7 +830,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                     //     ),
                     //   ),
                     // ),
-                    GestureDetector(
+
+                    !notifier.connectionError ? GestureDetector(
                       onTap: () {
                         if (pics?[index].reportedStatus != 'BLURRED') {
                           fAliplayer?.play();
@@ -896,6 +897,20 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                             ),
                           ),
                         ),
+                      ),
+                    ) : GestureDetector(
+                      onTap: () {
+                        notifier.checkConnection();
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                              color: kHyppeNotConnect,
+                              borderRadius: BorderRadius.circular(16)
+                          ),
+                          width: SizeConfig.screenWidth,
+                          height: 250,
+                          alignment: Alignment.center,
+                          child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage?? 'Error')
                       ),
                     ),
                     _buildBody(context, SizeConfig.screenWidth, pics?[index] ?? ContentData()),
@@ -1210,7 +1225,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          System().increaseViewCount2(context, data);
+                          System().increaseViewCount2(context, data, check: false);
                           setState(() {
                             data.reportedStatus = '';
                           });
