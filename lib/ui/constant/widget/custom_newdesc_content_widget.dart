@@ -282,14 +282,14 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
         } else if (firstChar == '#' && splitDesc[i].length > 1) {
           final lenght = splitDesc[i].length;
           final content = splitDesc[i].substring(1, lenght);
-          print('content: $content');
-          final isSpecialChar = System().specialCharPass(content);
-          if(isSpecialChar){
+          // print('content: $content');
+          final isSpecialChar = System().charForTag(content);
+          if (!isSpecialChar) {
             tempDesc = '$tempDesc ${splitDesc[i]}';
             if (i == (splitDesc.length - 1)) {
               descItems.add(ItemDesc(desc: getWithoutSpaces(tempDesc), type: CaptionType.normal));
             }
-          }else{
+          } else {
             if (tempDesc.isNotEmpty) {
               descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
               tempDesc = '';

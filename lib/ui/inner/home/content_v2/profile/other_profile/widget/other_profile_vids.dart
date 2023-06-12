@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
@@ -17,7 +18,8 @@ import 'package:tuple/tuple.dart';
 import '../../../../../../constant/widget/custom_loading.dart';
 
 class OtherProfileVids extends StatelessWidget {
-  const OtherProfileVids({Key? key}) : super(key: key);
+  final List<ContentData>? vids;
+  const OtherProfileVids({Key? key, this.vids}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,30 +27,34 @@ class OtherProfileVids extends StatelessWidget {
     return Selector<OtherProfileNotifier, Tuple3<UserInfoModel?, int, bool>>(
       selector: (_, select) => Tuple3(select.user, select.vidCount, select.vidHasNext),
       builder: (_, notifier, __) => notifier.item1 != null
-          ? (notifier.item1?.vids?.isEmpty ?? [].isEmpty)
+          ? (vids?.isEmpty ?? [].isEmpty)
               ? const EmptyOtherWidget()
               : SliverGrid(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       try {
-                        if (index == notifier.item1?.vids?.length) {
+                        if (index == vids?.length) {
                           return Container();
-                        } else if (index == (notifier.item1?.vids?.length ?? 0) + 1 && notifier.item3) {
+                        } else if (index == (vids?.length ?? 0) + 1 && notifier.item3) {
                           return const Padding(
                             padding: EdgeInsets.only(left: 40.0, right: 30.0, bottom: 40.0),
                             child: CustomLoading(size: 4),
                           );
                         }
                         return GestureDetector(
-                          onTap: () => context.read<OtherProfileNotifier>().navigateToSeeAllScreen(context, index,
-                              title: const Text(
-                                "Vid",
-                                style: TextStyle(color: kHyppeTextLightPrimary),
-                              )),
+                          onTap: () => context.read<OtherProfileNotifier>().navigateToSeeAllScreen(
+                                context,
+                                index,
+                                data: vids,
+                                title: const Text(
+                                  "Vid",
+                                  style: TextStyle(color: kHyppeTextLightPrimary),
+                                ),
+                              ),
                           child: Padding(
                             padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                            child: notifier.item1?.vids?[index].reportedStatus == 'BLURRED'
-                                ? SensitiveContentProfile(data: notifier.item1?.vids?[index])
+                            child: vids?[index].reportedStatus == 'BLURRED'
+                                ? SensitiveContentProfile(data: vids?[index])
                                 : Stack(
                                     children: [
                                       Center(
@@ -58,13 +64,11 @@ class OtherProfileVids extends StatelessWidget {
                                           isSale: false,
                                           featureType: FeatureType.vid,
                                           isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                          thumbnail: ImageUrl(notifier.item1?.vids?[index].postID,
-                                              url: (notifier.item1?.vids?[index].isApsara ?? false)
-                                                  ? (notifier.item1?.vids?[index].mediaThumbEndPoint ?? '')
-                                                  : System().showUserPicture(notifier.item1?.vids?[index].mediaThumbEndPoint) ?? ''),
+                                          thumbnail: ImageUrl(vids?[index].postID,
+                                              url: (vids?[index].isApsara ?? false) ? (vids?[index].mediaThumbEndPoint ?? '') : System().showUserPicture(vids?[index].mediaThumbEndPoint) ?? ''),
                                         ),
                                       ),
-                                      (notifier.item1?.vids?[index].saleAmount ?? 0) > 0
+                                      (vids?[index].saleAmount ?? 0) > 0
                                           ? const Align(
                                               alignment: Alignment.topRight,
                                               child: Padding(
@@ -76,7 +80,7 @@ class OtherProfileVids extends StatelessWidget {
                                                 ),
                                               ))
                                           : Container(),
-                                      (notifier.item1?.vids?[index].certified ?? false) && (notifier.item1?.vids?[index].saleAmount ?? 0) == 0
+                                      (vids?[index].certified ?? false) && (vids?[index].saleAmount ?? 0) == 0
                                           ? Align(
                                               alignment: Alignment.topRight,
                                               child: Padding(
@@ -103,7 +107,7 @@ class OtherProfileVids extends StatelessWidget {
                         );
                       }
                     },
-                    childCount: notifier.item2,
+                    childCount: vids?.length,
                   ),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
                 )

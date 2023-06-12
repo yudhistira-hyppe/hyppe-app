@@ -50,19 +50,19 @@ class PlayerPage extends StatefulWidget {
   final Function(FlutterAliplayer, FlutterAliplayer)? getPlayers;
   final Function(bool, bool)? listenerPlay;
 
-  PlayerPage({
-    Key? key,
-    required this.playMode,
-    required this.dataSourceMap,
-    required this.data,
-    this.height,
-    this.width,
-    this.inLanding = false,
-    final this.fromDeeplink = false,
-    required this.functionFullTriger,
-    this.getPlayers,
-    this.listenerPlay
-  }) : super(key: key);
+  PlayerPage(
+      {Key? key,
+      required this.playMode,
+      required this.dataSourceMap,
+      required this.data,
+      this.height,
+      this.width,
+      this.inLanding = false,
+      final this.fromDeeplink = false,
+      required this.functionFullTriger,
+      this.getPlayers,
+      this.listenerPlay})
+      : super(key: key);
 
   @override
   State<PlayerPage> createState() => _PlayerPageState();
@@ -71,7 +71,7 @@ class PlayerPage extends StatefulWidget {
 class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   FlutterAliplayer? fAliplayer;
   FlutterAliplayer? fAliplayerAds;
-  bool isloading = false;
+  bool isloading = true;
   bool isPrepare = false;
   bool isPause = false;
   int? bottomIndex;
@@ -151,6 +151,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   bool isActiveAds = false;
   bool isCompleteAds = false;
   AliPlayerView? aliPlayerView;
+  String auth = '';
 
   @override
   void initState() {
@@ -164,12 +165,12 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     //cek ikaln
 
     playState(true);
-    adsData = context.read<VidDetailNotifier>().adsData;
-    print("ini iklan ${adsData?.data?.videoId}");
-    print("ini iklan ${adsData?.data?.apsaraAuth}");
-    if (adsData != null && widget.inLanding) {
-      initAdsVideo();
-    }
+    // adsData = context.read<VidDetailNotifier>().adsData;
+    // print("ini iklan ${adsData?.data?.videoId}");
+    // print("ini iklan ${adsData?.data?.apsaraAuth}");
+    // if (adsData != null && widget.inLanding) {
+    //   initAdsVideo();
+    // }
     fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: "videoPlayer");
 
     WidgetsBinding.instance.addObserver(this);
@@ -404,9 +405,9 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   }
 
   Future getAuth({String videoId = ''}) async {
-    // setState(() {
-    //   isloading = true;
-    // });
+    setState(() {
+      isloading = true;
+    });
     try {
       final notifier = PostsBloc();
       String apsaraId = '';
@@ -424,13 +425,11 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           print("-======= auth iklan ${jsonMap['PlayAuth']}");
           // _dataSourceAdsMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
         } else {
-          _dataSourceMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
-          print("-======= auth konten ${_dataSourceMap?[DataSourceRelated.playAuth]}");
-          print("-======= auth konten ${_dataSourceMap?[DataSourceRelated.vidKey]}");
+          auth = jsonMap['PlayAuth'];
           fAliplayer?.setVidAuth(
               vid: apsaraId,
               region: _dataSourceMap?[DataSourceRelated.regionKey],
-              playAuth: _dataSourceMap?[DataSourceRelated.playAuth],
+              playAuth: auth,
               definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
               previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
           var configMap = {
@@ -463,15 +462,18 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           fAliplayer?.prepare();
           print('=2=2=2=2=2=2=2prepare done');
         }
+        setState(() {
+          isloading = false;
+        });
 
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
+      setState(() {
+        isloading = false;
+      });
       // 'Failed to fetch ads data $e'.logger();
     }
-    setState(() {
-      isloading = false;
-    });
   }
 
   Future getOldVideoUrl() async {
@@ -635,16 +637,16 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       // await getAdsVideoApsara(adsData?.data?.videoId ?? '');
     } catch (e) {
       'Failed to fetch ads data $e'.logger();
-    }finally{
+    } finally {
       final getPlayers = widget.getPlayers;
-      if(getPlayers != null && fAliplayer != null && fAliplayerAds != null){
+      if (getPlayers != null && fAliplayer != null && fAliplayerAds != null) {
         getPlayers(fAliplayer!, fAliplayerAds!);
       }
     }
   }
 
-  void playState(bool isInit){
-    if(widget.listenerPlay != null){
+  void playState(bool isInit) {
+    if (widget.listenerPlay != null) {
       widget.listenerPlay!(isPlay, isInit);
     }
   }
@@ -741,7 +743,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       );
     } else {
       aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
-      AliPlayerView aliPlayerAdsView = AliPlayerView(onCreated: onViewPlayerAdsCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
+      // AliPlayerView aliPlayerAdsView = AliPlayerView(onCreated: onViewPlayerAdsCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
 
       return GestureDetector(
         onTap: () {
@@ -757,7 +759,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         child: Stack(
           children: [
             // Text("${(adsData != null && !widget.inLanding)}"),
-            if (adsData != null && !isCompleteAds && widget.inLanding) Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView) else Container(),
+            // if (adsData != null && !isCompleteAds && widget.inLanding) Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView) else Container(),
             if (adsData == null || (adsData != null && !widget.inLanding)) Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerView),
 
             // Text("${adsData == null}"),
@@ -799,25 +801,25 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                     print("ini play");
                     isPlay = true;
                     playState(false);
-                    if (widget.inLanding) {
-                      _initAds(context);
-                      context.incrementAdsCount();
-                    }
+                    // if (widget.inLanding) {
+                    //   _initAds(context);
+                    //   context.incrementAdsCount();
+                    // }
                     setState(() {
                       _showLoading = true;
                     });
 
-                    if (adsData != null && widget.inLanding) {
-                      fAliplayerAds?.prepare().whenComplete(() => _showLoading = false);
-                      fAliplayerAds?.play();
-                      setState(() {
-                        isActiveAds = true;
-                      });
-                    } else {
-                      fAliplayer?.prepare().whenComplete(() => _showLoading = false);
-                      fAliplayer?.play();
-                      System().increaseViewCount2(context, widget.data ?? ContentData());
-                    }
+                    // if (adsData != null && widget.inLanding) {
+                    //   fAliplayerAds?.prepare().whenComplete(() => _showLoading = false);
+                    //   fAliplayerAds?.play();
+                    //   setState(() {
+                    //     isActiveAds = true;
+                    //   });
+                    // } else {
+                    fAliplayer?.prepare().whenComplete(() => _showLoading = false);
+                    fAliplayer?.play();
+                    System().increaseViewCount2(context, widget.data ?? ContentData());
+                    // }
                   },
                   child: Visibility(
                     visible: (widget.data?.reportedStatus != "BLURRED"),
@@ -855,32 +857,18 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
 
   void onViewPlayerCreated(viewId) async {
     fAliplayer?.setPlayerView(viewId);
-    switch (_playMode) {
-      case ModeTypeAliPLayer.url:
+    switch (widget.data?.isApsara) {
+      case false:
         fAliplayer?.setUrl(urlVid);
         break;
-      case ModeTypeAliPLayer.sts:
-        fAliplayer?.setVidSts(
-            vid: _dataSourceMap?[DataSourceRelated.vidKey],
-            region: _dataSourceMap?[DataSourceRelated.regionKey],
-            accessKeyId: _dataSourceMap?[DataSourceRelated.accessKeyId],
-            accessKeySecret: _dataSourceMap?[DataSourceRelated.accessKeySecret],
-            securityToken: _dataSourceMap?[DataSourceRelated.securityToken],
-            definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
-            previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
-        break;
-      case ModeTypeAliPLayer.auth:
+      case true:
         fAliplayer?.setVidAuth(
-            vid: _dataSourceMap?[DataSourceRelated.vidKey],
+            vid: widget.data?.apsaraId,
             region: _dataSourceMap?[DataSourceRelated.regionKey],
-            playAuth: _dataSourceMap?[DataSourceRelated.playAuth],
+            playAuth: auth,
             definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
             previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
         break;
-      case ModeTypeAliPLayer.mps:
-        fAliplayer?.setVidMps(_dataSourceMap!);
-        break;
-      default:
     }
   }
 

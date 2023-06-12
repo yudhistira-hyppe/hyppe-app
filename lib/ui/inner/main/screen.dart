@@ -56,25 +56,29 @@ class _MainScreenState extends State<MainScreen> {
               child: notifier.mainScreen(context, canShowAds),
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              tapMenu(2, notifier, consumerContext);
-            },
-            // shape: RoundedRectangleBorder(),
-            tooltip: 'Increment',
-            // elevation: 4.0,
-            backgroundColor: Colors.white,
-            child: const CustomIconWidget(
-              defaultColor: false,
-              // color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
-              iconData: '${AssetPath.vectorPath}hyppe-button.svg',
-              height: 50,
+          floatingActionButton: Visibility(
+            visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
+            child: FloatingActionButton(
+              onPressed: () {
+                tapMenu(2, notifier, consumerContext);
+              },
+              // shape: RoundedRectangleBorder(),
+              tooltip: 'Increment',
+              // elevation: 4.0,
+              backgroundColor: Colors.white,
+              child: const CustomIconWidget(
+                defaultColor: false,
+                // color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+                iconData: '${AssetPath.vectorPath}hyppe-button.svg',
+                height: 50,
+              ),
             ),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
           bottomNavigationBar: BottomAppBar(
             color: kHyppeLightSurface,
-            height: Platform.isIOS ? 135 : 60,
+            height: Platform.isIOS ? 88 : 60,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,

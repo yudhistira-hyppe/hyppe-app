@@ -6,11 +6,16 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/screen.dart';
 import 'package:provider/provider.dart';
 
 class OtherProfileBottom extends StatefulWidget {
+  final String? email;
+  final Function()? notifyParent;
+  const OtherProfileBottom({super.key, this.email, this.notifyParent});
+
   @override
-  _OtherProfileBottomState createState() => _OtherProfileBottomState();
+  State<OtherProfileBottom> createState() => _OtherProfileBottomState();
 }
 
 class _OtherProfileBottomState extends State<OtherProfileBottom> {
@@ -43,9 +48,11 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                     ),
                   ],
                 ),
-                onPressed: () {
+                onPressed: () async {
                   notifier.pageIndex = 0;
-                  notifier.getDataPerPgage(context);
+                  await notifier.getDataPerPgage(context, email: widget.email);
+                  // final OtherProfileScreenState? state = context.findAncestorStateOfType<OtherProfileScreenState>();
+                  // state?.userData?.pics = notifier.user.pics;
                 },
               ),
               SizedBox(
@@ -77,9 +84,11 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                     ),
                   ],
                 ),
-                onPressed: () {
+                onPressed: () async {
                   notifier.pageIndex = 1;
-                  notifier.getDataPerPgage(context);
+                  await notifier.getDataPerPgage(context, email: widget.email);
+                  // final OtherProfileScreenState? state = context.findAncestorStateOfType<OtherProfileScreenState>();
+                  // state?.userData?.diaries = notifier.user.diaries;
                 },
               ),
               SizedBox(
@@ -111,9 +120,11 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                     ),
                   ],
                 ),
-                onPressed: () {
+                onPressed: () async {
                   notifier.pageIndex = 2;
-                  notifier.getDataPerPgage(context);
+                  await notifier.getDataPerPgage(context, email: widget.email);
+                  // final OtherProfileScreenState? state = context.findAncestorStateOfType<OtherProfileScreenState>();
+                  // state?.userData?.vids = notifier.user.vids;
                 },
               ),
               SizedBox(

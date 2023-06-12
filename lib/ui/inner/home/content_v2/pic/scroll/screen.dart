@@ -129,7 +129,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     super.initState();
     pics = widget.arguments?.picData;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic-${pics?.first.postID}');
       WidgetsBinding.instance.addObserver(this);
 
       fAliplayer?.setAutoPlay(true);
@@ -443,7 +443,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     print("---=-=-=-=--===-=-=-=-DiSPOSE--=-=-=-=-=-=-=-=-=-=-=----==-=");
 
     super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    // WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
@@ -532,7 +532,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       backgroundColor: kHyppeLightSurface,
       body: WillPopScope(
         onWillPop: () async {
-          Navigator.pop(context, '$_curIdx');
+          // Navigator.pop(context, '$_curIdx');
+          Routing().moveBack();
           return false;
         },
         child: Consumer2<ScrollPicNotifier, HomeNotifier>(
@@ -549,7 +550,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       ),
                       onPressed: () {
                         Future.delayed(Duration.zero, () {
-                          Navigator.pop(context, '$_curIdx');
+                          // Navigator.pop(context, '$_curIdx');
+                          Navigator.pop(context);
                         });
                       }),
                 ),

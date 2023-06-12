@@ -93,7 +93,7 @@ class ScrollDiaryNotifier with ChangeNotifier {
       if (pageSrc == PageSrc.otherProfile) {
         final op = context.read<OtherProfileNotifier>();
         op.pageIndex = 1;
-        await op.getDataPerPgage(context);
+        await op.initialOtherProfile(context);
         diaryData = op.user.diaries;
         isLoadingLoadmore = false;
         notifyListeners();

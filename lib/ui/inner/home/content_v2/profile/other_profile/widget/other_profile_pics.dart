@@ -1,6 +1,7 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
@@ -13,11 +14,12 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_conte
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
-import 'package:measured_size/measured_size.dart';
+// import 'package:measured_size/measured_size.dart';
 import '../../../../../../constant/widget/custom_loading.dart';
 
 class OtherProfilePics extends StatelessWidget {
-  const OtherProfilePics({Key? key}) : super(key: key);
+  final List<ContentData>? pics;
+  const OtherProfilePics({Key? key, this.pics}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,30 +27,34 @@ class OtherProfilePics extends StatelessWidget {
     return Selector<OtherProfileNotifier, Tuple3<UserInfoModel?, int, bool>>(
       selector: (_, select) => Tuple3(select.user, select.picCount, select.picHasNext),
       builder: (_, notifier, __) => notifier.item1 != null
-          ? (notifier.item1?.pics?.isEmpty ?? [].isEmpty)
+          ? (pics?.isEmpty ?? [].isEmpty)
               ? const EmptyOtherWidget()
               : SliverGrid(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       try {
-                        if (index == notifier.item1?.pics?.length) {
+                        if (index == pics?.length) {
                           return Container();
-                        } else if (index == (notifier.item1?.pics?.length ?? 0) + 1 && notifier.item3) {
+                        } else if (index == (pics?.length ?? 0) + 1 && notifier.item3) {
                           return const Padding(
                             padding: EdgeInsets.only(left: 40.0, right: 30.0, bottom: 40.0),
                             child: CustomLoading(size: 4),
                           );
                         }
                         return GestureDetector(
-                          onTap: () => context.read<OtherProfileNotifier>().navigateToSeeAllScreen(context, index,
-                              title: const Text(
-                                "Pic",
-                                style: TextStyle(color: kHyppeTextLightPrimary),
-                              )),
+                          onTap: () => context.read<OtherProfileNotifier>().navigateToSeeAllScreen(
+                                context,
+                                index,
+                                data: pics,
+                                title: const Text(
+                                  "Pic",
+                                  style: TextStyle(color: kHyppeTextLightPrimary),
+                                ),
+                              ),
                           child: Padding(
                             padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                            child: notifier.item1?.pics?[index].reportedStatus == 'BLURRED'
-                                ? SensitiveContentProfile(data: notifier.item1?.pics?[index])
+                            child: pics?[index].reportedStatus == 'BLURRED'
+                                ? SensitiveContentProfile(data: pics?[index])
                                 : Stack(
                                     children: [
                                       Center(
@@ -57,13 +63,11 @@ class OtherProfilePics extends StatelessWidget {
                                           height: double.infinity,
                                           isSale: false,
                                           isSafe: true, //notifier.postData.data.listPic[index].isSafe,
-                                          thumbnail: ImageUrl(notifier.item1?.pics?[index].postID,
-                                              url: (notifier.item1?.pics?[index].isApsara ?? false)
-                                                  ? (notifier.item1?.pics?[index].mediaThumbEndPoint ?? '')
-                                                  : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint) ?? ''),
+                                          thumbnail: ImageUrl(pics?[index].postID,
+                                              url: (pics?[index].isApsara ?? false) ? (pics?[index].mediaThumbEndPoint ?? '') : System().showUserPicture(pics?[index].mediaEndpoint) ?? ''),
                                         ),
                                       ),
-                                      (notifier.item1?.pics?[index].saleAmount ?? 0) > 0
+                                      (pics?[index].saleAmount ?? 0) > 0
                                           ? const Align(
                                               alignment: Alignment.topRight,
                                               child: Padding(
@@ -75,7 +79,7 @@ class OtherProfilePics extends StatelessWidget {
                                                 ),
                                               ))
                                           : Container(),
-                                      (notifier.item1?.pics?[index].certified ?? false) && (notifier.item1?.pics?[index].saleAmount ?? 0) == 0
+                                      (pics?[index].certified ?? false) && (pics?[index].saleAmount ?? 0) == 0
                                           ? Align(
                                               alignment: Alignment.topRight,
                                               child: Padding(
@@ -102,7 +106,7 @@ class OtherProfilePics extends StatelessWidget {
                         );
                       }
                     },
-                    childCount: notifier.item2,
+                    childCount: pics?.length,
                   ),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
                 )
