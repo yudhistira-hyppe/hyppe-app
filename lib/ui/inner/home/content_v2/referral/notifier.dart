@@ -31,6 +31,7 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
   String _nameReferral = '';
   ModelReferral? get modelReferral => _modelReferral;
   String get nameReferral => _nameReferral;
+  bool loading = false;
 
   bool buttonReferralDisable() => _nameReferral.isNotEmpty ? true : false;
 
@@ -56,6 +57,8 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future onInitial(BuildContext context) async {
+    loading = true;
+    notifyListeners();
     var _result = await System().createdReferralLink(context);
     debugPrint("REFERRAL => " + _result.toString());
     referralLink = _result.toString();
@@ -69,6 +72,8 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
       modelReferral = ModelReferral.fromJson(referralFetch.data);
       print('heheh ${modelReferral?.data}');
     }
+    loading = false;
+    notifyListeners();
   }
 
   void _showSnackBar(BuildContext context, Color color, String message, String desc) {

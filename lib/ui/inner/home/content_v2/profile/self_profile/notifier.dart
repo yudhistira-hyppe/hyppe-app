@@ -26,6 +26,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_pics.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_vids.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -307,6 +308,8 @@ class SelfProfileNotifier with ChangeNotifier {
     print(pageIndex);
     if (isReload) {
       final usersNotifier = UserBloc();
+      PreviewStoriesNotifier stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
+      stories.initialStories(context);
       await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
       final usersFetch = usersNotifier.userFetch;
 

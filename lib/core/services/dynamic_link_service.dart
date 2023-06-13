@@ -88,7 +88,7 @@ class DynamicLinkService {
         // Auto follow user if app is install from a dynamic link
 
         if (isOpening == false) {
-          await Future.delayed(const Duration(seconds: 1));
+          // await Future.delayed(const Duration(seconds: 1));
           if (deepLink.queryParameters['referral'] != '1') {
             try {
               print('masuk sini dynamic');
@@ -126,14 +126,14 @@ class DynamicLinkService {
                 });
               } else {
                 _routing.moveAndRemoveUntil(Routes.lobby, Routes.lobby);
-                Future.delayed(const Duration(seconds: 1), () async {
-                  _routing.move(
-                    path,
-                    argument: VidDetailScreenArgument(fromDeepLink: true)
-                      ..postID = deepLink.queryParameters['postID']
-                      ..backPage = false,
-                  );
-                });
+                // Future.delayed(const Duration(seconds: 1), () async {
+                _routing.move(
+                  path,
+                  argument: VidDetailScreenArgument(fromDeepLink: true)
+                    ..postID = deepLink.queryParameters['postID']
+                    ..backPage = false,
+                );
+                // });
               }
 
               break;

@@ -414,7 +414,7 @@
   "ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies": "Jika menurut Anda bertentangan dengan Kebijakan Komunitas Sosial Media kami, beri tahu kami",
   "noInternetConnection": "Tidak Ada Koneksi Internet",
   "pleaseCheckYourInternetConnectionAgain": "Mohon periksa koneksi internet anda lagi",
-  "internetConnectionLost" : "Koneksi internet terputus",
+  "internetConnectionLost": "Koneksi internet terputus",
   "couldntLoadVideo": "Tidak dapat memuat video. Tap untuk coba lagi.",
   "couldntLoadImage": "Tidak dapat memuat gambar. Tap untuk coba lagi.",
   "back": "Kembali",
@@ -895,5 +895,6 @@
   "fullNameCannotContainLeadingSpace": "Nama lengkap tidak boleh mengandung spasi di awal",
   "noPostsYet": "Belum ada postingan",
   "youDontHaveAnyPostsHereYet": "Kamu belum memiliki postingan apapun di sini.",
-  "thisContentIsSubjectToModeration": "Konten ini terkena moderasi!"
+  "thisContentIsSubjectToModeration": "Konten ini terkena moderasi!",
+  "thisAccountHasNoPostsYet": "Akun ini belum memiliki postingan."
 }

@@ -33,7 +33,7 @@ class EmptyOtherWidget extends StatelessWidget {
                 ),
                 eightPx,
                 CustomTextWidget(
-                  textToDisplay: tn.translate.youDontHaveAnyPostsHereYet ?? '',
+                  textToDisplay: tn.translate.thisAccountHasNoPostsYet ?? '',
                   maxLines: 2,
                   textStyle: const TextStyle(color: kHyppeSecondary),
                 ),

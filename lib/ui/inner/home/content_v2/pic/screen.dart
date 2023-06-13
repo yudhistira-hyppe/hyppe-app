@@ -541,6 +541,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   }
 
   var initialControllerValue;
+  ValueNotifier<int> _networklHasErrorNotifier = ValueNotifier(0);
 
   Widget itemPict(PreviewPicNotifier notifier, int index) {
     return Container(
@@ -774,52 +775,78 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           _likeNotifier.likePost(context, notifier.pic![index]);
                         }
                       },
-                      child: Container(
-                        color: Colors.transparent,
-                        // width: SizeConfig.screenWidth,
-                        // height: SizeConfig.screenHeight,
-                        child: ZoomableImage(
-                          onScaleStart: () {
-                            widget.onScaleStart?.call();
-                          }, // optional
-                          onScaleStop: () {
-                            widget.onScaleStop?.call();
-                          }, // opt
-                          child: CustomBaseCacheImage(
-                            memCacheWidth: 100,
-                            memCacheHeight: 100,
-                            widthPlaceHolder: 80,
-                            heightPlaceHolder: 80,
-                            imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
-                            imageBuilder: (context, imageProvider) => ClipRRect(
-                              borderRadius: BorderRadius.circular(20), // Image border
-                              child: notifier.pic?[index].reportedStatus == 'BLURRED'
-                                  ? ImageFiltered(
-                                      imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                      child: Image(
-                                        image: imageProvider,
-                                        fit: BoxFit.fitHeight,
-                                        width: SizeConfig.screenWidth,
-                                      ),
-                                    )
-                                  : Image(
-                                      image: imageProvider,
-                                      fit: BoxFit.fitHeight,
-                                      width: SizeConfig.screenWidth,
+                      child: Center(
+                        child: Container(
+                          color: Colors.transparent,
+                          // width: SizeConfig.screenWidth,
+                          // height: SizeConfig.screenHeight,
+                          child: ZoomableImage(
+                            onScaleStart: () {
+                              widget.onScaleStart?.call();
+                            }, // optional
+                            onScaleStop: () {
+                              widget.onScaleStop?.call();
+                            }, // opt
+                            child: ValueListenableBuilder(
+                                valueListenable: _networklHasErrorNotifier,
+                                builder: (BuildContext context, int count, _) {
+                                  print("BUILDER");
+                                  print(_networklHasErrorNotifier.value);
+                                  return CustomBaseCacheImage(
+                                    cacheKey: "${notifier.pic?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
+                                    memCacheWidth: 100,
+                                    memCacheHeight: 100,
+                                    widthPlaceHolder: 80,
+                                    heightPlaceHolder: 80,
+                                    imageUrl: (notifier.pic?[index].isApsara ?? false) ? (notifier.pic?[index].mediaThumbEndPoint ?? "") : "${notifier.pic?[index].fullThumbPath}",
+                                    imageBuilder: (context, imageProvider) => ClipRRect(
+                                      borderRadius: BorderRadius.circular(20), // Image border
+                                      child: notifier.pic?[index].reportedStatus == 'BLURRED'
+                                          ? ImageFiltered(
+                                              imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                              child: Image(
+                                                image: imageProvider,
+                                                fit: BoxFit.fitHeight,
+                                                width: SizeConfig.screenWidth,
+                                              ),
+                                            )
+                                          : Image(
+                                              image: imageProvider,
+                                              fit: BoxFit.fitHeight,
+                                              width: SizeConfig.screenWidth,
+                                            ),
                                     ),
-                            ),
-                            emptyWidget: Container(
-                              // const EdgeInsets.symmetric(horizontal: 4.5),
-
-                              // height: 500,
-                              decoration: BoxDecoration(
-                                image: const DecorationImage(
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
+                                    emptyWidget: Container(
+                                      // const EdgeInsets.symmetric(horizontal: 4.5),
+                                      // height: 500,
+                                      decoration: BoxDecoration(
+                                        image: const DecorationImage(
+                                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          print("TOUCH");
+                                          _networklHasErrorNotifier.value++;
+                                        },
+                                        child: Container(
+                                          height: 100,
+                                          decoration: BoxDecoration(
+                                            image: const DecorationImage(
+                                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                              fit: BoxFit.cover,
+                                            ),
+                                            borderRadius: BorderRadius.circular(8.0),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }),
                           ),
                         ),
                       ),
@@ -984,7 +1011,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary, fontSize: 12),
             expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
-          if (notifier.pic?[index].allowComments ?? true)
+          if (notifier.pic?[index].allowComments ?? false)
             GestureDetector(
               onTap: () {
                 Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: notifier.pic?[index].postID ?? '', fromFront: true, data: notifier.pic?[index] ?? ContentData()));

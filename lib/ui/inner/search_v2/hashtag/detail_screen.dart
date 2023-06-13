@@ -22,15 +22,13 @@ import '../../../constant/widget/icon_button_widget.dart';
 
 class DetailHashtagScreen extends StatefulWidget {
   HashtagArgument argument;
-  DetailHashtagScreen({Key? key, required this.argument})
-      : super(key: key);
+  DetailHashtagScreen({Key? key, required this.argument}) : super(key: key);
 
   @override
   State<DetailHashtagScreen> createState() => _DetailHashtagScreenState();
 }
 
-class _DetailHashtagScreenState extends State<DetailHashtagScreen>
-    with RouteAware, AfterFirstLayoutMixin {
+class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAware, AfterFirstLayoutMixin {
   final ScrollController _scrollController = ScrollController();
   // final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   int heightTab = 0;
@@ -41,13 +39,11 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
     super.didPop();
   }
 
-
   @override
   void didPush() {
     'DetailHashtagScreen didPush'.logger();
     super.didPush();
   }
-
 
   @override
   void didPushNext() {
@@ -55,13 +51,11 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
     super.didPushNext();
   }
 
-
   @override
   void didPopNext() {
     'DetailHashtagScreen didPopNext'.logger();
     final notifier = context.read<SearchNotifier>();
-    notifier.getDetailHashtag(
-        context, widget.argument.hashtag.tag?.replaceAll(' ', '') ?? ' ').whenComplete((){
+    notifier.getDetailHashtag(context, widget.argument.hashtag.tag?.replaceAll(' ', '') ?? ' ').whenComplete(() {
       Future.delayed(Duration(milliseconds: 500), () {
         var jumpTo = heightTab + notifier.heightIndex - 10;
         print("jumpt ====== ${jumpTo}");
@@ -83,7 +77,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
   @override
   void deactivate() {
     final tag = widget.argument.hashtag.tag;
-    if(tag != null){
+    if (tag != null) {
       context.read<SearchNotifier>().deleteMapHashtag(tag);
     }
 
@@ -111,23 +105,21 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
   void afterFirstLayout(BuildContext context) {
     final notifier = context.read<SearchNotifier>();
     var tag = widget.argument.hashtag.tag;
-    if(widget.argument.fromRoute){
+    if (widget.argument.fromRoute) {
       tag = tag?.replaceAll(' ', '');
     }
-    notifier.getDetailHashtag(
-        context, tag?.replaceAll(' ', '') ?? ' ');
+    notifier.getDetailHashtag(context, tag?.replaceAll(' ', '') ?? ' ');
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         leading: CustomIconButtonWidget(
-          onPressed: (){
-            if(widget.argument.fromRoute){
+          onPressed: () {
+            if (widget.argument.fromRoute) {
               Routing().moveBack();
-            }else{
+            } else {
               context.read<SearchNotifier>().backFromSearchMore();
             }
           },
@@ -136,118 +128,114 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
           color: Theme.of(context).colorScheme.onSurface,
         ),
         title: CustomTextWidget(
-          textToDisplay: widget.argument.isTitle
-              ? (context.read<SearchNotifier>().language.popularHashtag ?? 'Popular Hashtag')
-              : ('#${widget.argument.hashtag.tag}' ),
-          textStyle: context
-              .getTextTheme()
-              .bodyText1
-              ?.copyWith(fontWeight: FontWeight.w700),
+          textToDisplay: widget.argument.isTitle ? (context.read<SearchNotifier>().language.popularHashtag ?? 'Popular Hashtag') : ('#${widget.argument.hashtag.tag}'),
+          textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
       body: SafeArea(
         child: Column(
           children: [
-            Consumer<SearchNotifier>(builder: (context, notifier, _){
+            Consumer<SearchNotifier>(builder: (context, notifier, _) {
               return Container(
-                padding: const EdgeInsets.only(
-                    left: 16, top: 16, right: 16, bottom: 12),
+                padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 12),
                 child: Column(
                   children: [
-                    !notifier.loadTagDetail ? Row(
-                      children: [Builder(builder: (context) {
-
-                        return InkWell(
-                          onTap: (){
-                            // ShowGeneralDialog.adsPopUpImage(context);
-                          },
-                          child: CustomBaseCacheImage(
-                            imageUrl: notifier.tagImageMain,
-                            memCacheWidth: 70,
-                            memCacheHeight: 70,
-                            imageBuilder: (_, imageProvider) {
-                              return Container(
-                                width: 56,
-                                height: 56,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(28)),
-                                  image: DecorationImage(
-                                    fit: BoxFit.contain,
-                                    image: imageProvider,
-                                  ),
-                                ),
-                              );
-                            },
-                            errorWidget: (_, __, ___) {
-                              return Container(
-                                width: 56,
-                                height: 56,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.contain,
-                                    image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
-                                  ),
-                                ),
-                              );
-                            },
-                            emptyWidget: Container(
-                              width: 56,
-                              height: 56,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.contain,
-                                  image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
-                        twelvePx,
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    !notifier.loadTagDetail
+                        ? Row(
                             children: [
-                              CustomTextWidget(
-                                textToDisplay: '#${widget.argument.hashtag.tag}',
-                                textStyle: context
-                                    .getTextTheme()
-                                    .bodyText1
-                                    ?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: context
-                                        .getColorScheme()
-                                        .onBackground),
-                                textAlign: TextAlign.start,
-                              ),
-                              fourPx,
-                              Text(
-                                "${notifier.countTag} ${notifier.language.posts}",
-                                style: const TextStyle(
-                                    fontSize: 12, color: kHyppeGrey),
+                              Builder(builder: (context) {
+                                return CustomBaseCacheImage(
+                                  imageUrl: notifier.tagImageMain,
+                                  memCacheWidth: 70,
+                                  memCacheHeight: 70,
+                                  imageBuilder: (_, imageProvider) {
+                                    return Container(
+                                      width: 56,
+                                      height: 56,
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(Radius.circular(28)),
+                                        image: DecorationImage(
+                                          fit: BoxFit.contain,
+                                          image: imageProvider,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  errorWidget: (_, __, ___) {
+                                    return Container(
+                                      width: 56,
+                                      height: 56,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          fit: BoxFit.contain,
+                                          image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  emptyWidget: Container(
+                                    width: 56,
+                                    height: 56,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        fit: BoxFit.contain,
+                                        image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                              twelvePx,
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomTextWidget(
+                                      textToDisplay: '#${widget.argument.hashtag.tag}',
+                                      textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                    fourPx,
+                                    Text(
+                                      "${notifier.countTag} ${notifier.language.posts}",
+                                      style: const TextStyle(fontSize: 12, color: kHyppeGrey),
+                                    )
+                                  ],
+                                ),
                               )
                             ],
-                          ),
-                        )
-                      ],
-                    ): Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CustomShimmer(height: 50, width: 50, radius: 25,),
-                          tenPx,
-                          Expanded(child: Column(
-                            children: [
-                              CustomShimmer(height: 20, width: double.infinity, radius: 5,),
-                              sixteenPx,
-                              CustomShimmer(height: 20, width: double.infinity, radius: 5,)
-                            ],
-                          ))
-                        ],
-                      ),
-                    )
+                          )
+                        : Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CustomShimmer(
+                                  height: 50,
+                                  width: 50,
+                                  radius: 25,
+                                ),
+                                tenPx,
+                                Expanded(
+                                    child: Column(
+                                  children: [
+                                    CustomShimmer(
+                                      height: 20,
+                                      width: double.infinity,
+                                      radius: 5,
+                                    ),
+                                    sixteenPx,
+                                    CustomShimmer(
+                                      height: 20,
+                                      width: double.infinity,
+                                      radius: 5,
+                                    )
+                                  ],
+                                ))
+                              ],
+                            ),
+                          )
                   ],
                 ),
               );
@@ -259,10 +247,10 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
             ),
             Expanded(
                 child: BottomDetail(
-                  hashtag: widget.argument.hashtag,
-                  fromRoute: widget.argument.fromRoute,
-                  scrollController: _scrollController,
-                ))
+              hashtag: widget.argument.hashtag,
+              fromRoute: widget.argument.fromRoute,
+              scrollController: _scrollController,
+            ))
           ],
         ),
       ),

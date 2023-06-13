@@ -89,9 +89,9 @@ class _CustomDescContentState extends State<CustomDescContent> {
     for (var i = 0; i < values.length; i++) {
       try {
         final last = values[i].split(' ').last;
-        print('has Emoji: $last');
+        // print('has Emoji: $last');
         if (last.hasEmoji()) {
-          print('has Emoji ke detect');
+          // print('has Emoji ke detect');
           values[i] += ' ';
         }
       } catch (e) {
@@ -315,7 +315,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
         } else if (firstChar == '#' && splitDesc[i].length > 1) {
           final lenght = splitDesc[i].length;
           final content = splitDesc[i].substring(1, lenght);
-          print('content: $content');
+          // print('content: $content');
           final isSpecialChar = System().charForTag(content);
           if (!isSpecialChar) {
             tempDesc = '$tempDesc ${splitDesc[i]}';
