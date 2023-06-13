@@ -33,6 +33,7 @@ const kHyppeBorder = Color(0xffF7F7F7);
 const kHyppeSecondary = Color(0xff707070);
 const kHyppeTextPrimary = Color(0xffFFFFFF);
 const kHyppeBorderTab = Color(0xffEAEAEA);
+const kHyppeNotConnect = Color(0xffE8E8E8);
 
 const kHyppeUploadIcon = Color(0xff822e6e);
 const kHyppeSenderBubbleChat = Color(0xff5A1E4C);

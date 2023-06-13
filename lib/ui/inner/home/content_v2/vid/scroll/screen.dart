@@ -52,6 +52,8 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../../../constant/widget/custom_text_widget.dart';
+
 class ScrollVid extends StatefulWidget {
   final SlidedVidDetailScreenArgument? arguments;
   const ScrollVid({
@@ -431,71 +433,84 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                 }
               }
             },
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              child: Builder(builder: (context) {
-                return VidPlayerPage(
-                  orientation: Orientation.portrait,
-                  playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                  dataSourceMap: map,
-                  data: vidData?[index] ?? ContentData(),
-                  height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                  width: MediaQuery.of(context).size.width,
-                  inLanding: true,
-                  fromDeeplink: false,
-                  functionFullTriger: (value) {
-                    print('===========hahhahahahaa===========');
-                    // fullscreen();
-                    // vidData?[_curIdx].fAliplayer?.pause();
-                    // showDialog(context: context, builder: (context){
-                    //     return VideoFullscreenPage(data: vidData?[_curIdx] ?? ContentData(), onClose: (){
-                    //       // Routing().moveBack();
-                    //     }, seekValue: value ?? 0);
-                    //   });
-                  },
-                  onPlay: (exec) {
-                    try {
-                      if (_curIdx != -1) {
-                        if (_curIdx != index) {
-                          print('Vid Landing Page: stop $_curIdx ${vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
-                          if (vidData?[_curIdx].fAliplayer != null) {
-                            vidData?[_curIdx].fAliplayer?.stop();
-                          } else {
-                            final player = dataAli[_curIdx];
-                            if (player != null) {
-                              // vidData?[_curIdx].fAliplayer = player;
-                              player.stop();
+            child: !notifier.connectionError
+                ? Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: Builder(builder: (context) {
+                      return VidPlayerPage(
+                        orientation: Orientation.portrait,
+                        playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                        dataSourceMap: map,
+                        data: vidData?[index] ?? ContentData(),
+                        height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                        width: MediaQuery.of(context).size.width,
+                        inLanding: true,
+                        fromDeeplink: false,
+                        functionFullTriger: (value) {
+                          print('===========hahhahahahaa===========');
+                          // fullscreen();
+                          // vidData?[_curIdx].fAliplayer?.pause();
+                          // showDialog(context: context, builder: (context){
+                          //     return VideoFullscreenPage(data: vidData?[_curIdx] ?? ContentData(), onClose: (){
+                          //       // Routing().moveBack();
+                          //     }, seekValue: value ?? 0);
+                          //   });
+                        },
+                        onPlay: (exec) async {
+                          await notifier.checkConnection();
+                          try {
+                            if (_curIdx != -1) {
+                              if (_curIdx != index) {
+                                print('Vid Landing Page: stop $_curIdx ${vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                                if (vidData?[_curIdx].fAliplayer != null) {
+                                  vidData?[_curIdx].fAliplayer?.stop();
+                                } else {
+                                  final player = dataAli[_curIdx];
+                                  if (player != null) {
+                                    // vidData?[_curIdx].fAliplayer = player;
+                                    player.stop();
+                                  }
+                                }
+                                // vidData?[_curIdx].fAliplayerAds?.stop();
+                              }
                             }
+                          } catch (e) {
+                            e.logger();
+                          } finally {
+                            setState(() {
+                              _curIdx = index;
+                            });
                           }
-                          // vidData?[_curIdx].fAliplayerAds?.stop();
-                        }
-                      }
-                    } catch (e) {
-                      e.logger();
-                    } finally {
-                      setState(() {
-                        _curIdx = index;
-                      });
-                    }
-                    // _lastCurIndex = _curIdx;
-                  },
-                  getPlayer: (main) {
-                    print('Vid Player1: screen ${main}');
-                    // notifier.setAliPlayer(index, main);
-                    setState(() {
-                      vidData?[index].fAliplayer = main;
-                      dataAli[index] = main;
-                    });
-                    print('Vid Player1: after $index ${globalAliPlayer} : ${vidData?[index].fAliplayer}');
-                  },
-                  getAdsPlayer: (ads) {
-                    // vidData?[index].fAliplayerAds = ads;
-                  },
-                  // fAliplayer: vidData?[index].fAliplayer,
-                  // fAliplayerAds: vidData?[index].fAliplayerAds,
-                );
-              }),
-            ),
+                          // _lastCurIndex = _curIdx;
+                        },
+                        getPlayer: (main) {
+                          print('Vid Player1: screen ${main}');
+                          // notifier.setAliPlayer(index, main);
+                          setState(() {
+                            vidData?[index].fAliplayer = main;
+                            dataAli[index] = main;
+                          });
+                          print('Vid Player1: after $index ${globalAliPlayer} : ${vidData?[index].fAliplayer}');
+                        },
+                        getAdsPlayer: (ads) {
+                          // vidData?[index].fAliplayerAds = ads;
+                        },
+                        // fAliplayer: vidData?[index].fAliplayer,
+                        // fAliplayerAds: vidData?[index].fAliplayerAds,
+                      );
+                    }),
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      notifier.checkConnection();
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                        width: SizeConfig.screenWidth,
+                        height: 250,
+                        alignment: Alignment.center,
+                        child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo ?? 'Error')),
+                  ),
           ),
           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
                   (vidData![index].boosted.isEmpty) &&
@@ -586,7 +601,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                               ),
                       ),
                     ),
-                    if (vidData?[index].allowComments ?? true)
+                    if (vidData?[index].allowComments ?? false)
                       Padding(
                         padding: const EdgeInsets.only(left: 21.0),
                         child: GestureDetector(

@@ -25,12 +25,18 @@ class ScrollPicNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  Future checkConnection() async {
+    bool connect = await System().checkConnections();
+    connectionError = !connect;
+  }
+
   List<ContentData>? pics = [];
 
   Future loadMore(BuildContext context, ScrollController scrollController, PageSrc pageSrc, String key) async {
     isLoadingLoadmore = true;
     bool connect = await System().checkConnections();
     connectionError = !connect;
+    final searchNotifier = context.read<SearchNotifier>();
     if(connect){
       if (pageSrc == PageSrc.selfProfile) {
         final sp = context.read<SelfProfileNotifier>();
@@ -48,29 +54,56 @@ class ScrollPicNotifier with ChangeNotifier {
         isLoadingLoadmore = false;
       }
 
-      final searchNotifier = context.read<SearchNotifier>();
+
 
       if(pageSrc == PageSrc.searchData){
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppePic, TypeApiSearch.normal, 12, skip: searchNotifier.searchPic?.length ?? 0);
-        searchNotifier.searchPic?.addAll(data);
-        pics = searchNotifier.searchPic;
+        if(data.isNotEmpty){
+          searchNotifier.searchPic?.addAll(data);
+          pics = searchNotifier.searchPic;
+
+        }
         isLoadingLoadmore = false;
       }
 
       if(pageSrc == PageSrc.hashtag){
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppePic, TypeApiSearch.detailHashTag, 12, skip: searchNotifier.mapDetailHashtag[key]?.pict?.length ?? 0);
-        searchNotifier.mapDetailHashtag[key]?.pict?.addAll(data);
-        pics = searchNotifier.mapDetailHashtag[key]?.pict;
+        if(data.isNotEmpty){
+          searchNotifier.mapDetailHashtag[key]?.pict?.addAll(data);
+          pics = searchNotifier.mapDetailHashtag[key]?.pict;
+
+        }
         isLoadingLoadmore = false;
       }
 
       if(pageSrc == PageSrc.interest){
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppePic, TypeApiSearch.detailInterest, 12, skip: searchNotifier.interestContents[key]?.pict?.length ?? 0);
-        searchNotifier.interestContents[key]?.pict?.addAll(data);
-        pics = searchNotifier.interestContents[key]?.pict;
+        if(data.isNotEmpty){
+          searchNotifier.interestContents[key]?.pict?.addAll(data);
+          pics = searchNotifier.interestContents[key]?.pict;
+
+        }
         isLoadingLoadmore = false;
       }
     }else{
+      if(pageSrc == PageSrc.interest){
+        pics = searchNotifier.interestContents[key]?.pict;
+      }
+      if(pageSrc == PageSrc.hashtag){
+        pics = searchNotifier.mapDetailHashtag[key]?.pict;
+      }
+      if(pageSrc == PageSrc.searchData){
+        pics = searchNotifier.searchPic;
+      }
+      if (pageSrc == PageSrc.selfProfile) {
+        final sp = context.read<SelfProfileNotifier>();
+        pics = sp.user.pics;
+      }
+      if (pageSrc == PageSrc.otherProfile) {
+        final op = context.read<OtherProfileNotifier>();
+        pics = op.user.pics;
+      }
+      connectionError = true;
       isLoadingLoadmore = false;
       final language = context.read<TranslateNotifierV2>().translate;
       context.showErrorConnection(language);
@@ -80,6 +113,7 @@ class ScrollPicNotifier with ChangeNotifier {
 
   Future reload(BuildContext context, PageSrc pageSrc, {String key = ""}) async {
     bool connect = await System().checkConnections();
+    final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
     if(connect){
       if (pageSrc == PageSrc.selfProfile) {
@@ -98,7 +132,6 @@ class ScrollPicNotifier with ChangeNotifier {
         isLoadingLoadmore = false;
       }
 
-      final searchNotifier = context.read<SearchNotifier>();
 
       if(pageSrc == PageSrc.searchData){
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppePic, TypeApiSearch.normal, 12);
@@ -121,6 +154,24 @@ class ScrollPicNotifier with ChangeNotifier {
         isLoadingLoadmore = false;
       }
     }else{
+      if(pageSrc == PageSrc.interest){
+        pics = searchNotifier.interestContents[key]?.pict;
+      }
+      if(pageSrc == PageSrc.hashtag){
+        pics = searchNotifier.mapDetailHashtag[key]?.pict;
+      }
+      if(pageSrc == PageSrc.searchData){
+        pics = searchNotifier.searchPic;
+      }
+      if (pageSrc == PageSrc.selfProfile) {
+        final sp = context.read<SelfProfileNotifier>();
+        pics = sp.user.pics;
+      }
+      if (pageSrc == PageSrc.otherProfile) {
+        final op = context.read<OtherProfileNotifier>();
+        pics = op.user.pics;
+      }
+      connectionError = true;
       isLoadingLoadmore = false;
       final language = context.read<TranslateNotifierV2>().translate;
       context.showErrorConnection(language);

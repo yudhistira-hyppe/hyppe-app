@@ -1200,12 +1200,12 @@ class System {
     }
   }
 
-  Future<void> increaseViewCount2(BuildContext context, v2.ContentData data) async {
+  Future<void> increaseViewCount2(BuildContext context, v2.ContentData data, {bool check = true}) async {
     print("??!!!!!!!!!!!!!!!!!!!!kirim data");
     try {
       print("!!!!!!!!!!!!!!!!!!!!kirim data2");
       final notifier = ViewBloc();
-      await notifier.viewPostUserBloc(context, postId: data.postID ?? '', emailOwner: data.email ?? '');
+      await notifier.viewPostUserBloc(context, postId: data.postID ?? '', emailOwner: data.email ?? '', check: check);
       final fetch = notifier.viewFetch;
       if (!(data.insight?.isView ?? true)) {
         if (fetch.viewState == ViewState.viewUserPostSuccess) {

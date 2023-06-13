@@ -48,9 +48,9 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                     ),
                   ],
                 ),
-                onPressed: () async {
+                onPressed: () {
                   notifier.pageIndex = 0;
-                  await notifier.getDataPerPgage(context, email: widget.email);
+                  notifier.getDataPerPgage(context, email: widget.email);
                   // final OtherProfileScreenState? state = context.findAncestorStateOfType<OtherProfileScreenState>();
                   // state?.userData?.pics = notifier.user.pics;
                 },
@@ -87,8 +87,8 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                 onPressed: () async {
                   notifier.pageIndex = 1;
                   await notifier.getDataPerPgage(context, email: widget.email);
-                  // final OtherProfileScreenState? state = context.findAncestorStateOfType<OtherProfileScreenState>();
-                  // state?.userData?.diaries = notifier.user.diaries;
+                  final OtherProfileScreenState? state = context.findAncestorStateOfType<OtherProfileScreenState>();
+                  state?.userData?.diaries = notifier.user.diaries;
                 },
               ),
               SizedBox(
@@ -123,8 +123,8 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                 onPressed: () async {
                   notifier.pageIndex = 2;
                   await notifier.getDataPerPgage(context, email: widget.email);
-                  // final OtherProfileScreenState? state = context.findAncestorStateOfType<OtherProfileScreenState>();
-                  // state?.userData?.vids = notifier.user.vids;
+                  final OtherProfileScreenState? state = context.findAncestorStateOfType<OtherProfileScreenState>();
+                  state?.userData?.vids = notifier.user.vids;
                 },
               ),
               SizedBox(

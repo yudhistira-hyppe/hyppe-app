@@ -865,7 +865,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         ),
                       ),
                     ),
-                    if (notifier.diaryData?[index].allowComments ?? true)
+                    if (notifier.diaryData?[index].allowComments ?? false)
                       Padding(
                         padding: const EdgeInsets.only(left: 21.0),
                         child: GestureDetector(

@@ -93,8 +93,8 @@ class OtherProfileNotifier with ChangeNotifier {
 
   int heightIndex = 0;
 
-  List _manyUser = [];
-  List get manyUser => _manyUser;
+  List<UserInfoModel> _manyUser = [];
+  List<UserInfoModel> get manyUser => _manyUser;
 
   set manyUser(val) {
     _manyUser = val;
@@ -163,7 +163,7 @@ class OtherProfileNotifier with ChangeNotifier {
 
   String? displayPhotoProfile() {
     if (manyUser.last != null) {
-      return _system.showUserPicture(manyUser.last?.profile.avatar?.mediaEndpoint);
+      return _system.showUserPicture(manyUser.last.profile?.avatar?.mediaEndpoint);
     } else {
       return '';
     }
@@ -311,9 +311,15 @@ class OtherProfileNotifier with ChangeNotifier {
             if (email != null) {
               picContentsQuery.searchText = email;
             }
-
             user.pics = await picContentsQuery.reload(context, otherContent: true);
+            print('==================================');
+            print(manyUser);
+            print(manyUser.last);
             manyUser.last.pics = user.pics;
+            print('==================================');
+            print(manyUser.last);
+            print(manyUser.first.pics);
+            print(manyUser.last.pics);
             Future.delayed(const Duration(milliseconds: 2000), () {
               isLoading = false;
             });
@@ -331,6 +337,7 @@ class OtherProfileNotifier with ChangeNotifier {
             }
             user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
             manyUser.last.diaries = user.diaries;
+
             context.read<ScrollDiaryNotifier>().diaryData = user.diaries;
             Future.delayed(const Duration(milliseconds: 2000), () {
               isLoading = false;
@@ -415,7 +422,7 @@ class OtherProfileNotifier with ChangeNotifier {
     if (connect) {
       var result;
       if (pageIndex == 0) {
-        result = await _routing.move(Routes.scrollPic,
+        _routing.move(Routes.scrollPic,
             argument: SlidedPicDetailScreenArgument(
               page: index,
               type: TypePlaylist.mine,
@@ -429,7 +436,7 @@ class OtherProfileNotifier with ChangeNotifier {
         // scrollAuto(result);
       }
       if (pageIndex == 1) {
-        result = await _routing.move(Routes.scrollDiary,
+        _routing.move(Routes.scrollDiary,
             argument: SlidedDiaryDetailScreenArgument(
               page: index,
               type: TypePlaylist.mine,
@@ -443,7 +450,7 @@ class OtherProfileNotifier with ChangeNotifier {
         // scrollAuto(result);
       }
       if (pageIndex == 2) {
-        result = await _routing.move(Routes.scrollVid,
+        _routing.move(Routes.scrollVid,
             argument: SlidedVidDetailScreenArgument(
               page: index,
               type: TypePlaylist.mine,
@@ -495,7 +502,9 @@ class OtherProfileNotifier with ChangeNotifier {
   }
 
   void onExit() {
-    // manyUser.removeLast(); // toes
+    Future.delayed(const Duration(milliseconds: 500), () {
+      manyUser.removeLast();
+    });
     routing.moveBack();
     userEmail = null;
   }

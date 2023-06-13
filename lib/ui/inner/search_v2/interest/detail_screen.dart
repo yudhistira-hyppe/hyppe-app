@@ -25,16 +25,16 @@ class InterestDetailScreen extends StatefulWidget {
 class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteAware, SingleTickerProviderStateMixin, AfterFirstLayoutMixin{
   late TabController _tabController;
   int _selectedIndex = 0;
-  final ScrollController _scrollController = ScrollController();
+  // final ScrollController _scrollController = ScrollController();
   // final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   int heightTab = 0;
 
   @override
   void afterFirstLayout(BuildContext context) {
-    final notifier = context.read<SearchNotifier>();
-    final index = notifier.listInterest?.indexOf(widget.data) ?? 0;
-    _tabController.index = index;
-    _tabController.notifyListeners();
+    // final notifier = context.read<SearchNotifier>();
+    // final index = notifier.listInterest?.indexOf(widget.data) ?? 0;
+    // _tabController.index = index;
+    // _tabController.notifyListeners();
   }
 
   @override
@@ -53,7 +53,7 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
         print("jumpt ====== ${jumpTo}");
         print("jumpt ====== ${heightTab}");
         print("jumpt ====== ${notifier.heightIndex}");
-        _scrollController.jumpTo(jumpTo.toDouble());
+        // _scrollController.jumpTo(jumpTo.toDouble());
       }catch(e){
         print('jumpt error: $e');
       }
@@ -78,8 +78,9 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'InterestDetailScreen');
-    _tabController = TabController(length: 6, vsync: this);
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
+    final index = notifier.listInterest?.indexOf(widget.data) ?? 0;
+    _tabController = TabController(length: 6, vsync: this, initialIndex: index);
     _tabController.addListener(() {
       notifier.tabIndex = _tabController.index;
       setState(() {
@@ -143,7 +144,7 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
                     controller: _tabController,
                     children: (notifier.listInterest ?? []).map((e) {
 
-                      return InterestTabLayout(interest: e, scrollController: _scrollController,);
+                      return InterestTabLayout(interest: e);
 
                     }).toList().sublist(0, (notifier.listInterest ?? []).length > 6 ? 6 : (notifier.listInterest ?? []).length),
                   ),

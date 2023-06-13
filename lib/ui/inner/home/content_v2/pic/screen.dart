@@ -1011,7 +1011,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary, fontSize: 12),
             expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
-          if (notifier.pic?[index].allowComments ?? true)
+          if (notifier.pic?[index].allowComments ?? false)
             GestureDetector(
               onTap: () {
                 Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: notifier.pic?[index].postID ?? '', fromFront: true, data: notifier.pic?[index] ?? ContentData()));

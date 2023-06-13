@@ -495,7 +495,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               ),
                       ),
                     ),
-                    if (vidData.allowComments ?? true)
+                    if (vidData.allowComments ?? false)
                       Padding(
                         padding: const EdgeInsets.only(left: 21.0),
                         child: GestureDetector(

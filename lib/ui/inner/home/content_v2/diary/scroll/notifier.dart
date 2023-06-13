@@ -25,11 +25,17 @@ class ScrollDiaryNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  Future checkConnection() async {
+    bool connect = await System().checkConnections();
+    connectionError = !connect;
+  }
+
   List<ContentData>? diaryData = [];
 
   Future loadMore(BuildContext context, ScrollController scrollController, PageSrc pageSrc, String key) async {
     isLoadingLoadmore = true;
     bool connect = await System().checkConnections();
+    final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
     if (connect) {
       if (pageSrc == PageSrc.selfProfile) {
@@ -79,6 +85,7 @@ class ScrollDiaryNotifier with ChangeNotifier {
 
   Future reload(BuildContext context, PageSrc pageSrc, {String key = ""}) async {
     bool connect = await System().checkConnections();
+    final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
     if (connect) {
       if (pageSrc == PageSrc.selfProfile) {

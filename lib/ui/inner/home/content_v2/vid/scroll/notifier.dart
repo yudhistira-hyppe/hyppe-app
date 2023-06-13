@@ -27,9 +27,15 @@ class ScrollVidNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  Future checkConnection() async {
+    bool connect = await System().checkConnections();
+    connectionError = !connect;
+  }
+
   Future loadMore(BuildContext context, ScrollController scrollController, PageSrc pageSrc, String key) async {
     isLoadingLoadmore = true;
     bool connect = await System().checkConnections();
+    final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
     if (connect) {
       if (pageSrc == PageSrc.selfProfile) {
@@ -79,6 +85,7 @@ class ScrollVidNotifier with ChangeNotifier {
 
   Future reload(BuildContext context, PageSrc pageSrc, {String key = ""}) async {
     bool connect = await System().checkConnections();
+    final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
     if (connect) {
       if (pageSrc == PageSrc.selfProfile) {
@@ -97,7 +104,7 @@ class ScrollVidNotifier with ChangeNotifier {
         isLoadingLoadmore = false;
       }
 
-      final searchNotifier = context.read<SearchNotifier>();
+
 
       if (pageSrc == PageSrc.searchData) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.normal, 12);
