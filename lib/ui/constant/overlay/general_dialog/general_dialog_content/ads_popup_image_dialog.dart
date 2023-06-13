@@ -117,21 +117,20 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
                           Container(
                             padding: const EdgeInsets.only(top: 20, left: 18, right: 18),
                             child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                AspectRatio(
-                                  aspectRatio: 1.0,
-                                  child: Container(
-                                    height: double.infinity,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      image: const DecorationImage(
-                                        image: AssetImage('${AssetPath.pngPath}avatar_ads_exp.png'),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.circular(12.0),
-                                    ),
-                                  ),
-                                ),
+                                Image.asset('${AssetPath.pngPath}avatar_ads_exp.png', width: double.infinity, fit: BoxFit.cover,),
+                                // Container(
+                                //   width: double.infinity,
+                                //   decoration: BoxDecoration(
+                                //     image: const DecorationImage(
+                                //       image: AssetImage('${AssetPath.pngPath}avatar_ads_exp.png'),
+                                //       fit: BoxFit.fitWidth,
+                                //     ),
+                                //     borderRadius: BorderRadius.circular(12.0),
+                                //   ),
+                                // ),
                                 sixteenPx,
                                 CustomTextWidget(
                                   maxLines: 10,

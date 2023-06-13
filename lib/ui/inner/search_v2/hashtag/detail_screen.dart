@@ -159,7 +159,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
 
                         return InkWell(
                           onTap: (){
-                            // ShowGeneralDialog.adsPopUpImage(context);
+                            ShowGeneralDialog.adsPopUpImage(context);
                           },
                           child: CustomBaseCacheImage(
                             imageUrl: notifier.tagImageMain,
