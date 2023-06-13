@@ -15,6 +15,7 @@ import '../../../../core/arguments/hashtag_argument.dart';
 import '../../../../core/constants/asset_path.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../core/services/route_observer_service.dart';
+import '../../../constant/overlay/general_dialog/show_general_dialog.dart';
 import '../../../constant/widget/custom_base_cache_image.dart';
 import '../../../constant/widget/custom_spacer.dart';
 import '../../../constant/widget/icon_button_widget.dart';
@@ -156,25 +157,40 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                     !notifier.loadTagDetail ? Row(
                       children: [Builder(builder: (context) {
 
-                        return CustomBaseCacheImage(
-                          imageUrl: notifier.tagImageMain,
-                          memCacheWidth: 70,
-                          memCacheHeight: 70,
-                          imageBuilder: (_, imageProvider) {
-                            return Container(
-                              width: 56,
-                              height: 56,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(28)),
-                                image: DecorationImage(
-                                  fit: BoxFit.contain,
-                                  image: imageProvider,
-                                ),
-                              ),
-                            );
+                        return InkWell(
+                          onTap: (){
+                            // ShowGeneralDialog.adsPopUpImage(context);
                           },
-                          errorWidget: (_, __, ___) {
-                            return Container(
+                          child: CustomBaseCacheImage(
+                            imageUrl: notifier.tagImageMain,
+                            memCacheWidth: 70,
+                            memCacheHeight: 70,
+                            imageBuilder: (_, imageProvider) {
+                              return Container(
+                                width: 56,
+                                height: 56,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(28)),
+                                  image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: imageProvider,
+                                  ),
+                                ),
+                              );
+                            },
+                            errorWidget: (_, __, ___) {
+                              return Container(
+                                width: 56,
+                                height: 56,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
+                                  ),
+                                ),
+                              );
+                            },
+                            emptyWidget: Container(
                               width: 56,
                               height: 56,
                               decoration: BoxDecoration(
@@ -182,16 +198,6 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                                   fit: BoxFit.contain,
                                   image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
                                 ),
-                              ),
-                            );
-                          },
-                          emptyWidget: Container(
-                            width: 56,
-                            height: 56,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                fit: BoxFit.contain,
-                                image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
                               ),
                             ),
                           ),

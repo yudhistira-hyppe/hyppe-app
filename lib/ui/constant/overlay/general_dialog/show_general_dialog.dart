@@ -2,6 +2,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/ads_popup_dialog.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/ads_popup_image_dialog.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/ads_reward_popup.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/delete_tag_user_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/general_dialog.dart';
@@ -321,6 +322,25 @@ class ShowGeneralDialog {
       print('Error Pop Ads: $e');
     }
 
+  }
+
+  static Future adsPopUpImage(BuildContext context) async {
+    try{
+      await showGeneralDialog(
+        //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+        context: Routing.navigatorKey.currentState?.overlay?.context ?? context,
+        barrierLabel: 'Barrier',
+        barrierDismissible: false,
+        transitionDuration: const Duration(milliseconds: 500),
+        pageBuilder: (context, animation, secondAnimation) => const AdsPopupImageDialog(),
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+          return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
+        },
+      );
+    }catch(e){
+      print('Error Pop Ads: $e');
+    }
   }
 
   static Future remarkWidthdrawal(BuildContext context) async {
