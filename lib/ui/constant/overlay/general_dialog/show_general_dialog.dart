@@ -1,8 +1,10 @@
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/ads_popup_dialog.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/ads_reward_popup.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/banner_pop.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/delete_tag_user_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/general_dialog.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/loading_content.dart';
@@ -300,7 +302,7 @@ class ShowGeneralDialog {
     if (isInAppAds) {
       SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, context.getCurrentDate());
     }
-    try{
+    try {
       await showGeneralDialog(
         //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
         context: Routing.navigatorKey.currentState!.overlay!.context,
@@ -317,10 +319,9 @@ class ShowGeneralDialog {
           return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
         },
       );
-    }catch(e){
+    } catch (e) {
       print('Error Pop Ads: $e');
     }
-
   }
 
   static Future remarkWidthdrawal(BuildContext context) async {
@@ -381,5 +382,29 @@ class ShowGeneralDialog {
         return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
       },
     ).then((value) => true);
+  }
+
+  static Future showBannerPop(BuildContext context, {bool? uploadProses}) async {
+    await showGeneralDialog(
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+      context: Routing.navigatorKey.currentState!.overlay!.context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: true,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) => WillPopScope(
+        onWillPop: () async => true,
+        child: AlertDialog(
+          content: BannerPop(uploadProses: uploadProses ?? false),
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+          backgroundColor: Colors.transparent,
+          insetPadding: EdgeInsets.symmetric(horizontal: SizeConfig.screenWidth! * 0.08),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+        ),
+      ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+        return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
+      },
+    );
   }
 }

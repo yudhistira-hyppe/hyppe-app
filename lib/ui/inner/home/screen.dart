@@ -11,6 +11,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
@@ -244,6 +245,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                               ),
                             ),
                           ),
+                          GestureDetector(
+                            onTap: () {
+                              ShowGeneralDialog.showBannerPop(context);
+                            },
+                            child: Text("test"),
+                          )
                         ]),
                       ),
                     ),
@@ -313,5 +320,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       print("isOnHomeScreen hit ads");
       homneNotifier.getAdsApsara(context, true);
     }
+    ShowGeneralDialog.showBannerPop(context);
   }
 }
