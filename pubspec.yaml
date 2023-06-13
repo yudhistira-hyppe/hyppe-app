@@ -70,7 +70,7 @@ dependencies:
   marquee: ^2.2.3
   ffmpeg_kit_flutter: ^5.1.0
   audioplayers: ^2.0.0
-  image_cropper: ^3.0.1
+  image_cropper: ^4.0.1
   move_to_background: ^1.0.2
   sqflite: ^2.2.3
   # secure_application: ^3.8.0

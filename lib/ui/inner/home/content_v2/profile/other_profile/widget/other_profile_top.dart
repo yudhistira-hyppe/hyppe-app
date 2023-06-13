@@ -5,6 +5,8 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -23,7 +25,10 @@ import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
 class OtherProfileTop extends StatelessWidget {
   final String? email;
-  const OtherProfileTop({Key? key, this.email}) : super(key: key);
+  final UserProfileModel? profile;
+  final Map<String, List<ContentData>>? otherStoryGroup;
+
+  const OtherProfileTop({Key? key, this.email, this.profile, this.otherStoryGroup}) : super(key: key);
 
   void showTap(BuildContext context, List<ContentData> dataStory, OtherProfileNotifier notifier) {
     if (dataStory.isNotEmpty) {
@@ -35,7 +40,7 @@ class OtherProfileTop extends StatelessWidget {
 
   void showPict(BuildContext context, OtherProfileNotifier notifier) {
     final imageUrl = notifier.displayPhotoProfileOriginal();
-    if (notifier.user.profile?.avatar?.mediaEndpoint?.isNotEmpty ?? false) {
+    if (notifier.manyUser.first.profile?.avatar?.mediaEndpoint?.isNotEmpty ?? false) {
       showDialog(
         context: context,
         builder: (context) {
@@ -43,6 +48,22 @@ class OtherProfileTop extends StatelessWidget {
         },
         // barrierColor: Colors.red,
       );
+    }
+  }
+
+  String displayBio() => profile != null
+      ? profile?.bio != null
+          ? '"${profile?.bio}"'
+          : ""
+      : "";
+
+  String? displayPlace() {
+    String? _area = profile?.area;
+    String? _country = profile?.country;
+    if (_area != null && _country != null) {
+      return " $_area - $_country";
+    } else {
+      return null;
     }
   }
 
@@ -72,9 +93,9 @@ class OtherProfileTop extends StatelessWidget {
                 // ),
                 StoryColorValidator(
                   isMy: false,
-                  haveStory: (sn.otherStoryGroup[email]?.isNotEmpty ?? [].isEmpty),
-                  featureType: (sn.otherStoryGroup[email]?.isNotEmpty ?? [].isEmpty) ? FeatureType.story : FeatureType.other,
-                  isView: (sn.otherStoryGroup[email]?.isNotEmpty ?? [].isEmpty) ? sn.otherStoryGroup[email]?.last.isViewed ?? false : false,
+                  haveStory: (otherStoryGroup?[email]?.isEmpty ?? [].isEmpty) ? false : true,
+                  featureType: (otherStoryGroup?[email]?.isEmpty ?? [].isEmpty) ? FeatureType.other : FeatureType.story,
+                  isView: (otherStoryGroup?[email]?.isEmpty ?? [].isEmpty) ? false : (otherStoryGroup?[email]?.last.isViewed ?? false),
                   child: GestureDetector(
                     onTap: () {
                       showTap(context, sn.otherStoryGroup[email] ?? [], notifier);
@@ -89,7 +110,8 @@ class OtherProfileTop extends StatelessWidget {
                         forStory: true,
                         width: 55 * SizeConfig.scaleDiagonal,
                         height: 55 * SizeConfig.scaleDiagonal,
-                        imageUrl: notifier.displayPhotoProfile(),
+                        imageUrl: System().showUserPicture(profile?.avatar?.mediaEndpoint),
+                        // imageUrl: notifier.displayPhotoProfile(),
                       ),
                     ),
                   ),
@@ -105,7 +127,8 @@ class OtherProfileTop extends StatelessWidget {
                         Column(
                           children: [
                             CustomTextWidget(
-                              textToDisplay: notifier.displayPostsCount(),
+                              // textToDisplay: notifier.displayPostsCount(),
+                              textToDisplay: System().formatterNumber((profile?.insight?.posts ?? 0).toInt()),
                               textStyle: Theme.of(context).textTheme.subtitle1,
                             ),
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
@@ -118,7 +141,8 @@ class OtherProfileTop extends StatelessWidget {
                         Column(
                           children: [
                             CustomTextWidget(
-                              textToDisplay: notifier.displayFollowers(),
+                              // textToDisplay: notifier.displayFollowers(),
+                              textToDisplay: System().formatterNumber((profile?.insight?.followers ?? 0).toInt()),
                               textStyle: Theme.of(context).textTheme.subtitle1,
                             ),
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
@@ -131,7 +155,8 @@ class OtherProfileTop extends StatelessWidget {
                         Column(
                           children: [
                             CustomTextWidget(
-                              textToDisplay: notifier.displayFollowing(),
+                              // textToDisplay: notifier.displayFollowing(),
+                              textToDisplay: System().formatterNumber((profile?.insight?.followings ?? 0).toInt()),
                               textStyle: Theme.of(context).textTheme.subtitle1,
                             ),
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
@@ -150,12 +175,12 @@ class OtherProfileTop extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: 13 * SizeConfig.scaleDiagonal),
               child: CustomTextWidget(
-                textToDisplay: notifier.displayFullName() ?? '',
+                textToDisplay: profile?.fullName ?? '',
                 textAlign: TextAlign.start,
                 textStyle: Theme.of(context).textTheme.subtitle1,
               ),
             ),
-            notifier.displayBio().length > 2
+            displayBio().length > 2
                 ? Container(
                     padding: const EdgeInsets.symmetric(vertical: 6),
                     constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.2),
@@ -164,7 +189,7 @@ class OtherProfileTop extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomDescContent(
-                          desc: notifier.displayBio(),
+                          desc: displayBio(),
                           trimLines: 5,
                           textAlign: TextAlign.start,
                           seeLess: ' ${notifier.language.seeLess}',
@@ -177,7 +202,7 @@ class OtherProfileTop extends StatelessWidget {
                     )),
                   )
                 : const SizedBox.shrink(),
-            notifier.displayPlace() != null
+            displayPlace() != null
                 ? Padding(
                     padding: EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),
                     child: Row(
@@ -188,7 +213,7 @@ class OtherProfileTop extends StatelessWidget {
                           color: kHyppeTextLightPrimary,
                         ),
                         CustomTextWidget(
-                          textToDisplay: notifier.displayPlace() ?? '',
+                          textToDisplay: displayPlace() ?? '',
                           textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(),
                         )
                       ],
@@ -239,7 +264,7 @@ class OtherProfileTop extends StatelessWidget {
                     height: 42 * SizeConfig.scaleDiagonal,
                     buttonStyle: Theme.of(context).elevatedButtonTheme.style,
                     function: () async {
-                      if (notifier.user.profile != null) {
+                      if (notifier.manyUser.first.profile != null) {
                         try {
                           await notifier.createDiscussion(context);
                         } catch (e) {

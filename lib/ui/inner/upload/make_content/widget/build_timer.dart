@@ -43,12 +43,14 @@ class BuildTimer extends StatelessWidget {
                       notifier.selectedDuration = notifier.durationOptions?.keys.elementAt(index) ?? 0;
                     },
                   ),
-                  items: notifier.durationOptions?.values.map(
+                  items: notifier.durationOptions?.values
+                      .map(
                         (element) => CustomTextWidget(
                           textToDisplay: element,
                           textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppeLightButtonText),
                         ),
-                      ).toList(),
+                      )
+                      .toList(),
                 ),
               ],
             ),

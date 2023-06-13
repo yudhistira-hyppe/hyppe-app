@@ -129,7 +129,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     super.initState();
     pics = widget.arguments?.picData;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic-${pics?.first.postID}');
       WidgetsBinding.instance.addObserver(this);
 
       fAliplayer?.setAutoPlay(true);
@@ -443,7 +443,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     print("---=-=-=-=--===-=-=-=-DiSPOSE--=-=-=-=-=-=-=-=-=-=-=----==-=");
 
     super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    // WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
@@ -532,7 +532,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       backgroundColor: kHyppeLightSurface,
       body: WillPopScope(
         onWillPop: () async {
-          Navigator.pop(context, '$_curIdx');
+          // Navigator.pop(context, '$_curIdx');
+          Routing().moveBack();
           return false;
         },
         child: Consumer2<ScrollPicNotifier, HomeNotifier>(
@@ -549,7 +550,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       ),
                       onPressed: () {
                         Future.delayed(Duration.zero, () {
-                          Navigator.pop(context, '$_curIdx');
+                          // Navigator.pop(context, '$_curIdx');
+                          Navigator.pop(context);
                         });
                       }),
                 ),
@@ -829,88 +831,88 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                     //   ),
                     // ),
 
-                    !notifier.connectionError ? GestureDetector(
-                      onTap: () {
-                        if (pics?[index].reportedStatus != 'BLURRED') {
-                          fAliplayer?.play();
-                          setState(() {
-                            isMute = !isMute;
-                          });
-                          fAliplayer?.setMuted(isMute);
-                        }
-                      },
-                      onDoubleTap: () {
-                        final _likeNotifier = context.read<LikeNotifier>();
-                        if (pics?[index] != null) {
-                          _likeNotifier.likePost(context, pics![index]);
-                        }
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        // width: SizeConfig.screenWidth,
-                        // height: SizeConfig.screenHeight,
-                        child: ZoomableImage(
-                          onScaleStart: () {
-                            zoom(true);
-                          },
-                          onScaleStop: () {
-                            zoom(false);
-                          },
-                          child: CustomBaseCacheImage(
-                            memCacheWidth: 100,
-                            memCacheHeight: 100,
-                            widthPlaceHolder: 80,
-                            heightPlaceHolder: 80,
+                    !notifier.connectionError
+                        ? GestureDetector(
+                            onTap: () {
+                              if (pics?[index].reportedStatus != 'BLURRED') {
+                                fAliplayer?.play();
+                                setState(() {
+                                  isMute = !isMute;
+                                });
+                                fAliplayer?.setMuted(isMute);
+                              }
+                            },
+                            onDoubleTap: () {
+                              final _likeNotifier = context.read<LikeNotifier>();
+                              if (pics?[index] != null) {
+                                _likeNotifier.likePost(context, pics![index]);
+                              }
+                            },
+                            child: Center(
+                              child: Container(
+                                color: Colors.transparent,
+                                // width: SizeConfig.screenWidth,
+                                // height: SizeConfig.screenHeight,
+                                child: ZoomableImage(
+                                  onScaleStart: () {
+                                    zoom(true);
+                                  },
+                                  onScaleStop: () {
+                                    zoom(false);
+                                  },
+                                  child: CustomBaseCacheImage(
+                                    memCacheWidth: 100,
+                                    memCacheHeight: 100,
+                                    widthPlaceHolder: 80,
+                                    heightPlaceHolder: 80,
 
-                            imageUrl: (pics?[index].isApsara ?? false) ? (pics?[index].mediaThumbEndPoint ?? "") : "${pics?[index].fullThumbPath}",
-                            // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
-                            imageBuilder: (context, imageProvider) => ClipRRect(
-                              borderRadius: BorderRadius.circular(20), // Image border
-                              child: pics?[index].reportedStatus == 'BLURRED'
-                                  ? ImageFiltered(
-                                      imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                      child: Image(
-                                        image: imageProvider,
-                                        fit: BoxFit.fitHeight,
-                                        width: SizeConfig.screenWidth,
-                                      ),
-                                    )
-                                  : Image(
-                                      image: imageProvider,
-                                      fit: BoxFit.fitHeight,
-                                      width: SizeConfig.screenWidth,
+                                    imageUrl: (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}",
+                                    // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
+                                    imageBuilder: (context, imageProvider) => ClipRRect(
+                                      borderRadius: BorderRadius.circular(20), // Image borderr
+                                      child: pics?[index].reportedStatus == 'BLURRED'
+                                          ? ImageFiltered(
+                                              imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                              child: Image(
+                                                image: imageProvider,
+                                                fit: BoxFit.fitHeight,
+                                                width: SizeConfig.screenWidth,
+                                              ),
+                                            )
+                                          : Image(
+                                              image: imageProvider,
+                                              fit: BoxFit.fitHeight,
+                                              width: SizeConfig.screenWidth,
+                                            ),
                                     ),
-                            ),
-                            emptyWidget: Container(
-                              // const EdgeInsets.symmetric(horizontal: 4.5),
+                                    emptyWidget: Container(
+                                      // const EdgeInsets.symmetric(horizontal: 4.5),
 
-                              // height: 500,
-                              decoration: BoxDecoration(
-                                image: const DecorationImage(
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                  fit: BoxFit.cover,
+                                      // height: 500,
+                                      decoration: BoxDecoration(
+                                        image: const DecorationImage(
+                                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              notifier.checkConnection();
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                width: SizeConfig.screenWidth,
+                                height: 250,
+                                alignment: Alignment.center,
+                                child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
                           ),
-                        ),
-                      ),
-                    ) : GestureDetector(
-                      onTap: () {
-                        notifier.checkConnection();
-                      },
-                      child: Container(
-                          decoration: BoxDecoration(
-                              color: kHyppeNotConnect,
-                              borderRadius: BorderRadius.circular(16)
-                          ),
-                          width: SizeConfig.screenWidth,
-                          height: 250,
-                          alignment: Alignment.center,
-                          child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage?? 'Error')
-                      ),
-                    ),
                     _buildBody(context, SizeConfig.screenWidth, pics?[index] ?? ContentData()),
                     blurContentWidget(context, pics?[index] ?? ContentData()),
                   ],
@@ -923,7 +925,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                   (pics?[index].reportedStatus != 'OWNED' && pics?[index].reportedStatus != 'BLURRED' && pics?[index].reportedStatus2 != 'BLURRED') &&
                   pics?[index].email == email
               ? Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery.of(context).size.width,
                   margin: const EdgeInsets.only(bottom: 16),
                   child: ButtonBoost(
                     onDetail: false,
@@ -1008,7 +1010,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               ),
                       ),
                     ),
-                    if (pics?[index].allowComments ?? true)
+                    if (pics?[index].allowComments ?? false)
                       Padding(
                         padding: EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
