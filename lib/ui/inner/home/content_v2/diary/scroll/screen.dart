@@ -448,9 +448,9 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       FlutterAliplayer.enableMix(false);
     }
     fAliplayer?.stop();
-    // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
-    //   fAliplayer?.destroy();
-    // }
+    if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
+      fAliplayer?.destroy();
+    }
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
@@ -718,6 +718,11 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
               if (info.visibleFraction >= 0.6) {
                 _curIdx = index;
                 if (_lastCurIndex != _curIdx) {
+                  try {
+                    widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, 175));
+                  } catch (e) {
+                    print("ini error $e");
+                  }
                   Future.delayed(const Duration(milliseconds: 400), () {
                     start(diaryData?[index] ?? ContentData());
                     System().increaseViewCount2(context, diaryData?[index] ?? ContentData(), check: false);

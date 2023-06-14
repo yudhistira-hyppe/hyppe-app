@@ -896,5 +896,7 @@
   "noPostsYet": "Belum ada postingan",
   "youDontHaveAnyPostsHereYet": "Kamu belum memiliki postingan apapun di sini.",
   "thisContentIsSubjectToModeration": "Konten ini terkena moderasi!",
-  "thisAccountHasNoPostsYet": "Akun ini belum memiliki postingan."
+  "thisAccountHasNoPostsYet": "Akun ini belum memiliki postingan.",
+  "oopsYoureOffline": "Ups, kamu sedang offline",
+  "checkYourWiFiConnectionOrInternet": "Cek koneksi WiFi atau kuota internetmu dan coba lagi, ya!"
 }

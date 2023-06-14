@@ -13,9 +13,22 @@ class SlidedDiaryDetailScreenArgument extends ContentScreenArgument {
   final Widget? titleAppbar;
   final PageSrc? pageSrc;
   final String? key;
+  final ScrollController? scrollController;
+  final double? heightTopProfile;
 
   @override
   FeatureType get featureType => FeatureType.pic;
 
-  SlidedDiaryDetailScreenArgument({this.index = 0, this.diaryData, this.page, this.limit, required this.type, this.titleAppbar, this.pageSrc, this.key});
+  SlidedDiaryDetailScreenArgument({
+    this.index = 0,
+    this.diaryData,
+    this.page,
+    this.limit,
+    required this.type,
+    this.titleAppbar,
+    this.pageSrc,
+    this.key,
+    this.scrollController,
+    this.heightTopProfile,
+  });
 }

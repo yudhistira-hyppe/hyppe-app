@@ -687,7 +687,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     fAliplayer?.stop();
                   }
                   Future.delayed(const Duration(milliseconds: 100), () {
-                    System().increaseViewCount2(context, notifier.pic?[index] ?? ContentData());
+                    System().increaseViewCount2(context, notifier.pic?[index] ?? ContentData(), check: false);
                   });
                   if (notifier.pic?[index].certified ?? false) {
                     System().block(context);

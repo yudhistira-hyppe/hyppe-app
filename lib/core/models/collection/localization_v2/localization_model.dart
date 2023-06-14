@@ -896,6 +896,8 @@ class LocalizationModelV2 {
   String? youDontHaveAnyPostsHereYet;
   String? thisContentIsSubjectToModeration;
   String? thisAccountHasNoPostsYet;
+  String? oopsYoureOffline;
+  String? checkYourWiFiConnectionOrInternet;
 
   LocalizationModelV2({
     this.login,
@@ -1795,6 +1797,8 @@ class LocalizationModelV2 {
     this.youDontHaveAnyPostsHereYet,
     this.thisContentIsSubjectToModeration,
     this.thisAccountHasNoPostsYet,
+    this.oopsYoureOffline,
+    this.checkYourWiFiConnectionOrInternet,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2713,5 +2717,7 @@ class LocalizationModelV2 {
     youDontHaveAnyPostsHereYet = json['youDontHaveAnyPostsHereYet'];
     thisContentIsSubjectToModeration = json['thisContentIsSubjectToModeration'];
     thisAccountHasNoPostsYet = json['thisAccountHasNoPostsYet'];
+    oopsYoureOffline = json['oopsYoureOffline'];
+    checkYourWiFiConnectionOrInternet = json['checkYourWiFiConnectionOrInternet'];
   }
 }

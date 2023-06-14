@@ -57,6 +57,9 @@ class OtherProfileNotifier with ChangeNotifier {
   ContentsDataQuery diaryContentsQuery = ContentsDataQuery();
   ContentsDataQuery picContentsQuery = ContentsDataQuery();
 
+  bool isConnect = true;
+  bool isConnectContent = true;
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -249,6 +252,15 @@ class OtherProfileNotifier with ChangeNotifier {
 
   initialOtherProfile(BuildContext context, {OtherProfileArgument? argument, bool refresh = false}) async {
     // pageIndex = 0;
+    final connect = await _system.checkConnections();
+    if (!connect) {
+      isConnect = false;
+      notifyListeners();
+      return false;
+    } else {
+      isConnect = true;
+      notifyListeners();
+    }
     user = UserInfoModel();
     golbalToOther++;
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
@@ -304,6 +316,15 @@ class OtherProfileNotifier with ChangeNotifier {
   }
 
   Future getDataPerPgage(BuildContext context, {String? email}) async {
+    final connect = await _system.checkConnections();
+    if (!connect) {
+      isConnectContent = false;
+      notifyListeners();
+      return false;
+    } else {
+      isConnectContent = true;
+      notifyListeners();
+    }
     switch (pageIndex) {
       case 0:
         {
@@ -418,7 +439,7 @@ class OtherProfileNotifier with ChangeNotifier {
     return pages[pageIndex];
   }
 
-  navigateToSeeAllScreen(BuildContext context, int index, {contentPosition? inPosition, Widget? title, List<ContentData>? data, scrollController}) async {
+  navigateToSeeAllScreen(BuildContext context, int index, {contentPosition? inPosition, Widget? title, List<ContentData>? data, scrollController, double? heightProfile}) async {
     context.read<ReportNotifier>().inPosition = contentPosition.otherprofile;
     final connect = await _system.checkConnections();
     if (connect) {
@@ -432,6 +453,7 @@ class OtherProfileNotifier with ChangeNotifier {
               pageSrc: PageSrc.otherProfile,
               picData: data,
               scrollController: scrollController,
+              heightTopProfile: heightProfile,
             ));
 
         // _routing.move(Routes.picSlideDetailPreview,
@@ -446,6 +468,8 @@ class OtherProfileNotifier with ChangeNotifier {
               titleAppbar: title,
               pageSrc: PageSrc.otherProfile,
               diaryData: data,
+              scrollController: scrollController,
+              heightTopProfile: heightProfile,
             ));
 
         // _routing.move(Routes.diaryDetail,
@@ -460,6 +484,8 @@ class OtherProfileNotifier with ChangeNotifier {
               titleAppbar: title,
               pageSrc: PageSrc.otherProfile,
               vidData: data,
+              scrollController: scrollController,
+              heightTopProfile: heightProfile,
             ));
 
         // _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
@@ -471,15 +497,15 @@ class OtherProfileNotifier with ChangeNotifier {
   }
 
   scrollAuto(String index) {
-    // var indexHei = int.parse(index) + 1;
-    // var hasilBagi = indexHei / 3;
-    // heightIndex = 0;
-    // if (isInteger(hasilBagi)) {
-    //   hasilBagi = hasilBagi;
-    // } else {
-    //   hasilBagi += 1;
-    // }
-    // heightIndex = (heightBox * hasilBagi.toInt() - heightBox);
+    var indexHei = int.parse(index) + 1;
+    var hasilBagi = indexHei / 3;
+    heightIndex = 0;
+    if (isInteger(hasilBagi)) {
+      hasilBagi = hasilBagi;
+    } else {
+      hasilBagi += 1;
+    }
+    heightIndex = (heightBox * hasilBagi.toInt() - heightBox);
   }
 
   bool isInteger(num value) => value is int || value == value.roundToDouble();

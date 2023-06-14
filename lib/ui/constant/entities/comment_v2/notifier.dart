@@ -199,7 +199,7 @@ class CommentNotifierV2 with ChangeNotifier {
       final _resFuture = commentQuery.addComment(context);
       final res = await _resFuture;
       if (res != null) {
-        context.read<HomeNotifier>().addCountComment(context, postID ?? '', true, 0);
+        context.read<HomeNotifier>().addCountComment(context, postID ?? '', true, 0, txtMsg: commentController.text, username: res.comment?.senderInfo?.username);
 
         if (parentID == null) {
           _commentData?.insert(0, res);

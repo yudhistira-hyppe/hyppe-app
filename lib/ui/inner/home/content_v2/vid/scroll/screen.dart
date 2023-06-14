@@ -407,6 +407,11 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                 if (_curIdx != index) {
                   Future.delayed(const Duration(milliseconds: 400), () {
                     try {
+                      widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_cardIndex, widget.arguments?.heightTopProfile ?? 0, 100));
+                    } catch (e) {
+                      print("ini error $e");
+                    }
+                    try {
                       if (_curIdx != -1) {
                         print('Vid Landing Page: pause $_curIdx ${vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
                         if (vidData?[_curIdx].fAliplayer != null) {

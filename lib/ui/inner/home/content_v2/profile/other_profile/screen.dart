@@ -19,6 +19,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/othe
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_pics.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_top.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_vids.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_top_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
@@ -38,7 +39,7 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
 
-  int heightProfileCard = 0;
+  double heightProfileCard = 0;
   UserInfoModel? userData;
   Map<String, List<ContentData>>? otherStoryGroup;
   bool isloading = false;
@@ -108,16 +109,29 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
     super.dispose();
   }
 
-  Widget optionButton(bool isLoading, int index) {
+  Widget optionButton(bool isLoading, int index, double height) {
     List pages = [
       !isLoading
           ? OtherProfilePics(
               pics: userData?.pics ?? [],
               scrollController: _scrollController,
+              height: height,
             )
           : BothProfileContentShimmer(),
-      !isLoading ? OtherProfileDiaries(diaries: userData?.diaries ?? []) : BothProfileContentShimmer(),
-      !isLoading ? OtherProfileVids(vids: userData?.vids ?? []) : BothProfileContentShimmer(),
+      !isLoading
+          ? OtherProfileDiaries(
+              diaries: userData?.diaries ?? [],
+              scrollController: _scrollController,
+              height: height,
+            )
+          : BothProfileContentShimmer(),
+      !isLoading
+          ? OtherProfileVids(
+              vids: userData?.vids ?? [],
+              scrollController: _scrollController,
+              height: height,
+            )
+          : BothProfileContentShimmer(),
     ];
     return pages[index];
   }
@@ -181,66 +195,85 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
             onRefresh: () async {
               await notifier.initialOtherProfile(context, refresh: true, argument: widget.arguments);
             },
-            child: CustomScrollView(
-              controller: _scrollController,
-              scrollDirection: Axis.vertical,
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                // SliverAppBar(
-                //   pinned: false,
-                //   stretch: false,
-                //   elevation: 0.0,
-                //   floating: false,
-                //   automaticallyImplyLeading: false,
-                //   expandedHeight: (200 * SizeConfig.scaleDiagonal) + 46,
-                //   backgroundColor: Theme.of(context).colorScheme.background,
-                //   flexibleSpace: FlexibleSpaceBar(
-                //     titlePadding: EdgeInsets.zero,
-                //     background: notifier.user.profile != null
-                //         ? notifier.statusFollowing == StatusFollowing.following
-                //             ? const OtherProfileTop()
-                //             : const OtherProfileTop()
-                //         : BothProfileTopShimmer(),
-                //   ),
-                // ),
-                SliverToBoxAdapter(
-                  child: MeasuredSize(
-                    onChange: (e) {
-                      e.height;
-                    },
-                    child: Container(
-                      child: notifier.user.profile != null
-                          ? notifier.statusFollowing == StatusFollowing.following
-                              ? OtherProfileTop(
-                                  // email: widget.arguments.senderEmail ?? '',
-                                  email: userData?.profile?.email ?? '',
-                                  profile: userData?.profile,
-                                  otherStoryGroup: otherStoryGroup,
-                                )
-                              : OtherProfileTop(
-                                  // email: widget.arguments.senderEmail ?? '',
-                                  email: userData?.profile?.email ?? '',
-                                  profile: userData?.profile,
-                                  otherStoryGroup: otherStoryGroup,
-                                )
-                          : BothProfileTopShimmer(),
-                    ),
-                  ),
-                ),
-                SliverAppBar(
-                  pinned: true,
-                  flexibleSpace: OtherProfileBottom(email: widget.arguments.senderEmail),
-                  automaticallyImplyLeading: false,
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                ),
-                if (notifier.user.profile != null && notifier.statusFollowing == StatusFollowing.following)
-                  isloading ? BothProfileContentShimmer() : optionButton(notifier.isLoading, notifier.pageIndex)
-                // else if (notifier.peopleProfile?.userDetail?.data?.isPrivate ?? false)
-                //     SliverList(delegate: SliverChildListDelegate([PrivateAccount()]))
-                else
-                  isloading ? BothProfileContentShimmer() : optionButton(notifier.isLoading, notifier.pageIndex)
-              ],
-            ),
+            child: isloading
+                ? CustomScrollView(
+                    slivers: [SliverToBoxAdapter(child: BothProfileTopShimmer()), BothProfileContentShimmer()],
+                  )
+                : !notifier.isConnect
+                    ? OfflineMode(
+                        function: () async {
+                          isloading = true;
+                          await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
+                        },
+                      )
+                    : CustomScrollView(
+                        controller: _scrollController,
+                        scrollDirection: Axis.vertical,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        slivers: [
+                          // SliverAppBar(
+                          //   pinned: false,
+                          //   stretch: false,
+                          //   elevation: 0.0,
+                          //   floating: false,
+                          //   automaticallyImplyLeading: false,
+                          //   expandedHeight: (200 * SizeConfig.scaleDiagonal) + 46,
+                          //   backgroundColor: Theme.of(context).colorScheme.background,
+                          //   flexibleSpace: FlexibleSpaceBar(
+                          //     titlePadding: EdgeInsets.zero,
+                          //     background: notifier.user.profile != null
+                          //         ? notifier.statusFollowing == StatusFollowing.following
+                          //             ? const OtherProfileTop()
+                          //             : const OtherProfileTop()
+                          //         : BothProfileTopShimmer(),
+                          //   ),
+                          // ),
+                          SliverToBoxAdapter(
+                            child: MeasuredSize(
+                              onChange: (e) async {
+                                heightProfileCard = e.height;
+                                // await Future.delayed(Duration(milliseconds: 300), () {
+                                //   isloading = true;
+                                // });
+                                // // await Future.delayed(Duration(milliseconds: 1000), () {
+                                // isloading = false;
+                                // // });
+                                // print("=============================== height");
+                                // print(heightProfileCard);
+                              },
+                              child: Container(
+                                child: notifier.user.profile != null
+                                    ? notifier.statusFollowing == StatusFollowing.following
+                                        ? OtherProfileTop(
+                                            // email: widget.arguments.senderEmail ?? '',
+                                            email: userData?.profile?.email ?? '',
+                                            profile: userData?.profile,
+                                            otherStoryGroup: otherStoryGroup,
+                                          )
+                                        : OtherProfileTop(
+                                            // email: widget.arguments.senderEmail ?? '',
+                                            email: userData?.profile?.email ?? '',
+                                            profile: userData?.profile,
+                                            otherStoryGroup: otherStoryGroup,
+                                          )
+                                    : BothProfileTopShimmer(),
+                              ),
+                            ),
+                          ),
+                          SliverAppBar(
+                            pinned: true,
+                            flexibleSpace: OtherProfileBottom(email: widget.arguments.senderEmail),
+                            automaticallyImplyLeading: false,
+                            backgroundColor: Theme.of(context).colorScheme.background,
+                          ),
+                          if (notifier.user.profile != null && notifier.statusFollowing == StatusFollowing.following)
+                            isloading ? BothProfileContentShimmer() : optionButton(notifier.isLoading, notifier.pageIndex, heightProfileCard)
+                          // else if (notifier.peopleProfile?.userDetail?.data?.isPrivate ?? false)
+                          //     SliverList(delegate: SliverChildListDelegate([PrivateAccount()]))
+                          else
+                            isloading ? BothProfileContentShimmer() : optionButton(notifier.isLoading, notifier.pageIndex, heightProfileCard)
+                        ],
+                      ),
           ),
         ),
       ),
