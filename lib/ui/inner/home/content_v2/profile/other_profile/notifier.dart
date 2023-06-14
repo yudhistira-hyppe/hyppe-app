@@ -1,3 +1,4 @@
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_vid_detail_screen_argument.dart';
@@ -249,6 +250,7 @@ class OtherProfileNotifier with ChangeNotifier {
   initialOtherProfile(BuildContext context, {OtherProfileArgument? argument, bool refresh = false}) async {
     // pageIndex = 0;
     user = UserInfoModel();
+    golbalToOther++;
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
 
     if (argument?.senderEmail != null) {
@@ -416,7 +418,7 @@ class OtherProfileNotifier with ChangeNotifier {
     return pages[pageIndex];
   }
 
-  navigateToSeeAllScreen(BuildContext context, int index, {contentPosition? inPosition, Widget? title, List<ContentData>? data}) async {
+  navigateToSeeAllScreen(BuildContext context, int index, {contentPosition? inPosition, Widget? title, List<ContentData>? data, scrollController}) async {
     context.read<ReportNotifier>().inPosition = contentPosition.otherprofile;
     final connect = await _system.checkConnections();
     if (connect) {
@@ -429,6 +431,7 @@ class OtherProfileNotifier with ChangeNotifier {
               titleAppbar: title,
               pageSrc: PageSrc.otherProfile,
               picData: data,
+              scrollController: scrollController,
             ));
 
         // _routing.move(Routes.picSlideDetailPreview,
@@ -502,9 +505,15 @@ class OtherProfileNotifier with ChangeNotifier {
   }
 
   void onExit() {
+    print("==========Exit==================");
     Future.delayed(const Duration(milliseconds: 500), () {
       manyUser.removeLast();
     });
+    print("==========Exit 2==================");
+    if (golbalToOther == 1) {
+      golbalToOther = 0;
+    }
+
     routing.moveBack();
     userEmail = null;
   }

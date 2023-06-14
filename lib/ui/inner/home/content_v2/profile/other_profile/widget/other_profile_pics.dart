@@ -19,7 +19,9 @@ import '../../../../../../constant/widget/custom_loading.dart';
 
 class OtherProfilePics extends StatelessWidget {
   final List<ContentData>? pics;
-  const OtherProfilePics({Key? key, this.pics}) : super(key: key);
+  final ScrollController? scrollController;
+
+  const OtherProfilePics({Key? key, this.pics, this.scrollController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +54,7 @@ class OtherProfilePics extends StatelessWidget {
                                         "Pic",
                                         style: TextStyle(color: kHyppeTextLightPrimary),
                                       ),
+                                      scrollController: scrollController,
                                     ),
                                 child: Padding(
                                   padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),

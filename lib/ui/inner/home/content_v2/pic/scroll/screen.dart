@@ -39,6 +39,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_vio
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
@@ -80,6 +81,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   TransformationController _transformationController = TransformationController();
   final scrollGlobal = GlobalKey<SelfProfileScreenState>();
   final a = SelfProfileScreenState();
+  final GlobalKey<OtherProfileScreenState> globalAuto = GlobalKey<OtherProfileScreenState>();
 
   bool isZoom = false;
   bool isPrepare = false;
@@ -559,6 +561,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                   child: pics?.isEmpty ?? [].isEmpty
                       ? const NoResultFound()
                       : RefreshIndicator(
+                          key: globalAuto,
                           onRefresh: () async {
                             setState(() {
                               isloading = true;
@@ -749,6 +752,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
                 //=============
                 if (_lastCurIndex != _curIdx) {
+                  try {
+                    widget.arguments?.scrollController?.jumpTo(2000);
+                    globalAuto.currentState!.scroll();
+                  } catch (e) {
+                    print("ini error $e");
+                  }
+                  print("==================hihihi 2==============");
                   if (pics?[index].music?.musicTitle != null) {
                     // print("ada musiknya ${pics?[index].music}");
                     Future.delayed(const Duration(milliseconds: 100), () {

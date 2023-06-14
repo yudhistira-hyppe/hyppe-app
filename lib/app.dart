@@ -30,6 +30,7 @@ final globalDB = DatabaseHelper();
 bool isHomeScreen = false;
 bool isFromSplash = false;
 bool isStopVideo = false;
+int golbalToOther = 0;
 
 void disposeGlobalAudio() async {
   try {

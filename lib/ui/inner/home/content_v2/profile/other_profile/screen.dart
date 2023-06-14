@@ -1,4 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -29,15 +31,21 @@ class OtherProfileScreen extends StatefulWidget {
   const OtherProfileScreen({Key? key, required this.arguments}) : super(key: key);
 
   @override
-  OtherProfileScreenState createState() => OtherProfileScreenState();
+  State<OtherProfileScreen> createState() => OtherProfileScreenState();
 }
 
 class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
+
   int heightProfileCard = 0;
   UserInfoModel? userData;
   Map<String, List<ContentData>>? otherStoryGroup;
+  bool isloading = false;
+
+  void scroll() {
+    print("==================hihihi==============");
+  }
 
   @override
   void initState() {
@@ -53,6 +61,7 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
     });
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
     System().disposeBlock();
+
     super.initState();
   }
 
@@ -65,6 +74,22 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
   @override
   void didPopNext() {
     System().disposeBlock();
+    print("========== golbalToOther $golbalToOther");
+
+    if (golbalToOther > 1) {
+      setState(() {
+        isloading = true;
+      });
+      Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          isloading = false;
+        });
+        golbalToOther--;
+      });
+    }
+
+    // setState(() {});
+
     // final notifier = context.read<OtherProfileNotifier>();
     // Future.delayed(const Duration(milliseconds: 500), () {
     // var jumpTo = heightProfileCard + notifier.heightIndex;
@@ -85,7 +110,12 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
 
   Widget optionButton(bool isLoading, int index) {
     List pages = [
-      !isLoading ? OtherProfilePics(pics: userData?.pics ?? []) : BothProfileContentShimmer(),
+      !isLoading
+          ? OtherProfilePics(
+              pics: userData?.pics ?? [],
+              scrollController: _scrollController,
+            )
+          : BothProfileContentShimmer(),
       !isLoading ? OtherProfileDiaries(diaries: userData?.diaries ?? []) : BothProfileContentShimmer(),
       !isLoading ? OtherProfileVids(vids: userData?.vids ?? []) : BothProfileContentShimmer(),
     ];
@@ -174,22 +204,27 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                 //   ),
                 // ),
                 SliverToBoxAdapter(
-                  child: Container(
-                    child: notifier.user.profile != null
-                        ? notifier.statusFollowing == StatusFollowing.following
-                            ? OtherProfileTop(
-                                // email: widget.arguments.senderEmail ?? '',
-                                email: userData?.profile?.email ?? '',
-                                profile: userData?.profile,
-                                otherStoryGroup: otherStoryGroup,
-                              )
-                            : OtherProfileTop(
-                                // email: widget.arguments.senderEmail ?? '',
-                                email: userData?.profile?.email ?? '',
-                                profile: userData?.profile,
-                                otherStoryGroup: otherStoryGroup,
-                              )
-                        : BothProfileTopShimmer(),
+                  child: MeasuredSize(
+                    onChange: (e) {
+                      e.height;
+                    },
+                    child: Container(
+                      child: notifier.user.profile != null
+                          ? notifier.statusFollowing == StatusFollowing.following
+                              ? OtherProfileTop(
+                                  // email: widget.arguments.senderEmail ?? '',
+                                  email: userData?.profile?.email ?? '',
+                                  profile: userData?.profile,
+                                  otherStoryGroup: otherStoryGroup,
+                                )
+                              : OtherProfileTop(
+                                  // email: widget.arguments.senderEmail ?? '',
+                                  email: userData?.profile?.email ?? '',
+                                  profile: userData?.profile,
+                                  otherStoryGroup: otherStoryGroup,
+                                )
+                          : BothProfileTopShimmer(),
+                    ),
                   ),
                 ),
                 SliverAppBar(
@@ -199,11 +234,11 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                   backgroundColor: Theme.of(context).colorScheme.background,
                 ),
                 if (notifier.user.profile != null && notifier.statusFollowing == StatusFollowing.following)
-                  optionButton(notifier.isLoading, notifier.pageIndex)
+                  isloading ? BothProfileContentShimmer() : optionButton(notifier.isLoading, notifier.pageIndex)
                 // else if (notifier.peopleProfile?.userDetail?.data?.isPrivate ?? false)
                 //     SliverList(delegate: SliverChildListDelegate([PrivateAccount()]))
                 else
-                  optionButton(notifier.isLoading, notifier.pageIndex)
+                  isloading ? BothProfileContentShimmer() : optionButton(notifier.isLoading, notifier.pageIndex)
               ],
             ),
           ),
