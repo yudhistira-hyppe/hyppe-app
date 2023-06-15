@@ -1654,7 +1654,10 @@ class SearchNotifier with ChangeNotifier {
           ));
           // _routing.move(Routes.picSlideDetailPreview,
           //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
-          scrollAuto(result);
+          if(result != null){
+            scrollAuto(result);
+          }
+
           break;
         case HyppeType.HyppeDiary:
           final diaries = await getDetailContents(context, keys, type, api, data.length);
@@ -1678,7 +1681,9 @@ class SearchNotifier with ChangeNotifier {
           ));
           // _routing.move(Routes.diaryDetail,
           //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
-          scrollAuto(result);
+          if(result != null){
+            scrollAuto(result);
+          }
           break;
         case HyppeType.HyppeVid:
           final vids = await getDetailContents(context, keys, type, api, data.length);
@@ -1701,7 +1706,9 @@ class SearchNotifier with ChangeNotifier {
               key: keys
           ));
           // result = await _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
-          scrollAuto(result);
+          if(result != null){
+            scrollAuto(result);
+          }
           break;
       }
     } else {

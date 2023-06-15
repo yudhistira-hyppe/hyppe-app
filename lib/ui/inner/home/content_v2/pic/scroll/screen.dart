@@ -143,6 +143,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         FlutterAliplayer.enableMix(true);
       }
 
+      notifier.checkConnection();
+
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
@@ -769,7 +771,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                     fAliplayer?.stop();
                   }
                   Future.delayed(const Duration(milliseconds: 100), () {
-                    System().increaseViewCount2(context, pics?[index] ?? ContentData(), check: false);
+                    System().increaseViewCount2(context, pics?[index] ?? ContentData());
                   });
                   if (pics?[index].certified ?? false) {
                     System().block(context);
@@ -1254,7 +1256,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          System().increaseViewCount2(context, data, check: false);
+                          System().increaseViewCount2(context, data);
                           setState(() {
                             data.reportedStatus = '';
                           });

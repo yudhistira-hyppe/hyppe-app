@@ -105,8 +105,6 @@ class ScrollPicNotifier with ChangeNotifier {
       }
       connectionError = true;
       isLoadingLoadmore = false;
-      final language = context.read<TranslateNotifierV2>().translate;
-      context.showErrorConnection(language);
     }
 
   }
@@ -173,8 +171,6 @@ class ScrollPicNotifier with ChangeNotifier {
       }
       connectionError = true;
       isLoadingLoadmore = false;
-      final language = context.read<TranslateNotifierV2>().translate;
-      context.showErrorConnection(language);
     }
 
   }

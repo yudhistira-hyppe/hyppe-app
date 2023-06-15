@@ -30,6 +30,8 @@ final globalDB = DatabaseHelper();
 bool isHomeScreen = false;
 bool isFromSplash = false;
 bool isStopVideo = false;
+bool isShowingDialog = false;
+bool connectInternet = true;
 int golbalToOther = 0;
 bool globalInternetConnection = true;
 
@@ -76,6 +78,7 @@ void mainApp(EnvType env) async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+
   runApp(Hyppe());
   // runZonedGuarded(() async {
   //   WidgetsFlutterBinding.ensureInitialized();

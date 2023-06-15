@@ -77,8 +77,6 @@ class ScrollVidNotifier with ChangeNotifier {
       }
     } else {
       isLoadingLoadmore = false;
-      final language = context.read<TranslateNotifierV2>().translate;
-      context.showErrorConnection(language);
     }
   }
 
@@ -125,8 +123,6 @@ class ScrollVidNotifier with ChangeNotifier {
       }
     } else {
       isLoadingLoadmore = false;
-      final language = context.read<TranslateNotifierV2>().translate;
-      context.showErrorConnection(language);
     }
   }
 

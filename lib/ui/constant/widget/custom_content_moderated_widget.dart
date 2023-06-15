@@ -1,12 +1,16 @@
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
+import '../../../app.dart';
 import 'custom_base_cache_image.dart';
 import 'custom_icon_widget.dart';
+import 'custom_loading.dart';
 import 'custom_spacer.dart';
 import 'custom_text_widget.dart';
 
@@ -52,7 +56,7 @@ class CustomContentModeratedWidget extends StatelessWidget {
             children: [
               (thumbnail is ImageUrl)
                   ? CustomBaseCacheImage(
-                      // cacheKey: _networklHasErrorNotifier.value.toString(),
+                      cacheKey: thumbnail.id,
                       imageUrl: (thumbnail as ImageUrl).url,
                       memCacheWidth: 70,
                       memCacheHeight: 70,
@@ -63,18 +67,56 @@ class CustomContentModeratedWidget extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: const BorderRadius.all(Radius.circular(10)),
                             image: DecorationImage(
-                              fit: boxFitContent,
+                              fit: BoxFit.cover,
                               image: imageProvider,
                             ),
                           ),
                         );
                       },
                       placeHolderWidget: ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer()),
-                      errorWidget: (_, __, ___) {
+                      errorWidget: (_, url, error) {
+                        print('image url is $url $error $connectInternet');
+                        if (connectInternet) {
+                          return ClipRRect(
+                              borderRadius: const BorderRadius.all(Radius.circular(10)),
+                              child: Image.network(
+                                url,
+                                fit: boxFitContent,
+                                width: double.infinity,
+                                height: double.infinity,
+                                errorBuilder: (_, __, ___) {
+                                  return Container(
+                                    width: width,
+                                    height: height,
+                                    decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(10)), color: Colors.grey),
+                                  );
+                                },
+                                loadingBuilder: (_, child, event) {
+                                  if (event == null) {
+                                    return Center(child: child);
+                                  } else {
+                                    return UnconstrainedBox(
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: const CustomLoading(),
+                                        width: 35 * SizeConfig.scaleDiagonal,
+                                        height: 35 * SizeConfig.scaleDiagonal,
+                                      ),
+                                    );
+                                  }
+                                },
+                              ));
+                        }
+
                         return Container(
                           width: width,
                           height: height,
-                          decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(10)), color: Colors.grey),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: boxFitError,
+                              image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                            ),
+                          ),
                         );
                       },
                       emptyWidget: Container(

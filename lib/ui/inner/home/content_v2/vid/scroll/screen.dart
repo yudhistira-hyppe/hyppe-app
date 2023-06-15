@@ -103,6 +103,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
       var index = 0;
       var lastIndex = 0;
 
+      notifier.checkConnection();
+
       itemPositionsListener.itemPositions.addListener(() async {
         index = itemPositionsListener.itemPositions.value.first.index;
         if (lastIndex != index) {

@@ -82,8 +82,8 @@ extension ContextScreen on BuildContext {
 
   bool isIndo() => SharedPreference().readStorage(SpKeys.isoCode) == 'id';
 
-  showErrorConnection(LocalizationModelV2 language){
-    ShowBottomSheet().onShowColouredSheet(
+  Future showErrorConnection(LocalizationModelV2 language) async {
+    await ShowBottomSheet().onShowColouredSheet(
       this,
       language.internetConnectionLost ?? ' ',
       maxLines: 3,
@@ -93,6 +93,8 @@ extension ContextScreen on BuildContext {
       margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
     );
   }
+
+
 }
 
 extension StringDefine on String {
@@ -186,6 +188,11 @@ extension StringDefine on String {
 
   bool hasEmoji(){
     return contains(RegExp(r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'));
+  }
+
+  bool isUrlLink(){
+    RegExp exp = new RegExp(r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+');
+    return exp.hasMatch(this);
   }
 }
 

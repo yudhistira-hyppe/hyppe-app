@@ -82,7 +82,13 @@ class _BuildButtonState extends State<BuildButton> {
                   iconData: '${AssetPath.vectorPath}share-white.svg',
                   color: kHyppeLightButtonText,
                 ),
-                onTap: () => notifier.createdDynamicLink(context, widget.data, storyController: widget.storyController),
+                onTap: () async {
+                  if(widget.pause != null){
+                    widget.pause!();
+                  }
+                  await notifier.createdDynamicLink(context, widget.data, storyController: widget.storyController);
+
+                },
               )
             ],
           );
