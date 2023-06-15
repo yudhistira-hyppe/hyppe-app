@@ -30,6 +30,21 @@ final globalDB = DatabaseHelper();
 bool isHomeScreen = false;
 bool isFromSplash = false;
 bool isStopVideo = false;
+bool isShowingDialog = false;
+bool connectInternet = true;
+
+class MyImageCache extends ImageCache {
+  @override
+  void clear() {
+    print('Clearing cache!');
+    super.clear();
+  }
+}
+
+class MyWidgetsBinding extends WidgetsFlutterBinding {
+  @override
+  ImageCache createImageCache() => MyImageCache();
+}
 
 void disposeGlobalAudio() async {
   try {
@@ -74,6 +89,7 @@ void mainApp(EnvType env) async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+
   runApp(Hyppe());
   // runZonedGuarded(() async {
   //   WidgetsFlutterBinding.ensureInitialized();

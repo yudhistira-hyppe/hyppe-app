@@ -15,6 +15,7 @@ import '../../../../core/services/shared_preference.dart';
 import '../../../constant/widget/custom_shimmer.dart';
 import '../../../constant/widget/custom_spacer.dart';
 import '../../../constant/widget/custom_text_widget.dart';
+import '../widget/search_no_result.dart';
 
 class InterestScreen extends StatefulWidget {
   Function(Interest)? onClick;
@@ -69,7 +70,7 @@ class _InterestScreenState extends State<InterestScreen> {
                               fontWeight: FontWeight.bold),
                         ),
                       ),
-                      CustomScrollView(
+                      (notifier.listInterest ?? []).isNotEmpty ? CustomScrollView(
                         primary: false,
                         shrinkWrap: true,
                         slivers: <Widget>[
@@ -134,7 +135,7 @@ class _InterestScreenState extends State<InterestScreen> {
                             ),
                           ),
                         ],
-                      )
+                      ): SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text, margin: const EdgeInsets.only(left: 16))
                     ],
                   );
                 }else{

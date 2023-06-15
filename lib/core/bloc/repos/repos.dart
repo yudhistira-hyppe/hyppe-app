@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/config/url_constants.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -135,15 +137,26 @@ class Repos {
     try {
       /// check if property withCheckConnection null, true or false
       if (connection != null && !connection) {
+        connectInternet = false;
         /// connect with ErrorService if property [errorService] not null
         if (errorServiceType != null) {
           context.read<ErrorService>().addErrorObject(errorServiceType, _language.noInternetConnection ?? '');
         }
         print('trigger onNoInternetConnection');
         if(withCheckConnection){
-          return ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: onNoInternet);
+          if(!isShowingDialog){
+            isShowingDialog = true;
+            final language = context.read<TranslateNotifierV2>().translate;
+            await context.showErrorConnection(language);
+            isShowingDialog = false;
+            return;
+          }
+
+          // return ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: onNoInternet);
         }
 
+      }else{
+        connectInternet = true;
       }
       print('_hitApiGetSearchData#3 ${System().getCurrentDate()}');
 
