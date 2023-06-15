@@ -45,33 +45,7 @@ class CustomBaseCacheImage extends StatelessWidget {
   Widget build(BuildContext context) {
     // System().checkMemory();
     SizeConfig().init(context);
-<<<<<<< HEAD
-    return (imageUrl ?? '').isNotEmpty
-        ? CachedNetworkImage(
-            cacheKey: cacheKey, // "$imageUrl${DateTime.now().minute}",
-            imageUrl: "$imageUrl",
-            httpHeaders: headers,
-            errorWidget: errorWidget,
-            imageBuilder: imageBuilder,
-            memCacheWidth: memCacheWidth,
-            memCacheHeight: memCacheHeight,
-            filterQuality: FilterQuality.none,
-            // cacheManager: CustomCacheManager.instance,
-            placeholder: (context, url) =>
-                placeHolderWidget ??
-                UnconstrainedBox(
-                  child: Container(
-                    padding: EdgeInsets.all(5),
-                    alignment: Alignment.center,
-                    width: widthPlaceHolder * SizeConfig.scaleDiagonal,
-                    height: heightPlaceHolder * SizeConfig.scaleDiagonal,
-                    child: const CustomLoading(),
-                  ),
-                ),
-          )
-        : emptyWidget;
-=======
-    if((imageUrl ?? '').isNotEmpty || (imageUrl ?? '').isUrlLink()){
+    if ((imageUrl ?? '').isNotEmpty || (imageUrl ?? '').isUrlLink()) {
       return CachedNetworkImage(
         cacheKey: cacheKey, // "$imageUrl${DateTime.now().minute}",
         imageUrl: "$imageUrl",
@@ -82,7 +56,7 @@ class CustomBaseCacheImage extends StatelessWidget {
         memCacheHeight: memCacheHeight,
         filterQuality: FilterQuality.none,
         placeholder: (context, url) =>
-        placeHolderWidget ??
+            placeHolderWidget ??
             UnconstrainedBox(
               child: Container(
                 alignment: Alignment.center,
@@ -92,10 +66,9 @@ class CustomBaseCacheImage extends StatelessWidget {
               ),
             ),
       );
-    }else{
+    } else {
       return emptyWidget;
     }
->>>>>>> 0c80dc2ab9b353da4241b5b6e11a904bca3fe2ce
     // return (imageUrl ?? '').isNotEmpty
     //     ? OptimizedCacheImage(
     //         imageUrl: "$imageUrl",
