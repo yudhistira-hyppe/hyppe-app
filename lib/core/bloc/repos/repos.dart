@@ -140,10 +140,9 @@ class Repos {
           context.read<ErrorService>().addErrorObject(errorServiceType, _language.noInternetConnection ?? '');
         }
         print('trigger onNoInternetConnection');
-        if(withCheckConnection){
+        if (withCheckConnection) {
           return ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: onNoInternet);
         }
-
       }
       print('_hitApiGetSearchData#3 ${System().getCurrentDate()}');
 

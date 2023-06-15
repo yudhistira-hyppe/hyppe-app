@@ -31,6 +31,7 @@ bool isHomeScreen = false;
 bool isFromSplash = false;
 bool isStopVideo = false;
 int golbalToOther = 0;
+bool globalInternetConnection = true;
 
 void disposeGlobalAudio() async {
   try {

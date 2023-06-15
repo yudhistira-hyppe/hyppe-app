@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'custom_base_cache_image.dart';
 import 'custom_icon_widget.dart';
 import 'custom_spacer.dart';
@@ -49,52 +50,53 @@ class CustomContentModeratedWidget extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              (thumbnail is ImageUrl) ?
-              CustomBaseCacheImage(
-                // cacheKey: _networklHasErrorNotifier.value.toString(),
-                imageUrl: (thumbnail as ImageUrl).url,
-                memCacheWidth: 70,
-                memCacheHeight: 70,
-                imageBuilder: (_, imageProvider) {
-                  return Container(
-                    width: width,
-                    height: height,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      image: DecorationImage(
+              (thumbnail is ImageUrl)
+                  ? CustomBaseCacheImage(
+                      // cacheKey: _networklHasErrorNotifier.value.toString(),
+                      imageUrl: (thumbnail as ImageUrl).url,
+                      memCacheWidth: 70,
+                      memCacheHeight: 70,
+                      imageBuilder: (_, imageProvider) {
+                        return Container(
+                          width: width,
+                          height: height,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(Radius.circular(10)),
+                            image: DecorationImage(
+                              fit: boxFitContent,
+                              image: imageProvider,
+                            ),
+                          ),
+                        );
+                      },
+                      placeHolderWidget: ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer()),
+                      errorWidget: (_, __, ___) {
+                        return Container(
+                          width: width,
+                          height: height,
+                          decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(10)), color: Colors.grey),
+                        );
+                      },
+                      emptyWidget: Container(
+                        width: width,
+                        height: height,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: boxFitError,
+                            image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                          ),
+                        ),
+                      ),
+                    )
+                  : ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      child: Image.memory(
+                        (thumbnail as ImageBlob).data,
                         fit: boxFitContent,
-                        image: imageProvider,
+                        width: width,
+                        height: height,
                       ),
                     ),
-                  );
-                },
-                errorWidget: (_, __, ___) {
-                  return Container(
-                    width: width,
-                    height: height,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: boxFitError,
-                        image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                      ),
-                    ),
-                  );
-                },
-                emptyWidget: Container(
-                  width: width,
-                  height: height,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: boxFitError,
-                      image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                    ),
-                  ),
-                ),
-              ) : ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                child: Image.memory((thumbnail as ImageBlob).data, fit: boxFitContent, width: width,
-                  height: height,),
-              ),
               if (featureType != FeatureType.pic)
                 CustomIconWidget(
                   defaultColor: false,
@@ -152,17 +154,17 @@ class CustomContentModeratedWidget extends StatelessWidget {
   }
 }
 
-class ImageUrl extends ImageContent{
+class ImageUrl extends ImageContent {
   String url;
   ImageUrl(super.id, {required this.url});
 }
 
-class ImageBlob extends ImageContent{
+class ImageBlob extends ImageContent {
   Uint8List data;
   ImageBlob(super.id, {required this.data});
 }
 
-class ImageContent{
+class ImageContent {
   String? id;
   ImageContent(this.id);
 }

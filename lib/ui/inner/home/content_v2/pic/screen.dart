@@ -830,19 +830,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                     errorWidget: (context, url, error) {
                                       return GestureDetector(
                                         onTap: () {
-                                          print("TOUCH");
                                           _networklHasErrorNotifier.value++;
+                                          // reloadImage(index);
                                         },
                                         child: Container(
-                                          height: 100,
-                                          decoration: BoxDecoration(
-                                            image: const DecorationImage(
-                                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                              fit: BoxFit.cover,
-                                            ),
-                                            borderRadius: BorderRadius.circular(8.0),
-                                          ),
-                                        ),
+                                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                            width: SizeConfig.screenWidth,
+                                            height: 250,
+                                            alignment: Alignment.center,
+                                            child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
                                       );
                                     },
                                   );

@@ -129,6 +129,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     // stopwatch = new Stopwatch()..start();
     super.initState();
     pics = widget.arguments?.picData;
+    notifier.pics = pics;
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic-${pics?.first.postID}');
       WidgetsBinding.instance.addObserver(this);
@@ -522,6 +524,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   }
 
   int _currentItem = 0;
+  ValueNotifier<int> _networklHasErrorNotifier = ValueNotifier(0);
 
   @override
   Widget build(BuildContext context) {
@@ -870,55 +873,60 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                   },
                                   child: pics?[index].isLoading ?? false
                                       ? Container()
-                                      : CustomBaseCacheImage(
-                                          memCacheWidth: 100,
-                                          memCacheHeight: 100,
-                                          widthPlaceHolder: 80,
-                                          heightPlaceHolder: 80,
-                                          imageUrl: (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2',
-                                          // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
-                                          imageBuilder: (context, imageProvider) => ClipRRect(
-                                            borderRadius: BorderRadius.circular(20), // Image borderr
-                                            child: pics?[index].reportedStatus == 'BLURRED'
-                                                ? ImageFiltered(
-                                                    imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                                    child: Image(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.fitHeight,
-                                                      width: SizeConfig.screenWidth,
-                                                    ),
-                                                  )
-                                                : Image(
-                                                    image: imageProvider,
-                                                    fit: BoxFit.fitHeight,
-                                                    width: SizeConfig.screenWidth,
-                                                  ),
-                                          ),
-                                          emptyWidget: Container(
-                                            // const EdgeInsets.symmetric(horizontal: 4.5),
-                                            // height: 500,
-                                            decoration: BoxDecoration(
-                                              image: const DecorationImage(
-                                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                                fit: BoxFit.cover,
+                                      : ValueListenableBuilder(
+                                          valueListenable: _networklHasErrorNotifier,
+                                          builder: (BuildContext context, int count, _) {
+                                            return CustomBaseCacheImage(
+                                              cacheKey: "${pics?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
+                                              memCacheWidth: 100,
+                                              memCacheHeight: 100,
+                                              widthPlaceHolder: 80,
+                                              heightPlaceHolder: 80,
+                                              imageUrl: (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2',
+                                              // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
+                                              imageBuilder: (context, imageProvider) => ClipRRect(
+                                                borderRadius: BorderRadius.circular(20), // Image borderr
+                                                child: pics?[index].reportedStatus == 'BLURRED'
+                                                    ? ImageFiltered(
+                                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                                        child: Image(
+                                                          image: imageProvider,
+                                                          fit: BoxFit.fitHeight,
+                                                          width: SizeConfig.screenWidth,
+                                                        ),
+                                                      )
+                                                    : Image(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.fitHeight,
+                                                        width: SizeConfig.screenWidth,
+                                                      ),
                                               ),
-                                              borderRadius: BorderRadius.circular(8.0),
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) {
-                                            return GestureDetector(
-                                              onTap: () {
-                                                reloadImage(index);
+                                              emptyWidget: Container(
+                                                // const EdgeInsets.symmetric(horizontal: 4.5),
+                                                // height: 500,
+                                                decoration: BoxDecoration(
+                                                  image: const DecorationImage(
+                                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(8.0),
+                                                ),
+                                              ),
+                                              errorWidget: (context, url, error) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    _networklHasErrorNotifier.value++;
+                                                  },
+                                                  child: Container(
+                                                      decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                                      width: SizeConfig.screenWidth,
+                                                      height: 250,
+                                                      alignment: Alignment.center,
+                                                      child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
+                                                );
                                               },
-                                              child: Container(
-                                                  decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                                  width: SizeConfig.screenWidth,
-                                                  height: 250,
-                                                  alignment: Alignment.center,
-                                                  child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
                                             );
-                                          },
-                                        ),
+                                          }),
                                 ),
                               ),
                             ),

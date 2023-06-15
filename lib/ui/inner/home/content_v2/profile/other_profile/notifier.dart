@@ -256,12 +256,11 @@ class OtherProfileNotifier with ChangeNotifier {
     if (!connect) {
       isConnect = false;
       notifyListeners();
-      return false;
     } else {
       isConnect = true;
       notifyListeners();
     }
-    user = UserInfoModel();
+    // user = UserInfoModel();
     golbalToOther++;
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
 
@@ -281,23 +280,26 @@ class OtherProfileNotifier with ChangeNotifier {
     diaryContentsQuery.searchText = userEmail ?? '';
     picContentsQuery.searchText = userEmail ?? '';
 
-    if (argument?.profile != null) {
-      user.profile = argument?.profile;
-      manyUser.add(user);
-      notifyListeners();
-    } else {
-      PreviewStoriesNotifier storyNotifier = context.read<PreviewStoriesNotifier>();
-      storyNotifier.otherStoryGroup = {};
-      await storyNotifier.initialOtherStoryGroup(context, userEmail ?? '');
-      final usersNotifier = UserBloc();
-      await usersNotifier.getUserProfilesBloc(context, search: userEmail, withAlertMessage: true);
-      final usersFetch = usersNotifier.userFetch;
+    PreviewStoriesNotifier storyNotifier = context.read<PreviewStoriesNotifier>();
+    storyNotifier.otherStoryGroup = {};
+    await storyNotifier.initialOtherStoryGroup(context, userEmail ?? '');
 
-      if (usersFetch.userState == UserState.getUserProfilesSuccess) {
-        user.profile = usersFetch.data;
+    if (isConnect) {
+      if (argument?.profile != null) {
+        user.profile = argument?.profile;
         manyUser.add(user);
-        print("========== many user $manyUser");
         notifyListeners();
+      } else {
+        final usersNotifier = UserBloc();
+        await usersNotifier.getUserProfilesBloc(context, search: userEmail, withAlertMessage: true);
+        final usersFetch = usersNotifier.userFetch;
+
+        if (usersFetch.userState == UserState.getUserProfilesSuccess) {
+          user.profile = usersFetch.data;
+          manyUser.add(user);
+          print("========== many user $manyUser");
+          notifyListeners();
+        }
       }
     }
 
@@ -306,6 +308,9 @@ class OtherProfileNotifier with ChangeNotifier {
     }
     // user.vids ??= await vidContentsQuery.reload(context, otherContent: true);
     // user.pics = await picContentsQuery.reload(context, otherContent: true);
+    user.pics = null;
+    user.vids = null;
+    user.diaries = null;
 
     await getDataPerPgage(context);
 
@@ -320,11 +325,11 @@ class OtherProfileNotifier with ChangeNotifier {
     if (!connect) {
       isConnectContent = false;
       notifyListeners();
-      return false;
     } else {
       isConnectContent = true;
       notifyListeners();
     }
+    print("========== USER ===========${user.pics}");
     switch (pageIndex) {
       case 0:
         {
@@ -335,14 +340,7 @@ class OtherProfileNotifier with ChangeNotifier {
               picContentsQuery.searchText = email;
             }
             user.pics = await picContentsQuery.reload(context, otherContent: true);
-            print('==================================');
-            print(manyUser);
-            print(manyUser.last);
             manyUser.last.pics = user.pics;
-            print('==================================');
-            print(manyUser.last);
-            print(manyUser.first.pics);
-            print(manyUser.last.pics);
             Future.delayed(const Duration(milliseconds: 2000), () {
               isLoading = false;
             });
@@ -441,59 +439,59 @@ class OtherProfileNotifier with ChangeNotifier {
 
   navigateToSeeAllScreen(BuildContext context, int index, {contentPosition? inPosition, Widget? title, List<ContentData>? data, scrollController, double? heightProfile}) async {
     context.read<ReportNotifier>().inPosition = contentPosition.otherprofile;
-    final connect = await _system.checkConnections();
-    if (connect) {
-      var result;
-      if (pageIndex == 0) {
-        _routing.move(Routes.scrollPic,
-            argument: SlidedPicDetailScreenArgument(
-              page: index,
-              type: TypePlaylist.mine,
-              titleAppbar: title,
-              pageSrc: PageSrc.otherProfile,
-              picData: data,
-              scrollController: scrollController,
-              heightTopProfile: heightProfile,
-            ));
+    // final connect = await _system.checkConnections();
+    // if (connect) {
+    var result;
+    if (pageIndex == 0) {
+      _routing.move(Routes.scrollPic,
+          argument: SlidedPicDetailScreenArgument(
+            page: index,
+            type: TypePlaylist.mine,
+            titleAppbar: title,
+            pageSrc: PageSrc.otherProfile,
+            picData: data,
+            scrollController: scrollController,
+            heightTopProfile: heightProfile,
+          ));
 
-        // _routing.move(Routes.picSlideDetailPreview,
-        //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.other));
-        // scrollAuto(result);
-      }
-      if (pageIndex == 1) {
-        _routing.move(Routes.scrollDiary,
-            argument: SlidedDiaryDetailScreenArgument(
-              page: index,
-              type: TypePlaylist.mine,
-              titleAppbar: title,
-              pageSrc: PageSrc.otherProfile,
-              diaryData: data,
-              scrollController: scrollController,
-              heightTopProfile: heightProfile,
-            ));
-
-        // _routing.move(Routes.diaryDetail,
-        //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.other));
-        // scrollAuto(result);
-      }
-      if (pageIndex == 2) {
-        _routing.move(Routes.scrollVid,
-            argument: SlidedVidDetailScreenArgument(
-              page: index,
-              type: TypePlaylist.mine,
-              titleAppbar: title,
-              pageSrc: PageSrc.otherProfile,
-              vidData: data,
-              scrollController: scrollController,
-              heightTopProfile: heightProfile,
-            ));
-
-        // _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
-        // scrollAuto(result);
-      }
-    } else {
-      ShowBottomSheet.onNoInternetConnection(context);
+      // _routing.move(Routes.picSlideDetailPreview,
+      //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.other));
+      // scrollAuto(result);
     }
+    if (pageIndex == 1) {
+      _routing.move(Routes.scrollDiary,
+          argument: SlidedDiaryDetailScreenArgument(
+            page: index,
+            type: TypePlaylist.mine,
+            titleAppbar: title,
+            pageSrc: PageSrc.otherProfile,
+            diaryData: data,
+            scrollController: scrollController,
+            heightTopProfile: heightProfile,
+          ));
+
+      // _routing.move(Routes.diaryDetail,
+      //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.other));
+      // scrollAuto(result);
+    }
+    if (pageIndex == 2) {
+      _routing.move(Routes.scrollVid,
+          argument: SlidedVidDetailScreenArgument(
+            page: index,
+            type: TypePlaylist.mine,
+            titleAppbar: title,
+            pageSrc: PageSrc.otherProfile,
+            vidData: data,
+            scrollController: scrollController,
+            heightTopProfile: heightProfile,
+          ));
+
+      // _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
+      // scrollAuto(result);
+    }
+    // } else {
+    //   ShowBottomSheet.onNoInternetConnection(context);
+    // }
   }
 
   scrollAuto(String index) {

@@ -11,9 +11,12 @@ class BothProfileContentShimmer extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) => Padding(
           padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-          child: const CustomShimmer(
-            width: double.infinity,
-            height: double.infinity,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: const CustomShimmer(
+              width: double.infinity,
+              height: double.infinity,
+            ),
           ),
         ),
         childCount: 12,

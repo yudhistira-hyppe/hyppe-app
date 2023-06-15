@@ -486,7 +486,8 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
       } else {
         apsaraId = widget.data?.apsaraId ?? '';
       }
-      await notifier.getAuthApsara(context, apsaraId: apsaraId);
+      globalInternetConnection = await System().checkConnections();
+      await notifier.getAuthApsara(context, apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         print(fetch.data);
@@ -534,8 +535,6 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           fAliplayer?.prepare();
           print('=2=2=2=2=2=2=2prepare done');
         }
-
-        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
       // 'Failed to fetch ads data $e'.logger();
@@ -554,21 +553,17 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
       isloading = true;
     });
     try {
+      globalInternetConnection = await System().checkConnections();
       final notifier = PostsBloc();
-      await notifier.getOldVideo(context, apsaraId: widget.data?.postID ?? '');
+      await notifier.getOldVideo(context, apsaraId: widget.data?.postID ?? '', check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
-        print("iyyiyiyiyiyi $jsonMap");
-        print("iyyiyiyiyiyi $jsonMap['data']['url]");
-
         setState(() {
           urlVid = jsonMap['data']['url'];
           fAliplayer?.setUrl(urlVid);
           isloading = false;
         });
-
-        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
       setState(() {
@@ -799,7 +794,6 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     var x = 0.0;
     var y = 0.0;
     var width = MediaQuery.of(context).size.width;
-    print('postID Video: ${widget.data?.postID} mode: ${widget.playMode}');
 
     if (widget.data!.isLoading) {
       Future.delayed(const Duration(milliseconds: 50), () {
@@ -824,7 +818,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         child: Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),
       );
     } else {
-      print("onViewPlayerCreated ${onViewPlayerCreated}");
+      // print("onViewPlayerCreated ${onViewPlayerCreated}");
       aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
       // AliPlayerView aliPlayerAdsView = AliPlayerView(onCreated: onViewPlayerAdsCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
 

@@ -122,6 +122,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
 
     super.initState();
     vidData = widget.arguments?.vidData;
+    notifier.vidData = vidData;
   }
 
   @override

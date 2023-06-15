@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:optimized_cached_image/optimized_cached_image.dart';
 
 class CustomCacheManager {
@@ -58,10 +59,11 @@ class CustomBaseCacheImage extends StatelessWidget {
                 placeHolderWidget ??
                 UnconstrainedBox(
                   child: Container(
+                    padding: EdgeInsets.all(5),
                     alignment: Alignment.center,
-                    child: const CustomLoading(),
                     width: widthPlaceHolder * SizeConfig.scaleDiagonal,
                     height: heightPlaceHolder * SizeConfig.scaleDiagonal,
+                    child: const CustomLoading(),
                   ),
                 ),
           )
