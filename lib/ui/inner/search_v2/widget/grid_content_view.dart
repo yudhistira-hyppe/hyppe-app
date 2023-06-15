@@ -58,7 +58,7 @@ class _GridContentViewState extends State<GridContentView> {
                     if (widget.type == HyppeType.HyppePic) {
                       final imageInfo = dataitem.media?.imageInfo;
                       if(imageInfo.isNotNullAndEmpty()){
-                        thumb = (dataitem.isApsara ?? false) ? (imageInfo?[0].url ?? (dataitem.mediaThumbEndPoint ?? '')) : System().showUserPicture(dataitem.mediaThumbEndPoint) ?? '';
+                        thumb = (dataitem.isApsara ?? false) ? (imageInfo?[0].url ?? (dataitem.apsaraThumbId != null ? (dataitem.mediaThumbEndPoint ?? '') : (dataitem.mediaEndpoint ?? ''))) : System().showUserPicture(dataitem.mediaThumbEndPoint) ?? '';
                       }
 
                     } else {

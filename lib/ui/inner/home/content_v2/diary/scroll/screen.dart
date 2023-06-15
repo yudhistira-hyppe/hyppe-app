@@ -125,6 +125,8 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
         FlutterAliplayer.enableMix(true);
       }
 
+      notifier.checkConnection();
+
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
@@ -720,7 +722,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                 if (_lastCurIndex != _curIdx) {
                   Future.delayed(const Duration(milliseconds: 400), () {
                     start(diaryData?[index] ?? ContentData());
-                    System().increaseViewCount2(context, diaryData?[index] ?? ContentData(), check: false);
+                    System().increaseViewCount2(context, diaryData?[index] ?? ContentData());
                   });
                   if (diaryData?[index].certified ?? false) {
                     System().block(context);

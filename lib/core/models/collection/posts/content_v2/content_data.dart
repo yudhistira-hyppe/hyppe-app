@@ -165,6 +165,8 @@ class ContentData {
 
   String? apsaraId;
 
+  String? apsaraThumbId;
+
   Music? music;
 
   bool? isReport;
@@ -229,6 +231,7 @@ class ContentData {
       this.saleLike,
       this.isApsara,
       this.apsaraId,
+      this.apsaraThumbId,
       this.isReport,
       this.boosted = const [],
       this.boostCount,
@@ -307,6 +310,7 @@ class ContentData {
     }
 
     apsaraId = json['apsaraId'] ?? '';
+    apsaraThumbId = json['apsaraThumbId'];
     music = json['music'] != null ? Music.fromJson(json['music']) : null;
     isReport = json['isReport'] ?? false;
     if (json['boosted'] != null) {
@@ -390,6 +394,7 @@ class ContentData {
     }
 
     data['apsaraId'] = apsaraId;
+    data['apsaraThumbId'] = apsaraThumbId;
     if (music != null) {
       data['music'] = music!.toJson();
     }
