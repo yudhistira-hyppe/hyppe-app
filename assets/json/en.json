@@ -895,5 +895,7 @@
   "noPostsYet": "No posts yet",
   "youDontHaveAnyPostsHereYet": "You don't have any posts here yet.",
   "thisContentIsSubjectToModeration": "This content is moderated!",
-  "thisAccountHasNoPostsYet": "This account has no posts yet."
+  "thisAccountHasNoPostsYet": "This account has no posts yet.",
+  "oopsYoureOffline": "Oops, you're offline",
+  "checkYourWiFiConnectionOrInternet": "Check your WiFi connection or internet quota and try again, ok!"
 }

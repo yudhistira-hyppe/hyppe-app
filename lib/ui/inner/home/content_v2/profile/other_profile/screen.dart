@@ -1,4 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -17,6 +19,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/othe
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_pics.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_top.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_vids.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_top_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
@@ -29,15 +32,21 @@ class OtherProfileScreen extends StatefulWidget {
   const OtherProfileScreen({Key? key, required this.arguments}) : super(key: key);
 
   @override
-  OtherProfileScreenState createState() => OtherProfileScreenState();
+  State<OtherProfileScreen> createState() => OtherProfileScreenState();
 }
 
 class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
-  int heightProfileCard = 0;
+
+  double heightProfileCard = 0;
   UserInfoModel? userData;
   Map<String, List<ContentData>>? otherStoryGroup;
+  bool isloading = false;
+
+  void scroll() {
+    print("==================hihihi==============");
+  }
 
   @override
   void initState() {
@@ -53,6 +62,7 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
     });
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
     System().disposeBlock();
+
     super.initState();
   }
 
@@ -65,6 +75,22 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
   @override
   void didPopNext() {
     System().disposeBlock();
+    print("========== golbalToOther $golbalToOther");
+
+    if (golbalToOther > 1) {
+      setState(() {
+        isloading = true;
+      });
+      Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          isloading = false;
+        });
+        golbalToOther--;
+      });
+    }
+
+    // setState(() {});
+
     // final notifier = context.read<OtherProfileNotifier>();
     // Future.delayed(const Duration(milliseconds: 500), () {
     // var jumpTo = heightProfileCard + notifier.heightIndex;
@@ -83,11 +109,29 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
     super.dispose();
   }
 
-  Widget optionButton(bool isLoading, int index) {
+  Widget optionButton(bool isLoading, int index, double height) {
     List pages = [
-      !isLoading ? OtherProfilePics(pics: userData?.pics ?? []) : BothProfileContentShimmer(),
-      !isLoading ? OtherProfileDiaries(diaries: userData?.diaries ?? []) : BothProfileContentShimmer(),
-      !isLoading ? OtherProfileVids(vids: userData?.vids ?? []) : BothProfileContentShimmer(),
+      !isLoading
+          ? OtherProfilePics(
+              pics: userData?.pics ?? [],
+              scrollController: _scrollController,
+              height: height,
+            )
+          : BothProfileContentShimmer(),
+      !isLoading
+          ? OtherProfileDiaries(
+              diaries: userData?.diaries ?? [],
+              scrollController: _scrollController,
+              height: height,
+            )
+          : BothProfileContentShimmer(),
+      !isLoading
+          ? OtherProfileVids(
+              vids: userData?.vids ?? [],
+              scrollController: _scrollController,
+              height: height,
+            )
+          : BothProfileContentShimmer(),
     ];
     return pages[index];
   }
@@ -151,61 +195,85 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
             onRefresh: () async {
               await notifier.initialOtherProfile(context, refresh: true, argument: widget.arguments);
             },
-            child: CustomScrollView(
-              controller: _scrollController,
-              scrollDirection: Axis.vertical,
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                // SliverAppBar(
-                //   pinned: false,
-                //   stretch: false,
-                //   elevation: 0.0,
-                //   floating: false,
-                //   automaticallyImplyLeading: false,
-                //   expandedHeight: (200 * SizeConfig.scaleDiagonal) + 46,
-                //   backgroundColor: Theme.of(context).colorScheme.background,
-                //   flexibleSpace: FlexibleSpaceBar(
-                //     titlePadding: EdgeInsets.zero,
-                //     background: notifier.user.profile != null
-                //         ? notifier.statusFollowing == StatusFollowing.following
-                //             ? const OtherProfileTop()
-                //             : const OtherProfileTop()
-                //         : BothProfileTopShimmer(),
-                //   ),
-                // ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    child: notifier.user.profile != null
-                        ? notifier.statusFollowing == StatusFollowing.following
-                            ? OtherProfileTop(
-                                // email: widget.arguments.senderEmail ?? '',
-                                email: userData?.profile?.email ?? '',
-                                profile: userData?.profile,
-                                otherStoryGroup: otherStoryGroup,
-                              )
-                            : OtherProfileTop(
-                                // email: widget.arguments.senderEmail ?? '',
-                                email: userData?.profile?.email ?? '',
-                                profile: userData?.profile,
-                                otherStoryGroup: otherStoryGroup,
-                              )
-                        : BothProfileTopShimmer(),
-                  ),
-                ),
-                SliverAppBar(
-                  pinned: true,
-                  flexibleSpace: OtherProfileBottom(email: widget.arguments.senderEmail),
-                  automaticallyImplyLeading: false,
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                ),
-                if (notifier.user.profile != null && notifier.statusFollowing == StatusFollowing.following)
-                  optionButton(notifier.isLoading, notifier.pageIndex)
-                // else if (notifier.peopleProfile?.userDetail?.data?.isPrivate ?? false)
-                //     SliverList(delegate: SliverChildListDelegate([PrivateAccount()]))
-                else
-                  optionButton(notifier.isLoading, notifier.pageIndex)
-              ],
-            ),
+            child: isloading
+                ? CustomScrollView(
+                    slivers: [SliverToBoxAdapter(child: BothProfileTopShimmer()), BothProfileContentShimmer()],
+                  )
+                : !notifier.isConnect
+                    ? OfflineMode(
+                        function: () async {
+                          isloading = true;
+                          await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
+                        },
+                      )
+                    : CustomScrollView(
+                        controller: _scrollController,
+                        scrollDirection: Axis.vertical,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        slivers: [
+                          // SliverAppBar(
+                          //   pinned: false,
+                          //   stretch: false,
+                          //   elevation: 0.0,
+                          //   floating: false,
+                          //   automaticallyImplyLeading: false,
+                          //   expandedHeight: (200 * SizeConfig.scaleDiagonal) + 46,
+                          //   backgroundColor: Theme.of(context).colorScheme.background,
+                          //   flexibleSpace: FlexibleSpaceBar(
+                          //     titlePadding: EdgeInsets.zero,
+                          //     background: notifier.user.profile != null
+                          //         ? notifier.statusFollowing == StatusFollowing.following
+                          //             ? const OtherProfileTop()
+                          //             : const OtherProfileTop()
+                          //         : BothProfileTopShimmer(),
+                          //   ),
+                          // ),
+                          SliverToBoxAdapter(
+                            child: MeasuredSize(
+                              onChange: (e) async {
+                                heightProfileCard = e.height;
+                                // await Future.delayed(Duration(milliseconds: 300), () {
+                                //   isloading = true;
+                                // });
+                                // // await Future.delayed(Duration(milliseconds: 1000), () {
+                                // isloading = false;
+                                // // });
+                                // print("=============================== height");
+                                // print(heightProfileCard);
+                              },
+                              child: Container(
+                                child: notifier.user.profile != null
+                                    ? notifier.statusFollowing == StatusFollowing.following
+                                        ? OtherProfileTop(
+                                            // email: widget.arguments.senderEmail ?? '',
+                                            email: userData?.profile?.email ?? '',
+                                            profile: userData?.profile,
+                                            otherStoryGroup: otherStoryGroup,
+                                          )
+                                        : OtherProfileTop(
+                                            // email: widget.arguments.senderEmail ?? '',
+                                            email: userData?.profile?.email ?? '',
+                                            profile: userData?.profile,
+                                            otherStoryGroup: otherStoryGroup,
+                                          )
+                                    : BothProfileTopShimmer(),
+                              ),
+                            ),
+                          ),
+                          SliverAppBar(
+                            pinned: true,
+                            flexibleSpace: OtherProfileBottom(email: widget.arguments.senderEmail),
+                            automaticallyImplyLeading: false,
+                            backgroundColor: Theme.of(context).colorScheme.background,
+                          ),
+                          if (notifier.user.profile != null && notifier.statusFollowing == StatusFollowing.following)
+                            isloading ? BothProfileContentShimmer() : optionButton(notifier.isLoading, notifier.pageIndex, heightProfileCard)
+                          // else if (notifier.peopleProfile?.userDetail?.data?.isPrivate ?? false)
+                          //     SliverList(delegate: SliverChildListDelegate([PrivateAccount()]))
+                          else
+                            isloading ? BothProfileContentShimmer() : optionButton(notifier.isLoading, notifier.pageIndex, heightProfileCard)
+                        ],
+                      ),
           ),
         ),
       ),

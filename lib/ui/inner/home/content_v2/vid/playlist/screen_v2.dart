@@ -160,15 +160,14 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                                           print('===========hahhahahahaa===========');
                                           fullscreen();
                                         },
-                                        listenerPlay: (state, isInit){
-                                          if(isInit){
+                                        listenerPlay: (state, isInit) {
+                                          if (isInit) {
                                             isPlay = state;
-                                          }else{
+                                          } else {
                                             setState(() {
                                               isPlay = state;
                                             });
                                           }
-
                                         },
                                       ),
                                     ),
@@ -180,7 +179,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                                 ),
                               ),
                               //  if (orientation == Orientation.portrait) twelvePx,
-                              (widget.arguments.vidData?.allowComments ?? false)
+                              (data.allowComments ?? false)
                                   ? Offstage(
                                       offstage: orientation == Orientation.landscape || isFullPotrait,
                                       child: Padding(
@@ -344,10 +343,9 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                             adsData: null,
                             onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
                           );
-                          if(isPlay){
+                          if (isPlay) {
                             globalAliPlayer?.play();
                           }
-
                         },
                         child: const CustomIconWidget(
                           defaultColor: false,
@@ -381,10 +379,9 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                             globalAudioPlayer!.resume();
                           }
                           if (globalAliPlayer != null) {
-                            if(isPlay){
+                            if (isPlay) {
                               globalAliPlayer?.play();
                             }
-
                           }
                         },
                         child: const CustomIconWidget(
@@ -434,24 +431,24 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
               ),
               sixteenPx,
               SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                  (data.boosted.isEmpty) &&
-                  (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&
-                  data.email == email
+                      (data.boosted.isEmpty) &&
+                      (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&
+                      data.email == email
                   ? Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(bottom: 16),
-                child: ButtonBoost(
-                  onDetail: false,
-                  marginBool: true,
-                  contentData: data,
-                  startState: () {
-                    SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                  },
-                  afterState: () {
-                    SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-                  },
-                ),
-              )
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      child: ButtonBoost(
+                        onDetail: false,
+                        marginBool: true,
+                        contentData: data,
+                        startState: () {
+                          SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                        },
+                        afterState: () {
+                          SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                        },
+                      ),
+                    )
                   : const SizedBox.shrink(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -539,7 +536,9 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                       seeMore: ' ${notifier.language.seeMoreContent}',
                       normStyle: Theme.of(context).textTheme.subtitle2,
                       hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                      expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary,),
+                      expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                       isPlay: isPlay,
                     ),
                   ],
