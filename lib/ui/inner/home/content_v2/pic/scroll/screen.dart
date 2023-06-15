@@ -39,6 +39,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_vio
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
@@ -381,7 +382,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     });
     try {
       final notifier = PostsBloc();
-      await notifier.getAuthApsara(context, apsaraId: apsaraId);
+      await notifier.getAuthApsara(context, apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
@@ -411,7 +412,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     });
     try {
       final notifier = PostsBloc();
-      await notifier.getOldVideo(context, apsaraId: postId);
+      await notifier.getOldVideo(context, apsaraId: postId, check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
@@ -646,6 +647,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Text("${widget.arguments?.heightTopProfile ?? 0}"),
           // ZoomOverlay(
           //     modalBarrierColor: Colors.black12, // optional
           //     minScale: 0.5, // optional
@@ -751,6 +753,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
                 //=============
                 if (_lastCurIndex != _curIdx) {
+                  try {
+                    widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, 110));
+                  } catch (e) {
+                    print("ini error $e");
+                  }
+                  print("==================hihihi 2==============");
                   if (pics?[index].music?.musicTitle != null) {
                     // print("ada musiknya ${pics?[index].music}");
                     Future.delayed(const Duration(milliseconds: 100), () {
@@ -862,44 +870,57 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                   onScaleStop: () {
                                     zoom(false);
                                   },
-                                  child: CustomBaseCacheImage(
-                                    memCacheWidth: 100,
-                                    memCacheHeight: 100,
-                                    widthPlaceHolder: 80,
-                                    heightPlaceHolder: 80,
-
-                                    imageUrl: (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}",
-                                    // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
-                                    imageBuilder: (context, imageProvider) => ClipRRect(
-                                      borderRadius: BorderRadius.circular(20), // Image borderr
-                                      child: pics?[index].reportedStatus == 'BLURRED'
-                                          ? ImageFiltered(
-                                              imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                              child: Image(
-                                                image: imageProvider,
-                                                fit: BoxFit.fitHeight,
-                                                width: SizeConfig.screenWidth,
+                                  child: pics?[index].isLoading ?? false
+                                      ? Container()
+                                      : CustomBaseCacheImage(
+                                          memCacheWidth: 100,
+                                          memCacheHeight: 100,
+                                          widthPlaceHolder: 80,
+                                          heightPlaceHolder: 80,
+                                          imageUrl: (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2',
+                                          // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
+                                          imageBuilder: (context, imageProvider) => ClipRRect(
+                                            borderRadius: BorderRadius.circular(20), // Image borderr
+                                            child: pics?[index].reportedStatus == 'BLURRED'
+                                                ? ImageFiltered(
+                                                    imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                                    child: Image(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.fitHeight,
+                                                      width: SizeConfig.screenWidth,
+                                                    ),
+                                                  )
+                                                : Image(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.fitHeight,
+                                                    width: SizeConfig.screenWidth,
+                                                  ),
+                                          ),
+                                          emptyWidget: Container(
+                                            // const EdgeInsets.symmetric(horizontal: 4.5),
+                                            // height: 500,
+                                            decoration: BoxDecoration(
+                                              image: const DecorationImage(
+                                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                                fit: BoxFit.cover,
                                               ),
-                                            )
-                                          : Image(
-                                              image: imageProvider,
-                                              fit: BoxFit.fitHeight,
-                                              width: SizeConfig.screenWidth,
+                                              borderRadius: BorderRadius.circular(8.0),
                                             ),
-                                    ),
-                                    emptyWidget: Container(
-                                      // const EdgeInsets.symmetric(horizontal: 4.5),
-
-                                      // height: 500,
-                                      decoration: BoxDecoration(
-                                        image: const DecorationImage(
-                                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                          fit: BoxFit.cover,
+                                          ),
+                                          errorWidget: (context, url, error) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                reloadImage(index);
+                                              },
+                                              child: Container(
+                                                  decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                                  width: SizeConfig.screenWidth,
+                                                  height: 250,
+                                                  alignment: Alignment.center,
+                                                  child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
+                                            );
+                                          },
                                         ),
-                                        borderRadius: BorderRadius.circular(8.0),
-                                      ),
-                                    ),
-                                  ),
                                 ),
                               ),
                             ),
@@ -1257,6 +1278,17 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                 )),
           )
         : Container();
+  }
+
+  void reloadImage(index) {
+    setState(() {
+      pics?[index].isLoading = true;
+    });
+    Future.delayed(Duration(milliseconds: 500), () {
+      setState(() {
+        pics?[index].isLoading = false;
+      });
+    });
   }
 }
 

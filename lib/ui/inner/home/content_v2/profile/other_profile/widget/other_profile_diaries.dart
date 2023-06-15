@@ -21,7 +21,9 @@ import '../../../../../../constant/widget/custom_loading.dart';
 
 class OtherProfileDiaries extends StatelessWidget {
   final List<ContentData>? diaries;
-  const OtherProfileDiaries({Key? key, this.diaries}) : super(key: key);
+  final ScrollController? scrollController;
+  final double? height;
+  const OtherProfileDiaries({Key? key, this.diaries, this.scrollController, this.height}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +55,8 @@ class OtherProfileDiaries extends StatelessWidget {
                             "Diary",
                             style: TextStyle(color: kHyppeTextLightPrimary),
                           ),
+                          scrollController: scrollController,
+                          heightProfile: height,
                         ),
                     child: Padding(
                       padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),

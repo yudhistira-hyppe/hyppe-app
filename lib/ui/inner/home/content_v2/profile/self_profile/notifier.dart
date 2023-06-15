@@ -51,6 +51,9 @@ class SelfProfileNotifier with ChangeNotifier {
   ContentsDataQuery diaryContentsQuery = ContentsDataQuery();
   ContentsDataQuery picContentsQuery = ContentsDataQuery();
 
+  bool isConnect = true;
+  bool isConnectContent = true;
+
   UserInfoModel _user = UserInfoModel();
   String? _username;
   int _limit = 10;
@@ -243,6 +246,15 @@ class SelfProfileNotifier with ChangeNotifier {
 
   Future initialSelfProfile(BuildContext context) async {
     // pageIndex = 0;
+    final connect = await _system.checkConnections();
+    if (!connect) {
+      isConnect = false;
+      notifyListeners();
+    } else {
+      isConnect = true;
+      notifyListeners();
+    }
+
     _statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
     picContentsQuery.featureType = FeatureType.pic;
@@ -305,7 +317,15 @@ class SelfProfileNotifier with ChangeNotifier {
   }
 
   Future getDataPerPgage(BuildContext context, {bool isReload = false}) async {
-    print(pageIndex);
+    final connect = await _system.checkConnections();
+    if (!connect) {
+      isConnectContent = false;
+      notifyListeners();
+      return false;
+    } else {
+      isConnectContent = true;
+      notifyListeners();
+    }
     if (isReload) {
       final usersNotifier = UserBloc();
       PreviewStoriesNotifier stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
@@ -353,61 +373,82 @@ class SelfProfileNotifier with ChangeNotifier {
     }
   }
 
-  Widget optionButton() {
+  Widget optionButton(ScrollController? scrollController, double height) {
     List pages = [
-      !isLoading ? const SelfProfilePics() : BothProfileContentShimmer(),
-      !isLoading ? const SelfProfileDiaries() : BothProfileContentShimmer(),
-      !isLoading ? const SelfProfileVids() : BothProfileContentShimmer(),
+      !isLoading
+          ? SelfProfilePics(
+              height: height,
+              scrollController: scrollController,
+            )
+          : BothProfileContentShimmer(),
+      !isLoading
+          ? SelfProfileDiaries(
+              height: height,
+              scrollController: scrollController,
+            )
+          : BothProfileContentShimmer(),
+      !isLoading
+          ? SelfProfileVids(
+              height: height,
+              scrollController: scrollController,
+            )
+          : BothProfileContentShimmer(),
     ];
     return pages[pageIndex];
   }
 
-  navigateToSeeAllScreen(BuildContext context, int index, Widget title) async {
+  navigateToSeeAllScreen(BuildContext context, int index, Widget title, {scrollController, double? heightProfile}) async {
     context.read<ReportNotifier>().inPosition = contentPosition.myprofile;
     final connect = await _system.checkConnections();
-    if (connect) {
-      var result;
-      if (pageIndex == 0) {
-        result = await _routing.move(Routes.scrollPic,
-            argument: SlidedPicDetailScreenArgument(
-              page: index,
-              type: TypePlaylist.mine,
-              titleAppbar: title,
-              pageSrc: PageSrc.selfProfile,
-              picData: user.pics,
-            ));
-        // _routing.move(Routes.picSlideDetailPreview,
-        //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
-        scrollAuto(result);
-      }
-      if (pageIndex == 1) {
-        result = await _routing.move(Routes.scrollDiary,
-            argument: SlidedDiaryDetailScreenArgument(
-              page: index,
-              type: TypePlaylist.mine,
-              titleAppbar: title,
-              pageSrc: PageSrc.selfProfile,
-              diaryData: user.diaries,
-            ));
-        // _routing.move(Routes.diaryDetail,
-        //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
-        scrollAuto(result);
-      }
-      if (pageIndex == 2) {
-        result = await _routing.move(Routes.scrollVid,
-            argument: SlidedVidDetailScreenArgument(
-              page: index,
-              type: TypePlaylist.mine,
-              titleAppbar: title,
-              pageSrc: PageSrc.selfProfile,
-              vidData: user.vids,
-            ));
-        // result = await _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
-        scrollAuto(result);
-      }
-    } else {
-      ShowBottomSheet.onNoInternetConnection(context);
+    // if (connect) {
+    var result;
+    if (pageIndex == 0) {
+      result = await _routing.move(Routes.scrollPic,
+          argument: SlidedPicDetailScreenArgument(
+            page: index,
+            type: TypePlaylist.mine,
+            titleAppbar: title,
+            pageSrc: PageSrc.selfProfile,
+            picData: user.pics,
+            scrollController: scrollController,
+            heightTopProfile: heightProfile,
+          ));
+      // _routing.move(Routes.picSlideDetailPreview,
+      //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
+      scrollAuto(result);
     }
+    if (pageIndex == 1) {
+      result = await _routing.move(Routes.scrollDiary,
+          argument: SlidedDiaryDetailScreenArgument(
+            page: index,
+            type: TypePlaylist.mine,
+            titleAppbar: title,
+            pageSrc: PageSrc.selfProfile,
+            diaryData: user.diaries,
+            scrollController: scrollController,
+            heightTopProfile: heightProfile,
+          ));
+      // _routing.move(Routes.diaryDetail,
+      //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
+      scrollAuto(result);
+    }
+    if (pageIndex == 2) {
+      result = await _routing.move(Routes.scrollVid,
+          argument: SlidedVidDetailScreenArgument(
+            page: index,
+            type: TypePlaylist.mine,
+            titleAppbar: title,
+            pageSrc: PageSrc.selfProfile,
+            vidData: user.vids,
+            scrollController: scrollController,
+            heightTopProfile: heightProfile,
+          ));
+      // result = await _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
+      scrollAuto(result);
+    }
+    // } else {
+    //   ShowBottomSheet.onNoInternetConnection(context);
+    // }
   }
 
   scrollAuto(String index) {

@@ -893,7 +893,7 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void addCountComment(BuildContext context, String postID, bool add, int totChild) {
+  void addCountComment(BuildContext context, String postID, bool add, int totChild, {String? username, String? txtMsg}) {
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -913,6 +913,17 @@ class HomeNotifier with ChangeNotifier {
 
     if (add) {
       _updatedData?.comments = (_updatedData.comments ?? 0) + 1;
+      Comment comment = Comment(txtMessages: txtMsg, userComment: UserComment(username: username));
+
+      picScroll.pics?.map((e) => print(e.description)).toList();
+
+      if (_updatedData?.comment == null) {
+        _updatedData?.comment = [];
+        _updatedData?.comment = [comment];
+      } else {
+        _updatedData?.comment?.insert(0, comment);
+      }
+      notifyListeners();
     } else {
       _updatedData?.comments = (_updatedData.comments ?? 0) - (1 + totChild);
     }

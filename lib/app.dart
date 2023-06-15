@@ -32,19 +32,7 @@ bool isFromSplash = false;
 bool isStopVideo = false;
 bool isShowingDialog = false;
 bool connectInternet = true;
-
-class MyImageCache extends ImageCache {
-  @override
-  void clear() {
-    print('Clearing cache!');
-    super.clear();
-  }
-}
-
-class MyWidgetsBinding extends WidgetsFlutterBinding {
-  @override
-  ImageCache createImageCache() => MyImageCache();
-}
+int golbalToOther = 0;
 
 void disposeGlobalAudio() async {
   try {

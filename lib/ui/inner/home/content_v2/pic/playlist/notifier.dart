@@ -358,6 +358,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void showUserTag(BuildContext context, data, postId, {final StoryController? storyController, FlutterAliplayer? fAliplayer}) {
+    fAliplayer?.pause();
     ShowBottomSheet.onShowUserTag(
       context,
       value: data,

@@ -18,8 +18,10 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_bottom.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_top.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_top_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
@@ -40,7 +42,8 @@ class SelfProfileScreen extends StatefulWidget {
 class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, AfterFirstLayoutMixin {
   ScrollController _scrollController = ScrollController();
   final GlobalKey<NestedScrollViewState> _globalKey = GlobalKey<NestedScrollViewState>();
-  int heightProfileCard = 0;
+  double heightProfileCard = 0;
+  bool isloading = false;
 
   @override
   void initState() {
@@ -75,7 +78,7 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
   void didPopNext() {
     System().disposeBlock();
     try {
-      if(mounted){
+      if (mounted) {
         final sp = context.read<ScrollPicNotifier>();
         final sd = context.read<ScrollDiaryNotifier>();
         final sv = context.read<ScrollVidNotifier>();
@@ -90,7 +93,6 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
           sv.vidData = spn.user.vids;
         }
       }
-
     } catch (e) {
       print(e);
     }
@@ -251,47 +253,69 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
             onRefresh: () async {
               await notifier.getDataPerPgage(context, isReload: true);
             },
-            child: CustomScrollView(
-              controller: _scrollController,
-              scrollDirection: Axis.vertical,
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                // SliverAppBar(
-                //   pinned: false,
-                //   stretch: false,
-                //   elevation: 0.0,
-                //   floating: false,
-                //   automaticallyImplyLeading: false,
-                //   expandedHeight: (400 * SizeConfig.scaleDiagonal) + 46,
-                //   backgroundColor: Theme.of(context).colorScheme.background,
-                //   flexibleSpace: FlexibleSpaceBar(
-                //       titlePadding: EdgeInsets.zero,
-                //       background: notifier.user.profile != null
-                //           ? SelfProfileTop()
-                //           : BothProfileTopShimmer()),
-                // ),
-                SliverToBoxAdapter(
-                  child: Container(child: notifier.user.profile != null ? SelfProfileTop() : BothProfileTopShimmer()),
-                ),
+            child: isloading
+                ? CustomScrollView(
+                    slivers: [SliverToBoxAdapter(child: BothProfileTopShimmer()), BothProfileContentShimmer()],
+                  )
+                : !notifier.isConnect
+                    ? OfflineMode(
+                        function: () async {
+                          isloading = true;
+                          await notifier.initialSelfProfile(context).then((value) => isloading = false);
+                        },
+                      )
+                    : CustomScrollView(
+                        controller: _scrollController,
+                        scrollDirection: Axis.vertical,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        slivers: [
+                          // SliverAppBar(
+                          //   pinned: false,
+                          //   stretch: false,
+                          //   elevation: 0.0,
+                          //   floating: false,
+                          //   automaticallyImplyLeading: false,
+                          //   expandedHeight: (400 * SizeConfig.scaleDiagonal) + 46,
+                          //   backgroundColor: Theme.of(context).colorScheme.background,
+                          //   flexibleSpace: FlexibleSpaceBar(
+                          //       titlePadding: EdgeInsets.zero,
+                          //       background: notifier.user.profile != null
+                          //           ? SelfProfileTop()
+                          //           : BothProfileTopShimmer()),
+                          // ),
+                          SliverToBoxAdapter(
+                            child: MeasuredSize(
+                                onChange: (e) async {
+                                  heightProfileCard = e.height;
+                                  await Future.delayed(Duration(milliseconds: 300), () {
+                                    isloading = true;
+                                  });
+                                  // await Future.delayed(Duration(milliseconds: 1000), () {
+                                  isloading = false;
+                                  // });
+                                  print("=============================== height");
+                                  print(heightProfileCard);
+                                },
+                                child: Container(child: notifier.user.profile != null ? const SelfProfileTop() : BothProfileTopShimmer())),
+                          ),
 
-                SliverAppBar(
-                  pinned: true,
-                  flexibleSpace: const SelfProfileBottom(),
-                  automaticallyImplyLeading: false,
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                ),
-
-                notifier.optionButton(),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      return notifier.scollLoading ? const CustomLoading(size: 4) : Container();
-                    },
-                    childCount: 1,
-                  ),
-                )
-              ],
-            ),
+                          SliverAppBar(
+                            pinned: true,
+                            flexibleSpace: const SelfProfileBottom(),
+                            automaticallyImplyLeading: false,
+                            backgroundColor: Theme.of(context).colorScheme.background,
+                          ),
+                          notifier.optionButton(_scrollController, heightProfileCard),
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                                return notifier.scollLoading ? const CustomLoading(size: 4) : Container();
+                              },
+                              childCount: 1,
+                            ),
+                          )
+                        ],
+                      ),
           ),
         ),
       ),
