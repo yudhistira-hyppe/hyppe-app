@@ -135,7 +135,10 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
           ),
         ),
         body: SafeArea(
-          child: notifier.connectionError ? OfflineMode(function: notifier.checkConnection,) : Column(
+          child: notifier.connectionError ? OfflineMode(function: (){
+            notifier.checkConnection();
+            notifier.getDetailHashtag(context, widget.argument.hashtag.tag?.replaceAll(' ', '') ?? ' ');
+          },) : Column(
             children: [
               Container(
                 padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 12),
