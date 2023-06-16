@@ -23,6 +23,8 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -1099,7 +1101,7 @@ class SearchNotifier with ChangeNotifier {
 
   List<Widget> getGridHashtag(String hashtag, bool fromRoute) {
     Map<String, List<Widget>> map = {
-      'HyppeVid': [
+      'Vid': [
         GridHashtagVid(tag: hashtag,),
         if ((_detailHashTag?.vid ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty && isHasNextVid)
           SliverToBoxAdapter(
@@ -1107,17 +1109,17 @@ class SearchNotifier with ChangeNotifier {
                 margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
           )
       ],
-      'HyppeDiary': [
+      'Diary': [
         GridHashtagDiary(tag: hashtag),
-        if ((_detailHashTag?.diary ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty && isHasNextDiary)
+        if ((_detailHashTag?.diary ?? []).length % limitSearch == 0 && (_detailHashTag?.diary ?? []).isNotEmpty && isHasNextDiary)
           SliverToBoxAdapter(
             child: Container(
                 margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
           )
       ],
-      'HyppePic': [
+      'Pic': [
         GridHashtagPic(tag: hashtag),
-        if ((_detailHashTag?.pict ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty && isHasNextPic)
+        if ((_detailHashTag?.pict ?? []).length % limitSearch == 0 && (_detailHashTag?.pict ?? []).isNotEmpty && isHasNextPic)
           SliverToBoxAdapter(
             child: Container(
                 margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
@@ -1656,7 +1658,17 @@ class SearchNotifier with ChangeNotifier {
           result = await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(
             page: index,
             type: TypePlaylist.search,
-            titleAppbar: const Text(
+            titleAppbar: pageSrc == PageSrc.hashtag ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:  [
+                const CustomTextWidget(textToDisplay: 'Pic Teratas', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
+                fourPx,
+                Text(
+                  "#$keys",
+                  style: TextStyle(color: kHyppeTextLightPrimary),
+                )
+              ],
+            ) : const Text(
               "Pic",
               style: TextStyle(color: kHyppeTextLightPrimary),
             ),
@@ -1683,7 +1695,17 @@ class SearchNotifier with ChangeNotifier {
           result = await _routing.move(Routes.scrollDiary, argument: SlidedDiaryDetailScreenArgument(
             page: index,
             type: TypePlaylist.search,
-            titleAppbar: const Text(
+            titleAppbar:  pageSrc == PageSrc.hashtag ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:  [
+                const CustomTextWidget(textToDisplay: 'Diary Teratas', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
+                fourPx,
+                Text(
+                  "#$keys",
+                  style: TextStyle(color: kHyppeTextLightPrimary),
+                )
+              ],
+            ) : const Text(
               "Diary",
               style: TextStyle(color: kHyppeTextLightPrimary),
             ),
@@ -1709,7 +1731,17 @@ class SearchNotifier with ChangeNotifier {
           result = await _routing.move(Routes.scrollVid, argument: SlidedVidDetailScreenArgument(
             page: index,
             type: TypePlaylist.search,
-            titleAppbar: const Text(
+            titleAppbar:  pageSrc == PageSrc.hashtag ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:  [
+                const CustomTextWidget(textToDisplay: 'Vid Teratas', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
+                fourPx,
+                Text(
+                  "#$keys",
+                  style: TextStyle(color: kHyppeTextLightPrimary),
+                )
+              ],
+            ) : const Text(
               "Vid",
               style: TextStyle(color: kHyppeTextLightPrimary),
             ),

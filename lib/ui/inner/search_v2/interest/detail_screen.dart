@@ -12,6 +12,7 @@ import '../../../../core/constants/asset_path.dart';
 import '../../../../core/models/collection/search/search_content.dart';
 import '../../../../core/services/route_observer_service.dart';
 import '../../../constant/widget/icon_button_widget.dart';
+import '../../home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import '../notifier.dart';
 
 class InterestDetailScreen extends StatefulWidget {
@@ -31,7 +32,8 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
 
   @override
   void afterFirstLayout(BuildContext context) {
-    // final notifier = context.read<SearchNotifier>();
+    final notifier = context.read<SearchNotifier>();
+    notifier.checkConnection();
     // final index = notifier.listInterest?.indexOf(widget.data) ?? 0;
     // _tabController.index = index;
     // _tabController.notifyListeners();
