@@ -771,7 +771,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                     fAliplayer?.stop();
                   }
                   Future.delayed(const Duration(milliseconds: 100), () {
-                    System().increaseViewCount2(context, pics?[index] ?? ContentData());
+                    System().increaseViewCount2(context, pics?[index] ?? ContentData(), check: false);
                   });
                   if (pics?[index].certified ?? false) {
                     System().block(context);
@@ -879,7 +879,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                           valueListenable: _networklHasErrorNotifier,
                                           builder: (BuildContext context, int count, _) {
                                             return CustomBaseCacheImage(
-                                              cacheKey: "${pics?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
+                                              // cacheKey: "${pics?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
                                               memCacheWidth: 100,
                                               memCacheHeight: 100,
                                               widthPlaceHolder: 80,

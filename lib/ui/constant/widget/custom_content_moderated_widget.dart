@@ -85,50 +85,20 @@ class CustomContentModeratedWidget extends StatelessWidget {
                                 width: double.infinity,
                                 height: double.infinity,
                                 errorBuilder: (_, __, ___) {
-                                  return Container(
-                                    width: width,
-                                    height: height,
-                                    decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(10)), color: Colors.grey),
-                                  );
+                                  return ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer());
                                 },
                                 loadingBuilder: (_, child, event) {
                                   if (event == null) {
                                     return Center(child: child);
                                   } else {
-                                    return UnconstrainedBox(
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        child: const CustomLoading(),
-                                        width: 35 * SizeConfig.scaleDiagonal,
-                                        height: 35 * SizeConfig.scaleDiagonal,
-                                      ),
-                                    );
+                                    return ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer());
                                   }
                                 },
                               ));
                         }
-
-                        return Container(
-                          width: width,
-                          height: height,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: boxFitError,
-                              image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                            ),
-                          ),
-                        );
+                        return ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer());
                       },
-                      emptyWidget: Container(
-                        width: width,
-                        height: height,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: boxFitError,
-                            image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                          ),
-                        ),
-                      ),
+                      emptyWidget: ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer()),
                     )
                   : ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),

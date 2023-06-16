@@ -186,6 +186,11 @@ class SelfProfileNotifier with ChangeNotifier {
   navigateToEditProfile() => Routing().move(Routes.accountPreferences).whenComplete(() => notifyListeners());
 
   onScrollListener(BuildContext context, ScrollController scrollController, {bool isLoad = false}) async {
+    var connection = await System().checkConnections();
+    if (!connection) {
+      return false;
+    }
+
     if (isLoad || (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange)) {
       switch (pageIndex) {
         case 0:

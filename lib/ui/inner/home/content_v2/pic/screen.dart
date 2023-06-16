@@ -790,8 +790,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             child: ValueListenableBuilder(
                                 valueListenable: _networklHasErrorNotifier,
                                 builder: (BuildContext context, int count, _) {
-                                  print("BUILDER");
-                                  print(_networklHasErrorNotifier.value);
                                   return CustomBaseCacheImage(
                                     cacheKey: "${notifier.pic?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
                                     memCacheWidth: 100,

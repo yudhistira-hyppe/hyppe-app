@@ -102,6 +102,9 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
 
   final _transformWidget = GlobalKey<_TransformWidgetState>();
 
+  double newPositionY = 0;
+  double updatePositionY = 0;
+
   @override
   void initState() {
     super.initState();
@@ -221,15 +224,26 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
     // create an matrix of where the image is on the screen for the overlay
     final renderBox = context.findRenderObject() as RenderBox;
     final position = renderBox.localToGlobal(Offset.zero);
+    newPositionY = position.dy;
 
-    print("==========new posisi $position");
+    print("==========new posisi ${position.dy}");
 
     _transformMatrix = Matrix4.translation(
       vector.Vector3(position.dx, position.dy, 0),
     );
   }
 
-  void _handleOnScaleUpdate(ScaleUpdateDetails details) {
+  Future _handleOnScaleUpdate(ScaleUpdateDetails details) async {
+    final renderBox = context.findRenderObject() as RenderBox;
+    var position = renderBox.localToGlobal(Offset.zero);
+    updatePositionY = position.dy;
+
+    if (newPositionY != position.dy) {
+      hide();
+      return;
+    }
+
+    print("==========new posisi new banget $position");
     // if (_scale! < 1.0 && _closeOnZoomOut!) {
     //   print("kakakakakaka");
     //   _zoom(Offset.zero, 1.0, context);
@@ -240,14 +254,19 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
     setState(() {
       _scale = (_previousScale! * details.scale).clamp(_minScale, _maxScale);
       // Ensure that image location under the focal point stays in the same place despite scaling.
-      _offset = _clampOffset(details.focalPoint - _normalizedOffset! * _scale!);
+      // _offset = _clampOffset(details.focalPoint - _normalizedOffset! * _scale!);
     });
+    print("========scale $_scale");
+    print("========scale $_previousScale");
     if (_scale! > _previousScale!) {
       show();
       widget.onScaleStart?.call();
       setState(() {
         _isZooming = true;
       });
+      // return;
+    } else {
+      return;
     }
 
     //================================================
@@ -260,7 +279,6 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
       vector.Vector3(translationDelta.dx, translationDelta.dy, 0),
     );
 
-    final renderBox = context.findRenderObject() as RenderBox;
     final focalPoint = renderBox.globalToLocal(
       details.focalPoint - translationDelta,
     );

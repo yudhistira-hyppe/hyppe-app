@@ -276,6 +276,7 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                                         hasScrollBody: false,
                                         child: OfflineMode(
                                           function: () {
+                                            isloading = true;
                                             notifier.getDataPerPgage(context);
                                           },
                                         ),
@@ -291,6 +292,7 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                                         hasScrollBody: false,
                                         child: OfflineMode(
                                           function: () {
+                                            isloading = true;
                                             notifier.getDataPerPgage(context);
                                           },
                                         ),

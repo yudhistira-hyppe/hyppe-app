@@ -204,6 +204,11 @@ class OtherProfileNotifier with ChangeNotifier {
   }
 
   onScrollListener(BuildContext context, ScrollController scrollController, {bool isLoad = false}) async {
+    var connection = await System().checkConnections();
+    if (!connection) {
+      return false;
+    }
+
     if (isLoad || (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange)) {
       switch (pageIndex) {
         case 0:
@@ -261,7 +266,7 @@ class OtherProfileNotifier with ChangeNotifier {
       notifyListeners();
     }
     // user = UserInfoModel();
-    golbalToOther++;
+
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
 
     if (argument?.senderEmail != null) {
@@ -288,6 +293,7 @@ class OtherProfileNotifier with ChangeNotifier {
       if (argument?.profile != null) {
         user.profile = argument?.profile;
         manyUser.add(user);
+        golbalToOther = manyUser.length;
         notifyListeners();
       } else {
         final usersNotifier = UserBloc();
@@ -297,6 +303,7 @@ class OtherProfileNotifier with ChangeNotifier {
         if (usersFetch.userState == UserState.getUserProfilesSuccess) {
           user.profile = usersFetch.data;
           manyUser.add(user);
+          golbalToOther = manyUser.length;
           print("========== many user $manyUser");
           notifyListeners();
         }
