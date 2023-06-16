@@ -911,6 +911,8 @@ class HomeNotifier with ChangeNotifier {
     _updatedData ??= diaryScroll.diaryData?.firstWhereOrNull((element) => element.postID == postID);
     _updatedData ??= picScroll.pics?.firstWhereOrNull((element) => element.postID == postID);
 
+    print("===-=-=-=-=- data vid ${vidScroll.vidData}");
+    print("===-=-=-=-=- data vid ${_updatedData}");
     if (add) {
       _updatedData?.comments = (_updatedData.comments ?? 0) + 1;
       Comment comment = Comment(txtMessages: txtMsg, userComment: UserComment(username: username));

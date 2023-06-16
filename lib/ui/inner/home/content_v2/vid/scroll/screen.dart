@@ -98,30 +98,34 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     final notifier = Provider.of<ScrollVidNotifier>(context, listen: false);
     // notifier.initialVid(context, reload: true);
     lang = context.read<TranslateNotifierV2>().translate;
+    vidData = widget.arguments?.vidData;
+    notifier.vidData = widget.arguments?.vidData;
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      print("============== widget argument ${widget.arguments!.vidData}");
       itemScrollController.jumpTo(index: widget.arguments!.page!);
-      var index = 0;
-      var lastIndex = 0;
-
-      notifier.checkConnection();
-      vidData = widget.arguments?.vidData;
-      notifier.vidData = widget.arguments?.vidData;
-
-      itemPositionsListener.itemPositions.addListener(() async {
-        index = itemPositionsListener.itemPositions.value.first.index;
-        if (lastIndex != index) {
-          if (index == vidData!.length - 2) {
-            print("ini reload harusnya");
-            if (!notifier.isLoadingLoadmore) {
-              await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
+      // notifier.checkConnection();
+    });
+    var index = 0;
+    var lastIndex = 0;
+    itemPositionsListener.itemPositions.addListener(() async {
+      index = itemPositionsListener.itemPositions.value.first.index;
+      if (lastIndex != index) {
+        if (index == vidData!.length - 2) {
+          print("ini reload harusnya");
+          if (!notifier.isLoadingLoadmore) {
+            await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
+            if (mounted) {
               setState(() {
                 vidData = notifier.vidData;
               });
+            } else {
+              vidData = notifier.vidData;
             }
           }
         }
-        lastIndex = index;
-      });
+      }
+      lastIndex = index;
     });
 
     super.initState();
@@ -253,6 +257,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                     //   // context.read<ScrollVidNotifier>().nextVideo = false;
                                     //   // context.read<ScrollVidNotifier>().initializeVideo = false;
                                     // },
+                                    physics: const AlwaysScrollableScrollPhysics(),
                                     shrinkWrap: false,
                                     padding: const EdgeInsets.symmetric(horizontal: 11.5),
                                     itemCount: vidData?.length ?? 0,

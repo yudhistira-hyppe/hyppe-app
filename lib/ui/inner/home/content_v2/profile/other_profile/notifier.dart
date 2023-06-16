@@ -292,8 +292,11 @@ class OtherProfileNotifier with ChangeNotifier {
     if (isConnect) {
       if (argument?.profile != null) {
         user.profile = argument?.profile;
-        manyUser.add(user);
-        golbalToOther = manyUser.length;
+        if (!refresh) {
+          manyUser.add(user);
+          golbalToOther = manyUser.length;
+        }
+        print("========== many user $manyUser");
         notifyListeners();
       } else {
         final usersNotifier = UserBloc();
@@ -302,15 +305,17 @@ class OtherProfileNotifier with ChangeNotifier {
 
         if (usersFetch.userState == UserState.getUserProfilesSuccess) {
           user.profile = usersFetch.data;
-          manyUser.add(user);
-          golbalToOther = manyUser.length;
+          if (!refresh) {
+            manyUser.add(user);
+            golbalToOther = manyUser.length;
+          }
           print("========== many user $manyUser");
           notifyListeners();
         }
       }
     }
 
-    if (refresh) {
+    if (refresh && isConnect) {
       checkFollowingToUser(context, userEmail ?? '');
     }
     // user.vids ??= await vidContentsQuery.reload(context, otherContent: true);

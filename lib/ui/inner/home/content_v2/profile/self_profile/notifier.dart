@@ -408,7 +408,7 @@ class SelfProfileNotifier with ChangeNotifier {
     // if (connect) {
     var result;
     if (pageIndex == 0) {
-      result = await _routing.move(Routes.scrollPic,
+      _routing.move(Routes.scrollPic,
           argument: SlidedPicDetailScreenArgument(
             page: index,
             type: TypePlaylist.mine,
@@ -420,10 +420,9 @@ class SelfProfileNotifier with ChangeNotifier {
           ));
       // _routing.move(Routes.picSlideDetailPreview,
       //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
-      scrollAuto(result);
     }
     if (pageIndex == 1) {
-      result = await _routing.move(Routes.scrollDiary,
+      _routing.move(Routes.scrollDiary,
           argument: SlidedDiaryDetailScreenArgument(
             page: index,
             type: TypePlaylist.mine,
@@ -435,10 +434,9 @@ class SelfProfileNotifier with ChangeNotifier {
           ));
       // _routing.move(Routes.diaryDetail,
       //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
-      scrollAuto(result);
     }
     if (pageIndex == 2) {
-      result = await _routing.move(Routes.scrollVid,
+      _routing.move(Routes.scrollVid,
           argument: SlidedVidDetailScreenArgument(
             page: index,
             type: TypePlaylist.mine,
@@ -449,7 +447,6 @@ class SelfProfileNotifier with ChangeNotifier {
             heightTopProfile: heightProfile,
           ));
       // result = await _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
-      scrollAuto(result);
     }
     // } else {
     //   ShowBottomSheet.onNoInternetConnection(context);

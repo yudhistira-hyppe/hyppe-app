@@ -275,9 +275,9 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                                     ? SliverFillRemaining(
                                         hasScrollBody: false,
                                         child: OfflineMode(
-                                          function: () {
+                                          function: () async {
                                             isloading = true;
-                                            notifier.getDataPerPgage(context);
+                                            await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
                                           },
                                         ),
                                       )
@@ -291,9 +291,9 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                                     ? SliverFillRemaining(
                                         hasScrollBody: false,
                                         child: OfflineMode(
-                                          function: () {
+                                          function: () async {
                                             isloading = true;
-                                            notifier.getDataPerPgage(context);
+                                            await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
                                           },
                                         ),
                                       )
