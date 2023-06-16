@@ -69,6 +69,18 @@ class SearchNotifier with ChangeNotifier {
   //   notifyListeners();
   // }
 
+  bool _connectionError = false;
+  bool get connectionError => _connectionError;
+  set connectionError(bool state) {
+    _connectionError = state;
+    notifyListeners();
+  }
+
+  Future checkConnection() async {
+    bool connect = await System().checkConnections();
+    connectionError = !connect;
+  }
+
   List<ContentData>? _searchVid;
   List<ContentData>? get searchVid => _searchVid;
 

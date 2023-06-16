@@ -16,6 +16,7 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/pick_file_error_alert.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/reaction_comment_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/remark_withdrawal_dialog.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/toast_alert.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_complete_profile_location_city_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_complete_profile_location_country_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_complete_profile_location_province_content.dart';
@@ -401,5 +402,23 @@ class ShowGeneralDialog {
         return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
       },
     ).then((value) => true);
+  }
+
+  static showToastAlert(BuildContext context, String message, Future<dynamic> Function() onDismiss) async {
+    await showGeneralDialog(
+      context: context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: true,
+      barrierColor: Colors.transparent,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) =>
+          ToastAlert(message: message, onTap: onDismiss,),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation =
+            CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+        return ScaleTransition(
+            child: child, scale: animation, alignment: Alignment.center);
+      },
+    );
   }
 }

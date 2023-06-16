@@ -71,7 +71,12 @@ void mainApp(EnvType env) async {
   }
   // SharedPreference().writeStorage(SpKeys.isPreventRoute, false);
   FlutterError.onError = (errorDetails) {
-    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    try{
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    }catch(e){
+      e.logger();
+    }
+
   };
   PlatformDispatcher.instance.onError = (error, stack) {
     // If you wish to record a "non-fatal" exception, please remove the "fatal" parameter
