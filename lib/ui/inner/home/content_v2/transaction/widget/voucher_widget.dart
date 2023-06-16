@@ -13,15 +13,15 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:provider/provider.dart';
 
-class BuySellWidget extends StatelessWidget {
-  TransactionHistoryModel? data;
-  LocalizationModelV2? language;
+class VoucherWidget extends StatelessWidget {
+  final TransactionHistoryModel? data;
+  final LocalizationModelV2? language;
 
-  BuySellWidget({Key? key, this.data, this.language}) : super(key: key);
+  const VoucherWidget({Key? key, this.data, this.language}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'BuySellWidget');
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'VoucherWidget');
     String title = '';
     String titleContent = '';
     String keterangan = '';
@@ -43,34 +43,9 @@ class BuySellWidget extends StatelessWidget {
       default:
     }
 
-    Color? titleColor;
-    Color? blockColor;
+    Color? titleColor = kHyppeTextLightPrimary;
+    Color? blockColor = kHyppeSoftYellow;
 
-    switch (data?.type) {
-      case TransactionType.buy:
-        keterangan = language?.from ?? 'from';
-        titleColor = kHyppeRed;
-        blockColor = kHyppeRedLight;
-        title = language?.purchased ?? 'Purchased';
-        fullname = data?.penjual ?? '';
-        email = data?.emailpenjual ?? '';
-        if (data?.jenis == 'BOOST_CONTENT') {
-          keterangan = language?.by ?? 'by';
-          titleColor = kHyppeJingga;
-          blockColor = kHyppeJinggaLight;
-          title = language?.postBoost ?? 'Post Boost';
-          fullname = data?.fullName ?? '';
-          email = data?.email ?? '';
-        }
-        break;
-      default:
-        keterangan = language?.forr ?? '';
-        titleColor = kHyppeGreen;
-        blockColor = kHyppeGreenLight;
-        title = language?.soldOut ?? 'Sold out';
-        fullname = data?.pembeli ?? '';
-        email = data?.emailpembeli ?? '';
-    }
     final desc = '$titleContent $keterangan $fullname ( $email )';
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -103,7 +78,7 @@ class BuySellWidget extends StatelessWidget {
                         boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
                       ),
                       child: CustomTextWidget(
-                        textToDisplay: title,
+                        textToDisplay: "Voucher",
                         textStyle: Theme.of(context).textTheme.button?.copyWith(color: titleColor),
                       ),
                     ),
@@ -131,20 +106,11 @@ class BuySellWidget extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: CustomCacheImage(
-                        imageUrl: data?.apsara ?? false
-                            ? data?.media?.imageInfo?.isEmpty ?? false
-                                ? (data?.media?.videoList != null
-                                    ? data!.media!.videoList!.isNotEmpty
-                                        ? "${data?.media?.videoList?[0].coverURL}"
-                                        : ""
-                                    : '')
-                                : (data?.media?.imageInfo?[0].url ?? '')
-                            : data?.fullThumbPath ?? '',
+                        imageUrl: data?.iconVoucher,
                         imageBuilder: (_, imageProvider) {
                           return Container(
                             height: 50,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
                               image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                             ),
                           );
@@ -178,11 +144,11 @@ class BuySellWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomTextWidget(
-                            textToDisplay: data?.descriptionContent ?? '',
+                            textToDisplay: language?.buyVoucher ?? '',
                             textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                           ),
                           CustomTextWidget(
-                            textToDisplay: desc,
+                            textToDisplay: "${language?.from} Hyppe Business",
                             textStyle: Theme.of(context).textTheme.caption,
                             textAlign: TextAlign.start,
                           ),

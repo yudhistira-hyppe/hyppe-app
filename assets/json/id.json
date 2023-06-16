@@ -898,5 +898,9 @@
   "thisContentIsSubjectToModeration": "Konten ini terkena moderasi!",
   "thisAccountHasNoPostsYet": "Akun ini belum memiliki postingan.",
   "oopsYoureOffline": "Ups, kamu sedang offline",
-  "checkYourWiFiConnectionOrInternet": "Cek koneksi WiFi atau kuota internetmu dan coba lagi, ya!"
+  "checkYourWiFiConnectionOrInternet": "Cek koneksi WiFi atau kuota internetmu dan coba lagi, ya!",
+  "buyVoucher": "Beli Voucher",
+  "voucherDetail": "Detail Voucher",
+  "adsCredit": "Kredit Iklan",
+  "totalBelanja": "Total Belanja"
 }

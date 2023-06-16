@@ -104,6 +104,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
       var lastIndex = 0;
 
       notifier.checkConnection();
+      vidData = widget.arguments?.vidData;
+      notifier.vidData = widget.arguments?.vidData;
 
       itemPositionsListener.itemPositions.addListener(() async {
         index = itemPositionsListener.itemPositions.value.first.index;
@@ -123,8 +125,6 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     });
 
     super.initState();
-    vidData = widget.arguments?.vidData;
-    notifier.vidData = vidData;
   }
 
   @override

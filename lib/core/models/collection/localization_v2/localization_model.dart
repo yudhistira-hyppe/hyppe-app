@@ -898,6 +898,10 @@ class LocalizationModelV2 {
   String? thisAccountHasNoPostsYet;
   String? oopsYoureOffline;
   String? checkYourWiFiConnectionOrInternet;
+  String? buyVoucher;
+  String? voucherDetail;
+  String? adsCredit;
+  String? totalBelanja;
 
   LocalizationModelV2({
     this.login,
@@ -1799,6 +1803,10 @@ class LocalizationModelV2 {
     this.thisAccountHasNoPostsYet,
     this.oopsYoureOffline,
     this.checkYourWiFiConnectionOrInternet,
+    this.buyVoucher,
+    this.voucherDetail,
+    this.adsCredit,
+    this.totalBelanja,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2719,5 +2727,9 @@ class LocalizationModelV2 {
     thisAccountHasNoPostsYet = json['thisAccountHasNoPostsYet'];
     oopsYoureOffline = json['oopsYoureOffline'];
     checkYourWiFiConnectionOrInternet = json['checkYourWiFiConnectionOrInternet'];
+    buyVoucher = json['buyVoucher'];
+    voucherDetail = json['voucherDetail'];
+    adsCredit = json['adsCredit'];
+    totalBelanja = json['totalBelanja'];
   }
 }

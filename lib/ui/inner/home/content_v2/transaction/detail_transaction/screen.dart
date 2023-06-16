@@ -7,6 +7,7 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/widget/bottom_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/widget/middle_buysell_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/widget/middle_voucher_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/widget/middle_withdrawal_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/widget/shimmer_t_detail_history.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/widget/top_widget.dart';
@@ -31,11 +32,19 @@ class DetailTransaction extends StatelessWidget {
               titleColor = kHyppeRed;
               blockColor = kHyppeRedLight;
               title = notifier2.translate.purchased ?? 'Purchased';
-              bodyWidget = MiddleBuySellDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate);
               if (notifier.dataTransactionDetail?.jenis == 'BOOST_CONTENT') {
                 titleColor = kHyppeJingga;
                 blockColor = kHyppeJinggaLight;
                 title = notifier2.translate.postBoost ?? 'Post Boost';
+              }
+
+              if (notifier.dataTransactionDetail?.jenis == 'VOUCHER') {
+                titleColor = kHyppeTextLightPrimary;
+                blockColor = kHyppeSoftYellow;
+                title = "Voucher";
+                bodyWidget = MiddleVoucherWidget(data: notifier.dataTransactionDetail, language: notifier2.translate);
+              } else {
+                bodyWidget = MiddleBuySellDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate);
               }
               break;
             case TransactionType.reward:

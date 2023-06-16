@@ -113,7 +113,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
     // stopwatch = new Stopwatch()..start();
     super.initState();
     diaryData = widget.arguments?.diaryData;
-    notifier.diaryData = diaryData;
+    notifier.diaryData = widget.arguments?.diaryData;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
       WidgetsBinding.instance.addObserver(this);

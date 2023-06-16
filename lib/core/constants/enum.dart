@@ -73,7 +73,7 @@ enum ErrorType {
   updateProfile,
 }
 
-enum TransactionType { sell, buy, withdrawal, boost, reward, none }
+enum TransactionType { sell, buy, withdrawal, boost, reward, voucher, none }
 
 enum VerifyPageRedirection { toLogin, toHome, toSignUpV2, none }
 

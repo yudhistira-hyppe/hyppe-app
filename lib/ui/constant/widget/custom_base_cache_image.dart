@@ -55,6 +55,11 @@ class CustomBaseCacheImage extends StatelessWidget {
         memCacheWidth: memCacheWidth,
         memCacheHeight: memCacheHeight,
         filterQuality: FilterQuality.none,
+        cacheManager: CacheManager(Config(
+          'keyImage',
+          stalePeriod: const Duration(days: 7),
+          //one week cache period
+        )),
         placeholder: (context, url) =>
             placeHolderWidget ??
             UnconstrainedBox(

@@ -897,5 +897,9 @@
   "thisContentIsSubjectToModeration": "This content is moderated!",
   "thisAccountHasNoPostsYet": "This account has no posts yet.",
   "oopsYoureOffline": "Oops, you're offline",
-  "checkYourWiFiConnectionOrInternet": "Check your WiFi connection or internet quota and try again, ok!"
+  "checkYourWiFiConnectionOrInternet": "Check your WiFi connection or internet quota and try again, ok!",
+  "buyVoucher": "Buy Voucher",
+  "voucherDetail": "Voucher Detail",
+  "adsCredit": "Ads credit",
+  "totalBelanja": "Total Spend"
 }

@@ -1075,7 +1075,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               left: 12,
               child: GestureDetector(
                 onTap: () {
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID);
+                  fAliplayer?.pause();
+                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
