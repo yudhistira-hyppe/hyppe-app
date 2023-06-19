@@ -181,7 +181,7 @@ class HomeNotifier with ChangeNotifier {
   void onUpdate() => notifyListeners();
 
   Future initNewHome(BuildContext context, bool mounted, {int? forceIndex, bool isreload = true, bool isgetMore = false, bool isNew = false}) async {
-    ReportNotifier rp = Provider.of(context, listen: false);
+    ReportNotifier rp = Provider.of(Routing.navigatorKey.currentContext ?? context, listen: false);
     rp.inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
 

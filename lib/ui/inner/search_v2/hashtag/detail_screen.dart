@@ -11,7 +11,6 @@ import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../app.dart';
 import '../../../../core/arguments/hashtag_argument.dart';
 import '../../../../core/constants/asset_path.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
