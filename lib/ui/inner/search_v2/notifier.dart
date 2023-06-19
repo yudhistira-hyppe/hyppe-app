@@ -385,6 +385,7 @@ class SearchNotifier with ChangeNotifier {
   }
 
   Future onSearchLandingPage(BuildContext context) async {
+    checkConnection();
     try {
       loadLandingPage = true;
       final notifier = SearchContentBloc();
@@ -770,6 +771,7 @@ class SearchNotifier with ChangeNotifier {
   Future getDetailHashtag(BuildContext context, String keys, {reload = true, HyppeType? hyppe, bool force = false}) async{
     print('getDetailHashtag keys: $keys');
     final detail = mapDetailHashtag[keys];
+    checkConnection();
     try {
       final lenghtVid = mapDetailHashtag[keys]?.vid?.length ?? 0;
       final lenghtDiary = mapDetailHashtag[keys]?.diary?.length ?? 0;
@@ -994,6 +996,7 @@ class SearchNotifier with ChangeNotifier {
       final lenghtVid = currentVid.length;
       final lenghtDiary = currentDairy.length;
       final lenghtPic = currentPic.length;
+      checkConnection();
       print('the interest id: $keys');
       if (reload) {
         initAllHasNext();
@@ -1229,6 +1232,7 @@ class SearchNotifier with ChangeNotifier {
   }
 
   Future getDataSearch(BuildContext context, {SearchLoadData typeSearch = SearchLoadData.all, bool reload = true, bool forceLoad = false}) async {
+    checkConnection();
     String search = searchController.text;
     if(forceLoad){
       hitApiSearchData(context, search, typeSearch: typeSearch, reload: reload);
@@ -1661,7 +1665,7 @@ class SearchNotifier with ChangeNotifier {
             titleAppbar: pageSrc == PageSrc.hashtag ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:  [
-                const CustomTextWidget(textToDisplay: 'Pic Teratas', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
+                CustomTextWidget(textToDisplay: language.topPic ?? 'Top Pic', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
                 fourPx,
                 Text(
                   "#$keys",
@@ -1698,7 +1702,7 @@ class SearchNotifier with ChangeNotifier {
             titleAppbar:  pageSrc == PageSrc.hashtag ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:  [
-                const CustomTextWidget(textToDisplay: 'Diary Teratas', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
+                CustomTextWidget(textToDisplay: language.topDiaty ?? 'Top Diary', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
                 fourPx,
                 Text(
                   "#$keys",
@@ -1734,7 +1738,7 @@ class SearchNotifier with ChangeNotifier {
             titleAppbar:  pageSrc == PageSrc.hashtag ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:  [
-                const CustomTextWidget(textToDisplay: 'Vid Teratas', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
+                CustomTextWidget(textToDisplay: language.topVid ?? 'Top Vic', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
                 fourPx,
                 Text(
                   "#$keys",

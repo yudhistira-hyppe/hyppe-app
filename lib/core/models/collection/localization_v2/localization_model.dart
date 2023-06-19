@@ -255,6 +255,9 @@ class LocalizationModelV2 {
   String? vidsForYou;
   String? diariesForYou;
   String? picsForYou;
+  String? topVid;
+  String? topDiaty;
+  String? topPic;
   String? hyppeVerificationCode;
   String? inbox;
   String? toMe;
@@ -1156,6 +1159,9 @@ class LocalizationModelV2 {
     this.vidsForYou,
     this.diariesForYou,
     this.picsForYou,
+    this.topVid,
+    this.topDiaty,
+    this.topPic,
     this.hyppeVerificationCode,
     this.inbox,
     this.toMe,
@@ -2058,6 +2064,9 @@ class LocalizationModelV2 {
     vidsForYou = json["vidsForYou"];
     diariesForYou = json["diariesForYou"];
     picsForYou = json["picsForYou"];
+    topVid = json["topVid"];
+    topDiaty = json["topDiaty"];
+    topPic = json["topPic"];
     hyppeVerificationCode = json['hyppeVerificationCode'];
     inbox = json['inbox'];
     toMe = json['toMe'];
