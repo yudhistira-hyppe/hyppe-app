@@ -233,34 +233,38 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
       _currentPlayerState = newState;
-
-      switch (newState) {
-        case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-          Wakelock.enable();
-          setState(() {
-            _showTipsWidget = false;
-            _showLoading = false;
-            isPause = false;
-          });
-          _animationController?.forward();
-          break;
-        case FlutterAvpdef.AVPStatus_AVPStatusPaused:
-          isPause = true;
-          setState(() {});
-          Wakelock.disable();
-          _animationController?.stop();
-          break;
-        case FlutterAvpdef.AVPStatus_AVPStatusStopped:
-          Wakelock.disable();
-          break;
-        case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
-          Wakelock.disable();
-          break;
-        case FlutterAvpdef.AVPStatus_AVPStatusError:
-          Wakelock.disable();
-          break;
-        default:
+      try{
+        switch (newState) {
+          case FlutterAvpdef.AVPStatus_AVPStatusStarted:
+            Wakelock.enable();
+            setState(() {
+              _showTipsWidget = false;
+              _showLoading = false;
+              isPause = false;
+            });
+            _animationController?.forward();
+            break;
+          case FlutterAvpdef.AVPStatus_AVPStatusPaused:
+            isPause = true;
+            setState(() {});
+            Wakelock.disable();
+            _animationController?.stop();
+            break;
+          case FlutterAvpdef.AVPStatus_AVPStatusStopped:
+            Wakelock.disable();
+            break;
+          case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
+            Wakelock.disable();
+            break;
+          case FlutterAvpdef.AVPStatus_AVPStatusError:
+            Wakelock.disable();
+            break;
+          default:
+        }
+      }catch(e){
+        e.logger();
       }
+
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
       _animationController?.stop();
