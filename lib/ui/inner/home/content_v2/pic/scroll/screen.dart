@@ -494,6 +494,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     isInPage = true;
     fAliplayer?.play();
     // System().disposeBlock();
+    final notifier = Provider.of<ScrollPicNotifier>(context, listen: false);
+    print(notifier.pics);
+    setState(() {
+      pics = notifier.pics;
+    });
+    print(pics?[0].comment?.length);
+
     super.didPopNext();
   }
 

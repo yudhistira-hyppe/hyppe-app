@@ -92,7 +92,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
   LocalizationModelV2? lang;
   ContentData? dataSelected;
-  bool isMute = false;
+  bool isMute = true;
   String email = '';
   // String statusKyc = '';
   bool isInPage = true;

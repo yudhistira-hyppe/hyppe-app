@@ -12,6 +12,7 @@ import '../../../../../core/models/collection/search/search_content.dart';
 import '../../../../../core/services/system.dart';
 import '../../../../constant/widget/custom_content_moderated_widget.dart';
 import '../../../../constant/widget/custom_icon_widget.dart';
+import '../../../../constant/widget/custom_loading.dart';
 import '../../../home/content_v2/profile/self_profile/widget/sensitive_content.dart';
 import '../../../home/content_v2/profile/widget/both_profile_content_shimmer.dart';
 import '../../notifier.dart';
@@ -81,6 +82,14 @@ class GridHashtagPic extends StatelessWidget {
                                 isSale: false,
                                 isSafe: true, //notifier.postData.data.listPic[index].isSafe,
                                 thumbnail: blob ?? ImageUrl(dataitem?.postID, url: thumb),
+                                placeHolder: UnconstrainedBox(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 35 * SizeConfig.scaleDiagonal,
+                                    height: 35 * SizeConfig.scaleDiagonal,
+                                    child: const CustomLoading(),
+                                  ),
+                                ),
                               ),
                             ),
                             (dataitem?.saleAmount ?? 0) > 0

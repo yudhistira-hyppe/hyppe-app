@@ -67,6 +67,7 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
       context.read<SelfProfileNotifier>().user = UserInfoModel();
       context.read<SelfProfileNotifier>().onUpdate();
       context.read<OtherProfileNotifier>().user = UserInfoModel();
+      context.read<OtherProfileNotifier>().manyUser = [];
       context.read<SearchNotifier>().allContents = UserInfoModel();
       context.read<HomeNotifier>().profileImage = '';
 

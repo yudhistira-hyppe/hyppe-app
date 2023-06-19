@@ -59,11 +59,12 @@ class CustomSearchBar extends StatelessWidget {
                 iconData: "${AssetPath.vectorPath}filter.svg",
               ) : null,
                 prefixIcon: CustomIconButtonWidget(
+                  height: 24,
                   defaultColor: false,
                   onPressed: onPressedIcon,
                   iconData: "${AssetPath.vectorPath}search.svg",
                 ),
-                hintStyle: Theme.of(context).textTheme.subtitle2,
+                hintStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeBurem),
                 hintText: hintText,
                 contentPadding: contentPadding,
                 border: InputBorder.none,

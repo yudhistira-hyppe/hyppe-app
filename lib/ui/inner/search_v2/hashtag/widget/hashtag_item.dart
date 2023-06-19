@@ -42,8 +42,8 @@ class HashtagItem extends StatelessWidget {
                       CustomTextWidget(
                         maxLines: 1,
                         textToDisplay:
-                        title,
-                        textStyle: context.getTextTheme().bodyMedium,
+                        '#$title',
+                        textStyle: context.getTextTheme().bodyText1,
                         textAlign: TextAlign.start,
                       ),
                       Text(

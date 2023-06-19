@@ -699,18 +699,19 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
             expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
-          GestureDetector(
-            onTap: () {
-              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData?[index].postID ?? '', fromFront: true, data: vidData?[index] ?? ContentData()));
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Text(
-                "${lang?.seeAll} ${vidData?[index].comments} ${lang?.comment}",
-                style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+          if (vidData?[index].allowComments ?? true)
+            GestureDetector(
+              onTap: () {
+                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData?[index].postID ?? '', fromFront: true, data: vidData?[index] ?? ContentData()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Text(
+                  "${lang?.seeAll} ${vidData?[index].comments} ${lang?.comment}",
+                  style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                ),
               ),
             ),
-          ),
           (vidData?[index].comment?.length ?? 0) > 0
               ? Padding(
                   padding: const EdgeInsets.only(top: 0.0),

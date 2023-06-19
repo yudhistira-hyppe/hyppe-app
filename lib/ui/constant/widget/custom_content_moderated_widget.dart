@@ -25,6 +25,7 @@ class CustomContentModeratedWidget extends StatelessWidget {
   final double blurIfNotSafe;
   final FeatureType featureType;
   final EdgeInsetsGeometry padding;
+  final Widget? placeHolder;
 
   const CustomContentModeratedWidget(
       {Key? key,
@@ -37,7 +38,9 @@ class CustomContentModeratedWidget extends StatelessWidget {
       this.padding = EdgeInsets.zero,
       this.boxFitError = BoxFit.fill,
       this.boxFitContent = BoxFit.cover,
-      this.featureType = FeatureType.pic})
+      this.featureType = FeatureType.pic,
+        this.placeHolder
+      })
       : super(key: key);
 
   @override
@@ -73,7 +76,7 @@ class CustomContentModeratedWidget extends StatelessWidget {
                           ),
                         );
                       },
-                      placeHolderWidget: ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer()),
+                      placeHolderWidget: placeHolder ?? ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer()),
                       errorWidget: (_, url, error) {
                         print('image url is $url $error $connectInternet');
                         if (connectInternet) {
