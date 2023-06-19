@@ -75,6 +75,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   int _lastCurIndex = -1;
   int _cardIndex = 0;
 
+  bool toComment = false;
+
   String auth = '';
   String email = '';
   LocalizationModelV2? lang;
@@ -173,6 +175,13 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     }
 
     // System().disposeBlock();
+    if (toComment) {
+      ScrollVidNotifier notifier = context.read<ScrollVidNotifier>();
+      setState(() {
+        vidData = notifier.vidData;
+        toComment = false;
+      });
+    }
 
     super.didPopNext();
   }
@@ -619,6 +628,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         padding: const EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
                           onTap: () {
+                            toComment = true;
                             Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData?[index].postID ?? '', fromFront: true, data: vidData?[index] ?? ContentData()));
                           },
                           child: const CustomIconWidget(
@@ -702,6 +712,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
           if (vidData?[index].allowComments ?? true)
             GestureDetector(
               onTap: () {
+                toComment = true;
                 Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData?[index].postID ?? '', fromFront: true, data: vidData?[index] ?? ContentData()));
               },
               child: Padding(

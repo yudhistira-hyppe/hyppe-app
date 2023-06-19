@@ -2,9 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
-import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
@@ -14,7 +12,6 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/empty
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/sensitive_content.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
-import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 
 class SelfProfilePics extends StatelessWidget {

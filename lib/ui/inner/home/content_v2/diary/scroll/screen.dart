@@ -76,6 +76,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
   bool _inSeek = false;
   bool isloading = false;
   bool isMute = false;
+  bool toComment = false;
 
   int _loadingPercent = 0;
   int _currentPlayerState = 0;
@@ -477,6 +478,13 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
     fAliplayer?.play();
 
     // System().disposeBlock();
+    if (toComment) {
+      ScrollDiaryNotifier notifier = context.read<ScrollDiaryNotifier>();
+      setState(() {
+        diaryData = notifier.diaryData;
+        toComment = false;
+      });
+    }
 
     super.didPopNext();
   }
@@ -972,6 +980,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                         padding: const EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
                           onTap: () {
+                            toComment = true;
                             Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: diaryData?[index].postID ?? '', fromFront: true, data: diaryData?[index] ?? ContentData()));
                           },
                           child: const CustomIconWidget(
@@ -1041,6 +1050,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
           ),
           GestureDetector(
             onTap: () {
+              toComment = true;
               Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: diaryData?[index].postID ?? '', fromFront: true, data: diaryData?[index] ?? ContentData()));
             },
             child: Padding(

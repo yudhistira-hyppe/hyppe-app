@@ -302,7 +302,7 @@ class ShowGeneralDialog {
     if (isInAppAds) {
       SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, context.getCurrentDate());
     }
-    try{
+    try {
       await showGeneralDialog(
         //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
         context: Routing.navigatorKey.currentState!.overlay!.context,
@@ -319,14 +319,13 @@ class ShowGeneralDialog {
           return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
         },
       );
-    }catch(e){
+    } catch (e) {
       print('Error Pop Ads: $e');
     }
-
   }
 
   static Future adsPopUpImage(BuildContext context) async {
-    try{
+    try {
       await showGeneralDialog(
         //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
         context: Routing.navigatorKey.currentState?.overlay?.context ?? context,
@@ -339,7 +338,7 @@ class ShowGeneralDialog {
           return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
         },
       );
-    }catch(e){
+    } catch (e) {
       print('Error Pop Ads: $e');
     }
   }
@@ -404,20 +403,45 @@ class ShowGeneralDialog {
     ).then((value) => true);
   }
 
+  // static showToastAlert(BuildContext context, String message, Future<dynamic> Function() onDismiss) async {
+  //   await showGeneralDialog(
+  //     context: context,
+  //     barrierLabel: 'Barrier',
+  //     barrierDismissible: true,
+  //     barrierColor: Colors.white.withOpacity(0),
+  //     transitionDuration: const Duration(milliseconds: 500),
+  //     pageBuilder: (context, animation, secondAnimation) => ToastAlert(
+  //       message: message,
+  //       onTap: onDismiss,
+  //     ),
+  //     transitionBuilder: (context, animation, secondaryAnimation, child) {
+  //       animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+  //       return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
+  //     },
+  //   );
+  // }
+
   static showToastAlert(BuildContext context, String message, Future<dynamic> Function() onDismiss) async {
-    await showGeneralDialog(
+    showGeneralDialog(
       context: context,
       barrierLabel: 'Barrier',
       barrierDismissible: true,
-      barrierColor: Colors.transparent,
       transitionDuration: const Duration(milliseconds: 500),
-      pageBuilder: (context, animation, secondAnimation) =>
-          ToastAlert(message: message, onTap: onDismiss,),
+      barrierColor: Colors.transparent,
+      pageBuilder: (context, animation, secondAnimation) => AlertDialog(
+        actions: [
+          ToastAlert(
+            message: message,
+            onTap: onDismiss,
+          ),
+        ],
+        contentPadding: EdgeInsets.all(0),
+        actionsPadding: EdgeInsets.all(0),
+        insetPadding: EdgeInsets.zero,
+      ),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
-        animation =
-            CurvedAnimation(curve: Curves.elasticOut, parent: animation);
-        return ScaleTransition(
-            child: child, scale: animation, alignment: Alignment.center);
+        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
       },
     );
   }

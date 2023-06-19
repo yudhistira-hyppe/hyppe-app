@@ -111,6 +111,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   // String statusKyc = '';
   bool isInPage = true;
   bool _scroolEnabled = true;
+  bool toComment = false;
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
@@ -456,7 +457,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(Routing.navigatorKey.currentContext ?? context) as PageRoute);
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -494,13 +495,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     isInPage = true;
     fAliplayer?.play();
     // System().disposeBlock();
-    final notifier = Provider.of<ScrollPicNotifier>(context, listen: false);
-    print(notifier.pics);
-    setState(() {
-      pics = notifier.pics;
-    });
-    print(pics?[0].comment?.length);
-
+    if (toComment) {
+      print("====picnotif======");
+      ScrollPicNotifier notifier = context.read<ScrollPicNotifier>();
+      setState(() {
+        pics = notifier.pics;
+        toComment = false;
+      });
+    }
     super.didPopNext();
   }
 
@@ -1070,6 +1072,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         padding: EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
                           onTap: () {
+                            toComment = true;
                             Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: pics?[index].postID ?? '', fromFront: true, data: pics?[index] ?? ContentData()));
                             // ShowBottomSheet.onShowCommentV2(context, postID: pics?[index].postID);
                           },
@@ -1140,6 +1143,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
           if (pics?[index].allowComments ?? true)
             GestureDetector(
               onTap: () {
+                toComment = true;
                 Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: pics?[index].postID ?? '', fromFront: true, data: pics?[index] ?? ContentData()));
               },
               child: Padding(

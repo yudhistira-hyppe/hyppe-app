@@ -898,21 +898,27 @@ class HomeNotifier with ChangeNotifier {
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
 
-    final vidScroll = Provider.of<ScrollVidNotifier>(context, listen: false);
-    final diaryScroll = Provider.of<ScrollDiaryNotifier>(context, listen: false);
-    final picScroll = Provider.of<ScrollPicNotifier>(context, listen: false);
+    ScrollVidNotifier vidScroll = context.read<ScrollVidNotifier>();
+    ScrollDiaryNotifier diaryScroll = context.read<ScrollDiaryNotifier>();
+    ScrollPicNotifier picScroll = context.read<ScrollPicNotifier>();
 
     ContentData? _updatedData;
     _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
+    print("vid");
     _updatedData ??= diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
+    print("diary");
     _updatedData ??= pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+    print("pict");
 
     _updatedData ??= vidScroll.vidData?.firstWhereOrNull((element) => element.postID == postID);
+    print("vid2");
     _updatedData ??= diaryScroll.diaryData?.firstWhereOrNull((element) => element.postID == postID);
+    print("diary2");
     _updatedData ??= picScroll.pics?.firstWhereOrNull((element) => element.postID == postID);
+    print("pic2");
 
-    print("===-=-=-=-=- data vid ${vidScroll.vidData}");
-    print("===-=-=-=-=- data vid ${_updatedData}");
+    print("===-=-=-=-=- data ${_updatedData}");
+    print("===-=-=-=-=- _updatedData?.comment ${picScroll.pics?.first.comment?.length}");
     if (add) {
       _updatedData?.comments = (_updatedData.comments ?? 0) + 1;
       Comment comment = Comment(txtMessages: txtMsg, userComment: UserComment(username: username));
@@ -929,6 +935,7 @@ class HomeNotifier with ChangeNotifier {
 
       print("===-=-=-=-=- _updatedData?.comment ${picScroll.pics?.first.comment?.length}");
       print("===-=-=-=-=- _updatedData?.comment ${picScroll.pics?.first.comment?.first.txtMessages}");
+      print("===-=-=-=-=- _updatedData?.comment ${_updatedData?.comment?.length}");
       print("===-=-=-=-=- _updatedData?.comment ${_updatedData?.comment?.first.txtMessages}");
       notifyListeners();
     } else {
