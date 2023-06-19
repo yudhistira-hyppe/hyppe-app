@@ -902,6 +902,10 @@ class LocalizationModelV2 {
   String? voucherDetail;
   String? adsCredit;
   String? totalBelanja;
+  String? shareYourMoment;
+  String? captureYourMoment;
+  String? howAreYouToday;
+  String? shareWithUsYourCreatifity;
 
   LocalizationModelV2({
     this.login,
@@ -1807,6 +1811,10 @@ class LocalizationModelV2 {
     this.voucherDetail,
     this.adsCredit,
     this.totalBelanja,
+    this.shareYourMoment,
+    this.captureYourMoment,
+    this.howAreYouToday,
+    this.shareWithUsYourCreatifity,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2731,5 +2739,9 @@ class LocalizationModelV2 {
     voucherDetail = json['voucherDetail'];
     adsCredit = json['adsCredit'];
     totalBelanja = json['totalBelanja'];
+    shareYourMoment = json['shareYourMoment'];
+    captureYourMoment = json['captureYourMoment'];
+    howAreYouToday = json['howAreYouToday'];
+    shareWithUsYourCreatifity = json['shareWithUsYourCreatifity'];
   }
 }
