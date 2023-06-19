@@ -23,6 +23,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
@@ -129,8 +130,23 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
       }
       lastIndex = index;
     });
+    checkInet();
 
     super.initState();
+  }
+
+  void checkInet() async {
+    var inet = await System().checkConnections();
+    if (!inet) {
+      TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
+      ShowGeneralDialog.showToastAlert(
+        context,
+        tn.translate.internetConnectionLost ?? ' Error',
+        () async {
+          Routing().moveBack();
+        },
+      );
+    }
   }
 
   @override

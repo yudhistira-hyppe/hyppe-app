@@ -421,27 +421,33 @@ class ShowGeneralDialog {
   //   );
   // }
 
-  static showToastAlert(BuildContext context, String message, Future<dynamic> Function() onDismiss) async {
-    showGeneralDialog(
+  static Future showToastAlert(BuildContext context, String message, Future<dynamic> Function() onDismiss) async {
+    await showGeneralDialog(
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: context,
       barrierLabel: 'Barrier',
+      barrierColor: Colors.transparent,
       barrierDismissible: true,
       transitionDuration: const Duration(milliseconds: 500),
-      barrierColor: Colors.transparent,
-      pageBuilder: (context, animation, secondAnimation) => AlertDialog(
-        actions: [
-          ToastAlert(
+      pageBuilder: (context, animation, secondAnimation) => WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          content: ToastAlert(
             message: message,
             onTap: onDismiss,
           ),
-        ],
-        contentPadding: EdgeInsets.all(0),
-        actionsPadding: EdgeInsets.all(0),
-        insetPadding: EdgeInsets.zero,
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 0),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+        ),
       ),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
-        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
-        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+        animation = CurvedAnimation(curve: Curves.ease, parent: animation);
+        return SlideTransition(
+          position: Tween(begin: const Offset(0, 1), end: const Offset(0, 0)).animate(animation),
+          child: child,
+        );
       },
     );
   }

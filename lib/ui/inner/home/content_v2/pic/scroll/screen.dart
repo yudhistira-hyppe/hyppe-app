@@ -150,7 +150,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-      itemScrollController.jumpTo(index: widget.arguments!.page!);
+      itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
       _initListener();
     });
     var index = 0;

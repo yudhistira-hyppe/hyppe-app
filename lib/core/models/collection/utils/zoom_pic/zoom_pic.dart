@@ -238,10 +238,10 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
     var position = renderBox.localToGlobal(Offset.zero);
     updatePositionY = position.dy;
 
-    if (newPositionY != position.dy) {
-      hide();
-      return;
-    }
+    // if (newPositionY != position.dy) {
+    //   hide();
+    //   return;
+    // }
 
     print("==========new posisi new banget $position");
     // if (_scale! < 1.0 && _closeOnZoomOut!) {

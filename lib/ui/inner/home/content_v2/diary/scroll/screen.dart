@@ -26,6 +26,7 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -152,8 +153,23 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       }
       lastIndex = index;
     });
+    checkInet();
 
     super.initState();
+  }
+
+  void checkInet() async {
+    var inet = await System().checkConnections();
+    if (!inet) {
+      TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
+      ShowGeneralDialog.showToastAlert(
+        context,
+        tn.translate.internetConnectionLost ?? ' Error',
+        () async {
+          Routing().moveBack();
+        },
+      );
+    }
   }
 
   _initListener() {
