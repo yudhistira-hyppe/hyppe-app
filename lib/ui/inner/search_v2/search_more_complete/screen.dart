@@ -15,6 +15,7 @@ import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/all_search_
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/search_contents_tab.dart';
 import 'package:provider/provider.dart';
 
+import '../../home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import '../hashtag/tab_screen.dart';
 
 class SearchMoreCompleteScreenV2 extends StatefulWidget {
@@ -164,10 +165,22 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                                   // physics: const NeverScrollableScrollPhysics(),
                                   controller: _tabController,
                                   children: [
-                                    AllSearchContent(tabController: _tabController, keyword: notifier.searchController.text,),
-                                    AccountSearchContent(users: notifier.searchUsers),
-                                    SearchContentsTab(keyword: notifier.searchController.text),
-                                    const HashtagTabScreen(),
+                                    notifier.connectionError ? OfflineMode(function: (){
+                                      notifier.checkConnection();
+                                      notifier.getDataSearch(context, forceLoad: true);
+                                    },) : AllSearchContent(tabController: _tabController, keyword: notifier.searchController.text,),
+                                    notifier.connectionError ? OfflineMode(function: (){
+                                      notifier.checkConnection();
+                                      notifier.getDataSearch(context, forceLoad: true);
+                                    },) : AccountSearchContent(users: notifier.searchUsers),
+                                    notifier.connectionError ? OfflineMode(function: (){
+                                      notifier.checkConnection();
+                                      notifier.getDataSearch(context, forceLoad: true);
+                                    },) : SearchContentsTab(keyword: notifier.searchController.text),
+                                    notifier.connectionError ? OfflineMode(function: (){
+                                      notifier.checkConnection();
+                                      notifier.getDataSearch(context, forceLoad: true);
+                                    },) : const HashtagTabScreen(),
                                   ],
                                 ),
                               ),
