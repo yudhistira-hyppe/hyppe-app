@@ -100,7 +100,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   @override
   void didPopNext() {
     Future.delayed(const Duration(milliseconds: 500), () {
-      (materialAppKey.currentContext ?? context).read<ReportNotifier>().inPosition = contentPosition.searchFirst;
+      (Routing.navigatorKey.currentContext ?? context).read<ReportNotifier>().inPosition = contentPosition.searchFirst;
       final notifier = Routing.navigatorKey.currentContext!.read<SearchNotifier>();
       if (notifier.layout == SearchLayout.searchMore) {
         // notifier.getDataSearch(context);

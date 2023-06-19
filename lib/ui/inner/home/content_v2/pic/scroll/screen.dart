@@ -439,7 +439,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(Routing.navigatorKey.currentContext ?? context) as PageRoute);
     super.didChangeDependencies();
   }
 
