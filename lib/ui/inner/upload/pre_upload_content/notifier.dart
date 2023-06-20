@@ -1268,7 +1268,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         _isLoading = true;
       }
       print('getSearchPeopleBloc 3');
-      await notifier.getSearchPeopleBloc(context, input, _startSearch * 10, 10);
+      await notifier.getSearchPeopleBloc(context, input, _startSearch * 12, 12);
       final fetch = notifier.utilsFetch;
       if (fetch.utilsState == UtilsState.searchPeopleSuccess) {
         if (_startSearch == 0) {

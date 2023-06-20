@@ -199,6 +199,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
           style: effectiveTextStyle,
           children: collectDescItems(
             context,
+            lastIndex: endIndex,
             getDescItems(lastIndex: endIndex, linkLongerThanLine: linkLongerThanLine),
             spanTrim: link,
           ),
@@ -214,7 +215,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
       } else {
         var textSpan = TextSpan(
           style: effectiveTextStyle,
-          children: collectDescItems(context, getDescItems(lastIndex: null, linkLongerThanLine: linkLongerThanLine)),
+          children: collectDescItems(context, lastIndex: null, getDescItems(lastIndex: null, linkLongerThanLine: linkLongerThanLine)),
         );
         return Text.rich(
           textSpan,
@@ -230,7 +231,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
     return result;
   }
 
-  List<TextSpan> collectDescItems(BuildContext context, List<ItemDesc> items, {TextSpan? spanTrim}) {
+  List<TextSpan> collectDescItems(BuildContext context, List<ItemDesc> items, {int? lastIndex, TextSpan? spanTrim}) {
     final callback = widget.callback;
     List<TextSpan> results = [];
     bool isSeeLess = items.where((element) => element.type == CaptionType.seeMore).toList().isNotEmpty;
@@ -247,7 +248,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
             error = true;
           }
         }
-        final fixdesc = error && isSeeLess ? item.desc.substring(0, item.desc.length -1) : item.desc;
+        final fixdesc = error && isSeeLess && lastIndex != null ? item.desc.substring(0, item.desc.length -1) : item.desc;
         results.add(TextSpan(
             text: fixdesc,
             style: item.type == CaptionType.mention || item.type == CaptionType.hashtag

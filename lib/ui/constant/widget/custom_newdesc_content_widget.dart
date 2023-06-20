@@ -176,6 +176,7 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
             context,
             getDescItems(lastIndex: endIndex, linkLongerThanLine: linkLongerThanLine),
             spanTrim: link,
+            lastIndex: endIndex
           ),
         );
         return Text.rich(
@@ -196,7 +197,8 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
       } else {
         var textSpan = TextSpan(
           style: effectiveTextStyle,
-          children: collectDescItems(context, getDescItems(lastIndex: null, linkLongerThanLine: linkLongerThanLine)),
+          children: collectDescItems(context,
+              lastIndex: null, getDescItems(lastIndex: null, linkLongerThanLine: linkLongerThanLine)),
         );
         return Text.rich(
           TextSpan(
@@ -219,7 +221,7 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
     return result;
   }
 
-  List<TextSpan> collectDescItems(BuildContext context, List<ItemDesc> items, {TextSpan? spanTrim}) {
+  List<TextSpan> collectDescItems(BuildContext context, List<ItemDesc> items, {int? lastIndex, TextSpan? spanTrim}) {
     List<TextSpan> results = [];
     bool isSeeLess = items.where((element) => element.type == CaptionType.seeMore).toList().isNotEmpty;
     for (var item in items) {
@@ -235,8 +237,9 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
             error = true;
           }
         }
-        print('state $error && $isSeeLess');
-        final fixdesc = error && isSeeLess ? item.desc.substring(0, item.desc.length -1) : item.desc;
+        print('state $desc $error && $isSeeLess && ${lastIndex != null}');
+        // final fixdesc = item.desc;
+        final fixdesc = error && isSeeLess && lastIndex != null ? item.desc.substring(0, item.desc.length -1) : item.desc;
         results.add(TextSpan(
             text: fixdesc,
             style: item.type == CaptionType.mention || item.type == CaptionType.hashtag
