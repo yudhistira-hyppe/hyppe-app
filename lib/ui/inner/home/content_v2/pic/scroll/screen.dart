@@ -1073,7 +1073,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         child: GestureDetector(
                           onTap: () {
                             toComment = true;
-                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: pics?[index].postID ?? '', fromFront: true, data: pics?[index] ?? ContentData()));
+                            Routing().move(Routes.commentsDetail,
+                                argument: CommentsArgument(
+                                  postID: pics?[index].postID ?? '',
+                                  fromFront: true,
+                                  data: pics?[index] ?? ContentData(),
+                                  pageDetail: true,
+                                ));
                             // ShowBottomSheet.onShowCommentV2(context, postID: pics?[index].postID);
                           },
                           child: const CustomIconWidget(
@@ -1144,7 +1150,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
             GestureDetector(
               onTap: () {
                 toComment = true;
-                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: pics?[index].postID ?? '', fromFront: true, data: pics?[index] ?? ContentData()));
+                Routing().move(Routes.commentsDetail,
+                    argument: CommentsArgument(
+                      postID: pics?[index].postID ?? '',
+                      fromFront: true,
+                      data: pics?[index] ?? ContentData(),
+                      pageDetail: true,
+                    ));
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),

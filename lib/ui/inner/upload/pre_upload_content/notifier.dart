@@ -177,6 +177,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get priceIsFilled => _priceIsFilled;
   bool get isSavedPrice => _isSavedPrice;
   bool get isUpdate => _isUpdate;
+  bool isLoadMorePage = false;
 
   DateTime _tmpstartDate = DateTime(1000);
   DateTime _tmpfinsihDate = DateTime(1000);
@@ -190,6 +191,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   String get tmpBoostTimeId => _tmpBoostTimeId;
   String _tmpBoostIntervalId = '';
   String get tmpBoostIntervalId => _tmpBoostIntervalId;
+  String inputCaption = '';
 
   String _postIdPanding = '';
   String get postIdPanding => _postIdPanding;
@@ -1290,8 +1292,6 @@ class PreUploadContentNotifier with ChangeNotifier {
             _searchPeolpleData.add(SearchPeolpleData.fromJson(v));
           });
         }
-        print("____________------- tagpepple $tagPeople");
-        print("____________------- tagpepple $_searchTagPeolpleData");
 
         notifyListeners();
       }
@@ -1300,12 +1300,17 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  Future scrollListPeopleListener(BuildContext context, ScrollController scrollController, input) async {
+  Future scrollListPeopleListener(
+    BuildContext context,
+    ScrollController scrollController,
+    input, {
+    bool tagPeople = false,
+  }) async {
     if (input.length > 2) {
       if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
         isLoadingLoadMore = true;
         _startSearch++;
-        searchPeople(context, input: input);
+        searchPeople(context, input: input, tagPeople: tagPeople);
         notifyListeners();
       }
     }
@@ -1324,6 +1329,8 @@ class PreUploadContentNotifier with ChangeNotifier {
 
       if (_tagRegex.hasMatch(withat)) {
         String withoutat = withat.substring(1);
+        inputCaption = withoutat;
+        _startSearch = 0;
 
         if (withoutat.length > 2) {
           _isShowAutoComplete = true;

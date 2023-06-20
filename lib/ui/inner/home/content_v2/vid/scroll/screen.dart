@@ -645,7 +645,13 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         child: GestureDetector(
                           onTap: () {
                             toComment = true;
-                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData?[index].postID ?? '', fromFront: true, data: vidData?[index] ?? ContentData()));
+                            Routing().move(Routes.commentsDetail,
+                                argument: CommentsArgument(
+                                  postID: vidData?[index].postID ?? '',
+                                  fromFront: true,
+                                  data: vidData?[index] ?? ContentData(),
+                                  pageDetail: true,
+                                ));
                           },
                           child: const CustomIconWidget(
                             defaultColor: false,
@@ -729,7 +735,13 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             GestureDetector(
               onTap: () {
                 toComment = true;
-                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData?[index].postID ?? '', fromFront: true, data: vidData?[index] ?? ContentData()));
+                Routing().move(Routes.commentsDetail,
+                    argument: CommentsArgument(
+                      postID: vidData?[index].postID ?? '',
+                      fromFront: true,
+                      data: vidData?[index] ?? ContentData(),
+                      pageDetail: true,
+                    ));
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),

@@ -893,7 +893,17 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void addCountComment(BuildContext context, String postID, bool add, int totChild, {String? username, String? txtMsg, String? parentID, int? indexComment}) async {
+  void addCountComment(
+    BuildContext context,
+    String postID,
+    bool add,
+    int totChild, {
+    String? username,
+    String? txtMsg,
+    String? parentID,
+    int? indexComment,
+    bool pageDetail = false,
+  }) async {
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -907,42 +917,50 @@ class HomeNotifier with ChangeNotifier {
     _updatedData ??= diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
     _updatedData ??= pic.pic?.firstWhereOrNull((element) => element.postID == postID);
 
-    _updatedData ??= vidScroll.vidData?.firstWhereOrNull((element) => element.postID == postID);
-    _updatedData ??= diaryScroll.diaryData?.firstWhereOrNull((element) => element.postID == postID);
+    // _updatedData ??= vidScroll.vidData?.firstWhereOrNull((element) => element.postID == postID);
+    // _updatedData ??= diaryScroll.diaryData?.firstWhereOrNull((element) => element.postID == postID);
     // _updatedData ??= picScroll.pics?.firstWhereOrNull((element) => element.postID == postID);
 
     if (add) {
-      try {
-        Comment comment = Comment(txtMessages: txtMsg, userComment: UserComment(username: username));
-        print("===-=-=-=-=- parentID ${parentID}");
+      Comment comment = Comment(txtMessages: txtMsg, userComment: UserComment(username: username));
+      print("===-=-=-=-=- parentID ${parentID}");
 
-        if (parentID == null) {
-          if (_updatedData == null) {
-            picScroll.pics?.forEach((e) {
-              if (e.postID == postID) {
-                e.comment?.insert(0, comment);
-                e.comments = (e.comments ?? 0) + 1;
-              }
-            });
-          } else {
-            if (_updatedData.comment == null) {
-              _updatedData.comment = [];
-              _updatedData.comment = [comment];
-              notifyListeners();
-            } else {
-              _updatedData.comment?.insert(0, comment);
-              notifyListeners();
+      if (parentID == null) {
+        if (pageDetail) {
+          picScroll.pics?.forEach((e) {
+            if (e.postID == postID) {
+              e.comment?.insert(0, comment);
+              e.comments = (e.comments ?? 0) + 1;
             }
-            _updatedData.comments = (_updatedData.comments ?? 0) + 1;
+          });
+          vidScroll.vidData?.forEach((e) {
+            if (e.postID == postID) {
+              e.comment?.insert(0, comment);
+              e.comments = (e.comments ?? 0) + 1;
+            }
+          });
+          diaryScroll.diaryData?.forEach((e) {
+            if (e.postID == postID) {
+              e.comment?.insert(0, comment);
+              e.comments = (e.comments ?? 0) + 1;
+            }
+          });
+        } else {
+          if (_updatedData?.comment == null) {
+            _updatedData?.comment = [];
+            _updatedData?.comment = [comment];
+            notifyListeners();
+          } else {
+            _updatedData?.comment?.insert(0, comment);
+            notifyListeners();
           }
+          _updatedData?.comments = (_updatedData.comments ?? 0) + 1;
         }
-      } catch (e) {
-        print(e);
       }
 
       notifyListeners();
     } else {
-      if (_updatedData == null) {
+      if (pageDetail) {
         picScroll.pics?.forEach((e) {
           if (e.postID == postID) {
             e.comments = (e.comments ?? 0) - (1 + totChild);
@@ -953,11 +971,31 @@ class HomeNotifier with ChangeNotifier {
             }
           }
         });
+        vidScroll.vidData?.forEach((e) {
+          if (e.postID == postID) {
+            e.comments = (e.comments ?? 0) - (1 + totChild);
+            if (parentID == null) {
+              if (indexComment != null && e.comment != null) {
+                e.comment?.removeAt(indexComment);
+              }
+            }
+          }
+        });
+        diaryScroll.diaryData?.forEach((e) {
+          if (e.postID == postID) {
+            e.comments = (e.comments ?? 0) - (1 + totChild);
+            if (parentID == null) {
+              if (indexComment != null && e.comment != null) {
+                e.comment?.removeAt(indexComment);
+              }
+            }
+          }
+        });
       } else {
-        _updatedData.comments = (_updatedData.comments ?? 0) - (1 + totChild);
+        _updatedData?.comments = (_updatedData.comments ?? 0) - (1 + totChild);
         if (parentID == null) {
-          if (indexComment != null && _updatedData.comment != null) {
-            _updatedData.comment?.removeAt(indexComment);
+          if (indexComment != null && _updatedData?.comment != null) {
+            _updatedData?.comment?.removeAt(indexComment);
           }
         }
       }

@@ -113,7 +113,12 @@ class CommentTile extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     ShowGeneralDialog.deleteContentDialog(context, '${_language.comment}', () async {
-                      notifier.deleteComment(context, comment?.lineID ?? '', comment?.detailDisquss?.length ?? 0, indexComment: index);
+                      notifier.deleteComment(
+                        context,
+                        comment?.lineID ?? '',
+                        comment?.detailDisquss?.length ?? 0,
+                        indexComment: index,
+                      );
                     });
                   },
                   child: CustomIconWidget(

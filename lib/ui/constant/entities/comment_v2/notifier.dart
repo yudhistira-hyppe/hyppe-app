@@ -173,7 +173,7 @@ class CommentNotifierV2 with ChangeNotifier {
     }
   }
 
-  Future<void> addComment(BuildContext context) async {
+  Future<void> addComment(BuildContext context, {bool? pageDetail}) async {
     inputNode.unfocus();
     if (commentController.value.text.isEmpty) {
       return;
@@ -207,6 +207,7 @@ class CommentNotifierV2 with ChangeNotifier {
               txtMsg: commentController.text,
               username: res.comment?.senderInfo?.username,
               parentID: parentID,
+              pageDetail: pageDetail ?? false,
             );
 
         if (parentID == null) {

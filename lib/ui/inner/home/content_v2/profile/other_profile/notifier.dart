@@ -461,7 +461,7 @@ class OtherProfileNotifier with ChangeNotifier {
             type: TypePlaylist.mine,
             titleAppbar: title,
             pageSrc: PageSrc.otherProfile,
-            picData: manyUser.last.pics ?? [],
+            picData: data,
             scrollController: scrollController,
             heightTopProfile: heightProfile,
           ));

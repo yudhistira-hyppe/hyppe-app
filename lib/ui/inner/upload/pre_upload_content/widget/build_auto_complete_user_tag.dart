@@ -8,8 +8,15 @@ import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:provider/provider.dart';
 
-class AutoCompleteUserTag extends StatelessWidget {
+class AutoCompleteUserTag extends StatefulWidget {
   const AutoCompleteUserTag({Key? key}) : super(key: key);
+
+  @override
+  State<AutoCompleteUserTag> createState() => _AutoCompleteUserTagState();
+}
+
+class _AutoCompleteUserTagState extends State<AutoCompleteUserTag> {
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,34 +45,58 @@ class AutoCompleteUserTag extends StatelessWidget {
                               Expanded(child: Center(child: Text('${notifier.language.userIsNotFound}'))),
                             ],
                           )
-                        : ListView.builder(
-                            itemCount: notifier.searchPeolpleData.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                onTap: () {
-                                  notifier.insertAutoComplete(index);
-                                },
+                        : NotificationListener<ScrollUpdateNotification>(
+                            onNotification: (notification) {
+                              notifier.scrollListPeopleListener(
+                                context,
+                                _scrollController,
+                                notifier.inputCaption,
+                                tagPeople: false,
+                              );
 
-                                title: CustomTextWidget(
-                                  textToDisplay: '@ ${notifier.searchPeolpleData[index].username}',
-                                  textStyle: Theme.of(context).textTheme.bodyMedium,
-                                  textAlign: TextAlign.start,
-                                ),
-                                // subtitle: Text("${notifier.searchPeolpleData[index].fullName}"),
-                                leading: StoryColorValidator(
-                                  haveStory: false,
-                                  featureType: FeatureType.pic,
-                                  child: CustomProfileImage(
-                                    width: 30,
-                                    height: 30,
-                                    onTap: () {},
-                                    imageUrl: System().showUserPicture(notifier.searchPeolpleData[index].avatar?.mediaEndpoint),
-                                    following: true,
-                                    onFollow: () {},
+                              return true;
+                            },
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: ListView.builder(
+                                    controller: _scrollController,
+                                    itemCount: notifier.searchPeolpleData.length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        onTap: () {
+                                          notifier.insertAutoComplete(index);
+                                        },
+                                        title: CustomTextWidget(
+                                          textToDisplay: '@ ${notifier.searchPeolpleData[index].username}',
+                                          textStyle: Theme.of(context).textTheme.bodyMedium,
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        // subtitle: Text("${notifier.searchPeolpleData[index].fullName}"),
+                                        leading: StoryColorValidator(
+                                          haveStory: false,
+                                          featureType: FeatureType.pic,
+                                          child: CustomProfileImage(
+                                            width: 30,
+                                            height: 30,
+                                            onTap: () {},
+                                            imageUrl: System().showUserPicture(notifier.searchPeolpleData[index].avatar?.mediaEndpoint),
+                                            following: true,
+                                            onFollow: () {},
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
-                              );
-                            },
+                                Visibility(
+                                  visible: notifier.isLoadingLoadMore,
+                                  child: Container(
+                                    child: CustomLoading(),
+                                  ),
+                                )
+                              ],
+                            ),
                           )
                 : Container(),
           ),

@@ -997,7 +997,13 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                         child: GestureDetector(
                           onTap: () {
                             toComment = true;
-                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: diaryData?[index].postID ?? '', fromFront: true, data: diaryData?[index] ?? ContentData()));
+                            Routing().move(Routes.commentsDetail,
+                                argument: CommentsArgument(
+                                  postID: diaryData?[index].postID ?? '',
+                                  fromFront: true,
+                                  data: diaryData?[index] ?? ContentData(),
+                                  pageDetail: true,
+                                ));
                           },
                           child: const CustomIconWidget(
                             defaultColor: false,
@@ -1067,7 +1073,13 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
           GestureDetector(
             onTap: () {
               toComment = true;
-              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: diaryData?[index].postID ?? '', fromFront: true, data: diaryData?[index] ?? ContentData()));
+              Routing().move(Routes.commentsDetail,
+                  argument: CommentsArgument(
+                    postID: diaryData?[index].postID ?? '',
+                    fromFront: true,
+                    data: diaryData?[index] ?? ContentData(),
+                    pageDetail: true,
+                  ));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),

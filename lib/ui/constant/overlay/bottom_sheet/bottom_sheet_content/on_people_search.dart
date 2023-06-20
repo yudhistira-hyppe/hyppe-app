@@ -137,6 +137,7 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
                     context,
                     _scrollController,
                     _controller.text,
+                    tagPeople: true,
                   );
 
                   return true;

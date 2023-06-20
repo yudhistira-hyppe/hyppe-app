@@ -242,7 +242,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                             ),
                                           ),
                                           onPressed: () {
-                                            notifier.addComment(context);
+                                            notifier.addComment(context, pageDetail: widget.argument.pageDetail);
                                           },
                                         )
                                   : const SizedBox.shrink(),
@@ -487,6 +487,7 @@ class CommentsArgument {
   final bool fromFront;
   final DisqusLogs? parentComment;
   final ContentData data;
+  final bool? pageDetail;
 
-  CommentsArgument({this.parentComment, required this.postID, required this.fromFront, required this.data});
+  CommentsArgument({this.parentComment, required this.postID, required this.fromFront, required this.data, this.pageDetail});
 }
