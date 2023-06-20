@@ -5,10 +5,25 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
-class BannerPop extends StatelessWidget {
+class BannerPop extends StatefulWidget {
   final bool uploadProses;
   const BannerPop({Key? key, this.uploadProses = false}) : super(key: key);
+
+  @override
+  State<BannerPop> createState() => _BannerPopState();
+}
+
+class _BannerPopState extends State<BannerPop> {
+  final List<String> imgList = [
+    'https://cache.teia.rocks/ipfs/QmPfuBWAmkaqxdkJZL4d2eCgkfAxrpnwKTLtSvo2t5Grjg',
+    'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
+    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+    'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
+    'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
+    'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -22,23 +37,49 @@ class BannerPop extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(8.0)),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
               height: size.width * 0.92,
               width: size.width * 0.92,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  // !uploadProses ? const CustomLoading() : const ProcessUploadComponent(showAlert: false),
-                  GestureDetector(
-                    // onTap: () => Routing().moveBack(),
-                    child: CustomTextWidget(
-                      textToDisplay: 'Loading',
-                      textStyle: theme.textTheme.subtitle1!.copyWith(fontWeight: FontWeight.w600),
+              child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+                // return Container(
+                //   width: size.width,
+                //   margin: EdgeInsets.all(12),
+                //   height: constraints.maxHeight,
+                //   decoration: BoxDecoration(
+                //       color: Colors.white,
+                //       image: DecorationImage(
+                //         image: NetworkImage('https://cache.teia.rocks/ipfs/QmPfuBWAmkaqxdkJZL4d2eCgkfAxrpnwKTLtSvo2t5Grjg'),
+                //         fit: BoxFit.cover,
+                //       )),
+                // );
+                return Container(
+                  width: size.width,
+                  margin: EdgeInsets.all(12),
+                  height: constraints.maxHeight,
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      // height: 300
+
+                      enlargeCenterPage: false,
+                      viewportFraction: 1.0,
+                      aspectRatio: 1 / 1,
+
+                      autoPlayInterval: Duration(seconds: 3),
                     ),
+                    items: imgList
+                        .map((item) => ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Center(
+                                  child: Image.network(
+                                item,
+                                height: constraints.maxHeight,
+                                fit: BoxFit.cover,
+                              )),
+                            ))
+                        .toList(),
                   ),
-                ],
-              ),
+                );
+              }),
             ),
           ],
         ),
@@ -49,12 +90,18 @@ class BannerPop extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
               },
-              child: const CustomIconWidget(
-                width: 20,
-                height: 20,
-                iconData: "${AssetPath.vectorPath}close.svg",
-                defaultColor: false,
-                color: kHyppePrimary,
+              child: ClipOval(
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  color: kHyppeTextLightPrimary,
+                  child: const CustomIconWidget(
+                    width: 20,
+                    height: 20,
+                    iconData: "${AssetPath.vectorPath}close.svg",
+                    defaultColor: false,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
           ),
