@@ -233,14 +233,23 @@ class _CustomDescContentState extends State<CustomDescContent> {
   List<TextSpan> collectDescItems(BuildContext context, List<ItemDesc> items, {TextSpan? spanTrim}) {
     final callback = widget.callback;
     List<TextSpan> results = [];
+    bool isSeeLess = items.where((element) => element.type == CaptionType.seeMore).toList().isNotEmpty;
     for (var item in items) {
       if (item.type == CaptionType.seeMore || item.type == CaptionType.seeLess) {
         if (spanTrim != null) {
           results.add(spanTrim);
         }
       } else {
+        bool error = false;
+        if(item.type == CaptionType.normal){
+          final lastDesc = item.desc.split(' ').last;
+          if(lastDesc.hasEmoji()){
+            error = true;
+          }
+        }
+        final fixdesc = error && isSeeLess ? item.desc.substring(0, item.desc.length -1) : item.desc;
         results.add(TextSpan(
-            text: item.desc,
+            text: fixdesc,
             style: item.type == CaptionType.mention || item.type == CaptionType.hashtag
                 ? (widget.hrefStyle ?? Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primary))
                 : (widget.normStyle ?? Theme.of(context).textTheme.bodyText2!.copyWith()),
