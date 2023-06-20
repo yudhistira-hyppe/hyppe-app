@@ -101,6 +101,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   ModelGoogleMapPlace? get modelGoogleMapPlace => _modelGoogleMapPlace;
   List<SearchPeolpleData> _searchPeolpleData = [];
   List<SearchPeolpleData> get searchPeolpleData => _searchPeolpleData;
+  List<SearchPeolpleData> _searchTagPeolpleData = [];
+  List<SearchPeolpleData> get searchTagPeolpleData => _searchTagPeolpleData;
   List<Map<String, dynamic>> _searchPeopleACData = [];
   List<Map<String, dynamic>> get searchPeopleACData => _searchPeopleACData;
   BoostMasterModel? boostMasterData;
@@ -1101,7 +1103,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       },
       onChange: (value) {
         _startSearch = 0;
-        searchPeople(context, input: value);
+        searchPeople(context, input: value, tagPeople: true);
         notifyListeners();
       },
       value: _privacyTitle,
@@ -1261,7 +1263,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  Future searchPeople(BuildContext context, {input}) async {
+  Future searchPeople(BuildContext context, {input, bool tagPeople = false}) async {
     final notifier = UtilsBlocV2();
     if (input.length > 2) {
       if (_startSearch == 0) {
@@ -1272,11 +1274,25 @@ class PreUploadContentNotifier with ChangeNotifier {
       final fetch = notifier.utilsFetch;
       if (fetch.utilsState == UtilsState.searchPeopleSuccess) {
         if (_startSearch == 0) {
-          _searchPeolpleData = [];
+          if (tagPeople) {
+            _searchTagPeolpleData = [];
+          } else {
+            _searchPeolpleData = [];
+          }
         }
-        fetch.data.forEach((v) {
-          _searchPeolpleData.add(SearchPeolpleData.fromJson(v));
-        });
+
+        if (tagPeople) {
+          fetch.data.forEach((v) {
+            _searchTagPeolpleData.add(SearchPeolpleData.fromJson(v));
+          });
+        } else {
+          fetch.data.forEach((v) {
+            _searchPeolpleData.add(SearchPeolpleData.fromJson(v));
+          });
+        }
+        print("____________------- tagpepple $tagPeople");
+        print("____________------- tagpepple $_searchTagPeolpleData");
+
         notifyListeners();
       }
       _isLoading = false;

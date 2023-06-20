@@ -30,7 +30,7 @@ class AutoCompleteUserTag extends StatelessWidget {
                           Expanded(child: SizedBox(height: 50, child: CustomLoading())),
                         ],
                       )
-                    : notifier.searchPeolpleData.length == 0
+                    : notifier.searchPeolpleData.isEmpty
                         ? Row(
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.center,

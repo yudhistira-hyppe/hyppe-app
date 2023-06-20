@@ -87,17 +87,16 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
                     if (lastInputValue != val) {
                       lastInputValue = val;
                       notifier.startSearch = 0;
-                      Future.delayed(const Duration(milliseconds: 500), () async{
-                        if(val == _controller.text){
-                          notifier.searchPeople(context, input: _controller.text);
+                      Future.delayed(const Duration(milliseconds: 500), () async {
+                        if (val == _controller.text) {
+                          notifier.searchPeople(context, input: _controller.text, tagPeople: true);
                         }
                       });
-
                     }
                   }),
               NotificationListener<ScrollUpdateNotification>(
                 child: Expanded(
-                  child: notifier.searchPeolpleData != []
+                  child: notifier.searchTagPeolpleData != []
                       ? notifier.isLoading
                           ? SizedBox(height: 30, child: CustomLoading())
                           : ListView.builder(
@@ -105,15 +104,15 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
                               controller: _scrollController,
                               scrollDirection: Axis.vertical,
                               physics: const BouncingScrollPhysics(),
-                              itemCount: notifier.searchPeolpleData.length,
+                              itemCount: notifier.searchTagPeolpleData.length,
                               itemBuilder: (context, index) {
                                 return Column(
                                   children: [
                                     ListTile(
                                       onTap: () => notifier.inserTagPeople(index),
                                       contentPadding: EdgeInsets.zero,
-                                      title: Text("@${notifier.searchPeolpleData[index].username}"),
-                                      subtitle: Text("${notifier.searchPeolpleData[index].fullName}"),
+                                      title: Text("@${notifier.searchTagPeolpleData[index].username}"),
+                                      subtitle: Text("${notifier.searchTagPeolpleData[index].fullName}"),
                                       leading: StoryColorValidator(
                                         haveStory: false,
                                         featureType: FeatureType.pic,
@@ -121,7 +120,7 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
                                           width: 50,
                                           height: 50,
                                           onTap: () {},
-                                          imageUrl: System().showUserPicture(notifier.searchPeolpleData[index].avatar?.mediaEndpoint),
+                                          imageUrl: System().showUserPicture(notifier.searchTagPeolpleData[index].avatar?.mediaEndpoint),
                                           following: true,
                                           onFollow: () {},
                                         ),
