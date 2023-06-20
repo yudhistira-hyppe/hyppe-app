@@ -918,25 +918,28 @@ class HomeNotifier with ChangeNotifier {
     print("pic2");
 
     print("===-=-=-=-=- data ${_updatedData}");
-    print("===-=-=-=-=- _updatedData?.comment ${picScroll.pics?.first.comment?.length}");
-    if (add) {
-      _updatedData?.comments = (_updatedData.comments ?? 0) + 1;
-      Comment comment = Comment(txtMessages: txtMsg, userComment: UserComment(username: username));
-      print("===-=-=-=-=- parentID ${parentID}");
-      if (parentID == null) {
-        if (_updatedData?.comment == null) {
-          _updatedData?.comment = [];
-          _updatedData?.comment = [comment];
-        } else {
-          _updatedData?.comment?.insert(0, comment);
-        }
-      }
-      picScroll.onUpdate();
+    print("===-=-=-=-=- data ${_updatedData?.description}");
 
-      print("===-=-=-=-=- _updatedData?.comment ${picScroll.pics?.first.comment?.length}");
-      print("===-=-=-=-=- _updatedData?.comment ${picScroll.pics?.first.comment?.first.txtMessages}");
-      print("===-=-=-=-=- _updatedData?.comment ${_updatedData?.comment?.length}");
-      print("===-=-=-=-=- _updatedData?.comment ${_updatedData?.comment?.first.txtMessages}");
+    if (add) {
+      try {
+        Comment comment = Comment(txtMessages: txtMsg, userComment: UserComment(username: username));
+        print("===-=-=-=-=- parentID ${parentID}");
+        if (parentID == null) {
+          if (_updatedData?.comment == null) {
+            _updatedData?.comment = [];
+            _updatedData?.comment = [comment];
+            notifyListeners();
+          } else {
+            _updatedData?.comment?.insert(0, comment);
+            notifyListeners();
+          }
+        }
+        _updatedData?.comments = (_updatedData.comments ?? 0) + 1;
+        picScroll.onUpdate();
+      } catch (e) {
+        print(e);
+      }
+
       notifyListeners();
     } else {
       _updatedData?.comments = (_updatedData.comments ?? 0) - (1 + totChild);
