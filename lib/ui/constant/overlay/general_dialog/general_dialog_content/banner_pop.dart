@@ -106,6 +106,29 @@ class _BannerPopState extends State<BannerPop> {
             ),
           ),
         ),
+        Positioned.fill(
+          child: Align(
+            alignment: Alignment.topRight,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: ClipOval(
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  color: kHyppeTextLightPrimary,
+                  child: const CustomIconWidget(
+                    width: 20,
+                    height: 20,
+                    iconData: "${AssetPath.vectorPath}close.svg",
+                    defaultColor: false,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
