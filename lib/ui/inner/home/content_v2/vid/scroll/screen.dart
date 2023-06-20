@@ -23,6 +23,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
@@ -75,6 +76,8 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   int _lastCurIndex = -1;
   int _cardIndex = 0;
 
+  bool toComment = false;
+
   String auth = '';
   String email = '';
   LocalizationModelV2? lang;
@@ -98,30 +101,52 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     final notifier = Provider.of<ScrollVidNotifier>(context, listen: false);
     // notifier.initialVid(context, reload: true);
     lang = context.read<TranslateNotifierV2>().translate;
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      itemScrollController.jumpTo(index: widget.arguments!.page!);
-      var index = 0;
-      var lastIndex = 0;
+    vidData = widget.arguments?.vidData;
+    notifier.vidData = widget.arguments?.vidData;
 
-      itemPositionsListener.itemPositions.addListener(() async {
-        index = itemPositionsListener.itemPositions.value.first.index;
-        if (lastIndex != index) {
-          if (index == vidData!.length - 2) {
-            print("ini reload harusnya");
-            if (!notifier.isLoadingLoadmore) {
-              await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      print("============== widget argument ${widget.arguments!.vidData}");
+      itemScrollController.jumpTo(index: widget.arguments!.page!);
+      // notifier.checkConnection();
+    });
+    var index = 0;
+    var lastIndex = 0;
+    itemPositionsListener.itemPositions.addListener(() async {
+      index = itemPositionsListener.itemPositions.value.first.index;
+      if (lastIndex != index) {
+        if (index == vidData!.length - 2) {
+          print("ini reload harusnya");
+          if (!notifier.isLoadingLoadmore) {
+            await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
+            if (mounted) {
               setState(() {
                 vidData = notifier.vidData;
               });
+            } else {
+              vidData = notifier.vidData;
             }
           }
         }
-        lastIndex = index;
-      });
+      }
+      lastIndex = index;
     });
+    checkInet();
 
     super.initState();
-    vidData = widget.arguments?.vidData;
+  }
+
+  void checkInet() async {
+    var inet = await System().checkConnections();
+    if (!inet) {
+      TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
+      ShowGeneralDialog.showToastAlert(
+        context,
+        tn.translate.internetConnectionLost ?? ' Error',
+        () async {
+          Routing().moveBack();
+        },
+      );
+    }
   }
 
   @override
@@ -166,6 +191,13 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     }
 
     // System().disposeBlock();
+    if (toComment) {
+      ScrollVidNotifier notifier = context.read<ScrollVidNotifier>();
+      setState(() {
+        vidData = notifier.vidData;
+        toComment = false;
+      });
+    }
 
     super.didPopNext();
   }
@@ -250,6 +282,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                     //   // context.read<ScrollVidNotifier>().nextVideo = false;
                                     //   // context.read<ScrollVidNotifier>().initializeVideo = false;
                                     // },
+                                    physics: const AlwaysScrollableScrollPhysics(),
                                     shrinkWrap: false,
                                     padding: const EdgeInsets.symmetric(horizontal: 11.5),
                                     itemCount: vidData?.length ?? 0,
@@ -406,6 +439,11 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                 _cardIndex = index;
                 if (_curIdx != index) {
                   Future.delayed(const Duration(milliseconds: 400), () {
+                    try {
+                      widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_cardIndex, widget.arguments?.heightTopProfile ?? 0, 100));
+                    } catch (e) {
+                      print("ini error $e");
+                    }
                     try {
                       if (_curIdx != -1) {
                         print('Vid Landing Page: pause $_curIdx ${vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
@@ -606,7 +644,14 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         padding: const EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
                           onTap: () {
-                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData?[index].postID ?? '', fromFront: true, data: vidData?[index] ?? ContentData()));
+                            toComment = true;
+                            Routing().move(Routes.commentsDetail,
+                                argument: CommentsArgument(
+                                  postID: vidData?[index].postID ?? '',
+                                  fromFront: true,
+                                  data: vidData?[index] ?? ContentData(),
+                                  pageDetail: true,
+                                ));
                           },
                           child: const CustomIconWidget(
                             defaultColor: false,
@@ -686,18 +731,26 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
             expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
-          GestureDetector(
-            onTap: () {
-              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData?[index].postID ?? '', fromFront: true, data: vidData?[index] ?? ContentData()));
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Text(
-                "${lang?.seeAll} ${vidData?[index].comments} ${lang?.comment}",
-                style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+          if (vidData?[index].allowComments ?? true)
+            GestureDetector(
+              onTap: () {
+                toComment = true;
+                Routing().move(Routes.commentsDetail,
+                    argument: CommentsArgument(
+                      postID: vidData?[index].postID ?? '',
+                      fromFront: true,
+                      data: vidData?[index] ?? ContentData(),
+                      pageDetail: true,
+                    ));
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Text(
+                  "${lang?.seeAll} ${vidData?[index].comments} ${lang?.comment}",
+                  style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                ),
               ),
             ),
-          ),
           (vidData?[index].comment?.length ?? 0) > 0
               ? Padding(
                   padding: const EdgeInsets.only(top: 0.0),

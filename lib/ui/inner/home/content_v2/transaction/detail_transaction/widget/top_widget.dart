@@ -28,7 +28,11 @@ class TopDetailWidget extends StatelessWidget {
     } else if (data?.type == TransactionType.reward) {
       return rewardWidget(context);
     } else if (data?.type == TransactionType.buy) {
-      return buyWidget(context);
+      if (data?.jenis == "VOUCHER") {
+        return voucherWidget(context);
+      } else {
+        return buyWidget(context);
+      }
     } else {
       return sellWidget(context);
     }
@@ -44,6 +48,42 @@ class TopDetailWidget extends StatelessWidget {
                 language?.time,
                 text2: System().dateFormatter(data?.time ?? '', 4),
               ),
+        TwoColumnWidget('Order ID', text2: data?.id),
+      ],
+    );
+  }
+
+  Widget voucherWidget(context) {
+    return Column(
+      children: [
+        // TwoColumnWidget(
+        //   data?.noinvoice ?? '',
+        //   // text2: 'See Invoice',
+        //   textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+        // ),
+
+        TwoColumnWidget('Status', text2: data?.status),
+        data?.status == 'WAITING_PAYMENT'
+            ? countDown(context)
+            : TwoColumnWidget(
+                language?.time,
+                text2: System().dateFormatter(data?.time ?? '', 4),
+              ),
+        data?.status == 'WAITING_PAYMENT'
+            ? TwoColumnWidget(
+                'No Virtual Account',
+                text2: data?.nova,
+                widget: const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}copy-link.svg",
+                  defaultColor: false,
+                  height: 15,
+                ),
+                function: () {
+                  System().copyToClipboard(data?.nova ?? '');
+                  ShowBottomSheet().onShowColouredSheet(context, 'Copy to clipboard', color: kHyppeLightSuccess);
+                },
+              )
+            : Container(),
         TwoColumnWidget('Order ID', text2: data?.id),
       ],
     );

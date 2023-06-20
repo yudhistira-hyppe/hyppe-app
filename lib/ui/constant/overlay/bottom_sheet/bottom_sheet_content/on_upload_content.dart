@@ -50,17 +50,17 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
               children: [
                 ListTile(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
-                  onTap: () async{
+                  onTap: () async {
                     // notifier.thumbnailLocalMedia();
                     context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
                     notifier.featureType = FeatureType.story;
                     notifier.selectedDuration = 15;
                     final tempIsHome = isHomeScreen;
-                    if(tempIsHome){
+                    if (tempIsHome) {
                       isHomeScreen = false;
                     }
                     await Routing().moveAndPop(Routes.makeContent);
-                    if(tempIsHome){
+                    if (tempIsHome) {
                       isHomeScreen = true;
                     }
                   },
@@ -71,7 +71,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                     textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
-                    textToDisplay: notifier.language.hyppeStoryCaption ?? '',
+                    textToDisplay: notifier.language.shareYourMoment ?? '',
                     textAlign: TextAlign.start,
                     textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
                   ),
@@ -93,11 +93,11 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                     notifier.isVideo = true;
                     notifier.selectedDuration = 15;
                     final tempIsHome = isHomeScreen;
-                    if(tempIsHome){
+                    if (tempIsHome) {
                       isHomeScreen = false;
                     }
                     Routing().moveAndPop(Routes.makeContent);
-                    if(tempIsHome){
+                    if (tempIsHome) {
                       isHomeScreen = true;
                     }
                   },
@@ -108,7 +108,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                     textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
-                    textToDisplay: notifier.language.hyppeVidCaption ?? '',
+                    textToDisplay: notifier.language.shareWithUsYourCreatifity ?? '',
                     textAlign: TextAlign.start,
                     textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
                   ),
@@ -130,11 +130,11 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                     notifier.isVideo = true;
                     notifier.selectedDuration = 15;
                     final tempIsHome = isHomeScreen;
-                    if(tempIsHome){
+                    if (tempIsHome) {
                       isHomeScreen = false;
                     }
                     Routing().moveAndPop(Routes.makeContent);
-                    if(tempIsHome){
+                    if (tempIsHome) {
                       isHomeScreen = true;
                     }
                   },
@@ -145,7 +145,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                     textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
-                    textToDisplay: notifier.language.hyppeDiaryCaption ?? '',
+                    textToDisplay: notifier.language.howAreYouToday ?? '',
                     textAlign: TextAlign.start,
                     textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
                   ),
@@ -167,11 +167,11 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                     notifier.isVideo = false;
                     notifier.selectedDuration = 15;
                     final tempIsHome = isHomeScreen;
-                    if(tempIsHome){
+                    if (tempIsHome) {
                       isHomeScreen = false;
                     }
                     Routing().moveAndPop(Routes.makeContent);
-                    if(tempIsHome){
+                    if (tempIsHome) {
                       isHomeScreen = true;
                     }
                     // Future.delayed(const Duration(seconds: 1), (){
@@ -180,7 +180,6 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                     //     isHomeScreen = true;
                     //   }
                     // });
-
                   },
                   dense: true,
                   minLeadingWidth: 20,
@@ -190,7 +189,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                     textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
-                    textToDisplay: notifier.language.hyppePicCaption ?? '',
+                    textToDisplay: notifier.language.captureYourMoment ?? '',
                     textAlign: TextAlign.start,
                     textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
                   ),

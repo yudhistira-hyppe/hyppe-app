@@ -26,6 +26,7 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -76,6 +77,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
   bool _inSeek = false;
   bool isloading = false;
   bool isMute = false;
+  bool toComment = false;
 
   int _loadingPercent = 0;
   int _currentPlayerState = 0;
@@ -113,6 +115,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
     // stopwatch = new Stopwatch()..start();
     super.initState();
     diaryData = widget.arguments?.diaryData;
+    notifier.diaryData = widget.arguments?.diaryData;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
       WidgetsBinding.instance.addObserver(this);
@@ -124,6 +127,8 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       if (Platform.isIOS) {
         FlutterAliplayer.enableMix(true);
       }
+
+      notifier.checkConnection();
 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
@@ -148,8 +153,23 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       }
       lastIndex = index;
     });
+    checkInet();
 
     super.initState();
+  }
+
+  void checkInet() async {
+    var inet = await System().checkConnections();
+    if (!inet) {
+      TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
+      ShowGeneralDialog.showToastAlert(
+        context,
+        tn.translate.internetConnectionLost ?? ' Error',
+        () async {
+          Routing().moveBack();
+        },
+      );
+    }
   }
 
   _initListener() {
@@ -315,34 +335,34 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       isPause = false;
       // _isFirstRenderShow = false;
     });
-    // var configMap = {
-    //   'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
-    //   'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
-    //   'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
-    //   'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
-    //   'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
-    //   'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
-    //   'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
-    //   'mLocalCacheDir': GlobalSettings.mDirController,
-    //   'mClearFrameWhenStop': true
-    // };
-    // Configure the application.
-    // fAliplayer?.setConfig(configMap);
-    // var map = {
-    //   "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
+    var configMap = {
+      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+      'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
+      'mLocalCacheDir': GlobalSettings.mDirController,
+      'mClearFrameWhenStop': true
+    };
+    //// Configure the application.
+    fAliplayer?.setConfig(configMap);
+    var map = {
+      "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
 
-    //   /// The maximum space that can be occupied by the cache directory.
-    //   "mMaxDurationS": GlobalSettings.mMaxDurationSController,
+      /// The maximum space that can be occupied by the cache directory.
+      "mMaxDurationS": GlobalSettings.mMaxDurationSController,
 
-    //   /// The maximum cache duration of a single file.
-    //   "mDir": GlobalSettings.mDirController,
+      /// The maximum cache duration of a single file.
+      "mDir": GlobalSettings.mDirController,
 
-    //   /// The cache directory.
-    //   "mEnable": GlobalSettings.mEnableCacheConfig
+      /// The cache directory.
+      "mEnable": GlobalSettings.mEnableCacheConfig
 
-    //   /// Specify whether to enable the cache feature.
-    // };
-    // fAliplayer?.setCacheConfig(map);
+      /// Specify whether to enable the cache feature.
+    };
+    fAliplayer?.setCacheConfig(map);
     if (data.reportedStatus == 'BLURRED') {
     } else {
       fAliplayer?.prepare();
@@ -448,9 +468,9 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       FlutterAliplayer.enableMix(false);
     }
     fAliplayer?.stop();
-    // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
-    //   fAliplayer?.destroy();
-    // }
+    if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
+      fAliplayer?.destroy();
+    }
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
@@ -474,6 +494,13 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
     fAliplayer?.play();
 
     // System().disposeBlock();
+    if (toComment) {
+      ScrollDiaryNotifier notifier = context.read<ScrollDiaryNotifier>();
+      setState(() {
+        diaryData = notifier.diaryData;
+        toComment = false;
+      });
+    }
 
     super.didPopNext();
   }
@@ -718,6 +745,11 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
               if (info.visibleFraction >= 0.6) {
                 _curIdx = index;
                 if (_lastCurIndex != _curIdx) {
+                  try {
+                    widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, 175));
+                  } catch (e) {
+                    print("ini error $e");
+                  }
                   Future.delayed(const Duration(milliseconds: 400), () {
                     start(diaryData?[index] ?? ContentData());
                     System().increaseViewCount2(context, diaryData?[index] ?? ContentData(), check: false);
@@ -964,7 +996,14 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                         padding: const EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
                           onTap: () {
-                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: diaryData?[index].postID ?? '', fromFront: true, data: diaryData?[index] ?? ContentData()));
+                            toComment = true;
+                            Routing().move(Routes.commentsDetail,
+                                argument: CommentsArgument(
+                                  postID: diaryData?[index].postID ?? '',
+                                  fromFront: true,
+                                  data: diaryData?[index] ?? ContentData(),
+                                  pageDetail: true,
+                                ));
                           },
                           child: const CustomIconWidget(
                             defaultColor: false,
@@ -1033,7 +1072,14 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
           ),
           GestureDetector(
             onTap: () {
-              Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: diaryData?[index].postID ?? '', fromFront: true, data: diaryData?[index] ?? ContentData()));
+              toComment = true;
+              Routing().move(Routes.commentsDetail,
+                  argument: CommentsArgument(
+                    postID: diaryData?[index].postID ?? '',
+                    fromFront: true,
+                    data: diaryData?[index] ?? ContentData(),
+                    pageDetail: true,
+                  ));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),

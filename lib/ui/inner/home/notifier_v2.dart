@@ -181,7 +181,7 @@ class HomeNotifier with ChangeNotifier {
   void onUpdate() => notifyListeners();
 
   Future initNewHome(BuildContext context, bool mounted, {int? forceIndex, bool isreload = true, bool isgetMore = false, bool isNew = false}) async {
-    ReportNotifier rp = Provider.of(context, listen: false);
+    ReportNotifier rp = Provider.of(Routing.navigatorKey.currentContext ?? context, listen: false);
     rp.inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
 
@@ -893,29 +893,114 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void addCountComment(BuildContext context, String postID, bool add, int totChild) {
+  void addCountComment(
+    BuildContext context,
+    String postID,
+    bool add,
+    int totChild, {
+    String? username,
+    String? txtMsg,
+    String? parentID,
+    int? indexComment,
+    bool pageDetail = false,
+  }) async {
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
 
-    final vidScroll = Provider.of<ScrollVidNotifier>(context, listen: false);
-    final diaryScroll = Provider.of<ScrollDiaryNotifier>(context, listen: false);
-    final picScroll = Provider.of<ScrollPicNotifier>(context, listen: false);
+    ScrollVidNotifier vidScroll = context.read<ScrollVidNotifier>();
+    ScrollDiaryNotifier diaryScroll = context.read<ScrollDiaryNotifier>();
+    ScrollPicNotifier picScroll = context.read<ScrollPicNotifier>();
 
     ContentData? _updatedData;
     _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
     _updatedData ??= diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
     _updatedData ??= pic.pic?.firstWhereOrNull((element) => element.postID == postID);
 
-    _updatedData ??= vidScroll.vidData?.firstWhereOrNull((element) => element.postID == postID);
-    _updatedData ??= diaryScroll.diaryData?.firstWhereOrNull((element) => element.postID == postID);
-    _updatedData ??= picScroll.pics?.firstWhereOrNull((element) => element.postID == postID);
+    // _updatedData ??= vidScroll.vidData?.firstWhereOrNull((element) => element.postID == postID);
+    // _updatedData ??= diaryScroll.diaryData?.firstWhereOrNull((element) => element.postID == postID);
+    // _updatedData ??= picScroll.pics?.firstWhereOrNull((element) => element.postID == postID);
 
     if (add) {
-      _updatedData?.comments = (_updatedData.comments ?? 0) + 1;
+      Comment comment = Comment(txtMessages: txtMsg, userComment: UserComment(username: username));
+      print("===-=-=-=-=- parentID ${parentID}");
+
+      if (parentID == null) {
+        if (pageDetail) {
+          picScroll.pics?.forEach((e) {
+            if (e.postID == postID) {
+              e.comment?.insert(0, comment);
+              e.comments = (e.comments ?? 0) + 1;
+            }
+          });
+          vidScroll.vidData?.forEach((e) {
+            if (e.postID == postID) {
+              e.comment?.insert(0, comment);
+              e.comments = (e.comments ?? 0) + 1;
+            }
+          });
+          diaryScroll.diaryData?.forEach((e) {
+            if (e.postID == postID) {
+              e.comment?.insert(0, comment);
+              e.comments = (e.comments ?? 0) + 1;
+            }
+          });
+        } else {
+          if (_updatedData?.comment == null) {
+            _updatedData?.comment = [];
+            _updatedData?.comment = [comment];
+            notifyListeners();
+          } else {
+            _updatedData?.comment?.insert(0, comment);
+            notifyListeners();
+          }
+          _updatedData?.comments = (_updatedData.comments ?? 0) + 1;
+        }
+      }
+
+      notifyListeners();
     } else {
-      _updatedData?.comments = (_updatedData.comments ?? 0) - (1 + totChild);
+      if (pageDetail) {
+        picScroll.pics?.forEach((e) {
+          if (e.postID == postID) {
+            e.comments = (e.comments ?? 0) - (1 + totChild);
+            if (parentID == null) {
+              if (indexComment != null && e.comment != null) {
+                e.comment?.removeAt(indexComment);
+              }
+            }
+          }
+        });
+        vidScroll.vidData?.forEach((e) {
+          if (e.postID == postID) {
+            e.comments = (e.comments ?? 0) - (1 + totChild);
+            if (parentID == null) {
+              if (indexComment != null && e.comment != null) {
+                e.comment?.removeAt(indexComment);
+              }
+            }
+          }
+        });
+        diaryScroll.diaryData?.forEach((e) {
+          if (e.postID == postID) {
+            e.comments = (e.comments ?? 0) - (1 + totChild);
+            if (parentID == null) {
+              if (indexComment != null && e.comment != null) {
+                e.comment?.removeAt(indexComment);
+              }
+            }
+          }
+        });
+      } else {
+        _updatedData?.comments = (_updatedData.comments ?? 0) - (1 + totChild);
+        if (parentID == null) {
+          if (indexComment != null && _updatedData?.comment != null) {
+            _updatedData?.comment?.removeAt(indexComment);
+          }
+        }
+      }
+
+      notifyListeners();
     }
-    notifyListeners();
   }
 }

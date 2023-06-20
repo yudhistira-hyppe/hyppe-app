@@ -13,14 +13,14 @@ import '../../../../../../initial/hyppe/translate_v2.dart';
 class ScrollPicNotifier with ChangeNotifier {
   bool _isLoadingLoadmore = false;
   bool get isLoadingLoadmore => _isLoadingLoadmore;
-  set isLoadingLoadmore(bool state){
+  set isLoadingLoadmore(bool state) {
     _isLoadingLoadmore = state;
     notifyListeners();
   }
 
   bool _connectionError = false;
   bool get connectionError => _connectionError;
-  set connectionError (bool state){
+  set connectionError(bool state) {
     _connectionError = state;
     notifyListeners();
   }
@@ -30,14 +30,23 @@ class ScrollPicNotifier with ChangeNotifier {
     connectionError = !connect;
   }
 
-  List<ContentData>? pics = [];
+  List<ContentData>? _pics;
+
+  List<ContentData>? get pics => _pics;
+
+  set pics(List<ContentData>? val) {
+    _pics = val;
+    notifyListeners();
+  }
+
+  void onUpdate() => notifyListeners();
 
   Future loadMore(BuildContext context, ScrollController scrollController, PageSrc pageSrc, String key) async {
     isLoadingLoadmore = true;
     bool connect = await System().checkConnections();
     connectionError = !connect;
     final searchNotifier = context.read<SearchNotifier>();
-    if(connect){
+    if (connect) {
       if (pageSrc == PageSrc.selfProfile) {
         final sp = context.read<SelfProfileNotifier>();
         sp.pageIndex = 0;
@@ -54,45 +63,40 @@ class ScrollPicNotifier with ChangeNotifier {
         isLoadingLoadmore = false;
       }
 
-
-
-      if(pageSrc == PageSrc.searchData){
+      if (pageSrc == PageSrc.searchData) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppePic, TypeApiSearch.normal, 12, skip: searchNotifier.searchPic?.length ?? 0);
-        if(data.isNotEmpty){
+        if (data.isNotEmpty) {
           searchNotifier.searchPic?.addAll(data);
           pics = searchNotifier.searchPic;
-
         }
         isLoadingLoadmore = false;
       }
 
-      if(pageSrc == PageSrc.hashtag){
+      if (pageSrc == PageSrc.hashtag) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppePic, TypeApiSearch.detailHashTag, 12, skip: searchNotifier.mapDetailHashtag[key]?.pict?.length ?? 0);
-        if(data.isNotEmpty){
+        if (data.isNotEmpty) {
           searchNotifier.mapDetailHashtag[key]?.pict?.addAll(data);
           pics = searchNotifier.mapDetailHashtag[key]?.pict;
-
         }
         isLoadingLoadmore = false;
       }
 
-      if(pageSrc == PageSrc.interest){
+      if (pageSrc == PageSrc.interest) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppePic, TypeApiSearch.detailInterest, 12, skip: searchNotifier.interestContents[key]?.pict?.length ?? 0);
-        if(data.isNotEmpty){
+        if (data.isNotEmpty) {
           searchNotifier.interestContents[key]?.pict?.addAll(data);
           pics = searchNotifier.interestContents[key]?.pict;
-
         }
         isLoadingLoadmore = false;
       }
-    }else{
-      if(pageSrc == PageSrc.interest){
+    } else {
+      if (pageSrc == PageSrc.interest) {
         pics = searchNotifier.interestContents[key]?.pict;
       }
-      if(pageSrc == PageSrc.hashtag){
+      if (pageSrc == PageSrc.hashtag) {
         pics = searchNotifier.mapDetailHashtag[key]?.pict;
       }
-      if(pageSrc == PageSrc.searchData){
+      if (pageSrc == PageSrc.searchData) {
         pics = searchNotifier.searchPic;
       }
       if (pageSrc == PageSrc.selfProfile) {
@@ -105,17 +109,14 @@ class ScrollPicNotifier with ChangeNotifier {
       }
       connectionError = true;
       isLoadingLoadmore = false;
-      final language = context.read<TranslateNotifierV2>().translate;
-      context.showErrorConnection(language);
     }
-
   }
 
   Future reload(BuildContext context, PageSrc pageSrc, {String key = ""}) async {
     bool connect = await System().checkConnections();
     final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
-    if(connect){
+    if (connect) {
       if (pageSrc == PageSrc.selfProfile) {
         final sp = context.read<SelfProfileNotifier>();
         sp.pageIndex = 0;
@@ -132,35 +133,34 @@ class ScrollPicNotifier with ChangeNotifier {
         isLoadingLoadmore = false;
       }
 
-
-      if(pageSrc == PageSrc.searchData){
+      if (pageSrc == PageSrc.searchData) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppePic, TypeApiSearch.normal, 12);
         searchNotifier.searchPic = data;
         pics = searchNotifier.searchPic;
         isLoadingLoadmore = false;
       }
 
-      if(pageSrc == PageSrc.hashtag){
+      if (pageSrc == PageSrc.hashtag) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppePic, TypeApiSearch.detailHashTag, 12);
         searchNotifier.mapDetailHashtag[key]?.pict = data;
         pics = searchNotifier.mapDetailHashtag[key]?.pict;
         isLoadingLoadmore = false;
       }
 
-      if(pageSrc == PageSrc.interest){
+      if (pageSrc == PageSrc.interest) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppePic, TypeApiSearch.detailInterest, 12);
         searchNotifier.interestContents[key]?.pict = data;
         pics = searchNotifier.interestContents[key]?.pict;
         isLoadingLoadmore = false;
       }
-    }else{
-      if(pageSrc == PageSrc.interest){
+    } else {
+      if (pageSrc == PageSrc.interest) {
         pics = searchNotifier.interestContents[key]?.pict;
       }
-      if(pageSrc == PageSrc.hashtag){
+      if (pageSrc == PageSrc.hashtag) {
         pics = searchNotifier.mapDetailHashtag[key]?.pict;
       }
-      if(pageSrc == PageSrc.searchData){
+      if (pageSrc == PageSrc.searchData) {
         pics = searchNotifier.searchPic;
       }
       if (pageSrc == PageSrc.selfProfile) {
@@ -173,9 +173,6 @@ class ScrollPicNotifier with ChangeNotifier {
       }
       connectionError = true;
       isLoadingLoadmore = false;
-      final language = context.read<TranslateNotifierV2>().translate;
-      context.showErrorConnection(language);
     }
-
   }
 }

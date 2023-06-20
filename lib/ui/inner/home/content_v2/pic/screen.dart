@@ -92,7 +92,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
   LocalizationModelV2? lang;
   ContentData? dataSelected;
-  bool isMute = false;
+  bool isMute = true;
   String email = '';
   // String statusKyc = '';
   bool isInPage = true;
@@ -687,7 +687,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     fAliplayer?.stop();
                   }
                   Future.delayed(const Duration(milliseconds: 100), () {
-                    System().increaseViewCount2(context, notifier.pic?[index] ?? ContentData());
+                    System().increaseViewCount2(context, notifier.pic?[index] ?? ContentData(), check: false);
                   });
                   if (notifier.pic?[index].certified ?? false) {
                     System().block(context);
@@ -790,8 +790,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             child: ValueListenableBuilder(
                                 valueListenable: _networklHasErrorNotifier,
                                 builder: (BuildContext context, int count, _) {
-                                  print("BUILDER");
-                                  print(_networklHasErrorNotifier.value);
                                   return CustomBaseCacheImage(
                                     cacheKey: "${notifier.pic?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
                                     memCacheWidth: 100,
@@ -830,19 +828,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                     errorWidget: (context, url, error) {
                                       return GestureDetector(
                                         onTap: () {
-                                          print("TOUCH");
                                           _networklHasErrorNotifier.value++;
+                                          // reloadImage(index);
                                         },
                                         child: Container(
-                                          height: 100,
-                                          decoration: BoxDecoration(
-                                            image: const DecorationImage(
-                                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                              fit: BoxFit.cover,
-                                            ),
-                                            borderRadius: BorderRadius.circular(8.0),
-                                          ),
-                                        ),
+                                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                            width: SizeConfig.screenWidth,
+                                            height: 250,
+                                            alignment: Alignment.center,
+                                            child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
                                       );
                                     },
                                   );
@@ -1081,7 +1075,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               left: 12,
               child: GestureDetector(
                 onTap: () {
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID);
+                  fAliplayer?.pause();
+                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',

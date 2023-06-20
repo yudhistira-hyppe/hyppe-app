@@ -96,7 +96,7 @@ class SubCommentTile extends StatelessWidget {
             InkWell(
               onTap: () {
                 ShowGeneralDialog.deleteContentDialog(context, '${notifier.language.comment}', () async {
-                  notifier.deleteComment(context, logs?.lineID ?? '', 0);
+                  notifier.deleteComment(context, logs?.lineID ?? '', 0, parentID: parentID);
                 });
               },
               child: CustomIconWidget(

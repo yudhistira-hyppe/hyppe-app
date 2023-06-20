@@ -650,7 +650,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                   fAliplayer?.stop();
                   Future.delayed(const Duration(milliseconds: 700), () {
                     start(notifier.diaryData?[index] ?? ContentData());
-                    System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData());
+                    System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData(), check: false);
                   });
                   if (notifier.diaryData?[index].certified ?? false) {
                     System().block(context);
@@ -680,8 +680,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                               onCreated: onViewPlayerCreated,
                               x: 0,
                               y: 0,
-                              height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                              width: MediaQuery.of(context).size.width,
+                              // height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                              // width: MediaQuery.of(context).size.width,
                             ),
                           )
                         : Container(),
@@ -722,24 +722,30 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     borderRadius: BorderRadius.circular(20), // Image border
                                     child: ImageFiltered(
                                       imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                      child: Image(
-                                        width: SizeConfig.screenWidth,
-                                        height: MediaQuery.of(context).size.width * 16.0 / 11.0,
-                                        image: imageProvider,
-                                        fit: BoxFit.cover,
+                                      child: AspectRatio(
+                                        aspectRatio: 9 / 16,
+                                        child: Image(
+                                          // width: SizeConfig.screenWidth,
+                                          // height: MediaQuery.of(context).size.width * 16.0 / 11.0,
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                   )
-                                : Container(
-                                    // const EdgeInsets.symmetric(horizontal: 4.5),
-                                    width: SizeConfig.screenWidth,
-                                    height: MediaQuery.of(context).size.width * 16.0 / 11.0,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover,
+                                : AspectRatio(
+                                    aspectRatio: 9 / 16,
+                                    child: Container(
+                                      // const EdgeInsets.symmetric(horizontal: 4.5),
+                                      // width: SizeConfig.screenWidth,
+                                      // height: MediaQuery.of(context).size.width * 16.0 / 11.0,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        borderRadius: BorderRadius.circular(16.0),
                                       ),
-                                      borderRadius: BorderRadius.circular(16.0),
                                     ),
                                   ),
                             errorWidget: (context, url, error) {
@@ -1033,7 +1039,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
               left: 12,
               child: GestureDetector(
                 onTap: () {
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID);
+                  fAliplayer?.pause();
+                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',

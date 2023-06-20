@@ -6,7 +6,6 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:provider/provider.dart';
-
 import '../../../../../../core/services/system.dart';
 import '../../../../../../initial/hyppe/translate_v2.dart';
 import '../../../../search_v2/notifier.dart';
@@ -78,8 +77,6 @@ class ScrollVidNotifier with ChangeNotifier {
       }
     } else {
       isLoadingLoadmore = false;
-      final language = context.read<TranslateNotifierV2>().translate;
-      context.showErrorConnection(language);
     }
   }
 
@@ -99,12 +96,10 @@ class ScrollVidNotifier with ChangeNotifier {
       if (pageSrc == PageSrc.otherProfile) {
         final op = context.read<OtherProfileNotifier>();
         op.pageIndex = 2;
-        await op.getDataPerPgage(context);
+        await op.initialOtherProfile(context, refresh: true);
         vidData = op.user.vids;
         isLoadingLoadmore = false;
       }
-
-
 
       if (pageSrc == PageSrc.searchData) {
         final data = await searchNotifier.getDetailContents(context, key, HyppeType.HyppeVid, TypeApiSearch.normal, 12);
@@ -128,8 +123,6 @@ class ScrollVidNotifier with ChangeNotifier {
       }
     } else {
       isLoadingLoadmore = false;
-      final language = context.read<TranslateNotifierV2>().translate;
-      context.showErrorConnection(language);
     }
   }
 

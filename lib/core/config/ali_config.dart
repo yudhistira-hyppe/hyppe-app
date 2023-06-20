@@ -13,16 +13,16 @@ class GlobalSettings {
 
   ///播放器名称
   static String mPlayerName = "";
-  static const String mStartBufferDuration="500";// The buffer duration before playback. Unit= milliseconds.
-  static const String mHighBufferDuration="10000";// The duration of high buffer. Unit= milliseconds.
-  static const String mMaxBufferDuration="15000";// The maximum buffer duration. Unit= milliseconds.
-  static const String mMaxDelayTime= "10000";// The maximum latency of live streaming. Unit= milliseconds. You can specify the latency only for live streams.
-  static const String mNetworkTimeout= "5000";// The network timeout period. Unit= milliseconds.
-  static const String mNetworkRetryCount="3";// The number of retires after a network timeout. Unit= milliseconds.
-  static const String mMaxSizeMBController="20";
-  static const String mMaxDurationSController="120";
-  static String mDirController="localCache/";
-  static bool mEnableCacheConfig=true;
+  static const String mStartBufferDuration = "500"; // The buffer duration before playback. Unit= milliseconds.
+  static const String mHighBufferDuration = "10000"; // The duration of high buffer. Unit= milliseconds.
+  static const String mMaxBufferDuration = "15000"; // The maximum buffer duration. Unit= milliseconds.
+  static const String mMaxDelayTime = "10000"; // The maximum latency of live streaming. Unit= milliseconds. You can specify the latency only for live streams.
+  static const String mNetworkTimeout = "5000"; // The network timeout period. Unit= milliseconds.
+  static const String mNetworkRetryCount = "3"; // The number of retires after a network timeout. Unit= milliseconds.
+  static const String mMaxSizeMBController = "20";
+  static const String mMaxDurationSController = "120";
+  static String mDirController = "storage/emulated/0/video";
+  static bool mEnableCacheConfig = true;
 }
 
 ///播放源相关
@@ -47,6 +47,4 @@ class DataSourceRelated {
   static const String hlsUriTokenKey = "hlsUriToken";
   static const String downloadSavePath = "savePath";
   static const String definitionList = "definitionList";
-
-  
 }

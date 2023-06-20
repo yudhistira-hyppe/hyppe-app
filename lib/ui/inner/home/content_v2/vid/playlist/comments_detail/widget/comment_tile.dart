@@ -22,7 +22,8 @@ class CommentTile extends StatelessWidget {
   final bool fromFront;
   final CommentsLogs? logs;
   final CommentNotifierV2 notifier;
-  CommentTile({Key? key, required this.logs, required this.fromFront, required this.notifier}) : super(key: key);
+  final int? index;
+  CommentTile({Key? key, required this.logs, required this.fromFront, required this.notifier, this.index}) : super(key: key);
 
   final email = SharedPreference().readStorage(SpKeys.email);
   @override
@@ -112,7 +113,12 @@ class CommentTile extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     ShowGeneralDialog.deleteContentDialog(context, '${_language.comment}', () async {
-                      notifier.deleteComment(context, comment?.lineID ?? '', comment?.detailDisquss?.length ?? 0);
+                      notifier.deleteComment(
+                        context,
+                        comment?.lineID ?? '',
+                        comment?.detailDisquss?.length ?? 0,
+                        indexComment: index,
+                      );
                     });
                   },
                   child: CustomIconWidget(

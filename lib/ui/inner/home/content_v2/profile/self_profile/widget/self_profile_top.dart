@@ -64,6 +64,7 @@ class SelfProfileTop extends StatelessWidget {
           children: [
             // SelectableText("${notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}")}"),
             // SelectableText("${SharedPreference().readStorage(SpKeys.fcmToken)}"),
+
             Row(
               children: <Widget>[
                 // StoryColorValidator(
@@ -78,6 +79,7 @@ class SelfProfileTop extends StatelessWidget {
                 //     onTap: () => notifier.viewStory(context),
                 //   ),
                 // ),
+
                 GestureDetector(
                   onTap: () {
                     showTap(context, sn.myStoryGroup[email] ?? [], notifier);
@@ -87,9 +89,9 @@ class SelfProfileTop extends StatelessWidget {
                   },
                   child: StoryColorValidator(
                     isMy: false,
-                    haveStory: sn.myStoryGroup[email]!.isNotEmpty,
-                    featureType: sn.myStoryGroup[email]!.isNotEmpty ? FeatureType.story : FeatureType.other,
-                    isView: sn.myStoryGroup[email]!.isNotEmpty ? sn.myStoryGroup[email]?.last.isViewed ?? false : false,
+                    haveStory: (sn.myStoryGroup[email]?.isEmpty ?? [].isEmpty) ? false : true,
+                    featureType: (sn.myStoryGroup[email]?.isEmpty ?? [].isEmpty) ? FeatureType.other : FeatureType.story,
+                    isView: (sn.myStoryGroup[email]?.isEmpty ?? [].isEmpty) ? false : (sn.myStoryGroup[email]?.last.isViewed ?? false),
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: CustomProfileImage(

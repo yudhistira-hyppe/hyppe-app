@@ -30,6 +30,10 @@ final globalDB = DatabaseHelper();
 bool isHomeScreen = false;
 bool isFromSplash = false;
 bool isStopVideo = false;
+bool isShowingDialog = false;
+bool connectInternet = true;
+int golbalToOther = 0;
+bool globalInternetConnection = true;
 
 void disposeGlobalAudio() async {
   try {
@@ -67,13 +71,19 @@ void mainApp(EnvType env) async {
   }
   // SharedPreference().writeStorage(SpKeys.isPreventRoute, false);
   FlutterError.onError = (errorDetails) {
-    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    try{
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    }catch(e){
+      e.logger();
+    }
+
   };
   PlatformDispatcher.instance.onError = (error, stack) {
     // If you wish to record a "non-fatal" exception, please remove the "fatal" parameter
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+
   runApp(Hyppe());
   // runZonedGuarded(() async {
   //   WidgetsFlutterBinding.ensureInitialized();

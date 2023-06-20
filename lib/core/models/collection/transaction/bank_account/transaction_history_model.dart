@@ -57,6 +57,8 @@ class TransactionHistoryModel {
   String? from;
   num? duration;
   num? kredit;
+  String? iconVoucher;
+  List<DetailTransaction>? detailTransaction;
 
   TransactionHistoryModel.fromJSON(dynamic json) {
     id = json['_id'];
@@ -121,15 +123,46 @@ class TransactionHistoryModel {
     from = json['from'] ?? '';
     duration = (json['duration'] is int) ? json['duration'].toDouble() : json['duration'];
     kredit = (json['kredit'] is int) ? json['kredit'].toDouble() : json['kredit'];
+    iconVoucher = json['iconVoucher'];
+    if (json['detailTransaction'] != null) {
+      detailTransaction = <DetailTransaction>[];
+      json['detailTransaction'].forEach((v) {
+        detailTransaction!.add(DetailTransaction.fromJson(v));
+      });
+    }
   }
 
   String? concatThumbUri() {
     final fixMedia = mediaThumbEndpoint ?? '';
-    if(fixMedia.isNotEmpty){
+    if (fixMedia.isNotEmpty) {
       return Env.data.baseUrl + fixMedia + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
-    }else{
+    } else {
       return fixMedia;
     }
+  }
+}
+
+class DetailTransaction {
+  String? voucherID;
+  String? noVoucher;
+  String? codeVoucher;
+  bool? isActive;
+  String? expiredAt;
+  int? qty;
+  int? totalPrice;
+  int? totalCredit;
+
+  DetailTransaction({this.voucherID, this.noVoucher, this.codeVoucher, this.isActive, this.expiredAt, this.qty, this.totalPrice, this.totalCredit});
+
+  DetailTransaction.fromJson(Map<String, dynamic> json) {
+    voucherID = json['voucherID'];
+    noVoucher = json['noVoucher'];
+    codeVoucher = json['codeVoucher'];
+    isActive = json['isActive'];
+    expiredAt = json['expiredAt'];
+    qty = json['qty'];
+    totalPrice = json['totalPrice'];
+    totalCredit = json['totalCredit'];
   }
 }
 

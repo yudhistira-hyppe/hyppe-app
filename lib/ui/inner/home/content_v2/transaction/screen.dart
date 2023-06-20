@@ -17,6 +17,7 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/empty_bank_acc
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/reward_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/shimmer_transaction_history.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/total_balance.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/voucher_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/witdhdrawal_widget.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -45,7 +46,6 @@ class _TransactionState extends State<Transaction> {
 
   @override
   void dispose() {
-
     super.dispose();
   }
 
@@ -185,10 +185,17 @@ class _TransactionState extends State<Transaction> {
                                           data: notifier.dataTransaction?[index],
                                         );
                                       default:
-                                        return BuySellWidget(
-                                          data: notifier.dataTransaction?[index],
-                                          language: notifier2.translate,
-                                        );
+                                        if (notifier.dataTransaction?[index].jenis == "VOUCHER") {
+                                          return VoucherWidget(
+                                            data: notifier.dataTransaction?[index],
+                                            language: notifier2.translate,
+                                          );
+                                        } else {
+                                          return BuySellWidget(
+                                            data: notifier.dataTransaction?[index],
+                                            language: notifier2.translate,
+                                          );
+                                        }
                                     }
                                   }),
                           notifier.isScrollLoading ? const CustomLoading() : const SizedBox()

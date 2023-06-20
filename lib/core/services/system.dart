@@ -126,11 +126,11 @@ class System {
   String getTitleHyppe(HyppeType type) {
     switch (type) {
       case HyppeType.HyppeVid:
-        return 'HyppeVid';
+        return 'Vid';
       case HyppeType.HyppeDiary:
-        return 'HyppeDiary';
+        return 'Diary';
       case HyppeType.HyppePic:
-        return 'HyppePic';
+        return 'Pic';
     }
   }
 
@@ -1153,7 +1153,7 @@ class System {
     return result;
   }
 
-  bool charForTag(String text){
+  bool charForTag(String text) {
     final result = RegExp(r'^[a-zA-Z0-9]+$').hasMatch(text);
     return result;
   }
@@ -1222,47 +1222,47 @@ class System {
 
   Future<void> navigateToProfile(BuildContext context, String email, {StoryController? storyController}) async {
     final connect = await checkConnections();
-    if (connect) {
-      String myEmail = SharedPreference().readStorage(SpKeys.email) ?? "";
-      if (email != myEmail) {
-        context.read<OtherProfileNotifier>().checkFollowingToUser(context, email);
-        if (storyController != null) {
-          storyController.pause();
-          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
-        } else {
-          if (globalAliPlayer != null) {
-            globalAliPlayer?.pause();
-          }
-          if (globalAudioPlayer != null) {
-            globalAudioPlayer?.pause();
-          }
-          await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-          if (globalAliPlayer != null) {
-            // globalAliPlayer?.play();
-          }
-          if (globalAudioPlayer != null) {
-            globalAudioPlayer?.resume();
-          }
-        }
+    // if (connect) {
+    String myEmail = SharedPreference().readStorage(SpKeys.email) ?? "";
+    if (email != myEmail) {
+      context.read<OtherProfileNotifier>().checkFollowingToUser(context, email);
+      if (storyController != null) {
+        storyController.pause();
+        Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
       } else {
-        if (storyController != null) {
-          context.read<HomeNotifier>().navigateToProfilePage(context, whenComplete: true, onWhenComplete: () => storyController.play());
-        } else {
-          if (globalAliPlayer != null) {
-            globalAliPlayer?.pause();
-          }
-          if (globalAudioPlayer != null) {
-            globalAudioPlayer?.pause();
-          }
-          await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
-          if (globalAudioPlayer != null) {
-            globalAudioPlayer?.resume();
-          }
+        if (globalAliPlayer != null) {
+          globalAliPlayer?.pause();
+        }
+        if (globalAudioPlayer != null) {
+          globalAudioPlayer?.pause();
+        }
+        await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+        if (globalAliPlayer != null) {
+          // globalAliPlayer?.play();
+        }
+        if (globalAudioPlayer != null) {
+          globalAudioPlayer?.resume();
         }
       }
     } else {
-      ShowBottomSheet.onNoInternetConnection(context);
+      if (storyController != null) {
+        context.read<HomeNotifier>().navigateToProfilePage(context, whenComplete: true, onWhenComplete: () => storyController.play());
+      } else {
+        if (globalAliPlayer != null) {
+          globalAliPlayer?.pause();
+        }
+        if (globalAudioPlayer != null) {
+          globalAudioPlayer?.pause();
+        }
+        await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
+        if (globalAudioPlayer != null) {
+          globalAudioPlayer?.resume();
+        }
+      }
     }
+    // } else {
+    //   ShowBottomSheet.onNoInternetConnection(context);
+    // }
   }
 
   int? convertOrientation(NativeDeviceOrientation? orientation) {
@@ -1613,7 +1613,7 @@ class System {
     return formatter.format(now);
   }
 
-  void goToWebScreen(String url, {bool isPop = false}) async{
+  void goToWebScreen(String url, {bool isPop = false}) async {
     if (isPop) {
       Routing().moveBack();
     }
@@ -1635,4 +1635,27 @@ class System {
     _imageCache.clearLiveImages();
     // }
   }
+
+  double scrollAuto(int index, double heightProfileCard, int heightBox) {
+    print("============= index $index =================");
+    var indexHei = index + 1;
+    var hasilBagi = indexHei / 3;
+    print("============= index $hasilBagi =================");
+    var heightIndex = 0;
+    if (isInteger(hasilBagi)) {
+      hasilBagi = hasilBagi;
+    } else {
+      hasilBagi += 1;
+    }
+    heightIndex = (heightBox * hasilBagi.toInt() - heightBox);
+
+    double jumpTo = heightProfileCard + heightIndex;
+    print("============= jumpt to $heightProfileCard =================");
+    print("============= jumpt to $hasilBagi =================");
+    print("============= jumpt to $heightIndex =================");
+    print("============= jumpt to $jumpTo =================");
+    return jumpTo;
+  }
+
+  bool isInteger(num value) => value is int || value == value.roundToDouble();
 }

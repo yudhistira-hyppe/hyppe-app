@@ -30,6 +30,7 @@ import '../../../ux/path.dart';
 import '../../../ux/routing.dart';
 import '../../constant/widget/custom_icon_widget.dart';
 import '../../constant/widget/custom_spacer.dart';
+import '../home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import 'interest/detail_screen.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -100,7 +101,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   @override
   void didPopNext() {
     Future.delayed(const Duration(milliseconds: 500), () {
-      (materialAppKey.currentContext ?? context).read<ReportNotifier>().inPosition = contentPosition.searchFirst;
+      (Routing.navigatorKey.currentContext ?? context).read<ReportNotifier>().inPosition = contentPosition.searchFirst;
       final notifier = Routing.navigatorKey.currentContext!.read<SearchNotifier>();
       if (notifier.layout == SearchLayout.searchMore) {
         // notifier.getDataSearch(context);
@@ -206,7 +207,14 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
         strokeWidth: 2.0,
         color: context.getColorScheme().primary,
         onRefresh: () => notifier.onSearchLandingPage(context),
-        child: SingleChildScrollView(
+        child: notifier.connectionError
+            ? OfflineMode(
+          function: () {
+            notifier.checkConnection();
+            notifier.onSearchLandingPage(context);
+          },
+        )
+            : SingleChildScrollView(
           child: Column(
             children: [
               Padding(

@@ -62,7 +62,7 @@ class SearchContentBloc {
       },
       data: param,
       withAlertMessage: true,
-      withCheckConnection: false,
+      withCheckConnection: true,
       host: isNormal ? UrlConstants.getSearchContentV5 : type == TypeApiSearch.detailHashTag ? UrlConstants.getDetailHashtagV2 : UrlConstants.getDetailInterestV2,
       methodType: MethodType.post,
     );

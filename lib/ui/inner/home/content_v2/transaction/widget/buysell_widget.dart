@@ -144,6 +144,7 @@ class BuySellWidget extends StatelessWidget {
                           return Container(
                             height: 50,
                             decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
                               image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                             ),
                           );
@@ -177,7 +178,7 @@ class BuySellWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomTextWidget(
-                            textToDisplay: data?.title ?? '',
+                            textToDisplay: data?.descriptionContent ?? '',
                             textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                           ),
                           CustomTextWidget(
