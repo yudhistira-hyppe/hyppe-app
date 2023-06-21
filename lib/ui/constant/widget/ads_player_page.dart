@@ -137,6 +137,8 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
 
   String extSubTitleText = '';
 
+  String auth = '';
+
   //网络状态监听
   StreamSubscription? _networkSubscriptiion;
 
@@ -439,84 +441,106 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
     }
   }
 
+  void start(ContentData data) async {
+    // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
+
+    fAliplayer?.stop();
+
+    isPlay = false;
+    // fAliplayer?.setVidAuth(
+    //   vid: "c1b24d30b2c671edbfcb542280e90102",
+    //   region: DataSourceRelated.defaultRegion,
+    //   playAuth:
+    //       "eyJTZWN1cml0eVRva2VuIjoiQ0FJU2lBTjFxNkZ0NUIyeWZTaklyNURISnUvWnJvZFIrb1d2VlY2SmdHa0RPdFZjaDZMRG96ejJJSDFLZlhadEJPQWN0ZlF3bFdwVDdQNGJsckl1RjhJWkdoR2ZONU10dE1RUHJGL3dKb0hidk5ldTBic0hoWnY5bGNNTHJaaWpqcUhvZU96Y1lJNzMwWjdQQWdtMlEwWVJySkwrY1RLOUphYk1VL21nZ29KbWFkSTZSeFN4YVNFOGF2NWRPZ3BscnIwSVZ4elBNdnIvSFJQMnVtN1pIV3R1dEEwZTgzMTQ1ZmFRejlHaTZ4YlRpM2I5ek9FVXFPYVhKNFMvUGZGb05ZWnlTZjZvd093VUVxL2R5M3hvN3hGYjFhRjRpODRpL0N2YzdQMlFDRU5BK3dtbFB2dTJpOE5vSUYxV2E3UVdJWXRncmZQeGsrWjEySmJOa0lpbDVCdFJFZHR3ZUNuRldLR216c3krYjRIUEROc2ljcXZoTUhuZ3k4MkdNb0tQMHprcGVuVUdMZ2hIQ2JGRFF6MVNjVUZ3RjIyRmQvVDlvQTJRTWwvK0YvbS92ZnRvZ2NvbC9UTEI1c0dYSWxXRGViS2QzQnNETjRVMEIwRlNiRU5JaERPOEwvOWNLRndUSWdrOFhlN01WL2xhYUJGUHRLWFdtaUgrV3lOcDAzVkxoZnI2YXVOcGJnUHIxVVFwTlJxQUFaT3kybE5GdndoVlFObjZmbmhsWFpsWVA0V3paN24wTnVCbjlILzdWZHJMOGR5dHhEdCtZWEtKNWI4SVh2c0lGdGw1cmFCQkF3ZC9kakhYTjJqZkZNVFJTekc0T3pMS1dKWXVzTXQycXcwMSt4SmNHeE9iMGtKZjRTcnFpQ1RLWVR6UHhwakg0eDhvQTV6Z0cvZjVIQ3lFV3pISmdDYjhEeW9EM3NwRUh4RGciLCJBdXRoSW5mbyI6IntcIkNJXCI6XCJmOUc0eExxaHg2Tkk3YThaY1Q2N3hObmYrNlhsM05abmJXR1VjRmxTelljS0VKVTN1aVRjQ29Hd3BrcitqL2phVVRXclB2L2xxdCs3MEkrQTJkb3prd0IvKzc5ZlFyT2dLUzN4VmtFWUt6TT1cIixcIkNhbGxlclwiOlwiV2NKTEpvUWJHOXR5UmM2ZXg3LzNpQXlEcS9ya3NvSldhcXJvTnlhTWs0Yz1cIixcIkV4cGlyZVRpbWVcIjpcIjIwMjMtMDMtMTZUMDk6NDE6MzdaXCIsXCJNZWRpYUlkXCI6XCJjMWIyNGQzMGIyYzY3MWVkYmZjYjU0MjI4MGU5MDEwMlwiLFwiUGxheURvbWFpblwiOlwidm9kLmh5cHBlLmNsb3VkXCIsXCJTaWduYXR1cmVcIjpcIk9pbHhxelNyaVVhOGlRZFhaVEVZZEJpbUhJUT1cIn0iLCJWaWRlb01ldGEiOnsiU3RhdHVzIjoiTm9ybWFsIiwiVmlkZW9JZCI6ImMxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyIiwiVGl0bGUiOiIyODg4MTdkYi1jNzdjLWM0ZTQtNjdmYi0zYjk1MTlmNTc0ZWIiLCJDb3ZlclVSTCI6Imh0dHBzOi8vdm9kLmh5cHBlLmNsb3VkL2MxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyL3NuYXBzaG90cy9jYzM0MjVkNzJiYjM0YTE3OWU5NmMzZTA3NTViZjJjNi0wMDAwNC5qcGciLCJEdXJhdGlvbiI6NTkuMDQ5fSwiQWNjZXNzS2V5SWQiOiJTVFMuTlNybVVtQ1hwTUdEV3g4ZGlWNlpwaGdoQSIsIlBsYXlEb21haW4iOiJ2b2QuaHlwcGUuY2xvdWQiLCJBY2Nlc3NLZXlTZWNyZXQiOiIzU1NRUkdkOThGMU04TkZ0b00xa2NlU01IZlRLNkJvZm93VXlnS1Y5aEpQdyIsIlJlZ2lvbiI6ImFwLXNvdXRoZWFzdC01IiwiQ3VzdG9tZXJJZCI6NTQ1NDc1MzIwNTI4MDU0OX0=",
+    // );
+    if (data.reportedStatus != 'BLURRED') {
+      if (data.isApsara ?? false) {
+        _playMode = ModeTypeAliPLayer.auth;
+        await getAuth(data.apsaraId ?? '');
+      } else {
+        _playMode = ModeTypeAliPLayer.url;
+        await getOldVideoUrl(data.postID ?? '');
+      }
+    }
+
+    setState(() {
+      isPause = false;
+      // _isFirstRenderShow = false;
+    });
+    var configMap = {
+      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+      'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
+      'mLocalCacheDir': GlobalSettings.mDirController,
+      'mClearFrameWhenStop': true
+    };
+    //// Configure the application.
+    fAliplayer?.setConfig(configMap);
+    var map = {
+      "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
+
+      /// The maximum space that can be occupied by the cache directory.
+      "mMaxDurationS": GlobalSettings.mMaxDurationSController,
+
+      /// The maximum cache duration of a single file.
+      "mDir": GlobalSettings.mDirController,
+
+      /// The cache directory.
+      "mEnable": GlobalSettings.mEnableCacheConfig
+
+      /// Specify whether to enable the cache feature.
+    };
+    fAliplayer?.setCacheConfig(map);
+    if (data.reportedStatus == 'BLURRED') {
+    } else {
+      fAliplayer?.prepare();
+    }
+
+    // fAliplayer?.play();
+  }
+
   @override
   void deactivate() {
     print('deactive player_page');
     super.deactivate();
   }
 
-  Future getAuth({String videoId = ''}) async {
+  Future getAuth(String apsaraId) async {
+    setState(() {
+      isloading = true;
+      _showLoading = true;
+    });
     try {
       final notifier = PostsBloc();
-      String apsaraId = '';
-      if (videoId != '') {
-        apsaraId = videoId;
-      } else {
-        apsaraId = widget.data?.apsaraId ?? '';
-      }
-      globalInternetConnection = await System().checkConnections();
       await notifier.getAuthApsara(context, apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
-        print(fetch.data);
         Map jsonMap = json.decode(fetch.data.toString());
-        if (videoId != '') {
-          print("-======= auth iklan ${jsonMap['PlayAuth']}");
-          // _dataSourceAdsMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
-        } else {
-          _dataSourceMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
-          print("-======= auth konten ${_dataSourceMap?[DataSourceRelated.playAuth]}");
-          print("-======= auth konten ${_dataSourceMap?[DataSourceRelated.vidKey]}");
-          fAliplayer?.setVidAuth(
-              vid: apsaraId,
-              region: _dataSourceMap?[DataSourceRelated.regionKey],
-              playAuth: _dataSourceMap?[DataSourceRelated.playAuth],
-              definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
-              previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
-          var configMap = {
-            'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
-            'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
-            'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
-            'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
-            'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
-            'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
-            // 'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
-            // 'mLocalCacheDir': GlobalSettings.mDirController
-          };
-          // Configure the application.
-          fAliplayer?.setConfig(configMap);
-          var map = {
-            "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
+        auth = jsonMap['PlayAuth'];
 
-            /// The maximum space that can be occupied by the cache directory.
-            "mMaxDurationS": GlobalSettings.mMaxDurationSController,
-
-            /// The maximum cache duration of a single file.
-            "mDir": GlobalSettings.mDirController,
-
-            /// The cache directory.
-            "mEnable": GlobalSettings.mEnableCacheConfig
-
-            /// Specify whether to enable the cache feature.
-          };
-          // fAliplayer?.setCacheConfig(map);
-          fAliplayer?.prepare();
-          print('=2=2=2=2=2=2=2prepare done');
-        }
+        fAliplayer?.setVidAuth(
+          vid: apsaraId,
+          region: DataSourceRelated.defaultRegion,
+          playAuth: auth,
+        );
+        setState(() {
+          isloading = false;
+        });
+        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
-      // 'Failed to fetch ads data $e'.logger();
-    }
-    if (mounted) {
       setState(() {
         isloading = false;
       });
-    } else {
-      isloading = false;
+      // 'Failed to fetch ads data $e'.logger();
     }
   }
 
-  Future getOldVideoUrl() async {
+  Future getOldVideoUrl(String postId) async {
     setState(() {
       isloading = true;
     });
