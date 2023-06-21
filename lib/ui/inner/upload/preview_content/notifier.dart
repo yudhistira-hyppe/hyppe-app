@@ -294,7 +294,7 @@ class PreviewContentNotifier with ChangeNotifier {
 
   set listMusics(List<Music> values) {
     _listMusics = values;
-    _isNextMusic = (values.length % 10 == 0);
+    _isNextMusic = (values.length % 15 == 0);
     notifyListeners();
   }
 
@@ -305,7 +305,7 @@ class PreviewContentNotifier with ChangeNotifier {
 
   set listExpMusics(List<Music> values) {
     _listExpMusics = values;
-    _isNextExpMusic = (values.length % 10 == 0);
+    _isNextExpMusic = (values.length % 15 == 0);
     notifyListeners();
   }
 
@@ -409,7 +409,7 @@ class PreviewContentNotifier with ChangeNotifier {
         if (_isNextExpMusic) {
           try {
             _isLoadNextExpMusic = true;
-            final int pageNumber = _listExpMusics.length ~/ 10;
+            final int pageNumber = _listExpMusics.length ~/ 15;
             List<Music> res = [];
             final myId = _selectedType?.id;
             if (myId != null) {
@@ -420,7 +420,7 @@ class PreviewContentNotifier with ChangeNotifier {
               } else {
                 res = await getMusics(context, keyword: searchController.text, idTheme: myId, pageNumber: pageNumber);
               }
-              _isNextExpMusic = res.isEmpty ? false : res.length % 10 == 0;
+              _isNextExpMusic = res.isEmpty ? false : res.length % 15 == 0;
               _listExpMusics.addAll(res);
             }
           } catch (e) {
@@ -440,9 +440,9 @@ class PreviewContentNotifier with ChangeNotifier {
         if (_isNextMusic) {
           try {
             _isLoadNextMusic = true;
-            final int pageNumber = _listMusics.length ~/ 10;
+            final int pageNumber = _listMusics.length ~/ 15;
             final res = await getMusics(context, keyword: searchController.text, pageNumber: pageNumber);
-            _isNextMusic = res.isEmpty ? false : res.length % 10 == 0;
+            _isNextMusic = res.isEmpty ? false : res.length % 15 == 0;
             _listMusics.addAll(res);
             notifyListeners();
           } catch (e) {
@@ -581,7 +581,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<Music>> getMusics(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood = '', int pageNumber = 0, int pageRow = 10}) async {
+  Future<List<Music>> getMusics(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood = '', int pageNumber = 0, int pageRow = 15}) async {
     List<Music>? res = [];
     _isLoadingMusic = true;
     try {

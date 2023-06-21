@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import '../../../app.dart';
 import 'custom_base_cache_image.dart';
 import 'custom_icon_widget.dart';
@@ -24,6 +25,7 @@ class CustomContentModeratedWidget extends StatelessWidget {
   final double blurIfNotSafe;
   final FeatureType featureType;
   final EdgeInsetsGeometry padding;
+  final Widget? placeHolder;
 
   const CustomContentModeratedWidget(
       {Key? key,
@@ -36,7 +38,9 @@ class CustomContentModeratedWidget extends StatelessWidget {
       this.padding = EdgeInsets.zero,
       this.boxFitError = BoxFit.fill,
       this.boxFitContent = BoxFit.cover,
-      this.featureType = FeatureType.pic})
+      this.featureType = FeatureType.pic,
+        this.placeHolder
+      })
       : super(key: key);
 
   @override
@@ -53,88 +57,61 @@ class CustomContentModeratedWidget extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              (thumbnail is ImageUrl) ?
-              CustomBaseCacheImage(
-                cacheKey: thumbnail.id,
-                imageUrl: (thumbnail as ImageUrl).url,
-                memCacheWidth: 70,
-                memCacheHeight: 70,
-                imageBuilder: (_, imageProvider) {
-                  return Container(
-                    width: width,
-                    height: height,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      image: DecorationImage(
-                        fit: boxFitContent,
-                        image: imageProvider,
-                      ),
-                    ),
-                  );
-                },
-                errorWidget: (_, url, error) {
-                  print('image url is $url $error $connectInternet');
-                  if(connectInternet){
-                    return ClipRRect(
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        child: Image.network(url,
-                          fit: boxFitContent,
-                          width: double.infinity,
-                          height: double.infinity,
-                          errorBuilder: (_, __, ___){
-                          return Container(
-                            width: width,
-                            height: height,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                fit: boxFitError,
-                                image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                              ),
+              (thumbnail is ImageUrl)
+                  ? CustomBaseCacheImage(
+                      cacheKey: thumbnail.id,
+                      imageUrl: (thumbnail as ImageUrl).url,
+                      memCacheWidth: 70,
+                      memCacheHeight: 70,
+                      imageBuilder: (_, imageProvider) {
+                        return Container(
+                          width: width,
+                          height: height,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(Radius.circular(10)),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: imageProvider,
                             ),
-                          );
-                        }, loadingBuilder: (_, child, event){
-                          if(event == null){
-                            return Center(child: child);
-                          }else{
-                            return UnconstrainedBox(
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: const CustomLoading(),
-                                width: 35 * SizeConfig.scaleDiagonal,
-                                height: 35 * SizeConfig.scaleDiagonal,
-                              ),
-                            );
-                          }
-
-                          },));
-                  }
-
-                  return Container(
-                    width: width,
-                    height: height,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: boxFitError,
-                        image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                          ),
+                        );
+                      },
+                      placeHolderWidget: placeHolder ?? ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer()),
+                      errorWidget: (_, url, error) {
+                        print('image url is $url $error $connectInternet');
+                        if (connectInternet) {
+                          return ClipRRect(
+                              borderRadius: const BorderRadius.all(Radius.circular(10)),
+                              child: Image.network(
+                                url,
+                                fit: boxFitContent,
+                                width: double.infinity,
+                                height: double.infinity,
+                                errorBuilder: (_, __, ___) {
+                                  return ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer());
+                                },
+                                loadingBuilder: (_, child, event) {
+                                  if (event == null) {
+                                    return Center(child: child);
+                                  } else {
+                                    return ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer());
+                                  }
+                                },
+                              ));
+                        }
+                        return ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer());
+                      },
+                      emptyWidget: ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer()),
+                    )
+                  : ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      child: Image.memory(
+                        (thumbnail as ImageBlob).data,
+                        fit: boxFitContent,
+                        width: width,
+                        height: height,
                       ),
                     ),
-                  );
-                },
-                emptyWidget: Container(
-                  width: width,
-                  height: height,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: boxFitError,
-                      image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                    ),
-                  ),
-                ),
-              ) : ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                child: Image.memory((thumbnail as ImageBlob).data, fit: boxFitContent, width: width,
-                  height: height,),
-              ),
               if (featureType != FeatureType.pic)
                 CustomIconWidget(
                   defaultColor: false,
@@ -192,17 +169,17 @@ class CustomContentModeratedWidget extends StatelessWidget {
   }
 }
 
-class ImageUrl extends ImageContent{
+class ImageUrl extends ImageContent {
   String url;
   ImageUrl(super.id, {required this.url});
 }
 
-class ImageBlob extends ImageContent{
+class ImageBlob extends ImageContent {
   Uint8List data;
   ImageBlob(super.id, {required this.data});
 }
 
-class ImageContent{
+class ImageContent {
   String? id;
   ImageContent(this.id);
 }

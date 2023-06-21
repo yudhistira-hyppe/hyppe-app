@@ -257,6 +257,9 @@
   "vidsForYou": "Vids For You",
   "diariesForYou": "Diaries For You",
   "picsForYou": "Pics For You",
+  "topVid": "Top Vid",
+  "topDiaty": "Top Diary",
+  "topPic": "Top Pic",
   "hyppeVerificationCode": "Hyppe-Verification Code",
   "inbox": "Inbox",
   "toMe": "to me",
@@ -897,5 +900,13 @@
   "thisContentIsSubjectToModeration": "This content is moderated!",
   "thisAccountHasNoPostsYet": "This account has no posts yet.",
   "oopsYoureOffline": "Oops, you're offline",
-  "checkYourWiFiConnectionOrInternet": "Check your WiFi connection or internet quota and try again, ok!"
+  "checkYourWiFiConnectionOrInternet": "Check your WiFi connection or internet quota and try again, ok!",
+  "buyVoucher": "Buy Voucher",
+  "voucherDetail": "Voucher Detail",
+  "adsCredit": "Ads credit",
+  "totalBelanja": "Total Spend",
+  "shareYourMoment": "Share your moment!",
+  "captureYourMoment": "Capture your moment!",
+  "howAreYouToday": "How are you today?",
+  "shareWithUsYourCreatifity": "Share with us your creativity!"
 }

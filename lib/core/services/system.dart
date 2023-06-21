@@ -126,11 +126,11 @@ class System {
   String getTitleHyppe(HyppeType type) {
     switch (type) {
       case HyppeType.HyppeVid:
-        return 'HyppeVid';
+        return 'Vid';
       case HyppeType.HyppeDiary:
-        return 'HyppeDiary';
+        return 'Diary';
       case HyppeType.HyppePic:
-        return 'HyppePic';
+        return 'Pic';
     }
   }
 

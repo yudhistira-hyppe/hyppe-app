@@ -8,6 +8,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/grid_content_view.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +57,7 @@ class _SearchContentsTabState extends State<SearchContentsTab> with RouteAware{
   @override
   void didPopNext() {
 
-    final notifier = context.read<SearchNotifier>();
+    final notifier = (Routing.navigatorKey.currentContext ?? context).read<SearchNotifier>();
     Future.delayed(Duration(milliseconds: 500), () {
 
       var jumpTo = heightTab + notifier.heightIndex - 10;

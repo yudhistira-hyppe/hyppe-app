@@ -48,57 +48,62 @@ class _BottomDetailState extends State<BottomDetail> {
   @override
   Widget build(BuildContext context) {
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SizedBox(
-            height: 64,
-            child: Row(
-              children: [
-                Expanded(
-                    child: HashtagTab(
+      return Container(
+        color: context.getColorScheme().surface,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 12, right: 12, top: 10, bottom: 16),
+              padding: const EdgeInsets.all(3),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: context.getColorScheme().background),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: HashtagTab(
+                          onTap: (value) {
+                            notifier.hashtagTab = value;
+                          },
+                          isActive: notifier.hashtagTab == HyppeType.HyppePic,
+                          // data: data.pict ?? [],
+                          type: HyppeType.HyppePic)),
+                  Expanded(
+                      child: HashtagTab(
+                          onTap: (value) {
+                            notifier.hashtagTab = value;
+                          },
+                          isActive: notifier.hashtagTab == HyppeType.HyppeDiary,
+                          // data: data.diary ?? [],
+                          type: HyppeType.HyppeDiary)),
+                  Expanded(
+                      child: HashtagTab(
                         onTap: (value) {
                           notifier.hashtagTab = value;
                         },
-                        isActive: notifier.hashtagTab == HyppeType.HyppePic,
-                        // data: data.pict ?? [],
-                        type: HyppeType.HyppePic)),
-                Expanded(
-                    child: HashtagTab(
-                        onTap: (value) {
-                          notifier.hashtagTab = value;
-                        },
-                        isActive: notifier.hashtagTab == HyppeType.HyppeDiary,
-                        // data: data.diary ?? [],
-                        type: HyppeType.HyppeDiary)),
-                Expanded(
-                    child: HashtagTab(
-                      onTap: (value) {
-                        notifier.hashtagTab = value;
-                      },
-                      isActive: notifier.hashtagTab == HyppeType.HyppeVid,
-                      // data: data.vid ?? [],
-                      type: HyppeType.HyppeVid,
-                    )),
-              ],
-            ),
-          ),
-          Expanded(
-            child: RefreshIndicator(
-              strokeWidth: 2.0,
-              color: context.getColorScheme().primary,
-              onRefresh: () => notifier.getDetailHashtag(
-                  context, widget.hashtag.tag ?? 'tag', force: true),
-              child: CustomScrollView(
-                controller: widget.scrollController,
-                scrollDirection: Axis.vertical,
-                physics: const AlwaysScrollableScrollPhysics(),
-                slivers: notifier.getGridHashtag(widget.hashtag.tag ?? '-', widget.fromRoute),
+                        isActive: notifier.hashtagTab == HyppeType.HyppeVid,
+                        // data: data.vid ?? [],
+                        type: HyppeType.HyppeVid,
+                      )),
+                ],
               ),
             ),
-          )
-        ],
+            Expanded(
+              child: RefreshIndicator(
+                strokeWidth: 2.0,
+                color: context.getColorScheme().primary,
+                onRefresh: () => notifier.getDetailHashtag(
+                    context, widget.hashtag.tag ?? 'tag', force: true),
+                child: CustomScrollView(
+                  controller: widget.scrollController,
+                  scrollDirection: Axis.vertical,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: notifier.getGridHashtag(widget.hashtag.tag ?? '-', widget.fromRoute),
+                ),
+              ),
+            )
+          ],
+        ),
       );
     });
   }

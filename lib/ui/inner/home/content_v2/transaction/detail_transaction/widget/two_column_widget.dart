@@ -6,9 +6,10 @@ class TwoColumnWidget extends StatelessWidget {
   final String? text1;
   final String? text2;
   final TextStyle? textStyle;
+  final TextStyle? textStyle1;
   final Widget? widget;
   final Function? function;
-  const TwoColumnWidget(this.text1, {Key? key, this.text2, this.textStyle, this.widget = const SizedBox(), this.function}) : super(key: key);
+  const TwoColumnWidget(this.text1, {Key? key, this.text2, this.textStyle, this.textStyle1, this.widget = const SizedBox(), this.function}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class TwoColumnWidget extends StatelessWidget {
         children: [
           CustomTextWidget(
             textToDisplay: text1 ?? '',
-            textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
+            textStyle: textStyle1 ?? Theme.of(context).textTheme.caption ?? const TextStyle(),
             textAlign: TextAlign.start,
           ),
           InkWell(

@@ -20,12 +20,50 @@ class BottomDetailWidget extends StatelessWidget {
     if (data?.type == TransactionType.withdrawal) {
       return withdrawWidget(context);
     } else if (data?.type == TransactionType.buy) {
-      return buyWidget(context);
+      if (data?.jenis == "VOUCHER") {
+        return voucherWidget(context);
+      } else {
+        return buyWidget(context);
+      }
     } else if (data?.type == TransactionType.reward) {
       return rewardWidget(context);
     } else {
       return sellWidget(context);
     }
+  }
+
+  Widget voucherWidget(context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        twelvePx,
+        const Divider(height: 0.2, thickness: 1, color: Color(0xffF7F7F7)),
+        twelvePx,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: CustomTextWidget(
+            textToDisplay: language?.paymentDetails ?? '',
+            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ),
+        TwoColumnWidget(
+          language?.paymentMethods,
+          text2: "${data?.bank?.replaceAll("Bank ", "")} ${data?.paymentmethode == 'VA' ? 'Virtual Account' : data?.paymentmethode}",
+        ),
+        TwoColumnWidget("${language?.totalPrice} (${data?.detailTransaction?.length} Voucher)", text2: System().currencyFormat(amount: data?.amount ?? 0)),
+        data?.adminFee == 0 ? Container() : TwoColumnWidget(language?.adminFee, text2: System().currencyFormat(amount: data?.adminFee ?? 0)),
+        TwoColumnWidget(language?.serviceFee, text2: System().currencyFormat(amount: data?.serviceFee ?? 0)),
+        TwoColumnWidget(
+          language?.totalBelanja,
+          text2: System().currencyFormat(amount: data?.totalamount ?? 0),
+          textStyle1: const TextStyle(fontWeight: FontWeight.w700),
+          textStyle: const TextStyle(fontWeight: FontWeight.w700),
+        ),
+      ],
+    );
   }
 
   Widget withdrawWidget(context) {

@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:optimized_cached_image/optimized_cached_image.dart';
 
 class CustomCacheManager {
@@ -44,7 +45,7 @@ class CustomBaseCacheImage extends StatelessWidget {
   Widget build(BuildContext context) {
     // System().checkMemory();
     SizeConfig().init(context);
-    if((imageUrl ?? '').isNotEmpty || (imageUrl ?? '').isUrlLink()){
+    if ((imageUrl ?? '').isNotEmpty || (imageUrl ?? '').isUrlLink()) {
       return CachedNetworkImage(
         cacheKey: cacheKey, // "$imageUrl${DateTime.now().minute}",
         imageUrl: "$imageUrl",
@@ -54,8 +55,13 @@ class CustomBaseCacheImage extends StatelessWidget {
         memCacheWidth: memCacheWidth,
         memCacheHeight: memCacheHeight,
         filterQuality: FilterQuality.none,
+        cacheManager: CacheManager(Config(
+          'keyImage',
+          stalePeriod: const Duration(days: 7),
+          //one week cache period
+        )),
         placeholder: (context, url) =>
-        placeHolderWidget ??
+            placeHolderWidget ??
             UnconstrainedBox(
               child: Container(
                 alignment: Alignment.center,
@@ -65,7 +71,7 @@ class CustomBaseCacheImage extends StatelessWidget {
               ),
             ),
       );
-    }else{
+    } else {
       return emptyWidget;
     }
     // return (imageUrl ?? '').isNotEmpty

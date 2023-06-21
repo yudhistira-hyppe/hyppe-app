@@ -173,7 +173,7 @@ class CommentNotifierV2 with ChangeNotifier {
     }
   }
 
-  Future<void> addComment(BuildContext context) async {
+  Future<void> addComment(BuildContext context, {bool? pageDetail}) async {
     inputNode.unfocus();
     if (commentController.value.text.isEmpty) {
       return;
@@ -199,7 +199,16 @@ class CommentNotifierV2 with ChangeNotifier {
       final _resFuture = commentQuery.addComment(context);
       final res = await _resFuture;
       if (res != null) {
-        context.read<HomeNotifier>().addCountComment(context, postID ?? '', true, 0, txtMsg: commentController.text, username: res.comment?.senderInfo?.username);
+        context.read<HomeNotifier>().addCountComment(
+              context,
+              postID ?? '',
+              true,
+              0,
+              txtMsg: commentController.text,
+              username: res.comment?.senderInfo?.username,
+              parentID: parentID,
+              pageDetail: pageDetail ?? false,
+            );
 
         if (parentID == null) {
           _commentData?.insert(0, res);
@@ -392,16 +401,23 @@ class CommentNotifierV2 with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteComment(BuildContext context, String lineID, int totChild) async {
+  Future<void> deleteComment(BuildContext context, String lineID, int totChild, {int? indexComment, String? parentID}) async {
     final _routing = Routing();
     final notifier = DeleteCommentBloc();
     try {
       await notifier.postDeleteCommentBloc(context, lineID: lineID, withAlertConnection: true);
       final fetch = notifier.deletCommentFetch;
       if (fetch.deleteCommentState == DeleteCommentState.deleteCommentSuccess) {
-        context.read<HomeNotifier>().addCountComment(context, postID ?? '', false, totChild);
-        getComment(context, reload: true);
+        context.read<HomeNotifier>().addCountComment(
+              context,
+              postID ?? '',
+              false,
+              totChild,
+              parentID: parentID,
+              indexComment: indexComment,
+            );
         _routing.moveBack();
+        getComment(context, reload: true);
       }
     } catch (e) {
       _routing.moveBack();

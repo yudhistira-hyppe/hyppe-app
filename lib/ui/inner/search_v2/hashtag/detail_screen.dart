@@ -5,12 +5,12 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import 'package:hyppe/ui/inner/search_v2/hashtag/widget/bottom_detail.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../app.dart';
 import '../../../../core/arguments/hashtag_argument.dart';
 import '../../../../core/constants/asset_path.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
@@ -54,15 +54,13 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
   void didPopNext() {
     'DetailHashtagScreen didPopNext'.logger();
     final notifier = context.read<SearchNotifier>();
-    notifier.getDetailHashtag(context, widget.argument.hashtag.tag?.replaceAll(' ', '') ?? ' ').whenComplete(() {
-      Future.delayed(Duration(milliseconds: 500), () {
-        var jumpTo = heightTab + notifier.heightIndex - 10;
-        print("jumpt ====== ${jumpTo}");
-        print("jumpt ====== ${heightTab}");
-        print("jumpt ====== ${notifier.heightIndex}");
-        _scrollController.jumpTo(jumpTo.toDouble());
-      });
-    });
+    // Future.delayed(Duration(milliseconds: 500), () {
+    //   var jumpTo = heightTab + notifier.heightIndex - 10;
+    //   print("jumpt ====== ${jumpTo}");
+    //   print("jumpt ====== ${heightTab}");
+    //   print("jumpt ====== ${notifier.heightIndex}");
+    //   _scrollController.jumpTo(jumpTo.toDouble());
+    // });
 
     super.didPopNext();
   }
@@ -103,6 +101,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
   @override
   void afterFirstLayout(BuildContext context) {
     final notifier = context.read<SearchNotifier>();
+    notifier.checkConnection();
     var tag = widget.argument.hashtag.tag;
     if (widget.argument.fromRoute) {
       tag = tag?.replaceAll(' ', '');
@@ -112,147 +111,151 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: CustomIconButtonWidget(
-          onPressed: () {
-            if (widget.argument.fromRoute) {
-              Routing().moveBack();
-            } else {
-              context.read<SearchNotifier>().backFromSearchMore();
-            }
-          },
-          defaultColor: false,
-          iconData: "${AssetPath.vectorPath}back-arrow.svg",
-          color: Theme.of(context).colorScheme.onSurface,
+    return Consumer<SearchNotifier>(builder: (context, notifier, _) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: CustomIconButtonWidget(
+            onPressed: () {
+              if (widget.argument.fromRoute) {
+                Routing().moveBack();
+              } else {
+                context.read<SearchNotifier>().backFromSearchMore();
+              }
+            },
+            defaultColor: false,
+            iconData: "${AssetPath.vectorPath}back-arrow.svg",
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+          title: CustomTextWidget(
+            textToDisplay: widget.argument.isTitle ? (context.read<SearchNotifier>().language.popularHashtag ?? 'Popular Hashtag') : ('#${widget.argument.hashtag.tag}'),
+            textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700),
+          ),
         ),
-        title: CustomTextWidget(
-          textToDisplay: widget.argument.isTitle ? (context.read<SearchNotifier>().language.popularHashtag ?? 'Popular Hashtag') : ('#${widget.argument.hashtag.tag}'),
-          textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700),
-        ),
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Consumer<SearchNotifier>(builder: (context, notifier, _) {
-              return Container(
+        body: SafeArea(
+          child: notifier.connectionError ? OfflineMode(function: (){
+            notifier.checkConnection();
+            notifier.getDetailHashtag(context, widget.argument.hashtag.tag?.replaceAll(' ', '') ?? ' ');
+          },) : Column(
+            children: [
+              Container(
                 padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 12),
                 child: Column(
                   children: [
                     !notifier.loadTagDetail
                         ? Row(
-                            children: [
-                              Builder(builder: (context) {
-                                return CustomBaseCacheImage(
-                                  imageUrl: notifier.tagImageMain,
-                                  memCacheWidth: 70,
-                                  memCacheHeight: 70,
-                                  imageBuilder: (_, imageProvider) {
-                                    return Container(
-                                      width: 56,
-                                      height: 56,
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(Radius.circular(28)),
-                                        image: DecorationImage(
-                                          fit: BoxFit.contain,
-                                          image: imageProvider,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  errorWidget: (_, __, ___) {
-                                    return Container(
-                                      width: 56,
-                                      height: 56,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          fit: BoxFit.contain,
-                                          image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  emptyWidget: Container(
-                                    width: 56,
-                                    height: 56,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        fit: BoxFit.contain,
-                                        image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
-                                      ),
-                                    ),
+                      children: [
+                        Builder(builder: (context) {
+                          return CustomBaseCacheImage(
+                            imageUrl: notifier.tagImageMain,
+                            memCacheWidth: 70,
+                            memCacheHeight: 70,
+                            imageBuilder: (_, imageProvider) {
+                              return Container(
+                                width: 56,
+                                height: 56,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(28)),
+                                  image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: imageProvider,
                                   ),
-                                );
-                              }),
-                              twelvePx,
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CustomTextWidget(
-                                      textToDisplay: '#${widget.argument.hashtag.tag}',
-                                      textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                    fourPx,
-                                    Text(
-                                      "${notifier.countTag} ${notifier.language.posts}",
-                                      style: const TextStyle(fontSize: 12, color: kHyppeGrey),
-                                    )
-                                  ],
                                 ),
+                              );
+                            },
+                            errorWidget: (_, __, ___) {
+                              return Container(
+                                width: 56,
+                                height: 56,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
+                                  ),
+                                ),
+                              );
+                            },
+                            emptyWidget: Container(
+                              width: 56,
+                              height: 56,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  fit: BoxFit.contain,
+                                  image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                        twelvePx,
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomTextWidget(
+                                textToDisplay: '#${widget.argument.hashtag.tag}',
+                                textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
+                                textAlign: TextAlign.start,
+                              ),
+                              fourPx,
+                              Text(
+                                "${notifier.countTag} ${notifier.language.posts}",
+                                style: const TextStyle(fontSize: 12, color: kHyppeGrey),
                               )
                             ],
-                          )
+                          ),
+                        )
+                      ],
+                    )
                         : Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CustomShimmer(
-                                  height: 50,
-                                  width: 50,
-                                  radius: 25,
-                                ),
-                                tenPx,
-                                Expanded(
-                                    child: Column(
-                                  children: [
-                                    CustomShimmer(
-                                      height: 20,
-                                      width: double.infinity,
-                                      radius: 5,
-                                    ),
-                                    sixteenPx,
-                                    CustomShimmer(
-                                      height: 20,
-                                      width: double.infinity,
-                                      radius: 5,
-                                    )
-                                  ],
-                                ))
-                              ],
-                            ),
-                          )
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CustomShimmer(
+                            height: 50,
+                            width: 50,
+                            radius: 25,
+                          ),
+                          tenPx,
+                          Expanded(
+                              child: Column(
+                                children: [
+                                  CustomShimmer(
+                                    height: 20,
+                                    width: double.infinity,
+                                    radius: 5,
+                                  ),
+                                  sixteenPx,
+                                  CustomShimmer(
+                                    height: 20,
+                                    width: double.infinity,
+                                    radius: 5,
+                                  )
+                                ],
+                              ))
+                        ],
+                      ),
+                    )
                   ],
                 ),
-              );
-            }),
-            Container(
-              height: 2,
-              width: double.infinity,
-              color: context.getColorScheme().surface,
-            ),
-            Expanded(
-                child: BottomDetail(
-              hashtag: widget.argument.hashtag,
-              fromRoute: widget.argument.fromRoute,
-              scrollController: _scrollController,
-            ))
-          ],
+              ),
+              Container(
+                height: 2,
+                width: double.infinity,
+                color: context.getColorScheme().surface,
+              ),
+              Expanded(
+                  child: BottomDetail(
+                    hashtag: widget.argument.hashtag,
+                    fromRoute: widget.argument.fromRoute,
+                    scrollController: _scrollController,
+                  ))
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
+
   }
 }

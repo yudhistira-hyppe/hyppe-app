@@ -27,6 +27,7 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -110,6 +111,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   // String statusKyc = '';
   bool isInPage = true;
   bool _scroolEnabled = true;
+  bool toComment = false;
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
@@ -129,6 +131,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     // stopwatch = new Stopwatch()..start();
     super.initState();
     pics = widget.arguments?.picData;
+    notifier.pics = widget.arguments?.picData;
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic-${pics?.first.postID}');
       WidgetsBinding.instance.addObserver(this);
@@ -146,7 +150,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-      itemScrollController.jumpTo(index: widget.arguments!.page!);
+      itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
       _initListener();
     });
     var index = 0;
@@ -172,7 +176,23 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       lastIndex = index;
     });
 
+    checkInet();
+
     super.initState();
+  }
+
+  void checkInet() async {
+    var inet = await System().checkConnections();
+    if (!inet) {
+      TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
+      ShowGeneralDialog.showToastAlert(
+        context,
+        tn.translate.internetConnectionLost ?? ' Error',
+        () async {
+          Routing().moveBack();
+        },
+      );
+    }
   }
 
   _initListener() {
@@ -475,6 +495,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     isInPage = true;
     fAliplayer?.play();
     // System().disposeBlock();
+    if (toComment) {
+      print("====picnotif======");
+      ScrollPicNotifier notifier = context.read<ScrollPicNotifier>();
+      setState(() {
+        pics = notifier.pics;
+        toComment = false;
+      });
+    }
     super.didPopNext();
   }
 
@@ -524,6 +552,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   }
 
   int _currentItem = 0;
+  ValueNotifier<int> _networklHasErrorNotifier = ValueNotifier(0);
 
   @override
   Widget build(BuildContext context) {
@@ -768,7 +797,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                     fAliplayer?.stop();
                   }
                   Future.delayed(const Duration(milliseconds: 100), () {
-                    System().increaseViewCount2(context, pics?[index] ?? ContentData());
+                    System().increaseViewCount2(context, pics?[index] ?? ContentData(), check: false);
                   });
                   if (pics?[index].certified ?? false) {
                     System().block(context);
@@ -872,55 +901,60 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                   },
                                   child: pics?[index].isLoading ?? false
                                       ? Container()
-                                      : CustomBaseCacheImage(
-                                          memCacheWidth: 100,
-                                          memCacheHeight: 100,
-                                          widthPlaceHolder: 80,
-                                          heightPlaceHolder: 80,
-                                          imageUrl: (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2',
-                                          // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
-                                          imageBuilder: (context, imageProvider) => ClipRRect(
-                                            borderRadius: BorderRadius.circular(20), // Image borderr
-                                            child: pics?[index].reportedStatus == 'BLURRED'
-                                                ? ImageFiltered(
-                                                    imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                                    child: Image(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.fitHeight,
-                                                      width: SizeConfig.screenWidth,
-                                                    ),
-                                                  )
-                                                : Image(
-                                                    image: imageProvider,
-                                                    fit: BoxFit.fitHeight,
-                                                    width: SizeConfig.screenWidth,
-                                                  ),
-                                          ),
-                                          emptyWidget: Container(
-                                            // const EdgeInsets.symmetric(horizontal: 4.5),
-                                            // height: 500,
-                                            decoration: BoxDecoration(
-                                              image: const DecorationImage(
-                                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                                fit: BoxFit.cover,
+                                      : ValueListenableBuilder(
+                                          valueListenable: _networklHasErrorNotifier,
+                                          builder: (BuildContext context, int count, _) {
+                                            return CustomBaseCacheImage(
+                                              // cacheKey: "${pics?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
+                                              memCacheWidth: 100,
+                                              memCacheHeight: 100,
+                                              widthPlaceHolder: 80,
+                                              heightPlaceHolder: 80,
+                                              imageUrl: (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2',
+                                              // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
+                                              imageBuilder: (context, imageProvider) => ClipRRect(
+                                                borderRadius: BorderRadius.circular(20), // Image borderr
+                                                child: pics?[index].reportedStatus == 'BLURRED'
+                                                    ? ImageFiltered(
+                                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                                        child: Image(
+                                                          image: imageProvider,
+                                                          fit: BoxFit.fitHeight,
+                                                          width: SizeConfig.screenWidth,
+                                                        ),
+                                                      )
+                                                    : Image(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.fitHeight,
+                                                        width: SizeConfig.screenWidth,
+                                                      ),
                                               ),
-                                              borderRadius: BorderRadius.circular(8.0),
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) {
-                                            return GestureDetector(
-                                              onTap: () {
-                                                reloadImage(index);
+                                              emptyWidget: Container(
+                                                // const EdgeInsets.symmetric(horizontal: 4.5),
+                                                // height: 500,
+                                                decoration: BoxDecoration(
+                                                  image: const DecorationImage(
+                                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(8.0),
+                                                ),
+                                              ),
+                                              errorWidget: (context, url, error) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    _networklHasErrorNotifier.value++;
+                                                  },
+                                                  child: Container(
+                                                      decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                                      width: SizeConfig.screenWidth,
+                                                      height: 250,
+                                                      alignment: Alignment.center,
+                                                      child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
+                                                );
                                               },
-                                              child: Container(
-                                                  decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                                  width: SizeConfig.screenWidth,
-                                                  height: 250,
-                                                  alignment: Alignment.center,
-                                                  child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
                                             );
-                                          },
-                                        ),
+                                          }),
                                 ),
                               ),
                             ),
@@ -1038,7 +1072,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         padding: EdgeInsets.only(left: 21.0),
                         child: GestureDetector(
                           onTap: () {
-                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: pics?[index].postID ?? '', fromFront: true, data: pics?[index] ?? ContentData()));
+                            toComment = true;
+                            Routing().move(Routes.commentsDetail,
+                                argument: CommentsArgument(
+                                  postID: pics?[index].postID ?? '',
+                                  fromFront: true,
+                                  data: pics?[index] ?? ContentData(),
+                                  pageDetail: true,
+                                ));
                             // ShowBottomSheet.onShowCommentV2(context, postID: pics?[index].postID);
                           },
                           child: const CustomIconWidget(
@@ -1108,7 +1149,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
           if (pics?[index].allowComments ?? true)
             GestureDetector(
               onTap: () {
-                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: pics?[index].postID ?? '', fromFront: true, data: pics?[index] ?? ContentData()));
+                toComment = true;
+                Routing().move(Routes.commentsDetail,
+                    argument: CommentsArgument(
+                      postID: pics?[index].postID ?? '',
+                      fromFront: true,
+                      data: pics?[index] ?? ContentData(),
+                      pageDetail: true,
+                    ));
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),

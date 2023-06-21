@@ -16,6 +16,7 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/pick_file_error_alert.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/reaction_comment_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/remark_withdrawal_dialog.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/toast_alert.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_complete_profile_location_city_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_complete_profile_location_country_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_complete_profile_location_province_content.dart';
@@ -301,7 +302,7 @@ class ShowGeneralDialog {
     if (isInAppAds) {
       SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, context.getCurrentDate());
     }
-    try{
+    try {
       await showGeneralDialog(
         //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
         context: Routing.navigatorKey.currentState!.overlay!.context,
@@ -318,14 +319,13 @@ class ShowGeneralDialog {
           return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
         },
       );
-    }catch(e){
+    } catch (e) {
       print('Error Pop Ads: $e');
     }
-
   }
 
   static Future adsPopUpImage(BuildContext context) async {
-    try{
+    try {
       await showGeneralDialog(
         //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
         context: Routing.navigatorKey.currentState?.overlay?.context ?? context,
@@ -338,7 +338,7 @@ class ShowGeneralDialog {
           return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
         },
       );
-    }catch(e){
+    } catch (e) {
       print('Error Pop Ads: $e');
     }
   }
@@ -401,5 +401,54 @@ class ShowGeneralDialog {
         return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
       },
     ).then((value) => true);
+  }
+
+  // static showToastAlert(BuildContext context, String message, Future<dynamic> Function() onDismiss) async {
+  //   await showGeneralDialog(
+  //     context: context,
+  //     barrierLabel: 'Barrier',
+  //     barrierDismissible: true,
+  //     barrierColor: Colors.white.withOpacity(0),
+  //     transitionDuration: const Duration(milliseconds: 500),
+  //     pageBuilder: (context, animation, secondAnimation) => ToastAlert(
+  //       message: message,
+  //       onTap: onDismiss,
+  //     ),
+  //     transitionBuilder: (context, animation, secondaryAnimation, child) {
+  //       animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+  //       return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
+  //     },
+  //   );
+  // }
+
+  static Future showToastAlert(BuildContext context, String message, Future<dynamic> Function() onDismiss) async {
+    await showGeneralDialog(
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+      context: context,
+      barrierLabel: 'Barrier',
+      barrierColor: Colors.transparent,
+      barrierDismissible: true,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) => WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          content: ToastAlert(
+            message: message,
+            onTap: onDismiss,
+          ),
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 0),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+        ),
+      ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.ease, parent: animation);
+        return SlideTransition(
+          position: Tween(begin: const Offset(0, 1), end: const Offset(0, 0)).animate(animation),
+          child: child,
+        );
+      },
+    );
   }
 }

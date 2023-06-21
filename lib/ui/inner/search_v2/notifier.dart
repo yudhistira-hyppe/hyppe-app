@@ -23,6 +23,8 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -68,6 +70,18 @@ class SearchNotifier with ChangeNotifier {
   //   _loadingSearch = state;
   //   notifyListeners();
   // }
+
+  bool _connectionError = false;
+  bool get connectionError => _connectionError;
+  set connectionError(bool state) {
+    _connectionError = state;
+    notifyListeners();
+  }
+
+  Future checkConnection() async {
+    bool connect = await System().checkConnections();
+    connectionError = !connect;
+  }
 
   List<ContentData>? _searchVid;
   List<ContentData>? get searchVid => _searchVid;
@@ -371,6 +385,7 @@ class SearchNotifier with ChangeNotifier {
   }
 
   Future onSearchLandingPage(BuildContext context) async {
+    checkConnection();
     try {
       loadLandingPage = true;
       final notifier = SearchContentBloc();
@@ -756,6 +771,7 @@ class SearchNotifier with ChangeNotifier {
   Future getDetailHashtag(BuildContext context, String keys, {reload = true, HyppeType? hyppe, bool force = false}) async{
     print('getDetailHashtag keys: $keys');
     final detail = mapDetailHashtag[keys];
+    checkConnection();
     try {
       final lenghtVid = mapDetailHashtag[keys]?.vid?.length ?? 0;
       final lenghtDiary = mapDetailHashtag[keys]?.diary?.length ?? 0;
@@ -980,6 +996,7 @@ class SearchNotifier with ChangeNotifier {
       final lenghtVid = currentVid.length;
       final lenghtDiary = currentDairy.length;
       final lenghtPic = currentPic.length;
+      checkConnection();
       print('the interest id: $keys');
       if (reload) {
         initAllHasNext();
@@ -1087,7 +1104,7 @@ class SearchNotifier with ChangeNotifier {
 
   List<Widget> getGridHashtag(String hashtag, bool fromRoute) {
     Map<String, List<Widget>> map = {
-      'HyppeVid': [
+      'Vid': [
         GridHashtagVid(tag: hashtag,),
         if ((_detailHashTag?.vid ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty && isHasNextVid)
           SliverToBoxAdapter(
@@ -1095,17 +1112,17 @@ class SearchNotifier with ChangeNotifier {
                 margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
           )
       ],
-      'HyppeDiary': [
+      'Diary': [
         GridHashtagDiary(tag: hashtag),
-        if ((_detailHashTag?.diary ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty && isHasNextDiary)
+        if ((_detailHashTag?.diary ?? []).length % limitSearch == 0 && (_detailHashTag?.diary ?? []).isNotEmpty && isHasNextDiary)
           SliverToBoxAdapter(
             child: Container(
                 margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
           )
       ],
-      'HyppePic': [
+      'Pic': [
         GridHashtagPic(tag: hashtag),
-        if ((_detailHashTag?.pict ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty && isHasNextPic)
+        if ((_detailHashTag?.pict ?? []).length % limitSearch == 0 && (_detailHashTag?.pict ?? []).isNotEmpty && isHasNextPic)
           SliverToBoxAdapter(
             child: Container(
                 margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
@@ -1215,6 +1232,7 @@ class SearchNotifier with ChangeNotifier {
   }
 
   Future getDataSearch(BuildContext context, {SearchLoadData typeSearch = SearchLoadData.all, bool reload = true, bool forceLoad = false}) async {
+    checkConnection();
     String search = searchController.text;
     if(forceLoad){
       hitApiSearchData(context, search, typeSearch: typeSearch, reload: reload);
@@ -1644,7 +1662,17 @@ class SearchNotifier with ChangeNotifier {
           result = await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(
             page: index,
             type: TypePlaylist.search,
-            titleAppbar: const Text(
+            titleAppbar: pageSrc == PageSrc.hashtag ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:  [
+                CustomTextWidget(textToDisplay: language.topPic ?? 'Top Pic', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
+                fourPx,
+                Text(
+                  "#$keys",
+                  style: TextStyle(color: kHyppeTextLightPrimary),
+                )
+              ],
+            ) : const Text(
               "Pic",
               style: TextStyle(color: kHyppeTextLightPrimary),
             ),
@@ -1671,7 +1699,17 @@ class SearchNotifier with ChangeNotifier {
           result = await _routing.move(Routes.scrollDiary, argument: SlidedDiaryDetailScreenArgument(
             page: index,
             type: TypePlaylist.search,
-            titleAppbar: const Text(
+            titleAppbar:  pageSrc == PageSrc.hashtag ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:  [
+                CustomTextWidget(textToDisplay: language.topDiaty ?? 'Top Diary', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
+                fourPx,
+                Text(
+                  "#$keys",
+                  style: TextStyle(color: kHyppeTextLightPrimary),
+                )
+              ],
+            ) : const Text(
               "Diary",
               style: TextStyle(color: kHyppeTextLightPrimary),
             ),
@@ -1697,7 +1735,17 @@ class SearchNotifier with ChangeNotifier {
           result = await _routing.move(Routes.scrollVid, argument: SlidedVidDetailScreenArgument(
             page: index,
             type: TypePlaylist.search,
-            titleAppbar: const Text(
+            titleAppbar:  pageSrc == PageSrc.hashtag ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:  [
+                CustomTextWidget(textToDisplay: language.topVid ?? 'Top Vic', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
+                fourPx,
+                Text(
+                  "#$keys",
+                  style: TextStyle(color: kHyppeTextLightPrimary),
+                )
+              ],
+            ) : const Text(
               "Vid",
               style: TextStyle(color: kHyppeTextLightPrimary),
             ),

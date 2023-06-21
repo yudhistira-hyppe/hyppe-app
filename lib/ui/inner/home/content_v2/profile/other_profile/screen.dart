@@ -194,12 +194,14 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
             color: Colors.purple,
             onRefresh: () async {
               await notifier.initialOtherProfile(context, refresh: true, argument: widget.arguments);
+              final sn = Provider.of<PreviewStoriesNotifier>(context, listen: false);
+              otherStoryGroup = sn.otherStoryGroup;
             },
             child: isloading
                 ? CustomScrollView(
                     slivers: [SliverToBoxAdapter(child: BothProfileTopShimmer()), BothProfileContentShimmer()],
                   )
-                : !notifier.isConnect
+                : !notifier.isConnect && notifier.user.profile == null
                     ? OfflineMode(
                         function: () async {
                           isloading = true;
@@ -267,11 +269,35 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                             backgroundColor: Theme.of(context).colorScheme.background,
                           ),
                           if (notifier.user.profile != null && notifier.statusFollowing == StatusFollowing.following)
-                            isloading ? BothProfileContentShimmer() : optionButton(notifier.isLoading, notifier.pageIndex, heightProfileCard)
+                            isloading
+                                ? BothProfileContentShimmer()
+                                : !notifier.isConnectContent
+                                    ? SliverFillRemaining(
+                                        hasScrollBody: false,
+                                        child: OfflineMode(
+                                          function: () async {
+                                            isloading = true;
+                                            await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
+                                          },
+                                        ),
+                                      )
+                                    : optionButton(notifier.isLoading, notifier.pageIndex, heightProfileCard)
                           // else if (notifier.peopleProfile?.userDetail?.data?.isPrivate ?? false)
                           //     SliverList(delegate: SliverChildListDelegate([PrivateAccount()]))
                           else
-                            isloading ? BothProfileContentShimmer() : optionButton(notifier.isLoading, notifier.pageIndex, heightProfileCard)
+                            isloading
+                                ? BothProfileContentShimmer()
+                                : !notifier.isConnectContent
+                                    ? SliverFillRemaining(
+                                        hasScrollBody: false,
+                                        child: OfflineMode(
+                                          function: () async {
+                                            isloading = true;
+                                            await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
+                                          },
+                                        ),
+                                      )
+                                    : optionButton(notifier.isLoading, notifier.pageIndex, heightProfileCard)
                         ],
                       ),
           ),

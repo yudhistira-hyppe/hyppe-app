@@ -255,6 +255,9 @@ class LocalizationModelV2 {
   String? vidsForYou;
   String? diariesForYou;
   String? picsForYou;
+  String? topVid;
+  String? topDiaty;
+  String? topPic;
   String? hyppeVerificationCode;
   String? inbox;
   String? toMe;
@@ -898,6 +901,14 @@ class LocalizationModelV2 {
   String? thisAccountHasNoPostsYet;
   String? oopsYoureOffline;
   String? checkYourWiFiConnectionOrInternet;
+  String? buyVoucher;
+  String? voucherDetail;
+  String? adsCredit;
+  String? totalBelanja;
+  String? shareYourMoment;
+  String? captureYourMoment;
+  String? howAreYouToday;
+  String? shareWithUsYourCreatifity;
 
   LocalizationModelV2({
     this.login,
@@ -1156,6 +1167,9 @@ class LocalizationModelV2 {
     this.vidsForYou,
     this.diariesForYou,
     this.picsForYou,
+    this.topVid,
+    this.topDiaty,
+    this.topPic,
     this.hyppeVerificationCode,
     this.inbox,
     this.toMe,
@@ -1799,6 +1813,14 @@ class LocalizationModelV2 {
     this.thisAccountHasNoPostsYet,
     this.oopsYoureOffline,
     this.checkYourWiFiConnectionOrInternet,
+    this.buyVoucher,
+    this.voucherDetail,
+    this.adsCredit,
+    this.totalBelanja,
+    this.shareYourMoment,
+    this.captureYourMoment,
+    this.howAreYouToday,
+    this.shareWithUsYourCreatifity,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2058,6 +2080,9 @@ class LocalizationModelV2 {
     vidsForYou = json["vidsForYou"];
     diariesForYou = json["diariesForYou"];
     picsForYou = json["picsForYou"];
+    topVid = json["topVid"];
+    topDiaty = json["topDiaty"];
+    topPic = json["topPic"];
     hyppeVerificationCode = json['hyppeVerificationCode'];
     inbox = json['inbox'];
     toMe = json['toMe'];
@@ -2719,5 +2744,13 @@ class LocalizationModelV2 {
     thisAccountHasNoPostsYet = json['thisAccountHasNoPostsYet'];
     oopsYoureOffline = json['oopsYoureOffline'];
     checkYourWiFiConnectionOrInternet = json['checkYourWiFiConnectionOrInternet'];
+    buyVoucher = json['buyVoucher'];
+    voucherDetail = json['voucherDetail'];
+    adsCredit = json['adsCredit'];
+    totalBelanja = json['totalBelanja'];
+    shareYourMoment = json['shareYourMoment'];
+    captureYourMoment = json['captureYourMoment'];
+    howAreYouToday = json['howAreYouToday'];
+    shareWithUsYourCreatifity = json['shareWithUsYourCreatifity'];
   }
 }
