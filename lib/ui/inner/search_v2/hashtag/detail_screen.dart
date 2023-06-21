@@ -54,21 +54,12 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
   void didPopNext() {
     'DetailHashtagScreen didPopNext'.logger();
     final notifier = context.read<SearchNotifier>();
-    Future.delayed(Duration(milliseconds: 500), () {
-      var jumpTo = heightTab + notifier.heightIndex - 10;
-      print("jumpt ====== ${jumpTo}");
-      print("jumpt ====== ${heightTab}");
-      print("jumpt ====== ${notifier.heightIndex}");
-      _scrollController.jumpTo(jumpTo.toDouble());
-    });
-    // notifier.getDetailHashtag(context, widget.argument.hashtag.tag?.replaceAll(' ', '') ?? ' ').whenComplete(() {
-    //   Future.delayed(Duration(milliseconds: 500), () {
-    //     var jumpTo = heightTab + notifier.heightIndex - 10;
-    //     print("jumpt ====== ${jumpTo}");
-    //     print("jumpt ====== ${heightTab}");
-    //     print("jumpt ====== ${notifier.heightIndex}");
-    //     _scrollController.jumpTo(jumpTo.toDouble());
-    //   });
+    // Future.delayed(Duration(milliseconds: 500), () {
+    //   var jumpTo = heightTab + notifier.heightIndex - 10;
+    //   print("jumpt ====== ${jumpTo}");
+    //   print("jumpt ====== ${heightTab}");
+    //   print("jumpt ====== ${notifier.heightIndex}");
+    //   _scrollController.jumpTo(jumpTo.toDouble());
     // });
 
     super.didPopNext();
