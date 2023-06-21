@@ -16,6 +16,9 @@ class BannerPop extends StatefulWidget {
 }
 
 class _BannerPopState extends State<BannerPop> {
+  final CarouselController _controller = CarouselController();
+  int _current = 0;
+
   final List<String> imgList = [
     'https://cache.teia.rocks/ipfs/QmPfuBWAmkaqxdkJZL4d2eCgkfAxrpnwKTLtSvo2t5Grjg',
     'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
@@ -58,14 +61,17 @@ class _BannerPopState extends State<BannerPop> {
                   height: constraints.maxHeight,
                   child: CarouselSlider(
                     options: CarouselOptions(
-                      // height: 300
+                        // height: 300
 
-                      enlargeCenterPage: false,
-                      viewportFraction: 1.0,
-                      aspectRatio: 1 / 1,
-
-                      autoPlayInterval: Duration(seconds: 3),
-                    ),
+                        enlargeCenterPage: false,
+                        viewportFraction: 1.0,
+                        aspectRatio: 1 / 1,
+                        autoPlayInterval: Duration(seconds: 3),
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _current = index;
+                          });
+                        }),
                     items: imgList
                         .map((item) => ClipRRect(
                               borderRadius: BorderRadius.circular(10),
@@ -108,24 +114,21 @@ class _BannerPopState extends State<BannerPop> {
         ),
         Positioned.fill(
           child: Align(
-            alignment: Alignment.topRight,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: ClipOval(
-                child: Container(
-                  padding: EdgeInsets.all(4),
-                  color: kHyppeTextLightPrimary,
-                  child: const CustomIconWidget(
-                    width: 20,
-                    height: 20,
-                    iconData: "${AssetPath.vectorPath}close.svg",
-                    defaultColor: false,
-                    color: Colors.white,
+            alignment: Alignment.bottomCenter,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: imgList.asMap().entries.map((entry) {
+                return GestureDetector(
+                  onTap: () => _controller.animateToPage(entry.key),
+                  child: Container(
+                    width: 12.0,
+                    height: 12.0,
+                    margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                    decoration:
+                        BoxDecoration(shape: BoxShape.circle, color: (Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black).withOpacity(_current == entry.key ? 0.9 : 0.4)),
                   ),
-                ),
-              ),
+                );
+              }).toList(),
             ),
           ),
         ),
