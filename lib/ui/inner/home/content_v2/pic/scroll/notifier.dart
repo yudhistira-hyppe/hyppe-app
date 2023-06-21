@@ -30,7 +30,14 @@ class ScrollPicNotifier with ChangeNotifier {
     connectionError = !connect;
   }
 
-  List<ContentData>? pics = [];
+  List<ContentData>? _pics;
+
+  List<ContentData>? get pics => _pics;
+
+  set pics(List<ContentData>? val) {
+    _pics = val;
+    notifyListeners();
+  }
 
   void onUpdate() => notifyListeners();
 

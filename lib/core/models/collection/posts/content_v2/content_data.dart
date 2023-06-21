@@ -338,6 +338,8 @@ class ContentData {
       json['comment'].forEach((v) {
         comment!.add(Comment.fromJson(v));
       });
+    } else {
+      comment = [];
     }
     isDiaryPlay = false;
     comments = json['comments'] ?? 0;
