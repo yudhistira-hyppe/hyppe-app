@@ -635,6 +635,7 @@ class PreUploadContentNotifier with ChangeNotifier {
           iconSvg: "${AssetPath.vectorPath}info_white.svg",
           milisecond: 2000,
           dismissible: false,
+          enableDrag: false,
         );
       }
       if (_isCompress) {
