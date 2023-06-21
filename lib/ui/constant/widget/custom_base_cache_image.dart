@@ -54,12 +54,10 @@ class CustomBaseCacheImage extends StatelessWidget {
         imageBuilder: imageBuilder,
         memCacheWidth: memCacheWidth,
         memCacheHeight: memCacheHeight,
-        filterQuality: FilterQuality.none,
-        cacheManager: CacheManager(Config(
-          'keyImage',
-          stalePeriod: const Duration(days: 7),
-          //one week cache period
-        )),
+        maxHeightDiskCache: 10000000,
+        maxWidthDiskCache: 100000000,
+        // filterQuality: FilterQuality.none,
+
         placeholder: (context, url) =>
             placeHolderWidget ??
             UnconstrainedBox(
@@ -74,26 +72,38 @@ class CustomBaseCacheImage extends StatelessWidget {
     } else {
       return emptyWidget;
     }
-    // return (imageUrl ?? '').isNotEmpty
-    //     ? OptimizedCacheImage(
-    //         imageUrl: "$imageUrl",
-    //         memCacheHeight: memCacheHeight,
-    //         memCacheWidth: memCacheWidth,
-    //         imageBuilder: imageBuilder,
-    //         // maxHeightDiskCache: 500,
-    //         // maxWidthDiskCache: 500,
-    //         errorWidget: errorWidget,
-    //         placeholder: (context, url) =>
-    //             placeHolderWidget ??
-    //             UnconstrainedBox(
-    //               child: Container(
-    //                 alignment: Alignment.center,
-    //                 width: widthPlaceHolder * SizeConfig.scaleDiagonal,
-    //                 height: heightPlaceHolder * SizeConfig.scaleDiagonal,
-    //                 child: const CustomLoading(),
+
+    // if ((imageUrl ?? '').isNotEmpty || (imageUrl ?? '').isUrlLink()) {
+    //   return (imageUrl ?? '').isNotEmpty
+    //       ? OptimizedCacheImage(
+    //           imageUrl: "$imageUrl",
+    //           memCacheHeight: memCacheHeight,
+    //           memCacheWidth: memCacheWidth,
+    //           imageBuilder: imageBuilder,
+
+    //           filterQuality: FilterQuality.none,
+    //           cacheManager: CacheManager(Config(
+    //             'keyImage',
+    //             stalePeriod: const Duration(days: 7),
+    //             //one week cache period
+    //           )),
+    //           // maxHeightDiskCache: 500,
+    //           // maxWidthDiskCache: 500,
+    //           errorWidget: errorWidget,
+    //           placeholder: (context, url) =>
+    //               placeHolderWidget ??
+    //               UnconstrainedBox(
+    //                 child: Container(
+    //                   alignment: Alignment.center,
+    //                   width: widthPlaceHolder * SizeConfig.scaleDiagonal,
+    //                   height: heightPlaceHolder * SizeConfig.scaleDiagonal,
+    //                   child: const CustomLoading(),
+    //                 ),
     //               ),
-    //             ),
-    //       )
-    //     : emptyWidget;
+    //         )
+    //       : emptyWidget;
+    // } else {
+    //   return emptyWidget;
+    // }
   }
 }

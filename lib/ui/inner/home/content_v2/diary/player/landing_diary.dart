@@ -94,10 +94,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     notifier.scrollController.addListener(() => notifier.scrollListener(context));
     email = SharedPreference().readStorage(SpKeys.email);
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+
     // stopwatch = new Stopwatch()..start();
+    fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingpage');
+
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
       WidgetsBinding.instance.addObserver(this);
       fAliplayer?.pause();
       fAliplayer?.setAutoPlay(true);
@@ -459,6 +461,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         fAliplayer?.pause();
         break;
       case AppLifecycleState.resumed:
+        fAliplayer?.play();
         if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
           fAliplayer?.play();
         }
@@ -478,7 +481,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
-    AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
+    // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
     return Consumer2<PreviewDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
       return Container(
         width: SizeConfig.screenWidth,
@@ -595,7 +598,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       onTap: () {
                         if (notifier.diaryData?[index].insight?.isloadingFollow != true) {
                           picNot.followUser(context, notifier.diaryData?[index] ?? ContentData(),
-                              isUnFollow: notifier.diaryData?[index].following, isloading: notifier.diaryData?[index].insight!.isloadingFollow ?? false);
+                              isUnFollow: notifier.diaryData?[index].following, isloading: notifier.diaryData?[index].insight?.isloadingFollow ?? false);
                         }
                       },
                       child: notifier.diaryData?[index].insight?.isloadingFollow ?? false
@@ -680,8 +683,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                               onCreated: onViewPlayerCreated,
                               x: 0,
                               y: 0,
-                              // height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                              // width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                              width: MediaQuery.of(context).size.width,
                             ),
                           )
                         : Container(),
@@ -698,7 +701,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         onDoubleTap: () {
                           final _likeNotifier = context.read<LikeNotifier>();
                           if (notifier.diaryData?[index] != null) {
-                            _likeNotifier.likePost(context, notifier.diaryData![index]);
+                            _likeNotifier.likePost(context, notifier.diaryData?[index] ?? ContentData());
                           }
                         },
                         child: Container(
@@ -864,7 +867,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   ),
                                   onTap: () {
                                     if (notifier.diaryData?[index] != null) {
-                                      likeNotifier.likePost(context, notifier.diaryData![index]);
+                                      likeNotifier.likePost(context, notifier.diaryData?[index] ?? ContentData());
                                     }
                                   },
                                 ),

@@ -26,6 +26,8 @@ class CustomContentModeratedWidget extends StatelessWidget {
   final FeatureType featureType;
   final EdgeInsetsGeometry padding;
   final Widget? placeHolder;
+  final int? memCacheWidth;
+  final int? memCacheHeight;
 
   const CustomContentModeratedWidget(
       {Key? key,
@@ -39,8 +41,9 @@ class CustomContentModeratedWidget extends StatelessWidget {
       this.boxFitError = BoxFit.fill,
       this.boxFitContent = BoxFit.cover,
       this.featureType = FeatureType.pic,
-        this.placeHolder
-      })
+      this.memCacheWidth,
+      this.memCacheHeight,
+      this.placeHolder})
       : super(key: key);
 
   @override
@@ -61,8 +64,8 @@ class CustomContentModeratedWidget extends StatelessWidget {
                   ? CustomBaseCacheImage(
                       cacheKey: thumbnail.id,
                       imageUrl: (thumbnail as ImageUrl).url,
-                      memCacheWidth: 70,
-                      memCacheHeight: 70,
+                      memCacheWidth: memCacheWidth ?? 70,
+                      memCacheHeight: memCacheHeight ?? 70,
                       imageBuilder: (_, imageProvider) {
                         return Container(
                           width: width,
