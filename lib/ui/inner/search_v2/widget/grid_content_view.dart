@@ -21,13 +21,15 @@ class GridContentView extends StatefulWidget {
   bool isLoading;
   String keyword;
   TypeApiSearch api;
+  ScrollController controller;
   GridContentView(
       {Key? key,
       required this.type,
       required this.data,
       required this.isLoading,
       required this.keyword,
-      required this.api})
+      required this.api,
+      required this.controller})
       : super(key: key);
 
   @override
@@ -105,7 +107,8 @@ class _GridContentViewState extends State<GridContentView> {
                                   widget.type,
                                   widget.api,
                                   widget.keyword,
-                                  pageSrc);
+                                  pageSrc,
+                                  widget.controller);
                         },
                         child: Padding(
                           padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
@@ -184,7 +187,8 @@ class _GridContentViewState extends State<GridContentView> {
                                   widget.type,
                                   widget.api,
                                   widget.keyword,
-                                  pageSrc);
+                                  pageSrc,
+                                  widget.controller);
                         },
                         child: Padding(
                           padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
@@ -261,7 +265,8 @@ class _GridContentViewState extends State<GridContentView> {
                                   widget.type,
                                   widget.api,
                                   widget.keyword,
-                                  pageSrc);
+                                  pageSrc,
+                                  widget.controller);
                         },
                         child: Padding(
                           padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),

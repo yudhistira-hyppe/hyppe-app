@@ -185,6 +185,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout>
                                                 isLoading: notifier.isHasNextVid,
                                                 keyword: widget.interest.id ?? '',
                                                 api: TypeApiSearch.detailInterest,
+                                                controller: scrollController,
                                               )
                                             : SearchNoResultImage(
                                                 locale: notifier.language,
@@ -200,6 +201,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout>
                                                     notifier.isHasNextDiary,
                                                 keyword: widget.interest.id ?? '',
                                                 api: TypeApiSearch.detailInterest,
+                                                controller: scrollController,
                                               )
                                             : SearchNoResultImage(
                                                 locale: notifier.language,
@@ -214,6 +216,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout>
                                                 isLoading: notifier.isHasNextPic,
                                                 keyword: widget.interest.id ?? '',
                                                 api: TypeApiSearch.detailInterest,
+                                                controller: scrollController,
                                               )
                                             : SearchNoResultImage(
                                                 locale: notifier.language,

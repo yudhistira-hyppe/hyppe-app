@@ -429,8 +429,12 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
       });
       print("!=1=1=1==================================================1=1=1");
       print(widget.playMode);
-      print(widget.data!.isApsara);
+      print(widget.data?.isApsara);
       print(widget.data?.postID);
+      if(widget.data != null){
+        start(widget.data!);
+      }
+
       // if (widget.data!.isApsara ?? false) {
       //   getAuth();
       // } else {

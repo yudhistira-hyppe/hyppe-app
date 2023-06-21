@@ -20,7 +20,8 @@ import '../../widget/search_no_result_image.dart';
 
 class GridHashtagPic extends StatelessWidget {
   final String tag;
-  const GridHashtagPic({Key? key, required this.tag}) : super(key: key);
+  final ScrollController controller;
+  const GridHashtagPic({Key? key, required this.tag, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +69,7 @@ class GridHashtagPic extends StatelessWidget {
                     // }
 
                     return GestureDetector(
-                      onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.pict ?? [], index, HyppeType.HyppePic, TypeApiSearch.detailHashTag, tag, PageSrc.hashtag),
+                      onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.pict ?? [], index, HyppeType.HyppePic, TypeApiSearch.detailHashTag, tag, PageSrc.hashtag, controller),
                       child: Padding(
                         padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
                         child: dataitem?.reportedStatus == 'BLURRED'

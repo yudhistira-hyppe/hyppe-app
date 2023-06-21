@@ -159,6 +159,8 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
   bool isCompleteAds = false;
   AliPlayerView? aliPlayerView;
 
+  AdsVideo? _newClipData;
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDSuccess');
@@ -169,12 +171,12 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     //   getOldVideoUrl();
     // }
     //cek ikaln
-    adsData = context.read<VidDetailNotifier>().adsData;
+    // adsData = context.read<VidDetailNotifier>().adsData;
     print("ini iklan ${adsData?.data?.videoId}");
     print("ini iklan ${adsData?.data?.apsaraAuth}");
-    // if (adsData != null && widget.inLanding) {
-    //   initAdsVideo();
-    // }
+    if (widget.inLanding) {
+      getAdsVideo(false);
+    }
     _playMode = widget.playMode;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
@@ -215,6 +217,23 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     });
 
     globalAliPlayer = fAliplayer;
+  }
+
+  Future getAdsVideo(bool isContent) async {
+    try {
+      final notifier = AdsDataBloc();
+      await notifier.adsVideoBloc(context, isContent);
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        // print('data : ${fetch.data.toString()}');
+        _newClipData = fetch.data;
+        'videoId : ${_newClipData?.data?.videoId}'.logger();
+        secondsSkip = _newClipData?.data?.adsSkip ?? 0;
+      }
+    } catch (e) {
+      'Failed to fetch ads data $e'.logger();
+    }
   }
 
   void configAliplayer() {
