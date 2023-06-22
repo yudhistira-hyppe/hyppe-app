@@ -74,6 +74,9 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
       context.read<PreviewStoriesNotifier>().myStoriesData = null;
       context.read<PreviewStoriesNotifier>().peopleStoriesData = null;
       context.read<PreviewStoriesNotifier>().myStoryGroup = {};
+      context.read<PreviewStoriesNotifier>().storiesGroups = [];
+      context.read<PreviewStoriesNotifier>().otherStoryGroup = {};
+
       context.read<StoriesPlaylistNotifier>().groupUserStories = [];
       context.read<PreviewDiaryNotifier>().diaryData = null;
       context.read<PreviewDiaryNotifier>().onUpdate();

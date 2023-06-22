@@ -154,6 +154,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                                                 isLoading: notifier.isHasNextVid,
                                                 keyword: widget.interest.id ?? '',
                                                 api: TypeApiSearch.detailInterest,
+                                                controller: scrollController,
                                               )
                                             : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                                       case HyppeType.HyppeDiary:
@@ -164,6 +165,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                                                 isLoading: notifier.isHasNextDiary,
                                                 keyword: widget.interest.id ?? '',
                                                 api: TypeApiSearch.detailInterest,
+                                                controller: scrollController,
                                               )
                                             : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                                       case HyppeType.HyppePic:
@@ -174,6 +176,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                                                 isLoading: notifier.isHasNextPic,
                                                 keyword: widget.interest.id ?? '',
                                                 api: TypeApiSearch.detailInterest,
+                                                controller: scrollController,
                                               )
                                             : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                                     }

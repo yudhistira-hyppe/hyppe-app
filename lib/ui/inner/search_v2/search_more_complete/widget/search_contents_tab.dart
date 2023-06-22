@@ -180,17 +180,20 @@ class _SearchContentsTabState extends State<SearchContentsTab> with RouteAware{
                               return notifier.searchVid.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchVid ?? [],
                                 isLoading: notifier.isHasNextVid,
                                 keyword: widget.keyword,
-                                api: TypeApiSearch.normal,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,);
+                                api: TypeApiSearch.normal,
+                                controller: _scrollController,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,);
                             case HyppeType.HyppeDiary:
                               return notifier.searchDiary.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchDiary ?? [],
                                 isLoading: notifier.isHasNextDiary,
                                 keyword: widget.keyword,
-                                api: TypeApiSearch.normal,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                                api: TypeApiSearch.normal,
+                                controller: _scrollController,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
                             case HyppeType.HyppePic:
                               return notifier.searchPic.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchPic ?? [],
                                 isLoading: notifier.isHasNextPic,
                                 keyword: widget.keyword,
-                                api: TypeApiSearch.normal,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                                api: TypeApiSearch.normal,
+                                controller: _scrollController,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
                           }
                         }
                     ),

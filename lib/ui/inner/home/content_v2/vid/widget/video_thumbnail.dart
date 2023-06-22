@@ -1,8 +1,12 @@
+import 'dart:ui';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_thumb_image.dart';
 import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -12,6 +16,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:provider/provider.dart';
 
 class VideoThumbnail extends StatelessWidget {
   final ContentData? videoData;
@@ -35,6 +40,7 @@ class VideoThumbnail extends StatelessWidget {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VideoThumbnail');
     SizeConfig().init(context);
     final isHorizon = (videoData?.metadata?.height ?? 0) < (videoData?.metadata?.width ?? 0);
+    final lang = context.read<TranslateNotifierV2>().translate;
     return Stack(
       children: [
         /// Thumbnail
@@ -42,17 +48,59 @@ class VideoThumbnail extends StatelessWidget {
           alignment: Alignment.center,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
-            child: CustomThumbImage(
-              memCacheHeight: 30,
-              memCacheWidth: 30,
-              onTap: () {},
-              postId: videoData?.postID,
-              boxFit: isHorizon ? BoxFit.fill : BoxFit.contain,
-              // imageUrl: 'https://vod.hyppe.cloud/00f120afbe2741be938a93053643c7a2/snapshots/11d8097848ff457b833e5bb0b8bfb482-00004.jpg',
+            child: CustomBaseCacheImage(
+              // cacheKey: "${pics?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
+              memCacheWidth: 100,
+              memCacheHeight: 100,
+              widthPlaceHolder: 80,
+              heightPlaceHolder: 80,
               imageUrl: (videoData?.isApsara ?? false) ? (videoData?.mediaThumbEndPoint ?? '') : '${videoData?.fullThumbPath}',
+              // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
+              imageBuilder: (context, imageProvider) => ClipRRect(
+                borderRadius: BorderRadius.circular(20), // Image borderr
+                child: Image(
+                  image: imageProvider,
+                  fit: BoxFit.fitHeight,
+                  width: SizeConfig.screenWidth,
+                ),
+              ),
+              emptyWidget: GestureDetector(
+                onTap: () {
+                  // _networklHasErrorNotifier.value++;
+                },
+                child: Container(
+                    decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                    width: SizeConfig.screenWidth,
+                    height: 250,
+                    alignment: Alignment.center,
+                    child: CustomTextWidget(textToDisplay: lang.couldntLoadVideo ?? 'Error')),
+              ),
+              errorWidget: (context, url, error) {
+                return GestureDetector(
+                  onTap: () {
+                    // _networklHasErrorNotifier.value++;
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                      width: SizeConfig.screenWidth,
+                      height: 250,
+                      alignment: Alignment.center,
+                      child: CustomTextWidget(textToDisplay: lang.couldntLoadVideo ?? 'Error')),
+                );
+              },
             ),
+            // CustomThumbImage(
+            //   memCacheHeight: 30,
+            //   memCacheWidth: 30,
+            //   onTap: () {},
+            //   postId: videoData?.postID,
+            //   boxFit: isHorizon ? BoxFit.fill : BoxFit.contain,
+            //   // imageUrl: 'https://vod.hyppe.cloud/00f120afbe2741be938a93053643c7a2/snapshots/11d8097848ff457b833e5bb0b8bfb482-00004.jpg',
+            //   imageUrl: (videoData?.isApsara ?? false) ? (videoData?.mediaThumbEndPoint ?? '') : '${videoData?.fullThumbPath}',
+            // ),
           ),
         ),
+
         /// Back Button & More Options
         Align(
           alignment: Alignment.topLeft,

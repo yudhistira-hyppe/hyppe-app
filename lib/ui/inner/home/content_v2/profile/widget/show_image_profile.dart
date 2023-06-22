@@ -89,24 +89,14 @@ class _ShowImageProfileState extends State<ShowImageProfile> {
                 );
               },
               errorWidget: (_, __, ___) {
-                return Container(
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.contain,
-                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                    ),
-                  ),
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth),
                 );
               },
-              emptyWidget: Container(
-                height: 50,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.contain,
-                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                  ),
-                ),
+              emptyWidget: ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth),
               ),
             ),
           ),

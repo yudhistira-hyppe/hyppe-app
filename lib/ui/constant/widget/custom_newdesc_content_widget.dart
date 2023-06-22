@@ -233,7 +233,21 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
         }
         // print('state $desc $error && $isSeeLess && ${lastIndex != null}');
         // final fixdesc = item.desc;
-        final fixdesc = error && isSeeLess && lastIndex != null ? item.desc.substring(0, item.desc.length - 1) : item.desc;
+        String fixdesc = '';
+        if(error && isSeeLess && lastIndex != null){
+          final texts = item.desc.split(' ');
+          for(final item in texts){
+            if(!item.hasEmoji()){
+              fixdesc += '$item ';
+            }
+
+          }
+        }else{
+          fixdesc = item.desc;
+        }
+        if(error){
+
+        }
         results.add(TextSpan(
             text: fixdesc,
             style: item.type == CaptionType.mention || item.type == CaptionType.hashtag
