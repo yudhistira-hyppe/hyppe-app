@@ -440,7 +440,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                 if (_curIdx != index) {
                   Future.delayed(const Duration(milliseconds: 400), () {
                     try {
-                      widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_cardIndex, widget.arguments?.heightTopProfile ?? 0, 100));
+                      widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_cardIndex, widget.arguments?.heightTopProfile ?? 0, widget.arguments?.heightBox?.toInt() ?? 100));
                     } catch (e) {
                       print("ini error $e");
                     }

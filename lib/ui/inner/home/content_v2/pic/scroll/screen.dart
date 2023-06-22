@@ -783,7 +783,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                 //=============
                 if (_lastCurIndex != _curIdx) {
                   try {
-                    widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, 110));
+                    widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, widget.arguments?.heightBox?.toInt() ?? 110));
                   } catch (e) {
                     print("ini error $e");
                   }

@@ -5,6 +5,7 @@ import 'package:hyppe/core/models/collection/search/search_content.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/constants/enum.dart';
@@ -29,6 +30,8 @@ class InterestTabLayout extends StatefulWidget {
 
 class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLayoutMixin {
   HyppeType currentType = HyppeType.HyppeVid;
+
+  double heightTab = 0.0;
   // final _scrollController = ScrollController();
   final ScrollController scrollController = ScrollController();
   @override
@@ -88,49 +91,56 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Container(
-                        margin: const EdgeInsets.only(left: 16, right: 12, top: 10, bottom: 16),
-                        padding: const EdgeInsets.all(3),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: context.getColorScheme().background),
-                        child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: listTab.map((e) {
-                              final isActive = e == currentType;
-                              return Expanded(
-                                child: Material(
-                                    color: Colors.transparent,
-                                    child: Ink(
-                                      height: 36,
-                                      decoration: BoxDecoration(
-                                        color: isActive ? context.getColorScheme().primary : context.getColorScheme().background,
-                                        borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                      ),
-                                      child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            currentType = e;
-                                            scrollController..animateTo(0, duration: Duration(milliseconds: 70), curve: Curves.fastOutSlowIn);
-                                          });
-                                        },
-                                        borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                        splashColor: context.getColorScheme().primary,
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          height: 36,
-                                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                                          decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                                          ),
-                                          child: CustomTextWidget(
-                                            textToDisplay: System().getTitleHyppe(e),
-                                            textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
+                      MeasuredSize(
+                        onChange: (value){
+                          setState(() {
+                            heightTab = value.height;
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 16, right: 12, top: 10, bottom: 16),
+                          padding: const EdgeInsets.all(3),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: context.getColorScheme().background),
+                          child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: listTab.map((e) {
+                                final isActive = e == currentType;
+                                return Expanded(
+                                  child: Material(
+                                      color: Colors.transparent,
+                                      child: Ink(
+                                        height: 36,
+                                        decoration: BoxDecoration(
+                                          color: isActive ? context.getColorScheme().primary : context.getColorScheme().background,
+                                          borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              currentType = e;
+                                              scrollController..animateTo(0, duration: Duration(milliseconds: 70), curve: Curves.fastOutSlowIn);
+                                            });
+                                          },
+                                          borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                          splashColor: context.getColorScheme().primary,
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            height: 36,
+                                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(Radius.circular(18)),
+                                            ),
+                                            child: CustomTextWidget(
+                                              textToDisplay: System().getTitleHyppe(e),
+                                              textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    )),
-                              );
-                            }).toList()),
+                                      )),
+                                );
+                              }).toList()),
+                        ),
                       ),
                       Expanded(
                         child: RefreshIndicator(
@@ -155,6 +165,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                                                 keyword: widget.interest.id ?? '',
                                                 api: TypeApiSearch.detailInterest,
                                                 controller: scrollController,
+                                          heightTab: heightTab,
                                               )
                                             : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                                       case HyppeType.HyppeDiary:
@@ -166,6 +177,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                                                 keyword: widget.interest.id ?? '',
                                                 api: TypeApiSearch.detailInterest,
                                                 controller: scrollController,
+                                          heightTab: heightTab,
                                               )
                                             : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                                       case HyppeType.HyppePic:
@@ -177,6 +189,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                                                 keyword: widget.interest.id ?? '',
                                                 api: TypeApiSearch.detailInterest,
                                                 controller: scrollController,
+                                          heightTab: heightTab,
                                               )
                                             : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                                     }

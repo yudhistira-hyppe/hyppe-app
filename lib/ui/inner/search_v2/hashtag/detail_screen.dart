@@ -9,6 +9,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/offli
 import 'package:hyppe/ui/inner/search_v2/hashtag/widget/bottom_detail.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/arguments/hashtag_argument.dart';
@@ -30,7 +31,7 @@ class DetailHashtagScreen extends StatefulWidget {
 class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAware, AfterFirstLayoutMixin {
   final ScrollController _scrollController = ScrollController();
   // final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
-  int heightTab = 0;
+  double heightTab = 0;
 
   @override
   void didPop() {
@@ -137,33 +138,50 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
             notifier.getDetailHashtag(context, widget.argument.hashtag.tag?.replaceAll(' ', '') ?? ' ');
           },) : Column(
             children: [
-              Container(
-                padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 12),
-                child: Column(
-                  children: [
-                    !notifier.loadTagDetail
-                        ? Row(
-                      children: [
-                        Builder(builder: (context) {
-                          return CustomBaseCacheImage(
-                            imageUrl: notifier.tagImageMain,
-                            memCacheWidth: 70,
-                            memCacheHeight: 70,
-                            imageBuilder: (_, imageProvider) {
-                              return Container(
-                                width: 56,
-                                height: 56,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(28)),
-                                  image: DecorationImage(
-                                    fit: BoxFit.contain,
-                                    image: imageProvider,
+              MeasuredSize(
+                onChange: (value){
+                  setState(() {
+                    heightTab = value.height;
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 12),
+                  child: Column(
+                    children: [
+                      !notifier.loadTagDetail
+                          ? Row(
+                        children: [
+                          Builder(builder: (context) {
+                            return CustomBaseCacheImage(
+                              imageUrl: notifier.tagImageMain,
+                              memCacheWidth: 70,
+                              memCacheHeight: 70,
+                              imageBuilder: (_, imageProvider) {
+                                return Container(
+                                  width: 56,
+                                  height: 56,
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(Radius.circular(28)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.contain,
+                                      image: imageProvider,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            errorWidget: (_, __, ___) {
-                              return Container(
+                                );
+                              },
+                              errorWidget: (_, __, ___) {
+                                return Container(
+                                  width: 56,
+                                  height: 56,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      fit: BoxFit.contain,
+                                      image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
+                                    ),
+                                  ),
+                                );
+                              },
+                              emptyWidget: Container(
                                 width: 56,
                                 height: 56,
                                 decoration: BoxDecoration(
@@ -172,72 +190,62 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
                                     image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
                                   ),
                                 ),
-                              );
-                            },
-                            emptyWidget: Container(
-                              width: 56,
-                              height: 56,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.contain,
-                                  image: const AssetImage('${AssetPath.pngPath}default_hashtag.png'),
-                                ),
                               ),
-                            ),
-                          );
-                        }),
-                        twelvePx,
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomTextWidget(
-                                textToDisplay: '#${widget.argument.hashtag.tag}',
-                                textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
-                                textAlign: TextAlign.start,
-                              ),
-                              fourPx,
-                              Text(
-                                "${notifier.countTag} ${notifier.language.posts}",
-                                style: const TextStyle(fontSize: 12, color: kHyppeGrey),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    )
-                        : Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CustomShimmer(
-                            height: 50,
-                            width: 50,
-                            radius: 25,
-                          ),
-                          tenPx,
+                            );
+                          }),
+                          twelvePx,
                           Expanded(
-                              child: Column(
-                                children: [
-                                  CustomShimmer(
-                                    height: 20,
-                                    width: double.infinity,
-                                    radius: 5,
-                                  ),
-                                  sixteenPx,
-                                  CustomShimmer(
-                                    height: 20,
-                                    width: double.infinity,
-                                    radius: 5,
-                                  )
-                                ],
-                              ))
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomTextWidget(
+                                  textToDisplay: '#${widget.argument.hashtag.tag}',
+                                  textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
+                                  textAlign: TextAlign.start,
+                                ),
+                                fourPx,
+                                Text(
+                                  "${notifier.countTag} ${notifier.language.posts}",
+                                  style: const TextStyle(fontSize: 12, color: kHyppeGrey),
+                                )
+                              ],
+                            ),
+                          )
                         ],
-                      ),
-                    )
-                  ],
+                      )
+                          : Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CustomShimmer(
+                              height: 50,
+                              width: 50,
+                              radius: 25,
+                            ),
+                            tenPx,
+                            Expanded(
+                                child: Column(
+                                  children: [
+                                    CustomShimmer(
+                                      height: 20,
+                                      width: double.infinity,
+                                      radius: 5,
+                                    ),
+                                    sixteenPx,
+                                    CustomShimmer(
+                                      height: 20,
+                                      width: double.infinity,
+                                      radius: 5,
+                                    )
+                                  ],
+                                ))
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               Container(
@@ -250,6 +258,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
                     hashtag: widget.argument.hashtag,
                     fromRoute: widget.argument.fromRoute,
                     scrollController: _scrollController,
+                    tab: heightTab,
                   ))
             ],
           ),
