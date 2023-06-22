@@ -36,12 +36,15 @@ class _BannerPopState extends State<BannerPop> {
       fit: StackFit.loose,
       children: [
         Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
-              height: size.width * 0.92,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: Colors.amber,
+              ),
+              height: size.width + 100,
               width: size.width * 0.92,
               child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
                 // return Container(
@@ -112,7 +115,8 @@ class _BannerPopState extends State<BannerPop> {
             ),
           ),
         ),
-        Positioned.fill(
+        Positioned(
+          bottom: 10,
           child: Align(
             alignment: Alignment.bottomCenter,
             child: Row(
@@ -132,6 +136,26 @@ class _BannerPopState extends State<BannerPop> {
             ),
           ),
         ),
+        // Positioned.fill(
+        //   child: Align(
+        //     alignment: Alignment.bottomCenter,
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       children: imgList.asMap().entries.map((entry) {
+        //         return GestureDetector(
+        //           onTap: () => _controller.animateToPage(entry.key),
+        //           child: Container(
+        //             width: 12.0,
+        //             height: 12.0,
+        //             margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+        //             decoration:
+        //                 BoxDecoration(shape: BoxShape.circle, color: (Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black).withOpacity(_current == entry.key ? 0.9 : 0.4)),
+        //           ),
+        //         );
+        //       }).toList(),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

@@ -419,23 +419,6 @@ class ShowGeneralDialog {
             contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
             backgroundColor: Colors.transparent,
             insetPadding: EdgeInsets.symmetric(horizontal: SizeConfig.screenWidth! * 0.08),
-            // static showToastAlert(BuildContext context, String message, Future<dynamic> Function() onDismiss) async {
-            //   await showGeneralDialog(
-            //     context: context,
-            //     barrierLabel: 'Barrier',
-            //     barrierDismissible: true,
-            //     barrierColor: Colors.white.withOpacity(0),
-            //     transitionDuration: const Duration(milliseconds: 500),
-            //     pageBuilder: (context, animation, secondAnimation) => ToastAlert(
-            //       message: message,
-            //       onTap: onDismiss,
-            //     ),
-            //     transitionBuilder: (context, animation, secondaryAnimation, child) {
-            //       animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
-            //       return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
-            //     },
-            //   );
-            // }
           )),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         animation = CurvedAnimation(curve: Curves.ease, parent: animation);

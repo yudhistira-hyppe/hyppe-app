@@ -909,6 +909,8 @@ class LocalizationModelV2 {
   String? captureYourMoment;
   String? howAreYouToday;
   String? shareWithUsYourCreatifity;
+  String? comeOnJoinTheInterestingCompetition;
+  String? otherCompetitions;
 
   LocalizationModelV2({
     this.login,
@@ -1821,6 +1823,8 @@ class LocalizationModelV2 {
     this.captureYourMoment,
     this.howAreYouToday,
     this.shareWithUsYourCreatifity,
+    this.comeOnJoinTheInterestingCompetition,
+    this.otherCompetitions,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2752,5 +2756,7 @@ class LocalizationModelV2 {
     captureYourMoment = json['captureYourMoment'];
     howAreYouToday = json['howAreYouToday'];
     shareWithUsYourCreatifity = json['shareWithUsYourCreatifity'];
+    comeOnJoinTheInterestingCompetition = json['comeOnJoinTheInterestingCompetition'];
+    otherCompetitions = json['otherCompetitions'];
   }
 }
