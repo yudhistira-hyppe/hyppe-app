@@ -255,7 +255,7 @@ class OtherProfileNotifier with ChangeNotifier {
     }
   }
 
-  initialOtherProfile(BuildContext context, {OtherProfileArgument? argument, bool refresh = false}) async {
+  Future initialOtherProfile(BuildContext context, {OtherProfileArgument? argument, bool refresh = false}) async {
     // pageIndex = 0;
     final connect = await _system.checkConnections();
     if (!connect) {
@@ -263,6 +263,7 @@ class OtherProfileNotifier with ChangeNotifier {
       notifyListeners();
     } else {
       isConnect = true;
+      isConnectContent = true;
       notifyListeners();
     }
     // user = UserInfoModel();

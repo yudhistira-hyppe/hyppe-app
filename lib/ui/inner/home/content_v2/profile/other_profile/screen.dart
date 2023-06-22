@@ -55,9 +55,10 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
     final notifier = Provider.of<OtherProfileNotifier>(context, listen: false);
     final sn = Provider.of<PreviewStoriesNotifier>(context, listen: false);
     notifier.user.profile = null;
+    isloading = true;
     Future.delayed(Duration.zero, () async {
       notifier.pageIndex = 0;
-      await notifier.initialOtherProfile(context, argument: widget.arguments);
+      await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
       userData = notifier.user;
       otherStoryGroup = sn.otherStoryGroup;
     });
