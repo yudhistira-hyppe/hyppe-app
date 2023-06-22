@@ -1623,17 +1623,11 @@ class System {
   }
 
   void checkMemory() {
-    ImageCache _imageCache = PaintingBinding.instance.imageCache;
-    print("*******");
-    print(_imageCache.currentSizeBytes);
-    print(55 << 20);
-    print(_imageCache.currentSizeBytes >= 55 << 20);
-    print(_imageCache.currentSize);
-    print(_imageCache.maximumSize);
-    // if (_imageCache.currentSizeBytes >= 55 << 20 || _imageCache.currentSize >= _imageCache.maximumSize) {
-    _imageCache.clear();
-    _imageCache.clearLiveImages();
-    // }
+    ImageCache imageCache = PaintingBinding.instance.imageCache;
+    if (imageCache.liveImageCount >= 50) {
+      imageCache.clear();
+      imageCache.clearLiveImages();
+    }
   }
 
   double scrollAuto(int index, double heightProfileCard, int heightBox) {

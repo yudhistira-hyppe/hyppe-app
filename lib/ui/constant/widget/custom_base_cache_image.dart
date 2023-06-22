@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
@@ -45,69 +46,68 @@ class CustomBaseCacheImage extends StatelessWidget {
   Widget build(BuildContext context) {
     // System().checkMemory();
     SizeConfig().init(context);
-    if ((imageUrl ?? '').isNotEmpty || (imageUrl ?? '').isUrlLink()) {
-      return CachedNetworkImage(
-        cacheKey: cacheKey, // "$imageUrl${DateTime.now().minute}",
-        imageUrl: "$imageUrl",
-        httpHeaders: headers,
-        errorWidget: errorWidget,
-        imageBuilder: imageBuilder,
-        memCacheWidth: memCacheWidth,
-        memCacheHeight: memCacheHeight,
-        // maxHeightDiskCache: 600,
-        // maxWidthDiskCache: 600,
-        // filterQuality: FilterQuality.none,
-        // cacheManager: CacheManager(Config(
-        //   'keyImage',
-        //   stalePeriod: const Duration(days: 7),
-        //   //one week cache period
-        // )),
-        placeholder: (context, url) =>
-            placeHolderWidget ??
-            UnconstrainedBox(
-              child: Container(
-                alignment: Alignment.center,
-                child: const CustomLoading(),
-                width: widthPlaceHolder * SizeConfig.scaleDiagonal,
-                height: heightPlaceHolder * SizeConfig.scaleDiagonal,
-              ),
-            ),
-      );
-    } else {
-      return emptyWidget;
-    }
-
     // if ((imageUrl ?? '').isNotEmpty || (imageUrl ?? '').isUrlLink()) {
-    //   return (imageUrl ?? '').isNotEmpty
-    //       ? OptimizedCacheImage(
-    //           imageUrl: "$imageUrl",
-    //           memCacheHeight: memCacheHeight,
-    //           memCacheWidth: memCacheWidth,
-    //           imageBuilder: imageBuilder,
-
-    //           filterQuality: FilterQuality.none,
-    //           cacheManager: CacheManager(Config(
-    //             'keyImage',
-    //             stalePeriod: const Duration(days: 7),
-    //             //one week cache period
-    //           )),
-    //           // maxHeightDiskCache: 500,
-    //           // maxWidthDiskCache: 500,
-    //           errorWidget: errorWidget,
-    //           placeholder: (context, url) =>
-    //               placeHolderWidget ??
-    //               UnconstrainedBox(
-    //                 child: Container(
-    //                   alignment: Alignment.center,
-    //                   width: widthPlaceHolder * SizeConfig.scaleDiagonal,
-    //                   height: heightPlaceHolder * SizeConfig.scaleDiagonal,
-    //                   child: const CustomLoading(),
-    //                 ),
-    //               ),
-    //         )
-    //       : emptyWidget;
+    //   return CachedNetworkImage(
+    //     cacheKey: cacheKey, // "$imageUrl${DateTime.now().minute}",
+    //     imageUrl: "$imageUrl",
+    //     httpHeaders: headers,
+    //     errorWidget: errorWidget,
+    //     imageBuilder: imageBuilder,
+    //     memCacheWidth: memCacheWidth,
+    //     memCacheHeight: memCacheHeight,
+    //     // maxHeightDiskCache: 600,
+    //     // maxWidthDiskCache: 600,
+    //     // filterQuality: FilterQuality.none,
+    //     // cacheManager: CacheManager(Config(
+    //     //   'keyImage',
+    //     //   stalePeriod: const Duration(days: 7),
+    //     //   //one week cache period
+    //     // )),
+    //     placeholder: (context, url) =>
+    //         placeHolderWidget ??
+    //         UnconstrainedBox(
+    //           child: Container(
+    //             alignment: Alignment.center,
+    //             child: const CustomLoading(),
+    //             width: widthPlaceHolder * SizeConfig.scaleDiagonal,
+    //             height: heightPlaceHolder * SizeConfig.scaleDiagonal,
+    //           ),
+    //         ),
+    //   );
     // } else {
     //   return emptyWidget;
     // }
+
+    if ((imageUrl ?? '').isNotEmpty || (imageUrl ?? '').isUrlLink()) {
+      return (imageUrl ?? '').isNotEmpty
+          ? OptimizedCacheImage(
+              imageUrl: "$imageUrl",
+              memCacheHeight: 60,
+              memCacheWidth: 45,
+              imageBuilder: imageBuilder,
+              // filterQuality: FilterQuality.none,
+              // cacheManager: CacheManager(Config(
+              //   'keyImage',
+              //   stalePeriod: const Duration(days: 7),
+              //   //one week cache period
+              // )),
+              // maxHeightDiskCache: 500,
+              // maxWidthDiskCache: 500,
+              errorWidget: errorWidget,
+              placeholder: (context, url) =>
+                  placeHolderWidget ??
+                  UnconstrainedBox(
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: widthPlaceHolder * SizeConfig.scaleDiagonal,
+                      height: heightPlaceHolder * SizeConfig.scaleDiagonal,
+                      child: const CustomLoading(),
+                    ),
+                  ),
+            )
+          : emptyWidget;
+    } else {
+      return emptyWidget;
+    }
   }
 }

@@ -42,10 +42,9 @@ class _BannerPopState extends State<BannerPop> {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.0),
-                color: Colors.amber,
               ),
-              height: size.width + 100,
-              width: size.width * 0.92,
+              height: size.width + 16,
+              width: size.width,
               child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
                 // return Container(
                 //   width: size.width,
@@ -60,12 +59,11 @@ class _BannerPopState extends State<BannerPop> {
                 // );
                 return Container(
                   width: size.width,
-                  margin: EdgeInsets.all(12),
                   height: constraints.maxHeight,
+                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                   child: CarouselSlider(
                     options: CarouselOptions(
                         // height: 300
-
                         enlargeCenterPage: false,
                         viewportFraction: 1.0,
                         aspectRatio: 1 / 1,
@@ -83,6 +81,25 @@ class _BannerPopState extends State<BannerPop> {
                                 item,
                                 height: constraints.maxHeight,
                                 fit: BoxFit.cover,
+                                loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                    child: Container(
+                                      height: SizeConfig.screenHeight,
+                                      width: SizeConfig.screenWidth,
+                                      color: Colors.black,
+                                      child: UnconstrainedBox(
+                                        child: Container(
+                                          height: 50,
+                                          width: 50,
+                                          child: CircularProgressIndicator(
+                                              // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
                               )),
                             ))
                         .toList(),
@@ -115,8 +132,7 @@ class _BannerPopState extends State<BannerPop> {
             ),
           ),
         ),
-        Positioned(
-          bottom: 10,
+        Positioned.fill(
           child: Align(
             alignment: Alignment.bottomCenter,
             child: Row(
@@ -125,11 +141,10 @@ class _BannerPopState extends State<BannerPop> {
                 return GestureDetector(
                   onTap: () => _controller.animateToPage(entry.key),
                   child: Container(
-                    width: 12.0,
-                    height: 12.0,
-                    margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-                    decoration:
-                        BoxDecoration(shape: BoxShape.circle, color: (Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black).withOpacity(_current == entry.key ? 0.9 : 0.4)),
+                    width: _current == entry.key ? 12 : 6.0,
+                    height: 6.0,
+                    margin: const EdgeInsets.only(top: 20, left: 4, right: 4),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: (_current == entry.key ? kHyppePrimary : Color(0xffcecece))),
                   ),
                 );
               }).toList(),
