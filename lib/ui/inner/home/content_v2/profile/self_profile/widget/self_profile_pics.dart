@@ -74,6 +74,7 @@ class SelfProfilePics extends StatelessWidget {
                                             child: CustomContentModeratedWidget(
                                               width: double.infinity,
                                               height: double.infinity,
+
                                               isSale: false,
                                               isSafe: true, //notifier.postData.data.listPic[index].isSafe,
                                               thumbnail: ImageUrl(notifier.user.pics?[index].postID,

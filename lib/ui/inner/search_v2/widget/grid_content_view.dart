@@ -21,14 +21,7 @@ class GridContentView extends StatefulWidget {
   bool isLoading;
   String keyword;
   TypeApiSearch api;
-  GridContentView(
-      {Key? key,
-      required this.type,
-      required this.data,
-      required this.isLoading,
-      required this.keyword,
-      required this.api})
-      : super(key: key);
+  GridContentView({Key? key, required this.type, required this.data, required this.isLoading, required this.keyword, required this.api}) : super(key: key);
 
   @override
   State<GridContentView> createState() => _GridContentViewState();
@@ -60,34 +53,22 @@ class _GridContentViewState extends State<GridContentView> {
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
                 crossAxisCount: 3,
-                childAspectRatio:
-                    widget.type == HyppeType.HyppeDiary ? 0.67 : 1.0,
+                childAspectRatio: widget.type == HyppeType.HyppeDiary ? 0.67 : 1.0,
                 children: List.generate(widget.data.length, (index) {
                   final dataitem = widget.data[index];
-                  String thumb =
-                      System().showUserPicture(dataitem.mediaThumbEndPoint) ??
-                          '';
+                  String thumb = System().showUserPicture(dataitem.mediaThumbEndPoint) ?? '';
                   if (widget.type == HyppeType.HyppePic) {
                     final imageInfo = dataitem.media?.imageInfo;
                     if (imageInfo.isNotNullAndEmpty()) {
                       thumb = (dataitem.isApsara ?? false)
-                          ? (imageInfo?[0].url ??
-                              (dataitem.apsaraThumbId != null
-                                  ? (dataitem.mediaThumbEndPoint ?? '')
-                                  : (dataitem.mediaEndpoint ?? '')))
-                          : System().showUserPicture(
-                                  dataitem.mediaThumbEndPoint) ??
-                              '';
+                          ? (imageInfo?[0].url ?? (dataitem.apsaraThumbId != null ? (dataitem.mediaThumbEndPoint ?? '') : (dataitem.mediaEndpoint ?? '')))
+                          : System().showUserPicture(dataitem.mediaThumbEndPoint) ?? '';
                     }
                   } else {
                     final imageInfo = dataitem.media?.videoList;
                     if (imageInfo.isNotNullAndEmpty()) {
-                      thumb = (dataitem.isApsara ?? false)
-                          ? (dataitem.media?.videoList?[0].coverURL ??
-                              (dataitem.mediaThumbEndPoint ?? ''))
-                          : System().showUserPicture(
-                                  dataitem.mediaThumbEndPoint) ??
-                              '';
+                      thumb =
+                          (dataitem.isApsara ?? false) ? (dataitem.media?.videoList?[0].coverURL ?? (dataitem.mediaThumbEndPoint ?? '')) : System().showUserPicture(dataitem.mediaThumbEndPoint) ?? '';
                     }
                   }
                   // print('GridContentView URL Image: $thumb');
@@ -96,21 +77,11 @@ class _GridContentViewState extends State<GridContentView> {
                     case HyppeType.HyppePic:
                       return GestureDetector(
                         onTap: () {
-                          context
-                              .read<SearchNotifier>()
-                              .navigateToSeeAllScreen4(
-                                  context,
-                                  widget.data,
-                                  index,
-                                  widget.type,
-                                  widget.api,
-                                  widget.keyword,
-                                  pageSrc);
+                          context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc);
                         },
                         child: Padding(
                           padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                          child: dataitem.reportedStatus == 'BLURRED' ||
-                                  dataitem.reportedStatus == 'OWNED'
+                          child: dataitem.reportedStatus == 'BLURRED' || dataitem.reportedStatus == 'OWNED'
                               ? SensitiveContentProfile(data: dataitem)
                               : Stack(
                                   children: [
@@ -118,18 +89,16 @@ class _GridContentViewState extends State<GridContentView> {
                                       child: CustomContentModeratedWidget(
                                           width: double.infinity,
                                           height: double.infinity,
+                                          memCacheWidth: 20,
+                                          memCacheHeight: 20,
                                           isSale: false,
-                                          isSafe:
-                                              true, //notifier.postData.data.listPic[index].isSafe,
-                                          thumbnail: ImageUrl(dataitem.postID,
-                                              url: thumb),
+                                          isSafe: true, //notifier.postData.data.listPic[index].isSafe,
+                                          thumbnail: ImageUrl(dataitem.postID, url: thumb),
                                           placeHolder: UnconstrainedBox(
                                             child: Container(
                                               alignment: Alignment.center,
-                                              width:
-                                                  35 * SizeConfig.scaleDiagonal,
-                                              height:
-                                                  35 * SizeConfig.scaleDiagonal,
+                                              width: 35 * SizeConfig.scaleDiagonal,
+                                              height: 35 * SizeConfig.scaleDiagonal,
                                               child: const CustomLoading(),
                                             ),
                                           )),
@@ -141,30 +110,23 @@ class _GridContentViewState extends State<GridContentView> {
                                         ? const Align(
                                             alignment: Alignment.topRight,
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(4.0),
+                                              padding: const EdgeInsets.all(4.0),
                                               child: CustomIconWidget(
-                                                iconData:
-                                                    "${AssetPath.vectorPath}sale.svg",
+                                                iconData: "${AssetPath.vectorPath}sale.svg",
                                                 height: 22,
                                                 defaultColor: false,
                                               ),
                                             ))
                                         : Container(),
-                                    (dataitem.certified ?? false) &&
-                                            (dataitem.saleAmount ?? 0) == 0
+                                    (dataitem.certified ?? false) && (dataitem.saleAmount ?? 0) == 0
                                         ? Align(
                                             alignment: Alignment.topRight,
                                             child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(2.0),
+                                                padding: const EdgeInsets.all(2.0),
                                                 child: Container(
-                                                    padding:
-                                                        const EdgeInsets.all(4),
-                                                    child:
-                                                        const CustomIconWidget(
-                                                      iconData:
-                                                          '${AssetPath.vectorPath}ownership.svg',
+                                                    padding: const EdgeInsets.all(4),
+                                                    child: const CustomIconWidget(
+                                                      iconData: '${AssetPath.vectorPath}ownership.svg',
                                                       defaultColor: false,
                                                     ))))
                                         : Container()
@@ -175,41 +137,29 @@ class _GridContentViewState extends State<GridContentView> {
                     case HyppeType.HyppeDiary:
                       return GestureDetector(
                         onTap: () {
-                          context
-                              .read<SearchNotifier>()
-                              .navigateToSeeAllScreen4(
-                                  context,
-                                  widget.data,
-                                  index,
-                                  widget.type,
-                                  widget.api,
-                                  widget.keyword,
-                                  pageSrc);
+                          context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc);
                         },
                         child: Padding(
                           padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                          child: dataitem.reportedStatus == 'BLURRED' ||
-                                  dataitem.reportedStatus == 'OWNED'
+                          child: dataitem.reportedStatus == 'BLURRED' || dataitem.reportedStatus == 'OWNED'
                               ? SensitiveContentProfile(data: dataitem)
                               : Stack(
                                   children: [
                                     Center(
                                       child: CustomContentModeratedWidget(
+                                          memCacheWidth: 20,
+                                          memCacheHeight: 20,
                                           width: double.infinity,
                                           height: double.infinity,
                                           featureType: FeatureType.diary,
                                           isSale: false,
-                                          isSafe:
-                                              true, //notifier.postData.data.listVid[index].isSafe,
-                                          thumbnail: ImageUrl(dataitem.postID,
-                                              url: thumb),
+                                          isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                                          thumbnail: ImageUrl(dataitem.postID, url: thumb),
                                           placeHolder: UnconstrainedBox(
                                             child: Container(
                                               alignment: Alignment.center,
-                                              width:
-                                                  35 * SizeConfig.scaleDiagonal,
-                                              height:
-                                                  35 * SizeConfig.scaleDiagonal,
+                                              width: 35 * SizeConfig.scaleDiagonal,
+                                              height: 35 * SizeConfig.scaleDiagonal,
                                               child: const CustomLoading(),
                                             ),
                                           )),
@@ -218,30 +168,23 @@ class _GridContentViewState extends State<GridContentView> {
                                         ? const Align(
                                             alignment: Alignment.topRight,
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(4.0),
+                                              padding: const EdgeInsets.all(4.0),
                                               child: CustomIconWidget(
-                                                iconData:
-                                                    "${AssetPath.vectorPath}sale.svg",
+                                                iconData: "${AssetPath.vectorPath}sale.svg",
                                                 height: 22,
                                                 defaultColor: false,
                                               ),
                                             ))
                                         : Container(),
-                                    (dataitem.certified ?? false) &&
-                                            (dataitem.saleAmount ?? 0) == 0
+                                    (dataitem.certified ?? false) && (dataitem.saleAmount ?? 0) == 0
                                         ? Align(
                                             alignment: Alignment.topRight,
                                             child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(2.0),
+                                                padding: const EdgeInsets.all(2.0),
                                                 child: Container(
-                                                    padding:
-                                                        const EdgeInsets.all(4),
-                                                    child:
-                                                        const CustomIconWidget(
-                                                      iconData:
-                                                          '${AssetPath.vectorPath}ownership.svg',
+                                                    padding: const EdgeInsets.all(4),
+                                                    child: const CustomIconWidget(
+                                                      iconData: '${AssetPath.vectorPath}ownership.svg',
                                                       defaultColor: false,
                                                     ))))
                                         : Container()
@@ -252,41 +195,29 @@ class _GridContentViewState extends State<GridContentView> {
                     case HyppeType.HyppeVid:
                       return GestureDetector(
                         onTap: () {
-                          context
-                              .read<SearchNotifier>()
-                              .navigateToSeeAllScreen4(
-                                  context,
-                                  widget.data,
-                                  index,
-                                  widget.type,
-                                  widget.api,
-                                  widget.keyword,
-                                  pageSrc);
+                          context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc);
                         },
                         child: Padding(
                           padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                          child: dataitem.reportedStatus == 'BLURRED' ||
-                                  dataitem.reportedStatus == 'OWNED'
+                          child: dataitem.reportedStatus == 'BLURRED' || dataitem.reportedStatus == 'OWNED'
                               ? SensitiveContentProfile(data: dataitem)
                               : Stack(
                                   children: [
                                     Center(
                                       child: CustomContentModeratedWidget(
+                                          memCacheWidth: 20,
+                                          memCacheHeight: 20,
                                           width: double.infinity,
                                           height: double.infinity,
                                           featureType: FeatureType.vid,
                                           isSale: false,
-                                          isSafe:
-                                              true, //notifier.postData.data.listVid[index].isSafe,
-                                          thumbnail: ImageUrl(dataitem.postID,
-                                              url: thumb),
+                                          isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                                          thumbnail: ImageUrl(dataitem.postID, url: thumb),
                                           placeHolder: UnconstrainedBox(
                                             child: Container(
                                               alignment: Alignment.center,
-                                              width:
-                                                  35 * SizeConfig.scaleDiagonal,
-                                              height:
-                                                  35 * SizeConfig.scaleDiagonal,
+                                              width: 35 * SizeConfig.scaleDiagonal,
+                                              height: 35 * SizeConfig.scaleDiagonal,
                                               child: const CustomLoading(),
                                             ),
                                           )),
@@ -298,30 +229,23 @@ class _GridContentViewState extends State<GridContentView> {
                                         ? const Align(
                                             alignment: Alignment.topRight,
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(4.0),
+                                              padding: const EdgeInsets.all(4.0),
                                               child: CustomIconWidget(
-                                                iconData:
-                                                    "${AssetPath.vectorPath}sale.svg",
+                                                iconData: "${AssetPath.vectorPath}sale.svg",
                                                 height: 22,
                                                 defaultColor: false,
                                               ),
                                             ))
                                         : Container(),
-                                    (dataitem.certified ?? false) &&
-                                            (dataitem.saleAmount ?? 0) == 0
+                                    (dataitem.certified ?? false) && (dataitem.saleAmount ?? 0) == 0
                                         ? Align(
                                             alignment: Alignment.topRight,
                                             child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(2.0),
+                                                padding: const EdgeInsets.all(2.0),
                                                 child: Container(
-                                                    padding:
-                                                        const EdgeInsets.all(4),
-                                                    child:
-                                                        const CustomIconWidget(
-                                                      iconData:
-                                                          '${AssetPath.vectorPath}ownership.svg',
+                                                    padding: const EdgeInsets.all(4),
+                                                    child: const CustomIconWidget(
+                                                      iconData: '${AssetPath.vectorPath}ownership.svg',
                                                       defaultColor: false,
                                                     ))))
                                         : Container()
@@ -336,11 +260,7 @@ class _GridContentViewState extends State<GridContentView> {
             SliverToBoxAdapter(
               child: Builder(builder: (context) {
                 if (widget.isLoading) {
-                  return Container(
-                      width: double.infinity,
-                      height: 50,
-                      alignment: Alignment.center,
-                      child: const CustomLoading());
+                  return Container(width: double.infinity, height: 50, alignment: Alignment.center, child: const CustomLoading());
                 } else {
                   return const SizedBox.shrink();
                 }

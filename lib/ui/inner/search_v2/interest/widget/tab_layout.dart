@@ -27,8 +27,7 @@ class InterestTabLayout extends StatefulWidget {
   State<InterestTabLayout> createState() => _InterestTabLayoutState();
 }
 
-class _InterestTabLayoutState extends State<InterestTabLayout>
-    with AfterFirstLayoutMixin {
+class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLayoutMixin {
   HyppeType currentType = HyppeType.HyppeVid;
   // final _scrollController = ScrollController();
   final ScrollController scrollController = ScrollController();
@@ -41,13 +40,11 @@ class _InterestTabLayoutState extends State<InterestTabLayout>
     super.initState();
     scrollController.addListener(() {
       print(scrollController.position.maxScrollExtent);
-      if (scrollController.offset >=
-          (scrollController.position.maxScrollExtent)) {
+      if (scrollController.offset >= (scrollController.position.maxScrollExtent)) {
         final fixContext = Routing.navigatorKey.currentContext ?? context;
         final notifier = fixContext.read<SearchNotifier>();
         final key = widget.interest.id ?? '';
-        notifier.getDetailInterest(fixContext, key,
-            reload: false, hyppe: currentType);
+        notifier.getDetailInterest(fixContext, key, reload: false, hyppe: currentType);
 
         // final key = widget.interest.id;
         // final lenghtVid = notifier.interestContents[key]?.vid?.length ?? 0;
@@ -73,11 +70,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout>
 
   @override
   Widget build(BuildContext context) {
-    final listTab = [
-      HyppeType.HyppePic,
-      HyppeType.HyppeDiary,
-      HyppeType.HyppeVid
-    ];
+    final listTab = [HyppeType.HyppePic, HyppeType.HyppeDiary, HyppeType.HyppeVid];
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final data = notifier.interestContents[widget.interest.id];
       print('size pic (${widget.interest.id}): ${data?.pict?.length}');
@@ -89,8 +82,9 @@ class _InterestTabLayoutState extends State<InterestTabLayout>
               },
             )
           : !notifier.loadIntDetail
-              ? Container(color: context.getColorScheme().surface,
-                child: Column(
+              ? Container(
+                  color: context.getColorScheme().surface,
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -109,52 +103,28 @@ class _InterestTabLayoutState extends State<InterestTabLayout>
                                     child: Ink(
                                       height: 36,
                                       decoration: BoxDecoration(
-                                        color: isActive
-                                            ? context.getColorScheme().primary
-                                            : context
-                                                .getColorScheme()
-                                                .background,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(18)),
+                                        color: isActive ? context.getColorScheme().primary : context.getColorScheme().background,
+                                        borderRadius: const BorderRadius.all(Radius.circular(18)),
                                       ),
                                       child: InkWell(
                                         onTap: () {
                                           setState(() {
                                             currentType = e;
-                                            scrollController
-                                              ..animateTo(0,
-                                                  duration: Duration(
-                                                      milliseconds: 70),
-                                                  curve: Curves.fastOutSlowIn);
+                                            scrollController..animateTo(0, duration: Duration(milliseconds: 70), curve: Curves.fastOutSlowIn);
                                           });
                                         },
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(18)),
-                                        splashColor:
-                                            context.getColorScheme().primary,
+                                        borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                        splashColor: context.getColorScheme().primary,
                                         child: Container(
                                           alignment: Alignment.center,
                                           height: 36,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 16),
+                                          padding: const EdgeInsets.symmetric(horizontal: 16),
                                           decoration: const BoxDecoration(
-                                              borderRadius:
-                                              BorderRadius.all(
-                                                      Radius.circular(18)),),
+                                            borderRadius: BorderRadius.all(Radius.circular(18)),
+                                          ),
                                           child: CustomTextWidget(
-                                            textToDisplay:
-                                                System().getTitleHyppe(e),
-                                            textStyle: context
-                                                .getTextTheme()
-                                                .bodyText2
-                                                ?.copyWith(
-                                                    color: isActive
-                                                        ? context
-                                                            .getColorScheme()
-                                                            .background
-                                                        : context
-                                                            .getColorScheme()
-                                                            .secondary),
+                                            textToDisplay: System().getTitleHyppe(e),
+                                            textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
                                           ),
                                         ),
                                       ),
@@ -166,8 +136,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout>
                         child: RefreshIndicator(
                           strokeWidth: 2.0,
                           color: context.getColorScheme().primary,
-                          onRefresh: () => notifier.getDetailInterest(
-                              context, widget.interest.id ?? ''),
+                          onRefresh: () => notifier.getDetailInterest(context, widget.interest.id ?? ''),
                           child: SingleChildScrollView(
                             controller: scrollController,
                             physics: const ClampingScrollPhysics(),
@@ -186,26 +155,17 @@ class _InterestTabLayoutState extends State<InterestTabLayout>
                                                 keyword: widget.interest.id ?? '',
                                                 api: TypeApiSearch.detailInterest,
                                               )
-                                            : SearchNoResultImage(
-                                                locale: notifier.language,
-                                                keyword: widget
-                                                        .interest.interestName ??
-                                                    '');
+                                            : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                                       case HyppeType.HyppeDiary:
                                         return data.diary.isNotNullAndEmpty()
                                             ? GridContentView(
                                                 type: type,
                                                 data: data.diary ?? [],
-                                                isLoading:
-                                                    notifier.isHasNextDiary,
+                                                isLoading: notifier.isHasNextDiary,
                                                 keyword: widget.interest.id ?? '',
                                                 api: TypeApiSearch.detailInterest,
                                               )
-                                            : SearchNoResultImage(
-                                                locale: notifier.language,
-                                                keyword: widget
-                                                        .interest.interestName ??
-                                                    '');
+                                            : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                                       case HyppeType.HyppePic:
                                         return data.pict.isNotNullAndEmpty()
                                             ? GridContentView(
@@ -215,17 +175,10 @@ class _InterestTabLayoutState extends State<InterestTabLayout>
                                                 keyword: widget.interest.id ?? '',
                                                 api: TypeApiSearch.detailInterest,
                                               )
-                                            : SearchNoResultImage(
-                                                locale: notifier.language,
-                                                keyword: widget
-                                                        .interest.interestName ??
-                                                    '');
+                                            : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                                     }
                                   } else {
-                                    return SearchNoResultImage(
-                                        locale: notifier.language,
-                                        keyword:
-                                            widget.interest.interestName ?? '');
+                                    return SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                                   }
                                 }),
                                 fortyPx
@@ -236,7 +189,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout>
                       )
                     ],
                   ),
-              )
+                )
               : const AllSearchShimmer();
     });
   }
