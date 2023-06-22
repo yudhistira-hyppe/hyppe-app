@@ -100,7 +100,7 @@ class OtherProfileNotifier with ChangeNotifier {
   List<UserInfoModel> _manyUser = [];
   List<UserInfoModel> get manyUser => _manyUser;
 
-  set manyUser(val) {
+  set manyUser(List<UserInfoModel> val) {
     _manyUser = val;
     notifyListeners();
   }
