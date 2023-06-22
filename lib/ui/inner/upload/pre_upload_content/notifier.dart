@@ -1217,7 +1217,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   Future inserTagPeople(int index) async {
     if (_searchPeolpleData.isNotEmpty) {
-      String tile = searchPeolpleData[index].username ?? '';
+      String tile = searchTagPeolpleData[index].username ?? '';
       if (_userTagData.contains(tile)) {
         showSnackBar(
           icon: "info-icon.svg",
@@ -1227,7 +1227,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       } else {
         _userTagData.add(tile);
         _userTagDataReal.add(
-          TagPeople(username: tile, avatar: searchPeolpleData[index].avatar, email: searchPeolpleData[index].email, status: 'FOLLOWING'),
+          TagPeople(username: tile, avatar: searchTagPeolpleData[index].avatar, email: searchTagPeolpleData[index].email, status: 'FOLLOWING'),
         );
 
         notifyListeners();
