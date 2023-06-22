@@ -186,17 +186,20 @@ class _AllSearchContentState extends State<AllSearchContent> {
                     return fixPic.isNotNullAndEmpty() ? GridContentView(type: type, data: fixPic ?? [],
                       isLoading: false,
                       keyword: widget.keyword,
-                      api: TypeApiSearch.normal,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,);
+                      api: TypeApiSearch.normal,
+                      controller: _scrollController,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,);
                   case HyppeType.HyppeDiary:
                     return fixDiary.isNotNullAndEmpty() ? GridContentView(type: type, data: fixDiary ?? [],
                       isLoading: false,
                       keyword: widget.keyword,
-                      api: TypeApiSearch.normal,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                      api: TypeApiSearch.normal,
+                      controller: _scrollController,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
                   case HyppeType.HyppeVid:
                     return fixVid.isNotNullAndEmpty() ? GridContentView(type: type, data: fixVid ?? [],
                       isLoading: false,
                       keyword: widget.keyword,
-                      api: TypeApiSearch.normal,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                      api: TypeApiSearch.normal,
+                      controller: _scrollController,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
                 }
               }
           )

@@ -98,7 +98,7 @@ class _BottomDetailState extends State<BottomDetail> {
                   controller: widget.scrollController,
                   scrollDirection: Axis.vertical,
                   physics: const AlwaysScrollableScrollPhysics(),
-                  slivers: notifier.getGridHashtag(widget.hashtag.tag ?? '-', widget.fromRoute),
+                  slivers: notifier.getGridHashtag(widget.hashtag.tag ?? '-', widget.fromRoute, widget.scrollController),
                 ),
               ),
             )

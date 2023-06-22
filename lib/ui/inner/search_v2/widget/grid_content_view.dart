@@ -21,7 +21,8 @@ class GridContentView extends StatefulWidget {
   bool isLoading;
   String keyword;
   TypeApiSearch api;
-  GridContentView({Key? key, required this.type, required this.data, required this.isLoading, required this.keyword, required this.api}) : super(key: key);
+  ScrollController controller;
+  GridContentView({Key? key, required this.type, required this.data, required this.isLoading, required this.keyword, required this.api, required this.controller}) : super(key: key);
 
   @override
   State<GridContentView> createState() => _GridContentViewState();
@@ -77,7 +78,7 @@ class _GridContentViewState extends State<GridContentView> {
                     case HyppeType.HyppePic:
                       return GestureDetector(
                         onTap: () {
-                          context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc);
+                          context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc, widget.controller);
                         },
                         child: Padding(
                           padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
@@ -137,7 +138,7 @@ class _GridContentViewState extends State<GridContentView> {
                     case HyppeType.HyppeDiary:
                       return GestureDetector(
                         onTap: () {
-                          context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc);
+                          context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc, widget.controller);
                         },
                         child: Padding(
                           padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
@@ -195,7 +196,7 @@ class _GridContentViewState extends State<GridContentView> {
                     case HyppeType.HyppeVid:
                       return GestureDetector(
                         onTap: () {
-                          context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc);
+                          context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc, widget.controller);
                         },
                         child: Padding(
                           padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
