@@ -929,16 +929,16 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                                         width: SizeConfig.screenWidth,
                                                       ),
                                               ),
-                                              emptyWidget: Container(
-                                                // const EdgeInsets.symmetric(horizontal: 4.5),
-                                                // height: 500,
-                                                decoration: BoxDecoration(
-                                                  image: const DecorationImage(
-                                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                  borderRadius: BorderRadius.circular(8.0),
-                                                ),
+                                              emptyWidget: GestureDetector(
+                                                onTap: () {
+                                                  _networklHasErrorNotifier.value++;
+                                                },
+                                                child: Container(
+                                                    decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                                    width: SizeConfig.screenWidth,
+                                                    height: 250,
+                                                    alignment: Alignment.center,
+                                                    child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
                                               ),
                                               errorWidget: (context, url, error) {
                                                 return GestureDetector(

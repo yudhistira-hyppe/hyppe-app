@@ -337,6 +337,7 @@ class OtherProfileNotifier with ChangeNotifier {
     if (!connect) {
       isConnectContent = false;
       notifyListeners();
+      return;
     } else {
       isConnectContent = true;
       notifyListeners();

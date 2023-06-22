@@ -859,29 +859,28 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                         ),
                                       ),
                                 errorWidget: (context, url, error) {
-                                  return Container(
-                                    // const EdgeInsets.symmetric(horizontal: 4.5),
-                                    height: 500,
-                                    decoration: BoxDecoration(
-                                      image: const DecorationImage(
-                                        image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
+                                  return GestureDetector(
+                                    onTap: () {
+                                      notifier.checkConnection();
+                                    },
+                                    child: Container(
+                                        decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                        width: SizeConfig.screenWidth,
+                                        height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                        alignment: Alignment.center,
+                                        child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo ?? 'Error')),
                                   );
                                 },
-                                emptyWidget: Container(
-                                  // const EdgeInsets.symmetric(horizontal: 4.5),
-
-                                  height: 500,
-                                  decoration: BoxDecoration(
-                                    image: const DecorationImage(
-                                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                      fit: BoxFit.cover,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
+                                emptyWidget: GestureDetector(
+                                  onTap: () {
+                                    notifier.checkConnection();
+                                  },
+                                  child: Container(
+                                      decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                      width: SizeConfig.screenWidth,
+                                      height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                      alignment: Alignment.center,
+                                      child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo ?? 'Error')),
                                 ),
                               )
                             : Container(),
