@@ -172,12 +172,7 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
       if (textPainter.didExceedMaxLines) {
         var textSpan = TextSpan(
           style: effectiveTextStyle,
-          children: collectDescItems(
-            context,
-            getDescItems(lastIndex: endIndex, linkLongerThanLine: linkLongerThanLine),
-            spanTrim: link,
-            lastIndex: endIndex
-          ),
+          children: collectDescItems(context, getDescItems(lastIndex: endIndex, linkLongerThanLine: linkLongerThanLine), spanTrim: link, lastIndex: endIndex),
         );
         return Text.rich(
           TextSpan(
@@ -197,8 +192,7 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
       } else {
         var textSpan = TextSpan(
           style: effectiveTextStyle,
-          children: collectDescItems(context,
-              lastIndex: null, getDescItems(lastIndex: null, linkLongerThanLine: linkLongerThanLine)),
+          children: collectDescItems(context, lastIndex: null, getDescItems(lastIndex: null, linkLongerThanLine: linkLongerThanLine)),
         );
         return Text.rich(
           TextSpan(
@@ -231,13 +225,13 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
         }
       } else {
         bool error = false;
-        if(item.type == CaptionType.normal){
+        if (item.type == CaptionType.normal) {
           final lastDesc = item.desc.split(' ').last;
-          if(lastDesc.hasEmoji()){
+          if (lastDesc.hasEmoji()) {
             error = true;
           }
         }
-        print('state $desc $error && $isSeeLess && ${lastIndex != null}');
+        // print('state $desc $error && $isSeeLess && ${lastIndex != null}');
         // final fixdesc = item.desc;
         String fixdesc = '';
         if(error && isSeeLess && lastIndex != null){

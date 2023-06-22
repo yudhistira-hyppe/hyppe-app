@@ -1,8 +1,10 @@
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/entities/camera/widgets/camera_view.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -26,17 +28,18 @@ class CameraPage extends StatefulWidget {
 
 class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, AfterFirstLayoutMixin {
   late CameraNotifier notifier;
+  bool isloading = false;
 
   @override
   void initState() {
-
     super.initState();
   }
 
   @override
-  void afterFirstLayout(BuildContext context) {
+  void afterFirstLayout(BuildContext context) async {
+    isloading = true;
     notifier = Provider.of<CameraNotifier>(context, listen: false);
-    notifier.initCamera(context, mounted, backCamera: widget.backCamera);
+    await notifier.initCamera(context, mounted, backCamera: widget.backCamera).then((value) => isloading = false);
   }
 
   @override
@@ -71,31 +74,39 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
   @override
   Widget build(BuildContext context) {
     final notifier = context.select((CameraNotifier value) => Tuple3(value.isInitialized, value.hasError, value.loadingForObject(CameraNotifier.loadingForSwitching)));
-    return AnimatedSwitcher(
-        duration: const Duration(milliseconds: 200),
-        transitionBuilder: (child, animation) => SlideTransition(
-              child: child,
-              position: Tween<Offset>(begin: const Offset(0.0, 1.0), end: const Offset(0.0, 0.0)).animate(animation),
-            ),
-        child: notifier.item2
-            ? Center(
-                child: SizedBox(
-                  height: 198,
-                  child: CustomErrorWidget(
-                    errorType: null,
-                    function: () => context.read<CameraNotifier>().initCamera(context, mounted),
-                  ),
+    return isloading
+        ? Container(
+            color: Colors.black,
+            height: SizeConfig.screenHeight,
+            width: SizeConfig.screenWidth,
+            child: Center(
+              child: CustomLoading(),
+            ))
+        : AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            transitionBuilder: (child, animation) => SlideTransition(
+                  position: Tween<Offset>(begin: const Offset(0.0, 1.0), end: const Offset(0.0, 0.0)).animate(animation),
+                  child: child,
                 ),
-              )
-            // : notifier.item1 && !notifier.item3
-            // ?
-            : Stack(
-                children: [
-                  const CameraView(),
-                  ...widget.additionalViews,
-                ],
-              )
-        // : const Center(child: CustomLoading()),
-        );
+            child: notifier.item2
+                ? Center(
+                    child: SizedBox(
+                      height: 198,
+                      child: CustomErrorWidget(
+                        errorType: null,
+                        function: () => context.read<CameraNotifier>().initCamera(context, mounted),
+                      ),
+                    ),
+                  )
+                // : notifier.item1 && !notifier.item3
+                // ?
+                : Stack(
+                    children: [
+                      const CameraView(),
+                      ...widget.additionalViews,
+                    ],
+                  )
+            // : const Center(child: CustomLoading()),
+            );
   }
 }
