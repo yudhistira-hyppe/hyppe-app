@@ -28,6 +28,7 @@ import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/page_not_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/delete_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/diary_player.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
@@ -402,6 +403,9 @@ class Generate {
         return MaterialPageRoute(builder: (_) => ScrollDiary(arguments: settings.arguments as SlidedDiaryDetailScreenArgument));
       case Routes.scrollVid:
         return MaterialPageRoute(builder: (_) => ScrollVid(arguments: settings.arguments as SlidedVidDetailScreenArgument));
+
+      case Routes.chalenge:
+        return MaterialPageRoute(builder: (_) => const ChalangeScreen());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

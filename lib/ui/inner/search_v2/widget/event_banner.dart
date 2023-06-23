@@ -5,6 +5,8 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class EventBannerWidget extends StatefulWidget {
@@ -36,9 +38,14 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                 tn.translate.comeOnJoinTheInterestingCompetition ?? '',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
               ),
-              CustomTextWidget(
-                textToDisplay: tn.translate.otherCompetitions ?? '',
-                textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: kHyppePrimary),
+              GestureDetector(
+                onTap: () {
+                  Routing().move(Routes.chalenge);
+                },
+                child: CustomTextWidget(
+                  textToDisplay: tn.translate.otherCompetitions ?? '',
+                  textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: kHyppePrimary),
+                ),
               ),
             ],
           ),

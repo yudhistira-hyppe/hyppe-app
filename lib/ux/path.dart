@@ -138,4 +138,8 @@ class Routes {
   static const String scrollPic = '/scroll-pict';
   static const String scrollDiary = '/scroll-diary';
   static const String scrollVid = '/scroll-vid';
+
+  //======================== chalange ============
+  static const String chalenge = '/chalenge';
+  static const String chalengeAcievment = '/chalenge-achievment';
 }
