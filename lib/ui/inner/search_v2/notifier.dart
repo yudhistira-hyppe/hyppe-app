@@ -1102,10 +1102,10 @@ class SearchNotifier with ChangeNotifier {
 
 
 
-  List<Widget> getGridHashtag(String hashtag, bool fromRoute, ScrollController controller) {
+  List<Widget> getGridHashtag(String hashtag, bool fromRoute, ScrollController controller, double top) {
     Map<String, List<Widget>> map = {
       'Vid': [
-        GridHashtagVid(tag: hashtag, controller: controller,),
+        GridHashtagVid(tag: hashtag, controller: controller, top: top,),
         if ((_detailHashTag?.vid ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty && isHasNextVid)
           SliverToBoxAdapter(
             child: Container(
@@ -1113,7 +1113,7 @@ class SearchNotifier with ChangeNotifier {
           )
       ],
       'Diary': [
-        GridHashtagDiary(tag: hashtag, controller: controller,),
+        GridHashtagDiary(tag: hashtag, controller: controller, top: top,),
         if ((_detailHashTag?.diary ?? []).length % limitSearch == 0 && (_detailHashTag?.diary ?? []).isNotEmpty && isHasNextDiary)
           SliverToBoxAdapter(
             child: Container(
@@ -1121,7 +1121,7 @@ class SearchNotifier with ChangeNotifier {
           )
       ],
       'Pic': [
-        GridHashtagPic(tag: hashtag, controller: controller,),
+        GridHashtagPic(tag: hashtag, controller: controller, top: top,),
         if ((_detailHashTag?.pict ?? []).length % limitSearch == 0 && (_detailHashTag?.pict ?? []).isNotEmpty && isHasNextPic)
           SliverToBoxAdapter(
             child: Container(
@@ -1132,7 +1132,7 @@ class SearchNotifier with ChangeNotifier {
     final key = System().getTitleHyppe(hashtagTab);
     return map[key] ??
         [
-          GridHashtagVid(tag: hashtag, controller: controller,),
+          GridHashtagVid(tag: hashtag, controller: controller, top: top,),
           if ((hashtagVid ?? []).length % limitSearch == 0)
             SliverToBoxAdapter(
               child: Container(
@@ -1643,7 +1643,7 @@ class SearchNotifier with ChangeNotifier {
     print("========== height box ${heightIndex}");
   }
 
-  navigateToSeeAllScreen4(BuildContext context, List<ContentData> data, int index, HyppeType type, TypeApiSearch api, String keys, PageSrc pageSrc, ScrollController controller) async {
+  navigateToSeeAllScreen4(BuildContext context, List<ContentData> data, int index, HyppeType type, TypeApiSearch api, String keys, PageSrc pageSrc, ScrollController controller, double heightBox, double heightTop) async {
     context.read<ReportNotifier>().inPosition = contentPosition.myprofile;
     final connect = await System().checkConnections();
     if (connect) {
@@ -1679,6 +1679,8 @@ class SearchNotifier with ChangeNotifier {
             pageSrc: pageSrc,
             picData: pics,
             key: keys,
+              heightBox: heightBox,
+              heightTopProfile: heightTop,
               scrollController: controller
           ));
           // _routing.move(Routes.picSlideDetailPreview,
@@ -1717,6 +1719,8 @@ class SearchNotifier with ChangeNotifier {
             pageSrc: pageSrc,
             diaryData: diaries,
               key: keys,
+              heightBox: heightBox,
+              heightTopProfile: heightTop,
               scrollController: controller
           ));
           // _routing.move(Routes.diaryDetail,
@@ -1754,6 +1758,8 @@ class SearchNotifier with ChangeNotifier {
             pageSrc: pageSrc,
             vidData: vids,
               key: keys,
+              heightBox: heightBox,
+              heightTopProfile: heightTop,
               scrollController: controller
           ));
           // result = await _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
