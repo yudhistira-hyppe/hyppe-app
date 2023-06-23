@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
+import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/models/collection/search/search_content.dart';
@@ -11,8 +12,9 @@ import 'hastag_tab.dart';
 class BottomDetail extends StatefulWidget {
   Tags hashtag;
   bool fromRoute;
+  double tab;
   ScrollController scrollController;
-  BottomDetail({Key? key, required this.hashtag, this.fromRoute = false, required this.scrollController}) : super(key: key);
+  BottomDetail({Key? key, required this.hashtag, required this.tab, this.fromRoute = false, required this.scrollController}) : super(key: key);
 
   @override
   State<BottomDetail> createState() => _BottomDetailState();
@@ -45,6 +47,8 @@ class _BottomDetailState extends State<BottomDetail> {
     super.dispose();
   }
 
+  double bottomTab = 0.0;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
@@ -54,38 +58,45 @@ class _BottomDetailState extends State<BottomDetail> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              margin: const EdgeInsets.only(left: 12, right: 12, top: 10, bottom: 16),
-              padding: const EdgeInsets.all(3),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: context.getColorScheme().background),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: HashtagTab(
+            MeasuredSize(
+              onChange: (value){
+                setState(() {
+                  bottomTab = value.height;
+                });
+              },
+              child: Container(
+                margin: const EdgeInsets.only(left: 12, right: 12, top: 10, bottom: 16),
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: context.getColorScheme().background),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: HashtagTab(
+                            onTap: (value) {
+                              notifier.hashtagTab = value;
+                            },
+                            isActive: notifier.hashtagTab == HyppeType.HyppePic,
+                            // data: data.pict ?? [],
+                            type: HyppeType.HyppePic)),
+                    Expanded(
+                        child: HashtagTab(
+                            onTap: (value) {
+                              notifier.hashtagTab = value;
+                            },
+                            isActive: notifier.hashtagTab == HyppeType.HyppeDiary,
+                            // data: data.diary ?? [],
+                            type: HyppeType.HyppeDiary)),
+                    Expanded(
+                        child: HashtagTab(
                           onTap: (value) {
                             notifier.hashtagTab = value;
                           },
-                          isActive: notifier.hashtagTab == HyppeType.HyppePic,
-                          // data: data.pict ?? [],
-                          type: HyppeType.HyppePic)),
-                  Expanded(
-                      child: HashtagTab(
-                          onTap: (value) {
-                            notifier.hashtagTab = value;
-                          },
-                          isActive: notifier.hashtagTab == HyppeType.HyppeDiary,
-                          // data: data.diary ?? [],
-                          type: HyppeType.HyppeDiary)),
-                  Expanded(
-                      child: HashtagTab(
-                        onTap: (value) {
-                          notifier.hashtagTab = value;
-                        },
-                        isActive: notifier.hashtagTab == HyppeType.HyppeVid,
-                        // data: data.vid ?? [],
-                        type: HyppeType.HyppeVid,
-                      )),
-                ],
+                          isActive: notifier.hashtagTab == HyppeType.HyppeVid,
+                          // data: data.vid ?? [],
+                          type: HyppeType.HyppeVid,
+                        )),
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -98,7 +109,7 @@ class _BottomDetailState extends State<BottomDetail> {
                   controller: widget.scrollController,
                   scrollDirection: Axis.vertical,
                   physics: const AlwaysScrollableScrollPhysics(),
-                  slivers: notifier.getGridHashtag(widget.hashtag.tag ?? '-', widget.fromRoute, widget.scrollController),
+                  slivers: notifier.getGridHashtag(widget.hashtag.tag ?? '-', widget.fromRoute, widget.scrollController, widget.tab + bottomTab),
                 ),
               ),
             )

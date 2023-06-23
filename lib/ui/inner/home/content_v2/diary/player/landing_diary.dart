@@ -461,7 +461,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         fAliplayer?.pause();
         break;
       case AppLifecycleState.resumed:
-        fAliplayer?.play();
         if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
           fAliplayer?.play();
         }

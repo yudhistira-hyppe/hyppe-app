@@ -18,10 +18,19 @@ import '../../../home/content_v2/profile/widget/both_profile_content_shimmer.dar
 import '../../notifier.dart';
 import '../../widget/search_no_result_image.dart';
 
-class GridHashtagDiary extends StatelessWidget {
+class GridHashtagDiary extends StatefulWidget {
   final String tag;
+  final double top;
   final ScrollController controller;
-  const GridHashtagDiary({Key? key, required this.tag, required this.controller}) : super(key: key);
+  const GridHashtagDiary({Key? key, required this.top, required this.tag, required this.controller}) : super(key: key);
+
+  @override
+  State<GridHashtagDiary> createState() => _GridHashtagDiaryState();
+}
+
+class _GridHashtagDiaryState extends State<GridHashtagDiary> {
+
+  double heightItem = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -49,61 +58,71 @@ class GridHashtagDiary extends StatelessWidget {
                           dataitem?.mediaThumbEndPoint) ??
                           '';
                     }
-                    return GestureDetector(
-                      onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.diary ?? [], index, HyppeType.HyppeDiary, TypeApiSearch.detailHashTag, tag, PageSrc.hashtag, controller),
-                      child: Padding(
-                        padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                        child: dataitem?.reportedStatus == 'BLURRED'
-                            ? SensitiveContentProfile(data:dataitem)
-                            : Stack(
-                          children: [
-                            Center(
-                              child: CustomContentModeratedWidget(
-                                width: double.infinity,
-                                height: double.infinity,
-                                featureType: FeatureType.diary,
-                                isSafe: true, //notifier.postData.data.listDiary[index].isSafe,
-                                isSale: false,
-                                thumbnail: ImageUrl(dataitem?.postID, url: thumb),
-                                placeHolder: UnconstrainedBox(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    width: 35 * SizeConfig.scaleDiagonal,
-                                    height: 35 * SizeConfig.scaleDiagonal,
-                                    child: CustomLoading(),
+                    return MeasuredSize(
+                      onChange: (value){
+                        setState(() {
+                          heightItem = value.height + 20;
+                        });
+                      },
+                      child: GestureDetector(
+                        onTap: (){
+                          print('height item top: $heightItem ${widget.top}');
+                          context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.diary ?? [], index, HyppeType.HyppeDiary, TypeApiSearch.detailHashTag, tag, PageSrc.hashtag, widget.controller, heightItem, widget.top);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
+                          child: dataitem?.reportedStatus == 'BLURRED'
+                              ? SensitiveContentProfile(data:dataitem)
+                              : Stack(
+                            children: [
+                              Center(
+                                child: CustomContentModeratedWidget(
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  featureType: FeatureType.diary,
+                                  isSafe: true, //notifier.postData.data.listDiary[index].isSafe,
+                                  isSale: false,
+                                  thumbnail: ImageUrl(dataitem?.postID, url: thumb),
+                                  placeHolder: UnconstrainedBox(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      width: 35 * SizeConfig.scaleDiagonal,
+                                      height: 35 * SizeConfig.scaleDiagonal,
+                                      child: CustomLoading(),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            (dataitem?.saleAmount ?? 0) > 0
-                                ? const Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
-                                  padding: EdgeInsets.all(4.0),
-                                  child: CustomIconWidget(
-                                    iconData: "${AssetPath.vectorPath}sale.svg",
-                                    height: 22,
-                                    defaultColor: false,
-                                  ),
-                                ))
-                                : Container(),
-                            (dataitem?.certified ?? false) && (dataitem?.saleAmount ?? 0) == 0
-                                ? Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(4),
-                                          color: Colors.black.withOpacity(0.3),
-                                        ),
-                                        child: const CustomIconWidget(
-                                          iconData: '${AssetPath.vectorPath}ownership.svg',
-                                          defaultColor: false,
-                                        ))))
-                                : Container()
-                          ],
+                              (dataitem?.saleAmount ?? 0) > 0
+                                  ? const Align(
+                                  alignment: Alignment.topRight,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(4.0),
+                                    child: CustomIconWidget(
+                                      iconData: "${AssetPath.vectorPath}sale.svg",
+                                      height: 22,
+                                      defaultColor: false,
+                                    ),
+                                  ))
+                                  : Container(),
+                              (dataitem?.certified ?? false) && (dataitem?.saleAmount ?? 0) == 0
+                                  ? Align(
+                                  alignment: Alignment.topRight,
+                                  child: Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: Container(
+                                          padding: const EdgeInsets.all(4),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(4),
+                                            color: Colors.black.withOpacity(0.3),
+                                          ),
+                                          child: const CustomIconWidget(
+                                            iconData: '${AssetPath.vectorPath}ownership.svg',
+                                            defaultColor: false,
+                                          ))))
+                                  : Container()
+                            ],
+                          ),
                         ),
                       ),
                     );

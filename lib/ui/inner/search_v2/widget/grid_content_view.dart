@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
+import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/asset_path.dart';
@@ -19,16 +20,20 @@ class GridContentView extends StatefulWidget {
   HyppeType type;
   List<ContentData> data;
   bool isLoading;
+  double heightTab;
   String keyword;
   TypeApiSearch api;
   ScrollController controller;
-  GridContentView({Key? key, required this.type, required this.data, required this.isLoading, required this.keyword, required this.api, required this.controller}) : super(key: key);
+  GridContentView({Key? key, required this.type, required this.data, required this.isLoading, required this.heightTab, required this.keyword, required this.api, required this.controller}) : super(key: key);
 
   @override
   State<GridContentView> createState() => _GridContentViewState();
 }
 
 class _GridContentViewState extends State<GridContentView> {
+
+  double heightItem = 0.0;
+
   @override
   void initState() {
     context.read<SearchNotifier>().initAllHasNext();
@@ -73,18 +78,25 @@ class _GridContentViewState extends State<GridContentView> {
                     }
                   }
                   // print('GridContentView URL Image: $thumb');
-
-                  switch (widget.type) {
-                    case HyppeType.HyppePic:
-                      return GestureDetector(
-                        onTap: () {
-                          context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc, widget.controller);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                          child: dataitem.reportedStatus == 'BLURRED' || dataitem.reportedStatus == 'OWNED'
-                              ? SensitiveContentProfile(data: dataitem)
-                              : Stack(
+                  return MeasuredSize(
+                    onChange: (value){
+                      setState(() {
+                        heightItem = value.height;
+                      });
+                    },
+                    child: Builder(
+                      builder: (context){
+                        switch (widget.type) {
+                          case HyppeType.HyppePic:
+                            return GestureDetector(
+                              onTap: () {
+                                context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc, widget.controller, heightItem, widget.heightTab);
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
+                                child: dataitem.reportedStatus == 'BLURRED' || dataitem.reportedStatus == 'OWNED'
+                                    ? SensitiveContentProfile(data: dataitem)
+                                    : Stack(
                                   children: [
                                     Center(
                                       child: CustomContentModeratedWidget(
@@ -109,42 +121,42 @@ class _GridContentViewState extends State<GridContentView> {
                                     //     : System().showUserPicture(notifier.user?.pics?[index].mediaThumbEndPoint) ?? ''),
                                     (dataitem.saleAmount ?? 0) > 0
                                         ? const Align(
-                                            alignment: Alignment.topRight,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(4.0),
-                                              child: CustomIconWidget(
-                                                iconData: "${AssetPath.vectorPath}sale.svg",
-                                                height: 22,
-                                                defaultColor: false,
-                                              ),
-                                            ))
+                                        alignment: Alignment.topRight,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}sale.svg",
+                                            height: 22,
+                                            defaultColor: false,
+                                          ),
+                                        ))
                                         : Container(),
                                     (dataitem.certified ?? false) && (dataitem.saleAmount ?? 0) == 0
                                         ? Align(
-                                            alignment: Alignment.topRight,
-                                            child: Padding(
-                                                padding: const EdgeInsets.all(2.0),
-                                                child: Container(
-                                                    padding: const EdgeInsets.all(4),
-                                                    child: const CustomIconWidget(
-                                                      iconData: '${AssetPath.vectorPath}ownership.svg',
-                                                      defaultColor: false,
-                                                    ))))
+                                        alignment: Alignment.topRight,
+                                        child: Padding(
+                                            padding: const EdgeInsets.all(2.0),
+                                            child: Container(
+                                                padding: const EdgeInsets.all(4),
+                                                child: const CustomIconWidget(
+                                                  iconData: '${AssetPath.vectorPath}ownership.svg',
+                                                  defaultColor: false,
+                                                ))))
                                         : Container()
                                   ],
                                 ),
-                        ),
-                      );
-                    case HyppeType.HyppeDiary:
-                      return GestureDetector(
-                        onTap: () {
-                          context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc, widget.controller);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                          child: dataitem.reportedStatus == 'BLURRED' || dataitem.reportedStatus == 'OWNED'
-                              ? SensitiveContentProfile(data: dataitem)
-                              : Stack(
+                              ),
+                            );
+                          case HyppeType.HyppeDiary:
+                            return GestureDetector(
+                              onTap: () {
+                                context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc, widget.controller, heightItem, widget.heightTab);
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
+                                child: dataitem.reportedStatus == 'BLURRED' || dataitem.reportedStatus == 'OWNED'
+                                    ? SensitiveContentProfile(data: dataitem)
+                                    : Stack(
                                   children: [
                                     Center(
                                       child: CustomContentModeratedWidget(
@@ -167,42 +179,42 @@ class _GridContentViewState extends State<GridContentView> {
                                     ),
                                     (dataitem.saleAmount ?? 0) > 0
                                         ? const Align(
-                                            alignment: Alignment.topRight,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(4.0),
-                                              child: CustomIconWidget(
-                                                iconData: "${AssetPath.vectorPath}sale.svg",
-                                                height: 22,
-                                                defaultColor: false,
-                                              ),
-                                            ))
+                                        alignment: Alignment.topRight,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}sale.svg",
+                                            height: 22,
+                                            defaultColor: false,
+                                          ),
+                                        ))
                                         : Container(),
                                     (dataitem.certified ?? false) && (dataitem.saleAmount ?? 0) == 0
                                         ? Align(
-                                            alignment: Alignment.topRight,
-                                            child: Padding(
-                                                padding: const EdgeInsets.all(2.0),
-                                                child: Container(
-                                                    padding: const EdgeInsets.all(4),
-                                                    child: const CustomIconWidget(
-                                                      iconData: '${AssetPath.vectorPath}ownership.svg',
-                                                      defaultColor: false,
-                                                    ))))
+                                        alignment: Alignment.topRight,
+                                        child: Padding(
+                                            padding: const EdgeInsets.all(2.0),
+                                            child: Container(
+                                                padding: const EdgeInsets.all(4),
+                                                child: const CustomIconWidget(
+                                                  iconData: '${AssetPath.vectorPath}ownership.svg',
+                                                  defaultColor: false,
+                                                ))))
                                         : Container()
                                   ],
                                 ),
-                        ),
-                      );
-                    case HyppeType.HyppeVid:
-                      return GestureDetector(
-                        onTap: () {
-                          context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc, widget.controller);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                          child: dataitem.reportedStatus == 'BLURRED' || dataitem.reportedStatus == 'OWNED'
-                              ? SensitiveContentProfile(data: dataitem)
-                              : Stack(
+                              ),
+                            );
+                          case HyppeType.HyppeVid:
+                            return GestureDetector(
+                              onTap: () {
+                                context.read<SearchNotifier>().navigateToSeeAllScreen4(context, widget.data, index, widget.type, widget.api, widget.keyword, pageSrc, widget.controller, heightItem, widget.heightTab);
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
+                                child: dataitem.reportedStatus == 'BLURRED' || dataitem.reportedStatus == 'OWNED'
+                                    ? SensitiveContentProfile(data: dataitem)
+                                    : Stack(
                                   children: [
                                     Center(
                                       child: CustomContentModeratedWidget(
@@ -228,33 +240,37 @@ class _GridContentViewState extends State<GridContentView> {
                                     //     : System().showUserPicture(notifier.user?.vids?[index].mediaThumbEndPoint) ?? ''),
                                     (dataitem.saleAmount ?? 0) > 0
                                         ? const Align(
-                                            alignment: Alignment.topRight,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(4.0),
-                                              child: CustomIconWidget(
-                                                iconData: "${AssetPath.vectorPath}sale.svg",
-                                                height: 22,
-                                                defaultColor: false,
-                                              ),
-                                            ))
+                                        alignment: Alignment.topRight,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}sale.svg",
+                                            height: 22,
+                                            defaultColor: false,
+                                          ),
+                                        ))
                                         : Container(),
                                     (dataitem.certified ?? false) && (dataitem.saleAmount ?? 0) == 0
                                         ? Align(
-                                            alignment: Alignment.topRight,
-                                            child: Padding(
-                                                padding: const EdgeInsets.all(2.0),
-                                                child: Container(
-                                                    padding: const EdgeInsets.all(4),
-                                                    child: const CustomIconWidget(
-                                                      iconData: '${AssetPath.vectorPath}ownership.svg',
-                                                      defaultColor: false,
-                                                    ))))
+                                        alignment: Alignment.topRight,
+                                        child: Padding(
+                                            padding: const EdgeInsets.all(2.0),
+                                            child: Container(
+                                                padding: const EdgeInsets.all(4),
+                                                child: const CustomIconWidget(
+                                                  iconData: '${AssetPath.vectorPath}ownership.svg',
+                                                  defaultColor: false,
+                                                ))))
                                         : Container()
                                   ],
                                 ),
-                        ),
-                      );
-                  }
+                              ),
+                            );
+                        }
+                      },
+                    ),
+                  );
+
                 }).toList()),
           ),
           if (widget.data.length % limitSearch == 0)
