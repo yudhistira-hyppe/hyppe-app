@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -14,14 +15,12 @@ class EventBannerWidget extends StatefulWidget {
 }
 
 class _EventBannerWidgetState extends State<EventBannerWidget> {
+  final CarouselController _controller = CarouselController();
   int _current = 0;
   final List<String> imgList = [
-    'https://cache.teia.rocks/ipfs/QmPfuBWAmkaqxdkJZL4d2eCgkfAxrpnwKTLtSvo2t5Grjg',
-    'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
-    'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
-    'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
+    'https://images.unsplash.com/photo-1603486002664-a7319421e133?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1842&q=80',
+    'https://images.unsplash.com/photo-1580757468214-c73f7062a5cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80',
+    'https://images.unsplash.com/photo-1626593261859-4fe4865d8cb1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80'
   ];
   @override
   Widget build(BuildContext context) {
@@ -43,17 +42,18 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
               ),
             ],
           ),
+          sixteenPx,
           AspectRatio(
-            aspectRatio: 16 / 9,
+            aspectRatio: 16 / 7,
             child: Container(
-              color: Colors.purple,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
               child: CarouselSlider(
                 options: CarouselOptions(
                     // height: 300
-                    enlargeCenterPage: false,
+                    enlargeCenterPage: true,
                     viewportFraction: 1.0,
-                    aspectRatio: 16 / 9,
-                    autoPlayInterval: Duration(seconds: 3),
+                    aspectRatio: 16 / 7,
+                    autoPlayInterval: const Duration(seconds: 3),
                     onPageChanged: (index, reason) {
                       setState(() {
                         _current = index;
@@ -65,6 +65,7 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                           child: Center(
                               child: Image.network(
                             item,
+                            width: SizeConfig.screenWidth,
                             fit: BoxFit.cover,
                             loadingBuilder: (context, child, loadingProgress) {
                               if (loadingProgress == null) return child;
@@ -90,6 +91,20 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                     .toList(),
               ),
             ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: imgList.asMap().entries.map((entry) {
+              return GestureDetector(
+                onTap: () => _controller.animateToPage(entry.key),
+                child: Container(
+                  width: _current == entry.key ? 12 : 6.0,
+                  height: 6.0,
+                  margin: const EdgeInsets.only(top: 12, left: 4, right: 4),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: (_current == entry.key ? kHyppePrimary : Color(0xffcecece))),
+                ),
+              );
+            }).toList(),
           )
         ],
       ),
