@@ -1216,7 +1216,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   Future inserTagPeople(int index) async {
-    if (_searchPeolpleData.isNotEmpty) {
+    if (searchTagPeolpleData.isNotEmpty) {
       String tile = searchTagPeolpleData[index].username ?? '';
       if (_userTagData.contains(tile)) {
         showSnackBar(

@@ -607,7 +607,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   (index) => Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: CustomTextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        notifier.removeTagPeople(index);
+                      },
                       style: TextButton.styleFrom(padding: EdgeInsets.zero, splashFactory: NoSplash.splashFactory),
                       child: PickitemTitle(
                         function: () => notifier.removeTagPeople(index),

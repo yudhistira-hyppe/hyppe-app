@@ -56,14 +56,15 @@ class VideoThumbnail extends StatelessWidget {
               heightPlaceHolder: 80,
               imageUrl: (videoData?.isApsara ?? false) ? (videoData?.mediaThumbEndPoint ?? '') : '${videoData?.fullThumbPath}',
               // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
-              imageBuilder: (context, imageProvider) => ClipRRect(
-                borderRadius: BorderRadius.circular(20), // Image borderr
-                child: Image(
-                  image: imageProvider,
-                  fit: BoxFit.fitHeight,
-                  width: SizeConfig.screenWidth,
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: isHorizon ? BoxFit.fill : BoxFit.contain,
+                    image: imageProvider,
+                  ),
                 ),
               ),
+
               emptyWidget: GestureDetector(
                 onTap: () {
                   // _networklHasErrorNotifier.value++;
