@@ -91,7 +91,7 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
                                             notifier.layout =
                                                 SearchLayout.hashtagDetail;
                                           },
-                                          title: '#${data.tag}',
+                                          title: '${data.tag}',
                                           count: data.total ?? 0,
                                           countContainer:
                                               notifier.language.posts ??
