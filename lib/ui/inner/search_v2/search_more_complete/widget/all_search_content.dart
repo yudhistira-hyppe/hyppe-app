@@ -342,7 +342,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
                                   notifier.layout = SearchLayout.mainHashtagDetail;
                                 },
                                 padding: const EdgeInsets.only(top: 10, bottom: 10),
-                                title: '#${data.tag}',
+                                title: '${data.tag}',
                                 count: data.total ?? 0,
                                 countContainer:
                                 notifier.language.posts ?? 'Posts');
