@@ -1769,7 +1769,7 @@ class SearchNotifier with ChangeNotifier {
           break;
       }
     } else {
-      ShowBottomSheet.onNoInternetConnection(context);
+      connectionError = !connect;
     }
   }
 }

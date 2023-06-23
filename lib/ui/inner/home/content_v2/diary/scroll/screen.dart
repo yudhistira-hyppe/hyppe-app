@@ -1219,6 +1219,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                       const CustomIconWidget(
                         iconData: "${AssetPath.vectorPath}eye-off.svg",
                         defaultColor: false,
+                        color: Colors.white,
                         height: 30,
                       ),
                       Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
@@ -1228,16 +1229,16 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                             color: Colors.white,
                             fontSize: 13,
                           )),
-                      // data.email == SharedPreference().readStorage(SpKeys.email)
-                      //     ? GestureDetector(
-                      //         onTap: () => Routing().move(Routes.appeal, argument: data),
-                      //         child: Container(
-                      //             padding: const EdgeInsets.all(8),
-                      //             margin: const EdgeInsets.all(18),
-                      //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                      //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                      //       )
-                      //     : const SizedBox(),
+                      data.email == SharedPreference().readStorage(SpKeys.email)
+                          ? GestureDetector(
+                              onTap: () => Routing().move(Routes.appeal, argument: data),
+                              child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  margin: const EdgeInsets.all(18),
+                                  decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                                  child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                            )
+                          : const SizedBox(),
                       const Spacer(),
                       GestureDetector(
                         onTap: () {

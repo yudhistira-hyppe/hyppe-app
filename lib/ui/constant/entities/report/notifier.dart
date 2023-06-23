@@ -211,8 +211,6 @@ class ReportNotifier with ChangeNotifier {
   }
 
   void seeContent(BuildContext context, ContentData data, String typeContent) {
-    print('ini posisi mana ${data.postID}');
-    print('ini posisi mana $inPosition');
     switch (_inPosition) {
       case contentPosition.otherprofile:
         context.read<OtherProfileNotifier>().showContentSensitive(

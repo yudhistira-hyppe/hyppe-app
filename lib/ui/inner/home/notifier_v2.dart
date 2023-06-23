@@ -22,6 +22,11 @@ import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_diaries.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_pics.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_vids.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_vids.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -666,41 +671,23 @@ class HomeNotifier with ChangeNotifier {
     final pic2 = Provider.of<SlidedPicDetailNotifier>(context, listen: false);
     final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
 
-    switch (content) {
-      case hyppeVid:
-        vid.vidData?.removeWhere((element) => element.postID == postID);
-        // _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
-        break;
-      case hyppeDiary:
-        diary.diaryData?.removeWhere((element) => element.postID == postID);
-        // _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
-        break;
-      case hyppePic:
-        pic.pic?.removeWhere((element) => element.postID == postID);
-        // _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
-        // _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
-        _updatedData2 = pic2.data;
-        break;
-      case hyppeStory:
-        stories.peopleStoriesData?.removeWhere((element) => element.postID == postID);
-        // _updatedData = stories.peopleStoriesData?.firstWhereOrNull((element) => element.postID == postID);
-        break;
-      default:
-        "$content It's Not a content of $postID".logger();
-        break;
-    }
+    ScrollVidNotifier vidScroll = context.read<ScrollVidNotifier>();
+    ScrollDiaryNotifier diaryScroll = context.read<ScrollDiaryNotifier>();
+    ScrollPicNotifier picScroll = context.read<ScrollPicNotifier>();
 
-    // print('kesini story');
-    // print(_updatedData);
+    final otherProfile = Provider.of<OtherProfileNotifier>(context, listen: false);
+    diaryScroll.diaryData?.removeWhere((element) => element.postID == postID);
+    picScroll.pics?.removeWhere((element) => element.postID == postID);
+    vidScroll.vidData?.removeWhere((element) => element.postID == postID);
 
-    // if (_updatedData != null) {
-    //   _updatedData.delete();
-    //   // _updatedData.isReport = isReport;
-    // }
-    // if (_updatedData2 != null) {
-    //   _updatedData2.delete();
-    //   _updatedData2.isReport = isReport;
-    // }
+    if (otherProfile.manyUser.isNotEmpty) otherProfile.manyUser.last.vids?.removeWhere((element) => element.postID == postID);
+    if (otherProfile.manyUser.isNotEmpty) otherProfile.manyUser.last.diaries?.removeWhere((element) => element.postID == postID);
+    if (otherProfile.manyUser.isNotEmpty) otherProfile.manyUser.last.pics?.removeWhere((element) => element.postID == postID);
+
+    vid.vidData?.removeWhere((element) => element.postID == postID);
+    diary.diaryData?.removeWhere((element) => element.postID == postID);
+    pic.pic?.removeWhere((element) => element.postID == postID);
+    stories.peopleStoriesData?.removeWhere((element) => element.postID == postID);
 
     notifyListeners();
   }

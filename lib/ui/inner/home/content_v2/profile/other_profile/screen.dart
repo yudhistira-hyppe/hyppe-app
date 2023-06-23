@@ -91,6 +91,18 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
       });
     }
 
+    if (globalAfterReport) {
+      setState(() {
+        isloading = true;
+      });
+      Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          isloading = false;
+        });
+        globalAfterReport = false;
+      });
+    }
+
     // setState(() {});
 
     // final notifier = context.read<OtherProfileNotifier>();

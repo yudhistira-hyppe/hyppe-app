@@ -48,6 +48,7 @@ class PicDetailTop extends StatelessWidget {
 
     return Container(
       width: SizeConfig.screenWidth,
+      padding: EdgeInsets.only(top: 16, bottom: 6),
       color: _themes.colorScheme.surface,
       child: Row(
         children: [
@@ -75,17 +76,19 @@ class PicDetailTop extends StatelessWidget {
                       children: [
                         value.checkIsLoading
                             ? const Center(child: SizedBox(height: 40, width: 40, child: CustomLoading()))
-                            : value.statusFollowing != StatusFollowing.following ? CustomFollowButton(
-                                checkIsLoading: value.checkIsLoading,
-                                onPressed: () async {
-                                  try {
-                                    await value.followUser(context, isUnFollow: value.statusFollowing == StatusFollowing.following);
-                                  } catch (e) {
-                                    e.logger();
-                                  }
-                                },
-                                isFollowing: value.statusFollowing,
-                              ) : const SizedBox.shrink(),
+                            : value.statusFollowing != StatusFollowing.following
+                                ? CustomFollowButton(
+                                    checkIsLoading: value.checkIsLoading,
+                                    onPressed: () async {
+                                      try {
+                                        await value.followUser(context, isUnFollow: value.statusFollowing == StatusFollowing.following);
+                                      } catch (e) {
+                                        e.logger();
+                                      }
+                                    },
+                                    isFollowing: value.statusFollowing,
+                                  )
+                                : const SizedBox.shrink(),
                       ],
                     );
                   },
@@ -182,28 +185,26 @@ class PicDetailTop extends StatelessWidget {
   }
 
   Widget _buildProfilePicture(BuildContext context) => data != null
-      ? Consumer<PicDetailNotifier>(
-        builder: (context, notifier, _) {
+      ? Consumer<PicDetailNotifier>(builder: (context, notifier, _) {
           return ProfileComponent(
-              show: true,
-              following: true,
-              onFollow: () {},
-              username: data?.username,
-              spaceProfileAndId: eightPx,
-              haveStory: false,
-              isCelebrity: false,
-              isUserVerified: data?.isIdVerified ?? false,
-              onTapOnProfileImage: () => _system.navigateToProfile(context, data?.email ?? ''),
-              featureType: FeatureType.pic,
-              imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',
-              createdAt: '${_system.readTimestamp(
-                DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
-                context,
-                fullCaption: true,
-              )}',
-            );
-        }
-      )
+            show: true,
+            following: true,
+            onFollow: () {},
+            username: data?.username,
+            spaceProfileAndId: eightPx,
+            haveStory: false,
+            isCelebrity: false,
+            isUserVerified: data?.isIdVerified ?? false,
+            onTapOnProfileImage: () => _system.navigateToProfile(context, data?.email ?? ''),
+            featureType: FeatureType.pic,
+            imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',
+            createdAt: '${_system.readTimestamp(
+              DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
+              context,
+              fullCaption: true,
+            )}',
+          );
+        })
       : Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: const [
