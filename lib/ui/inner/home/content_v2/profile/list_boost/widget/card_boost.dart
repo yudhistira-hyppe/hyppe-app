@@ -52,7 +52,6 @@ class CardBoost extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("${data?.boosted.isNotEmpty}"),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 14.0),
                 child: Row(
