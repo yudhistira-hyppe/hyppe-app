@@ -1220,7 +1220,6 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
               child: GestureDetector(
                 onTap: () {
                   fAliplayer?.pause();
-
                   context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer);
                 },
                 child: const CustomIconWidget(
@@ -1293,7 +1292,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          if (data.music != null) {
+                          print("===========data musik ${data.music?.musicTitle}");
+                          if (data.music?.musicTitle != null) {
                             fAliplayer?.prepare();
                             fAliplayer?.play();
                           }
