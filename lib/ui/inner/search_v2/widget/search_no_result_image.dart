@@ -17,6 +17,7 @@ class SearchNoResultImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SearchNoResultImage');
+    print('SearchNoResultImage: $keyword');
     return Container(
       height: 500,
       alignment: Alignment.center,
