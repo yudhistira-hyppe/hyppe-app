@@ -1237,9 +1237,12 @@ class SearchNotifier with ChangeNotifier {
     if(forceLoad){
       hitApiSearchData(context, search, typeSearch: typeSearch, reload: reload);
     }else{
+      print('result reload: $_lastKey $search');
       if(search.isNotEmpty){
         if(_lastKey != search){
           _lastKey = search;
+          hitApiSearchData(context, search, typeSearch: typeSearch, reload: reload);
+        }else if(forceLoad){
           hitApiSearchData(context, search, typeSearch: typeSearch, reload: reload);
         }
       }else{
