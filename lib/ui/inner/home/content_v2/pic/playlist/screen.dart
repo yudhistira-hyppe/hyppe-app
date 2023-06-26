@@ -16,11 +16,7 @@ class PicDetailScreen extends StatefulWidget {
   final PicDetailScreenArgument arguments;
   final bool isOnPageTurning;
 
-  const PicDetailScreen({
-    Key? key,
-    required this.arguments,
-    required this.isOnPageTurning
-  }) : super(key: key);
+  const PicDetailScreen({Key? key, required this.arguments, required this.isOnPageTurning}) : super(key: key);
 
   @override
   _PicDetailScreenState createState() => _PicDetailScreenState();
@@ -45,7 +41,6 @@ class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayout
   @override
   Widget build(BuildContext context) {
     final tempAllow = widget.isOnPageTurning;
-
 
     return ChangeNotifierProvider<PicDetailNotifier>(
       create: (context) => _notifier,

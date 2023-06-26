@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -136,6 +137,7 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                                       : () {
                                           notifier.reportPost(context, inDetail: widget.inDetail).whenComplete(() {
                                             if (widget.onUpdate != null) widget.onUpdate;
+                                            globalAfterReport = true;
                                           });
                                         },
                                   child: notifier.isLoading
