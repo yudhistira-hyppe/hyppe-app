@@ -112,7 +112,7 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
                                   if (lenght >= maxLenght) {
-                                    notifier.getDataSearch(context);
+                                    notifier.getDataSearch(context, forceLoad: true);
                                   }
                                 },
                                 onPressedIcon: () {
@@ -122,7 +122,7 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
                                   if (lenght >= maxLenght) {
-                                    notifier.getDataSearch(context);
+                                    notifier.getDataSearch(context, forceLoad: true);
                                   }
                                 },
                                 // onTap: () => notifier.moveSearchMore(),
