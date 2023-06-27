@@ -817,11 +817,18 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                 notifier.checkConnection();
                               },
                               child: Container(
-                                  decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                  width: SizeConfig.screenWidth,
-                                  height: SizeConfig.screenHeight,
-                                  alignment: Alignment.center,
-                                  child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo ?? 'Error')),
+                                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                width: SizeConfig.screenWidth,
+                                height: SizeConfig.screenHeight,
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.all(20),
+                                child: diaryData?[index].reportedStatus == 'BLURRED'
+                                    ? Container()
+                                    : CustomTextWidget(
+                                        textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                        maxLines: 3,
+                                      ),
+                              ),
                             ),
                           ),
                     dataSelected?.postID == diaryData?[index].postID && isPlay
@@ -880,11 +887,15 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                       width: SizeConfig.screenWidth,
                                       height: MediaQuery.of(context).size.width * 16.0 / 9.0,
                                       alignment: Alignment.center,
-                                      child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo ?? 'Error')),
+                                      padding: EdgeInsets.all(20),
+                                      child: CustomTextWidget(
+                                        textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                        maxLines: 3,
+                                      )),
                                 ),
                               )
                             : Container(),
-                    _showLoading
+                    _showLoading && !notifier.connectionError
                         ? Positioned.fill(
                             child: Align(
                             alignment: Alignment.center,

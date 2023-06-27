@@ -102,6 +102,13 @@ class HomeNotifier with ChangeNotifier {
   int _lastCurIndex = -1;
   int get lastCurIndex => _lastCurIndex;
 
+  bool _connectionError = false;
+  bool get connectionError => _connectionError;
+  set connectionError(bool state) {
+    _connectionError = state;
+    notifyListeners();
+  }
+
   set tabIndex(val) {
     _tabIndex = val;
     notifyListeners();
@@ -185,10 +192,16 @@ class HomeNotifier with ChangeNotifier {
 
   void onUpdate() => notifyListeners();
 
+  Future checkConnection() async {
+    bool connect = await System().checkConnections();
+    connectionError = !connect;
+  }
+
   Future initNewHome(BuildContext context, bool mounted, {int? forceIndex, bool isreload = true, bool isgetMore = false, bool isNew = false}) async {
     ReportNotifier rp = Provider.of(Routing.navigatorKey.currentContext ?? context, listen: false);
     rp.inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
+    connectionError = !isConnected;
 
     if (isConnected) {
       if (!mounted) return;

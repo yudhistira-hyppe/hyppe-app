@@ -108,8 +108,8 @@ class OtherProfileTop extends StatelessWidget {
                       child: CustomProfileImage(
                         following: true,
                         forStory: true,
-                        width: 55 * SizeConfig.scaleDiagonal,
-                        height: 55 * SizeConfig.scaleDiagonal,
+                        width: 64 * SizeConfig.scaleDiagonal,
+                        height: 64 * SizeConfig.scaleDiagonal,
                         imageUrl: System().showUserPicture(profile?.avatar?.mediaEndpoint),
                         // imageUrl: notifier.displayPhotoProfile(),
                       ),
