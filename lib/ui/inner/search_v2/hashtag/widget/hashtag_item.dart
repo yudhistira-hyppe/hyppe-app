@@ -32,7 +32,7 @@ class HashtagItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const CustomIconWidget(iconData: '${AssetPath.vectorPath}hashtag_icon.svg', width: 20, height: 20,),
+                const CustomIconWidget(iconData: '${AssetPath.vectorPath}hashtag_icon.svg', width: 20, height: 20, defaultColor: false, color: kHyppeTextLightPrimary,),
                 fourteenPx,
                 Expanded(
                   child: Column(
@@ -43,9 +43,10 @@ class HashtagItem extends StatelessWidget {
                         maxLines: 1,
                         textToDisplay:
                         '#$title',
-                        textStyle: context.getTextTheme().bodyText1,
+                        textStyle: context.getTextTheme().bodyText1?.copyWith(color: kHyppeTextLightPrimary),
                         textAlign: TextAlign.start,
                       ),
+                      fourPx,
                       Text(
                         "$count $countContainer",
                         style: const TextStyle(

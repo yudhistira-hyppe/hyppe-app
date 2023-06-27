@@ -97,7 +97,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
                                     title: Text("${widget.users?[index].fullName}"),
                                     subtitle: Text(
                                       isIndo ? (widget.users?[index].statusID?.capitalizeFirstofEach ?? '') : (widget.users?[index].statusEN?.capitalizeFirstofEach ?? ''),
-                                      style: context.getTextTheme().overline,
+                                      style: context.getTextTheme().caption,
                                     ),
                                     leading: StoryColorValidator(
                                       haveStory: false,

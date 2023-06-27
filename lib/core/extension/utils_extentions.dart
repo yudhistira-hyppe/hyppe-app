@@ -106,7 +106,6 @@ extension StringDefine on String {
     } else if (length == 1) {
       return this[0].toUpperCase();
     }
-
     return '';
   }
 
