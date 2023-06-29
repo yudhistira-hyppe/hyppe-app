@@ -260,8 +260,13 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                 : !notifier.isConnect
                     ? OfflineMode(
                         function: () async {
-                          isloading = true;
-                          await notifier.initialSelfProfile(context).then((value) => isloading = false);
+                          var connect = await System().checkConnections();
+                          if (connect) {
+                            setState(() {
+                              isloading = true;
+                            });
+                            await notifier.initialSelfProfile(context).then((value) => isloading = false);
+                          }
                         },
                       )
                     : CustomScrollView(

@@ -123,7 +123,7 @@ class _NewAutoCompleteSearchState extends State<NewAutoCompleteSearch> {
                         // notifier.getDataSearch(context, isMove: true);
                       },
                       title: CustomTextWidget(
-                        textToDisplay: notifier.language.seeMore ?? 'See More',
+                        textToDisplay: notifier.language.seeMoreContent ?? 'See More',
                         textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(color: kHyppePrimary),
                       ),
                     )

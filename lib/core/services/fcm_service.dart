@@ -18,7 +18,7 @@ import 'package:hyppe/core/services/notification_service.dart';
 Future<void> onBackgroundMessage(RemoteMessage message) async {
   final _notificationService = NotificationService();
 
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   """ 
             Background incoming message data => ${message.data},
             Background incoming message category => ${message.category},

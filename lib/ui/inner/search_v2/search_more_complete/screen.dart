@@ -112,7 +112,7 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
                                   if (lenght >= maxLenght) {
-                                    notifier.getDataSearch(context);
+                                    notifier.getDataSearch(context, forceLoad: true);
                                   }
                                 },
                                 onPressedIcon: () {
@@ -122,7 +122,7 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
                                   if (lenght >= maxLenght) {
-                                    notifier.getDataSearch(context);
+                                    notifier.getDataSearch(context, forceLoad: true);
                                   }
                                 },
                                 // onTap: () => notifier.moveSearchMore(),
@@ -136,13 +136,14 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                         controller: _tabController,
                         isScrollable: true,
                         indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                        labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                        unselectedLabelStyle: const TextStyle(fontSize: 14),
                         tabs: _list.map((e) {
                           return Container(
                             padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 13),
                             child: Center(
                               child: Text(
                                 e,
-                                style: const TextStyle(fontSize: 14),
                               ),
                             ),
                           );

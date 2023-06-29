@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:hyppe/app.dart';
-import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_vid_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -48,7 +47,6 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -237,7 +235,12 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
               child: Column(
                 children: [
                   ListTile(
-                    title: widget.arguments?.titleAppbar ?? Container(),
+                    title: Align(
+                      alignment: const Alignment(-1.2, 0),
+                      child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          child: widget.arguments?.titleAppbar ?? Container()),
+                    ),
                     leading: IconButton(
                         icon: const Icon(
                           Icons.chevron_left,

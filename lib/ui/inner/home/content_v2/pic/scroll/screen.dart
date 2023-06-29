@@ -570,7 +570,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ListTile(
-                  title: widget.arguments?.titleAppbar ?? Container(),
+                  title: Align(
+                    alignment: const Alignment(-1.2, 0),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                        child: widget.arguments?.titleAppbar ?? Container()),
+                  ),
                   leading: IconButton(
                       icon: const Icon(
                         Icons.chevron_left,

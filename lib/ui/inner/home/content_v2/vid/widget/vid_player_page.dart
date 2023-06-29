@@ -974,8 +974,9 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                       height: widget.height,
                       child: const CustomIconWidget(
                         defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}pause.svg',
-                        color: kHyppeLightButtonText,
+                        width: 40,
+                        iconData: '${AssetPath.vectorPath}pause2.svg',
+                        // color: kHyppeLightButtonText,
                       ),
                     ),
                   ),

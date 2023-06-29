@@ -51,6 +51,7 @@ class CustomSearchBar extends StatelessWidget {
         focusNode: focusNode,
         controller: controller,
         autofocus: autoFocus,
+        style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w400),
         decoration: inputDecoration ??
             InputDecoration(
               suffixIcon: onPressedRightIcon != null ? CustomIconButtonWidget(

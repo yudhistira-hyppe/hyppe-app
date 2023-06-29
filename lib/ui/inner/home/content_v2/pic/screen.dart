@@ -523,7 +523,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             );
                           }
 
-                          return itemPict(notifier, index, home);
+                          return itemPict(context, notifier, index, home);
                         },
                       ),
                     ),
@@ -543,7 +543,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   var initialControllerValue;
   ValueNotifier<int> _networklHasErrorNotifier = ValueNotifier(0);
 
-  Widget itemPict(PreviewPicNotifier notifier, int index, HomeNotifier homeNotifier) {
+  Widget itemPict(BuildContext context, PreviewPicNotifier notifier, int index, HomeNotifier homeNotifier) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -656,20 +656,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             ],
           ),
           tenPx,
-          // Stack(
-          //   children: [
-          //     Positioned.fill(
-          //       child: InteractiveViewer(
-          //         child: Image.network(
-          //           'https://flutterservice.com/wp-content/uploads/2022/10/3-1.jpg',
-          //           height: 300,
-          //           width: double.infinity,
-          //           fit: BoxFit.cover,
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
 
           VisibilityDetector(
             key: Key(index.toString()),
