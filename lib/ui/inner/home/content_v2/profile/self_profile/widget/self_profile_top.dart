@@ -39,15 +39,15 @@ class SelfProfileTop extends StatelessWidget {
   void showPict(BuildContext context, SelfProfileNotifier notifier) {
     final imageUrl = notifier.displayPhotoProfileOriginal();
     print("gambar profil $imageUrl");
-    if (notifier.user.profile?.avatar?.mediaEndpoint?.isNotEmpty ?? false) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return ShowImageProfile(imageUrl: imageUrl!);
-        },
-        // barrierColor: Colors.red,
-      );
-    }
+    // if (notifier.user.profile?.avatar?.mediaEndpoint?.isNotEmpty ?? false) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ShowImageProfile(imageUrl: imageUrl!);
+      },
+      // barrierColor: Colors.red,
+    );
+    // }
   }
 
   @override
@@ -98,8 +98,8 @@ class SelfProfileTop extends StatelessWidget {
                         cacheKey: notifier.user.profile?.avatar?.imageKey,
                         following: true,
                         forStory: true,
-                        width: 55 * SizeConfig.scaleDiagonal,
-                        height: 55 * SizeConfig.scaleDiagonal,
+                        width: 64 * SizeConfig.scaleDiagonal,
+                        height: 64 * SizeConfig.scaleDiagonal,
                         imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
                       ),
                     ),

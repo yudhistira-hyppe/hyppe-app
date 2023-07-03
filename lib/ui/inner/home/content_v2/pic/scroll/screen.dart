@@ -906,7 +906,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                           valueListenable: _networklHasErrorNotifier,
                                           builder: (BuildContext context, int count, _) {
                                             return CustomBaseCacheImage(
-                                              // cacheKey: "${pics?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
+                                              cacheKey: "${pics?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
                                               memCacheWidth: 100,
                                               memCacheHeight: 100,
                                               widthPlaceHolder: 80,
@@ -939,7 +939,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                                     width: SizeConfig.screenWidth,
                                                     height: 250,
                                                     alignment: Alignment.center,
-                                                    child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
+                                                    padding: const EdgeInsets.all(20),
+                                                    child: pics?[index].reportedStatus == 'BLURRED'
+                                                        ? Container()
+                                                        : CustomTextWidget(
+                                                            textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                                            maxLines: 3,
+                                                          )),
                                               ),
                                               errorWidget: (context, url, error) {
                                                 return GestureDetector(
@@ -951,7 +957,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                                       width: SizeConfig.screenWidth,
                                                       height: 250,
                                                       alignment: Alignment.center,
-                                                      child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
+                                                      padding: const EdgeInsets.all(20),
+                                                      child: pics?[index].reportedStatus == 'BLURRED'
+                                                          ? Container()
+                                                          : CustomTextWidget(
+                                                              textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                                              maxLines: 3,
+                                                            )),
                                                 );
                                               },
                                             );
@@ -968,8 +980,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                 decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
                                 width: SizeConfig.screenWidth,
                                 height: 250,
+                                padding: const EdgeInsets.all(20),
                                 alignment: Alignment.center,
-                                child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
+                                child: pics?[index].reportedStatus == 'BLURRED'
+                                    ? Container()
+                                    : CustomTextWidget(
+                                        textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                        maxLines: 3,
+                                      )),
                           ),
                     _buildBody(context, SizeConfig.screenWidth, pics?[index] ?? ContentData()),
                     blurContentWidget(context, pics?[index] ?? ContentData()),
