@@ -76,7 +76,7 @@ class SelfProfileDiaries extends StatelessWidget {
                                             child: CustomContentModeratedWidget(
                                               width: double.infinity,
                                               height: double.infinity,
-                                              featureType: FeatureType.vid,
+                                              featureType: FeatureType.pic,
                                               isSale: false,
                                               isSafe: true, //notifier.postData.data.listVid[index].isSafe,
                                               thumbnail: ImageUrl(notifier.user.diaries?[index].postID,

@@ -30,6 +30,7 @@ import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
@@ -325,7 +326,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     });
     try {
       final notifier = PostsBloc();
-      await notifier.getAuthApsara(context, apsaraId: apsaraId);
+      await notifier.getAuthApsara(context, apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
@@ -355,7 +356,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     });
     try {
       final notifier = PostsBloc();
-      await notifier.getOldVideo(context, apsaraId: postId);
+      await notifier.getOldVideo(context, apsaraId: postId, check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
@@ -531,7 +532,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                             fAliplayer?.stop();
                           }
 
-                          return itemDiary(notifier, index);
+                          return itemDiary(notifier, index, home);
                         },
                       ),
                     ),
@@ -548,7 +549,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     });
   }
 
-  Widget itemDiary(PreviewDiaryNotifier notifier, int index) {
+  Widget itemDiary(PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -688,28 +689,49 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           )
                         : Container(),
                     // _buildProgressBar(SizeConfig.screenWidth!, 500),
-                    Positioned.fill(
-                      child: GestureDetector(
-                        onTap: () {
-                          fAliplayer?.play();
-                          setState(() {
-                            isMute = !isMute;
-                          });
-                          fAliplayer?.setMuted(isMute);
-                        },
-                        onDoubleTap: () {
-                          final _likeNotifier = context.read<LikeNotifier>();
-                          if (notifier.diaryData?[index] != null) {
-                            _likeNotifier.likePost(context, notifier.diaryData?[index] ?? ContentData());
-                          }
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          width: SizeConfig.screenWidth,
-                          height: SizeConfig.screenHeight,
-                        ),
-                      ),
-                    ),
+                    !notifier.connectionError
+                        ? Positioned.fill(
+                            child: GestureDetector(
+                              onTap: () {
+                                fAliplayer?.play();
+                                setState(() {
+                                  isMute = !isMute;
+                                });
+                                fAliplayer?.setMuted(isMute);
+                              },
+                              onDoubleTap: () {
+                                final _likeNotifier = context.read<LikeNotifier>();
+                                if (notifier.diaryData?[index] != null) {
+                                  _likeNotifier.likePost(context, notifier.diaryData?[index] ?? ContentData());
+                                }
+                              },
+                              child: Container(
+                                color: Colors.transparent,
+                                width: SizeConfig.screenWidth,
+                                height: SizeConfig.screenHeight,
+                              ),
+                            ),
+                          )
+                        : Positioned.fill(
+                            child: GestureDetector(
+                              onTap: () {
+                                homeNotifier.checkConnection();
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                width: SizeConfig.screenWidth,
+                                height: SizeConfig.screenHeight,
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.all(20),
+                                child: notifier.diaryData?[index].reportedStatus == 'BLURRED'
+                                    ? Container()
+                                    : CustomTextWidget(
+                                        textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                        maxLines: 3,
+                                      ),
+                              ),
+                            ),
+                          ),
                     dataSelected?.postID == notifier.diaryData?[index].postID && isPlay
                         ? Container()
                         : CustomBaseCacheImage(
@@ -751,32 +773,39 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     ),
                                   ),
                             errorWidget: (context, url, error) {
-                              return Container(
-                                // const EdgeInsets.symmetric(horizontal: 4.5),
-                                height: 500,
-                                decoration: BoxDecoration(
-                                  image: const DecorationImage(
-                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
+                              return GestureDetector(
+                                onTap: () {
+                                  homeNotifier.checkConnection();
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                    width: SizeConfig.screenWidth,
+                                    height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.all(20),
+                                    child: CustomTextWidget(
+                                      textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                      maxLines: 3,
+                                    )),
                               );
                             },
-                            emptyWidget: Container(
-                              // const EdgeInsets.symmetric(horizontal: 4.5),
-
-                              height: 500,
-                              decoration: BoxDecoration(
-                                image: const DecorationImage(
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
+                            emptyWidget: GestureDetector(
+                              onTap: () {
+                                homeNotifier.checkConnection();
+                              },
+                              child: Container(
+                                  decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                  width: SizeConfig.screenWidth,
+                                  height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(20),
+                                  child: CustomTextWidget(
+                                    textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                    maxLines: 3,
+                                  )),
                             ),
                           ),
-                    _showLoading
+                    _showLoading && !homeNotifier.connectionError
                         ? Positioned.fill(
                             child: Align(
                             alignment: Alignment.center,

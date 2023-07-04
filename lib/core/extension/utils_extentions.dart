@@ -98,6 +98,23 @@ extension ContextScreen on BuildContext {
 }
 
 extension StringDefine on String {
+
+  String textToTitleCase() {
+    if (length > 1) {
+      return this[0].toUpperCase() + substring(1).toLowerCase();
+      /*or text[0].toUpperCase() + text.substring(1).toLowerCase(), if you want absolute title case*/
+    } else if (length == 1) {
+      return this[0].toUpperCase();
+    }
+    return '';
+  }
+
+  String get capitalizeFirstofEach =>
+      split(' ')
+      .map((element) => element.textToTitleCase())
+      .toList()
+      .join(' ');
+
   ContentType? translateType() {
     if (this == "video") {
       return ContentType.video;

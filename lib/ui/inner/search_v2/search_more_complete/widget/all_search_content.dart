@@ -264,7 +264,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
                         onTap: () => _system.navigateToProfile(context, users?[index].email ?? ''),
                         contentPadding: EdgeInsets.zero,
                         title: Text("${users?[index].fullName}"),
-                        subtitle: Text(isIndo ? (users?[index].statusID ?? '') : (users?[index].statusEN ?? ''), style: context.getTextTheme().overline,),
+                        subtitle: Text(isIndo ? (users?[index].statusID?.capitalizeFirstofEach ?? '') : (users?[index].statusEN?.capitalizeFirstofEach ?? ''), style: context.getTextTheme().caption,),
                         leading: StoryColorValidator(
                           haveStory: false,
                           featureType: FeatureType.pic,
@@ -342,7 +342,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
                                   notifier.layout = SearchLayout.mainHashtagDetail;
                                 },
                                 padding: const EdgeInsets.only(top: 10, bottom: 10),
-                                title: '#${data.tag}',
+                                title: '${data.tag}',
                                 count: data.total ?? 0,
                                 countContainer:
                                 notifier.language.posts ?? 'Posts');

@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'dart:ui';
-
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:hyppe/app.dart';
-import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_vid_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -48,7 +46,6 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -115,20 +112,31 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
       index = itemPositionsListener.itemPositions.value.first.index;
       if (lastIndex != index) {
         if (index == vidData!.length - 2) {
-          print("ini reload harusnya");
-          if (!notifier.isLoadingLoadmore) {
-            await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
-            if (mounted) {
-              setState(() {
+          bool connect = await System().checkConnections();
+          if (connect) {
+            print("ini reload harusnya");
+            if (!notifier.isLoadingLoadmore) {
+              await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
+              if (mounted) {
+                setState(() {
+                  vidData = notifier.vidData;
+                });
+              } else {
                 vidData = notifier.vidData;
-              });
-            } else {
-              vidData = notifier.vidData;
+              }
+            }
+          } else {
+            if (mounted) {
+              ShowGeneralDialog.showToastAlert(
+                context,
+                lang?.internetConnectionLost ?? ' Error',
+                () async {},
+              );
             }
           }
         }
+        lastIndex = index;
       }
-      lastIndex = index;
     });
     checkInet();
 
@@ -237,7 +245,10 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
               child: Column(
                 children: [
                   ListTile(
-                    title: widget.arguments?.titleAppbar ?? Container(),
+                    title: Align(
+                      alignment: const Alignment(-1.2, 0),
+                      child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
+                    ),
                     leading: IconButton(
                         icon: const Icon(
                           Icons.chevron_left,
@@ -253,13 +264,24 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           : Expanded(
                               child: RefreshIndicator(
                                 onRefresh: () async {
-                                  setState(() {
-                                    isloading = true;
-                                  });
-                                  await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                                  setState(() {
-                                    vidData = vidNotifier.vidData;
-                                  });
+                                  bool connect = await System().checkConnections();
+                                  if (connect) {
+                                    setState(() {
+                                      isloading = true;
+                                    });
+                                    await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                    setState(() {
+                                      vidData = vidNotifier.vidData;
+                                    });
+                                  } else {
+                                    if (mounted) {
+                                      ShowGeneralDialog.showToastAlert(
+                                        context,
+                                        lang?.internetConnectionLost ?? ' Error',
+                                        () async {},
+                                      );
+                                    }
+                                  }
                                 },
                                 child: NotificationListener<OverscrollIndicatorNotification>(
                                   onNotification: (overscroll) {
@@ -570,7 +592,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   ),
                 )
               : Container(),
-          vidData?[index].email == SharedPreference().readStorage(SpKeys.email) && (vidData?[index].reportedStatus == 'OWNED')
+          vidData?[index].email == SharedPreference().readStorage(SpKeys.email) && (vidData?[index].reportedStatus == 'OWNED' || vidData?[index].reportedStatus == 'OWNED')
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 11.0),
                   child: ContentViolationWidget(
@@ -1139,6 +1161,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         iconData: "${AssetPath.vectorPath}eye-off.svg",
                         defaultColor: false,
                         height: 30,
+                        color: Colors.white,
                       ),
                       Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
                       Text("HyppeVid ${transnot.translate.contentContainsSensitiveMaterial}",
@@ -1147,16 +1170,16 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                             color: Colors.white,
                             fontSize: 13,
                           )),
-                      // data.email == SharedPreference().readStorage(SpKeys.email)
-                      //     ? GestureDetector(
-                      //         onTap: () => Routing().move(Routes.appeal, argument: data),
-                      //         child: Container(
-                      //             padding: const EdgeInsets.all(8),
-                      //             margin: const EdgeInsets.all(18),
-                      //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                      //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                      //       )
-                      //     : const SizedBox(),
+                      data.email == SharedPreference().readStorage(SpKeys.email)
+                          ? GestureDetector(
+                              onTap: () => Routing().move(Routes.appeal, argument: data),
+                              child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  margin: const EdgeInsets.all(18),
+                                  decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                                  child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                            )
+                          : const SizedBox(),
                       const Spacer(),
                       GestureDetector(
                         onTap: () {

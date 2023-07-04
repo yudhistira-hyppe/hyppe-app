@@ -41,6 +41,8 @@ class _GridHashtagDiaryState extends State<GridHashtagDiary> {
           String tag = '';
           if(ref.item1?.tags?.isNotEmpty ?? false){
             tag = ref.item1?.tags?[0].tag ?? '';
+          }else{
+            tag = '#${widget.tag}';
           }
           return !ref.item3 ? ref.item2 == 0 ? SliverToBoxAdapter(child: SearchNoResultImage(locale: context.read<SearchNotifier>().language, keyword: tag)) : SliverPadding(
             padding: const EdgeInsets.all(10),

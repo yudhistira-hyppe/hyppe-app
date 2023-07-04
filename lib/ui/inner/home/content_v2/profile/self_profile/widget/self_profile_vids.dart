@@ -30,7 +30,9 @@ class SelfProfileVids extends StatelessWidget {
               hasScrollBody: false,
               child: OfflineMode(
                 function: () {
-                  notifier.getDataPerPgage(context);
+                  if (!notifier.isConnectContent) {
+                    notifier.getDataPerPgage(context);
+                  }
                 },
               ),
             )

@@ -18,7 +18,7 @@ import 'package:hyppe/core/services/notification_service.dart';
 Future<void> onBackgroundMessage(RemoteMessage message) async {
   final _notificationService = NotificationService();
 
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   """ 
             Background incoming message data => ${message.data},
             Background incoming message category => ${message.category},
@@ -110,7 +110,7 @@ class FcmService {
             Foreground incoming message sentTime => ${message.sentTime},
             Foreground incoming message threadId => ${message.threadId},
             Foreground incoming message ttl => ${message.ttl},
-            Foreground incoming message notification => ${message.notification?.title} ${message.notification?.body}
+            Foreground incoming message notification => ${message.notification?.title} || ${message.notification?.body}
             """
             .logger();
 
@@ -122,7 +122,7 @@ class FcmService {
         //     message: '${message.notification?.title ?? ''} ${message.notification?.body ?? ''}');
         // isHaveNotification.value = true;
 
-        _notifyApp(message, () => _eventService.notifyForegroundMessage(message));
+        // _notifyApp(message, () => _eventService.notifyForegroundMessage(message));
         _notificationService.showNotification(message);
         // if (notification != null) {
         //

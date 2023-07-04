@@ -68,7 +68,7 @@ class OtherProfileDiaries extends StatelessWidget {
                                   child: CustomContentModeratedWidget(
                                     width: double.infinity,
                                     height: double.infinity,
-                                    featureType: FeatureType.diary,
+                                    featureType: FeatureType.pic,
                                     isSafe: true, //notifier.postData.data.listDiary[index].isSafe,
                                     isSale: false,
                                     thumbnail: ImageUrl(notifier.manyUser.last.diaries?[index].postID,

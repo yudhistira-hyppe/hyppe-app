@@ -8,7 +8,6 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/grid_content_view.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +40,7 @@ class _SearchContentsTabState extends State<SearchContentsTab> with RouteAware{
         final lenghtPic = notifier.searchPic?.length ?? 0;
         final currentSkip = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
         if(currentSkip%12 == 0){
-          notifier.getDataSearch(context, typeSearch: SearchLoadData.content, reload: false);
+          notifier.getDataSearch(context, typeSearch: SearchLoadData.content, reload: false, forceLoad: true);
         }
       }
     });

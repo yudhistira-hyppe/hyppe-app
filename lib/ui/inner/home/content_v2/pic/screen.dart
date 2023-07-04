@@ -523,7 +523,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             );
                           }
 
-                          return itemPict(notifier, index);
+                          return itemPict(context, notifier, index, home);
                         },
                       ),
                     ),
@@ -543,7 +543,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   var initialControllerValue;
   ValueNotifier<int> _networklHasErrorNotifier = ValueNotifier(0);
 
-  Widget itemPict(PreviewPicNotifier notifier, int index) {
+  Widget itemPict(BuildContext context, PreviewPicNotifier notifier, int index, HomeNotifier homeNotifier) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -656,20 +656,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             ],
           ),
           tenPx,
-          // Stack(
-          //   children: [
-          //     Positioned.fill(
-          //       child: InteractiveViewer(
-          //         child: Image.network(
-          //           'https://flutterservice.com/wp-content/uploads/2022/10/3-1.jpg',
-          //           height: 300,
-          //           width: double.infinity,
-          //           fit: BoxFit.cover,
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
 
           VisibilityDetector(
             key: Key(index.toString()),
@@ -781,6 +767,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           // width: SizeConfig.screenWidth,
                           // height: SizeConfig.screenHeight,
                           child: ZoomableImage(
+                            enable: homeNotifier.connectionError ? false : true,
                             onScaleStart: () {
                               widget.onScaleStart?.call();
                             }, // optional
@@ -814,16 +801,21 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                               width: SizeConfig.screenWidth,
                                             ),
                                     ),
-                                    emptyWidget: Container(
-                                      // const EdgeInsets.symmetric(horizontal: 4.5),
-                                      // height: 500,
-                                      decoration: BoxDecoration(
-                                        image: const DecorationImage(
-                                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8.0),
-                                      ),
+                                    emptyWidget: GestureDetector(
+                                      onTap: () {
+                                        _networklHasErrorNotifier.value++;
+                                        // reloadImage(index);
+                                      },
+                                      child: Container(
+                                          decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                          width: SizeConfig.screenWidth,
+                                          height: 250,
+                                          padding: EdgeInsets.all(20),
+                                          alignment: Alignment.center,
+                                          child: CustomTextWidget(
+                                            textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                            maxLines: 3,
+                                          )),
                                     ),
                                     errorWidget: (context, url, error) {
                                       return GestureDetector(
@@ -835,8 +827,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
                                             width: SizeConfig.screenWidth,
                                             height: 250,
+                                            padding: const EdgeInsets.all(20),
                                             alignment: Alignment.center,
-                                            child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
+                                            child: CustomTextWidget(
+                                              textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                              maxLines: 3,
+                                            )),
                                       );
                                     },
                                   );

@@ -160,20 +160,32 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     itemPositionsListener.itemPositions.addListener(() async {
       index = itemPositionsListener.itemPositions.value.first.index;
       if (lastIndex != index) {
+        bool connect = await System().checkConnections();
+
         if (index == pics!.length - 2) {
-          if (!notifier.isLoadingLoadmore) {
-            await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
-            if (mounted) {
-              setState(() {
+          if (connect) {
+            if (!notifier.isLoadingLoadmore) {
+              await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
+              if (mounted) {
+                setState(() {
+                  pics = notifier.pics;
+                });
+              } else {
                 pics = notifier.pics;
-              });
-            } else {
-              pics = notifier.pics;
+              }
+            }
+          } else {
+            if (mounted) {
+              ShowGeneralDialog.showToastAlert(
+                context,
+                lang?.internetConnectionLost ?? ' Error',
+                () async {},
+              );
             }
           }
         }
+        lastIndex = index;
       }
-      lastIndex = index;
     });
 
     checkInet();
@@ -297,7 +309,6 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     });
     fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
       _showLoading = false;
-
       setState(() {});
     });
 
@@ -347,13 +358,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     //   playAuth:
     //       "eyJTZWN1cml0eVRva2VuIjoiQ0FJU2lBTjFxNkZ0NUIyeWZTaklyNURISnUvWnJvZFIrb1d2VlY2SmdHa0RPdFZjaDZMRG96ejJJSDFLZlhadEJPQWN0ZlF3bFdwVDdQNGJsckl1RjhJWkdoR2ZONU10dE1RUHJGL3dKb0hidk5ldTBic0hoWnY5bGNNTHJaaWpqcUhvZU96Y1lJNzMwWjdQQWdtMlEwWVJySkwrY1RLOUphYk1VL21nZ29KbWFkSTZSeFN4YVNFOGF2NWRPZ3BscnIwSVZ4elBNdnIvSFJQMnVtN1pIV3R1dEEwZTgzMTQ1ZmFRejlHaTZ4YlRpM2I5ek9FVXFPYVhKNFMvUGZGb05ZWnlTZjZvd093VUVxL2R5M3hvN3hGYjFhRjRpODRpL0N2YzdQMlFDRU5BK3dtbFB2dTJpOE5vSUYxV2E3UVdJWXRncmZQeGsrWjEySmJOa0lpbDVCdFJFZHR3ZUNuRldLR216c3krYjRIUEROc2ljcXZoTUhuZ3k4MkdNb0tQMHprcGVuVUdMZ2hIQ2JGRFF6MVNjVUZ3RjIyRmQvVDlvQTJRTWwvK0YvbS92ZnRvZ2NvbC9UTEI1c0dYSWxXRGViS2QzQnNETjRVMEIwRlNiRU5JaERPOEwvOWNLRndUSWdrOFhlN01WL2xhYUJGUHRLWFdtaUgrV3lOcDAzVkxoZnI2YXVOcGJnUHIxVVFwTlJxQUFaT3kybE5GdndoVlFObjZmbmhsWFpsWVA0V3paN24wTnVCbjlILzdWZHJMOGR5dHhEdCtZWEtKNWI4SVh2c0lGdGw1cmFCQkF3ZC9kakhYTjJqZkZNVFJTekc0T3pMS1dKWXVzTXQycXcwMSt4SmNHeE9iMGtKZjRTcnFpQ1RLWVR6UHhwakg0eDhvQTV6Z0cvZjVIQ3lFV3pISmdDYjhEeW9EM3NwRUh4RGciLCJBdXRoSW5mbyI6IntcIkNJXCI6XCJmOUc0eExxaHg2Tkk3YThaY1Q2N3hObmYrNlhsM05abmJXR1VjRmxTelljS0VKVTN1aVRjQ29Hd3BrcitqL2phVVRXclB2L2xxdCs3MEkrQTJkb3prd0IvKzc5ZlFyT2dLUzN4VmtFWUt6TT1cIixcIkNhbGxlclwiOlwiV2NKTEpvUWJHOXR5UmM2ZXg3LzNpQXlEcS9ya3NvSldhcXJvTnlhTWs0Yz1cIixcIkV4cGlyZVRpbWVcIjpcIjIwMjMtMDMtMTZUMDk6NDE6MzdaXCIsXCJNZWRpYUlkXCI6XCJjMWIyNGQzMGIyYzY3MWVkYmZjYjU0MjI4MGU5MDEwMlwiLFwiUGxheURvbWFpblwiOlwidm9kLmh5cHBlLmNsb3VkXCIsXCJTaWduYXR1cmVcIjpcIk9pbHhxelNyaVVhOGlRZFhaVEVZZEJpbUhJUT1cIn0iLCJWaWRlb01ldGEiOnsiU3RhdHVzIjoiTm9ybWFsIiwiVmlkZW9JZCI6ImMxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyIiwiVGl0bGUiOiIyODg4MTdkYi1jNzdjLWM0ZTQtNjdmYi0zYjk1MTlmNTc0ZWIiLCJDb3ZlclVSTCI6Imh0dHBzOi8vdm9kLmh5cHBlLmNsb3VkL2MxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyL3NuYXBzaG90cy9jYzM0MjVkNzJiYjM0YTE3OWU5NmMzZTA3NTViZjJjNi0wMDAwNC5qcGciLCJEdXJhdGlvbiI6NTkuMDQ5fSwiQWNjZXNzS2V5SWQiOiJTVFMuTlNybVVtQ1hwTUdEV3g4ZGlWNlpwaGdoQSIsIlBsYXlEb21haW4iOiJ2b2QuaHlwcGUuY2xvdWQiLCJBY2Nlc3NLZXlTZWNyZXQiOiIzU1NRUkdkOThGMU04TkZ0b00xa2NlU01IZlRLNkJvZm93VXlnS1Y5aEpQdyIsIlJlZ2lvbiI6ImFwLXNvdXRoZWFzdC01IiwiQ3VzdG9tZXJJZCI6NTQ1NDc1MzIwNTI4MDU0OX0=",
     // );
+    // await getAuth(data.music?.apsaraMusic ?? '');
 
     _playMode = ModeTypeAliPLayer.auth;
-    // await getAuth(data.music?.apsaraMusic ?? '');
-    if (data.reportedStatus != 'BLURRED') {
-      _playMode = ModeTypeAliPLayer.auth;
-      await getAuth(data.music?.apsaraMusic ?? '');
-    }
+    await getAuth(data.music?.apsaraMusic ?? '');
 
     setState(() {
       isPause = false;
@@ -387,9 +395,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     //   /// Specify whether to enable the cache feature.
     // };
     // fAliplayer?.setCacheConfig(map);
-    print("sedang prepare");
-    print("sedang prepare $isMute");
-    fAliplayer?.prepare();
+    if (data.reportedStatus != 'BLURRED') {
+      fAliplayer?.prepare();
+    }
     if (isMute) {
       fAliplayer?.setMuted(true);
     }
@@ -574,7 +582,10 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ListTile(
-                  title: widget.arguments?.titleAppbar ?? Container(),
+                  title: Align(
+                    alignment: const Alignment(-1.2, 0),
+                    child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
+                  ),
                   leading: IconButton(
                       icon: const Icon(
                         Icons.chevron_left,
@@ -592,13 +603,24 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       ? const NoResultFound()
                       : RefreshIndicator(
                           onRefresh: () async {
-                            setState(() {
-                              isloading = true;
-                            });
-                            await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                            setState(() {
-                              pics = notifier.pics;
-                            });
+                            bool connect = await System().checkConnections();
+                            if (connect) {
+                              setState(() {
+                                isloading = true;
+                              });
+                              await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                              setState(() {
+                                pics = notifier.pics;
+                              });
+                            } else {
+                              if (mounted) {
+                                ShowGeneralDialog.showToastAlert(
+                                  context,
+                                  lang?.internetConnectionLost ?? ' Error',
+                                  () async {},
+                                );
+                              }
+                            }
                           },
                           child: NotificationListener<OverscrollIndicatorNotification>(
                             onNotification: (overscroll) {
@@ -905,7 +927,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                           valueListenable: _networklHasErrorNotifier,
                                           builder: (BuildContext context, int count, _) {
                                             return CustomBaseCacheImage(
-                                              // cacheKey: "${pics?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
+                                              cacheKey: "${pics?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
                                               memCacheWidth: 100,
                                               memCacheHeight: 100,
                                               widthPlaceHolder: 80,
@@ -938,7 +960,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                                     width: SizeConfig.screenWidth,
                                                     height: 250,
                                                     alignment: Alignment.center,
-                                                    child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
+                                                    padding: const EdgeInsets.all(20),
+                                                    child: pics?[index].reportedStatus == 'BLURRED'
+                                                        ? Container()
+                                                        : CustomTextWidget(
+                                                            textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                                            maxLines: 3,
+                                                          )),
                                               ),
                                               errorWidget: (context, url, error) {
                                                 return GestureDetector(
@@ -950,7 +978,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                                       width: SizeConfig.screenWidth,
                                                       height: 250,
                                                       alignment: Alignment.center,
-                                                      child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
+                                                      padding: const EdgeInsets.all(20),
+                                                      child: pics?[index].reportedStatus == 'BLURRED'
+                                                          ? Container()
+                                                          : CustomTextWidget(
+                                                              textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                                              maxLines: 3,
+                                                            )),
                                                 );
                                               },
                                             );
@@ -967,8 +1001,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                 decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
                                 width: SizeConfig.screenWidth,
                                 height: 250,
+                                padding: const EdgeInsets.all(20),
                                 alignment: Alignment.center,
-                                child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
+                                child: pics?[index].reportedStatus == 'BLURRED'
+                                    ? Container()
+                                    : CustomTextWidget(
+                                        textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                        maxLines: 3,
+                                      )),
                           ),
                     _buildBody(context, SizeConfig.screenWidth, pics?[index] ?? ContentData()),
                     blurContentWidget(context, pics?[index] ?? ContentData()),
@@ -1224,7 +1264,6 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
               child: GestureDetector(
                 onTap: () {
                   fAliplayer?.pause();
-
                   context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer);
                 },
                 child: const CustomIconWidget(
@@ -1275,6 +1314,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                         iconData: "${AssetPath.vectorPath}eye-off.svg",
                         defaultColor: false,
                         height: 30,
+                        color: Colors.white,
                       ),
                       Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
                       Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
@@ -1283,19 +1323,23 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                             color: Colors.white,
                             fontSize: 13,
                           )),
-                      // data.email == SharedPreference().readStorage(SpKeys.email)
-                      //     ? GestureDetector(
-                      //         onTap: () => Routing().move(Routes.appeal, argument: data),
-                      //         child: Container(
-                      //             padding: const EdgeInsets.all(8),
-                      //             margin: const EdgeInsets.all(18),
-                      //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                      //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                      //       )
-                      //     : const SizedBox(),
+                      data.email == SharedPreference().readStorage(SpKeys.email)
+                          ? GestureDetector(
+                              onTap: () => Routing().move(Routes.appeal, argument: data),
+                              child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  margin: const EdgeInsets.all(18),
+                                  decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                                  child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                            )
+                          : const SizedBox(),
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
+                          if (data.music?.musicTitle != null) {
+                            fAliplayer?.prepare();
+                            fAliplayer?.play();
+                          }
                           System().increaseViewCount2(context, data);
                           setState(() {
                             data.reportedStatus = '';

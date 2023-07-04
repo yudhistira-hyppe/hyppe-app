@@ -91,6 +91,18 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
       });
     }
 
+    if (globalAfterReport) {
+      setState(() {
+        isloading = true;
+      });
+      Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          isloading = false;
+        });
+        globalAfterReport = false;
+      });
+    }
+
     // setState(() {});
 
     // final notifier = context.read<OtherProfileNotifier>();
@@ -206,8 +218,13 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                 : !notifier.isConnect && notifier.user.profile == null
                     ? OfflineMode(
                         function: () async {
-                          isloading = true;
-                          await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
+                          var connect = await System().checkConnections();
+                          if (connect) {
+                            setState(() {
+                              isloading = true;
+                            });
+                            await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
+                          }
                         },
                       )
                     : CustomScrollView(
@@ -278,8 +295,13 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                                         hasScrollBody: false,
                                         child: OfflineMode(
                                           function: () async {
-                                            isloading = true;
-                                            await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
+                                            var connect = await System().checkConnections();
+                                            if (connect) {
+                                              setState(() {
+                                                isloading = true;
+                                              });
+                                              await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
+                                            }
                                           },
                                         ),
                                       )
@@ -294,8 +316,13 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                                         hasScrollBody: false,
                                         child: OfflineMode(
                                           function: () async {
-                                            isloading = true;
-                                            await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
+                                            var connect = await System().checkConnections();
+                                            if (connect) {
+                                              setState(() {
+                                                isloading = true;
+                                              });
+                                              await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
+                                            }
                                           },
                                         ),
                                       )
