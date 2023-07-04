@@ -144,7 +144,7 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  bool _isHasNextPic = true;
+  bool _isHasNextPic = false;
   bool get isHasNextPic => _isHasNextPic;
   set isHasNextPic(bool state){
     _isHasNextPic = state;
@@ -154,7 +154,7 @@ class SearchNotifier with ChangeNotifier {
     _isHasNextPic = state;
   }
 
-  bool _isHasNextVid = true;
+  bool _isHasNextVid = false;
   bool get isHasNextVid => _isHasNextVid;
   set isHasNextVid(bool state){
     _isHasNextVid = state;
@@ -164,7 +164,7 @@ class SearchNotifier with ChangeNotifier {
     _isHasNextVid = state;
   }
 
-  bool _isHasNextDiary = true;
+  bool _isHasNextDiary = false;
   bool get isHasNextDiary => _isHasNextDiary;
   set isHasNextDiary(bool state){
     _isHasNextDiary = state;
@@ -172,6 +172,36 @@ class SearchNotifier with ChangeNotifier {
   }
   setHasNextDiary(bool state){
     _isHasNextDiary = state;
+  }
+
+  bool _intHasNextPic = false;
+  bool get intHasNextPic => _intHasNextPic;
+  set intHasNextPic(bool state){
+    _intHasNextPic = state;
+    notifyListeners();
+  }
+  setIntHasNextPic(bool state){
+    _intHasNextPic = state;
+  }
+
+  bool _intHasNextVid = false;
+  bool get intHasNextVid => _intHasNextVid;
+  set intHasNextVid(bool state){
+    _intHasNextVid = state;
+    notifyListeners();
+  }
+  setIntHasNextVid(bool state){
+    _intHasNextVid = state;
+  }
+
+  bool _intHasNextDiary = false;
+  bool get intHasNextDiary => _intHasNextDiary;
+  set intHasNextDiary(bool state){
+    _intHasNextDiary = state;
+    notifyListeners();
+  }
+  setIntHasNextDiary(bool state){
+    _intHasNextDiary = state;
   }
 
   List<ContentData>? _hashtagVid;
@@ -999,7 +1029,6 @@ class SearchNotifier with ChangeNotifier {
       checkConnection();
       print('the interest id: $keys');
       if (reload) {
-        initAllHasNext();
         loadIntDetail = true;
         final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: hyppe);
         if (_res != null) {
@@ -1033,50 +1062,54 @@ class SearchNotifier with ChangeNotifier {
                 ? lenghtDiary
                 : hyppe == HyppeType.HyppePic ? lenghtPic : 0;
         if (currentSkip % 12 == 0) {
-          if (!hasNext) {
-            hasNext = true;
-            final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, currentSkip, type: hyppe);
-            if (_res != null) {
-              if(currentSkip != 0){
-                final videos = _res.vid;
-                final diaries = _res.diary;
-                final pics = _res.pict;
-                if(hyppe == HyppeType.HyppeVid){
-                  if(videos?.isEmpty ?? true){
-                    isHasNextVid = false;
-                  }
+          if(hyppe == HyppeType.HyppeVid){
+            intHasNextVid = true;
+          }else if(hyppe == HyppeType.HyppeDiary){
+            intHasNextDiary = true;
+          }else if(hyppe == HyppeType.HyppePic){
+            intHasNextPic = true;
+          }
+          final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, currentSkip, type: hyppe);
+          if (_res != null) {
+            if(currentSkip != 0){
+              final videos = _res.vid;
+              final diaries = _res.diary;
+              final pics = _res.pict;
+              if(hyppe == HyppeType.HyppeVid){
+                if(videos?.isEmpty ?? true){
+                  intHasNextVid = false;
                 }
-                if(hyppe == HyppeType.HyppeDiary){
-                  if(diaries?.isEmpty ?? true){
-                    isHasNextDiary = false;
-                  }
+              }
+              if(hyppe == HyppeType.HyppeDiary){
+                if(diaries?.isEmpty ?? true){
+                  intHasNextDiary = false;
                 }
-                if(hyppe == HyppeType.HyppePic){
-                  if(pics?.isEmpty ?? true){
-                    isHasNextPic = false;
-                  }
+              }
+              if(hyppe == HyppeType.HyppePic){
+                if(pics?.isEmpty ?? true){
+                  intHasNextPic = false;
                 }
-
-                if (hyppe == HyppeType.HyppeVid) {
-                  for (final video in videos ?? []) {
-                    interestContents[keys]?.vid?.add(video);
-                  }
-                  // _hashtagVid = [...(_hashtagVid ?? []), ...(videos ?? [])];
-                } else if (hyppe == HyppeType.HyppeDiary) {
-                  for (final diary in diaries ?? []) {
-                    interestContents[keys]?.diary?.add(diary);
-                  }
-                  // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
-                } else if (hyppe == HyppeType.HyppePic){
-                  for (final pic in pics ?? []) {
-                    interestContents[keys]?.pict?.add(pic);
-                  }
-                  // _hashtagPic = [...(_hashtagPic ?? []), ...(pics ?? [])];
-                }
-                notifyListeners();
               }
 
+              if (hyppe == HyppeType.HyppeVid) {
+                for (final video in videos ?? []) {
+                  interestContents[keys]?.vid?.add(video);
+                }
+                // _hashtagVid = [...(_hashtagVid ?? []), ...(videos ?? [])];
+              } else if (hyppe == HyppeType.HyppeDiary) {
+                for (final diary in diaries ?? []) {
+                  interestContents[keys]?.diary?.add(diary);
+                }
+                // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
+              } else if (hyppe == HyppeType.HyppePic){
+                for (final pic in pics ?? []) {
+                  interestContents[keys]?.pict?.add(pic);
+                }
+                // _hashtagPic = [...(_hashtagPic ?? []), ...(pics ?? [])];
+              }
+              notifyListeners();
             }
+
           }
         }
         hasNext = false;
@@ -1085,8 +1118,14 @@ class SearchNotifier with ChangeNotifier {
       if (loadTagDetail) {
         loadIntDetail = false;
       }
-      if (_hasNext) {
-        hasNext = false;
+      if(hyppe == HyppeType.HyppeVid){
+        intHasNextVid = false;
+      }
+      if(hyppe == HyppeType.HyppeDiary){
+        intHasNextDiary = false;
+      }
+      if(hyppe == HyppeType.HyppePic){
+        intHasNextPic = false;
       }
 
       'Error getDetail: $e'.logger();
@@ -1094,8 +1133,14 @@ class SearchNotifier with ChangeNotifier {
       if (loadTagDetail) {
         loadTagDetail = false;
       }
-      if (_hasNext) {
-        hasNext = false;
+      if(hyppe == HyppeType.HyppeVid){
+        intHasNextVid = false;
+      }
+      if(hyppe == HyppeType.HyppeDiary){
+        intHasNextDiary = false;
+      }
+      if(hyppe == HyppeType.HyppePic){
+        intHasNextPic = false;
       }
     }
   }
@@ -1170,7 +1215,12 @@ class SearchNotifier with ChangeNotifier {
       }
 
       final notifier = SearchContentBloc();
-      await notifier.getSearchContent(context, param, type: typeApi);
+      if(typeApi == TypeApiSearch.detailInterest){
+        await notifier.getDetailContents(context, param, type: typeApi);
+      }else{
+        await notifier.getSearchContent(context, param, type: typeApi);
+      }
+
       final fetch = notifier.searchContentFetch;
       if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
         final _res = SearchContentModel.fromJson(fetch.data[0]);
@@ -1277,7 +1327,9 @@ class SearchNotifier with ChangeNotifier {
       }
 
       if (reload) {
-        initAllHasNext();
+        if(typeSearch == TypeApiSearch.detailHashTag){
+          initAllHasNext();
+        }
         isLoading = true;
       }
 
@@ -1370,9 +1422,9 @@ class SearchNotifier with ChangeNotifier {
         final _res = SearchContentModel.fromJson(fetch.data[0]);
         switch (typeSearch) {
           case SearchLoadData.all:
-            isHasNextVid = true;
-            isHasNextDiary = true;
-            isHasNextPic = true;
+            // isHasNextVid = true;
+            // isHasNextDiary = true;
+            // isHasNextPic = true;
             searchUsers = _res.users;
             searchVid = _res.vid;
             searchDiary = _res.diary;

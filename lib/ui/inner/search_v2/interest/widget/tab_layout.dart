@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
+import 'package:hyppe/ui/inner/search_v2/interest/widget/diary_scroll_screen.dart';
+import 'package:hyppe/ui/inner/search_v2/interest/widget/pic_scroll_screen.dart';
+import 'package:hyppe/ui/inner/search_v2/interest/widget/vid_scroll_screen.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:measured_size/measured_size.dart';
@@ -143,64 +146,38 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                         ),
                       ),
                       Expanded(
-                        child: RefreshIndicator(
-                          strokeWidth: 2.0,
-                          color: context.getColorScheme().primary,
-                          onRefresh: () => notifier.getDetailInterest(context, widget.interest.id ?? ''),
-                          child: SingleChildScrollView(
-                            controller: scrollController,
-                            physics: const ClampingScrollPhysics(),
-                            child: Column(
-                              children: [
-                                Builder(builder: (context) {
-                                  final type = currentType;
-                                  if (data != null) {
-                                    switch (type) {
-                                      case HyppeType.HyppeVid:
-                                        return data.vid.isNotNullAndEmpty()
-                                            ? GridContentView(
-                                                type: type,
-                                                data: data.vid ?? [],
-                                                isLoading: notifier.isHasNextVid,
-                                                keyword: widget.interest.id ?? '',
-                                                api: TypeApiSearch.detailInterest,
-                                                controller: scrollController,
-                                          heightTab: heightTab,
-                                              )
-                                            : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
-                                      case HyppeType.HyppeDiary:
-                                        return data.diary.isNotNullAndEmpty()
-                                            ? GridContentView(
-                                                type: type,
-                                                data: data.diary ?? [],
-                                                isLoading: notifier.isHasNextDiary,
-                                                keyword: widget.interest.id ?? '',
-                                                api: TypeApiSearch.detailInterest,
-                                                controller: scrollController,
-                                          heightTab: heightTab,
-                                              )
-                                            : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
-                                      case HyppeType.HyppePic:
-                                        return data.pict.isNotNullAndEmpty()
-                                            ? GridContentView(
-                                                type: type,
-                                                data: data.pict ?? [],
-                                                isLoading: notifier.isHasNextPic,
-                                                keyword: widget.interest.id ?? '',
-                                                api: TypeApiSearch.detailInterest,
-                                                controller: scrollController,
-                                          heightTab: heightTab,
-                                              )
-                                            : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
-                                    }
-                                  } else {
-                                    return SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              child: Builder(builder: (context) {
+                                final type = currentType;
+                                if (data != null) {
+                                  switch (type) {
+                                    case HyppeType.HyppeVid:
+                                      return data.vid.isNotNullAndEmpty() ? VidScrollScreen(interestKey: widget.interest.id ?? ''): SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                                    case HyppeType.HyppeDiary:
+                                      return data.diary.isNotNullAndEmpty() ? DiaryScrollScreen(interestKey: widget.interest.id ?? ''): SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                                    case HyppeType.HyppePic:
+                                      return data.pict.isNotNullAndEmpty() ? PicScrollScreen(interestKey: widget.interest.id ?? ''): SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                                      return data.pict.isNotNullAndEmpty()
+                                          ? GridContentView(
+                                        type: type,
+                                        data: data.pict ?? [],
+                                        isLoading: notifier.isHasNextPic,
+                                        keyword: widget.interest.id ?? '',
+                                        api: TypeApiSearch.detailInterest,
+                                        controller: scrollController,
+                                        heightTab: heightTab,
+                                      )
+                                          : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                                   }
-                                }),
-                                fortyPx
-                              ],
+                                } else {
+                                  return SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                                }
+                              }),
                             ),
-                          ),
+                          ],
                         ),
                       )
                     ],

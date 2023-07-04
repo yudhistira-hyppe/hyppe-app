@@ -20,6 +20,7 @@ import '../../../../../core/constants/enum.dart';
 import '../../../../../core/constants/kyc_status.dart';
 import '../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../core/constants/size_config.dart';
+import '../../../../../core/constants/size_widget.dart';
 import '../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../core/constants/utils.dart';
 import '../../../../../core/models/collection/posts/content_v2/content_data.dart';
@@ -83,7 +84,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ScrollVid');
     email = SharedPreference().readStorage(SpKeys.email);
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
-    final vidData = notifier.mapDetailHashtag[widget.interestKey]?.vid;
+    final vidData = notifier.interestContents[widget.interestKey]?.vid;
     var index = 0;
     var lastIndex = 0;
     itemPositionsListener.itemPositions.addListener(() async {
@@ -91,7 +92,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
       if (lastIndex != index) {
         if (index == vidData!.length - 2) {
           print("ini reload harusnya");
-          if (!notifier.hasNext) {
+          if (!notifier.intHasNextVid) {
             notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interestKey, reload: false, hyppe: HyppeType.HyppeVid);
 
           }
@@ -154,7 +155,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
   void didPopNext() {
     print("======= didPopNext dari diary");
     final notifier = context.read<SearchNotifier>();
-    final vidData = notifier.mapDetailHashtag[widget.interestKey]?.vid;
+    final vidData = notifier.interestContents[widget.interestKey]?.vid;
     if (_curIdx != -1) {
       vidData?[_curIdx].fAliplayer?.play();
     }
@@ -173,7 +174,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
   void didPushNext() {
     print("========= didPushNext dari diary");
     final notifier = context.read<SearchNotifier>();
-    final vidData = notifier.mapDetailHashtag[widget.interestKey]?.vid;
+    final vidData = notifier.interestContents[widget.interestKey]?.vid;
     if (_curIdx != -1) {
       vidData?[_curIdx].fAliplayer?.pause();
     }
@@ -184,90 +185,69 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    // final vidNotifier = context.watch<ScrollVidNotifier>();
-    // final error = context.select((ErrorService value) => value.getError(ErrorType.vid));
-    // final likeNotifier = Provider.of<LikeNotifier>(context, listen: false);
 
-    return Scaffold(
-      backgroundColor: kHyppeLightSurface,
-      body: WillPopScope(
-        onWillPop: () async {
-          Navigator.pop(context, '$_cardIndex');
-          return false;
-        },
-        child: Consumer<SearchNotifier>(
-          builder: (_, vidNotifier, __){
-            final vidData = vidNotifier.mapDetailHashtag[widget.interestKey]?.vid;
-            return SafeArea(
-              child: SizedBox(
-                child: Column(
-                  children: [
-                    (vidData != null)
-                        ? (vidData.isEmpty)
-                        ? const NoResultFound()
-                        : Expanded(
-                      child: RefreshIndicator(
-                        onRefresh: () async {
-                          await vidNotifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interestKey, hyppe: HyppeType.HyppeVid);
-                        },
-                        child: NotificationListener<OverscrollIndicatorNotification>(
-                          onNotification: (overscroll) {
-                            overscroll.disallowIndicator();
-                            return false;
-                          },
-                          child: ScrollablePositionedList.builder(
-                            itemScrollController: itemScrollController,
-                            itemPositionsListener: itemPositionsListener,
-                            scrollOffsetController: scrollOffsetController,
-                            // controller: vidNotifier.pageController,
-                            // onPageChanged: (index) async {
-                            //   print('ScrollVid index : $index');
-                            //   if (index == (vidNotifier.itemCount - 1)) {
-                            //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
-                            //     if (values.isNotEmpty) {
-                            //       vidData = [...(vidData ?? [] as List<ContentData>)] + values;
-                            //     }
-                            //   }
-                            //   // context.read<ScrollVidNotifier>().nextVideo = false;
-                            //   // context.read<ScrollVidNotifier>().initializeVideo = false;
-                            // },
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            shrinkWrap: false,
-                            padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                            itemCount: vidData.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              vidData[index].fAliplayer?.pause();
-                              _lastCurIndex = -1;
-                              return CustomShimmer(
-                                margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
-                                height: context.getHeight() / 8,
-                                width: double.infinity,
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    )
-                        : const AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: CustomShimmer(
-                        height: double.infinity,
-                        width: double.infinity,
-                      ),
-                    ),
-                    vidNotifier.hasNext
-                        ? const SizedBox(
-                      height: 50,
-                      child: CustomLoading(),
-                    )
-                        : Container(),
-                  ],
+    return Consumer<SearchNotifier>(
+      builder: (_, vidNotifier, __){
+        final vidData = vidNotifier.interestContents[widget.interestKey]?.vid;
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            (vidData != null)
+                ? (vidData.isEmpty)
+                ? const NoResultFound()
+                : Flexible(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await vidNotifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interestKey, hyppe: HyppeType.HyppeVid);
+                },
+                child: NotificationListener<OverscrollIndicatorNotification>(
+                  onNotification: (overscroll) {
+                    overscroll.disallowIndicator();
+                    return false;
+                  },
+                  child: ScrollablePositionedList.builder(
+                    itemScrollController: itemScrollController,
+                    itemPositionsListener: itemPositionsListener,
+                    scrollOffsetController: scrollOffsetController,
+                    // controller: vidNotifier.pageController,
+                    // onPageChanged: (index) async {
+                    //   print('ScrollVid index : $index');
+                    //   if (index == (vidNotifier.itemCount - 1)) {
+                    //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
+                    //     if (values.isNotEmpty) {
+                    //       vidData = [...(vidData ?? [] as List<ContentData>)] + values;
+                    //     }
+                    //   }
+                    //   // context.read<ScrollVidNotifier>().nextVideo = false;
+                    //   // context.read<ScrollVidNotifier>().initializeVideo = false;
+                    // },
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    shrinkWrap: false,
+                    padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                    itemCount: vidData.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return itemVid(vidNotifier, index, vidData);
+                    },
+                  ),
                 ),
               ),
-            );
-          },
-        ),
-      ),
+            )
+                : const AspectRatio(
+              aspectRatio: 16 / 9,
+              child: CustomShimmer(
+                height: double.infinity,
+                width: double.infinity,
+              ),
+            ),
+            vidNotifier.intHasNextVid
+                ? const SizedBox(
+              height: 50,
+              child: CustomLoading(),
+            )
+                : Container(),
+          ],
+        );
+      },
     );
   }
 

@@ -105,18 +105,25 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
     return Consumer<SearchNotifier>(builder: (context, notifier, _){
       return Scaffold(
           appBar: AppBar(
-            leading: CustomIconButtonWidget(
-              onPressed: () => notifier.backFromSearchMore(),
-              defaultColor: false,
-              iconData: "${AssetPath.vectorPath}back-arrow.svg",
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-            title: CustomTextWidget(
-              textToDisplay: notifier.language.moreContents ?? 'More Contents',
-              textStyle: context
-                  .getTextTheme()
-                  .bodyText1
-                  ?.copyWith(fontWeight: FontWeight.w700),
+            automaticallyImplyLeading: false,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CustomIconButtonWidget(
+                  onPressed: () => notifier.backFromSearchMore(),
+                  defaultColor: false,
+                  iconData: "${AssetPath.vectorPath}back-arrow.svg",
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                CustomTextWidget(
+                  textToDisplay: notifier.language.moreContents ?? 'More Contents',
+                  textStyle: context
+                      .getTextTheme()
+                      .bodyText1
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ],
             ),
           ),
           body: Column(

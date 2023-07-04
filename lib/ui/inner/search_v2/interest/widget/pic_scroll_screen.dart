@@ -21,6 +21,7 @@ import '../../../../../core/constants/enum.dart';
 import '../../../../../core/constants/kyc_status.dart';
 import '../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../core/constants/size_config.dart';
+import '../../../../../core/constants/size_widget.dart';
 import '../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../core/constants/utils.dart';
 import '../../../../../core/models/collection/posts/content_v2/content_data.dart';
@@ -113,7 +114,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic-${notifier.mapDetailHashtag[widget.interestKey]?.pict?.first.postID}');
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic-${notifier.interestContents[widget.interestKey]?.pict?.first.postID}');
       WidgetsBinding.instance.addObserver(this);
 
       fAliplayer?.setAutoPlay(true);
@@ -137,8 +138,8 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
     itemPositionsListener.itemPositions.addListener(() async {
       index = itemPositionsListener.itemPositions.value.first.index;
       if (lastIndex != index) {
-        if (index == (notifier.mapDetailHashtag[widget.interestKey]?.pict?.length ?? 2) - 2) {
-          if (!notifier.hasNext) {
+        if (index == (notifier.interestContents[widget.interestKey]?.pict?.length ?? 2) - 2) {
+          if (!notifier.intHasNextPic) {
             notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interestKey, reload: false, hyppe: HyppeType.HyppePic);
           }
         }
@@ -488,84 +489,72 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    return Scaffold(
-      backgroundColor: kHyppeLightSurface,
-      body: WillPopScope(
-        onWillPop: () async {
-          // Navigator.pop(context, '$_curIdx');
-          Routing().moveBack();
-          return false;
-        },
-        child: Consumer<SearchNotifier>(
-          builder: (_, notifier, __){
-            final pics = notifier.mapDetailHashtag[widget.interestKey]?.pict;
-            return SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: pics?.isEmpty ?? true
-                        ? const NoResultFound()
-                        : RefreshIndicator(
-                      onRefresh: () async {
-                        await notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interestKey, hyppe: HyppeType.HyppePic);
-                      },
-                      child: NotificationListener<OverscrollIndicatorNotification>(
-                        onNotification: (overscroll) {
-                          overscroll.disallowIndicator();
+    return Consumer<SearchNotifier>(
+      builder: (_, notifier, __){
+        final pics = notifier.interestContents[widget.interestKey]?.pict;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: pics?.isEmpty ?? true
+                  ? const NoResultFound()
+                  : RefreshIndicator(
+                onRefresh: () async {
+                  await notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interestKey, hyppe: HyppeType.HyppePic);
+                },
+                child: NotificationListener<OverscrollIndicatorNotification>(
+                  onNotification: (overscroll) {
+                    overscroll.disallowIndicator();
 
-                          return false;
-                        },
-                        child: ScrollablePositionedList.builder(
-                          scrollDirection: Axis.vertical,
-                          itemScrollController: itemScrollController,
-                          itemPositionsListener: itemPositionsListener,
-                          scrollOffsetController: scrollOffsetController,
-                          // scrollDirection: Axis.horizontal,
-                          physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
-                          shrinkWrap: false,
-                          itemCount: pics?.length ?? 0,
-                          padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                          itemBuilder: (context, index) {
-                            if (pics == null) {
-                              fAliplayer?.pause();
-                              _lastCurIndex = -1;
-                              return CustomShimmer(
-                                width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                                height: 168,
-                                radius: 8,
-                                margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                              );
-                            } else if (index == pics.length) {
-                              return UnconstrainedBox(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: 80 * SizeConfig.scaleDiagonal,
-                                  height: 80 * SizeConfig.scaleDiagonal,
-                                  child: const CustomLoading(),
-                                ),
-                              );
-                            }
+                    return false;
+                  },
+                  child: ScrollablePositionedList.builder(
+                    scrollDirection: Axis.vertical,
+                    itemScrollController: itemScrollController,
+                    itemPositionsListener: itemPositionsListener,
+                    scrollOffsetController: scrollOffsetController,
+                    // scrollDirection: Axis.horizontal,
+                    physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
+                    shrinkWrap: false,
+                    itemCount: pics?.length ?? 0,
+                    padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                    itemBuilder: (context, index) {
+                      if (pics == null) {
+                        fAliplayer?.pause();
+                        _lastCurIndex = -1;
+                        return CustomShimmer(
+                          width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                          height: 168,
+                          radius: 8,
+                          margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                        );
+                      } else if (index == pics.length) {
+                        return UnconstrainedBox(
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: 80 * SizeConfig.scaleDiagonal,
+                            height: 80 * SizeConfig.scaleDiagonal,
+                            child: const CustomLoading(),
+                          ),
+                        );
+                      }
 
-                            return itemPict(notifier, index, pics);
-                          },
-                        ),
-                      ),
-                    ),
+                      return itemPict(notifier, index, pics);
+                    },
                   ),
-                  notifier.hasNext
-                      ? const SizedBox(
-                    height: 50,
-                    child: Center(child: CustomLoading()),
-                  )
-                      : Container(),
-                ],
+                ),
               ),
-            );
-          },
-        ),
-      ),
+            ),
+            notifier.intHasNextPic
+                ? const SizedBox(
+              height: 50,
+              child: Center(child: CustomLoading()),
+            )
+                : Container(),
+          ],
+        );
+      },
     );
   }
 
