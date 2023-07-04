@@ -142,16 +142,27 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       index = itemPositionsListener.itemPositions.value.first.index;
       if (lastIndex != index) {
         if (index == diaryData!.length - 2) {
-          print("ini reload harusnya");
-          if (!notifier.isLoadingLoadmore) {
-            await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
-            setState(() {
-              diaryData = notifier.diaryData;
-            });
+          bool connect = await System().checkConnections();
+          if (connect) {
+            print("ini reload harusnya");
+            if (!notifier.isLoadingLoadmore) {
+              await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
+              setState(() {
+                diaryData = notifier.diaryData;
+              });
+            }
+          } else {
+            if (mounted) {
+              ShowGeneralDialog.showToastAlert(
+                context,
+                lang?.internetConnectionLost ?? ' Error',
+                () async {},
+              );
+            }
           }
         }
+        lastIndex = index;
       }
-      lastIndex = index;
     });
     checkInet();
 
@@ -611,13 +622,24 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                         ? const NoResultFound()
                         : RefreshIndicator(
                             onRefresh: () async {
-                              setState(() {
-                                isloading = true;
-                              });
-                              await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                              setState(() {
-                                diaryData = notifier.diaryData;
-                              });
+                              bool connect = await System().checkConnections();
+                              if (connect) {
+                                setState(() {
+                                  isloading = true;
+                                });
+                                await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                setState(() {
+                                  diaryData = notifier.diaryData;
+                                });
+                              } else {
+                                if (mounted) {
+                                  ShowGeneralDialog.showToastAlert(
+                                    context,
+                                    lang?.internetConnectionLost ?? ' Error',
+                                    () async {},
+                                  );
+                                }
+                              }
                             },
                             child: NotificationListener<OverscrollIndicatorNotification>(
                               onNotification: (overscroll) {
@@ -819,16 +841,22 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                         ? ClipRRect(
                             borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                             child: Builder(builder: (context) {
-                              if (!isloading) {
-                                return AliPlayerView(
-                                  onCreated: onViewPlayerCreated,
-                                  x: 0,
-                                  y: 0,
-                                  height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                  width: MediaQuery.of(context).size.width,
-                                );
-                              }
-                              return Container();
+                              // if (!isloading) {
+                              //   return AliPlayerView(
+                              //     onCreated: onViewPlayerCreated,
+                              //     x: 0,
+                              //     y: 0,
+                              //     height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                              //     width: MediaQuery.of(context).size.width,
+                              //   );
+                              // }
+                              return AliPlayerView(
+                                onCreated: onViewPlayerCreated,
+                                x: 0,
+                                y: 0,
+                                height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                width: MediaQuery.of(context).size.width,
+                              );
                             }),
                           )
                         : Container(),
@@ -1276,7 +1304,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Spacer(),
+                      const Spacer(),
                       const CustomIconWidget(
                         iconData: "${AssetPath.vectorPath}eye-off.svg",
                         defaultColor: false,

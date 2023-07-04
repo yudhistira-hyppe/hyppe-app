@@ -40,15 +40,15 @@ class OtherProfileTop extends StatelessWidget {
 
   void showPict(BuildContext context, OtherProfileNotifier notifier) {
     final imageUrl = notifier.displayPhotoProfileOriginal();
-    if (notifier.manyUser.first.profile?.avatar?.mediaEndpoint?.isNotEmpty ?? false) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return ShowImageProfile(imageUrl: imageUrl!);
-        },
-        // barrierColor: Colors.red,
-      );
-    }
+    // if (notifier.manyUser.first.profile?.avatar?.mediaEndpoint?.isNotEmpty ?? false) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ShowImageProfile(imageUrl: imageUrl!);
+      },
+      // barrierColor: Colors.red,
+    );
+    // }
   }
 
   String displayBio() => profile != null
