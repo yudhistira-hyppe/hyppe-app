@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -9,7 +10,9 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_ongoing.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
@@ -43,11 +46,9 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'Chalange Screen');
-
-    'initState isOnHomeScreen $isHomeScreen'.logger();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     lang = context.read<TranslateNotifierV2>().translate;
-    nameTab = [lang?.ongoing, lang?.completed];
+    nameTab = [lang?.goingOn, lang?.end];
 
     offset = 0;
     Future.delayed(Duration.zero, () {
@@ -71,11 +72,36 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
             child: AppBar(
-              title: Text('${lang?.challengePage}'),
-              actions: [IconButton(onPressed: () {}, icon: Icon(Icons.bedroom_parent_rounded))],
+              leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios_new_sharp,
+                  color: kHyppeTextLightPrimary,
+                  size: 16,
+                ),
+                onPressed: () {},
+              ),
+              title: Text(
+                '${lang?.challengePage}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Lato',
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              titleSpacing: 0,
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}achievement.svg",
+                    defaultColor: false,
+                    height: 20,
+                  ),
+                )
+              ],
             )),
         body: DefaultTabController(
-          length: 3,
+          length: 2,
           child: RefreshIndicator(
             color: kHyppePrimary,
             notificationPredicate: (notification) {
@@ -97,6 +123,14 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                     sliver: SliverList(
                       delegate: SliverChildListDelegate([
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+                          child: Text("Challenge Utama",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              )),
+                        ),
                         Container(
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
                           child: CarouselSlider(
@@ -150,21 +184,21 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                           child: Container(
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(24),
-                              color: kHyppeLightButtonText,
+                              borderRadius: BorderRadius.circular(8),
+                              color: kHyppeLightSurface,
                             ),
                             child: TabBar(
                               controller: _tabController,
                               indicator: BoxDecoration(
                                 borderRadius: BorderRadius.circular(
-                                  25.0,
+                                  8.0,
                                 ),
-                                color: kHyppePrimary,
+                                color: kHyppeLightButtonText,
                               ),
                               labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                              labelColor: kHyppeLightButtonText,
+                              labelColor: kHyppeTextLightPrimary,
                               unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                              labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                              labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
                               // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
                               unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
                               tabs: [
@@ -195,10 +229,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                 // controller: _tabController,
                 physics: const AlwaysScrollableScrollPhysics(),
                 children: [
-                  Container(
-                    height: 40,
-                    padding: const EdgeInsets.only(left: 6.0, right: 6),
-                  ),
+                  ListOnGoing(),
                   Container(
                     height: 40,
                     padding: const EdgeInsets.only(left: 6.0, right: 6),

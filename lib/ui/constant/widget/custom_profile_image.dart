@@ -39,24 +39,38 @@ class CustomProfileImage extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(forStory ? 20 : 50),
-            child: cacheKey != null
-                ? Image.network(
-                    '$imageUrl',
-                    key: cacheKey != null ? ValueKey(cacheKey) : null,
-                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                      return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
-                    },
-                    fit: BoxFit.cover,
-                  )
-                : Image.network(
-                    '$imageUrl',
-                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                      return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
-                    },
-                    fit: BoxFit.cover,
-                  ),
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0, left: 4, right: 4),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(forStory ? 20 : 50),
+                  child: cacheKey != null
+                      ? Image.network(
+                          '$imageUrl',
+                          key: cacheKey != null ? ValueKey(cacheKey) : null,
+                          errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                            return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
+                          },
+                          fit: BoxFit.cover,
+                        )
+                      : Image.network(
+                          '$imageUrl',
+                          errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                            return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
+                          },
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              ),
+              Positioned.fill(
+                child: Image.asset(
+                  "${AssetPath.pngPath}badge.png",
+                  width: width,
+                  height: height,
+                ),
+              )
+            ],
           ),
         ),
       ),

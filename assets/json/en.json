@@ -912,5 +912,7 @@
   "comeOnJoinTheInterestingCompetition": "Come on Join",
   "otherCompetitions": "Other Competitions",
   "challengePage": "Challenge Page",
-  "mainChallenge": "Main Challenge"
+  "mainChallenge": "Main Challenge",
+  "goingOn": "Is going",
+  "end": "End"
 }
