@@ -21,12 +21,10 @@ import '../../../../../core/constants/enum.dart';
 import '../../../../../core/constants/kyc_status.dart';
 import '../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../core/constants/size_config.dart';
-import '../../../../../core/constants/size_widget.dart';
 import '../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../core/constants/utils.dart';
 import '../../../../../core/models/collection/posts/content_v2/content_data.dart';
 import '../../../../../core/models/collection/utils/zoom_pic/zoom_pic.dart';
-import '../../../../../core/services/error_service.dart';
 import '../../../../../core/services/route_observer_service.dart';
 import '../../../../../core/services/shared_preference.dart';
 import '../../../../../core/services/system.dart';
@@ -68,7 +66,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
   // final scrollGlobal = GlobalKey<SelfProfileScreenState>();
   // final a = SelfProfileScreenState();
 
-  bool isZoom = false;
+  // bool isZoom = false;
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
@@ -477,12 +475,6 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
     }
   }
 
-  void zoom(val) {
-    setState(() {
-      isZoom = val;
-    });
-  }
-
   ValueNotifier<int> _networklHasErrorNotifier = ValueNotifier(0);
 
   @override
@@ -495,63 +487,34 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: pics?.isEmpty ?? true
-                  ? const NoResultFound()
-                  : RefreshIndicator(
-                onRefresh: () async {
-                  await notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interestKey, hyppe: HyppeType.HyppePic);
-                },
-                child: NotificationListener<OverscrollIndicatorNotification>(
-                  onNotification: (overscroll) {
-                    overscroll.disallowIndicator();
+            pics?.isEmpty ?? true
+                ? const Expanded(child: NoResultFound())
+                : Column(
+                children: List.generate(pics?.length ?? 0, (index){
+                  if (pics == null) {
+                    fAliplayer?.pause();
+                    _lastCurIndex = -1;
+                    return CustomShimmer(
+                      width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                      height: 168,
+                      radius: 8,
+                      margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                    );
+                  } else if (index == pics.length) {
+                    return UnconstrainedBox(
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 80 * SizeConfig.scaleDiagonal,
+                        height: 80 * SizeConfig.scaleDiagonal,
+                        child: const CustomLoading(),
+                      ),
+                    );
+                  }
 
-                    return false;
-                  },
-                  child: ScrollablePositionedList.builder(
-                    scrollDirection: Axis.vertical,
-                    itemScrollController: itemScrollController,
-                    itemPositionsListener: itemPositionsListener,
-                    scrollOffsetController: scrollOffsetController,
-                    // scrollDirection: Axis.horizontal,
-                    physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
-                    shrinkWrap: false,
-                    itemCount: pics?.length ?? 0,
-                    padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                    itemBuilder: (context, index) {
-                      if (pics == null) {
-                        fAliplayer?.pause();
-                        _lastCurIndex = -1;
-                        return CustomShimmer(
-                          width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                          height: 168,
-                          radius: 8,
-                          margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                        );
-                      } else if (index == pics.length) {
-                        return UnconstrainedBox(
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: 80 * SizeConfig.scaleDiagonal,
-                            height: 80 * SizeConfig.scaleDiagonal,
-                            child: const CustomLoading(),
-                          ),
-                        );
-                      }
-
-                      return itemPict(notifier, index, pics);
-                    },
-                  ),
-                ),
-              ),
+                  return itemPict(notifier, index, pics);
+                })
             ),
-            notifier.intHasNextPic
-                ? const SizedBox(
-              height: 50,
-              child: Center(child: CustomLoading()),
-            )
-                : Container(),
           ],
         );
       },
@@ -568,7 +531,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
       ),
       padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
       margin: const EdgeInsets.only(
-        top: 18,
+        top: 10,
         left: 6,
         right: 6,
       ),
@@ -719,10 +682,12 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                           // height: SizeConfig.screenHeight,
                           child: ZoomableImage(
                             onScaleStart: () {
-                              zoom(true);
+                              // zoom(true);
+                              notifier.isZoom = true;
                             },
                             onScaleStop: () {
-                              zoom(false);
+                              // zoom(false);
+                              notifier.isZoom = false;
                             },
                             child: pics[index].isLoading
                                 ? Container()

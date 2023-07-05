@@ -149,7 +149,7 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
                 child: Padding(
                   padding: const EdgeInsets.only(top: 0.0),
                   child: TabBarView(
-                    // physics: const NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     controller: _tabController,
                     children: (notifier.listInterest ?? []).map((e) {
 

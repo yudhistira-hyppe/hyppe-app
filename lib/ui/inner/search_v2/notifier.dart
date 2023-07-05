@@ -78,6 +78,13 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isZoom = false;
+  bool get isZoom => _isZoom;
+  set isZoom(bool state){
+    _isZoom = state;
+    notifyListeners();
+  }
+
   Future checkConnection() async {
     bool connect = await System().checkConnections();
     connectionError = !connect;
