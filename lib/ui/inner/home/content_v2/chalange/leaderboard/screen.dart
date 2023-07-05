@@ -6,7 +6,6 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
@@ -15,7 +14,6 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_ongoing.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
-import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
@@ -188,7 +186,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                               color: kHyppeLightSurface,
                             ),
                             child: TabBar(
-                              controller: _tabController,
+                              // controller: _tabController,
                               indicator: BoxDecoration(
                                 borderRadius: BorderRadius.circular(
                                   8.0,
@@ -227,7 +225,8 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
               },
               body: TabBarView(
                 // controller: _tabController,
-                physics: const AlwaysScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
+
                 children: [
                   ListOnGoing(),
                   Container(
