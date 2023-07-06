@@ -73,7 +73,7 @@ class _OpeningLogoState extends State<OpeningLogo> with AfterFirstLayoutMixin {
                             style: _textTheme.bodyText2,
                             children: [
                               TextSpan(
-                                text: ' Kominfo ',
+                                text: 'Kominfo ',
                                 // recognizer: TapGestureRecognizer()..onTap = () => context.read<UserInterestNotifier>().goToEula(),
                                 style: _textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
                               )

@@ -15,7 +15,7 @@ import '../../../../../core/constants/enum.dart';
 import '../../../../../core/services/system.dart';
 import '../../../../constant/widget/custom_loading.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
-import '../../../home/content_v2/profile/self_profile/widget/offline_mode.dart';
+import '../../../home/content_v2/profile/widget/both_profile_content_shimmer.dart';
 import '../../search_more_complete/widget/all_search_shimmer.dart';
 import '../../widget/search_no_result_image.dart';
 
@@ -86,17 +86,10 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final data = notifier.interestContents[widget.interest.id];
       print('size pic (${widget.interest.id}): ${data?.pict?.length}');
-      return notifier.connectionError
-          ? OfflineMode(
-              function: () {
-                notifier.checkConnection();
-                notifier.getDetailInterest(context, widget.interest.id ?? '');
-              },
-            )
-          : !notifier.loadIntDetail
-              ? Container(
+      return Container(
                   color: context.getColorScheme().surface,
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Expanded(
                         child: AbsorbPointer(
@@ -126,7 +119,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: listTab.map((e) {
                                             final isActive = e == currentType;
-                                            return Expanded(
+                                            return Flexible(
                                               child: Material(
                                                   color: Colors.transparent,
                                                   child: Ink(
@@ -172,8 +165,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                       loadingWidget(notifier)
                     ],
                   ),
-                )
-              : const AllSearchShimmer();
+                );
     });
   }
 
@@ -211,24 +203,23 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
     if (data != null) {
       switch (type) {
         case HyppeType.HyppeVid:
+          if(notifier.loadIntDetailVid){
+            return const AllSearchShimmer();
+          }
           return data.vid.isNotNullAndEmpty() ? VidScrollScreen(interestKey: widget.interest.id ?? ''): SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
         case HyppeType.HyppeDiary:
+          if(notifier.loadIntDetailDiary){
+            return const AllSearchShimmer();
+          }
           return data.diary.isNotNullAndEmpty() ? DiaryScrollScreen(interestKey: widget.interest.id ?? ''): SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
         case HyppeType.HyppePic:
+          if(notifier.loadIntDetailPic){
+            return const AllSearchShimmer();
+          }
           return data.pict.isNotNullAndEmpty() ? PicScrollScreen(interestKey: widget.interest.id ?? ''): SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
-          // return data.pict.isNotNullAndEmpty()
-          //     ? GridContentView(
-          //   type: type,
-          //   data: data.pict ?? [],
-          //   isLoading: notifier.isHasNextPic,
-          //   keyword: widget.interest.id ?? '',
-          //   api: TypeApiSearch.detailInterest,
-          //   controller: scrollController,
-          //   heightTab: heightTab,
-          // )
-          //     : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
       }
     } else {
+      return const AllSearchShimmer();
       return SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
     }
   }

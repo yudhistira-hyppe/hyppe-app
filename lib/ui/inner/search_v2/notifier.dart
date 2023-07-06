@@ -64,13 +64,6 @@ class SearchNotifier with ChangeNotifier {
   SearchContentModel? _searchContent;
   SearchContentModel? get searchContent => _searchContent;
 
-  // bool _loadingSearch = true;
-  // bool get loadingSearch => _loadingSearch;
-  // set loadingSearch(bool state){
-  //   _loadingSearch = state;
-  //   notifyListeners();
-  // }
-
   bool _connectionError = false;
   bool get connectionError => _connectionError;
   set connectionError(bool state) {
@@ -281,15 +274,31 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  bool _loadIntDetail = true;
-  bool get loadIntDetail => _loadIntDetail;
-  set loadIntDetail(bool val){
-    _loadIntDetail = val;
+  bool _loadIntDetailPic = true;
+  bool get loadIntDetailPic => _loadIntDetailPic;
+  set loadIntDetailPic(bool val){
+    _loadIntDetailPic = val;
+    notifyListeners();
+  }
+
+  bool _loadIntDetailDiary = true;
+  bool get loadIntDetailDiary => _loadIntDetailDiary;
+  set loadIntDetailDiary(bool val){
+    _loadIntDetailDiary = val;
+    notifyListeners();
+  }
+
+  bool _loadIntDetailVid = true;
+  bool get loadIntDetailVid => _loadIntDetailVid;
+  set loadIntDetailVid(bool val){
+    _loadIntDetailVid = val;
     notifyListeners();
   }
 
   initDetailInterest(){
-    _loadIntDetail = true;
+    _loadIntDetailPic = true;
+    _loadIntDetailDiary = true;
+    _loadIntDetailVid = true;
   }
 
   ContentsDataQuery vidContentsQuery = ContentsDataQuery();
@@ -1036,32 +1045,37 @@ class SearchNotifier with ChangeNotifier {
       checkConnection();
       print('the interest id: $keys');
       if (reload) {
-        loadIntDetail = true;
-        final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: hyppe);
-        if (_res != null) {
-          interestContents[keys] = _res;
-          notifyListeners();
-          // if (interest.isNotNullAndEmpty()) {
-          //   _currentHashtag = hashtags.first;
-          //   final extraTag = _currentHashtag;
-          //   final count = (extraTag != null ? (extraTag.total ?? 0) : 0);
-          //   if ((pics.isEmpty) && (diaries.isEmpty) && (videos.isEmpty)) {
-          //     _countTag = 0;
-          //   } else {
-          //     _countTag = count;
-          //   }
-          // }
-          // _detailHashTag?.vid = videos;
-          // _detailHashTag?.diary = diaries;
-          // _detailHashTag?.pict = pics;
-          // if (pics.isNotNullAndEmpty()) {
-          //   final data = pics[0];
-          //   final url = data != null ? ((data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? (data.mediaThumbEndPoint ?? '')) : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
-          //   _tagImageMain = url;
-          // }
+        initDetailInterest();
+        if(interestContents[keys] == null){
+          interestContents[keys] = SearchContentModel();
         }
-        await Future.delayed(const Duration(milliseconds: 400));
-        loadIntDetail = false;
+
+        notifyListeners();
+        _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppePic).then((value){
+          if(value != null){
+            interestContents[keys]?.pict = value.pict;
+            Future.delayed(const Duration(milliseconds: 200), (){
+              loadIntDetailPic = false;
+            });
+          }
+        });
+        _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppeDiary).then((value){
+          if(value != null){
+            interestContents[keys]?.diary = value.diary;
+            Future.delayed(const Duration(milliseconds: 200), (){
+              loadIntDetailDiary = false;
+            });
+          }
+        });
+        _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppeVid).then((value){
+          if(value != null){
+            interestContents[keys]?.vid = value.vid;
+            Future.delayed(const Duration(milliseconds: 200), (){
+              loadIntDetailVid = false;
+            });
+          }
+        });
+
       } else {
         final currentSkip = hyppe == HyppeType.HyppeVid
             ? lenghtVid
@@ -1122,33 +1136,47 @@ class SearchNotifier with ChangeNotifier {
         hasNext = false;
       }
     } catch (e) {
-      if (loadTagDetail) {
-        loadIntDetail = false;
+      if (loadIntDetailPic) {
+        _loadIntDetailPic = false;
+      }
+      if (loadIntDetailDiary) {
+        _loadIntDetailDiary = false;
+      }
+      if (loadIntDetailVid) {
+        _loadIntDetailVid = false;
       }
       if(hyppe == HyppeType.HyppeVid){
-        intHasNextVid = false;
+        _intHasNextVid = false;
       }
       if(hyppe == HyppeType.HyppeDiary){
-        intHasNextDiary = false;
+        _intHasNextDiary = false;
       }
       if(hyppe == HyppeType.HyppePic){
-        intHasNextPic = false;
+        _intHasNextPic = false;
       }
+      notifyListeners();
 
       'Error getDetail: $e'.logger();
     } finally {
-      if (loadTagDetail) {
-        loadTagDetail = false;
+      if (loadIntDetailPic) {
+        _loadIntDetailPic = false;
+      }
+      if (loadIntDetailDiary) {
+        _loadIntDetailDiary = false;
+      }
+      if (loadIntDetailVid) {
+        _loadIntDetailVid = false;
       }
       if(hyppe == HyppeType.HyppeVid){
-        intHasNextVid = false;
+        _intHasNextVid = false;
       }
       if(hyppe == HyppeType.HyppeDiary){
-        intHasNextDiary = false;
+        _intHasNextDiary = false;
       }
       if(hyppe == HyppeType.HyppePic){
-        intHasNextPic = false;
+        _intHasNextPic = false;
       }
+      notifyListeners();
     }
   }
 

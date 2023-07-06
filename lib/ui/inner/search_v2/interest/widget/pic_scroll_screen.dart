@@ -405,7 +405,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
     print("====== deactivate ");
     fAliplayer?.stop();
     System().disposeBlock();
-    if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
+    if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps) {
       fAliplayer?.destroy();
     }
     if (Platform.isIOS) {
@@ -485,10 +485,11 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
       builder: (_, notifier, __){
         final pics = notifier.interestContents[widget.interestKey]?.pict;
         return Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             pics?.isEmpty ?? true
-                ? const Expanded(child: NoResultFound())
+                ? const Flexible(child: NoResultFound())
                 : Column(
                 children: List.generate(pics?.length ?? 0, (index){
                   if (pics == null) {

@@ -435,7 +435,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
       FlutterAliplayer.enableMix(false);
     }
     fAliplayer?.stop();
-    if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
+    if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps) {
       fAliplayer?.destroy();
     }
     super.dispose();
@@ -517,7 +517,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                 },
                 child: Column(
                   children: List.generate(diaryData?.length ?? 0, (index){
-                    if (diaryData == null || notifier.loadIntDetail) {
+                    if (diaryData == null) {
                       fAliplayer?.pause();
                       _lastCurIndex = -1;
                       return CustomShimmer(
