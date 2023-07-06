@@ -160,20 +160,32 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     itemPositionsListener.itemPositions.addListener(() async {
       index = itemPositionsListener.itemPositions.value.first.index;
       if (lastIndex != index) {
+        bool connect = await System().checkConnections();
+
         if (index == pics!.length - 2) {
-          if (!notifier.isLoadingLoadmore) {
-            await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
-            if (mounted) {
-              setState(() {
+          if (connect) {
+            if (!notifier.isLoadingLoadmore) {
+              await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
+              if (mounted) {
+                setState(() {
+                  pics = notifier.pics;
+                });
+              } else {
                 pics = notifier.pics;
-              });
-            } else {
-              pics = notifier.pics;
+              }
+            }
+          } else {
+            if (mounted) {
+              ShowGeneralDialog.showToastAlert(
+                context,
+                lang?.internetConnectionLost ?? ' Error',
+                () async {},
+              );
             }
           }
         }
+        lastIndex = index;
       }
-      lastIndex = index;
     });
 
     checkInet();
@@ -572,9 +584,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                 ListTile(
                   title: Align(
                     alignment: const Alignment(-1.2, 0),
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                        child: widget.arguments?.titleAppbar ?? Container()),
+                    child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
                   ),
                   leading: IconButton(
                       icon: const Icon(
@@ -593,13 +603,24 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       ? const NoResultFound()
                       : RefreshIndicator(
                           onRefresh: () async {
-                            setState(() {
-                              isloading = true;
-                            });
-                            await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                            setState(() {
-                              pics = notifier.pics;
-                            });
+                            bool connect = await System().checkConnections();
+                            if (connect) {
+                              setState(() {
+                                isloading = true;
+                              });
+                              await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                              setState(() {
+                                pics = notifier.pics;
+                              });
+                            } else {
+                              if (mounted) {
+                                ShowGeneralDialog.showToastAlert(
+                                  context,
+                                  lang?.internetConnectionLost ?? ' Error',
+                                  () async {},
+                                );
+                              }
+                            }
                           },
                           child: NotificationListener<OverscrollIndicatorNotification>(
                             onNotification: (overscroll) {
@@ -906,7 +927,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                           valueListenable: _networklHasErrorNotifier,
                                           builder: (BuildContext context, int count, _) {
                                             return CustomBaseCacheImage(
-                                              // cacheKey: "${pics?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
+                                              cacheKey: "${pics?[index].postID}-${_networklHasErrorNotifier.value.toString()}",
                                               memCacheWidth: 100,
                                               memCacheHeight: 100,
                                               widthPlaceHolder: 80,
@@ -939,7 +960,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                                     width: SizeConfig.screenWidth,
                                                     height: 250,
                                                     alignment: Alignment.center,
-                                                    child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
+                                                    padding: const EdgeInsets.all(20),
+                                                    child: pics?[index].reportedStatus == 'BLURRED'
+                                                        ? Container()
+                                                        : CustomTextWidget(
+                                                            textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                                            maxLines: 3,
+                                                          )),
                                               ),
                                               errorWidget: (context, url, error) {
                                                 return GestureDetector(
@@ -951,7 +978,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                                       width: SizeConfig.screenWidth,
                                                       height: 250,
                                                       alignment: Alignment.center,
-                                                      child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
+                                                      padding: const EdgeInsets.all(20),
+                                                      child: pics?[index].reportedStatus == 'BLURRED'
+                                                          ? Container()
+                                                          : CustomTextWidget(
+                                                              textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                                              maxLines: 3,
+                                                            )),
                                                 );
                                               },
                                             );
@@ -968,8 +1001,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                 decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
                                 width: SizeConfig.screenWidth,
                                 height: 250,
+                                padding: const EdgeInsets.all(20),
                                 alignment: Alignment.center,
-                                child: CustomTextWidget(textToDisplay: lang?.couldntLoadImage ?? 'Error')),
+                                child: pics?[index].reportedStatus == 'BLURRED'
+                                    ? Container()
+                                    : CustomTextWidget(
+                                        textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                        maxLines: 3,
+                                      )),
                           ),
                     _buildBody(context, SizeConfig.screenWidth, pics?[index] ?? ContentData()),
                     blurContentWidget(context, pics?[index] ?? ContentData()),
@@ -1297,7 +1336,6 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          print("===========data musik ${data.music?.musicTitle}");
                           if (data.music?.musicTitle != null) {
                             fAliplayer?.prepare();
                             fAliplayer?.play();

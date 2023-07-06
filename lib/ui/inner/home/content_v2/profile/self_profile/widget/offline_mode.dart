@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -31,13 +30,13 @@ class OfflineMode extends StatelessWidget {
                 CustomTextWidget(
                   textToDisplay: tn.translate.oopsYoureOffline ?? '',
                   maxLines: 2,
-                  textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 eightPx,
                 CustomTextWidget(
                   textToDisplay: tn.translate.checkYourWiFiConnectionOrInternet ?? '',
                   maxLines: 2,
-                  textStyle: const TextStyle(color: kHyppeSecondary),
+                  textStyle: const TextStyle(color: kHyppeSecondary, fontSize: 16),
                 ),
                 twentyPx,
                 CustomTextButton(

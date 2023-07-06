@@ -24,6 +24,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_diaries.dart';
@@ -260,6 +261,11 @@ class OtherProfileNotifier with ChangeNotifier {
     final connect = await _system.checkConnections();
     if (!connect) {
       isConnect = false;
+      ShowGeneralDialog.showToastAlert(
+        context,
+        language.internetConnectionLost ?? ' Error',
+        () async {},
+      );
       notifyListeners();
     } else {
       isConnect = true;

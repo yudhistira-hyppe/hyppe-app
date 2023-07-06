@@ -15,6 +15,7 @@ class ZoomableImage extends StatelessWidget {
   final Widget child;
   final VoidCallback? onScaleStart;
   final VoidCallback? onScaleStop;
+  final bool enable;
 
   const ZoomableImage({
     super.key,
@@ -25,21 +26,27 @@ class ZoomableImage extends StatelessWidget {
     this.animateToInitScale,
     this.onScaleStart,
     this.onScaleStop,
+    this.enable = true,
   });
 
   // Widget loadImage() {}
 
+  @override
   Widget build(BuildContext context) {
-    return ZoomablePhotoViewer(
-      // url: url!,
-      closeOnZoomOut: closeOnZoomOut ?? false,
-      focalPoint: focalPoint ?? Offset(0, 0),
-      initialScale: initialScale ?? 0,
-      animateToInitScale: animateToInitScale ?? false,
-      onScaleStart: onScaleStart,
-      onScaleStop: onScaleStop,
-      child: child,
-    );
+    return enable
+        ? ZoomablePhotoViewer(
+            // url: url!,
+            closeOnZoomOut: closeOnZoomOut ?? false,
+            focalPoint: focalPoint ?? Offset(0, 0),
+            initialScale: initialScale ?? 0,
+            animateToInitScale: animateToInitScale ?? false,
+            onScaleStart: onScaleStart,
+            onScaleStop: onScaleStop,
+            child: child,
+          )
+        : Container(
+            child: child,
+          );
   }
 }
 //==============================================================================================

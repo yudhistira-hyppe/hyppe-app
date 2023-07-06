@@ -120,7 +120,7 @@ class CustomContentModeratedWidget extends StatelessWidget {
                   defaultColor: false,
                   width: 24 * SizeConfig.scaleDiagonal,
                   height: 24 * SizeConfig.scaleDiagonal,
-                  iconData: "${AssetPath.vectorPath}pause.svg",
+                  iconData: "${AssetPath.vectorPath}pause2.svg",
                 ),
               if (!isSafe)
                 ClipRect(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -79,7 +80,7 @@ class NotificationService {
 
   // initialization service
   Future initializeLocalNotification() async {
-    await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
+    // await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: (String? payload) async {
       print('notification payload: $payload');
       try {
@@ -152,6 +153,7 @@ class NotificationService {
   // show notification
 
   Future showNotification(RemoteMessage message, {MessageDataV2? data, String? idNotif}) async {
+    print("===''''-- ${message.hashCode}");
     if (idNotif != null) {
       try {
         await flutterLocalNotificationsPlugin.cancel(0, tag: idNotif);
@@ -160,11 +162,12 @@ class NotificationService {
         // 'Error Get rid the notification $e'.logger();
       }
     }
-    print('notif message ${message.notification?.body}');
+
     // String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
 
     try {
       if (data != null) {
+        print("masuk 1");
         if (message.notification != null) {
           await flutterLocalNotificationsPlugin.show(
             message.hashCode,
@@ -175,24 +178,33 @@ class NotificationService {
           );
         }
       } else {
+        print("masuk 2");
         final Map<String, dynamic> jsonNotif = message.data;
         final value = NotificationBody.fromJson(jsonNotif);
+        // var body;
+        // Platform.isIOS ? body = json.decode(message.notification?.body ?? '') : '';
         await flutterLocalNotificationsPlugin.show(
           message.hashCode,
           value.title ?? message.notification?.title,
-          value.message ?? message.notification?.body,
+          message.data['body'],
           platformChannelSpecifics,
-          payload: json.encode(message.data),
+          payload: Platform.isIOS ? json.encode(message.data) : json.encode(message.data),
         );
       }
     } catch (e) {
+      print("===error $e");
       if (message.notification != null) {
+        print("======= test notif ${message.data}");
+        // final Map<String, dynamic> map = json.decode(message.notification?.body ?? '{}');
+        var body;
+        // Platform.isIOS ? body = json.decode(message.notification?.body ?? '') : '';
         await flutterLocalNotificationsPlugin.show(
           message.hashCode,
           message.notification?.title ?? '',
           message.notification?.body,
+          // message.notification?.body,
           platformChannelSpecifics,
-          payload: json.encode(message.data),
+          payload: Platform.isIOS ? json.encode(message.data) : json.encode(message.data),
         );
       }
       e.logger();
@@ -213,7 +225,6 @@ class NotificationBody {
     postType = json['postType'];
     message = json['body'];
     title = json['title'];
-
   }
 
   Map<String, dynamic> toJson() {

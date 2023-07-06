@@ -57,6 +57,13 @@ class PreviewDiaryNotifier with ChangeNotifier {
   AdsVideo? _adsData;
   AdsVideo? get adsData => _adsData;
 
+  bool _connectionError = false;
+  bool get connectionError => _connectionError;
+  set connectionError(bool state) {
+    _connectionError = state;
+    notifyListeners();
+  }
+
   set adsData(val) {
     _adsData = val;
   }
