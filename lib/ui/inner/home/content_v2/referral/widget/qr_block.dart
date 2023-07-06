@@ -17,7 +17,6 @@ class QRBlock extends StatefulWidget {
 }
 
 class _QRBlockState extends State<QRBlock> {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'QRBlock');
@@ -44,9 +43,9 @@ class _QRBlockState extends State<QRBlock> {
                           height: 180,
                           width: 180,
                           child: QrImage(
-                            data: notifier.referralLink,
-                            version: QrVersions.auto,
-                            size: 140.0,
+                            notifier.referralLink,
+                            // version: QrVersions.auto,
+                            // size: 140.0,
                           ),
                         ),
                         Padding(

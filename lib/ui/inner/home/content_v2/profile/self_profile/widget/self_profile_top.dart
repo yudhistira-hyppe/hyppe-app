@@ -63,7 +63,7 @@ class SelfProfileTop extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // SelectableText("${notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}")}"),
-            // SelectableText("${SharedPreference().readStorage(SpKeys.fcmToken)}"),
+            SelectableText("${SharedPreference().readStorage(SpKeys.fcmToken)}"),
 
             Row(
               children: <Widget>[

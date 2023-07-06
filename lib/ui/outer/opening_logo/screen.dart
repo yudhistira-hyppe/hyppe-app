@@ -19,7 +19,6 @@ class OpeningLogo extends StatefulWidget {
 }
 
 class _OpeningLogoState extends State<OpeningLogo> with AfterFirstLayoutMixin {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'OpeningLogo');
@@ -27,10 +26,11 @@ class _OpeningLogoState extends State<OpeningLogo> with AfterFirstLayoutMixin {
   }
 
   @override
-  void afterFirstLayout(BuildContext context) {
+  void afterFirstLayout(BuildContext context) async {
     if (widget.isLaunch) {
       context.read<MainNotifier>().pageIndex = 0;
       final notifier = Provider.of<HyppeNotifier>(context, listen: false);
+
       notifier.handleStartUp(mounted);
     }
   }

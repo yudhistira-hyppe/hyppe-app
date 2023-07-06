@@ -103,7 +103,7 @@ dependencies:
   story_view: # Story viewer
     path: packages/story_view
   
-  qr_flutter: ^4.0.0
+  qr_flutter: ^4.1.0
   pattern_formatter: ^2.0.0
   flutter_countdown_timer: ^4.1.0
   #flutter_masked_text: ^0.8.0 #currency format for input text

@@ -190,7 +190,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
 
     //Turn on mix mode
     if (Platform.isIOS) {
-      FlutterAliplayer.enableMix(true);
+      // FlutterAliplayer.enableMix(true);
+      FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
     }
 
     //set player
@@ -427,11 +428,12 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         } else {
           auth = jsonMap['PlayAuth'];
           fAliplayer?.setVidAuth(
-              vid: apsaraId,
-              region: _dataSourceMap?[DataSourceRelated.regionKey],
-              playAuth: auth,
-              definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
-              previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
+            vid: apsaraId,
+            region: _dataSourceMap?[DataSourceRelated.regionKey],
+            playAuth: auth,
+            definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
+            // previewTime: _dataSourceMap?[DataSourceRelated.previewTime]
+          );
           var configMap = {
             'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
             'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
@@ -541,11 +543,12 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       skipAdsCurent = secondsSkip;
       print("========== get source ads 1 ${_dataSourceAdsMap?[DataSourceRelated.vidKey]}");
       fAliplayerAds?.setVidAuth(
-          vid: adsData?.data?.videoId,
-          region: 'ap-southeast-5',
-          playAuth: adsData?.data?.apsaraAuth,
-          definitionList: _dataSourceAdsMap?[DataSourceRelated.definitionList],
-          previewTime: _dataSourceAdsMap?[DataSourceRelated.previewTime]);
+        vid: adsData?.data?.videoId,
+        region: 'ap-southeast-5',
+        playAuth: adsData?.data?.apsaraAuth,
+        definitionList: _dataSourceAdsMap?[DataSourceRelated.definitionList],
+        // previewTime: _dataSourceAdsMap?[DataSourceRelated.previewTime]
+      );
       fAliplayerAds?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayerAds?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
       fAliplayerAds?.setOnPrepared((playerId) {
@@ -704,7 +707,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     Wakelock.disable();
     globalAliPlayer = null;
     if (Platform.isIOS) {
-      FlutterAliplayer.enableMix(false);
+      // FlutterAliplayer.enableMix(false);
+      FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
 
     fAliplayer?.stop();
@@ -863,11 +867,12 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         break;
       case true:
         fAliplayer?.setVidAuth(
-            vid: widget.data?.apsaraId,
-            region: _dataSourceMap?[DataSourceRelated.regionKey],
-            playAuth: auth,
-            definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
-            previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
+          vid: widget.data?.apsaraId,
+          region: _dataSourceMap?[DataSourceRelated.regionKey],
+          playAuth: auth,
+          definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
+          // previewTime: _dataSourceMap?[DataSourceRelated.previewTime]
+        );
         break;
     }
   }

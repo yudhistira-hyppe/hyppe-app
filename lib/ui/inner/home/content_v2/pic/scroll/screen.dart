@@ -142,7 +142,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
       //Turn on mix mode
       if (Platform.isIOS) {
-        FlutterAliplayer.enableMix(true);
+        // FlutterAliplayer.enableMix(true);
+        FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
       }
 
       notifier.checkConnection();
@@ -486,7 +487,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       fAliplayer?.destroy();
     }
     if (Platform.isIOS) {
-      FlutterAliplayer.enableMix(false);
+      // FlutterAliplayer.enableMix(false);
+      FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
     super.deactivate();
   }

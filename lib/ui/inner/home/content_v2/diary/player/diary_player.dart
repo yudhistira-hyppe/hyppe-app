@@ -172,7 +172,8 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
 
       //Turn on mix mode
       if (Platform.isIOS) {
-        FlutterAliplayer.enableMix(true);
+        // FlutterAliplayer.enableMix(true);
+        FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
       }
 
       //set player
@@ -221,11 +222,12 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
         Map jsonMap = json.decode(fetch.data.toString());
         auth = jsonMap['PlayAuth'];
         fAliplayer?.setVidAuth(
-            vid: apsaraId,
-            region: DataSourceRelated.defaultRegion,
-            playAuth: auth,
-            definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
-            previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
+          vid: apsaraId,
+          region: DataSourceRelated.defaultRegion,
+          playAuth: auth,
+          definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
+          // previewTime: _dataSourceMap?[DataSourceRelated.previewTime]
+        );
         setState(() {
           isloading = false;
         });
@@ -468,7 +470,8 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     Wakelock.disable();
     _animationController?.dispose();
     if (Platform.isIOS) {
-      FlutterAliplayer.enableMix(false);
+      // FlutterAliplayer.enableMix(false);
+      FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
 
     fAliplayer?.stop();

@@ -81,6 +81,7 @@ class NotificationService {
   // initialization service
   Future initializeLocalNotification() async {
     // await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
+
     await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: (String? payload) async {
       print('notification payload: $payload');
       try {
