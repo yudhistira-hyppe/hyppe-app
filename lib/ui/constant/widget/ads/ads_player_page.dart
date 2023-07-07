@@ -34,7 +34,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 
-import '../../../../../../app.dart';
+import '../../../../../../../app.dart';
 
 class AdsPlayerPage extends StatefulWidget {
   final ModeTypeAliPLayer playMode;

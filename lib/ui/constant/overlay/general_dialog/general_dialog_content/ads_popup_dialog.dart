@@ -133,14 +133,6 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
   // GlobalKey<TrackFragmentState> trackFragmentKey = GlobalKey();
   AnimationController? _animationController;
 
-  // PageController? _pageController;
-
-  RefreshController _videoListRefreshController = RefreshController(initialRefresh: false);
-
-  List<ContentData>? _listData;
-
-  late PageController _pageController;
-
   var loadLaunch = false;
 
   @override
