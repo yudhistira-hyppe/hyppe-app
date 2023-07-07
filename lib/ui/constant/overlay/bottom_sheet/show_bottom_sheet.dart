@@ -718,6 +718,7 @@ class ShowBottomSheet {
     Function? onUpdate,
     bool? inDetail,
     FlutterAliplayer? fAliplayer,
+        String? key,
   }) async {
     await showModalBottomSheet(
       context: _,
@@ -740,6 +741,7 @@ class ShowBottomSheet {
               onUpdate: onUpdate,
               adsData: adsData,
               inDetail: inDetail,
+              keyInt: key,
             ),
           ),
         );
@@ -785,6 +787,7 @@ class ShowBottomSheet {
     String? type,
     Function? onUpdate,
     bool? inDetail,
+        String? key
   }) {
     showModalBottomSheet(
       context: _,
@@ -808,6 +811,7 @@ class ShowBottomSheet {
                 postData: postData,
                 type: type,
                 inDetail: inDetail ?? true,
+                keyInt: key,
               ),
             ),
           ),

@@ -301,6 +301,16 @@ class SearchNotifier with ChangeNotifier {
     _loadIntDetailVid = true;
   }
 
+  removeInterestItem(String key, String postID){
+    final interest = interestContents[key];
+    if(interest != null){
+      interest.vid?.removeWhere((element) => element.postID == postID);
+      interest.pict?.removeWhere((element) => element.postID == postID);
+      interest.diary?.removeWhere((element) => element.postID == postID);
+      notifyListeners();
+    }
+  }
+
   ContentsDataQuery vidContentsQuery = ContentsDataQuery();
   ContentsDataQuery diaryContentsQuery = ContentsDataQuery();
   ContentsDataQuery picContentsQuery = ContentsDataQuery();
@@ -1067,7 +1077,7 @@ class SearchNotifier with ChangeNotifier {
             });
           }
         });
-        _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppeVid).then((value){
+        await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppeVid).then((value){
           if(value != null){
             interestContents[keys]?.vid = value.vid;
             Future.delayed(const Duration(milliseconds: 200), (){

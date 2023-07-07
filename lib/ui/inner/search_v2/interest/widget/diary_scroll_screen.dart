@@ -626,7 +626,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                 onTap: () {
                   if (diaryData[index].email != email) {
                     // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>().reportContent(context, diaryData[index], fAliplayer: fAliplayer);
+                    context.read<PreviewPicNotifier>().reportContent(context, diaryData[index], fAliplayer: fAliplayer, key: widget.interestKey);
                   } else {
                     fAliplayer?.setMuted(true);
                     fAliplayer?.pause();

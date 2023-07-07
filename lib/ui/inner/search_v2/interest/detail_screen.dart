@@ -82,6 +82,7 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
     FirebaseCrashlytics.instance.setCustomKey('layout', 'InterestDetailScreen');
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
     final index = notifier.listInterest?.indexOf(widget.data) ?? 0;
+    notifier.initDetailInterest();
     _tabController = TabController(length: 6, vsync: this, initialIndex: index);
     _tabController.addListener(() {
       notifier.tabIndex = _tabController.index;
