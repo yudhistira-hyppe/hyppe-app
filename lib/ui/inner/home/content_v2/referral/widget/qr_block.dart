@@ -42,10 +42,10 @@ class _QRBlockState extends State<QRBlock> {
                           color: kHyppeLightSurface,
                           height: 180,
                           width: 180,
-                          child: QrImage(
-                            notifier.referralLink,
-                            // version: QrVersions.auto,
-                            // size: 140.0,
+                          child: QrImageView(
+                            data: notifier.referralLink,
+                            version: QrVersions.auto,
+                            size: 140.0,
                           ),
                         ),
                         Padding(

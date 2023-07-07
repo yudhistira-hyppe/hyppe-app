@@ -190,8 +190,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
 
     //Turn on mix mode
     if (Platform.isIOS) {
-      // FlutterAliplayer.enableMix(true);
-      FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
+      FlutterAliplayer.enableMix(true);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
     }
 
     //set player
@@ -707,8 +707,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     Wakelock.disable();
     globalAliPlayer = null;
     if (Platform.isIOS) {
-      // FlutterAliplayer.enableMix(false);
-      FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
+      FlutterAliplayer.enableMix(false);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
 
     fAliplayer?.stop();

@@ -184,8 +184,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
 
       //Turn on mix mode
       if (Platform.isIOS) {
-        // FlutterAliplayer.enableMix(true);
-        FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
+        FlutterAliplayer.enableMix(true);
+        // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
       }
 
       //set player
@@ -463,8 +463,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     _animationController?.dispose();
     if (Platform.isIOS) {
-      // FlutterAliplayer.enableMix(false);
-      FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
+      FlutterAliplayer.enableMix(false);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
 
     fAliplayer?.stop();

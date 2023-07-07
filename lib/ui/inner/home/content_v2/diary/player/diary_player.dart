@@ -172,8 +172,8 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
 
       //Turn on mix mode
       if (Platform.isIOS) {
-        // FlutterAliplayer.enableMix(true);
-        FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
+        FlutterAliplayer.enableMix(true);
+        // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
       }
 
       //set player
@@ -470,8 +470,8 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     Wakelock.disable();
     _animationController?.dispose();
     if (Platform.isIOS) {
-      // FlutterAliplayer.enableMix(false);
-      FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
+      FlutterAliplayer.enableMix(false);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
 
     fAliplayer?.stop();

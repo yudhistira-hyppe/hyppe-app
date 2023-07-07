@@ -80,6 +80,7 @@ class NotificationService {
 
   // initialization service
   Future initializeLocalNotification() async {
+    Future.delayed(Duration(seconds: 10), () {});
     // await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: (String? payload) async {

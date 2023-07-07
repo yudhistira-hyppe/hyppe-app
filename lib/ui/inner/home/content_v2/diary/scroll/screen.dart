@@ -125,8 +125,8 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
 
       //Turn on mix mode
       if (Platform.isIOS) {
-        // FlutterAliplayer.enableMix(true);
-        FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
+        FlutterAliplayer.enableMix(true);
+        // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
       }
 
       notifier.checkConnection();
@@ -514,8 +514,8 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
   @override
   void dispose() {
     if (Platform.isIOS) {
-      // FlutterAliplayer.enableMix(false);
-      FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
+      FlutterAliplayer.enableMix(false);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
     fAliplayer?.stop();
     if (context.read<PreviewVidNotifier>().canPlayOpenApps) {

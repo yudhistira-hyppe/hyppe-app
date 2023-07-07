@@ -121,8 +121,8 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
 
       //Turn on mix mode
       if (Platform.isIOS) {
-        // FlutterAliplayer.enableMix(true);
-        FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
+        FlutterAliplayer.enableMix(true);
+        // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
       }
 
       notifier.checkConnection();
@@ -410,8 +410,8 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
       fAliplayer?.destroy();
     }
     if (Platform.isIOS) {
-      // FlutterAliplayer.enableMix(false);
-      FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
+      FlutterAliplayer.enableMix(false);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
     super.deactivate();
   }
