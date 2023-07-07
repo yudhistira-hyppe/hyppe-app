@@ -12,6 +12,8 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../../core/services/system.dart';
+
 class ContentViolationWidget extends StatelessWidget {
   final ContentData data;
   final String text;
@@ -28,7 +30,11 @@ class ContentViolationWidget extends StatelessWidget {
         if (globalAliPlayer != null) {
           globalAliPlayer?.pause();
         }
-        Routing().move(Routes.appeal, argument: data);
+        System().checkConnections().then((value){
+          if(value){
+            Routing().move(Routes.appeal, argument: data);
+          }
+        });
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
