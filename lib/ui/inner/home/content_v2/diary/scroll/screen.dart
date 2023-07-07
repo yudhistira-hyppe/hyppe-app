@@ -1320,7 +1320,14 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           )),
                       data.email == SharedPreference().readStorage(SpKeys.email)
                           ? GestureDetector(
-                              onTap: () => Routing().move(Routes.appeal, argument: data),
+                              onTap: ()async{
+                                System().checkConnections().then((value){
+                                  if(value){
+                                    Routing().move(Routes.appeal, argument: data);
+                                  }
+                                });
+
+                              },
                               child: Container(
                                   padding: const EdgeInsets.all(8),
                                   margin: const EdgeInsets.all(18),

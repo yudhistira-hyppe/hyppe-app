@@ -15,6 +15,8 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../../core/services/system.dart';
+
 class DiarySensitive extends StatefulWidget {
   final ContentData? data;
   final Function()? function;
@@ -53,7 +55,14 @@ class _DiarySensitiveState extends State<DiarySensitive> {
                   )),
               widget.data?.email == SharedPreference().readStorage(SpKeys.email)
                   ? GestureDetector(
-                      onTap: () => Routing().move(Routes.appeal, argument: widget.data),
+                      onTap: ()async{
+                        System().checkConnections().then((value){
+                          if(value){
+                            Routing().move(Routes.appeal, argument: widget.data);
+                          }
+                        });
+
+                      },
                       child: Container(
                           padding: const EdgeInsets.all(8),
                           margin: const EdgeInsets.all(18),
