@@ -4,7 +4,7 @@ homepage: https://www.hyppe.id
 
 publish_to: "none"
 
-version: 1.2.3+94 #26-06-2023
+version: 1.3.0+95 #26-06-2023
  
 
 environment:
@@ -171,8 +171,6 @@ flutter:
     - assets/effect/Peter/
     - assets/effect/PopFace/
     - assets/effect/Samurai/
-    - assets/encryptedApp.dat
-    - assets/encryptedApp_ios.dat
  
   fonts:
     - family: Lato

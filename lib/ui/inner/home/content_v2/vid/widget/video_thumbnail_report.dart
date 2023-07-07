@@ -15,6 +15,8 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../core/services/system.dart';
+
 class VideoThumbnailReport extends StatelessWidget {
   final ContentData? videoData;
   final bool seeContent;
@@ -62,7 +64,14 @@ class VideoThumbnailReport extends StatelessWidget {
                     )),
                 videoData?.email == SharedPreference().readStorage(SpKeys.email)
                     ? GestureDetector(
-                        onTap: () => Routing().move(Routes.appeal, argument: videoData),
+                        onTap: ()async{
+                          System().checkConnections().then((value){
+                            if(value){
+                              Routing().move(Routes.appeal, argument: videoData);
+                            }
+                          });
+
+                        },
                         child: Container(
                             padding: const EdgeInsets.all(8),
                             margin: const EdgeInsets.only(top: 6),

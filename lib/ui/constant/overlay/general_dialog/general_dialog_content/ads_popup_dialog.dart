@@ -665,8 +665,9 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                             alignment: Alignment.center,
                             child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
                         : InkWell(
-                            onTap: () {
-                              adsView(widget.data, secondsVideo);
+                            onTap: () async {
+                              print('second close ads: $secondsVideo');
+                              await adsView(widget.data, secondsVideo);
                               Navigator.pop(context);
                             },
                             child: const Padding(
@@ -714,6 +715,12 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                   setState(() {
                     loadLaunch = true;
                   });
+
+                  print('second close ads: $secondsVideo');
+                  // Navigator.pop(context);
+                  // Future.delayed(const Duration(milliseconds: 800), () {
+                  //   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                  // });
                   adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
                     Navigator.pop(context);
                     Future.delayed(const Duration(milliseconds: 800), () {
@@ -728,6 +735,12 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                       setState(() {
                         loadLaunch = true;
                       });
+                      print('second close ads: $secondsVideo');
+                      // Navigator.pop(context);
+                      // await launchUrl(
+                      //   uri,
+                      //   mode: LaunchMode.externalApplication,
+                      // );
                       adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
                         Navigator.pop(context);
                         await launchUrl(
@@ -743,6 +756,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                     setState(() {
                       loadLaunch = true;
                     });
+                    print('second close ads: $secondsVideo');
+                    // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                     adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
                       System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                     });
@@ -1251,8 +1266,9 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                             alignment: Alignment.center,
                             child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
                         : InkWell(
-                            onTap: () {
-                              adsView(widget.data, secondsVideo);
+                            onTap: () async {
+                              print('second close ads: $secondsVideo');
+                              await adsView(widget.data, secondsVideo);
                               Navigator.pop(context);
                             },
                             child: const Padding(
@@ -1298,7 +1314,9 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                 if (data.adsUrlLink?.isEmail() ?? false) {
                   final email = data.adsUrlLink!.replaceAll('email:', '');
                   Navigator.pop(context);
-                  adsView(widget.data, secondsVideo, isClick: true);
+
+                  print('second close ads: $secondsVideo');
+                  await adsView(widget.data, secondsVideo, isClick: true);
                   Future.delayed(const Duration(milliseconds: 500), () {
                     Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                   });
@@ -1307,7 +1325,8 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                     final uri = Uri.parse(data.adsUrlLink ?? '');
                     print('bottomAdsLayout ${data.adsUrlLink}');
                     if (await canLaunchUrl(uri)) {
-                      adsView(widget.data, secondsVideo, isClick: true);
+                      print('second close ads: $secondsVideo');
+                      await adsView(widget.data, secondsVideo, isClick: true);
                       Navigator.pop(context);
                       await launchUrl(
                         uri,
@@ -1318,7 +1337,8 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                     }
                     // can't launch url, there is some error
                   } catch (e) {
-                    adsView(widget.data, secondsVideo, isClick: true);
+                    print('second close ads: $secondsVideo');
+                    await adsView(widget.data, secondsVideo, isClick: true);
                     System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                   }
                 }
