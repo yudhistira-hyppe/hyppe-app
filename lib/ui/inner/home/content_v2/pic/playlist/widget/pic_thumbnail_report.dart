@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
@@ -56,7 +57,14 @@ class PichTumbnailReport extends StatelessWidget {
                   )),
               pictData?.email == SharedPreference().readStorage(SpKeys.email)
                   ? GestureDetector(
-                      onTap: () => Routing().move(Routes.appeal, argument: pictData),
+                      onTap: ()async{
+                        System().checkConnections().then((value){
+                          if(value){
+                            Routing().move(Routes.appeal, argument: pictData);
+                          }
+                        });
+
+                      },
                       child: Container(
                           padding: const EdgeInsets.all(8),
                           margin: const EdgeInsets.all(18),

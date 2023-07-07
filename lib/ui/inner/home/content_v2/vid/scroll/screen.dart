@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:ui';
-
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:hyppe/app.dart';
@@ -113,20 +112,31 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
       index = itemPositionsListener.itemPositions.value.first.index;
       if (lastIndex != index) {
         if (index == vidData!.length - 2) {
-          print("ini reload harusnya");
-          if (!notifier.isLoadingLoadmore) {
-            await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
-            if (mounted) {
-              setState(() {
+          bool connect = await System().checkConnections();
+          if (connect) {
+            print("ini reload harusnya");
+            if (!notifier.isLoadingLoadmore) {
+              await notifier.loadMore(context, _scrollController, widget.arguments!.pageSrc!, widget.arguments?.key ?? '');
+              if (mounted) {
+                setState(() {
+                  vidData = notifier.vidData;
+                });
+              } else {
                 vidData = notifier.vidData;
-              });
-            } else {
-              vidData = notifier.vidData;
+              }
+            }
+          } else {
+            if (mounted) {
+              ShowGeneralDialog.showToastAlert(
+                context,
+                lang?.internetConnectionLost ?? ' Error',
+                () async {},
+              );
             }
           }
         }
+        lastIndex = index;
       }
-      lastIndex = index;
     });
     checkInet();
 
@@ -237,9 +247,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   ListTile(
                     title: Align(
                       alignment: const Alignment(-1.2, 0),
-                      child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                          child: widget.arguments?.titleAppbar ?? Container()),
+                      child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
                     ),
                     leading: IconButton(
                         icon: const Icon(
@@ -256,13 +264,24 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           : Expanded(
                               child: RefreshIndicator(
                                 onRefresh: () async {
-                                  setState(() {
-                                    isloading = true;
-                                  });
-                                  await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                                  setState(() {
-                                    vidData = vidNotifier.vidData;
-                                  });
+                                  bool connect = await System().checkConnections();
+                                  if (connect) {
+                                    setState(() {
+                                      isloading = true;
+                                    });
+                                    await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                    setState(() {
+                                      vidData = vidNotifier.vidData;
+                                    });
+                                  } else {
+                                    if (mounted) {
+                                      ShowGeneralDialog.showToastAlert(
+                                        context,
+                                        lang?.internetConnectionLost ?? ' Error',
+                                        () async {},
+                                      );
+                                    }
+                                  }
                                 },
                                 child: NotificationListener<OverscrollIndicatorNotification>(
                                   onNotification: (overscroll) {
@@ -1153,7 +1172,14 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           )),
                       data.email == SharedPreference().readStorage(SpKeys.email)
                           ? GestureDetector(
-                              onTap: () => Routing().move(Routes.appeal, argument: data),
+                              onTap: ()async{
+                                System().checkConnections().then((value){
+                                  if(value){
+                                    Routing().move(Routes.appeal, argument: data);
+                                  }
+                                });
+
+                              },
                               child: Container(
                                   padding: const EdgeInsets.all(8),
                                   margin: const EdgeInsets.all(18),

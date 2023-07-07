@@ -160,20 +160,32 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     itemPositionsListener.itemPositions.addListener(() async {
       index = itemPositionsListener.itemPositions.value.first.index;
       if (lastIndex != index) {
+        bool connect = await System().checkConnections();
+
         if (index == pics!.length - 2) {
-          if (!notifier.isLoadingLoadmore) {
-            await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
-            if (mounted) {
-              setState(() {
+          if (connect) {
+            if (!notifier.isLoadingLoadmore) {
+              await notifier.loadMore(context, _scrollController, pageSrc, widget.arguments?.key ?? '');
+              if (mounted) {
+                setState(() {
+                  pics = notifier.pics;
+                });
+              } else {
                 pics = notifier.pics;
-              });
-            } else {
-              pics = notifier.pics;
+              }
+            }
+          } else {
+            if (mounted) {
+              ShowGeneralDialog.showToastAlert(
+                context,
+                lang?.internetConnectionLost ?? ' Error',
+                () async {},
+              );
             }
           }
         }
+        lastIndex = index;
       }
-      lastIndex = index;
     });
 
     checkInet();
@@ -572,9 +584,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                 ListTile(
                   title: Align(
                     alignment: const Alignment(-1.2, 0),
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                        child: widget.arguments?.titleAppbar ?? Container()),
+                    child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
                   ),
                   leading: IconButton(
                       icon: const Icon(
@@ -593,13 +603,24 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       ? const NoResultFound()
                       : RefreshIndicator(
                           onRefresh: () async {
-                            setState(() {
-                              isloading = true;
-                            });
-                            await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                            setState(() {
-                              pics = notifier.pics;
-                            });
+                            bool connect = await System().checkConnections();
+                            if (connect) {
+                              setState(() {
+                                isloading = true;
+                              });
+                              await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                              setState(() {
+                                pics = notifier.pics;
+                              });
+                            } else {
+                              if (mounted) {
+                                ShowGeneralDialog.showToastAlert(
+                                  context,
+                                  lang?.internetConnectionLost ?? ' Error',
+                                  () async {},
+                                );
+                              }
+                            }
                           },
                           child: NotificationListener<OverscrollIndicatorNotification>(
                             onNotification: (overscroll) {
@@ -1304,7 +1325,14 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           )),
                       data.email == SharedPreference().readStorage(SpKeys.email)
                           ? GestureDetector(
-                              onTap: () => Routing().move(Routes.appeal, argument: data),
+                              onTap: ()async{
+                                System().checkConnections().then((value){
+                                  if(value){
+                                    Routing().move(Routes.appeal, argument: data);
+                                  }
+                                });
+
+                              },
                               child: Container(
                                   padding: const EdgeInsets.all(8),
                                   margin: const EdgeInsets.all(18),
@@ -1315,7 +1343,6 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          print("===========data musik ${data.music?.musicTitle}");
                           if (data.music?.musicTitle != null) {
                             fAliplayer?.prepare();
                             fAliplayer?.play();
