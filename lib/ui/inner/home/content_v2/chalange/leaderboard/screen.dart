@@ -228,7 +228,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                 physics: const NeverScrollableScrollPhysics(),
 
                 children: [
-                  ListOnGoing(),
+                  const ListOnGoing(),
                   Container(
                     height: 40,
                     padding: const EdgeInsets.only(left: 6.0, right: 6),

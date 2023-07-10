@@ -234,7 +234,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                             physics: const AlwaysScrollableScrollPhysics(),
                             shrinkWrap: false,
                             padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                            itemCount: vidData.length ?? 0,
+                            itemCount: vidData.length,
                             itemBuilder: (BuildContext context, int index) {
                               vidData[index].fAliplayer?.pause();
                               _lastCurIndex = -1;

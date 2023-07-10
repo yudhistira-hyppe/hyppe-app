@@ -11,7 +11,7 @@ class ModelReferral {
     parent = json['parent'];
     responseCode = json['response_code'];
     data = json['data'];
-    messages = json['messages'] != null ? new Messages.fromJson(json['messages']) : null;
+    messages = json['messages'] != null ? Messages.fromJson(json['messages']) : null;
     if (json['list'] != null) {
       list = <ListReferral>[];
       json['list'].forEach((v) {

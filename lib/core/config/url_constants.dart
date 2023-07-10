@@ -25,12 +25,12 @@ class UrlConstants {
   static const String apiV7 = '/v7/';
 
   /// Production Base url
-  // static const String productionBaseApi = "https://p1.hyppe.cloud";
-  // static const String productionUploadBaseApi = "https://p1.hyppe.cloud";
+  static const String productionBaseApi = "https://p1.hyppe.cloud";
+  static const String productionUploadBaseApi = "https://p1.hyppe.cloud";
   // static const String productionBaseApi = "https://prod.hyppe.app"; //lama
   // static const String productionUploadBaseApi = "https://upload.hyppe.app"; //lama
-  static const String productionBaseApi = "https://s1.hyppe.cloud";
-  static const String productionUploadBaseApi = "https://s1.hyppe.cloud";
+  // static const String productionBaseApi = "https://s1.hyppe.cloud";
+  // static const String productionUploadBaseApi = "https://s1.hyppe.cloud";
 
   /// Staging v2 Base url
   // static const String stagingBaseApi = "https://prod.hyppe.app";
@@ -106,6 +106,8 @@ class UrlConstants {
   static const String contentRouteV3 = "/api/getusercontents";
 
   static const String interestCount = "/api/interest-count";
+
+  static const String challange = "/api/challenge";
 
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Bookmark */
@@ -438,4 +440,7 @@ class UrlConstants {
   static const String getNewLandingPage = "$userContentRoute/landingpage";
 
   static const String getKtpText = "$postsRoute/gettext";
+
+  // Get Chalange
+  static const String getBannerChalange = "$challange/listing/bannerlandingpage";
 }

@@ -126,6 +126,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       //Turn on mix mode
       if (Platform.isIOS) {
         FlutterAliplayer.enableMix(true);
+        // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
       }
 
       notifier.checkConnection();
@@ -514,6 +515,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
   void dispose() {
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
     fAliplayer?.stop();
     if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
@@ -1320,7 +1322,14 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           )),
                       data.email == SharedPreference().readStorage(SpKeys.email)
                           ? GestureDetector(
-                              onTap: () => Routing().move(Routes.appeal, argument: data),
+                              onTap: ()async{
+                                System().checkConnections().then((value){
+                                  if(value){
+                                    Routing().move(Routes.appeal, argument: data);
+                                  }
+                                });
+
+                              },
                               child: Container(
                                   padding: const EdgeInsets.all(8),
                                   margin: const EdgeInsets.all(18),

@@ -53,7 +53,7 @@ class OtherProfileTop extends StatelessWidget {
 
   String displayBio() => profile != null
       ? profile?.bio != null
-          ? '"${profile?.bio}"'
+          ? '${profile?.bio}'
           : ""
       : "";
 

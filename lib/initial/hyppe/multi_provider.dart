@@ -8,6 +8,7 @@ import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/entities/stories/notifier.dart';
 import 'package:hyppe/ui/constant/entities/web_view/notifier.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
@@ -240,6 +241,7 @@ class AppDependencies {
         ChangeNotifierProvider<CommentNotifierV2>(create: (context) => CommentNotifierV2()),
         ChangeNotifierProvider<ScrollPicNotifier>(create: (context) => ScrollPicNotifier()),
         ChangeNotifierProvider<ScrollDiaryNotifier>(create: (context) => ScrollDiaryNotifier()),
-        ChangeNotifierProvider<ScrollVidNotifier>(create: (context) => ScrollVidNotifier())
+        ChangeNotifierProvider<ScrollVidNotifier>(create: (context) => ScrollVidNotifier()),
+        ChangeNotifierProvider<ChallangeNotifier>(create: (context) => ChallangeNotifier())
       ];
 }

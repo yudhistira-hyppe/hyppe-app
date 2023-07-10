@@ -181,6 +181,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
         //Turn on mix mode
         if (Platform.isIOS) {
           FlutterAliplayer.enableMix(true);
+          // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
         }
 
         configAliplayer();
@@ -632,6 +633,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
     globalAliPlayer = null;
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
 
     fAliplayer?.stop();
@@ -821,11 +823,12 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
         break;
       case true:
         fAliplayer?.setVidAuth(
-            vid: _dataSourceMap?[DataSourceRelated.vidKey],
-            region: _dataSourceMap?[DataSourceRelated.regionKey],
-            playAuth: _dataSourceMap?[DataSourceRelated.playAuth],
-            definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
-            previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
+          vid: _dataSourceMap?[DataSourceRelated.vidKey],
+          region: _dataSourceMap?[DataSourceRelated.regionKey],
+          playAuth: _dataSourceMap?[DataSourceRelated.playAuth],
+          definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
+          // previewTime: _dataSourceMap?[DataSourceRelated.previewTime]
+        );
         break;
     }
   }
