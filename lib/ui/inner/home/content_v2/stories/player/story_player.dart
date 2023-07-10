@@ -146,20 +146,14 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     _pageController = PageController(initialPage: widget.argument.peopleIndex);
     _pageController.addListener(() {
       final _notifier = context.read<StoriesPlaylistNotifier>();
-      if (isOnPageTurning &&
-          _pageController.page ==
-              _pageController.page?.roundToDouble()) {
+      if (isOnPageTurning && _pageController.page == _pageController.page?.roundToDouble()) {
         _notifier.pageIndex = _pageController.page?.toInt() ?? 0;
         setState(() {
           // current = _controller.page.toInt();
           isOnPageTurning = false;
         });
-      } else if (!isOnPageTurning &&
-          _notifier.currentPage?.toDouble() != _pageController.page) {
-        if (((_notifier.pageIndex.toDouble()) -
-            (_pageController.page ?? 0))
-            .abs() >
-            0.1) {
+      } else if (!isOnPageTurning && _notifier.currentPage?.toDouble() != _pageController.page) {
+        if (((_notifier.pageIndex.toDouble()) - (_pageController.page ?? 0)).abs() > 0.1) {
           setState(() {
             isOnPageTurning = true;
           });
@@ -209,6 +203,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       //Turn on mix mode
       if (Platform.isIOS) {
         FlutterAliplayer.enableMix(true);
+        // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
       }
 
       //set player
@@ -242,11 +237,12 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
         auth = jsonMap['PlayAuth'];
         fAliplayer?.setVidAuth(
-            vid: apsaraId,
-            region: DataSourceRelated.defaultRegion,
-            playAuth: auth,
-            definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
-            previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
+          vid: apsaraId,
+          region: DataSourceRelated.defaultRegion,
+          playAuth: auth,
+          definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
+          // previewTime: _dataSourceMap?[DataSourceRelated.previewTime]
+        );
         setState(() {
           isloading = false;
         });
@@ -482,6 +478,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     _animationController?.dispose();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
     print('dispose StoryPlayerPage');
     fAliplayer?.stop();
@@ -592,20 +589,25 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                 //         height: MediaQuery.of(context).size.height,
                 //       )
                 //     : Container(),
-                Builder(
-                  builder: (context) {
-                    return !isOnPageTurning ? AliPlayerView(
-                      onCreated: (id) {
-                        final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
-                        onViewPlayerCreated(id, isImage);
-                      },
-                      x: 0,
-                      y: _playerY,
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                    ): Container(color: Colors.transparent, alignment: Alignment.center, child: const CircularProgressIndicator(),);
-                  }
-                ),
+                Builder(builder: (context) {
+                  return !isOnPageTurning
+                      ? AliPlayerView(
+                          onCreated: (id) {
+                            final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
+                            onViewPlayerCreated(id, isImage);
+                          },
+                          x: 0,
+                          y: _playerY,
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                        )
+                      : Container(
+                          color: Colors.transparent,
+                          alignment: Alignment.center,
+                          child: const CircularProgressIndicator(),
+                        );
+                }),
+
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,

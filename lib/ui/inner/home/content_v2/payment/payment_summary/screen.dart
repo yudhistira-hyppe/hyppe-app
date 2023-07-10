@@ -250,8 +250,8 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
             child: Html(
                 data: body,
                 style: {"a": Style(color: kHyppePrimary, textDecoration: TextDecoration.underline, textDecorationThickness: 0)},
-                onLinkTap: (String? url, RenderContext context, Map<String, String> attributes, element) async {
-                  try{
+                onLinkTap: (String? url, Map<String, String> attributes, element) async {
+                  try {
                     if (await canLaunchUrl(Uri.parse(url ?? ''))) {
                       await launchUrl(
                         Uri.parse(url ?? ''),
@@ -260,10 +260,9 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                     } else {
                       throw "Could not launch $url";
                     }
-                  }catch(e){
+                  } catch (e) {
                     System().goToWebScreen(url ?? '');
                   }
-
                 }),
           )
         ],

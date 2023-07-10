@@ -206,6 +206,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         //Turn on mix mode
         if (Platform.isIOS) {
           FlutterAliplayer.enableMix(true);
+          // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
         }
 
         configAliplayer();
@@ -518,11 +519,12 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           print("-======= auth konten ${_dataSourceMap?[DataSourceRelated.playAuth]}");
           print("-======= auth konten ${_dataSourceMap?[DataSourceRelated.vidKey]}");
           fAliplayer?.setVidAuth(
-              vid: apsaraId,
-              region: _dataSourceMap?[DataSourceRelated.regionKey],
-              playAuth: _dataSourceMap?[DataSourceRelated.playAuth],
-              definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
-              previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
+            vid: apsaraId,
+            region: _dataSourceMap?[DataSourceRelated.regionKey],
+            playAuth: _dataSourceMap?[DataSourceRelated.playAuth],
+            definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
+            // previewTime: _dataSourceMap?[DataSourceRelated.previewTime]
+          );
           var configMap = {
             'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
             'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
@@ -785,6 +787,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     globalAliPlayer = null;
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
 
     fAliplayer?.stop();
@@ -1045,11 +1048,12 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         break;
       case true:
         fAliplayer?.setVidAuth(
-            vid: _dataSourceMap?[DataSourceRelated.vidKey],
-            region: _dataSourceMap?[DataSourceRelated.regionKey],
-            playAuth: _dataSourceMap?[DataSourceRelated.playAuth],
-            definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
-            previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
+          vid: _dataSourceMap?[DataSourceRelated.vidKey],
+          region: _dataSourceMap?[DataSourceRelated.regionKey],
+          playAuth: _dataSourceMap?[DataSourceRelated.playAuth],
+          definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
+          // previewTime: _dataSourceMap?[DataSourceRelated.previewTime]
+        );
         break;
     }
   }

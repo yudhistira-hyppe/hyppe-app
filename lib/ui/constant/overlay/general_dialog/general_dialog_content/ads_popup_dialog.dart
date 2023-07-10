@@ -177,6 +177,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       //Turn on mix mode
       if (Platform.isIOS) {
         FlutterAliplayer.enableMix(true);
+        // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
       }
 
       //set player
@@ -225,7 +226,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
       _currentPlayerState = newState;
-      try{
+      try {
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
             Wakelock.enable();
@@ -253,10 +254,9 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
             break;
           default:
         }
-      }catch(e){
+      } catch (e) {
         e.logger();
       }
-
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
       _animationController?.stop();
@@ -456,6 +456,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
     _animationController?.dispose();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
 
     fAliplayer?.stop();
@@ -477,11 +478,12 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
   void onViewPlayerCreated(viewId) async {
     fAliplayer?.setPlayerView(viewId);
     fAliplayer?.setVidAuth(
-        vid: widget.data.videoId,
-        region: DataSourceRelated.defaultRegion,
-        playAuth: widget.auth,
-        definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
-        previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
+      vid: widget.data.videoId,
+      region: DataSourceRelated.defaultRegion,
+      playAuth: widget.auth,
+      definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
+      // previewTime: _dataSourceMap?[DataSourceRelated.previewTime]
+    );
   }
 
   @override
@@ -655,8 +657,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                             alignment: Alignment.center,
                             child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
                         : InkWell(
-                            onTap: () async{
-
+                            onTap: () async {
                               print('second close ads: $secondsVideo');
                               await adsView(widget.data, secondsVideo);
                               Navigator.pop(context);
@@ -712,13 +713,12 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                   // Future.delayed(const Duration(milliseconds: 800), () {
                   //   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                   // });
-                  adsView(widget.data, secondsVideo, isClick: true).whenComplete((){
+                  adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
                     Navigator.pop(context);
                     Future.delayed(const Duration(milliseconds: 800), () {
                       Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                     });
                   });
-
                 } else {
                   try {
                     final uri = Uri.parse(data.adsUrlLink ?? '');
@@ -733,14 +733,13 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                       //   uri,
                       //   mode: LaunchMode.externalApplication,
                       // );
-                      adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async{
+                      adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
                         Navigator.pop(context);
                         await launchUrl(
-                        uri,
-                        mode: LaunchMode.externalApplication,
+                          uri,
+                          mode: LaunchMode.externalApplication,
                         );
                       });
-
                     } else {
                       throw "Could not launch $uri";
                     }
@@ -751,10 +750,9 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                     });
                     print('second close ads: $secondsVideo');
                     // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                    adsView(widget.data, secondsVideo, isClick: true).whenComplete((){
+                    adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
                       System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                     });
-
                   }
                 }
               }
@@ -765,14 +763,16 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
                 decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: secondsSkip < 1 ? KHyppeButtonAds : context.getColorScheme().secondary),
-                child: loadLaunch ? const SizedBox(width: 40, height: 20, child: CustomLoading()) : Text(
-                  learnMore,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                child: loadLaunch
+                    ? const SizedBox(width: 40, height: 20, child: CustomLoading())
+                    : Text(
+                        learnMore,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
               );
             }),
           ),
@@ -1317,7 +1317,6 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                     final uri = Uri.parse(data.adsUrlLink ?? '');
                     print('bottomAdsLayout ${data.adsUrlLink}');
                     if (await canLaunchUrl(uri)) {
-
                       print('second close ads: $secondsVideo');
                       await adsView(widget.data, secondsVideo, isClick: true);
                       Navigator.pop(context);
@@ -1330,7 +1329,6 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                     }
                     // can't launch url, there is some error
                   } catch (e) {
-
                     print('second close ads: $secondsVideo');
                     await adsView(widget.data, secondsVideo, isClick: true);
                     System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);

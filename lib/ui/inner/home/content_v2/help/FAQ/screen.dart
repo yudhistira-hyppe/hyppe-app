@@ -221,7 +221,7 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
         }
         return Html(
           data: fixTextHtml,
-          onLinkTap: (text, ctx, map, e) async {
+          onLinkTap: (text, ctx, map) async {
             print('test1');
             await launchUrl(
               Uri.parse(text ?? ''),
@@ -233,7 +233,7 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
       } else {
         return Html(
           data: text,
-          onLinkTap: (text, ctx, map, e) async {
+          onLinkTap: (text, ctx, map) async {
             print('test2');
             await launchUrl(
               Uri.parse(text ?? ''),
@@ -245,7 +245,7 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
     } else {
       return Html(
         data: text,
-        onLinkTap: (text, ctx, map, e) async {
+        onLinkTap: (text, ctx, map) async {
           print('test3 ');
           await launchUrl(
             Uri.parse(text ?? ''),

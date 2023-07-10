@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -28,6 +29,7 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/preview/screen.dart';
 import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
 import 'package:move_to_background/move_to_background.dart';
+import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool canShowAds;
@@ -129,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       }
 
       globalKey.currentState?.innerController.addListener(() {
-        try{
+        try {
           setState(() {
             offset = globalKey.currentState?.innerController.position.pixels ?? 0;
             // print(offset);
@@ -138,15 +140,17 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
               !(globalKey.currentState?.innerController.position.outOfRange ?? true)) {
             notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);
           }
-        }catch(e){
+        } catch (e) {
           e.logger();
         }
-
       });
 
       // context.read<MainNotifier>().scrollController.addListener(() {
       // });
       context.read<ReportNotifier>().inPosition = contentPosition.home;
+      _initLicense();
+      // FlutterAliPlayerFactory.loadRtsLibrary();
+      // _loadEncrypted();
     });
 
     context.read<PreUploadContentNotifier>().onGetInterest(context);
@@ -156,6 +160,25 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     }
     super.initState();
     'ini iniststate home'.logger();
+  }
+
+  _initLicense() {
+    if (Platform.isIOS) {
+      FlutterAliPlayerFactory.initLicenseServiceForIOS();
+    } else {
+      // 不需要
+    }
+  }
+
+  _loadEncrypted() async {
+    if (Platform.isAndroid) {
+      var bytes = await rootBundle.load("assets/encryptedApp.dat");
+      // getExternalStorageDirectories
+      FlutterAliPlayerFactory.initService(bytes.buffer.asUint8List());
+    } else if (Platform.isIOS) {
+      var bytes = await rootBundle.load("assets/encryptedApp_ios.dat");
+      FlutterAliPlayerFactory.initService(bytes.buffer.asUint8List());
+    }
   }
 
   bool isZoom = false;
