@@ -34,6 +34,7 @@ class AdsData {
   double? duration;
   bool? isReport;
   String? apsaraAuth;
+  bool? isLoading;
 
   AdsData({
     this.adsId,

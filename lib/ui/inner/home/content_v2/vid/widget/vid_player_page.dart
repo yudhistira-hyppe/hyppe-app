@@ -13,13 +13,13 @@ import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/constant/widget/ads/ads_player_page.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -30,7 +30,6 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:path_provider/path_provider.dart';
-// import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
@@ -152,14 +151,13 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
   StreamSubscription? _networkSubscriptiion;
 
   // GlobalKey<TrackFragmentState> trackFragmentKey = GlobalKey();
-  AdsVideo? adsData;
   var secondsSkip = 0;
   var skipAdsCurent = 0;
   bool isActiveAds = false;
   bool isCompleteAds = false;
   AliPlayerView? aliPlayerView;
 
-  AdsVideo? _newClipData;
+  AdsData? adsData;
 
   @override
   void initState() {
@@ -172,8 +170,8 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     // }
     //cek ikaln
     // adsData = context.read<VidDetailNotifier>().adsData;
-    print("ini iklan ${adsData?.data?.videoId}");
-    print("ini iklan ${adsData?.data?.apsaraAuth}");
+    print("ini iklan ${adsData?.videoId}");
+    print("ini iklan ${adsData?.apsaraAuth}");
     if (widget.inLanding) {
       getAdsVideo(false);
     }
@@ -227,9 +225,10 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
 
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
         // print('data : ${fetch.data.toString()}');
-        _newClipData = fetch.data;
-        'videoId : ${_newClipData?.data?.videoId}'.logger();
-        secondsSkip = _newClipData?.data?.adsSkip ?? 0;
+        final data = fetch.data;
+        adsData = data.data;
+        'videoId : ${adsData?.videoId}'.logger();
+        secondsSkip = adsData?.adsSkip ?? 0;
       }
     } catch (e) {
       'Failed to fetch ads data $e'.logger();
@@ -1011,6 +1010,20 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                   widget.height ?? 0,
                 ),
               ),
+            if(adsData != null)
+            Positioned.fill(child: AdsPlayerPage(dataSourceMap: {
+              DataSourceRelated.vidKey: adsData?.videoId,
+              DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
+            }, data: adsData, functionFullTriger: (){
+
+            }, height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+              getPlayer: (player){
+
+              },
+              onPlay: (data){
+
+              },
+              width: MediaQuery.of(context).size.width, orientation: Orientation.portrait,))
           ],
         ),
       );

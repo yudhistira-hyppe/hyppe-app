@@ -606,7 +606,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                     ): Container(color: Colors.transparent, alignment: Alignment.center, child: const CircularProgressIndicator(),);
                   }
                 ),
-
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
