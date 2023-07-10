@@ -21,16 +21,13 @@ class EventBannerWidget extends StatefulWidget {
 class _EventBannerWidgetState extends State<EventBannerWidget> {
   final CarouselController _controller = CarouselController();
   int _current = 0;
-  final List<String> imgList = [
-    'https://images.unsplash.com/photo-1603486002664-a7319421e133?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1842&q=80',
-    'https://images.unsplash.com/photo-1580757468214-c73f7062a5cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80',
-    'https://images.unsplash.com/photo-1626593261859-4fe4865d8cb1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80'
-  ];
 
   @override
   void initState() {
-    var cn = context.read<ChallangeNotifier>();
-    cn.getBannerLanding(context);
+    Future.delayed(Duration(seconds: 0), () {
+      var cn = context.read<ChallangeNotifier>();
+      cn.getBannerLanding(context);
+    });
     super.initState();
   }
 

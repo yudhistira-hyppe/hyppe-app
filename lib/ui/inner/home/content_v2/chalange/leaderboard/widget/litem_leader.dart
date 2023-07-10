@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/chalange/leaderboard_challange_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 
 class ItemLeader extends StatelessWidget {
-  const ItemLeader({super.key});
+  final Getlastrank? data;
+  const ItemLeader({super.key, this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +26,9 @@ class ItemLeader extends StatelessWidget {
             decoration: BoxDecoration(color: Colors.amber, borderRadius: BorderRadius.circular(100)),
             child: Center(
               child: Text(
-                '1',
+                "${data?.ranking}",
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: kHyppeLightButtonText,
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
@@ -41,14 +43,14 @@ class ItemLeader extends StatelessWidget {
             width: 44 * SizeConfig.scaleDiagonal,
             height: 44 * SizeConfig.scaleDiagonal,
             // imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
-            imageUrl: System().showUserPicture("/profilepict/57b74890-122d-5e3a-71d3-8547f442d86c"),
+            imageUrl: data?.avatar?.mediaEndpoint != null ? System().showUserPicture("${data?.avatar?.mediaEndpoint}") : '',
           ),
           twelvePx,
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'markchen_',
+                '${data?.username}',
                 style: TextStyle(
                   color: Color(0xFF3E3E3E),
                   fontSize: 16,
@@ -56,7 +58,7 @@ class ItemLeader extends StatelessWidget {
                 ),
               ),
               Text(
-                '100 poin',
+                '${data?.score} poin',
                 style: TextStyle(
                   color: Color(0xFF9B9B9B),
                   fontSize: 12,
@@ -67,14 +69,16 @@ class ItemLeader extends StatelessWidget {
             ],
           ),
           twelvePx,
-          Expanded(
-              child: Align(
-            alignment: Alignment.centerRight,
-            child: CustomIconWidget(
-              iconData: "${AssetPath.vectorPath}arrow_drop_down.svg",
-              defaultColor: false,
-            ),
-          ))
+          // data?.currentstatistik == "NETRAL"
+          //     ? Container()
+          //     : Expanded(
+          //         child: Align(
+          //         alignment: Alignment.centerRight,
+          //         child: CustomIconWidget(
+          //           iconData: data?.currentstatistik == 'UP' ? "${AssetPath.vectorPath}arrow_drop_up.svg" : "${AssetPath.vectorPath}arrow_drop_down.svg",
+          //           defaultColor: false,
+          //         ),
+          //       ))
         ],
       ),
     );
