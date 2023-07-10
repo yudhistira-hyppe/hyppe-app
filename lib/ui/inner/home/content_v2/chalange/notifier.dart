@@ -80,7 +80,7 @@ class ChallangeNotifier with ChangeNotifier {
     notifyListeners();
     checkInet(context);
     await getBannerLanding(context);
-    // await getLeaderBoard(context);
+    await getLeaderBoard(context);
     isLoadingLeaderboard = false;
     notifyListeners();
   }
@@ -97,7 +97,7 @@ class ChallangeNotifier with ChangeNotifier {
     final bannerFatch = bannerNotifier.userFetch;
 
     if (bannerFatch.challengeState == ChallengeState.getPostSuccess) {
-      leaderBoardData = LeaderboardChallangeModel.fromJson(bannerFatch.data);
+      leaderBoardData = LeaderboardChallangeModel.fromJson(bannerFatch.data[0]);
       isLoading = false;
       notifyListeners();
     }
