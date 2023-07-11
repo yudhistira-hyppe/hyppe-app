@@ -86,7 +86,8 @@ class _PaymentBoostSummaryScreenState extends State<PaymentBoostSummaryScreen> {
                           children: [
                             CustomTextWidget(
                               // textToDisplay: "Saturday, 15 Jul 2022 01:50 WIB",
-                              textToDisplay: DateFormat('EEEE, dd MMM yyyy HH:mm', notifier.language.localeDatetime).format(DateTime.parse(notifier.paymentMethodNotifier.boostPaymentResponse?.expiredtimeva ?? '')),
+                              textToDisplay: DateFormat('EEEE, dd MMM yyyy HH:mm', notifier.language.localeDatetime)
+                                  .format(DateTime.parse(notifier.paymentMethodNotifier.boostPaymentResponse?.expiredtimeva ?? '')),
                               textStyle: textTheme.bodyMedium,
                             ),
                             TweenAnimationBuilder<Duration>(
@@ -224,9 +225,9 @@ class _PaymentBoostSummaryScreenState extends State<PaymentBoostSummaryScreen> {
             child: Html(
                 data: body,
                 style: {"a": Style(color: kHyppePrimary, textDecoration: TextDecoration.underline, textDecorationThickness: 0)},
-                onLinkTap: (String? url, RenderContext context, Map<String, String> attributes, element) async {
+                onLinkTap: (String? url, Map<String, String> attributes, element) async {
                   print(url);
-                  try{
+                  try {
                     if (await canLaunchUrl(Uri.parse(url ?? ''))) {
                       await launchUrl(
                         Uri.parse(url ?? ''),
@@ -235,10 +236,9 @@ class _PaymentBoostSummaryScreenState extends State<PaymentBoostSummaryScreen> {
                     } else {
                       throw "Could not launch $url";
                     }
-                  }catch(e){
+                  } catch (e) {
                     System().goToWebScreen(url ?? '');
                   }
-
                 }),
           )
         ],

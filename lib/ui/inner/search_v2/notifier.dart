@@ -1064,7 +1064,8 @@ class SearchNotifier with ChangeNotifier {
         _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppePic).then((value){
           if(value != null){
             interestContents[keys]?.pict = value.pict;
-            Future.delayed(const Duration(milliseconds: 200), (){
+            notifyListeners();
+            Future.delayed(const Duration(milliseconds: 500), (){
               loadIntDetailPic = false;
             });
           }
@@ -1072,7 +1073,8 @@ class SearchNotifier with ChangeNotifier {
         _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppeDiary).then((value){
           if(value != null){
             interestContents[keys]?.diary = value.diary;
-            Future.delayed(const Duration(milliseconds: 200), (){
+            notifyListeners();
+            Future.delayed(const Duration(milliseconds: 500), (){
               loadIntDetailDiary = false;
             });
           }
@@ -1080,7 +1082,8 @@ class SearchNotifier with ChangeNotifier {
         await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppeVid).then((value){
           if(value != null){
             interestContents[keys]?.vid = value.vid;
-            Future.delayed(const Duration(milliseconds: 200), (){
+            notifyListeners();
+            Future.delayed(const Duration(milliseconds: 500), (){
               loadIntDetailVid = false;
             });
           }

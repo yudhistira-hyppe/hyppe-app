@@ -51,6 +51,7 @@ import '../../../home/content_v2/pic/widget/pic_top_item.dart';
 import '../../../home/content_v2/vid/notifier.dart';
 import '../../../home/content_v2/vid/playlist/comments_detail/screen.dart';
 import '../../../home/notifier_v2.dart';
+import '../../search_more_complete/widget/all_search_shimmer.dart';
 
 class PicScrollScreen extends StatefulWidget {
   final String interestKey;
@@ -489,7 +490,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             pics?.isEmpty ?? true
-                ? const Flexible(child: NoResultFound())
+                ?  const Flexible(child: AllSearchShimmer())
                 : Column(
                 children: List.generate(pics?.length ?? 0, (index){
                   if (pics == null) {

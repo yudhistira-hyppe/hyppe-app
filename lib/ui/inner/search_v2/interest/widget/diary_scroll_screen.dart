@@ -53,6 +53,7 @@ import '../../../home/content_v2/pic/widget/pic_top_item.dart';
 import '../../../home/content_v2/vid/notifier.dart';
 import '../../../home/content_v2/vid/playlist/comments_detail/screen.dart';
 import '../../../home/notifier_v2.dart';
+import '../../search_more_complete/widget/all_search_shimmer.dart';
 
 class DiaryScrollScreen extends StatefulWidget {
   final String interestKey;
@@ -110,6 +111,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
       //Turn on mix mode
       if (Platform.isIOS) {
         FlutterAliplayer.enableMix(true);
+        // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
       }
 
       notifier.checkConnection();
@@ -132,7 +134,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
       ShowGeneralDialog.showToastAlert(
         context,
         notifier.language.internetConnectionLost ?? ' Error',
-            () async {
+        () async {
           Routing().moveBack();
         },
       );
@@ -433,6 +435,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
   void dispose() {
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
     fAliplayer?.stop();
     if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps) {
@@ -463,7 +466,6 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
     // System().disposeBlock();
     if (toComment) {
       setState(() {
-
         toComment = false;
       });
     }
@@ -509,7 +511,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           diaryData?.isEmpty ?? true
-              ? const Expanded(child: NoResultFound())
+              ? const Expanded(child: AllSearchShimmer())
               : NotificationListener<OverscrollIndicatorNotification>(
                 onNotification: (overscroll) {
                   overscroll.disallowIndicator();
@@ -608,17 +610,17 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                       },
                       child: diaryData[index].insight?.isloadingFollow ?? false
                           ? const SizedBox(
-                        height: 40,
-                        width: 30,
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: CustomLoading(),
-                        ),
-                      )
+                              height: 40,
+                              width: 30,
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: CustomLoading(),
+                              ),
+                            )
                           : Text(
-                        (diaryData[index].following ?? false) ? (notifier.language.following ?? '') : (notifier.language.follow ?? ''),
-                        style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                      ),
+                              (diaryData[index].following ?? false) ? (notifier.language.following ?? '') : (notifier.language.follow ?? ''),
+                              style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                            ),
                     ),
                   ),
                 ),
@@ -655,7 +657,6 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
               if (info.visibleFraction >= 0.6) {
                 _curIdx = index;
                 if (_lastCurIndex != _curIdx) {
-
                   Future.delayed(const Duration(milliseconds: 400), () {
                     start(diaryData[index]);
                     System().increaseViewCount2(context, diaryData[index], check: false);
@@ -683,38 +684,38 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                   children: [
                     _curIdx == index
                         ? ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                      child: AliPlayerView(
-                        onCreated: onViewPlayerCreated,
-                        x: 0,
-                        y: 0,
-                        height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                        width: MediaQuery.of(context).size.width,
-                      ),
-                    )
+                            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                            child: AliPlayerView(
+                              onCreated: onViewPlayerCreated,
+                              x: 0,
+                              y: 0,
+                              height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                              width: MediaQuery.of(context).size.width,
+                            ),
+                          )
                         : Container(),
                     // _buildProgressBar(SizeConfig.screenWidth!, 500),
                     !notifier.connectionError
                         ? Positioned.fill(
-                      child: GestureDetector(
-                        onTap: () {
-                          fAliplayer?.play();
-                          setState(() {
-                            isMute = !isMute;
-                          });
-                          fAliplayer?.setMuted(isMute);
-                        },
-                        onDoubleTap: () {
-                          final _likeNotifier = context.read<LikeNotifier>();
-                          _likeNotifier.likePost(context, diaryData[index]);
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          width: SizeConfig.screenWidth,
-                          height: SizeConfig.screenHeight,
-                        ),
-                      ),
-                    )
+                            child: GestureDetector(
+                              onTap: () {
+                                fAliplayer?.play();
+                                setState(() {
+                                  isMute = !isMute;
+                                });
+                                fAliplayer?.setMuted(isMute);
+                              },
+                              onDoubleTap: () {
+                                final _likeNotifier = context.read<LikeNotifier>();
+                                _likeNotifier.likePost(context, diaryData[index]);
+                              },
+                              child: Container(
+                                color: Colors.transparent,
+                                width: SizeConfig.screenWidth,
+                                height: SizeConfig.screenHeight,
+                              ),
+                            ),
+                          )
                         : Positioned.fill(
                       child: GestureDetector(
                         onTap: () {
@@ -788,10 +789,10 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                     ),
                     _showLoading
                         ? Positioned.fill(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: CircularProgressIndicator(),
-                        ))
+                            child: Align(
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator(),
+                          ))
                         : Container(),
                     _buildBody(context, SizeConfig.screenWidth, diaryData[index]),
                     blurContentWidget(context, diaryData[index]),
@@ -801,33 +802,33 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
             ),
           ),
           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-              diaryData[index].boosted.isEmpty &&
-              (diaryData[index].reportedStatus != 'OWNED' && diaryData[index].reportedStatus != 'BLURRED' && diaryData[index].reportedStatus2 != 'BLURRED') &&
-              diaryData[index].email == email
+                  diaryData[index].boosted.isEmpty &&
+                  (diaryData[index].reportedStatus != 'OWNED' && diaryData[index].reportedStatus != 'BLURRED' && diaryData[index].reportedStatus2 != 'BLURRED') &&
+                  diaryData[index].email == email
               ? Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(bottom: 16),
-            child: ButtonBoost(
-              onDetail: false,
-              marginBool: true,
-              contentData: diaryData[index],
-              startState: () {
-                SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-              },
-              afterState: () {
-                SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-              },
-            ),
-          )
+                  width: MediaQuery.of(context).size.width,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: ButtonBoost(
+                    onDetail: false,
+                    marginBool: true,
+                    contentData: diaryData[index],
+                    startState: () {
+                      SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                    },
+                    afterState: () {
+                      SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                    },
+                  ),
+                )
               : Container(),
           diaryData[index].email == SharedPreference().readStorage(SpKeys.email) && (diaryData[index].reportedStatus == 'OWNED')
               ? Padding(
-            padding: const EdgeInsets.only(bottom: 11.0),
-            child: ContentViolationWidget(
-              data: diaryData[index],
-              text: notifier.language.thisHyppeVidisSubjectToModeration ?? '',
-            ),
-          )
+                  padding: const EdgeInsets.only(bottom: 11.0),
+                  child: ContentViolationWidget(
+                    data: diaryData[index],
+                    text: notifier.language.thisHyppeVidisSubjectToModeration ?? '',
+                  ),
+                )
               : Container(),
           if (diaryData[index].email == email && (diaryData[index].boostCount ?? 0) >= 0 && diaryData[index].boosted.isNotEmpty)
             Container(
@@ -869,26 +870,26 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                           alignment: Alignment.bottomRight,
                           child: diaryData[index].insight?.isloading ?? false
                               ? const SizedBox(
-                            height: 28,
-                            width: 28,
-                            child: CircularProgressIndicator(
-                              color: kHyppePrimary,
-                              strokeWidth: 2,
-                            ),
-                          )
+                                  height: 28,
+                                  width: 28,
+                                  child: CircularProgressIndicator(
+                                    color: kHyppePrimary,
+                                    strokeWidth: 2,
+                                  ),
+                                )
                               : InkWell(
-                            child: CustomIconWidget(
-                              defaultColor: false,
-                              color: (diaryData[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                              iconData: '${AssetPath.vectorPath}${(diaryData[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                              height: 28,
-                            ),
-                            onTap: () {
-                              if (diaryData[index] != null) {
-                                likeNotifier.likePost(context, diaryData[index]);
-                              }
-                            },
-                          ),
+                                  child: CustomIconWidget(
+                                    defaultColor: false,
+                                    color: (diaryData[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                                    iconData: '${AssetPath.vectorPath}${(diaryData[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                    height: 28,
+                                  ),
+                                  onTap: () {
+                                    if (diaryData[index] != null) {
+                                      likeNotifier.likePost(context, diaryData[index]);
+                                    }
+                                  },
+                                ),
                         ),
                       ),
                     ),
@@ -992,30 +993,30 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
           ),
           (diaryData[index].comment?.length ?? 0) > 0
               ? Padding(
-            padding: const EdgeInsets.only(top: 0.0),
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: (diaryData[index].comment?.length ?? 0) >= 2 ? 2 : 1,
-              itemBuilder: (context, indexComment) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 6.0),
-                  child: CustomNewDescContent(
-                    // desc: "${diaryData?[index]?.description}",
-                    username: diaryData[index].comment?[indexComment].userComment?.username ?? '',
-                    desc: diaryData[index].comment?[indexComment].txtMessages ?? '',
-                    trimLines: 2,
-                    textAlign: TextAlign.start,
-                    seeLess: ' ${notifier.language.seeLess}', // ${notifier2.translate.seeLess}',
-                    seeMore: ' ${notifier.language.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                    normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                    hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                    expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                  padding: const EdgeInsets.only(top: 0.0),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: (diaryData[index].comment?.length ?? 0) >= 2 ? 2 : 1,
+                    itemBuilder: (context, indexComment) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 6.0),
+                        child: CustomNewDescContent(
+                          // desc: "${diaryData?[index]?.description}",
+                          username: diaryData[index].comment?[indexComment].userComment?.username ?? '',
+                          desc: diaryData[index].comment?[indexComment].txtMessages ?? '',
+                          trimLines: 2,
+                          textAlign: TextAlign.start,
+                          seeLess: ' ${notifier.language.seeLess}', // ${notifier2.translate.seeLess}',
+                          seeMore: ' ${notifier.language.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                          normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                          hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                          expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          )
+                )
               : Container(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -1084,68 +1085,68 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
     final transnot = Provider.of<TranslateNotifierV2>(context, listen: false);
     return data.reportedStatus == 'BLURRED'
         ? Positioned.fill(
-      child: Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Spacer(),
-                const CustomIconWidget(
-                  iconData: "${AssetPath.vectorPath}eye-off.svg",
-                  defaultColor: false,
-                  height: 30,
-                ),
-                Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                Text("HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                    )),
-                // data.email == SharedPreference().readStorage(SpKeys.email)
-                //     ? GestureDetector(
-                //         onTap: () => Routing().move(Routes.appeal, argument: data),
-                //         child: Container(
-                //             padding: const EdgeInsets.all(8),
-                //             margin: const EdgeInsets.all(18),
-                //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                //       )
-                //     : const SizedBox(),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    data.reportedStatus = '';
-                    start(data);
-                    context.read<ReportNotifier>().seeContent(context, data, hyppeDiary);
-                    fAliplayer?.prepare();
-                    fAliplayer?.play();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 8),
-                    margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
-                    width: SizeConfig.screenWidth,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        top: BorderSide(
-                          color: Colors.white,
-                          width: 1,
+            child: Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Spacer(),
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}eye-off.svg",
+                        defaultColor: false,
+                        height: 30,
+                      ),
+                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                      Text("HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                          )),
+                      // data.email == SharedPreference().readStorage(SpKeys.email)
+                      //     ? GestureDetector(
+                      //         onTap: () => Routing().move(Routes.appeal, argument: data),
+                      //         child: Container(
+                      //             padding: const EdgeInsets.all(8),
+                      //             margin: const EdgeInsets.all(18),
+                      //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                      //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                      //       )
+                      //     : const SizedBox(),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          data.reportedStatus = '';
+                          start(data);
+                          context.read<ReportNotifier>().seeContent(context, data, hyppeDiary);
+                          fAliplayer?.prepare();
+                          fAliplayer?.play();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.only(top: 8),
+                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                          width: SizeConfig.screenWidth,
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            "${transnot.translate.see} HyppeDiary",
+                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
-                    ),
-                    child: Text(
-                      "${transnot.translate.see} HyppeDiary",
-                      style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                      textAlign: TextAlign.center,
-                    ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          )),
-    )
+                )),
+          )
         : Container();
   }
 }

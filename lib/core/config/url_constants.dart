@@ -107,6 +107,8 @@ class UrlConstants {
 
   static const String interestCount = "/api/interest-count";
 
+  static const String challange = "/api/challenge";
+
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Bookmark */
   /// get => Get bookmark.
@@ -438,4 +440,7 @@ class UrlConstants {
   static const String getNewLandingPage = "$userContentRoute/landingpage";
 
   static const String getKtpText = "$postsRoute/gettext";
+
+  // Get Chalange
+  static const String getBannerChalange = "$challange/listing/bannerlandingpage";
 }
