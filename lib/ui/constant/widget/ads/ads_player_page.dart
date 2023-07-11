@@ -12,7 +12,6 @@ import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
@@ -21,14 +20,18 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dar
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:measured_size/measured_size.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 
 import '../../../../../../../app.dart';
+import '../../../../core/constants/themes/hyppe_colors.dart';
+import '../custom_cache_image.dart';
 
 class AdsPlayerPage extends StatefulWidget {
   final Map<String, dynamic> dataSourceMap;
@@ -38,7 +41,9 @@ class AdsPlayerPage extends StatefulWidget {
   final Function functionFullTriger;
   final Function(FlutterAliplayer)? getPlayer;
   final Function(AdsData)? onPlay;
+  final Function() onClose;
   final Orientation orientation;
+  final String thumbnail;
 
   AdsPlayerPage({
     Key? key,
@@ -48,8 +53,10 @@ class AdsPlayerPage extends StatefulWidget {
     this.width,
     required this.functionFullTriger,
     this.onPlay,
+    required this.onClose,
     this.getPlayer,
     required this.orientation,
+    required this.thumbnail
   }) : super(key: key);
 
   @override
@@ -137,7 +144,6 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
   AdsVideo? adsData;
   var secondsSkip = 0;
   var skipAdsCurent = 0;
-  bool isActiveAds = false;
   bool isCompleteAds = false;
   AliPlayerView? aliPlayerView;
 
@@ -477,10 +483,22 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
 
       /// Specify whether to enable the cache feature.
     };
-    fAliplayer?.setCacheConfig(map);
-    fAliplayer?.prepare();
+    await fAliplayer?.setCacheConfig(map);
 
-    // fAliplayer?.play();
+    setState(() {
+      isPlay = true;
+      _showLoading = true;
+    });
+    await fAliplayer?.prepare().whenComplete(() {}).onError((error, stackTrace) => print('Error Loading video: $error'));
+    Future.delayed(const Duration(seconds: 1), () {
+      if (isPlay) {
+        fAliplayer?.play();
+        setState(() {
+          isPlay = true;
+          // _showLoading = false;
+        });
+      }
+    });
   }
 
   @override
@@ -660,58 +678,59 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
             //       withMargin: true,
             //     ),
             //   ),
-            if (!isPlay && !_showLoading)
-              Center(
-                child: GestureDetector(
-                  onTap: () async {
-                    globalAliPlayer = fAliplayer;
-
-
-
-                    setState(() {
-                      isPlay = true;
-                      _showLoading = true;
-                    });
-                    fAliplayer?.play();
-                    await fAliplayer?.prepare().whenComplete(() {}).onError((error, stackTrace) => print('Error Loading video: $error'));
-                    Future.delayed(const Duration(seconds: 1), () {
-                      if (isPlay) {
-                        fAliplayer?.play();
-                        setState(() {
-                          isPlay = true;
-                          // _showLoading = false;
-                        });
-                      }
-                    });
-                  },
-                  child: SizedBox(
-                    width: widget.width,
-                    height: widget.height,
-                    child: const CustomIconWidget(
-                      defaultColor: false,
-                      iconData: '${AssetPath.vectorPath}pause.svg',
-                      color: kHyppeLightButtonText,
-                    ),
-                  ),
-                ),
-              ),
+            // if (!isPlay && !_showLoading)
+            //   Center(
+            //     child: GestureDetector(
+            //       onTap: () async {
+            //         globalAliPlayer = fAliplayer;
+            //
+            //
+            //
+            //         setState(() {
+            //           isPlay = true;
+            //           _showLoading = true;
+            //         });
+            //         fAliplayer?.play();
+            //         await fAliplayer?.prepare().whenComplete(() {}).onError((error, stackTrace) => print('Error Loading video: $error'));
+            //         Future.delayed(const Duration(seconds: 1), () {
+            //           if (isPlay) {
+            //             fAliplayer?.play();
+            //             setState(() {
+            //               isPlay = true;
+            //               // _showLoading = false;
+            //             });
+            //           }
+            //         });
+            //       },
+            //       child: SizedBox(
+            //         width: widget.width,
+            //         height: widget.height,
+            //         child: const CustomIconWidget(
+            //           defaultColor: false,
+            //           iconData: '${AssetPath.vectorPath}pause.svg',
+            //           color: kHyppeLightButtonText,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
             _buildProgressBar(widget.width ?? 0, widget.height ?? 0),
-            if (isPlay)
-              Align(
-                alignment: Alignment.topCenter,
-                child: _buildController(
-                  Colors.transparent,
-                  Colors.white,
-                  100,
-                  widget.width ?? 0,
-                  widget.height ?? 0,
-                ),
-              ),
+            // if (isPlay)
+            //   Align(
+            //     alignment: Alignment.topCenter,
+            //     child: _buildController(
+            //       Colors.transparent,
+            //       Colors.white,
+            //       100,
+            //       widget.width ?? 0,
+            //       widget.height ?? 0,
+            //     ),
+            //   ),
           ],
         ),
       );
     }
   }
+
 
   void onViewPlayerCreated(viewId) async {
     await fAliplayer?.setPlayerView(viewId);
@@ -955,6 +974,8 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
     }
   }
 
+  double heightSkip = 0;
+
   _buildContentWidget(BuildContext context, Orientation orientation) {
     return SafeArea(
       child: _currentPosition <= 0
@@ -963,13 +984,78 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  children: [
+                    const Expanded(flex: 16 ,child: SizedBox.shrink()),
+                    Expanded(
+                      flex: 14,
+                      child: InkWell(
+                        onTap: (){
+                          fAliplayer?.stop();
+                          widget.onClose();
+                        },
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 96,
+                              child: MeasuredSize(
+                                onChange: (size){
+                                  setState(() {
+                                    heightSkip = size.height;
+                                  });
+                                },
+                                child: Container(
+                                  color: Colors.black.withOpacity(0.5),
+                                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                                  child: CustomTextWidget(textToDisplay: 'Lewati video dalam 1 detik', textStyle: context.getTextTheme().overline?.copyWith(color: Colors.white), maxLines: 2,),
+                                ),
+                              ),
+                            ),
+                            Expanded(flex: 40, child: CustomCacheImage(
+                              // imageUrl: picData.content[arguments].contentUrl,
+                              imageUrl: widget.thumbnail,
+                              imageBuilder: (_, imageProvider) {
+                                return Container(
+                                  height: heightSkip,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                                  ),
+                                );
+                              },
+                              errorWidget: (_, __, ___) {
+                                return Container(
+                                  height: heightSkip,
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      fit: BoxFit.contain,
+                                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    ),
+                                  ),
+                                );
+                              },
+                              emptyWidget: Container(
+                                height: heightSkip,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  ),
+                                ),
+                              ),
+                            ))
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Row(
                     children: [
                       sixPx,
                       Text(
-                        System.getTimeformatByMs(isActiveAds ? _currentAdsPositionText : _currentPositionText),
+                        System.getTimeformatByMs(_currentPositionText),
                         style: const TextStyle(color: Colors.white, fontSize: 11),
                       ),
                       sixPx,
@@ -986,41 +1072,35 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                           ),
                           child: Slider(
                               min: 0,
-                              max: isActiveAds
-                                  ? _videoAdsDuration == 0
-                                      ? 1
-                                      : _videoAdsDuration.toDouble()
-                                  : _videoDuration == 0
-                                      ? 1
-                                      : _videoDuration.toDouble(),
-                              value: isActiveAds ? _currentAdsPosition.toDouble() : _currentPosition.toDouble(),
-                              activeColor: Colors.purple,
+                              max: _videoDuration.toDouble(),
+                              value: _currentPosition.toDouble(),
+                              activeColor: kHyppeAdsProgress,
                               // trackColor: Color(0xAA7d7d7d),
-                              thumbColor: Colors.purple,
+                              thumbColor: kHyppeAdsProgress,
                               onChangeStart: (value) {
-                                _inSeek = true;
-                                _showLoading = false;
-                                setState(() {});
+                                // _inSeek = true;
+                                // _showLoading = false;
+                                // setState(() {});
                               },
                               onChangeEnd: (value) {
-                                _inSeek = false;
-                                setState(() {
-                                  if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
-                                    setState(() {
-                                      _showTipsWidget = false;
-                                    });
-                                  }
-                                });
-                                fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
+                                // _inSeek = false;
+                                // setState(() {
+                                //   if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+                                //     setState(() {
+                                //       _showTipsWidget = false;
+                                //     });
+                                //   }
+                                // });
+                                // fAliplayer?.seekTo(value.ceil(), FlutterAvpdef.ACCURATE);
                               },
                               onChanged: (value) {
-                                print('on change');
-                                if (_thumbnailSuccess) {
-                                  fAliplayer?.requestBitmapAtPosition(value.ceil());
-                                }
-                                setState(() {
-                                  _currentPosition = value.ceil();
-                                });
+                                // print('on change');
+                                // if (_thumbnailSuccess) {
+                                //   fAliplayer?.requestBitmapAtPosition(value.ceil());
+                                // }
+                                // setState(() {
+                                //   _currentPosition = value.ceil();
+                                // });
                               }),
                         ),
                       ),
@@ -1157,14 +1237,12 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
     isPause = true;
     setState(() {
       _currentAdsPosition = _videoAdsDuration;
-      print("========== $isCompleteAds || $isActiveAds");
       isPlay = true;
     });
     fAliplayer?.prepare().whenComplete(() => _showLoading = false);
     fAliplayer?.isAutoPlay();
     fAliplayer?.play();
 
-    isActiveAds = false;
     adsData = null;
     context.read<VidDetailNotifier>().adsData = null;
     setState(() {});

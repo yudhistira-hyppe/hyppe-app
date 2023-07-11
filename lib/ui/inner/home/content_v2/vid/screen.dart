@@ -20,8 +20,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
@@ -296,7 +294,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                               (vidData.following ?? false)
                                   ? (lang?.following ?? '')
                                   : (lang?.follow ?? ''),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: kHyppePrimary,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
@@ -375,6 +373,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                     child: Builder(builder: (context) {
                       return VidPlayerPage(
                         orientation: Orientation.portrait,
+                        onShowAds: (ads){
+                          setState(() {
+                            vidData.adsShowing = ads != null;
+                          });
+                        },
                         playMode: (vidData.isApsara ?? false)
                             ? ModeTypeAliPLayer.auth
                             : ModeTypeAliPLayer.url,

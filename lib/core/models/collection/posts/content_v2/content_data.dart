@@ -192,7 +192,7 @@ class ContentData {
   bool isLoading = false;
   FlutterAliplayer? fAliplayer;
   FlutterAliplayer? fAliplayerAds;
-  bool? adsShowing = true;
+  bool? adsShowing = false;
 
   ContentData(
       {this.metadata,

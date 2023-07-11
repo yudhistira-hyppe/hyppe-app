@@ -48,6 +48,7 @@ class VidPlayerPage extends StatefulWidget {
   final Function(FlutterAliplayer)? getPlayer;
   final Function(FlutterAliplayer)? getAdsPlayer;
   final Function(ContentData)? onPlay;
+  final Function(AdsData?)? onShowAds;
   final Orientation orientation;
   // FlutterAliplayer? fAliplayer;
   // FlutterAliplayer? fAliplayerAds;
@@ -65,6 +66,7 @@ class VidPlayerPage extends StatefulWidget {
     this.onPlay,
     this.getPlayer,
     this.getAdsPlayer,
+    this.onShowAds,
     required this.orientation,
     // this.fAliplayer,
     // this.fAliplayerAds
@@ -228,6 +230,9 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         // print('data : ${fetch.data.toString()}');
         final data = fetch.data;
         adsData = data.data;
+        if(widget.onShowAds != null){
+          widget.onShowAds!(adsData);
+        }
         'videoId : ${adsData?.videoId}'.logger();
         secondsSkip = adsData?.adsSkip ?? 0;
       }
@@ -411,6 +416,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           // mOptionsFragment.switchHardwareDecoder();
         }
       });
+
       fAliplayer?.setOnCompletion((playerId) {
         _showTipsWidget = true;
         _showLoading = false;
@@ -936,6 +942,20 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                       isPlay = true;
                       _showLoading = true;
                     });
+
+                    Future.delayed(const Duration(seconds: 3), (){
+                      setState((){
+                        if(isPlay){
+                          adsData = AdsData();
+                          if(widget.onShowAds != null){
+                            widget.onShowAds!(adsData);
+                          }
+
+                          fAliplayer?.pause();
+                        }
+                      });
+                    });
+
                     fAliplayer?.play();
                     await fAliplayer?.prepare().whenComplete(() {}).onError((error, stackTrace) => print('Error Loading video: $error'));
                     Future.delayed(const Duration(seconds: 1), () {
@@ -1017,7 +1037,9 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
             Positioned.fill(child: AdsPlayerPage(dataSourceMap: {
               DataSourceRelated.vidKey: adsData?.videoId,
               DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
-            }, data: adsData, functionFullTriger: (){
+            },
+              thumbnail: (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}'
+              ,data: adsData, functionFullTriger: (){
 
             }, height: MediaQuery.of(context).size.width * 9.0 / 16.0,
               getPlayer: (player){
@@ -1025,6 +1047,15 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
               },
               onPlay: (data){
 
+              },
+              onClose: (){
+                setState(() {
+                  adsData = null;
+                  if(widget.onShowAds != null){
+                    widget.onShowAds!(adsData);
+                  }
+                  fAliplayer?.play();
+                });
               },
               width: MediaQuery.of(context).size.width, orientation: Orientation.portrait,))
           ],
@@ -1705,6 +1736,9 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     // fAliplayerAds?.stop();
     isActiveAds = false;
     adsData = null;
+    if(widget.onShowAds != null){
+      widget.onShowAds!(adsData);
+    }
     context.read<VidDetailNotifier>().adsData = null;
     setState(() {});
   }
