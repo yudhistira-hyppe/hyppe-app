@@ -172,9 +172,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
           mainAxisSize: MainAxisSize.min,
           children: [
             (vidData != null)
-                ? (vidData.isEmpty)
-                ? const Expanded(child: NoResultFound())
-                : Flexible(
+                ? Flexible(
               child: NotificationListener<OverscrollIndicatorNotification>(
                 onNotification: (overscroll) {
                   overscroll.disallowIndicator();
