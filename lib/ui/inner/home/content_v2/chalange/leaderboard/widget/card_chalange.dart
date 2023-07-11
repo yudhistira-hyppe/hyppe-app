@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/chalange/challange_model.dart';
+import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:provider/provider.dart';
 
 class CardChalange extends StatelessWidget {
-  const CardChalange({super.key});
+  final ChallangeModel? data;
+  const CardChalange({super.key, this.data});
 
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting('id', null);
+    TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
+    var compareDate = System().compareDate("${data?.startChallenge} ${data?.startTime}", "${data?.endChallenge} ${data?.endTime}");
+    var dateText = "";
+    if (compareDate[0] == true) {
+      dateText = "Mulai dalam ${compareDate[1].inDays} Hari Lagi";
+    } else {
+      dateText = "Berakhir dalam ${compareDate[1].inDays} Hari Lagi";
+    }
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -44,7 +60,7 @@ class CardChalange extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                 ),
                 child: CustomCacheImage(
-                  imageUrl: 'https://images.unsplash.com/photo-1603486002664-a7319421e133?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1842&q=80',
+                  imageUrl: data?.searchBanner ?? '',
                   imageBuilder: (_, imageProvider) {
                     return Container(
                       alignment: Alignment.topRight,
@@ -93,13 +109,13 @@ class CardChalange extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           decoration: ShapeDecoration(
-                            color: kHyppeSoftYellow,
+                            color: data?.statusFormalChallenge == 'Berlangsung' ? kHyppeSoftYellow : kHyppeGreenLight,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
                           ),
                           child: Text(
-                            'Berlangsung',
+                            "${data?.statusFormalChallenge}",
                             style: TextStyle(
-                              color: Color(0xFFB64C00),
+                              color: data?.statusFormalChallenge == 'Berlangsung' ? const Color(0xFFB74D00) : kHyppeGreen,
                               fontSize: 10,
                               fontFamily: 'Lato',
                               fontWeight: FontWeight.w700,
@@ -111,13 +127,13 @@ class CardChalange extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                           clipBehavior: Clip.antiAlias,
                           decoration: ShapeDecoration(
-                            color: Color(0xFFE8E8E8),
+                            color: data?.statusJoined == 'Bukan Partisipan' ? kHyppeNotConnect : kHyppePrimaryTransparent,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
                           ),
                           child: Text(
-                            'Bukan Partisipan',
+                            "${data?.statusJoined}",
                             style: TextStyle(
-                              color: Color(0xFF9B9B9B),
+                              color: data?.statusJoined == 'Bukan Partisipan' ? Color(0xFF9B9B9B) : kHyppePrimary,
                               fontSize: 10,
                               fontFamily: 'Lato',
                               fontWeight: FontWeight.w700,
@@ -130,8 +146,8 @@ class CardChalange extends StatelessWidget {
                     SizedBox(
                       width: 234.38,
                       child: Text(
-                        'Influencer Of The Weeks ',
-                        style: TextStyle(
+                        "${data?.nameChallenge}",
+                        style: const TextStyle(
                           color: Color(0xFF3E3E3E),
                           fontSize: 14,
                           fontFamily: 'Lato',
@@ -149,8 +165,8 @@ class CardChalange extends StatelessWidget {
                           SizedBox(
                             width: 234.38,
                             child: Text(
-                              '20 Maret 2023 s/d 26 Maret 2023',
-                              style: TextStyle(
+                              '${System().dateFormatter(data?.startChallenge ?? "2023-01-01", 7, lang: tn.translate.localeDatetime ?? '')} s/d ${System().dateFormatter(data?.endChallenge ?? "2023-01-01", 7, lang: tn.translate.localeDatetime ?? '')} ',
+                              style: const TextStyle(
                                 color: Color(0xFF9B9B9B),
                                 fontSize: 10,
                                 fontFamily: 'Lato',
@@ -173,24 +189,13 @@ class CardChalange extends StatelessWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 18,
-                                        height: 18,
-                                        clipBehavior: Clip.antiAlias,
-                                        decoration: BoxDecoration(),
-                                        child: Stack(children: []),
-                                      ),
-                                    ],
-                                  ),
+                                const CustomIconWidget(
+                                  iconData: "${AssetPath.vectorPath}clock.svg",
+                                  defaultColor: false,
                                 ),
+                                sixPx,
                                 Container(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -199,7 +204,7 @@ class CardChalange extends StatelessWidget {
                                     children: [
                                       SizedBox(
                                         child: Text(
-                                          'Berakhir Dalam 6 Hari Lagi',
+                                          dateText,
                                           style: TextStyle(
                                             color: Color(0xFF3E3E3E),
                                             fontSize: 10,

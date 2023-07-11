@@ -82,6 +82,7 @@ class Getlastrank {
   AvatarChallange? avatar;
   String? currentstatistik;
   String? winnerBadge;
+  String? winnerBadgeOther;
 
   Getlastrank(
       {this.sId,
@@ -98,7 +99,8 @@ class Getlastrank {
       this.email,
       this.avatar,
       this.currentstatistik,
-      this.winnerBadge});
+      this.winnerBadge,
+      this.winnerBadgeOther});
 
   Getlastrank.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -126,6 +128,7 @@ class Getlastrank {
     avatar = json['avatar'] != null ? new AvatarChallange.fromJson(json['avatar']) : null;
     currentstatistik = json['currentstatistik'];
     winnerBadge = json['winnerBadge'];
+    winnerBadgeOther = json['winnerBadgeOther'];
   }
 
   Map<String, dynamic> toJson() {

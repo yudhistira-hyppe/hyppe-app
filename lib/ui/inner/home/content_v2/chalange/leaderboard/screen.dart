@@ -12,6 +12,7 @@ import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_ongoing.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_list.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:flutter/material.dart';
@@ -139,19 +140,22 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                               enlargeCenterPage: true,
                               enableInfiniteScroll: false,
                               // viewportFraction: 1.0,
-                              aspectRatio: 16 / 7,
+                              aspectRatio: 343 / 103,
+                              // height: 100,
                               autoPlayInterval: const Duration(seconds: 3),
                               onPageChanged: (index, reason) {
                                 setState(() {
                                   _current = index;
+                                  _tabController.index = 0;
+                                  cn.getLeaderBoard(context, cn.bannerSearchData[index].sId ?? '');
                                 });
                               }),
-                          items: imgList
+                          items: cn.bannerSearchData
                               .map((item) => ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: Center(
                                         child: Image.network(
-                                      item,
+                                      item.bannerLandingpage ?? '',
                                       width: SizeConfig.screenWidth,
                                       fit: BoxFit.cover,
                                       loadingBuilder: (context, child, loadingProgress) {
@@ -165,7 +169,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                               child: Container(
                                                 height: 50,
                                                 width: 50,
-                                                child: CircularProgressIndicator(
+                                                child: const CircularProgressIndicator(
                                                     // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
                                                     ),
                                               ),
@@ -188,7 +192,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                             color: kHyppeLightSurface,
                           ),
                           child: TabBar(
-                            // controller: _tabController,
+                            controller: _tabController,
                             indicator: BoxDecoration(
                               borderRadius: BorderRadius.circular(
                                 8.0,
@@ -226,11 +230,10 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
               ];
             },
             body: TabBarView(
-              // controller: _tabController,
+              controller: _tabController,
               physics: const NeverScrollableScrollPhysics(),
-
               children: [
-                cn.isLoadingLeaderboard || cn.leaderBoardData?.sId == null ? Container() : ListOnGoing(),
+                cn.isLoadingLeaderboard || cn.leaderBoardData?.sId == null ? const ShimmerListLeaderboard() : const ListOnGoing(),
                 // Container(
                 //   height: 40,
                 //   padding: const EdgeInsets.only(left: 6.0, right: 6),

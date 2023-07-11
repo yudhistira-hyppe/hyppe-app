@@ -4,6 +4,7 @@ import 'package:hyppe/core/bloc/challange/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/chalange/banner_chalange_model.dart';
+import 'package:hyppe/core/models/collection/chalange/challange_model.dart';
 import 'package:hyppe/core/models/collection/chalange/leaderboard_challange_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -23,8 +24,11 @@ class ChallangeNotifier with ChangeNotifier {
   bool isLoading = false;
   bool isLoadingLeaderboard = false;
 
+  int pageGetChallange = 0;
+
   List<BannerChalangeModel> bannerData = [];
   List<BannerChalangeModel> bannerSearchData = [];
+  List<ChallangeModel> listChallangeData = [];
   LeaderboardChallangeModel? leaderBoardData;
 
   ///////
@@ -80,15 +84,16 @@ class ChallangeNotifier with ChangeNotifier {
     notifyListeners();
     checkInet(context);
     await getBannerLanding(context);
-    await getLeaderBoard(context);
+    await getLeaderBoard(context, bannerSearchData[0].sId ?? '');
+    await getOtherChallange(context);
     isLoadingLeaderboard = false;
     notifyListeners();
   }
 
-  Future getLeaderBoard(BuildContext context) async {
+  Future getLeaderBoard(BuildContext context, String idchallenge) async {
     Map param = {
-      "idchallenge": "6486f6d4b8ab34f61602f85a",
-      "iduser": SharedPreference().readStorage(SpKeys.userID)
+      "idchallenge": idchallenge,
+      "iduser": SharedPreference().readStorage(SpKeys.userID),
       // "status":"BERLANGSUNG",
       // "session":1
     };
@@ -98,6 +103,20 @@ class ChallangeNotifier with ChangeNotifier {
 
     if (bannerFatch.challengeState == ChallengeState.getPostSuccess) {
       leaderBoardData = LeaderboardChallangeModel.fromJson(bannerFatch.data[0]);
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future getOtherChallange(BuildContext context) async {
+    Map param = {"iduser": SharedPreference().readStorage(SpKeys.userID), "page": pageGetChallange, "limit": 10};
+    final bannerNotifier = ChallangeBloc();
+    await bannerNotifier.postChallange(context, data: param, url: UrlConstants.getOtherChallange);
+    final bannerFatch = bannerNotifier.userFetch;
+
+    if (bannerFatch.challengeState == ChallengeState.getPostSuccess) {
+      listChallangeData = [];
+      bannerFatch.data.forEach((v) => listChallangeData.add(ChallangeModel.fromJson(v)));
       isLoading = false;
       notifyListeners();
     }

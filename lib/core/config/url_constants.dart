@@ -444,4 +444,5 @@ class UrlConstants {
   // Get Chalange
   static const String getBannerChalange = "$challange/listing/bannerlandingpage";
   static const String getLeaderBoard = "$challange/listleaderboard";
+  static const String getOtherChallange = "$challange/allchallenge";
 }
