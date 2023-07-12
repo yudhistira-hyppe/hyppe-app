@@ -49,7 +49,7 @@ class ChallangeNotifier with ChangeNotifier {
     }
   }
 
-  Future getBannerLanding(BuildContext context, {bool ispopUp = false}) async {
+  Future getBannerLanding(BuildContext context, {bool ispopUp = false, bool isLeaderBoard = false}) async {
     checkInet(context);
     isLoading = true;
     notifyListeners();
@@ -59,6 +59,9 @@ class ChallangeNotifier with ChangeNotifier {
       data['target'] = "popup";
     } else {
       data['target'] = "search";
+      if (isLeaderBoard) {
+        data['jenischallenge'] = "647055de0435000059003462";
+      }
     }
 
     final bannerNotifier = ChallangeBloc();
@@ -83,9 +86,27 @@ class ChallangeNotifier with ChangeNotifier {
     isLoadingLeaderboard = true;
     notifyListeners();
     checkInet(context);
-    await getBannerLanding(context);
+    await getBannerLanding(context, isLeaderBoard: true);
     await getLeaderBoard(context, bannerSearchData[0].sId ?? '');
     await getOtherChallange(context);
+    // await getBannerLanding(context, isLeaderBoard: true).then((value) async {
+    //   await getLeaderBoard(context, bannerSearchData[0].sId ?? '').then((value) async {
+    //     print(value);
+    //     await getOtherChallange(context);
+    //   });
+    // });
+    print("selesai");
+
+    isLoadingLeaderboard = false;
+    notifyListeners();
+  }
+
+  Future initLeaderboardDetail(BuildContext context) async {
+    print("=========asdasdasd");
+    isLoadingLeaderboard = true;
+    notifyListeners();
+    checkInet(context);
+    await getLeaderBoard(context, bannerSearchData[0].sId ?? '');
     isLoadingLeaderboard = false;
     notifyListeners();
   }
@@ -93,6 +114,7 @@ class ChallangeNotifier with ChangeNotifier {
   Future getLeaderBoard(BuildContext context, String idchallenge) async {
     Map param = {
       "idchallenge": idchallenge,
+      // "idchallenge": "6486f6d4b8ab34f61602f85a",
       "iduser": SharedPreference().readStorage(SpKeys.userID),
       // "status":"BERLANGSUNG",
       // "session":1
@@ -102,9 +124,18 @@ class ChallangeNotifier with ChangeNotifier {
     final bannerFatch = bannerNotifier.userFetch;
 
     if (bannerFatch.challengeState == ChallengeState.getPostSuccess) {
-      leaderBoardData = LeaderboardChallangeModel.fromJson(bannerFatch.data[0]);
+      if (bannerFatch.data.isNotEmpty) {
+        leaderBoardData = LeaderboardChallangeModel.fromJson(bannerFatch.data[0]);
+        if (leaderBoardData?.startDatetime != '' || leaderBoardData?.startDatetime != null) {
+          var dateNote = await System().compareDate(leaderBoardData?.startDatetime ?? '', leaderBoardData?.endDatetime ?? '');
+          leaderBoardData?.onGoing = dateNote[0];
+          leaderBoardData?.totalDays = dateNote[1].inDays;
+        }
+      }
+
       isLoading = false;
       notifyListeners();
+      print("selesai");
     }
   }
 
@@ -116,7 +147,16 @@ class ChallangeNotifier with ChangeNotifier {
 
     if (bannerFatch.challengeState == ChallengeState.getPostSuccess) {
       listChallangeData = [];
-      bannerFatch.data.forEach((v) => listChallangeData.add(ChallangeModel.fromJson(v)));
+
+      await bannerFatch.data.forEach((v) => listChallangeData.add(ChallangeModel.fromJson(v)));
+      if (listChallangeData.isNotEmpty) {
+        for (var e in listChallangeData) {
+          var dateNote = await System().compareDate("${e.startChallenge} ${e.startTime}", "${e.endChallenge} ${e.endTime}");
+          e.onGoing = dateNote[0];
+          e.totalDays = dateNote[1].inDays;
+        }
+      }
+
       isLoading = false;
       notifyListeners();
     }

@@ -12,19 +12,14 @@ import 'package:provider/provider.dart';
 
 class CardChalange extends StatelessWidget {
   final ChallangeModel? data;
-  const CardChalange({super.key, this.data});
+  final String? dateText;
+  const CardChalange({super.key, this.data, this.dateText});
 
   @override
   Widget build(BuildContext context) {
     initializeDateFormatting('id', null);
     TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
-    var compareDate = System().compareDate("${data?.startChallenge} ${data?.startTime}", "${data?.endChallenge} ${data?.endTime}");
-    var dateText = "";
-    if (compareDate[0] == true) {
-      dateText = "Mulai dalam ${compareDate[1].inDays} Hari Lagi";
-    } else {
-      dateText = "Berakhir dalam ${compareDate[1].inDays} Hari Lagi";
-    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -204,7 +199,7 @@ class CardChalange extends StatelessWidget {
                                     children: [
                                       SizedBox(
                                         child: Text(
-                                          dateText,
+                                          dateText ?? '',
                                           style: TextStyle(
                                             color: Color(0xFF3E3E3E),
                                             fontSize: 10,

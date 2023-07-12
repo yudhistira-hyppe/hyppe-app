@@ -1651,22 +1651,26 @@ class System {
 
   bool isInteger(num value) => value is int || value == value.roundToDouble();
 
-  compareDate(String startDateString, String endtDateString) {
+  Future<List> compareDate(String startDateString, String endtDateString, {String? dari}) async {
     //get difrent date
+    print("???????? $startDateString");
+    print("???????? $endtDateString");
+    // startDateString = "2023-01-08 13:52:15";
     var temp = DateTime.now();
     var startDate = DateTime.parse(startDateString);
     var endDate = DateTime.parse(endtDateString);
     var d1 = DateTime.utc(temp.year, temp.month, temp.day, temp.hour, temp.minute, temp.second);
     var startDay = DateTime.utc(startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute, startDate.second);
     var endDay = DateTime.utc(endDate.year, endDate.month, endDate.day, endDate.hour, endDate.minute, endDate.second);
-
-    if (startDay.compareTo(d1) >= 1) {
+    if (startDay.compareTo(d1) <= -1) {
       //tanggal lewat ("berakhir dalam");
-      final difference = startDay.difference(d1);
+      print(d1);
+      print(endDay);
+      final difference = endDay.difference(d1);
       return [true, difference];
     } else {
       //tanggal akan datang ("Mulai dalam");
-      final difference = endDay.difference(d1);
+      final difference = startDay.difference(d1);
       return [false, difference];
     }
   }

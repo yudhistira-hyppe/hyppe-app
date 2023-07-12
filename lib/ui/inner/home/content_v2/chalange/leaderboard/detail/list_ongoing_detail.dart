@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_commingsoon_page.dart';
 import 'package:hyppe/ui/constant/widget/custom_empty_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
@@ -12,21 +14,21 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
-class ListOnGoing extends StatefulWidget {
-  const ListOnGoing({super.key});
+class ListOnGoingDetail extends StatefulWidget {
+  const ListOnGoingDetail({super.key});
 
   @override
-  State<ListOnGoing> createState() => _ListOnGoingState();
+  State<ListOnGoingDetail> createState() => _ListOnGoingDetailState();
 }
 
-class _ListOnGoingState extends State<ListOnGoing> {
+class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ChallangeNotifier>(builder: (_, cn, __) {
       return SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         child: Column(
-          mainAxisSize: MainAxisSize.max,
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1
@@ -64,42 +66,8 @@ class _ListOnGoingState extends State<ListOnGoing> {
                   bgColor: kHyppePrimary,
                   text: "Yuk, Join Challenge Sekarang",
                   function: () {
-                    Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: cn.leaderBoardData?.sId));
+                    ShowGeneralDialog.joinChallange(context);
                   }),
-            ),
-            Container(
-              height: 20,
-              color: kHyppeLightSurface,
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              child: Text(
-                "Ikuti Challenge Menarik Lainnya",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 200,
-              child: ListView.builder(
-                itemCount: cn.listChallangeData.length,
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: false,
-                itemBuilder: (context, index) {
-                  var dateText = "";
-                  if (cn.listChallangeData[index].onGoing == true) {
-                    dateText = "Berakhir dalam ${cn.listChallangeData[index].totalDays} Hari Lagi";
-                  } else {
-                    dateText = "Mulai dalam ${cn.listChallangeData[index].totalDays} Hari Lagi";
-                  }
-                  return CardChalange(
-                    data: cn.listChallangeData[index],
-                    dateText: dateText,
-                  );
-                },
-              ),
             ),
           ],
         ),

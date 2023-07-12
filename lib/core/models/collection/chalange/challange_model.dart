@@ -17,26 +17,31 @@ class ChallangeModel {
   String? bannerLeaderboard;
   String? statusJoined;
   String? statusFormalChallenge;
+  bool? onGoing;
+  int? totalDays;
 
-  ChallangeModel(
-      {this.sId,
-      this.nameChallenge,
-      this.jenisChallenge,
-      this.description,
-      this.createdAt,
-      this.updatedAt,
-      this.durasi,
-      this.tampilStatusPengguna,
-      this.objectChallenge,
-      this.statusChallenge,
-      this.endChallenge,
-      this.endTime,
-      this.startChallenge,
-      this.startTime,
-      this.searchBanner,
-      this.bannerLeaderboard,
-      this.statusJoined,
-      this.statusFormalChallenge});
+  ChallangeModel({
+    this.sId,
+    this.nameChallenge,
+    this.jenisChallenge,
+    this.description,
+    this.createdAt,
+    this.updatedAt,
+    this.durasi,
+    this.tampilStatusPengguna,
+    this.objectChallenge,
+    this.statusChallenge,
+    this.endChallenge,
+    this.endTime,
+    this.startChallenge,
+    this.startTime,
+    this.searchBanner,
+    this.bannerLeaderboard,
+    this.statusJoined,
+    this.statusFormalChallenge,
+    this.onGoing,
+    this.totalDays,
+  });
 
   ChallangeModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -57,5 +62,7 @@ class ChallangeModel {
     bannerLeaderboard = json['bannerLeaderboard'];
     statusJoined = json['statusJoined'];
     statusFormalChallenge = json['statusFormalChallenge'];
+    onGoing = json['onGoing'];
+    totalDays = json['totalDays'];
   }
 }

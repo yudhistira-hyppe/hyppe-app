@@ -11,6 +11,12 @@ class LeaderboardChallangeModel {
   String? joined;
   String? objectChallenge;
   int? totalSession;
+  String? description;
+  String? leaderBoard;
+  String? bannerSearch;
+  String? popUp;
+  bool? onGoing;
+  int? totalDays;
 
   LeaderboardChallangeModel({
     this.sId,
@@ -25,6 +31,12 @@ class LeaderboardChallangeModel {
     this.joined,
     this.objectChallenge,
     this.totalSession,
+    this.bannerSearch,
+    this.description,
+    this.leaderBoard,
+    this.popUp,
+    this.onGoing,
+    this.totalDays,
   });
 
   LeaderboardChallangeModel.fromJson(Map<String, dynamic> json) {
@@ -45,6 +57,12 @@ class LeaderboardChallangeModel {
     joined = json['joined'];
     objectChallenge = json['objectChallenge'];
     totalSession = json['totalSession'] ?? 0;
+    bannerSearch = json['bannerSearch'];
+    description = json['description'];
+    leaderBoard = json['leaderBoard'];
+    popUp = json['popUp'];
+    onGoing = json['onGoing'] ?? false;
+    totalDays = json['totalDays'];
   }
 
   Map<String, dynamic> toJson() {

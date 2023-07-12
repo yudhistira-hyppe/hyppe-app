@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:hyppe/app.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -10,32 +10,27 @@ import 'package:hyppe/core/models/collection/localization_v2/localization_model.
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
+import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_ongoing.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/list_ongoing_detail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_list.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
-class ChalangeScreen extends StatefulWidget {
-  const ChalangeScreen({Key? key}) : super(key: key);
+class ChalangeDetailScreen extends StatefulWidget {
+  final GeneralArgument? arguments;
+  const ChalangeDetailScreen({Key? key, this.arguments}) : super(key: key);
 
   @override
-  State<ChalangeScreen> createState() => _ChalangeScreenState();
+  State<ChalangeDetailScreen> createState() => _ChalangeDetailScreenState();
 }
 
-class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
+class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
   final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
-
-  final List<String> imgList = [
-    'https://images.unsplash.com/photo-1603486002664-a7319421e133?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1842&q=80',
-    'https://images.unsplash.com/photo-1580757468214-c73f7062a5cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80',
-    'https://images.unsplash.com/photo-1626593261859-4fe4865d8cb1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80'
-  ];
 
   late TabController _tabController;
   double offset = 0.0;
@@ -43,6 +38,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
   int _current = 0;
   final CarouselController _controller = CarouselController();
   bool hideTab = false;
+  String dateText = '';
 
   LocalizationModelV2? lang;
   @override
@@ -60,7 +56,8 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
       });
 
       var cn = context.read<ChallangeNotifier>();
-      cn.initLeaderboard(context);
+      cn.initLeaderboardDetail(context);
+      toHideTab(cn);
     });
 
     super.initState();
@@ -75,17 +72,23 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
     } else {
       hideTab = false;
     }
+
+    if (cn.leaderBoardData?.onGoing == true) {
+      dateText = "Berakhir dalam ${cn.leaderBoardData?.totalDays} Hari Lagi";
+    } else {
+      dateText = "Mulai  dalam ${cn.leaderBoardData?.totalDays} Hari Lagi";
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     var cn = context.watch<ChallangeNotifier>();
-    isFromSplash = false;
-    toHideTab(cn);
+    var tn = context.read<TranslateNotifierV2>();
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
           child: AppBar(
+            backgroundColor: Colors.white,
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back_ios_new_sharp,
@@ -95,7 +98,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
               onPressed: () {},
             ),
             title: Text(
-              '${lang?.challengePage}',
+              '${cn.leaderBoardData?.sId}',
               style: const TextStyle(
                 fontSize: 16,
                 fontFamily: 'Lato',
@@ -105,11 +108,9 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
             titleSpacing: 0,
             actions: [
               IconButton(
-                onPressed: () {
-                  Routing().move(Routes.chalengeCollectionBadge);
-                },
+                onPressed: () {},
                 icon: const CustomIconWidget(
-                  iconData: "${AssetPath.vectorPath}achievement.svg",
+                  iconData: "${AssetPath.vectorPath}share2.svg",
                   defaultColor: false,
                   height: 20,
                 ),
@@ -141,65 +142,62 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                     sliver: SliverList(
                       delegate: SliverChildListDelegate([
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
-                          child: Text("Challenge Utama",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                              )),
+                        CustomBaseCacheImage(
+                          memCacheWidth: 100,
+                          memCacheHeight: 100,
+                          widthPlaceHolder: 80,
+                          heightPlaceHolder: 80,
+                          imageUrl: (cn.leaderBoardData?.bannerSearch),
+                          imageBuilder: (context, imageProvider) => Image(
+                            image: imageProvider,
+                            fit: BoxFit.fitHeight,
+                            width: SizeConfig.screenWidth,
+                          ),
+                          emptyWidget: GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                                decoration: BoxDecoration(color: kHyppeNotConnect),
+                                width: SizeConfig.screenWidth,
+                                height: 250,
+                                alignment: Alignment.center,
+                                child: CustomTextWidget(textToDisplay: tn.translate.couldntLoadImage ?? 'Error')),
+                          ),
+                          errorWidget: (context, url, error) {
+                            return GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                  decoration: BoxDecoration(color: kHyppeNotConnect),
+                                  width: SizeConfig.screenWidth,
+                                  height: 250,
+                                  alignment: Alignment.center,
+                                  child: CustomTextWidget(textToDisplay: tn.translate.couldntLoadImage ?? 'Error')),
+                            );
+                          },
                         ),
-                        Container(
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                          child: CarouselSlider(
-                            options: CarouselOptions(
-                                // height: 300
-                                enlargeCenterPage: true,
-                                enableInfiniteScroll: false,
-                                // viewportFraction: 1.0,
-                                aspectRatio: 343 / 103,
-                                // height: 100,
-                                autoPlayInterval: const Duration(seconds: 3),
-                                onPageChanged: (index, reason) {
-                                  setState(() {
-                                    print("=======change");
-                                    _current = index;
-                                    _tabController.index = 0;
-                                    cn.getLeaderBoard(context, cn.bannerSearchData[index].sId ?? '');
-                                  });
-                                }),
-                            items: cn.bannerSearchData
-                                .map((item) => ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Center(
-                                          child: Image.network(
-                                        item.bannerLandingpage ?? '',
-                                        width: SizeConfig.screenWidth,
-                                        fit: BoxFit.cover,
-                                        loadingBuilder: (context, child, loadingProgress) {
-                                          if (loadingProgress == null) return child;
-                                          return Center(
-                                            child: Container(
-                                              height: SizeConfig.screenHeight,
-                                              width: SizeConfig.screenWidth,
-                                              color: Colors.black,
-                                              child: UnconstrainedBox(
-                                                child: Container(
-                                                  height: 50,
-                                                  width: 50,
-                                                  child: const CircularProgressIndicator(
-                                                      // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      )),
-                                    ))
-                                .toList(),
+                        twelvePx,
+                        Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: ShapeDecoration(
+                                  color: Colors.black.withOpacity(0.5),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                                ),
+                                child: Text(
+                                  dateText,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+
                         sixPx,
                         //Tab
                         hideTab
@@ -254,7 +252,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                 controller: _tabController,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  cn.isLoadingLeaderboard || cn.leaderBoardData?.sId == null ? const ShimmerListLeaderboard() : const ListOnGoing(),
+                  cn.isLoadingLeaderboard || cn.leaderBoardData?.sId != null ? const ShimmerListLeaderboard() : const ListOnGoingDetail(),
                   // Container(
                   //   height: 40,
                   //   padding: const EdgeInsets.only(left: 6.0, right: 6),
