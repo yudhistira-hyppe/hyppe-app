@@ -1379,6 +1379,30 @@ class System {
     }
   }
 
+  Future adsPopUpV2(BuildContext context, AdsData data, String auth) async {
+    String lastTimeAds = SharedPreference().readStorage(SpKeys.datetimeLastShowAds) ?? '';
+    print("tanggall ======== $lastTimeAds");
+
+    if (lastTimeAds == '') {
+      if(data.mediaType == 'video'){
+        return ShowGeneralDialog.adsPopUpVideo(context, data, auth);
+      }
+      return ShowGeneralDialog.adsPopUpImage(context, data);
+    } else {
+      DateTime now = DateTime.now();
+      DateTime menitCache = DateTime.parse(lastTimeAds);
+      var jumlahMenit = System().menghitungJumlahMenit(menitCache, now);
+      print(jumlahMenit);
+      if (jumlahMenit >= 14) {
+        // if (lastTimeAds.canShowAds()) {
+        if(data.mediaType == 'video'){
+          return ShowGeneralDialog.adsPopUpVideo(context, data, auth);
+        }
+        return ShowGeneralDialog.adsPopUpImage(context, data);
+      }
+    }
+  }
+
   Future userVerified(status) async {
     switch (status) {
       case VERIFIED:

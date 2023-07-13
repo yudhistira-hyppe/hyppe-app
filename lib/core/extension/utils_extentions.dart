@@ -211,6 +211,17 @@ extension StringDefine on String {
     RegExp exp = new RegExp(r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+');
     return exp.hasMatch(this);
   }
+
+  int getAdsTime(double seconds){
+    if(toLowerCase() == 'first'){
+      return 2;
+    }else if(toLowerCase() == 'mid'){
+      print('adsSkip seconds: ${seconds/2}');
+      return (seconds/2).toInt();
+    }else{
+      return (seconds - 2).toInt();
+    }
+  }
 }
 
 extension IntegerExtension on int {

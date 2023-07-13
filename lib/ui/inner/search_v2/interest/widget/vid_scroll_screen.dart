@@ -61,7 +61,6 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
   bool isPause = false;
   bool isloading = false;
   int _curIdx = -1;
-  int _lastCurIndex = -1;
   int _cardIndex = 0;
 
   bool toComment = false;
@@ -237,7 +236,6 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                             itemCount: vidData.length,
                             itemBuilder: (BuildContext context, int index) {
                               vidData[index].fAliplayer?.pause();
-                              _lastCurIndex = -1;
                               return CustomShimmer(
                                 margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
                                 height: context.getHeight() / 8,
@@ -521,7 +519,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                     padding: const EdgeInsets.only(left: 13),
                     child: Text(
                       "${vidData[index].boostJangkauan ?? '0'} ${notifier.language.reach}",
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
                     ),
                   )
                 ],
@@ -697,7 +695,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
           )
               : Container(),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 4.0),
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: Text(
               "${System().readTimestamp(
                 DateTime.parse(System().dateTimeRemoveT(vidData[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,

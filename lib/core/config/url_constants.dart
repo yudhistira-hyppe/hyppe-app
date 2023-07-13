@@ -96,6 +96,8 @@ class UrlConstants {
   /* v3 user ads */
   static const String adsRoute = "/api/ads";
 
+  static const String adsRouteV2 = "/api/adsv2/ads";
+
   static const String transactionRoute = "/api/transactions";
 
   static const String userbankaccountsRoute = "/api/userbankaccounts";
@@ -396,6 +398,15 @@ class UrlConstants {
 
   /// get => Get In App Ads
   static const String getInAppAds = "$adsRoute/getAds/user?type=In%20App%20Ads";
+
+  /// get => Get Ads In Between
+  static const String getAdsInBetween = "$adsRouteV2/get/62e238a4f63d0000510026b3";
+
+  /// get => Get Ads In Content
+  static const String getAdsInContent = "$adsRouteV2/get/62f0b435118731ecc0f45772";
+
+  /// get => Get Pop Up Ads
+  static const String getPopUpAds = "$adsRouteV2/get/632a806ad2770000fd007a62";
 
   /// post => View Ads User
   static const String viewAds = "$adsRoute/viewads";

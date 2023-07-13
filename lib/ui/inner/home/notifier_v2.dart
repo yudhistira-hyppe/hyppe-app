@@ -837,7 +837,7 @@ class HomeNotifier with ChangeNotifier {
           print('get Ads Video');
           final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
           // if (!isShowAds) {
-          System().adsPopUp(context, ads, auth, isInAppAds: isInAppAds);
+          System().adsPopUpV2(context, ads, auth);
           // }
 
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
@@ -852,7 +852,7 @@ class HomeNotifier with ChangeNotifier {
     var data = AdsData();
     try {
       final notifier = AdsDataBloc();
-      await notifier.appAdsBloc(context);
+      await notifier.adsVideoBlocV2(context, AdsType.popup);
       final fetch = notifier.adsDataFetch;
       print('video ads');
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {

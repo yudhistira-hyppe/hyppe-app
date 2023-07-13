@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/device/state.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import 'package:hyppe/core/bloc/device/bloc.dart';
@@ -191,7 +192,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     var data = AdsData();
     try {
       final notifier = AdsDataBloc();
-      await notifier.appAdsBloc(context);
+      await notifier.adsVideoBlocV2(context, AdsType.popup);
       final fetch = notifier.adsDataFetch;
 
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
@@ -240,7 +241,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
           print("---------- $isShowAds");
           if (!isShowAds) {
-            System().adsPopUp(context, ads, auth, isInAppAds: true);
+            System().adsPopUpV2(context, ads, auth);
           }
 
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];

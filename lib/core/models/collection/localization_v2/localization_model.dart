@@ -831,7 +831,11 @@ class LocalizationModelV2 {
   String? content;
   String? problemBugs;
   String? ads;
+  String? sponsored;
   String? learnMore;
+  String? skipMessage;
+  String? second;
+  String? skipAds;
   String? newLabel;
   String? inProgress;
   String? solved;
@@ -1743,7 +1747,11 @@ class LocalizationModelV2 {
     this.content,
     this.problemBugs,
     this.ads,
+    this.sponsored,
     this.learnMore,
+    this.skipMessage,
+    this.second,
+    this.skipAds,
     this.newLabel,
     this.inProgress,
     this.solved,
@@ -2674,7 +2682,11 @@ class LocalizationModelV2 {
     content = json['content'];
     problemBugs = json['problemBugs'];
     ads = json['ads'];
+    sponsored = json['sponsored'];
     learnMore = json['learnMore'];
+    skipAds = json['skipAds'];
+    skipMessage = json['skipMessage'];
+    second = json['second'];
     newLabel = json['new'];
     inProgress = json['inProgress'];
     solved = json['solved'];

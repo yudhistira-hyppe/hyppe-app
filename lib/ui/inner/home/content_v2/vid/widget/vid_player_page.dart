@@ -115,7 +115,6 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
 
   //视频时长
   int _videoDuration = 1;
-  int _videoAdsDuration = 1;
 
   //截图保存路径
   String _snapShotPath = '';
@@ -155,15 +154,21 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
   // GlobalKey<TrackFragmentState> trackFragmentKey = GlobalKey();
   var secondsSkip = 0;
   var skipAdsCurent = 0;
-  bool isActiveAds = false;
   bool isCompleteAds = false;
   AliPlayerView? aliPlayerView;
 
+  AdsData? tempAdsData;
+
   AdsData? adsData;
+
+  int adsTime = 0;
+
+  bool hasShowedAds = false;
 
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDSuccess');
+    hasShowedAds = false;
     super.initState();
     // if (widget.playMode == ModeTypeAliPLayer.auth) {
     //   getAuth();
@@ -174,12 +179,11 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     // adsData = context.read<VidDetailNotifier>().adsData;
     print("ini iklan ${adsData?.videoId}");
     print("ini iklan ${adsData?.apsaraAuth}");
-    if (widget.inLanding) {
-      getAdsVideo(false);
-    }
+
     _playMode = widget.playMode;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
+
         fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.postID ?? 'video_player_landing');
 
         final getPlayers = widget.getPlayer;
@@ -220,21 +224,33 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     globalAliPlayer = fAliplayer;
   }
 
-  Future getAdsVideo(bool isContent) async {
+  Future getAdsVideo() async {
     try {
       final notifier = AdsDataBloc();
-      await notifier.adsVideoBloc(context, isContent);
+      await notifier.adsVideoBlocV2(context, AdsType.content);
       final fetch = notifier.adsDataFetch;
 
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
         // print('data : ${fetch.data.toString()}');
         final data = fetch.data;
-        adsData = data.data;
+        setState(() {
+          tempAdsData = data.data;
+          secondsSkip = tempAdsData?.adsSkip ?? 0;
+          final place = tempAdsData?.adsPlace;
+          if(place != null){
+            double duration = _videoDuration/ 1000;
+            adsTime = place.getAdsTime(duration);
+          }else{
+            adsTime = 2;
+          }
+
+        });
+
         if(widget.onShowAds != null){
           widget.onShowAds!(adsData);
         }
-        'videoId : ${adsData?.videoId}'.logger();
-        secondsSkip = adsData?.adsSkip ?? 0;
+        'videoId : ${tempAdsData?.videoId}'.logger();
+
       }
     } catch (e) {
       'Failed to fetch ads data $e'.logger();
@@ -384,6 +400,18 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
           if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
             _currentPosition = extraValue ?? 0;
+            final detik = (_currentPosition / 1000).round();
+            if(adsTime == detik){
+              if(tempAdsData != null){
+                print('pause here 2');
+                fAliplayer?.pause();
+                setState(() {
+                  adsData = tempAdsData;
+                });
+              }
+
+
+            }
           }
           if (!_inSeek) {
             try {
@@ -776,6 +804,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         break;
       case AppLifecycleState.paused:
         if (!_mEnablePlayBack) {
+          print('pause here 3');
           fAliplayer?.pause();
         }
         if (_networkSubscriptiion != null) {
@@ -874,15 +903,13 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
             //           child: Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView));
             //     }
             //   ),
-            if (adsData == null || (adsData != null && !widget.inLanding))
-              widget.data!.isLoading
-                  ? Container(color: Colors.black, width: widget.width, height: widget.height)
-                  : ClipRRect(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(16),
-                      ),
-                      child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
-
+            widget.data!.isLoading
+                ? Container(color: Colors.black, width: widget.width, height: widget.height)
+                : ClipRRect(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(16),
+                ),
+                child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
             // Text("${adsData == null}"),
             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
             // /====slide dan tombol fullscreen
@@ -941,23 +968,14 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                     setState(() {
                       isPlay = true;
                       _showLoading = true;
+                      hasShowedAds = false;
                     });
-
-                    Future.delayed(const Duration(seconds: 3), (){
-                      setState((){
-                        if(isPlay){
-                          adsData = AdsData();
-                          if(widget.onShowAds != null){
-                            widget.onShowAds!(adsData);
-                          }
-
-                          fAliplayer?.pause();
-                        }
-                      });
-                    });
-
-                    fAliplayer?.play();
+                    //
+                    // fAliplayer?.play();
                     await fAliplayer?.prepare().whenComplete(() {}).onError((error, stackTrace) => print('Error Loading video: $error'));
+                    if (widget.inLanding) {
+                      await getAdsVideo();
+                    }
                     Future.delayed(const Duration(seconds: 1), () {
                       if (isPlay) {
                         fAliplayer?.play();
@@ -1045,17 +1063,18 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
               getPlayer: (player){
 
               },
-              onPlay: (data){
-
-              },
               onClose: (){
                 setState(() {
+                  isPlay = true;
+                  hasShowedAds = true;
+                  tempAdsData = null;
                   adsData = null;
                   if(widget.onShowAds != null){
                     widget.onShowAds!(adsData);
                   }
-                  fAliplayer?.play();
+
                 });
+                fAliplayer?.play();
               },
               width: MediaQuery.of(context).size.width, orientation: Orientation.portrait,))
           ],
@@ -1187,6 +1206,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           isPause = false;
           setState(() {});
         } else {
+          print('pause here 4');
           fAliplayer?.pause();
           isPause = true;
           setState(() {});
@@ -1450,7 +1470,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                     children: [
                       sixPx,
                       Text(
-                        System.getTimeformatByMs(isActiveAds ? _currentAdsPositionText : _currentPositionText),
+                        System.getTimeformatByMs( _currentPositionText),
                         style: const TextStyle(color: Colors.white, fontSize: 11),
                       ),
                       sixPx,
@@ -1467,14 +1487,10 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                           ),
                           child: Slider(
                               min: 0,
-                              max: isActiveAds
-                                  ? _videoAdsDuration == 0
-                                      ? 1
-                                      : _videoAdsDuration.toDouble()
-                                  : _videoDuration == 0
+                              max: _videoDuration == 0
                                       ? 1
                                       : _videoDuration.toDouble(),
-                              value: isActiveAds ? _currentAdsPosition.toDouble() : _currentPosition.toDouble(),
+                              value: _currentPosition.toDouble(),
                               activeColor: Colors.purple,
                               // trackColor: Color(0xAA7d7d7d),
                               thumbColor: Colors.purple,
@@ -1538,6 +1554,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                             changevalue = _videoDuration;
                           }
                           if (widget.orientation == Orientation.portrait) {
+                            print('pause here 1');
                             fAliplayer?.pause();
                             SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
                             if ((widget.data?.metadata?.height ?? 0) < (widget.data?.metadata?.width ?? 0)) {
@@ -1719,11 +1736,6 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     _tipsContent = "Play Again";
     isPause = true;
     setState(() {
-      // isCompleteAds = true;
-      // isActiveAds = false;
-      _currentAdsPosition = _videoAdsDuration;
-      print("========== $isCompleteAds || $isActiveAds");
-      // adsData = null;
       isPlay = true;
     });
     // fAliplayerAds?.stop();
@@ -1734,7 +1746,6 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
 
     ///
     // fAliplayerAds?.stop();
-    isActiveAds = false;
     adsData = null;
     if(widget.onShowAds != null){
       widget.onShowAds!(adsData);

@@ -16,12 +16,12 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:measured_size/measured_size.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,7 +30,9 @@ import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 
 import '../../../../../../../app.dart';
+import '../../../../core/constants/shared_preference_keys.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
+import '../../../../core/services/shared_preference.dart';
 import '../custom_cache_image.dart';
 
 class AdsPlayerPage extends StatefulWidget {
@@ -84,7 +86,6 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
 
   //当前播放进度
   int _currentPosition = 0;
-  int _currentAdsPosition = 0;
 
   //当前播放时间，用于Text展示
   int _currentPositionText = 0;
@@ -141,7 +142,6 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
   StreamSubscription? _networkSubscriptiion;
 
   // GlobalKey<TrackFragmentState> trackFragmentKey = GlobalKey();
-  AdsVideo? adsData;
   var secondsSkip = 0;
   var skipAdsCurent = 0;
   bool isCompleteAds = false;
@@ -151,9 +151,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDSuccess');
     super.initState();
-    adsData = context.read<VidDetailNotifier>().adsData;
-    print("ini iklan ${adsData?.data?.videoId}");
-    print("ini iklan ${adsData?.data?.apsaraAuth}");
+    secondsSkip = widget.data?.adsSkip ?? 0;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
         fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.adsId ?? 'video_player_landing');
@@ -328,10 +326,19 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
       fAliplayer?.setOnSeekComplete((playerId) {
         _inSeek = false;
       });
+
       fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
         if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
           if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
             _currentPosition = extraValue ?? 0;
+            final seconds = (_currentPosition / 1000).round();
+            setState(() {
+              final fixSeconds = (widget.data?.adsSkip ?? 0) - seconds;
+              if(fixSeconds >= 0){
+                secondsSkip = fixSeconds;
+              }
+
+            });
           }
           if (!_inSeek) {
             try {
@@ -485,6 +492,9 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
     };
     await fAliplayer?.setCacheConfig(map);
 
+    if(widget.onPlay != null){
+      widget.onPlay!(widget.data ?? AdsData());
+    }
     setState(() {
       isPlay = true;
       _showLoading = true;
@@ -493,10 +503,10 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
     Future.delayed(const Duration(seconds: 1), () {
       if (isPlay) {
         fAliplayer?.play();
-        setState(() {
-          isPlay = true;
-          // _showLoading = false;
-        });
+        // setState(() {
+        //   isPlay = true;
+        //   // _showLoading = false;
+        // });
       }
     });
   }
@@ -535,19 +545,6 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
         isloading = false;
       });
       // 'Failed to fetch ads data $e'.logger();
-    }
-  }
-
-  Future _newInitAds(BuildContext context, bool isContent) async {
-    if (isContent) {
-      context.setAdsCount(0);
-    }
-    try {
-      if (adsData == null) {
-        context.read<VidDetailNotifier>().getAdsVideo(context, isContent);
-      }
-    } catch (e) {
-      'Failed to fetch ads data 0 : $e'.logger();
     }
   }
 
@@ -652,8 +649,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
         },
         child: Stack(
           children: [
-            if (adsData == null || adsData != null)
-              (widget.data?.isLoading ?? false)
+            (widget.data?.isLoading ?? false)
                   ? Container(color: Colors.black, width: widget.width, height: widget.height)
                   : ClipRRect(
                       borderRadius: const BorderRadius.all(
@@ -667,64 +663,6 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                 // padding: EdgeInsets.only(bottom: 25.0),
                 child: Offstage(offstage: _isLock, child: _buildContentWidget(context, widget.orientation)),
               ),
-            // if (!isPlay)
-            //   SizedBox(
-            //     height: widget.height,
-            //     width: widget.width,
-            //     child: VideoThumbnail(
-            //       videoData: widget.data,
-            //       onDetail: false,
-            //       fn: () {},
-            //       withMargin: true,
-            //     ),
-            //   ),
-            // if (!isPlay && !_showLoading)
-            //   Center(
-            //     child: GestureDetector(
-            //       onTap: () async {
-            //         globalAliPlayer = fAliplayer;
-            //
-            //
-            //
-            //         setState(() {
-            //           isPlay = true;
-            //           _showLoading = true;
-            //         });
-            //         fAliplayer?.play();
-            //         await fAliplayer?.prepare().whenComplete(() {}).onError((error, stackTrace) => print('Error Loading video: $error'));
-            //         Future.delayed(const Duration(seconds: 1), () {
-            //           if (isPlay) {
-            //             fAliplayer?.play();
-            //             setState(() {
-            //               isPlay = true;
-            //               // _showLoading = false;
-            //             });
-            //           }
-            //         });
-            //       },
-            //       child: SizedBox(
-            //         width: widget.width,
-            //         height: widget.height,
-            //         child: const CustomIconWidget(
-            //           defaultColor: false,
-            //           iconData: '${AssetPath.vectorPath}pause.svg',
-            //           color: kHyppeLightButtonText,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            _buildProgressBar(widget.width ?? 0, widget.height ?? 0),
-            // if (isPlay)
-            //   Align(
-            //     alignment: Alignment.topCenter,
-            //     child: _buildController(
-            //       Colors.transparent,
-            //       Colors.white,
-            //       100,
-            //       widget.width ?? 0,
-            //       widget.height ?? 0,
-            //     ),
-            //   ),
           ],
         ),
       );
@@ -747,200 +685,6 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
         playAuth: _dataSourceMap?[DataSourceRelated.playAuth],
         definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
         previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
-  }
-
-  void _onPlayerHide() {
-    Future.delayed(const Duration(seconds: 4), () {
-      onTapCtrl = false;
-    });
-  }
-
-  Widget skipAds() {
-    return Positioned.fill(
-      bottom: 40,
-      child: Align(
-          alignment: Alignment.bottomRight,
-          child: GestureDetector(
-            onTap: () {
-              if (skipAdsCurent == 0) {
-                adsComleteOrSkip();
-              }
-            },
-            child: Container(
-              height: 40,
-              margin: EdgeInsets.only(bottom: 10),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.7),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    width: skipAdsCurent == 0 ? null : 100,
-                    child: Text(
-                      skipAdsCurent > 0 ? " Your video will begin in $skipAdsCurent" : " SkipdAds",
-                      maxLines: 3,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.white, fontSize: 10),
-                    ),
-                  ),
-                  skipAdsCurent == 0
-                      ? Icon(
-                          Icons.skip_next,
-                          color: Colors.white,
-                        )
-                      : Container(),
-                  // Container(
-                  //     child: Image.network(
-                  //   (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
-                  // ))
-                ],
-              ),
-            ),
-          )),
-    );
-  }
-
-  Widget _buildController(
-    Color backgroundColor,
-    Color iconColor,
-    double barHeight,
-    double width,
-    double height,
-  ) {
-    return AnimatedOpacity(
-      opacity: onTapCtrl || isPause ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 500),
-      onEnd: _onPlayerHide,
-      child: Container(
-        height: height * 0.8,
-        decoration: BoxDecoration(
-          color: backgroundColor,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(child: _buildSkipBack(iconColor, height)),
-            _buildPlayPause(iconColor, barHeight),
-            Expanded(child: _buildSkipForward(iconColor, height)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  GestureDetector _buildPlayPause(
-    Color iconColor,
-    double barHeight,
-  ) {
-    return GestureDetector(
-      onTap: () {
-        if (isPause) {
-          // if (_showTipsWidget) fAliplayer?.prepare();
-          fAliplayer?.play();
-          isPause = false;
-          setState(() {});
-        } else {
-          fAliplayer?.pause();
-          isPause = true;
-          setState(() {});
-        }
-        if (_showTipsWidget) {
-          fAliplayer?.prepare();
-          fAliplayer?.play();
-        }
-      },
-      child: CustomIconWidget(
-        iconData: isPause ? "${AssetPath.vectorPath}pause.svg" : "${AssetPath.vectorPath}play.svg",
-        defaultColor: false,
-      ),
-    );
-  }
-
-  Widget _buildSkipBack(Color iconColor, double barHeight) {
-    return GestureDetector(
-      onTap: () {
-        // if (!onTapCtrl) return;
-        int value;
-        int changevalue;
-        if (_videoDuration > 60000) {
-          value = 10000;
-        } else {
-          value = 5000;
-        }
-
-        changevalue = _currentPosition - value;
-        if (changevalue < 0) {
-          changevalue = 0;
-        }
-        print("currSeek: " + value.toString() + ", changeSeek: " + changevalue.toString());
-        fAliplayer?.requestBitmapAtPosition(changevalue);
-        setState(() {
-          _currentPosition = changevalue;
-        });
-        _inSeek = false;
-        setState(() {
-          if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
-            setState(() {
-              _showTipsWidget = false;
-            });
-          }
-        });
-        // fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
-        fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
-      },
-      child: Container(
-        // color: Colors.blue,
-        padding: const EdgeInsets.all(20.0),
-        child: const CustomIconWidget(
-          iconData: "${AssetPath.vectorPath}replay10.svg",
-          defaultColor: false,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSkipForward(Color iconColor, double barHeight) {
-    return GestureDetector(
-      onTap: () {
-        // if (!onTapCtrl) return;
-        int value;
-        int changevalue;
-        if (_videoDuration > 60000) {
-          value = 10000;
-        } else {
-          value = 5000;
-        }
-        changevalue = _currentPosition + value;
-        if (changevalue > _videoDuration) {
-          changevalue = _videoDuration;
-        }
-        print("currSeek: " + value.toString() + ", changeSeek: " + changevalue.toString());
-        fAliplayer?.requestBitmapAtPosition(changevalue);
-        setState(() {
-          _currentPosition = changevalue;
-        });
-        _inSeek = false;
-        setState(() {
-          if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
-            setState(() {
-              _showTipsWidget = false;
-            });
-          }
-        });
-        // fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
-        fAliplayer?.seekTo(changevalue, FlutterAvpdef.ACCURATE);
-      },
-      child: Container(
-        // color: Colors.red,
-        padding: const EdgeInsets.all(20.0),
-        child: const CustomIconWidget(
-          iconData: "${AssetPath.vectorPath}forward10.svg",
-          defaultColor: false,
-        ),
-      ),
-    );
   }
 
   ///Loading
@@ -1007,7 +751,20 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                                 child: Container(
                                   color: Colors.black.withOpacity(0.5),
                                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                                  child: CustomTextWidget(textToDisplay: 'Lewati video dalam 1 detik', textStyle: context.getTextTheme().overline?.copyWith(color: Colors.white), maxLines: 2,),
+                                  child: Builder(builder: (context){
+                                    final language = context.read<TranslateNotifierV2>().translate;
+                                    final locale = SharedPreference().readStorage(SpKeys.isoCode);
+                                    final isIndo = locale == 'id';
+                                    return secondsSkip <= 0 ? Row(
+                                      children: [
+                                        Expanded(child: CustomTextWidget(textToDisplay: language.skipAds ?? 'Skip Ads', textStyle: context.getTextTheme().caption?.copyWith(color: Colors.white), maxLines: 2,)),
+                                        const Icon(
+                                          Icons.skip_next,
+                                          color: Colors.white,
+                                        )
+                                      ],
+                                    ) : CustomTextWidget(textToDisplay: isIndo ? '${language.skipMessage} ${secondsSkip} ${language.second}' : "${language.skipMessage} ${secondsSkip}", textStyle: context.getTextTheme().overline?.copyWith(color: Colors.white), maxLines: 2,);
+                                  }),
                                 ),
                               ),
                             ),
@@ -1230,21 +987,18 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
     );
   }
 
-  void adsComleteOrSkip() {
-    _showTipsWidget = true;
-    _showLoading = false;
-    _tipsContent = "Play Again";
-    isPause = true;
-    setState(() {
-      _currentAdsPosition = _videoAdsDuration;
-      isPlay = true;
-    });
-    fAliplayer?.prepare().whenComplete(() => _showLoading = false);
-    fAliplayer?.isAutoPlay();
-    fAliplayer?.play();
-
-    adsData = null;
-    context.read<VidDetailNotifier>().adsData = null;
-    setState(() {});
-  }
+  // void adsComleteOrSkip() {
+  //   _showTipsWidget = true;
+  //   _showLoading = false;
+  //   _tipsContent = "Play Again";
+  //   isPause = true;
+  //   setState(() {
+  //     isPlay = true;
+  //   });
+  //   fAliplayer?.prepare().whenComplete(() => _showLoading = false);
+  //   fAliplayer?.isAutoPlay();
+  //   fAliplayer?.play();
+  //   context.read<VidDetailNotifier>().adsData = null;
+  //   setState(() {});
+  // }
 }
