@@ -25,7 +25,6 @@ import '../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../core/constants/utils.dart';
 import '../../../../../core/models/collection/posts/content_v2/content_data.dart';
 import '../../../../../core/models/collection/utils/zoom_pic/zoom_pic.dart';
-import '../../../../../core/services/error_service.dart';
 import '../../../../../core/services/route_observer_service.dart';
 import '../../../../../core/services/shared_preference.dart';
 import '../../../../../core/services/system.dart';
@@ -52,6 +51,7 @@ import '../../../home/content_v2/pic/widget/pic_top_item.dart';
 import '../../../home/content_v2/vid/notifier.dart';
 import '../../../home/content_v2/vid/playlist/comments_detail/screen.dart';
 import '../../../home/notifier_v2.dart';
+import '../../search_more_complete/widget/all_search_shimmer.dart';
 
 class PicScrollScreen extends StatefulWidget {
   final String interestKey;
@@ -61,13 +61,13 @@ class PicScrollScreen extends StatefulWidget {
   State<PicScrollScreen> createState() => _PicScrollScreenState();
 }
 
-class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
+class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware  {
   FlutterAliplayer? fAliplayer;
   TransformationController _transformationController = TransformationController();
   // final scrollGlobal = GlobalKey<SelfProfileScreenState>();
   // final a = SelfProfileScreenState();
 
-  bool isZoom = false;
+  // bool isZoom = false;
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
@@ -113,7 +113,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic-${notifier.mapDetailHashtag[widget.interestKey]?.pict?.first.postID}');
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic-${notifier.interestContents[widget.interestKey]?.pict?.first.postID}');
       WidgetsBinding.instance.addObserver(this);
 
       fAliplayer?.setAutoPlay(true);
@@ -122,7 +122,6 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
       //Turn on mix mode
       if (Platform.isIOS) {
         FlutterAliplayer.enableMix(true);
-        // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
       }
 
       notifier.checkConnection();
@@ -138,8 +137,8 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
     itemPositionsListener.itemPositions.addListener(() async {
       index = itemPositionsListener.itemPositions.value.first.index;
       if (lastIndex != index) {
-        if (index == (notifier.mapDetailHashtag[widget.interestKey]?.pict?.length ?? 2) - 2) {
-          if (!notifier.hasNext) {
+        if (index == (notifier.interestContents[widget.interestKey]?.pict?.length ?? 2) - 2) {
+          if (!notifier.intHasNextPic) {
             notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interestKey, reload: false, hyppe: HyppeType.HyppePic);
           }
         }
@@ -158,7 +157,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
       ShowGeneralDialog.showToastAlert(
         context,
         notifier.language.internetConnectionLost ?? ' Error',
-        () async {
+            () async {
           Routing().moveBack();
         },
       );
@@ -303,6 +302,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
   }
 
   void start(ContentData data) async {
+
     fAliplayer?.stop();
 
     isPlay = false;
@@ -406,12 +406,11 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
     print("====== deactivate ");
     fAliplayer?.stop();
     System().disposeBlock();
-    if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
+    if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps) {
       fAliplayer?.destroy();
     }
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
-      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
     super.deactivate();
   }
@@ -429,7 +428,9 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
     fAliplayer?.play();
     // System().disposeBlock();
     if (toComment) {
+
       setState(() {
+
         toComment = false;
       });
     }
@@ -475,102 +476,56 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
     }
   }
 
-  void zoom(val) {
-    setState(() {
-      isZoom = val;
-    });
-  }
-
   ValueNotifier<int> _networklHasErrorNotifier = ValueNotifier(0);
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    return Scaffold(
-      backgroundColor: kHyppeLightSurface,
-      body: WillPopScope(
-        onWillPop: () async {
-          // Navigator.pop(context, '$_curIdx');
-          Routing().moveBack();
-          return false;
-        },
-        child: Consumer<SearchNotifier>(
-          builder: (_, notifier, __) {
-            final pics = notifier.mapDetailHashtag[widget.interestKey]?.pict;
-            return SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: pics?.isEmpty ?? true
-                        ? const NoResultFound()
-                        : RefreshIndicator(
-                            onRefresh: () async {
-                              await notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interestKey, hyppe: HyppeType.HyppePic);
-                            },
-                            child: NotificationListener<OverscrollIndicatorNotification>(
-                              onNotification: (overscroll) {
-                                overscroll.disallowIndicator();
+    return Consumer<SearchNotifier>(
+      builder: (_, notifier, __){
+        final pics = notifier.interestContents[widget.interestKey]?.pict;
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            pics?.isEmpty ?? true
+                ?  const Flexible(child: AllSearchShimmer())
+                : Column(
+                children: List.generate(pics?.length ?? 0, (index){
+                  if (pics == null) {
+                    fAliplayer?.pause();
+                    _lastCurIndex = -1;
+                    return CustomShimmer(
+                      width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                      height: 168,
+                      radius: 8,
+                      margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                    );
+                  } else if (index == pics.length) {
+                    return UnconstrainedBox(
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 80 * SizeConfig.scaleDiagonal,
+                        height: 80 * SizeConfig.scaleDiagonal,
+                        child: const CustomLoading(),
+                      ),
+                    );
+                  }
 
-                                return false;
-                              },
-                              child: ScrollablePositionedList.builder(
-                                scrollDirection: Axis.vertical,
-                                itemScrollController: itemScrollController,
-                                itemPositionsListener: itemPositionsListener,
-                                scrollOffsetController: scrollOffsetController,
-                                // scrollDirection: Axis.horizontal,
-                                physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
-                                shrinkWrap: false,
-                                itemCount: pics?.length ?? 0,
-                                padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                                itemBuilder: (context, index) {
-                                  if (pics == null) {
-                                    fAliplayer?.pause();
-                                    _lastCurIndex = -1;
-                                    return CustomShimmer(
-                                      width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                                      height: 168,
-                                      radius: 8,
-                                      margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                      padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                                    );
-                                  } else if (index == pics.length) {
-                                    return UnconstrainedBox(
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        width: 80 * SizeConfig.scaleDiagonal,
-                                        height: 80 * SizeConfig.scaleDiagonal,
-                                        child: const CustomLoading(),
-                                      ),
-                                    );
-                                  }
-
-                                  return itemPict(notifier, index, pics);
-                                },
-                              ),
-                            ),
-                          ),
-                  ),
-                  notifier.hasNext
-                      ? const SizedBox(
-                          height: 50,
-                          child: Center(child: CustomLoading()),
-                        )
-                      : Container(),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
+                  return itemPict(notifier, index, pics);
+                })
+            ),
+          ],
+        );
+      },
     );
   }
 
   var initialControllerValue;
 
-  Widget itemPict(SearchNotifier notifier, int index, List<ContentData> pics) {
+  Widget itemPict(SearchNotifier notifier, int index, List<ContentData>  pics) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -578,7 +533,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
       ),
       padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
       margin: const EdgeInsets.only(
-        top: 18,
+        top: 10,
         left: 6,
         right: 6,
       ),
@@ -617,22 +572,22 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                     child: GestureDetector(
                       onTap: () {
                         if (pics[index].insight?.isloadingFollow != true) {
-                          picNot.followUser(context, pics[index], isUnFollow: pics[index].following, isloading: pics[index].insight!.isloadingFollow ?? false);
+                          picNot.followUser(context, pics[index] , isUnFollow: pics[index].following, isloading: pics[index].insight!.isloadingFollow ?? false);
                         }
                       },
                       child: pics[index].insight?.isloadingFollow ?? false
                           ? Container(
-                              height: 40,
-                              width: 30,
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: CustomLoading(),
-                              ),
-                            )
+                        height: 40,
+                        width: 30,
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: CustomLoading(),
+                        ),
+                      )
                           : Text(
-                              (pics[index].following ?? false) ? (notifier.language.following ?? '') : (notifier.language.follow ?? ''),
-                              style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                            ),
+                        (pics[index].following ?? false) ? (notifier.language.following ?? '') : (notifier.language.follow ?? ''),
+                        style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                      ),
                     ),
                   ),
                 ),
@@ -640,13 +595,13 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                 onTap: () {
                   // fAliplayer?.pause();
                   if (pics[index].email != email) {
-                    context.read<PreviewPicNotifier>().reportContent(context, pics[index], fAliplayer: fAliplayer);
+                    context.read<PreviewPicNotifier>().reportContent(context, pics[index] , fAliplayer: fAliplayer, key: widget.interestKey);
                   } else {
                     fAliplayer?.setMuted(true);
                     fAliplayer?.pause();
                     ShowBottomSheet().onShowOptionContent(
                       context,
-                      contentData: pics[index],
+                      contentData: pics[index] ,
                       captionTitle: hyppePic,
                       onDetail: false,
                       isShare: pics[index].isShared,
@@ -674,16 +629,17 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
 
                 //=============
                 if (_lastCurIndex != _curIdx) {
+
                   if (pics[index].music?.musicTitle != null) {
                     // print("ada musiknya ${pics?[index].music}");
                     Future.delayed(const Duration(milliseconds: 100), () {
-                      start(pics[index]);
+                      start(pics[index] );
                     });
                   } else {
                     fAliplayer?.stop();
                   }
                   Future.delayed(const Duration(milliseconds: 100), () {
-                    System().increaseViewCount2(context, pics[index], check: false);
+                    System().increaseViewCount2(context, pics[index] , check: false);
                   });
                   if (pics[index].certified ?? false) {
                     System().block(context);
@@ -704,104 +660,107 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                 ),
                 child: Stack(
                   children: [
+
                     !notifier.connectionError
                         ? GestureDetector(
-                            onTap: () {
-                              if (pics[index].reportedStatus != 'BLURRED') {
-                                fAliplayer?.play();
-                                setState(() {
-                                  isMute = !isMute;
-                                });
-                                fAliplayer?.setMuted(isMute);
-                              }
+                      onTap: () {
+                        if (pics[index].reportedStatus != 'BLURRED') {
+                          fAliplayer?.play();
+                          setState(() {
+                            isMute = !isMute;
+                          });
+                          fAliplayer?.setMuted(isMute);
+                        }
+                      },
+                      onDoubleTap: () {
+                        final _likeNotifier = context.read<LikeNotifier>();
+                        if (pics[index] != null) {
+                          _likeNotifier.likePost(context, pics[index]);
+                        }
+                      },
+                      child: Center(
+                        child: Container(
+                          color: Colors.transparent,
+                          // width: SizeConfig.screenWidth,
+                          // height: SizeConfig.screenHeight,
+                          child: ZoomableImage(
+                            onScaleStart: () {
+                              // zoom(true);
+                              notifier.isZoom = true;
                             },
-                            onDoubleTap: () {
-                              final _likeNotifier = context.read<LikeNotifier>();
-                              if (pics[index] != null) {
-                                _likeNotifier.likePost(context, pics[index]);
-                              }
+                            onScaleStop: () {
+                              // zoom(false);
+                              notifier.isZoom = false;
                             },
-                            child: Center(
-                              child: Container(
-                                color: Colors.transparent,
-                                // width: SizeConfig.screenWidth,
-                                // height: SizeConfig.screenHeight,
-                                child: ZoomableImage(
-                                  onScaleStart: () {
-                                    zoom(true);
-                                  },
-                                  onScaleStop: () {
-                                    zoom(false);
-                                  },
-                                  child: pics[index].isLoading
-                                      ? Container()
-                                      : ValueListenableBuilder(
-                                          valueListenable: _networklHasErrorNotifier,
-                                          builder: (BuildContext context, int count, _) {
-                                            return CustomBaseCacheImage(
-                                              memCacheWidth: 100,
-                                              memCacheHeight: 100,
-                                              widthPlaceHolder: 80,
-                                              heightPlaceHolder: 80,
-                                              imageUrl: (pics[index].isApsara ?? false) ? (pics[index].mediaEndpoint ?? "") : "${pics[index].fullContent}" + '&2',
-                                              imageBuilder: (context, imageProvider) => ClipRRect(
-                                                borderRadius: BorderRadius.circular(20), // Image borderr
-                                                child: pics[index].reportedStatus == 'BLURRED'
-                                                    ? ImageFiltered(
-                                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                                        child: Image(
-                                                          image: imageProvider,
-                                                          fit: BoxFit.fitHeight,
-                                                          width: SizeConfig.screenWidth,
-                                                        ),
-                                                      )
-                                                    : Image(
-                                                        image: imageProvider,
-                                                        fit: BoxFit.fitHeight,
-                                                        width: SizeConfig.screenWidth,
-                                                      ),
-                                              ),
-                                              emptyWidget: GestureDetector(
-                                                onTap: () {
-                                                  _networklHasErrorNotifier.value++;
-                                                },
-                                                child: Container(
-                                                    decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                                    width: SizeConfig.screenWidth,
-                                                    height: 250,
-                                                    alignment: Alignment.center,
-                                                    child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadImage ?? 'Error')),
-                                              ),
-                                              errorWidget: (context, url, error) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    _networklHasErrorNotifier.value++;
-                                                  },
-                                                  child: Container(
-                                                      decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                                      width: SizeConfig.screenWidth,
-                                                      height: 250,
-                                                      alignment: Alignment.center,
-                                                      child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadImage ?? 'Error')),
-                                                );
-                                              },
-                                            );
-                                          }),
-                                ),
-                              ),
-                            ),
-                          )
-                        : GestureDetector(
-                            onTap: () {
-                              notifier.checkConnection();
-                            },
-                            child: Container(
-                                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                width: SizeConfig.screenWidth,
-                                height: 250,
-                                alignment: Alignment.center,
-                                child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadImage ?? 'Error')),
+                            child: pics[index].isLoading
+                                ? Container()
+                                : ValueListenableBuilder(
+                                valueListenable: _networklHasErrorNotifier,
+                                builder: (BuildContext context, int count, _) {
+                                  return CustomBaseCacheImage(
+                                    memCacheWidth: 100,
+                                    memCacheHeight: 100,
+                                    widthPlaceHolder: 80,
+                                    heightPlaceHolder: 80,
+                                    imageUrl: (pics[index].isApsara ?? false) ? (pics[index].mediaEndpoint ?? "") : "${pics[index].fullContent}" + '&2',
+                                    imageBuilder: (context, imageProvider) => ClipRRect(
+                                      borderRadius: BorderRadius.circular(20), // Image borderr
+                                      child: pics[index].reportedStatus == 'BLURRED'
+                                          ? ImageFiltered(
+                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                        child: Image(
+                                          image: imageProvider,
+                                          fit: BoxFit.fitHeight,
+                                          width: SizeConfig.screenWidth,
+                                        ),
+                                      )
+                                          : Image(
+                                        image: imageProvider,
+                                        fit: BoxFit.fitHeight,
+                                        width: SizeConfig.screenWidth,
+                                      ),
+                                    ),
+                                    emptyWidget: GestureDetector(
+                                      onTap: () {
+                                        _networklHasErrorNotifier.value++;
+                                      },
+                                      child: Container(
+                                          decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                          width: SizeConfig.screenWidth,
+                                          height: 250,
+                                          alignment: Alignment.center,
+                                          child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadImage ?? 'Error')),
+                                    ),
+                                    errorWidget: (context, url, error) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          _networklHasErrorNotifier.value++;
+                                        },
+                                        child: Container(
+                                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                            width: SizeConfig.screenWidth,
+                                            height: 250,
+                                            alignment: Alignment.center,
+                                            child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadImage ?? 'Error')),
+                                      );
+                                    },
+                                  );
+                                }),
                           ),
+                        ),
+                      ),
+                    )
+                        : GestureDetector(
+                      onTap: () {
+                        notifier.checkConnection();
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                          width: SizeConfig.screenWidth,
+                          height: 250,
+                          alignment: Alignment.center,
+                          child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadImage ?? 'Error')),
+                    ),
                     _buildBody(context, SizeConfig.screenWidth, pics[index]),
                     blurContentWidget(context, notifier.language, pics[index]),
                   ],
@@ -810,33 +769,33 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
             ),
           ),
           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                  (pics[index].boosted.isEmpty) &&
-                  (pics[index].reportedStatus != 'OWNED' && pics[index].reportedStatus != 'BLURRED' && pics[index].reportedStatus2 != 'BLURRED') &&
-                  pics[index].email == email
+              (pics[index].boosted.isEmpty) &&
+              (pics[index].reportedStatus != 'OWNED' && pics[index].reportedStatus != 'BLURRED' && pics[index].reportedStatus2 != 'BLURRED') &&
+              pics[index].email == email
               ? Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  child: ButtonBoost(
-                    onDetail: false,
-                    marginBool: true,
-                    contentData: pics[index],
-                    startState: () {
-                      SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                    },
-                    afterState: () {
-                      SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-                    },
-                  ),
-                )
+            width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.only(bottom: 16),
+            child: ButtonBoost(
+              onDetail: false,
+              marginBool: true,
+              contentData: pics[index],
+              startState: () {
+                SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+              },
+              afterState: () {
+                SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+              },
+            ),
+          )
               : Container(),
           pics[index].email == SharedPreference().readStorage(SpKeys.email) && (pics[index].reportedStatus == 'OWNED')
               ? Padding(
-                  padding: const EdgeInsets.only(bottom: 11.0),
-                  child: ContentViolationWidget(
-                    data: pics[index],
-                    text: notifier.language.thisHyppeVidisSubjectToModeration ?? '',
-                  ),
-                )
+            padding: const EdgeInsets.only(bottom: 11.0),
+            child: ContentViolationWidget(
+              data: pics[index],
+              text: notifier.language.thisHyppeVidisSubjectToModeration ?? '',
+            ),
+          )
               : Container(),
           if (pics[index].email == email && (pics[index].boostCount ?? 0) >= 0 && (pics[index].boosted.isNotEmpty))
             Container(
@@ -877,24 +836,24 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                         alignment: Alignment.bottomRight,
                         child: pics[index].insight?.isloading ?? false
                             ? const SizedBox(
-                                height: 28,
-                                width: 28,
-                                child: CircularProgressIndicator(
-                                  color: kHyppePrimary,
-                                  strokeWidth: 2,
-                                ),
-                              )
+                          height: 28,
+                          width: 28,
+                          child: CircularProgressIndicator(
+                            color: kHyppePrimary,
+                            strokeWidth: 2,
+                          ),
+                        )
                             : InkWell(
-                                child: CustomIconWidget(
-                                  defaultColor: false,
-                                  color: (pics[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                  iconData: '${AssetPath.vectorPath}${(pics[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                  height: 28,
-                                ),
-                                onTap: () {
-                                  likeNotifier.likePost(context, pics[index]);
-                                },
-                              ),
+                          child: CustomIconWidget(
+                            defaultColor: false,
+                            color: (pics[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                            iconData: '${AssetPath.vectorPath}${(pics[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                            height: 28,
+                          ),
+                          onTap: () {
+                            likeNotifier.likePost(context, pics[index]);
+                          },
+                        ),
                       ),
                     ),
                     if (pics[index].allowComments ?? false)
@@ -907,7 +866,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                                 argument: CommentsArgument(
                                   postID: pics[index].postID ?? '',
                                   fromFront: true,
-                                  data: pics[index],
+                                  data: pics[index] ,
                                   pageDetail: true,
                                 ));
                           },
@@ -982,7 +941,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                     argument: CommentsArgument(
                       postID: pics[index].postID ?? '',
                       fromFront: true,
-                      data: pics[index],
+                      data: pics[index] ,
                       pageDetail: true,
                     ));
               },
@@ -996,29 +955,29 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
             ),
           (pics[index].comment?.length ?? 0) > 0
               ? Padding(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: (pics[index].comment?.length ?? 0) >= 2 ? 2 : 1,
-                    itemBuilder: (context, indexComment) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 6.0),
-                        child: CustomNewDescContent(
-                          username: pics[index].comment?[indexComment].userComment?.username ?? '',
-                          desc: pics[index].comment?[indexComment].txtMessages ?? '',
-                          trimLines: 2,
-                          textAlign: TextAlign.start,
-                          seeLess: ' seeLess', // ${notifier2.translate.seeLess}',
-                          seeMore: '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
-                          normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                          hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                          expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                        ),
-                      );
-                    },
+            padding: const EdgeInsets.only(top: 0.0),
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: (pics[index].comment?.length ?? 0) >= 2 ? 2 : 1,
+              itemBuilder: (context, indexComment) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 6.0),
+                  child: CustomNewDescContent(
+                    username: pics[index].comment?[indexComment].userComment?.username ?? '',
+                    desc: pics[index].comment?[indexComment].txtMessages ?? '',
+                    trimLines: 2,
+                    textAlign: TextAlign.start,
+                    seeLess: ' seeLess', // ${notifier2.translate.seeLess}',
+                    seeMore: '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
+                    normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                    hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                    expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
                   ),
-                )
+                );
+              },
+            ),
+          )
               : Container(),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 4.0),
@@ -1089,68 +1048,68 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
   Widget blurContentWidget(BuildContext context, LocalizationModelV2 lang, ContentData data) {
     return data.reportedStatus == 'BLURRED'
         ? Positioned.fill(
-            child: Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Spacer(),
-                      const CustomIconWidget(
-                        iconData: "${AssetPath.vectorPath}eye-off.svg",
-                        defaultColor: false,
-                        height: 30,
-                      ),
-                      Text(lang.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                      Text("HyppePic ${lang.contentContainsSensitiveMaterial}",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                          )),
-                      // data.email == SharedPreference().readStorage(SpKeys.email)
-                      //     ? GestureDetector(
-                      //         onTap: () => Routing().move(Routes.appeal, argument: data),
-                      //         child: Container(
-                      //             padding: const EdgeInsets.all(8),
-                      //             margin: const EdgeInsets.all(18),
-                      //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                      //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                      //       )
-                      //     : const SizedBox(),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          System().increaseViewCount2(context, data);
-                          setState(() {
-                            data.reportedStatus = '';
-                          });
-                          context.read<ReportNotifier>().seeContent(context, data, hyppePic);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 8),
-                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
-                          width: SizeConfig.screenWidth,
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              top: BorderSide(
-                                color: Colors.white,
-                                width: 1,
-                              ),
-                            ),
-                          ),
-                          child: Text(
-                            "${lang.see} HyppePic",
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                            textAlign: TextAlign.center,
-                          ),
+      child: Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Spacer(),
+                const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}eye-off.svg",
+                  defaultColor: false,
+                  height: 30,
+                ),
+                Text(lang.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                Text("HyppePic ${lang.contentContainsSensitiveMaterial}",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                    )),
+                // data.email == SharedPreference().readStorage(SpKeys.email)
+                //     ? GestureDetector(
+                //         onTap: () => Routing().move(Routes.appeal, argument: data),
+                //         child: Container(
+                //             padding: const EdgeInsets.all(8),
+                //             margin: const EdgeInsets.all(18),
+                //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                //       )
+                //     : const SizedBox(),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    System().increaseViewCount2(context, data);
+                    setState(() {
+                      data.reportedStatus = '';
+                    });
+                    context.read<ReportNotifier>().seeContent(context, data, hyppePic);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 8),
+                    margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                    width: SizeConfig.screenWidth,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: Colors.white,
+                          width: 1,
                         ),
                       ),
-                    ],
+                    ),
+                    child: Text(
+                      "${lang.see} HyppePic",
+                      style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                )),
-          )
+                ),
+              ],
+            ),
+          )),
+    )
         : Container();
   }
 
