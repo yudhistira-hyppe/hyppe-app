@@ -71,6 +71,7 @@ class _ComponentState extends State<Component> {
                 height: 50 * SizeConfig.scaleDiagonal,
                 onTap: () => System().navigateToProfile(context, widget.data?.mate ?? ''),
                 imageUrl: '${System().showUserPicture(widget.data?.senderOrReceiverInfo?.avatar?.mediaEndpoint)}',
+                badge: widget.data?.urluserBadge,
               ),
             ),
             sixteenPx,

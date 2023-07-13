@@ -253,6 +253,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                   musicName: data.music?.musicTitle ?? '',
                   location: data.location ?? '',
                   isIdVerified: data.isIdVerified ?? false,
+                  badge: data.urluserBadge,
                 ),
               ),
               // Expanded(

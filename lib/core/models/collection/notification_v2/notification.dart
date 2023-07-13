@@ -1,4 +1,5 @@
 import 'package:hyppe/core/config/env.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/notification_v2/notification_sender_or_receiver.dart';
@@ -23,6 +24,7 @@ class NotificationModel {
   bool? isRead;
   String? postID;
   String? postType;
+  UserBadgeModel? urluserBadge;
 
   NotificationModel({
     this.active,
@@ -44,6 +46,7 @@ class NotificationModel {
     this.isRead,
     this.postID,
     this.postType,
+    this.urluserBadge,
   });
 
   NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -70,6 +73,10 @@ class NotificationModel {
     postID = json['postID'];
     isRead = json['isRead'] ?? false;
     postType = json['postType'];
+    urluserBadge =
+        json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty
+            ? UserBadgeModel.fromJson(json['urluserBadge'])
+            : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -92,6 +99,9 @@ class NotificationModel {
     data['email'] = email;
     data['updatedAt'] = updatedAt;
     data['isRead'] = isRead;
+    if (urluserBadge != null) {
+      data['urluserBadge'] = urluserBadge?.toJson();
+    }
     return data;
   }
 

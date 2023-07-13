@@ -38,8 +38,9 @@ class BuildCircleProfile extends StatelessWidget {
             featureType: FeatureType.story,
             haveStory: listStory?.isNotEmpty ?? false,
             isMy: true,
+            borderRadius: 20,
             child: Padding(
-              padding: const EdgeInsets.all(6.0),
+              padding: const EdgeInsets.all(2.0),
               child: CustomProfileImage(
                 cacheKey: imageUrlKey,
                 following: true,
@@ -48,6 +49,7 @@ class BuildCircleProfile extends StatelessWidget {
                 width: SizeWidget.circleDiameterOutside,
                 height: SizeWidget.circleDiameterOutside,
                 forStory: true,
+                allwaysUseBadgePadding: true,
               ),
             ),
           ),

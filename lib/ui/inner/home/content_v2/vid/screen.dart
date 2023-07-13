@@ -261,6 +261,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                   musicName: vidData.music?.musicTitle ?? '',
                   location: vidData.location ?? '',
                   isIdVerified: vidData.privacy?.isIdVerified,
+                  badge: vidData.urluserBadge,
                 ),
               ),
               if (vidData.email != email && (vidData.isNewFollowing ?? false))

@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_insight_model.dart';
 
 class UserProfileModel {
@@ -34,6 +35,7 @@ class UserProfileModel {
   String? statusKyc;
   String? idUser;
   String? loginSource;
+  UserBadgeModel? urluserBadge;
 
   UserProfileModel({
     this.country,
@@ -65,6 +67,7 @@ class UserProfileModel {
     this.statusKyc,
     this.idUser,
     this.loginSource,
+    this.urluserBadge,
   });
 
   UserProfileModel.fromJson(Map<String, dynamic> json) {
@@ -112,6 +115,10 @@ class UserProfileModel {
     statusKyc = json['statusKyc'] ?? '';
     idUser = json['iduser'] ?? '';
     loginSource = json['loginSource'] ?? 'manual';
+    urluserBadge =
+        json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty
+            ? UserBadgeModel.fromJson(json['urluserBadge'])
+            : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -149,6 +156,9 @@ class UserProfileModel {
     data['pin_create'] = pinCreate;
     data['statusKyc'] = statusKyc;
     data['iduser'] = idUser;
+    if (urluserBadge != null) {
+      data['urluserBadge'] = urluserBadge?.toJson();
+    }
     return data;
   }
 
