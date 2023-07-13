@@ -8,12 +8,16 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
+import 'package:provider/provider.dart';
 
-import '../../../../../../core/config/ali_config.dart';
-import '../../../../../../core/models/collection/posts/content_v2/content_data.dart';
+import '../../../../../../../core/config/ali_config.dart';
+import '../../../../../../../core/models/collection/posts/content_v2/content_data.dart';
+import '../../../../../../constant/widget/ads/ads_player_page.dart';
 
 class VideoFullscreenPage extends StatefulWidget {
   final AliPlayerView aliPlayerView;
+  final AdsPlayerPage adsPlayer;
   final ContentData data;
   final Function onClose;
   final FlutterAliplayer? fAliplayer;
@@ -22,6 +26,7 @@ class VideoFullscreenPage extends StatefulWidget {
   const VideoFullscreenPage({
     Key? key,
     required this.aliPlayerView,
+    required this.adsPlayer,
     required this.data,
     required this.onClose,
     this.fAliplayer,
@@ -177,42 +182,48 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
         return false;
       },
-      child: Scaffold(
-        body: isloading
-            ? Container(
-                color: Colors.black,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              )
-            : GestureDetector(
-                onTap: () {
-                  onTapCtrl = true;
-                  setState(() {});
-                },
-                child: Stack(
-                  children: [
-                    Container(width: context.getWidth(), height: SizeConfig.screenHeight, decoration: const BoxDecoration(color: Colors.black), child: widget.aliPlayerView),
-                    if (!_showTipsWidget)
-                      SizedBox(
-                        width: context.getWidth(),
-                        height: SizeConfig.screenHeight,
-                        // padding: EdgeInsets.only(bottom: 25.0),
-                        child: Offstage(offstage: false, child: _buildContentWidget(context, Orientation.portrait)),
-                      ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: _buildController(
-                        Colors.transparent,
-                        Colors.white,
-                        100,
-                        context.getWidth(),
-                        SizeConfig.screenHeight ?? 0,
-                      ),
+      child: Consumer<VideoNotifier>(
+        builder: (context, notifier, _) {
+          return Scaffold(
+            body: isloading
+                ? Container(
+                    color: Colors.black,
+                    child: Center(
+                      child: CircularProgressIndicator(),
                     ),
-                  ],
-                ),
-              ),
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      onTapCtrl = true;
+                      setState(() {});
+                    },
+                    child: Stack(
+                      children: [
+                        Container(width: context.getWidth(), height: SizeConfig.screenHeight, decoration: const BoxDecoration(color: Colors.black), child: widget.aliPlayerView),
+                        if (!_showTipsWidget)
+                          SizedBox(
+                            width: context.getWidth(),
+                            height: SizeConfig.screenHeight,
+                            // padding: EdgeInsets.only(bottom: 25.0),
+                            child: Offstage(offstage: false, child: _buildContentWidget(context, Orientation.portrait)),
+                          ),
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: _buildController(
+                            Colors.transparent,
+                            Colors.white,
+                            100,
+                            context.getWidth(),
+                            SizeConfig.screenHeight ?? 0,
+                          ),
+                        ),
+                        if(notifier.isShowingAds && !notifier.hasShowedAds)
+                        Container(width: context.getWidth(), height: SizeConfig.screenHeight, decoration: const BoxDecoration(color: Colors.black), child: widget.adsPlayer,)
+                      ],
+                    ),
+                  ),
+          );
+        }
       ),
     );
     // return WillPopScope(

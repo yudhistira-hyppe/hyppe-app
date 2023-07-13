@@ -66,6 +66,7 @@ import 'package:hyppe/ui/inner/search_v2/notifier.dart' as sV2;
 import '../../ui/constant/entities/comment_v2/notifier.dart';
 import '../../ui/inner/home/content_v2/help/detail_ticket/notifier.dart';
 import '../../ui/inner/home/content_v2/vid/playlist/notifier.dart';
+import '../../ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 
 class AppDependencies {
   static List<SingleChildWidget> inject({required HyppeNotifier rootNotifier}) => [
@@ -102,6 +103,7 @@ class AppDependencies {
         ChangeNotifierProvider(create: (context) => DiariesPlaylistNotifier()),
         ChangeNotifierProvider(create: (context) => PreUploadContentNotifier()),
         ChangeNotifierProvider(create: (context) => VidDetailNotifier()),
+        ChangeNotifierProvider(create: (context) => VideoNotifier()),
 
         ChangeNotifierProvider(create: (context) => cpV2.ChangePasswordNotifier()),
 

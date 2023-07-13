@@ -44,6 +44,7 @@ class AdsPlayerPage extends StatefulWidget {
   final Function(FlutterAliplayer)? getPlayer;
   final Function(AdsData)? onPlay;
   final Function() onClose;
+  final Function() onFullscreen;
   final Orientation orientation;
   final String thumbnail;
 
@@ -54,6 +55,7 @@ class AdsPlayerPage extends StatefulWidget {
     this.height,
     this.width,
     required this.functionFullTriger,
+    required this.onFullscreen,
     this.onPlay,
     required this.onClose,
     this.getPlayer,
@@ -735,8 +737,10 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                       flex: 14,
                       child: InkWell(
                         onTap: (){
-                          fAliplayer?.stop();
-                          widget.onClose();
+                          if(secondsSkip <= 0){
+                            fAliplayer?.stop();
+                            widget.onClose();
+                          }
                         },
                         child: Row(
                           children: [
@@ -879,11 +883,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                       ),
                       GestureDetector(
                         onTap: () async {
-                          int changevalue;
-                          changevalue = _currentPosition + 1000;
-                          if (changevalue > _videoDuration) {
-                            changevalue = _videoDuration;
-                          }
+                          widget.onFullscreen();
                           // if (widget.orientation == Orientation.portrait) {
                           //   fAliplayer?.pause();
                           //   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
