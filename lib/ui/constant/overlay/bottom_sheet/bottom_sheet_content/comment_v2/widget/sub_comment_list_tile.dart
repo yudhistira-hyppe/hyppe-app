@@ -49,6 +49,7 @@ class _SubCommentListTileState extends State<SubCommentListTile> {
               width: 30 * SizeConfig.scaleDiagonal,
               height: 30 * SizeConfig.scaleDiagonal,
               imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
+              badge: commentor?.urluserBadge,
               onTap: () => System().navigateToProfile(context, widget.data?.sender ?? ''),
             ),
           ),

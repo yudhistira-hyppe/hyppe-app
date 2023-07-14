@@ -273,6 +273,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
                             height: 50,
                             onTap: () {},
                             imageUrl: System().showUserPicture(users?[index].avatar?[0].mediaEndpoint?.split('_')[0]),
+                            badge: users?[index].urluserBadge,
                             following: true,
                             onFollow: () {},
                           ),

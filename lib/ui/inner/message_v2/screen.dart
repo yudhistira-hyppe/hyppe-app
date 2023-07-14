@@ -163,7 +163,7 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                                                 imageUrl: System().showUserPicture(discussData?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
                                                 height: 50 * SizeConfig.scaleDiagonal,
                                                 width: 50 * SizeConfig.scaleDiagonal,
-                                                badge: discussData?.senderOrReceiverInfo?.urluserBadges?[0],
+                                                badge: discussData?.senderOrReceiverInfo?.urluserBadge,
                                               ),
                                             // ),
                                           ),

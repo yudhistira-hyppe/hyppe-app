@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 
 class CommentDataV2 {
   String? createdAt;
@@ -204,11 +205,13 @@ class SenderInfo {
   Avatar? avatar;
   String? username;
   bool? isIdVerified;
+  UserBadgeModel? urluserBadge;
 
   SenderInfo({
     this.fullName,
     this.avatar,
     this.username,
+    this.urluserBadge,
   });
 
   SenderInfo.fromJson(Map<String, dynamic> json) {
@@ -216,6 +219,13 @@ class SenderInfo {
     avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
     username = json['username'];
     isIdVerified = json['isIdVerified'];
+    if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
+      if (json['urluserBadge'] is List) {
+        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge'].first);
+      } else {
+        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
+      }
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -226,6 +236,9 @@ class SenderInfo {
     }
     data['username'] = username;
     data['isIdVerified'] = isIdVerified;
+    if (urluserBadge != null) {
+      data['urluserBadge'] = urluserBadge?.toJson();
+    }
     return data;
   }
 }

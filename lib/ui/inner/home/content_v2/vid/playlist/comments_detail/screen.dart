@@ -224,6 +224,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                     width: 26,
                                     height: 26,
                                     imageUrl: System().showUserPicture(comments?.first.comment?.senderInfo?.avatar?.mediaEndpoint ?? (urlImage ?? '')),
+                                    badge: comments?.first.comment?.senderInfo?.urluserBadge,
                                     following: true,
                                   );
                                 }),
@@ -277,6 +278,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
             height: 36,
             onTap: () => System().navigateToProfile(context, data.email ?? ''),
             imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint),
+            badge: data.urluserBadge,
             following: true,
             onFollow: () {},
           ),

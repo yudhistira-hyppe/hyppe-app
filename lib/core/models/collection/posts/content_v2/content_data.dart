@@ -348,10 +348,13 @@ class ContentData {
     isDiaryPlay = false;
     comments = json['comments'] ?? 0;
     isNewFollowing = following ?? false ? false : true;
-    urluserBadge =
-        json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty
-            ? UserBadgeModel.fromJson(json['urluserBadge'])
-            : null;
+    if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
+      if (json['urluserBadge'] is List) {
+        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge'].first);
+      } else {
+        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
+      }
+    }
   }
 
   Map<String, dynamic> toJson() {

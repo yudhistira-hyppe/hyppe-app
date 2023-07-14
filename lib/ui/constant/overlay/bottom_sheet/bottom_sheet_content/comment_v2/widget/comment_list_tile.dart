@@ -57,6 +57,7 @@ class _CommentListTileState extends State<CommentListTile> {
                   width: 30 * SizeConfig.scaleDiagonal,
                   height: 30 * SizeConfig.scaleDiagonal,
                   imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
+                  badge: commentor?.urluserBadge,
                   onTap: () => System().navigateToProfile(context, comment?.sender ?? ''),
                 ),
               ),

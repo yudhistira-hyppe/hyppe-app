@@ -622,6 +622,7 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
                             height: 36,
                             onTap: () => System().navigateToProfile(context, comment?.disqusLogs?[0].comment?.sender ?? ''),
                             imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
+                            badge: commentor?.urluserBadge,
                             following: true,
                             onFollow: () {},
                           ),

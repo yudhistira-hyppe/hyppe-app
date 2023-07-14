@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
@@ -325,14 +326,14 @@ class SenderOrReceiverInfo {
   Avatar? avatar;
   String? email;
   String? username;
-  List<UserBadgeModel>? urluserBadges;
+  UserBadgeModel? urluserBadge;
 
   SenderOrReceiverInfo({
     this.fullName,
     this.avatar,
     this.email,
     this.username,
-    this.urluserBadges,
+    this.urluserBadge,
   });
 
   SenderOrReceiverInfo.fromJson(Map<String, dynamic> json) {
@@ -341,10 +342,11 @@ class SenderOrReceiverInfo {
     email = json['email'];
     username = json['username'];
     if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
-			urluserBadges = <UserBadgeModel>[];
-			json['urluserBadge'].forEach((v) {
-        urluserBadges!.add(UserBadgeModel.fromJson(v));
-      });
+      if (json['urluserBadge'] is List) {
+        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge'].first);
+      } else {
+        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
+      }
     }
   }
 
