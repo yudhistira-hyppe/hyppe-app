@@ -79,18 +79,18 @@ PODS:
     - Firebase/Auth (= 9.6.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.9.0):
+  - firebase_core (2.14.0):
     - Firebase/CoreOnly (= 9.6.0)
     - Flutter
-  - firebase_crashlytics (3.1.0):
+  - firebase_crashlytics (3.3.3):
     - Firebase/Crashlytics (= 9.6.0)
     - firebase_core
     - Flutter
-  - firebase_dynamic_links (5.1.0):
+  - firebase_dynamic_links (5.3.3):
     - Firebase/DynamicLinks (= 9.6.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (14.4.0):
+  - firebase_messaging (14.6.4):
     - Firebase/Messaging (= 9.6.0)
     - firebase_core
     - Flutter
@@ -280,7 +280,7 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - permission_handler_apple (9.0.4):
+  - permission_handler_apple (9.1.1):
     - Flutter
   - PINCache (3.0.3):
     - PINCache/Arc-exception-safe (= 3.0.3)
@@ -309,7 +309,7 @@ PODS:
     - FlutterMacOS
   - sign_in_with_apple (0.0.1):
     - Flutter
-  - sqflite (0.0.2):
+  - sqflite (0.0.3):
     - Flutter
     - FMDB (>= 2.7.5)
   - SwiftyGif (5.4.4)
@@ -507,10 +507,10 @@ SPEC CHECKSUMS:
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
   Firebase: 5ae8b7cf8efce559a653aef0ad95bab3f427c351
   firebase_auth: aa41092a9db430f98e655a8a34ca9d58a39b19de
-  firebase_core: 02d6f04422528f65d2ed9e8b5fbf78aa0561db6d
-  firebase_crashlytics: 0f69458402ad1a81b380bf5b3373868b659e2dc4
-  firebase_dynamic_links: 20d40a82e7ac7e0ab5a8134bc074859b71ddce07
-  firebase_messaging: c8cf68c8009998a211e8bf57f9f3e6e458fa0797
+  firebase_core: eb2894b54a2ae7f75b882f2819b3f52671563f68
+  firebase_crashlytics: bb6ddca03754d5e81a381279780993ee8c6f00ce
+  firebase_dynamic_links: 6eef5ff587c319be1e1d2d0a017e154760799a5a
+  firebase_messaging: 9fc44148736c7d9a5b875f72425540a32ee28703
   FirebaseAuth: e4a5d3c36e778e41141b91cc861103a441d80bcc
   FirebaseCore: 2082fffcd855f95f883c0a1641133eb9bbe76d40
   FirebaseCoreDiagnostics: 99a495094b10a57eeb3ae8efa1665700ad0bdaa6
@@ -555,8 +555,8 @@ SPEC CHECKSUMS:
   native_device_orientation: 3b4cfc9565a7b879cc4fde282b3e27745e852d0d
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
-  path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
-  permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
+  path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   PINCache: 7a8fc1a691173d21dbddbf86cd515de6efa55086
   PINOperation: daa34d4aa1d8449089be7d405b9d974abc4724c6
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
@@ -566,9 +566,9 @@ SPEC CHECKSUMS:
   SDWebImage: 25bac438318faf37e35650619ebc288a9061d292
   SDWebImageWebPCoder: 295a6573c512f54ad2dd58098e64e17dcf008499
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
-  shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
-  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4

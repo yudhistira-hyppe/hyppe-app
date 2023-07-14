@@ -13,14 +13,14 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
-class CollectionBadgeScreen extends StatefulWidget {
-  const CollectionBadgeScreen({Key? key}) : super(key: key);
+class AchievementScreen extends StatefulWidget {
+  const AchievementScreen({Key? key}) : super(key: key);
 
   @override
-  State<CollectionBadgeScreen> createState() => _CollectionBadgeScreenState();
+  State<AchievementScreen> createState() => _AchievementScreenState();
 }
 
-class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
+class _AchievementScreenState extends State<AchievementScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
   LocalizationModelV2? lang;
   @override
   void initState() {
@@ -56,7 +56,7 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
             },
           ),
           title: const Text(
-            'Koleksi Badge Saya',
+            'Halaman Pencapaian',
             style: TextStyle(
               fontSize: 16,
               fontFamily: 'Lato',
@@ -68,37 +68,21 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Stack(
-                children: [
-                  Image.asset("${AssetPath.pngPath}bg_collection.jpg"),
-                  Positioned.fill(
-                      child: Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        CustomProfileImage(
-                          following: true,
-                          forStory: false,
-                          width: 80,
-                          height: 80,
-                          imageUrl: "",
-                        ),
-                        sixteenPx,
-                        Text(
-                          'Koleksi Badgemu',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18.36,
-                            fontFamily: 'Lato',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        )
-                      ],
+              Container(
+                color: kHyppeLightSurface,
+                child: Container(
+                  decoration: ShapeDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment(1.00, 0.00),
+                      end: Alignment(-1, 0),
+                      colors: [Color(0xFF7551C0), Color(0xFFAB22AF)],
                     ),
-                  ))
-                ],
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  child: Row(
+                    children: [Text("sdsd")],
+                  ),
+                ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
@@ -115,32 +99,12 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
                       ),
                     ),
                     twentyFourPx,
-                    BadgeWidget(),
                   ],
                 ),
               ),
               Container(
                 height: 24,
                 color: kHyppeLightSurface,
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Koleksi Badge',
-                      style: TextStyle(
-                        color: Color(0xFF3E3E3E),
-                        fontSize: 14,
-                        fontFamily: 'Lato',
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    twentyFourPx,
-                    BadgeWidget(),
-                  ],
-                ),
               ),
             ],
           ),

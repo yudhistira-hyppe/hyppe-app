@@ -56,7 +56,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
       });
 
       var cn = context.read<ChallangeNotifier>();
-      cn.initLeaderboardDetail(context);
+      cn.initLeaderboardDetail(context, widget.arguments?.id ?? '');
       toHideTab(cn);
     });
 
@@ -147,7 +147,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                           memCacheHeight: 100,
                           widthPlaceHolder: 80,
                           heightPlaceHolder: 80,
-                          imageUrl: (cn.leaderBoardData?.bannerSearch),
+                          imageUrl: (cn.leaderBoardData?.challengeData?[0].leaderBoard?[0].bannerLeaderboard),
                           imageBuilder: (context, imageProvider) => Image(
                             image: imageProvider,
                             fit: BoxFit.fitHeight,
@@ -252,7 +252,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                 controller: _tabController,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  cn.isLoadingLeaderboard || cn.leaderBoardData?.sId != null ? const ShimmerListLeaderboard() : const ListOnGoingDetail(),
+                  cn.isLoadingLeaderboard || cn.leaderBoardData?.sId == null ? const ShimmerListLeaderboard() : const ListOnGoingDetail(),
                   // Container(
                   //   height: 40,
                   //   padding: const EdgeInsets.only(left: 6.0, right: 6),

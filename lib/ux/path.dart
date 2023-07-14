@@ -144,4 +144,5 @@ class Routes {
   static const String chalengeAcievment = '/chalenge-achievment';
   static const String chalengeDetail = '/chalenge-detail';
   static const String chalengeCollectionBadge = '/chalenge-collection-badge';
+  static const String chalengeAchievement = '/chalenge-achievement';
 }

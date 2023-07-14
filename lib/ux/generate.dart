@@ -28,6 +28,7 @@ import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/page_not_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/delete_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/achievement/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/collection/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/screen.dart';
@@ -412,6 +413,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => ChalangeDetailScreen(arguments: settings.arguments as GeneralArgument));
       case Routes.chalengeCollectionBadge:
         return MaterialPageRoute(builder: (_) => const CollectionBadgeScreen());
+      case Routes.chalengeAchievement:
+        return MaterialPageRoute(builder: (_) => const AchievementScreen());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

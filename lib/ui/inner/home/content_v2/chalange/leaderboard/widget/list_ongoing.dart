@@ -64,7 +64,8 @@ class _ListOnGoingState extends State<ListOnGoing> {
                   bgColor: kHyppePrimary,
                   text: "Yuk, Join Challenge Sekarang",
                   function: () {
-                    Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: cn.leaderBoardData?.sId));
+                    // print(cn.leaderBoardData?.challengeId);
+                    Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: cn.leaderBoardData?.challengeId));
                   }),
             ),
             Container(

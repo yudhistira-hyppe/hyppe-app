@@ -121,7 +121,7 @@ class FcmService {
         //     message: '${message.notification?.title ?? ''} ${message.notification?.body ?? ''}');
         // isHaveNotification.value = true;
 
-        // _notifyApp(message, () => _eventService.notifyForegroundMessage(message));
+        _notifyApp(message, () => _eventService.notifyForegroundMessage(message));
         _notificationService.showNotification(message);
         // if (notification != null) {
         //

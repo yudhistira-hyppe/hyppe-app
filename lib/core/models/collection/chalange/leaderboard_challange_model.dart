@@ -9,35 +9,28 @@ class LeaderboardChallangeModel {
   List<Getlastrank>? getlastrank;
   String? status;
   String? joined;
-  String? objectChallenge;
+  List<ChallengeData>? challengeData;
+  List<SubChallenges>? subChallenges;
   int? totalSession;
-  String? description;
-  String? leaderBoard;
-  String? bannerSearch;
-  String? popUp;
   bool? onGoing;
   int? totalDays;
 
-  LeaderboardChallangeModel({
-    this.sId,
-    this.challengeId,
-    this.startDatetime,
-    this.endDatetime,
-    this.isActive,
-    this.session,
-    this.timenow,
-    this.getlastrank,
-    this.status,
-    this.joined,
-    this.objectChallenge,
-    this.totalSession,
-    this.bannerSearch,
-    this.description,
-    this.leaderBoard,
-    this.popUp,
-    this.onGoing,
-    this.totalDays,
-  });
+  LeaderboardChallangeModel(
+      {this.sId,
+      this.challengeId,
+      this.startDatetime,
+      this.endDatetime,
+      this.isActive,
+      this.session,
+      this.timenow,
+      this.getlastrank,
+      this.status,
+      this.joined,
+      this.challengeData,
+      this.subChallenges,
+      this.totalSession,
+      this.onGoing,
+      this.totalDays});
 
   LeaderboardChallangeModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -50,37 +43,26 @@ class LeaderboardChallangeModel {
     if (json['getlastrank'] != null) {
       getlastrank = <Getlastrank>[];
       json['getlastrank'].forEach((v) {
-        getlastrank!.add(Getlastrank.fromJson(v));
+        getlastrank!.add(new Getlastrank.fromJson(v));
       });
     }
     status = json['status'];
     joined = json['joined'];
-    objectChallenge = json['objectChallenge'];
-    totalSession = json['totalSession'] ?? 0;
-    bannerSearch = json['bannerSearch'];
-    description = json['description'];
-    leaderBoard = json['leaderBoard'];
-    popUp = json['popUp'];
-    onGoing = json['onGoing'] ?? false;
-    totalDays = json['totalDays'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['challengeId'] = challengeId;
-    data['startDatetime'] = startDatetime;
-    data['endDatetime'] = endDatetime;
-    data['isActive'] = isActive;
-    data['session'] = session;
-    data['timenow'] = timenow;
-    if (getlastrank != null) {
-      data['getlastrank'] = getlastrank!.map((v) => v.toJson()).toList();
+    if (json['challenge_data'] != null) {
+      challengeData = <ChallengeData>[];
+      json['challenge_data'].forEach((v) {
+        challengeData!.add(new ChallengeData.fromJson(v));
+      });
     }
-    data['status'] = status;
-    data['joined'] = joined;
-    data['objectChallenge'] = objectChallenge;
-    return data;
+    if (json['subChallenges'] != null) {
+      subChallenges = <SubChallenges>[];
+      json['subChallenges'].forEach((v) {
+        subChallenges!.add(new SubChallenges.fromJson(v));
+      });
+    }
+    totalSession = json['totalSession'] ?? 0;
+    onGoing = json['onGoing'];
+    totalDays = json['totalDays'];
   }
 }
 
@@ -97,7 +79,7 @@ class Getlastrank {
   List<String>? objectChallenge;
   String? username;
   String? email;
-  AvatarChallange? avatar;
+  Avatar? avatar;
   String? currentstatistik;
   String? winnerBadge;
   String? winnerBadgeOther;
@@ -125,7 +107,7 @@ class Getlastrank {
     idUser = json['idUser'];
     idSubChallenge = json['idSubChallenge'];
     ranking = json['ranking'];
-    score = json['score'];
+    score = json['score'] ?? 0;
     if (json['history'] != null) {
       history = <History>[];
       json['history'].forEach((v) {
@@ -137,42 +119,16 @@ class Getlastrank {
     if (json['postChallengess'] != null) {
       postChallengess = <PostChallengess>[];
       json['postChallengess'].forEach((v) {
-        postChallengess!.add(new PostChallengess.fromJson(v));
+        postChallengess!.add(PostChallengess.fromJson(v));
       });
     }
     objectChallenge = json['objectChallenge'].cast<String>();
     username = json['username'];
     email = json['email'];
-    avatar = json['avatar'] != null ? new AvatarChallange.fromJson(json['avatar']) : null;
+    avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
     currentstatistik = json['currentstatistik'];
     winnerBadge = json['winnerBadge'];
     winnerBadgeOther = json['winnerBadgeOther'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['idUser'] = idUser;
-    data['idSubChallenge'] = idSubChallenge;
-    data['ranking'] = ranking;
-    data['score'] = score;
-    if (history != null) {
-      data['history'] = history!.map((v) => v.toJson()).toList();
-    }
-    data['lastRank'] = lastRank;
-    data['isUserLogin'] = isUserLogin;
-    if (postChallengess != null) {
-      data['postChallengess'] = postChallengess!.map((v) => v.toJson()).toList();
-    }
-    data['objectChallenge'] = objectChallenge;
-    data['username'] = username;
-    data['email'] = email;
-    if (avatar != null) {
-      data['avatar'] = avatar!.toJson();
-    }
-    data['currentstatistik'] = currentstatistik;
-    data['winnerBadge'] = winnerBadge;
-    return data;
   }
 }
 
@@ -187,14 +143,6 @@ class History {
     updatedAt = json['updatedAt'];
     score = json['score'];
     ranking = json['ranking'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['updatedAt'] = updatedAt;
-    data['score'] = score;
-    data['ranking'] = ranking;
-    return data;
   }
 }
 
@@ -212,29 +160,412 @@ class PostChallengess {
     postType = json['postType'];
     index = json['index'];
   }
+}
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['postID'] = postID;
-    data['postType'] = postType;
-    data['index'] = index;
-    return data;
+class Avatar {
+  String? mediaEndpoint;
+
+  Avatar({this.mediaEndpoint});
+
+  Avatar.fromJson(Map<String, dynamic> json) {
+    mediaEndpoint = json['mediaEndpoint'];
   }
 }
 
-class AvatarChallange {
-  String? mediaEndpoint;
+class ChallengeData {
+  String? sId;
+  String? nameChallenge;
+  String? jenisChallenge;
+  String? description;
+  String? createdAt;
+  String? updatedAt;
+  int? durasi;
+  String? startChallenge;
+  String? endChallenge;
+  String? startTime;
+  String? endTime;
+  String? jenisDurasi;
+  bool? tampilStatusPengguna;
+  String? objectChallenge;
+  String? statusChallenge;
+  List<Metrik>? metrik;
+  List<Peserta>? peserta;
+  List<LeaderBoard>? leaderBoard;
+  List<KetentuanHadiah>? ketentuanHadiah;
+  List<HadiahPemenang>? hadiahPemenang;
+  List<BannerSearch>? bannerSearch;
 
-  AvatarChallange({this.mediaEndpoint});
+  ChallengeData({
+    this.sId,
+    this.nameChallenge,
+    this.jenisChallenge,
+    this.description,
+    this.createdAt,
+    this.updatedAt,
+    this.durasi,
+    this.startChallenge,
+    this.endChallenge,
+    this.startTime,
+    this.endTime,
+    this.jenisDurasi,
+    this.tampilStatusPengguna,
+    this.objectChallenge,
+    this.statusChallenge,
+    this.metrik,
+    this.peserta,
+    this.leaderBoard,
+    this.ketentuanHadiah,
+    this.hadiahPemenang,
+    this.bannerSearch,
+  });
 
-  AvatarChallange.fromJson(Map<String, dynamic> json) {
-    mediaEndpoint = json['mediaEndpoint'];
+  ChallengeData.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    nameChallenge = json['nameChallenge'];
+    jenisChallenge = json['jenisChallenge'];
+    description = json['description'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    durasi = json['durasi'];
+    startChallenge = json['startChallenge'];
+    endChallenge = json['endChallenge'];
+    startTime = json['startTime'];
+    endTime = json['endTime'];
+    jenisDurasi = json['jenisDurasi'];
+    tampilStatusPengguna = json['tampilStatusPengguna'];
+    objectChallenge = json['objectChallenge'];
+    statusChallenge = json['statusChallenge'];
+    if (json['metrik'] != null) {
+      metrik = <Metrik>[];
+      json['metrik'].forEach((v) {
+        metrik!.add(new Metrik.fromJson(v));
+      });
+    }
+    if (json['peserta'] != null) {
+      peserta = <Peserta>[];
+      json['peserta'].forEach((v) {
+        peserta!.add(new Peserta.fromJson(v));
+      });
+    }
+    if (json['leaderBoard'] != null) {
+      leaderBoard = <LeaderBoard>[];
+      json['leaderBoard'].forEach((v) {
+        leaderBoard!.add(new LeaderBoard.fromJson(v));
+      });
+    }
+    if (json['ketentuanHadiah'] != null) {
+      ketentuanHadiah = <KetentuanHadiah>[];
+      json['ketentuanHadiah'].forEach((v) {
+        ketentuanHadiah!.add(new KetentuanHadiah.fromJson(v));
+      });
+    }
+    if (json['hadiahPemenang'] != null) {
+      hadiahPemenang = <HadiahPemenang>[];
+      json['hadiahPemenang'].forEach((v) {
+        hadiahPemenang!.add(new HadiahPemenang.fromJson(v));
+      });
+    }
+    if (json['bannerSearch'] != null) {
+      bannerSearch = <BannerSearch>[];
+      json['bannerSearch'].forEach((v) {
+        bannerSearch!.add(new BannerSearch.fromJson(v));
+      });
+    }
   }
+}
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['mediaEndpoint'] = mediaEndpoint;
-    return data;
+class Metrik {
+  bool? aktivitas;
+  bool? interaksi;
+  List<AktivitasAkun>? aktivitasAkun;
+  List<InteraksiKonten>? interaksiKonten;
+
+  Metrik({this.aktivitas, this.interaksi, this.aktivitasAkun, this.interaksiKonten});
+
+  Metrik.fromJson(Map<String, dynamic> json) {
+    aktivitas = json['Aktivitas'];
+    interaksi = json['Interaksi'];
+    if (json['AktivitasAkun'] != null) {
+      aktivitasAkun = <AktivitasAkun>[];
+      json['AktivitasAkun'].forEach((v) {
+        aktivitasAkun!.add(new AktivitasAkun.fromJson(v));
+      });
+    }
+    if (json['InteraksiKonten'] != null) {
+      interaksiKonten = <InteraksiKonten>[];
+      json['InteraksiKonten'].forEach((v) {
+        interaksiKonten!.add(InteraksiKonten.fromJson(v));
+      });
+    }
+  }
+}
+
+class AktivitasAkun {
+  int? referal;
+  int? ikuti;
+
+  AktivitasAkun({this.referal, this.ikuti});
+
+  AktivitasAkun.fromJson(Map<String, dynamic> json) {
+    referal = json['Referal'];
+    ikuti = json['Ikuti'];
+  }
+}
+
+class InteraksiKonten {
+  String? tagar;
+  List<BuatKonten>? buatKonten;
+  List<BuatKonten>? suka;
+  List<Tonton>? tonton;
+
+  InteraksiKonten({this.tagar, this.buatKonten, this.suka, this.tonton});
+
+  InteraksiKonten.fromJson(Map<String, dynamic> json) {
+    tagar = json['tagar'];
+    if (json['buatKonten'] != null) {
+      buatKonten = <BuatKonten>[];
+      json['buatKonten'].forEach((v) {
+        buatKonten!.add(new BuatKonten.fromJson(v));
+      });
+    }
+    if (json['suka'] != null) {
+      suka = <BuatKonten>[];
+      json['suka'].forEach((v) {
+        suka!.add(new BuatKonten.fromJson(v));
+      });
+    }
+    if (json['tonton'] != null) {
+      tonton = <Tonton>[];
+      json['tonton'].forEach((v) {
+        tonton!.add(new Tonton.fromJson(v));
+      });
+    }
+  }
+}
+
+class BuatKonten {
+  int? hyppeVid;
+  int? hyppePic;
+  int? hyppeDiary;
+
+  BuatKonten({this.hyppeVid, this.hyppePic, this.hyppeDiary});
+
+  BuatKonten.fromJson(Map<String, dynamic> json) {
+    hyppeVid = json['HyppeVid'];
+    hyppePic = json['HyppePic'];
+    hyppeDiary = json['HyppeDiary'];
+  }
+}
+
+class Tonton {
+  int? hyppeVid;
+  int? hyppeDiary;
+
+  Tonton({this.hyppeVid, this.hyppeDiary});
+
+  Tonton.fromJson(Map<String, dynamic> json) {
+    hyppeVid = json['HyppeVid'];
+    hyppeDiary = json['HyppeDiary'];
+  }
+}
+
+class Peserta {
+  String? tipeAkunTerverikasi;
+  String? caraGabung;
+  List<JenisKelamin>? jenisKelamin;
+  List<String>? lokasiPengguna;
+
+  Peserta({
+    this.tipeAkunTerverikasi,
+    this.caraGabung,
+    this.jenisKelamin,
+    this.lokasiPengguna,
+  });
+
+  Peserta.fromJson(Map<String, dynamic> json) {
+    tipeAkunTerverikasi = json['tipeAkunTerverikasi'];
+    caraGabung = json['caraGabung'];
+    if (json['jenisKelamin'] != null) {
+      jenisKelamin = <JenisKelamin>[];
+      json['jenisKelamin'].forEach((v) {
+        jenisKelamin!.add(new JenisKelamin.fromJson(v));
+      });
+    }
+    lokasiPengguna = json['lokasiPengguna'].cast<String>();
+  }
+}
+
+class JenisKelamin {
+  String? lAKILAKI;
+  String? pEREMPUAN;
+  String? oTHER;
+
+  JenisKelamin({this.lAKILAKI, this.pEREMPUAN, this.oTHER});
+
+  JenisKelamin.fromJson(Map<String, dynamic> json) {
+    lAKILAKI = json['LAKI-LAKI'];
+    pEREMPUAN = json['PEREMPUAN'];
+    oTHER = json['OTHER'];
+  }
+}
+
+class LeaderBoard {
+  bool? tampilBadge;
+  int? height;
+  int? weight;
+  int? maxSize;
+  int? minSize;
+  String? warnaBackground;
+  String? formatFile;
+  String? bannerLeaderboard;
+
+  LeaderBoard({this.tampilBadge, this.height, this.weight, this.maxSize, this.minSize, this.warnaBackground, this.formatFile, this.bannerLeaderboard});
+
+  LeaderBoard.fromJson(Map<String, dynamic> json) {
+    tampilBadge = json['tampilBadge'];
+    height = json['Height'];
+    weight = json['Weight'];
+    maxSize = json['maxSize'];
+    minSize = json['minSize'];
+    warnaBackground = json['warnaBackground'];
+    formatFile = json['formatFile'];
+    bannerLeaderboard = json['bannerLeaderboard'];
+  }
+}
+
+class KetentuanHadiah {
+  bool? badgePemenang;
+  int? height;
+  int? weight;
+  int? maxSize;
+  int? minSize;
+  String? formatFile;
+  List<Badge>? badge;
+
+  KetentuanHadiah({this.badgePemenang, this.height, this.weight, this.maxSize, this.minSize, this.formatFile, this.badge});
+
+  KetentuanHadiah.fromJson(Map<String, dynamic> json) {
+    badgePemenang = json['badgePemenang'];
+    height = json['Height'];
+    weight = json['Weight'];
+    maxSize = json['maxSize'];
+    minSize = json['minSize'];
+    formatFile = json['formatFile'];
+    if (json['badge'] != null) {
+      badge = <Badge>[];
+      json['badge'].forEach((v) {
+        badge!.add(new Badge.fromJson(v));
+      });
+    }
+  }
+}
+
+class Badge {
+  String? juara1;
+  String? juara2;
+  String? juara3;
+
+  Badge({this.juara1, this.juara2, this.juara3});
+
+  Badge.fromJson(Map<String, dynamic> json) {
+    juara1 = json['juara1'];
+    juara2 = json['juara2'];
+    juara3 = json['juara3'];
+  }
+}
+
+class HadiahPemenang {
+  String? currency;
+  int? juara1;
+  int? juara2;
+  int? juara3;
+
+  HadiahPemenang({this.currency, this.juara1, this.juara2, this.juara3});
+
+  HadiahPemenang.fromJson(Map<String, dynamic> json) {
+    currency = json['currency'];
+    juara1 = json['juara1'];
+    juara2 = json['juara2'];
+    juara3 = json['juara3'];
+  }
+}
+
+class BannerSearch {
+  int? height;
+  int? weight;
+  int? maxSize;
+  int? minSize;
+  String? formatFile;
+  String? image;
+
+  BannerSearch({this.height, this.weight, this.maxSize, this.minSize, this.formatFile, this.image});
+
+  BannerSearch.fromJson(Map<String, dynamic> json) {
+    height = json['Height'];
+    weight = json['Weight'];
+    maxSize = json['maxSize'];
+    minSize = json['minSize'];
+    formatFile = json['formatFile'];
+    image = json['image'];
+  }
+}
+
+class SubChallenges {
+  int? tahun;
+  List<DetailSub>? detail;
+
+  SubChallenges({this.tahun, this.detail});
+
+  SubChallenges.fromJson(Map<String, dynamic> json) {
+    tahun = json['tahun'];
+    if (json['detail'] != null) {
+      detail = <DetailSub>[];
+      json['detail'].forEach((v) {
+        detail!.add(new DetailSub.fromJson(v));
+      });
+    }
+  }
+}
+
+class DetailSub {
+  int? bulan;
+  int? tahun;
+  List<Detail>? detail;
+
+  DetailSub({this.bulan, this.tahun, this.detail});
+
+  DetailSub.fromJson(Map<String, dynamic> json) {
+    bulan = json['bulan'];
+    tahun = json['tahun'];
+    if (json['detail'] != null) {
+      detail = <Detail>[];
+      json['detail'].forEach((v) {
+        detail!.add(new Detail.fromJson(v));
+      });
+    }
+  }
+}
+
+class Detail {
+  String? sId;
+  String? challengeId;
+  String? startDatetime;
+  String? endDatetime;
+  bool? isActive;
+  int? session;
+  int? tahun;
+  int? bulan;
+
+  Detail({this.sId, this.challengeId, this.startDatetime, this.endDatetime, this.isActive, this.session, this.tahun, this.bulan});
+
+  Detail.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    challengeId = json['challengeId'];
+    startDatetime = json['startDatetime'];
+    endDatetime = json['endDatetime'];
+    isActive = json['isActive'];
+    session = json['session'];
+    tahun = json['tahun'];
+    bulan = json['bulan'];
   }
 }

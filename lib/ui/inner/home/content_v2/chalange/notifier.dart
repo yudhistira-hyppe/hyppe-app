@@ -101,12 +101,12 @@ class ChallangeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future initLeaderboardDetail(BuildContext context) async {
+  Future initLeaderboardDetail(BuildContext context, String id) async {
     print("=========asdasdasd");
     isLoadingLeaderboard = true;
     notifyListeners();
     checkInet(context);
-    await getLeaderBoard(context, bannerSearchData[0].sId ?? '');
+    await getLeaderBoard(context, id);
     isLoadingLeaderboard = false;
     notifyListeners();
   }

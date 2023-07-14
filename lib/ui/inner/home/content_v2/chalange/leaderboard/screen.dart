@@ -7,7 +7,6 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -92,7 +91,9 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                 color: kHyppeTextLightPrimary,
                 size: 16,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Routing().moveBack();
+              },
             ),
             title: Text(
               '${lang?.challengePage}',
@@ -106,7 +107,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
             actions: [
               IconButton(
                 onPressed: () {
-                  Routing().move(Routes.chalengeCollectionBadge);
+                  Routing().move(Routes.chalengeAchievement);
                 },
                 icon: const CustomIconWidget(
                   iconData: "${AssetPath.vectorPath}achievement.svg",
