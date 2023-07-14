@@ -152,7 +152,7 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                                             featureType: FeatureType.other,
                                             // haveStory: notifier.chatData[index].isHaveStory ?? false,
                                             haveStory: false,
-                                            child: ClipOval(
+                                            // child: ClipOval(
                                               child: CustomProfileImage(
                                                 forStory: false,
                                                 following: true,
@@ -163,8 +163,9 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                                                 imageUrl: System().showUserPicture(discussData?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
                                                 height: 50 * SizeConfig.scaleDiagonal,
                                                 width: 50 * SizeConfig.scaleDiagonal,
+                                                badge: discussData?.senderOrReceiverInfo?.urluserBadges?[0],
                                               ),
-                                            ),
+                                            // ),
                                           ),
                                           title: CustomTextWidget(
                                             // "Demo user",

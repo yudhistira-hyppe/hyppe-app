@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:hyppe/core/config/env.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 
@@ -322,12 +325,14 @@ class SenderOrReceiverInfo {
   Avatar? avatar;
   String? email;
   String? username;
+  List<UserBadgeModel>? urluserBadges;
 
   SenderOrReceiverInfo({
     this.fullName,
     this.avatar,
     this.email,
     this.username,
+    this.urluserBadges,
   });
 
   SenderOrReceiverInfo.fromJson(Map<String, dynamic> json) {
@@ -335,6 +340,12 @@ class SenderOrReceiverInfo {
     avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
     email = json['email'];
     username = json['username'];
+    if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
+			urluserBadges = <UserBadgeModel>[];
+			json['urluserBadge'].forEach((v) {
+        urluserBadges!.add(UserBadgeModel.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
