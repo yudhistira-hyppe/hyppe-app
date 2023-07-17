@@ -78,6 +78,11 @@ class PreviewDiaryNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  void setAdsData(int index, AdsData adsData){
+    diaryData?[index].adsData = adsData;
+    notifyListeners();
+  }
+
   double scaleDiary(BuildContext context) {
     final _size = MediaQuery.of(context).size;
     const _appBar = 50;

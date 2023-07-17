@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/asset_path.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
+import '../../../../core/constants/utils.dart';
 import '../../../../initial/hyppe/translate_v2.dart';
+import '../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../../constant/widget/custom_icon_widget.dart';
 import '../../../constant/widget/custom_loading.dart';
 import '../../../constant/widget/custom_spacer.dart';
 import '../../../constant/widget/custom_text_widget.dart';
 
 class AdsInBetween extends StatefulWidget {
-  const AdsInBetween({Key? key}) : super(key: key);
+  final AdsData data;
+  const AdsInBetween({Key? key, required this.data}) : super(key: key);
 
   @override
   State<AdsInBetween> createState() => _AdsInBetweenState();
@@ -23,6 +27,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
 
   @override
   Widget build(BuildContext context) {
+    final language = context.read<TranslateNotifierV2>().translate;
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       child: Column(
@@ -51,15 +56,30 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                     Expanded(child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomTextWidget(textToDisplay: 'nike.offical', textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, ),),
-                        CustomTextWidget(textToDisplay: 'Bersponsor', textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, ),)
+                        CustomTextWidget(textToDisplay: widget.data.fullName ?? '', textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, ),),
+                        CustomTextWidget(textToDisplay: language.sponsored ?? 'Sponsored', textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, ),)
                       ],
                     ),),
                     twelvePx,
-                    const CustomIconWidget(
-                      defaultColor: false,
-                      iconData: '${AssetPath.vectorPath}more.svg',
-                      color: kHyppeTextLightPrimary,
+                    GestureDetector(
+                      onTap: (){
+                        ShowBottomSheet().onReportContent(
+                          context,
+                          adsData: widget.data,
+                          type: adsPopUp,
+                          postData: null,
+                          onUpdate: () {
+                            setState(() {
+                              widget.data.isReport = true;
+                            });
+                          },
+                        );
+                      },
+                      child: const CustomIconWidget(
+                        defaultColor: false,
+                        iconData: '${AssetPath.vectorPath}more.svg',
+                        color: kHyppeTextLightPrimary,
+                      ),
                     ),
                   ],
                 ),
@@ -76,8 +96,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
 
                         },
                         child: Builder(builder: (context) {
-                          final notifier = context.read<TranslateNotifierV2>();
-                          final learnMore = (notifier.translate.learnMore ?? 'Learn More');
+                          final learnMore = (language.learnMore ?? 'Learn More');
                           return Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.only(top: 10, bottom: 10),
@@ -94,11 +113,12 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                         }),
                       ),
                       twelvePx,
+                      if(widget.data.adsDescription != null)
                       Builder(
                         builder: (context) {
                           final notifier = context.read<TranslateNotifierV2>();
                           return CustomDescContent(
-                              desc: 'Embrace the iconic Swoosh logo and make a statement wherever you go. Choose Nike, choose excellence. Shop now and step up your shoe game with Nike.',
+                              desc: widget.data.adsDescription!,
                               trimLines: 2,
                               textAlign: TextAlign.justify,
                               seeLess: ' ${notifier.translate.seeLess}',

@@ -326,6 +326,7 @@ class ShowGeneralDialog {
   }
 
   static Future adsPopUpImage(BuildContext context, AdsData data) async {
+    SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, context.getCurrentDate());
     try {
       await showGeneralDialog(
         //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
@@ -345,6 +346,7 @@ class ShowGeneralDialog {
   }
 
   static Future adsPopUpVideo(BuildContext context, AdsData data, String auth) async {
+    SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, context.getCurrentDate());
     try {
       await showGeneralDialog(
         //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp

@@ -6,6 +6,7 @@ import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -116,6 +117,11 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     } catch (e) {
       'load pic list: ERROR: $e'.logger();
     }
+  }
+
+  void setAdsData(int index, AdsData adsData){
+    pic?[index].adsData = adsData;
+    notifyListeners();
   }
 
   void scrollListener(BuildContext context) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 
@@ -30,6 +31,20 @@ class VideoNotifier with ChangeNotifier{
     notifyListeners();
   }
 
+  int _adsCurrentPosition = 0;
+  int get adsCurrentPosition => _adsCurrentPosition;
+  set adsCurrentPosition(int value){
+    _adsCurrentPosition = value;
+    notifyListeners();
+  }
+
+  int _adsCurrentPositionText = 0;
+  int get adsCurrentPositionText => _adsCurrentPositionText;
+  set adsCurrentPositionText(int value){
+    _adsCurrentPositionText = value;
+    notifyListeners();
+  }
+
   int _secondsSkip = 0;
   int get secondsSkip => _secondsSkip;
   set secondsSkip (int value){
@@ -51,10 +66,21 @@ class VideoNotifier with ChangeNotifier{
     notifyListeners();
   }
 
+  int _adsVideoDuration = 0;
+  int get adsVideoDuration => _adsVideoDuration;
+  set adsVideoDuration(int value){
+    _adsVideoDuration = value;
+    notifyListeners();
+  }
+
   initVideo(){
     _hasShowedAds = false;
     _isFullScreen = false;
   }
+
+  AliPlayerView? adsAliPlayerView;
+  FlutterAliplayer? adsAliplayer;
+
 
   Future getAdsVideo(BuildContext context, int videoDuration) async {
     try {

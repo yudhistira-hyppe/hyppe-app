@@ -14,6 +14,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -675,7 +676,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     fAliplayer?.stop();
                   }
                   Future.delayed(const Duration(milliseconds: 100), () {
-                    System().increaseViewCount2(context, notifier.pic?[index] ?? ContentData(), check: false);
+                    System().increaseViewCount2(context, notifier.pic?[index] ?? ContentData(), check: false).whenComplete(() async{
+                      final count = context.getAdsCount();
+                      if(count == 5){
+                        final adsData = await context.getPopUpAds();
+                        notifier.setAdsData(index, adsData);
+                      }
+                    });
                   });
                   if (notifier.pic?[index].certified ?? false) {
                     System().block(context);

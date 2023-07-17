@@ -10,6 +10,7 @@ import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insight.dart';
 
+import '../../advertising/ads_video_data.dart';
 import '../../music/music.dart';
 
 class StoriesGroup {
@@ -193,6 +194,7 @@ class ContentData {
   FlutterAliplayer? fAliplayer;
   FlutterAliplayer? fAliplayerAds;
   bool? adsShowing = false;
+  AdsData? adsData;
 
   ContentData(
       {this.metadata,

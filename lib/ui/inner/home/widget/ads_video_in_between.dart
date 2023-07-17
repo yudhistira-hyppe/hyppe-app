@@ -17,10 +17,11 @@ import '../../../../core/config/ali_config.dart';
 import '../../../../core/constants/asset_path.dart';
 import '../../../../core/constants/shared_preference_keys.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
+import '../../../../core/constants/utils.dart';
 import '../../../../core/models/collection/posts/content_v2/content_data.dart';
 import '../../../../core/services/shared_preference.dart';
-import '../../../../core/services/system.dart';
 import '../../../../initial/hyppe/translate_v2.dart';
+import '../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../../constant/widget/custom_icon_widget.dart';
 import '../../../constant/widget/custom_loading.dart';
 import '../../../constant/widget/custom_spacer.dart';
@@ -74,7 +75,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
     FirebaseCrashlytics.instance.setCustomKey('layout', 'AdsVideoBetween');
     email = SharedPreference().readStorage(SpKeys.email);
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
-    // stopwatch = new Stopwatch()..start();
+
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
@@ -325,6 +326,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
 
   @override
   Widget build(BuildContext context) {
+    final language = context.read<TranslateNotifierV2>().translate;
     return VisibilityDetector(
       key: Key(widget.data?.videoId ?? 'ads'),
       onVisibilityChanged: (info) {
@@ -379,14 +381,14 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomTextWidget(
-                              textToDisplay: 'nike.offical',
+                              textToDisplay: widget.data?.fullName ?? '',
                               textStyle:
                                   context.getTextTheme().bodyText1?.copyWith(
                                         fontWeight: FontWeight.w700,
                                       ),
                             ),
                             CustomTextWidget(
-                              textToDisplay: 'Bersponsor',
+                              textToDisplay: language.sponsored ?? 'Sponsored',
                               textStyle:
                                   context.getTextTheme().bodyText2?.copyWith(
                                         fontWeight: FontWeight.w400,
@@ -396,10 +398,25 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                         ),
                       ),
                       twelvePx,
-                      const CustomIconWidget(
-                        defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}more.svg',
-                        color: kHyppeTextLightPrimary,
+                      GestureDetector(
+                        onTap: (){
+                          ShowBottomSheet().onReportContent(
+                            context,
+                            adsData: widget.data,
+                            type: adsPopUp,
+                            postData: null,
+                            onUpdate: () {
+                              setState(() {
+                                widget.data?.isReport = true;
+                              });
+                            },
+                          );
+                        },
+                        child: const CustomIconWidget(
+                          defaultColor: false,
+                          iconData: '${AssetPath.vectorPath}more.svg',
+                          color: kHyppeTextLightPrimary,
+                        ),
                       ),
                     ],
                   ),
@@ -419,10 +436,8 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                         InkWell(
                           onTap: () async {},
                           child: Builder(builder: (context) {
-                            final notifier =
-                                context.read<TranslateNotifierV2>();
                             final learnMore =
-                                (notifier.translate.learnMore ?? 'Learn More');
+                                (language.learnMore ?? 'Learn More');
                             return Container(
                               alignment: Alignment.center,
                               padding:
@@ -448,11 +463,11 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                           }),
                         ),
                         twelvePx,
+                        if(widget.data?.adsDescription != null)
                         Builder(builder: (context) {
                           final notifier = context.read<TranslateNotifierV2>();
                           return CustomDescContent(
-                              desc:
-                                  'Embrace the iconic Swoosh logo and make a statement wherever you go. Choose Nike, choose excellence. Shop now and step up your shoe game with Nike.',
+                              desc: widget.data?.adsDescription ?? '',
                               trimLines: 2,
                               textAlign: TextAlign.justify,
                               seeLess: ' ${notifier.translate.seeLess}',

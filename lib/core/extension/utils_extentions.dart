@@ -10,8 +10,11 @@ import 'package:provider/provider.dart';
 
 import '../../initial/hyppe/translate_v2.dart';
 import '../../ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import '../bloc/ads_video/bloc.dart';
+import '../bloc/ads_video/state.dart';
 import '../constants/shared_preference_keys.dart';
 import '../constants/themes/hyppe_colors.dart';
+import '../models/collection/advertising/ads_video_data.dart';
 import '../models/collection/localization_v2/localization_model.dart';
 import '../services/shared_preference.dart';
 import '../services/system.dart';
@@ -72,6 +75,23 @@ extension ContextScreen on BuildContext {
     } else {
       setAdsCount(0);
     }
+  }
+
+  Future<AdsData> getPopUpAds() async {
+    var data = AdsData();
+    try {
+      final notifier = AdsDataBloc();
+      await notifier.adsVideoBlocV2(this, AdsType.popup);
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        // print('data : ${fetch.data.toString()}');
+        data = fetch.data?.data;
+      }
+    } catch (e) {
+      'Failed to fetch ads data $e'.logger();
+    }
+    return data;
   }
 
   String getCurrentDate() {

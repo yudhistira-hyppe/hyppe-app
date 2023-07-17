@@ -673,7 +673,13 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                   fAliplayer?.stop();
                   Future.delayed(const Duration(milliseconds: 700), () {
                     start(notifier.diaryData?[index] ?? ContentData());
-                    System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData(), check: false);
+                    System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData(), check: false).whenComplete(() async{
+                      final count = context.getAdsCount();
+                      if(count == 5){
+                        final adsData = await context.getPopUpAds();
+                        notifier.setAdsData(index, adsData);
+                      }
+                    });
                   });
                   if (notifier.diaryData?[index].certified ?? false) {
                     System().block(context);

@@ -1500,10 +1500,11 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
 
   Future onFullscreen(VideoNotifier notifier) async{
     int changeValue;
-    changeValue = _currentPosition + 1000;
+    changeValue = _currentPosition;
     if (changeValue > _videoDuration) {
       changeValue = _videoDuration;
     }
+    print('change Value : $changeValue');
     if (widget.orientation == Orientation.portrait) {
       print('pause here 1');
       fAliplayer?.pause();
@@ -1524,10 +1525,23 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
       VideoIndicator value = await Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
           builder: (_) => VideoFullscreenPage(
             aliPlayerView: aliPlayerView!,
-            adsPlayer: adsPlayerPage!,
+            thumbnail: (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
+            // adsPlayer: adsPlayerPage!,
             fAliplayer: fAliplayer,
             data: widget.data ?? ContentData(),
             onClose: () {
+              setState(() {
+                isPlay = true;
+
+                adsData = null;
+                if(widget.onShowAds != null){
+                  widget.onShowAds!(adsData);
+                }
+
+              });
+              notifier.hasShowedAds = true;
+              notifier.tempAdsData = null;
+              notifier.isShowingAds = false;
               // Routing().moveBack();
             },
             slider: _buildContentWidget(context, widget.orientation, notifier),
@@ -1609,6 +1623,46 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         setState(() {
           _currentPosition = _videoDuration;
         });
+      });
+
+      fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
+        if (mounted) {
+          try {
+            setState(() {
+              _loadingPercent = 0;
+              _showLoading = true;
+            });
+          } catch (e) {
+            print('error setOnLoadingStatusListener: $e');
+          }
+        }
+      }, loadingProgress: (percent, netSpeed, playerId) {
+        if (percent == 100) {
+          _showLoading = false;
+        }
+        try {
+          if (mounted) {
+            setState(() {
+              _loadingPercent = percent;
+            });
+          } else {
+            _loadingPercent = percent;
+          }
+        } catch (e) {
+          print('error loadingProgress: $e');
+        }
+      }, loadingEnd: (playerId) {
+        try {
+          if (mounted) {
+            setState(() {
+              _showLoading = false;
+            });
+          } else {
+            _showLoading = false;
+          }
+        } catch (e) {
+          print('error loadingEnd: $e');
+        }
       });
       // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
       // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
