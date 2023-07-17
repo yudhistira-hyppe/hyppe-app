@@ -111,6 +111,8 @@ class OtherProfileTop extends StatelessWidget {
                         width: 64 * SizeConfig.scaleDiagonal,
                         height: 64 * SizeConfig.scaleDiagonal,
                         imageUrl: System().showUserPicture(profile?.avatar?.mediaEndpoint),
+                        badge: profile?.urluserBadge,
+                        allwaysUseBadgePadding: true,
                         // imageUrl: notifier.displayPhotoProfile(),
                       ),
                     ),

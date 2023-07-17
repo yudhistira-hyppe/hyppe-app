@@ -157,6 +157,7 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                                   height: 40,
                                   onTap: () {},
                                   imageUrl: System().showUserPicture(notifierTag.listTagPeople[index].avatar == null ? '' : notifierTag.listTagPeople[index].avatar?.mediaEndpoint),
+                                  badge: notifierTag.listTagPeople[index].urluserBadge,
                                   following: true,
                                   onFollow: () {},
                                 ),

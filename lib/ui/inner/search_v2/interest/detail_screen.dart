@@ -82,6 +82,7 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
     FirebaseCrashlytics.instance.setCustomKey('layout', 'InterestDetailScreen');
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
     final index = notifier.listInterest?.indexOf(widget.data) ?? 0;
+    notifier.initDetailInterest();
     _tabController = TabController(length: 6, vsync: this, initialIndex: index);
     _tabController.addListener(() {
       notifier.tabIndex = _tabController.index;
@@ -105,18 +106,25 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
     return Consumer<SearchNotifier>(builder: (context, notifier, _){
       return Scaffold(
           appBar: AppBar(
-            leading: CustomIconButtonWidget(
-              onPressed: () => notifier.backFromSearchMore(),
-              defaultColor: false,
-              iconData: "${AssetPath.vectorPath}back-arrow.svg",
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-            title: CustomTextWidget(
-              textToDisplay: notifier.language.moreContents ?? 'More Contents',
-              textStyle: context
-                  .getTextTheme()
-                  .bodyText1
-                  ?.copyWith(fontWeight: FontWeight.w700),
+            automaticallyImplyLeading: false,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CustomIconButtonWidget(
+                  onPressed: () => notifier.backFromSearchMore(),
+                  defaultColor: false,
+                  iconData: "${AssetPath.vectorPath}back-arrow.svg",
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                CustomTextWidget(
+                  textToDisplay: notifier.language.moreContents ?? 'More Contents',
+                  textStyle: context
+                      .getTextTheme()
+                      .bodyText1
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ],
             ),
           ),
           body: Column(
@@ -142,7 +150,7 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
                 child: Padding(
                   padding: const EdgeInsets.only(top: 0.0),
                   child: TabBarView(
-                    // physics: const NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     controller: _tabController,
                     children: (notifier.listInterest ?? []).map((e) {
 

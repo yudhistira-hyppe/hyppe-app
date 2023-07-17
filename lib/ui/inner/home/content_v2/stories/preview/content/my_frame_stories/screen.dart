@@ -38,6 +38,7 @@ class MyFrameStory extends StatelessWidget {
                     listStory: notifier.myStoryGroup[email],
                     imageUrlKey: home.profileImageKey,
                     imageUrl: System().showUserPicture(home.profileImage),
+                    badge: home.profileBadge,
                   )
                 : const CustomShimmer(
                     radius: 50,

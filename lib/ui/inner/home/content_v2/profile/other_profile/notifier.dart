@@ -590,6 +590,7 @@ class OtherProfileNotifier with ChangeNotifier {
                 usernameReceiver: displayUserName(),
                 fullnameReceiver: displayFullName() ?? '',
                 photoReceiver: displayPhotoProfile() ?? '',
+                badgeReceiver: _selfProfile.user.profile?.urluserBadge,
                 disqusID: '',
               ))
           .then((value) {});

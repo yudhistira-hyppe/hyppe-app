@@ -1,4 +1,5 @@
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/core/services/system.dart';
 
 class InteractiveFollow {
@@ -13,6 +14,7 @@ class InteractiveFollow {
   String? senderOrReceiver;
   String? email;
   String? username;
+  UserBadgeModel? urluserBadge;
 
   InteractiveFollow({
     this.createdAt,
@@ -26,6 +28,7 @@ class InteractiveFollow {
     this.senderOrReceiver,
     this.email,
     this.username,
+    this.urluserBadge,
   });
 
   InteractiveFollow.fromJson(Map<String, dynamic> json) {
@@ -40,6 +43,13 @@ class InteractiveFollow {
     senderOrReceiver = json['senderOrReceiver'];
     email = json['email'];
     username = json['username'];
+    if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
+      if (json['urluserBadge'] is List) {
+        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge'].first);
+      } else {
+        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
+      }
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -61,6 +71,9 @@ class InteractiveFollow {
     data['senderOrReceiver'] = senderOrReceiver;
     data['email'] = email;
     data['username'] = username;
+    if (urluserBadge != null) {
+      data['urluserBadge'] = urluserBadge?.toJson();
+    }
     return data;
   }
 
@@ -148,12 +161,14 @@ class SenderOrReceiverInfo {
   String? username;
   String? email;
   Avatar? avatar;
+  UserBadgeModel? urluserBadge;
 
   SenderOrReceiverInfo({
     this.email,
     this.avatar,
     this.fullname,
     this.username,
+    this.urluserBadge,
   });
 
   SenderOrReceiverInfo.fromJson(Map<String, dynamic> json) {
@@ -161,6 +176,10 @@ class SenderOrReceiverInfo {
     fullname = json['fullname'];
     username = json['username'];
     avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
+    urluserBadge =
+        json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty
+            ? UserBadgeModel.fromJson(json['urluserBadge'])
+            : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -170,6 +189,9 @@ class SenderOrReceiverInfo {
     data['username'] = username;
     if (avatar != null) {
       data['avatar'] = avatar?.toJson();
+    }
+    if (urluserBadge != null) {
+      data['urluserBadge'] = urluserBadge?.toJson();
     }
     return data;
   }

@@ -13,6 +13,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/SqliteData.dart';
@@ -45,6 +46,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 
 import '../../../core/bloc/posts_v2/bloc.dart';
+import '../search_v2/notifier.dart';
 
 class HomeNotifier with ChangeNotifier {
   //for visibilty
@@ -90,6 +92,9 @@ class HomeNotifier with ChangeNotifier {
   String _profileImage = '';
   String get profileImage => _profileImage;
 
+  UserBadgeModel? _profileBadge;
+  UserBadgeModel? get profileBadge => _profileBadge;
+
   String _profileImageKey = '';
   String get profileImageKey => _profileImageKey;
 
@@ -123,6 +128,11 @@ class HomeNotifier with ChangeNotifier {
 
   set profileImage(String url) {
     _profileImage = url;
+    notifyListeners();
+  }
+
+  set profileBadge(UserBadgeModel? badge) {
+    _profileBadge = badge;
     notifyListeners();
   }
 
@@ -675,7 +685,7 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void onReport(BuildContext context, {required String postID, required String content, bool? isReport}) {
+  void onReport(BuildContext context, {required String postID, required String content, bool? isReport, String? key}) {
     ContentData? _updatedData;
     ContentData? _updatedData2;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
@@ -701,6 +711,11 @@ class HomeNotifier with ChangeNotifier {
     diary.diaryData?.removeWhere((element) => element.postID == postID);
     pic.pic?.removeWhere((element) => element.postID == postID);
     stories.peopleStoriesData?.removeWhere((element) => element.postID == postID);
+
+    if(key != null){
+      final search = context.read<SearchNotifier>();
+      search.removeInterestItem(key, postID);
+    }
 
     notifyListeners();
   }

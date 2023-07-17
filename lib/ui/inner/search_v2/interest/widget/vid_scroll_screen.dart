@@ -4,11 +4,9 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:provider/provider.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../../app.dart';
@@ -61,8 +59,6 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
   bool isPause = false;
   bool isloading = false;
   int _curIdx = -1;
-  int _lastCurIndex = -1;
-  int _cardIndex = 0;
 
   bool toComment = false;
 
@@ -71,11 +67,11 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
 
   Map<int, FlutterAliplayer> dataAli = {};
 
-  final ItemScrollController itemScrollController = ItemScrollController();
-  final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
-
-  /// Listener that reports the position of items when the list is scrolled.
-  final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
+  // final ItemScrollController itemScrollController = ItemScrollController();
+  // final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
+  //
+  // /// Listener that reports the position of items when the list is scrolled.
+  // final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
 
   @override
   void initState() {
@@ -83,22 +79,6 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ScrollVid');
     email = SharedPreference().readStorage(SpKeys.email);
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
-    final vidData = notifier.mapDetailHashtag[widget.interestKey]?.vid;
-    var index = 0;
-    var lastIndex = 0;
-    itemPositionsListener.itemPositions.addListener(() async {
-      index = itemPositionsListener.itemPositions.value.first.index;
-      if (lastIndex != index) {
-        if (index == vidData!.length - 2) {
-          print("ini reload harusnya");
-          if (!notifier.hasNext) {
-            notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interestKey, reload: false, hyppe: HyppeType.HyppeVid);
-
-          }
-        }
-      }
-      lastIndex = index;
-    });
     checkInet(notifier);
 
     super.initState();
@@ -108,7 +88,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
     var inet = await System().checkConnections();
     if (!inet) {
       ShowGeneralDialog.showToastAlert(
-        context,
+        Routing.navigatorKey.currentContext ?? context,
         notifier.language.internetConnectionLost ?? ' Error',
             () async {
           Routing().moveBack();
@@ -154,7 +134,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
   void didPopNext() {
     print("======= didPopNext dari diary");
     final notifier = context.read<SearchNotifier>();
-    final vidData = notifier.mapDetailHashtag[widget.interestKey]?.vid;
+    final vidData = notifier.interestContents[widget.interestKey]?.vid;
     if (_curIdx != -1) {
       vidData?[_curIdx].fAliplayer?.play();
     }
@@ -173,7 +153,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
   void didPushNext() {
     print("========= didPushNext dari diary");
     final notifier = context.read<SearchNotifier>();
-    final vidData = notifier.mapDetailHashtag[widget.interestKey]?.vid;
+    final vidData = notifier.interestContents[widget.interestKey]?.vid;
     if (_curIdx != -1) {
       vidData?[_curIdx].fAliplayer?.pause();
     }
@@ -184,90 +164,35 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    // final vidNotifier = context.watch<ScrollVidNotifier>();
-    // final error = context.select((ErrorService value) => value.getError(ErrorType.vid));
-    // final likeNotifier = Provider.of<LikeNotifier>(context, listen: false);
 
-    return Scaffold(
-      backgroundColor: kHyppeLightSurface,
-      body: WillPopScope(
-        onWillPop: () async {
-          Navigator.pop(context, '$_cardIndex');
-          return false;
-        },
-        child: Consumer<SearchNotifier>(
-          builder: (_, vidNotifier, __){
-            final vidData = vidNotifier.mapDetailHashtag[widget.interestKey]?.vid;
-            return SafeArea(
-              child: SizedBox(
+    return Consumer<SearchNotifier>(
+      builder: (_, vidNotifier, __){
+        final vidData = vidNotifier.interestContents[widget.interestKey]?.vid;
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            (vidData != null)
+                ? Flexible(
+              child: NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (overscroll) {
+                  overscroll.disallowIndicator();
+                  return false;
+                },
                 child: Column(
-                  children: [
-                    (vidData != null)
-                        ? (vidData.isEmpty)
-                        ? const NoResultFound()
-                        : Expanded(
-                      child: RefreshIndicator(
-                        onRefresh: () async {
-                          await vidNotifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interestKey, hyppe: HyppeType.HyppeVid);
-                        },
-                        child: NotificationListener<OverscrollIndicatorNotification>(
-                          onNotification: (overscroll) {
-                            overscroll.disallowIndicator();
-                            return false;
-                          },
-                          child: ScrollablePositionedList.builder(
-                            itemScrollController: itemScrollController,
-                            itemPositionsListener: itemPositionsListener,
-                            scrollOffsetController: scrollOffsetController,
-                            // controller: vidNotifier.pageController,
-                            // onPageChanged: (index) async {
-                            //   print('ScrollVid index : $index');
-                            //   if (index == (vidNotifier.itemCount - 1)) {
-                            //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
-                            //     if (values.isNotEmpty) {
-                            //       vidData = [...(vidData ?? [] as List<ContentData>)] + values;
-                            //     }
-                            //   }
-                            //   // context.read<ScrollVidNotifier>().nextVideo = false;
-                            //   // context.read<ScrollVidNotifier>().initializeVideo = false;
-                            // },
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            shrinkWrap: false,
-                            padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                            itemCount: vidData.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              vidData[index].fAliplayer?.pause();
-                              _lastCurIndex = -1;
-                              return CustomShimmer(
-                                margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
-                                height: context.getHeight() / 8,
-                                width: double.infinity,
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    )
-                        : const AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: CustomShimmer(
-                        height: double.infinity,
-                        width: double.infinity,
-                      ),
-                    ),
-                    vidNotifier.hasNext
-                        ? const SizedBox(
-                      height: 50,
-                      child: CustomLoading(),
-                    )
-                        : Container(),
-                  ],
+                  children: List.generate(vidData.length, (index) => itemVid(vidNotifier, index, vidData)),
                 ),
               ),
-            );
-          },
-        ),
-      ),
+            )
+                : const AspectRatio(
+              aspectRatio: 16 / 9,
+              child: CustomShimmer(
+                height: double.infinity,
+                width: double.infinity,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -283,7 +208,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
       ),
       padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
       margin: const EdgeInsets.only(
-        top: 18,
+        top: 10,
         left: 6,
         right: 6,
       ),
@@ -312,6 +237,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                   musicName: vidData[index].music?.musicTitle ?? '',
                   location: vidData[index].location ?? '',
                   isIdVerified: vidData[index].privacy?.isIdVerified,
+                  badge: vidData[index].urluserBadge,
                 ),
               ),
               if (vidData[index].email != email && (vidData[index].isNewFollowing ?? false))
@@ -344,7 +270,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                 onTap: () {
                   if (vidData[index].email != email) {
                     // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>().reportContent(context, vidData[index] , fAliplayer: vidData[index].fAliplayer);
+                    context.read<PreviewPicNotifier>().reportContent(context, vidData[index] , fAliplayer: vidData[index].fAliplayer, key: widget.interestKey);
                   } else {
                     if (_curIdx != -1) {
                       print('Vid Landing Page: pause $_curIdx');
@@ -375,7 +301,6 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
             onVisibilityChanged: (info) {
               print("visibleFraction: ${info.visibleFraction}");
               if (info.visibleFraction >= 0.6) {
-                _cardIndex = index;
                 if (_curIdx != index) {
                   Future.delayed(const Duration(milliseconds: 400), () {
                     try {

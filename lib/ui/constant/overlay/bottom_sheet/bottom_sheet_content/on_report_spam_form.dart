@@ -15,6 +15,7 @@ class OnReportSpamFormBottomSheet extends StatefulWidget {
   final ContentData? postData;
   final String? type;
   final bool inDetail;
+  final String? keyInt;
   final Function? onUpdate;
 
   const OnReportSpamFormBottomSheet({
@@ -22,6 +23,7 @@ class OnReportSpamFormBottomSheet extends StatefulWidget {
     this.type,
     this.postData,
     this.inDetail = true,
+    this.keyInt,
     this.onUpdate,
   }) : super(key: key);
 
@@ -41,6 +43,7 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
     notifier.initializeData(context);
     notifier.currentReport = '';
     notifier.currentReportDesc = '';
+    notifier.setKey(widget.keyInt ?? '');
 
     super.initState();
   }

@@ -608,6 +608,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                   musicName: notifier.diaryData?[index].music?.musicTitle ?? '',
                   location: notifier.diaryData?[index].location ?? '',
                   isIdVerified: notifier.diaryData?[index].privacy?.isIdVerified,
+                  badge: notifier.diaryData?[index].urluserBadge,
                 ),
               ),
               if (notifier.diaryData?[index].email != email && (notifier.diaryData?[index].isNewFollowing ?? false))

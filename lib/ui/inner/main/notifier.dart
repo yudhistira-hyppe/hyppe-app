@@ -101,6 +101,7 @@ class MainNotifier with ChangeNotifier {
       print("profile?.avatar ${selfProfile.user.profile?.avatar?.imageKey}");
       context.read<SelfProfileNotifier>().user.profile = usersFetch.data;
       context.read<HomeNotifier>().profileImage = context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint ?? '';
+      context.read<HomeNotifier>().profileBadge = context.read<SelfProfileNotifier>().user.profile?.urluserBadge;
       // context.read<HomeNotifier>().profileImageKey = context.read<SelfProfileNotifier>().user.profile?.avatar?.imageKey ?? '';
       context.read<HomeNotifier>().profileImageKey = keyImageCache;
 

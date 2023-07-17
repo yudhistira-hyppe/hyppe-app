@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -15,6 +16,7 @@ class BuildCircleProfile extends StatelessWidget {
   final String? imageUrl;
   final String? imageUrlKey;
   final Map<String, String>? headers;
+  final UserBadgeModel? badge;
 
   const BuildCircleProfile({
     Key? key,
@@ -22,6 +24,7 @@ class BuildCircleProfile extends StatelessWidget {
     this.imageUrl,
     this.listStory,
     this.imageUrlKey,
+    this.badge,
   }) : super(key: key);
 
   @override
@@ -38,16 +41,19 @@ class BuildCircleProfile extends StatelessWidget {
             featureType: FeatureType.story,
             haveStory: listStory?.isNotEmpty ?? false,
             isMy: true,
+            borderRadius: 20,
             child: Padding(
-              padding: const EdgeInsets.all(6.0),
+              padding: const EdgeInsets.all(2.0),
               child: CustomProfileImage(
                 cacheKey: imageUrlKey,
                 following: true,
                 imageUrl: imageUrl,
+                badge: badge,
                 headers: headers,
                 width: SizeWidget.circleDiameterOutside,
                 height: SizeWidget.circleDiameterOutside,
                 forStory: true,
+                allwaysUseBadgePadding: true,
               ),
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 
 class ModelSearchPeople {
   ModelSearchPeople({
@@ -23,6 +24,7 @@ class SearchPeolpleData {
   String? username;
   String? fullName;
   String? email;
+  UserBadgeModel? urluserBadge;
 
   SearchPeolpleData({
     this.id,
@@ -31,6 +33,7 @@ class SearchPeolpleData {
     this.username,
     this.fullName,
     this.email,
+    this.urluserBadge,
   });
 
   factory SearchPeolpleData.createPeopleData(Map<String, dynamic> object) => SearchPeolpleData(
@@ -40,6 +43,12 @@ class SearchPeolpleData {
         username: object['username'],
         fullName: object['fullName'],
         email: object['email'],
+        urluserBadge:
+            object['urluserBadge'] != null && object['urluserBadge'].isNotEmpty
+                ? object['urluserBadge'] is List
+                    ? UserBadgeModel.fromJson(object['urluserBadge'].first)
+                    : UserBadgeModel.fromJson(object['urluserBadge'])
+                : null,
       );
 
   static SearchPeolpleData fromJson(json) => SearchPeolpleData(
@@ -49,6 +58,12 @@ class SearchPeolpleData {
         username: json['username'],
         fullName: json['fullName'],
         email: json['email'],
+        urluserBadge:
+            json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty
+                ? json['urluserBadge'] is List
+                    ? UserBadgeModel.fromJson(json['urluserBadge'].first)
+                    : UserBadgeModel.fromJson(json['urluserBadge'])
+                : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -58,6 +73,7 @@ class SearchPeolpleData {
         "username": username,
         "fullName": fullName,
         "email": email,
+        "urluserBadge": urluserBadge,
       };
 
   void forEach(Null Function(dynamic v) param0) {}

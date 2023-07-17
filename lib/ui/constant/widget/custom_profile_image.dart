@@ -2,6 +2,7 @@ import 'custom_icon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 
 class CustomProfileImage extends StatelessWidget {
   final double width;
@@ -9,6 +10,8 @@ class CustomProfileImage extends StatelessWidget {
   final Function? onTap;
   final bool following;
   final String? imageUrl;
+  final UserBadgeModel? badge;
+  final bool allwaysUseBadgePadding;
   final String? cacheKey;
   final Function? onFollow;
   final Map<String, String>? headers;
@@ -22,9 +25,11 @@ class CustomProfileImage extends StatelessWidget {
     required this.width,
     required this.height,
     required this.imageUrl,
+    this.badge,
     this.cacheKey,
     this.following = false,
     this.forStory = false,
+    this.allwaysUseBadgePadding = false, // add padding to make image size consistent when there is no badge
   }) : super(key: key);
 
   @override
@@ -39,24 +44,44 @@ class CustomProfileImage extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(forStory ? 20 : 50),
-            child: cacheKey != null
-                ? Image.network(
-                    '$imageUrl',
-                    key: cacheKey != null ? ValueKey(cacheKey) : null,
-                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                      return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
-                    },
-                    fit: BoxFit.cover,
-                  )
-                : Image.network(
-                    '$imageUrl',
-                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                      return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
-                    },
-                    fit: BoxFit.cover,
-                  ),
+          child: Stack(
+            children: [
+              Padding(
+                padding:  EdgeInsets.all(
+                  badge != null || allwaysUseBadgePadding ? (width * 0.08) : 0,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(forStory ? (width * 0.25) : 50),
+                  child: cacheKey != null
+                      ? Image.network(
+                          '$imageUrl',
+                          width: width,
+                          height: height,
+                          key: cacheKey != null ? ValueKey(cacheKey) : null,
+                          errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                            return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
+                          },
+                          fit: BoxFit.cover,
+                        )
+                      : Image.network(
+                          '$imageUrl',
+                          width: width,
+                          height: height,
+                          errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                            return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
+                          },
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              ),
+              Image.network(
+                forStory ? '${badge?.badgeProfile}' : '${badge?.badgeOther}',
+                fit: BoxFit.cover,
+                errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                  return Container();
+                },
+              ),
+            ],
           ),
         ),
       ),

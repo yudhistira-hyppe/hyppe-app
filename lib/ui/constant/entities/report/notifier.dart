@@ -34,6 +34,16 @@ class ReportNotifier with ChangeNotifier {
   String _currentReportDesc = '';
   String get currentReportDesc => _currentReportDesc;
 
+  String? _keyInt;
+  String? get keyInt => _keyInt;
+  set keyInt (String? value){
+    _keyInt = value;
+    notifyListeners();
+  }
+  setKey(String value){
+    _keyInt = value;
+  }
+
   String? _appBar;
   String _fABCaption = "Submit";
   ReportType? _reportType;
@@ -191,6 +201,7 @@ class ReportNotifier with ChangeNotifier {
               postID: contentData?.postID ?? '',
               content: typeContent,
               isReport: true,
+          key: keyInt
             );
       }
 

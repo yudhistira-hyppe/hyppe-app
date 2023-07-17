@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -49,6 +51,7 @@ class _UserItemState extends State<UserItem> {
               height: 50,
               following: true,
               imageUrl: System().showUserPicture(widget.data?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
+              badge: widget.data?.senderOrReceiverInfo?.urluserBadge,
               onTap: () => System().navigateToProfile(context, widget.data?.senderOrReceiverInfo?.email ?? ''),
             ),
             sixteenPx,

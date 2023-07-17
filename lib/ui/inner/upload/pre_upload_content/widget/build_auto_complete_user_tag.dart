@@ -81,6 +81,7 @@ class _AutoCompleteUserTagState extends State<AutoCompleteUserTag> {
                                             height: 30,
                                             onTap: () {},
                                             imageUrl: System().showUserPicture(notifier.searchPeolpleData[index].avatar?.mediaEndpoint),
+                                            badge: notifier.searchPeolpleData[index].urluserBadge,
                                             following: true,
                                             onFollow: () {},
                                           ),

@@ -48,6 +48,7 @@ class SubCommentTile extends StatelessWidget {
             height: 36,
             onTap: () => System().navigateToProfile(context, logs?.sender ?? ''),
             imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
+            badge: commentor?.urluserBadge,
             following: true,
             onFollow: () {},
           ),

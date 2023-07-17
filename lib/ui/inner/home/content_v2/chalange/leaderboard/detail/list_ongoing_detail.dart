@@ -113,14 +113,16 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                     Text("${cn.leaderBoardData?.challengeData?[0].description}"),
                   ],
                 )),
-            Container(
-                width: SizeConfig.screenWidth,
-                margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: FooterChallangeDetail()),
+            cn.leaderBoardData?.onGoing == false
+                ? Container()
+                : Container(
+                    width: SizeConfig.screenWidth,
+                    margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: FooterChallangeDetail()),
           ],
         ),
       );

@@ -50,8 +50,9 @@ class PeopleFrameStory extends StatelessWidget {
             // haveStory: data[index].story.map((e) => e.isView).contains(0),
             haveStory: true,
             contentData: getData,
+            borderRadius: 20.0,
             child: Padding(
-              padding: const EdgeInsets.all(6.0),
+              padding: const EdgeInsets.all(2.0),
               child: CustomProfileImage(
                 following: true,
                 width: SizeWidget.circleDiameterOutside,
@@ -65,7 +66,9 @@ class PeopleFrameStory extends StatelessWidget {
                 },
                 // imageUrl: context.read<PreviewStoriesNotifier>().onProfilePicShow(data[index].profilePicture),
                 imageUrl: System().showUserPicture(getData?.avatar?.mediaEndpoint),
+                badge: getData?.urluserBadge,
                 forStory: true,
+                allwaysUseBadgePadding: true,
               ),
             ),
           ),
