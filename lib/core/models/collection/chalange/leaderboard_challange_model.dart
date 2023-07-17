@@ -14,23 +14,26 @@ class LeaderboardChallangeModel {
   int? totalSession;
   bool? onGoing;
   int? totalDays;
+  String? noteTime;
 
-  LeaderboardChallangeModel(
-      {this.sId,
-      this.challengeId,
-      this.startDatetime,
-      this.endDatetime,
-      this.isActive,
-      this.session,
-      this.timenow,
-      this.getlastrank,
-      this.status,
-      this.joined,
-      this.challengeData,
-      this.subChallenges,
-      this.totalSession,
-      this.onGoing,
-      this.totalDays});
+  LeaderboardChallangeModel({
+    this.sId,
+    this.challengeId,
+    this.startDatetime,
+    this.endDatetime,
+    this.isActive,
+    this.session,
+    this.timenow,
+    this.getlastrank,
+    this.status,
+    this.joined,
+    this.challengeData,
+    this.subChallenges,
+    this.totalSession,
+    this.onGoing,
+    this.totalDays,
+    this.noteTime,
+  });
 
   LeaderboardChallangeModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -63,6 +66,7 @@ class LeaderboardChallangeModel {
     totalSession = json['totalSession'] ?? 0;
     onGoing = json['onGoing'];
     totalDays = json['totalDays'];
+    noteTime = json['noteTime'];
   }
 }
 
@@ -288,7 +292,7 @@ class Metrik {
     if (json['AktivitasAkun'] != null) {
       aktivitasAkun = <AktivitasAkun>[];
       json['AktivitasAkun'].forEach((v) {
-        aktivitasAkun!.add(new AktivitasAkun.fromJson(v));
+        aktivitasAkun!.add(AktivitasAkun.fromJson(v));
       });
     }
     if (json['InteraksiKonten'] != null) {

@@ -129,7 +129,18 @@ class ChallangeNotifier with ChangeNotifier {
         if (leaderBoardData?.startDatetime != '' || leaderBoardData?.startDatetime != null) {
           var dateNote = await System().compareDate(leaderBoardData?.startDatetime ?? '', leaderBoardData?.endDatetime ?? '');
           leaderBoardData?.onGoing = dateNote[0];
-          leaderBoardData?.totalDays = dateNote[1].inDays;
+          if (dateNote[1].inDays == 0) {
+            if (dateNote[1].inHours == 0) {
+              leaderBoardData?.totalDays = dateNote[1].inMinutes;
+              leaderBoardData?.noteTime = 'inMinutes';
+            } else {
+              leaderBoardData?.totalDays = dateNote[1].inHours;
+              leaderBoardData?.noteTime = 'inHours';
+            }
+          } else {
+            leaderBoardData?.totalDays = dateNote[1].inDays;
+            leaderBoardData?.noteTime = 'inDays';
+          }
         }
       }
 
@@ -159,6 +170,24 @@ class ChallangeNotifier with ChangeNotifier {
 
       isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<bool> joinChallange(BuildContext context, String idChallenge) async {
+    Map param = {
+      "idChallenge": idChallenge,
+      "idUser": SharedPreference().readStorage(SpKeys.userID),
+    };
+    final bannerNotifier = ChallangeBloc();
+    await bannerNotifier.postChallange(context, data: param, url: UrlConstants.joinChallange);
+    final bannerFatch = bannerNotifier.userFetch;
+
+    if (bannerFatch.challengeState == ChallengeState.getPostSuccess) {
+      isLoading = false;
+      notifyListeners();
+      return true;
+    } else {
+      return false;
     }
   }
 }

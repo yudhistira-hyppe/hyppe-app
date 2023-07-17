@@ -73,10 +73,23 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
       hideTab = false;
     }
 
+    String inTime = '';
+
+    switch (cn.leaderBoardData?.noteTime) {
+      case "inDays":
+        inTime = "Hari";
+        break;
+      case "inHours":
+        inTime = "Jam";
+        break;
+      default:
+        inTime = "Menit";
+    }
+
     if (cn.leaderBoardData?.onGoing == true) {
-      dateText = "Berakhir dalam ${cn.leaderBoardData?.totalDays} Hari Lagi";
+      dateText = "Berakhir dalam ${cn.leaderBoardData?.totalDays} $inTime Lagi";
     } else {
-      dateText = "Mulai  dalam ${cn.leaderBoardData?.totalDays} Hari Lagi";
+      dateText = "Mulai  dalam ${cn.leaderBoardData?.totalDays} $inTime Lagi";
     }
   }
 
@@ -85,6 +98,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
     var cn = context.watch<ChallangeNotifier>();
     var tn = context.read<TranslateNotifierV2>();
     return Scaffold(
+      backgroundColor: kHyppeLightSurface,
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
           child: AppBar(
@@ -98,7 +112,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
               onPressed: () {},
             ),
             title: Text(
-              '${cn.leaderBoardData?.sId}',
+              '${cn.leaderBoardData?.challengeData?[0].nameChallenge}',
               style: const TextStyle(
                 fontSize: 16,
                 fontFamily: 'Lato',
