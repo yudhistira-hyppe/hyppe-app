@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wakelock/wakelock.dart';
 
+import '../../../../../app.dart';
 import '../../../../../core/arguments/other_profile_argument.dart';
 import '../../../../../core/bloc/ads_video/bloc.dart';
 import '../../../../../core/bloc/ads_video/state.dart';
@@ -365,6 +366,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
         });
       }
     });
+    adsGlobalAliPlayer = fAliplayer;
   }
 
   @override
@@ -490,17 +492,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                             children: [
                               Row(
                                 children: [
-                                  // Container(
-                                  //   height: 36,
-                                  //   width: 36,
-                                  //   decoration: BoxDecoration(
-                                  //     image: const DecorationImage(
-                                  //       image: AssetImage('${AssetPath.pngPath}image_ads_exp.png'),
-                                  //       fit: BoxFit.cover,
-                                  //     ),
-                                  //     borderRadius: BorderRadius.circular(18.0),
-                                  //   ),
-                                  // ),
                                   CustomBaseCacheImage(
                                     imageUrl: widget.data.avatar?.fullLinkURL,
                                     memCacheWidth: 200,

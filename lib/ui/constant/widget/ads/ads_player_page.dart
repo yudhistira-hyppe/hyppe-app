@@ -44,6 +44,7 @@ class AdsPlayerPage extends StatefulWidget {
   final Function functionFullTriger;
   final Function(FlutterAliplayer)? getPlayer;
   final Function(AdsData)? onPlay;
+  final Function() onStop;
   final Function() onClose;
   final Function() onFullscreen;
   final Orientation orientation;
@@ -58,6 +59,7 @@ class AdsPlayerPage extends StatefulWidget {
     required this.functionFullTriger,
     required this.onFullscreen,
     this.onPlay,
+    required this.onStop,
     required this.onClose,
     this.getPlayer,
     required this.orientation,
@@ -266,6 +268,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             isPlay = false;
             _showLoading = false;
+            //
             try {
               Wakelock.disable();
             } catch (e) {
@@ -430,6 +433,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
         }
       });
 
+      adsGlobalAliPlayer = notifier.adsAliplayer;
       if (widget.data != null) {
         start(widget.data!, notifier);
       }

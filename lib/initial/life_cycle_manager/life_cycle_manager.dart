@@ -104,7 +104,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           }else{
             globalAliPlayer?.pause();
           }
-
+        }
+        if(adsGlobalAliPlayer != null){
+          adsGlobalAliPlayer?.pause();
         }
 
         "App Inactive".logger();

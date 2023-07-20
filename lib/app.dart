@@ -26,6 +26,7 @@ final GlobalKey<ScaffoldState> materialAppKey = GlobalKey<ScaffoldState>();
 AudioPlayer? globalAudioPlayer;
 // ScrollController? globalScroller;
 FlutterAliplayer? globalAliPlayer;
+FlutterAliplayer? adsGlobalAliPlayer;
 final globalDB = DatabaseHelper();
 bool isHomeScreen = false;
 bool isFromSplash = false;

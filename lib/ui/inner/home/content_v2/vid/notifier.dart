@@ -95,6 +95,11 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  void setAdsData(int index, AdsData? adsData){
+    vidData?[index].adsData = adsData;
+    notifyListeners();
+  }
+
   Future<void> initialVid(BuildContext context, {bool reload = false, List<ContentData>? list}) async {
     List<ContentData> res = [];
 

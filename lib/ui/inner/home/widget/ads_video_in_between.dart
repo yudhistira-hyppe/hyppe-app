@@ -5,9 +5,12 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -22,22 +25,25 @@ import '../../../../core/models/collection/posts/content_v2/content_data.dart';
 import '../../../../core/services/shared_preference.dart';
 import '../../../../initial/hyppe/translate_v2.dart';
 import '../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import '../../../constant/widget/custom_base_cache_image.dart';
 import '../../../constant/widget/custom_icon_widget.dart';
 import '../../../constant/widget/custom_loading.dart';
 import '../../../constant/widget/custom_spacer.dart';
 import '../../../constant/widget/custom_text_widget.dart';
 
 class AdsVideoInBetween extends StatefulWidget {
-  final Function(VisibilityInfo) onVisibility;
+  final Function(VisibilityInfo)? onVisibility;
   final FlutterAliplayer? player;
-  final AdsData? data;
+  final String postID;
+  final AdsData data;
   final double ratio;
   const AdsVideoInBetween(
       {Key? key,
-      required this.onVisibility,
+      this.onVisibility,
       this.player,
+      required this.postID,
       required this.ratio,
-      this.data})
+      required this.data,})
       : super(key: key);
 
   @override
@@ -45,10 +51,254 @@ class AdsVideoInBetween extends StatefulWidget {
 }
 
 class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindingObserver {
+  // FlutterAliplayer? fAliplayer;
+
+  bool loadLaunch = false;
+
+  @override
+  void initState() {
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'AdsVideoBetween');
+
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+
+
+    });
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final language = context.read<TranslateNotifierV2>().translate;
+    return Consumer<VideoNotifier>(
+      builder: (context, notifier, _) {
+        return Container(
+          margin: const EdgeInsets.only(bottom: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                decoration: BoxDecoration(
+                    color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        CustomBaseCacheImage(
+                          imageUrl: widget.data.avatar?.fullLinkURL,
+                          memCacheWidth: 200,
+                          memCacheHeight: 200,
+                          imageBuilder: (_, imageProvider) {
+                            return Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: imageProvider,
+                                ),
+                              ),
+                            );
+                          },
+                          errorWidget: (_, __, ___) {
+                            return Container(
+                              width: 36,
+                              height: 36,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                ),
+                              ),
+                            );
+                          },
+                          emptyWidget: Container(
+                            width: 36,
+                            height: 36,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(18)),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                              ),
+                            ),
+                          ),
+                        ),
+                        twelvePx,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomTextWidget(
+                                textToDisplay: widget.data.fullName ?? '',
+                                textStyle:
+                                context.getTextTheme().bodyText1?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              CustomTextWidget(
+                                textToDisplay: language.sponsored ?? 'Sponsored',
+                                textStyle:
+                                context.getTextTheme().bodyText2?.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        twelvePx,
+                        GestureDetector(
+                          onTap: (){
+                            ShowBottomSheet().onReportContent(
+                              context,
+                              adsData: widget.data,
+                              type: adsPopUp,
+                              postData: null,
+                              onUpdate: () {
+                                setState(() {
+                                  widget.data.isReport = true;
+                                });
+                              },
+                            );
+                          },
+                          child: const CustomIconWidget(
+                            defaultColor: false,
+                            iconData: '${AssetPath.vectorPath}more.svg',
+                            color: kHyppeTextLightPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      padding:
+                      const EdgeInsets.only(top: 20, left: 18, right: 18),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Image.asset(
+                          //   '${AssetPath.pngPath}avatar_ads_exp.png',
+                          //   width: double.infinity,
+                          //   fit: BoxFit.cover,
+                          // ),
+                          VisibilityDetector(
+                            key: Key(widget.data.videoId ?? 'ads'),
+                            onVisibilityChanged: (info) {
+                              if (info.visibleFraction >= 0.6) {
+                                // _curIdx = index;
+                                if (notifier.currentPostID != widget.postID) {
+                                  notifier.betweenPlayer?.stop();
+
+                                  // if (diaryData[index].certified ?? false) {
+                                  //   System().block(context);
+                                  // } else {
+                                  //   System().disposeBlock();
+                                  // }
+                                }
+                                notifier.currentPostID = widget.postID;
+                                if(widget.onVisibility != null){
+                                  widget.onVisibility!(info);
+                                }
+                              }
+                            },
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: notifier.currentPostID == widget.postID ? InBetweenScreen(postID: widget.postID, adsData: widget.data, player: widget.player,) : Container(decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))), alignment: Alignment.center, child: const CustomLoading(),),
+                            ),
+                          ),
+                          twelvePx,
+                          InkWell(
+                            onTap: () async {},
+                            child: Builder(builder: (context) {
+                              final learnMore =
+                              (language.learnMore ?? 'Learn More');
+                              return Container(
+                                alignment: Alignment.center,
+                                padding:
+                                const EdgeInsets.only(top: 10, bottom: 10),
+                                decoration: const BoxDecoration(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                    color: KHyppeButtonAds),
+                                child: loadLaunch
+                                    ? const SizedBox(
+                                    width: 40,
+                                    height: 20,
+                                    child: CustomLoading())
+                                    : Text(
+                                  learnMore,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                          twelvePx,
+                          if(widget.data.adsDescription != null)
+                            Builder(builder: (context) {
+                              final notifier = context.read<TranslateNotifierV2>();
+                              return CustomDescContent(
+                                  desc: widget.data.adsDescription ?? '',
+                                  trimLines: 2,
+                                  textAlign: TextAlign.justify,
+                                  seeLess: ' ${notifier.translate.seeLess}',
+                                  seeMore: ' ${notifier.translate.seeMoreContent}',
+                                  textOverflow: TextOverflow.visible,
+                                  normStyle: Theme.of(context).textTheme.bodyText2,
+                                  hrefStyle: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                                  expandStyle: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary));
+                            })
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    );
+  }
+}
+
+class InBetweenScreen extends StatefulWidget {
+  final String postID;
+  final AdsData adsData;
+  final FlutterAliplayer? player;
+  const InBetweenScreen({Key? key, required this.postID, required this.adsData, this.player}) : super(key: key);
+
+  @override
+  State<InBetweenScreen> createState() => _InBetweenScreenState();
+}
+
+class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingObserver {
   FlutterAliplayer? fAliplayer;
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
+
+  int _loadingPercent = 0;
   bool _showLoading = false;
   bool _inSeek = false;
   bool isloading = false;
@@ -68,21 +318,21 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
   final Map _dataSourceMap = {};
   String email = '';
   String statusKyc = '';
-  bool loadLaunch = false;
 
   @override
   void initState() {
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'AdsVideoBetween');
-    email = SharedPreference().readStorage(SpKeys.email);
-    statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'InBetweenScreen');
+    // email = SharedPreference().readStorage(SpKeys.email);
+    // statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
+      // final ref = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.postID);
       WidgetsBinding.instance.addObserver(this);
       fAliplayer?.pause();
       fAliplayer?.setAutoPlay(true);
-      fAliplayer?.setLoop(true);
+      fAliplayer?.setLoop(false);
 
       //Turn on mix mode
       if (Platform.isIOS) {
@@ -123,10 +373,21 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-          setState(() {
-            _showLoading = false;
-            isPause = false;
-          });
+          if(mounted){
+            setState(() {
+              _showLoading = false;
+              isPause = false;
+            });
+          }
+
+          break;
+        case FlutterAvpdef.AVPStatus_AVPStatusStopped:
+          if(mounted){
+            setState(() {
+              _showLoading = false;
+            });
+          }
+
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
@@ -135,22 +396,45 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
         default:
       }
     });
-    // fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-    //   setState(() {
-    //     _loadingPercent = 0;
-    //     _showLoading = true;
-    //   });
-    // }, loadingProgress: (percent, netSpeed, playerId) {
-    //   _loadingPercent = percent;
-    //   if (percent == 100) {
-    //     _showLoading = false;
-    //   }
-    //   setState(() {});
-    // }, loadingEnd: (playerId) {
-    //   setState(() {
-    //     _showLoading = false;
-    //   });
-    // });
+    fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
+      if (mounted) {
+        try {
+          setState(() {
+            _loadingPercent = 0;
+            _showLoading = true;
+          });
+        } catch (e) {
+          print('error setOnLoadingStatusListener: $e');
+        }
+      }
+    }, loadingProgress: (percent, netSpeed, playerId) {
+      if (percent == 100) {
+        _showLoading = false;
+      }
+      try {
+        if (mounted) {
+          setState(() {
+            _loadingPercent = percent;
+          });
+        } else {
+          _loadingPercent = percent;
+        }
+      } catch (e) {
+        print('error loadingProgress: $e');
+      }
+    }, loadingEnd: (playerId) {
+      try {
+        if (mounted) {
+          setState(() {
+            _showLoading = false;
+          });
+        } else {
+          _showLoading = false;
+        }
+      } catch (e) {
+        print('error loadingEnd: $e');
+      }
+    });;
     fAliplayer?.setOnSeekComplete((playerId) {
       _inSeek = false;
     });
@@ -230,61 +514,33 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
         setState(() {});
       }
     });
+    adsGlobalAliPlayer = fAliplayer;
+    Future.delayed(const Duration(milliseconds: 700), () {
+      start(widget.adsData);
+    });
   }
 
-  void start(ContentData data) async {
+  void start(AdsData data) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
     fAliplayer?.stop();
     widget.player?.stop();
 
-    isPlay = false;
+    // isPlay = false;
     // fAliplayer?.setVidAuth(
     //   vid: "c1b24d30b2c671edbfcb542280e90102",
     //   region: DataSourceRelated.defaultRegion,
     //   playAuth:
     //       "eyJTZWN1cml0eVRva2VuIjoiQ0FJU2lBTjFxNkZ0NUIyeWZTaklyNURISnUvWnJvZFIrb1d2VlY2SmdHa0RPdFZjaDZMRG96ejJJSDFLZlhadEJPQWN0ZlF3bFdwVDdQNGJsckl1RjhJWkdoR2ZONU10dE1RUHJGL3dKb0hidk5ldTBic0hoWnY5bGNNTHJaaWpqcUhvZU96Y1lJNzMwWjdQQWdtMlEwWVJySkwrY1RLOUphYk1VL21nZ29KbWFkSTZSeFN4YVNFOGF2NWRPZ3BscnIwSVZ4elBNdnIvSFJQMnVtN1pIV3R1dEEwZTgzMTQ1ZmFRejlHaTZ4YlRpM2I5ek9FVXFPYVhKNFMvUGZGb05ZWnlTZjZvd093VUVxL2R5M3hvN3hGYjFhRjRpODRpL0N2YzdQMlFDRU5BK3dtbFB2dTJpOE5vSUYxV2E3UVdJWXRncmZQeGsrWjEySmJOa0lpbDVCdFJFZHR3ZUNuRldLR216c3krYjRIUEROc2ljcXZoTUhuZ3k4MkdNb0tQMHprcGVuVUdMZ2hIQ2JGRFF6MVNjVUZ3RjIyRmQvVDlvQTJRTWwvK0YvbS92ZnRvZ2NvbC9UTEI1c0dYSWxXRGViS2QzQnNETjRVMEIwRlNiRU5JaERPOEwvOWNLRndUSWdrOFhlN01WL2xhYUJGUHRLWFdtaUgrV3lOcDAzVkxoZnI2YXVOcGJnUHIxVVFwTlJxQUFaT3kybE5GdndoVlFObjZmbmhsWFpsWVA0V3paN24wTnVCbjlILzdWZHJMOGR5dHhEdCtZWEtKNWI4SVh2c0lGdGw1cmFCQkF3ZC9kakhYTjJqZkZNVFJTekc0T3pMS1dKWXVzTXQycXcwMSt4SmNHeE9iMGtKZjRTcnFpQ1RLWVR6UHhwakg0eDhvQTV6Z0cvZjVIQ3lFV3pISmdDYjhEeW9EM3NwRUh4RGciLCJBdXRoSW5mbyI6IntcIkNJXCI6XCJmOUc0eExxaHg2Tkk3YThaY1Q2N3hObmYrNlhsM05abmJXR1VjRmxTelljS0VKVTN1aVRjQ29Hd3BrcitqL2phVVRXclB2L2xxdCs3MEkrQTJkb3prd0IvKzc5ZlFyT2dLUzN4VmtFWUt6TT1cIixcIkNhbGxlclwiOlwiV2NKTEpvUWJHOXR5UmM2ZXg3LzNpQXlEcS9ya3NvSldhcXJvTnlhTWs0Yz1cIixcIkV4cGlyZVRpbWVcIjpcIjIwMjMtMDMtMTZUMDk6NDE6MzdaXCIsXCJNZWRpYUlkXCI6XCJjMWIyNGQzMGIyYzY3MWVkYmZjYjU0MjI4MGU5MDEwMlwiLFwiUGxheURvbWFpblwiOlwidm9kLmh5cHBlLmNsb3VkXCIsXCJTaWduYXR1cmVcIjpcIk9pbHhxelNyaVVhOGlRZFhaVEVZZEJpbUhJUT1cIn0iLCJWaWRlb01ldGEiOnsiU3RhdHVzIjoiTm9ybWFsIiwiVmlkZW9JZCI6ImMxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyIiwiVGl0bGUiOiIyODg4MTdkYi1jNzdjLWM0ZTQtNjdmYi0zYjk1MTlmNTc0ZWIiLCJDb3ZlclVSTCI6Imh0dHBzOi8vdm9kLmh5cHBlLmNsb3VkL2MxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyL3NuYXBzaG90cy9jYzM0MjVkNzJiYjM0YTE3OWU5NmMzZTA3NTViZjJjNi0wMDAwNC5qcGciLCJEdXJhdGlvbiI6NTkuMDQ5fSwiQWNjZXNzS2V5SWQiOiJTVFMuTlNybVVtQ1hwTUdEV3g4ZGlWNlpwaGdoQSIsIlBsYXlEb21haW4iOiJ2b2QuaHlwcGUuY2xvdWQiLCJBY2Nlc3NLZXlTZWNyZXQiOiIzU1NRUkdkOThGMU04TkZ0b00xa2NlU01IZlRLNkJvZm93VXlnS1Y5aEpQdyIsIlJlZ2lvbiI6ImFwLXNvdXRoZWFzdC01IiwiQ3VzdG9tZXJJZCI6NTQ1NDc1MzIwNTI4MDU0OX0=",
     // );
-    if (data.reportedStatus != 'BLURRED') {
-      await getAuth(data.apsaraId ?? '');
-    }
+    await getAuth(data.videoId ?? '476cf7a01e7371ee9612442380ea0102');
 
     setState(() {
       isPause = false;
       // _isFirstRenderShow = false;
     });
-    var configMap = {
-      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
-      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
-      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
-      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
-      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
-      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
-      'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
-      'mLocalCacheDir': GlobalSettings.mDirController,
-      'mClearFrameWhenStop': true
-    };
-    //// Configure the application.
-    fAliplayer?.setConfig(configMap);
-    var map = {
-      "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
 
-      /// The maximum space that can be occupied by the cache directory.
-      "mMaxDurationS": GlobalSettings.mMaxDurationSController,
-
-      /// The maximum cache duration of a single file.
-      "mDir": GlobalSettings.mDirController,
-
-      /// The cache directory.
-      "mEnable": GlobalSettings.mEnableCacheConfig
-
-      /// Specify whether to enable the cache feature.
-    };
-    fAliplayer?.setCacheConfig(map);
-    if (data.reportedStatus == 'BLURRED') {
-    } else {
-      fAliplayer?.prepare();
-    }
+    fAliplayer?.prepare();
 
     // fAliplayer?.play();
   }
@@ -292,7 +548,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
   Future getAuth(String apsaraId) async {
     setState(() {
       isloading = true;
-      _showLoading = true;
+      // _showLoading = true;
     });
     try {
       final notifier = PostsBloc();
@@ -306,6 +562,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
           vid: apsaraId,
           region: DataSourceRelated.defaultRegion,
           playAuth: auth,
+          definitionList: [DataSourceRelated.definitionList],
         );
         setState(() {
           isloading = false;
@@ -325,179 +582,57 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
   }
 
   @override
-  Widget build(BuildContext context) {
-    final language = context.read<TranslateNotifierV2>().translate;
-    return VisibilityDetector(
-      key: Key(widget.data?.videoId ?? 'ads'),
-      onVisibilityChanged: (info) {
-        if (info.visibleFraction >= 0.6) {
-          // _curIdx = index;
-          if (_lastCurIndex != _curIdx) {
+  void dispose() {
+    fAliplayer?.stop();
+    fAliplayer?.destroy();
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
 
-            Future.delayed(const Duration(milliseconds: 400), () {
-              // start(diaryData[index]);
-            });
-            // if (diaryData[index].certified ?? false) {
-            //   System().block(context);
-            // } else {
-            //   System().disposeBlock();
-            // }
-          }
-          _lastCurIndex = _curIdx;
-        }
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: ClipRRect(
+            borderRadius:
+            const BorderRadius.all(Radius.circular(16.0)),
+            child: AliPlayerView(
+              onCreated: onViewPlayerCreated,
+              x: 0,
+              y: 0,
+              height:600,
+              width: 600,
+              aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
+            ),
+          ),
+        ),
+        if(_showLoading)
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.center,
               child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      AspectRatio(
-                        aspectRatio: widget.ratio,
-                        child: ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(16.0)),
-                          child: AliPlayerView(
-                            onCreated: onViewPlayerCreated,
-                            x: 0,
-                            y: 0,
-                            height:
-                                MediaQuery.of(context).size.width * widget.ratio,
-                            width: MediaQuery.of(context).size.width,
-                          ),
-                        ),
-                      ),
-                      twelvePx,
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomTextWidget(
-                              textToDisplay: widget.data?.fullName ?? '',
-                              textStyle:
-                                  context.getTextTheme().bodyText1?.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                            ),
-                            CustomTextWidget(
-                              textToDisplay: language.sponsored ?? 'Sponsored',
-                              textStyle:
-                                  context.getTextTheme().bodyText2?.copyWith(
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                            )
-                          ],
-                        ),
-                      ),
-                      twelvePx,
-                      GestureDetector(
-                        onTap: (){
-                          ShowBottomSheet().onReportContent(
-                            context,
-                            adsData: widget.data,
-                            type: adsPopUp,
-                            postData: null,
-                            onUpdate: () {
-                              setState(() {
-                                widget.data?.isReport = true;
-                              });
-                            },
-                          );
-                        },
-                        child: const CustomIconWidget(
-                          defaultColor: false,
-                          iconData: '${AssetPath.vectorPath}more.svg',
-                          color: kHyppeTextLightPrimary,
-                        ),
-                      ),
-                    ],
+                  CircularProgressIndicator(
+                    backgroundColor: Colors.white,
+                    strokeWidth: 3.0,
                   ),
-                  Container(
-                    padding:
-                        const EdgeInsets.only(top: 20, left: 18, right: 18),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          '${AssetPath.pngPath}avatar_ads_exp.png',
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                        twelvePx,
-                        InkWell(
-                          onTap: () async {},
-                          child: Builder(builder: (context) {
-                            final learnMore =
-                                (language.learnMore ?? 'Learn More');
-                            return Container(
-                              alignment: Alignment.center,
-                              padding:
-                                  const EdgeInsets.only(top: 10, bottom: 10),
-                              decoration: const BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
-                                  color: KHyppeButtonAds),
-                              child: loadLaunch
-                                  ? const SizedBox(
-                                      width: 40,
-                                      height: 20,
-                                      child: CustomLoading())
-                                  : Text(
-                                      learnMore,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                            );
-                          }),
-                        ),
-                        twelvePx,
-                        if(widget.data?.adsDescription != null)
-                        Builder(builder: (context) {
-                          final notifier = context.read<TranslateNotifierV2>();
-                          return CustomDescContent(
-                              desc: widget.data?.adsDescription ?? '',
-                              trimLines: 2,
-                              textAlign: TextAlign.justify,
-                              seeLess: ' ${notifier.translate.seeLess}',
-                              seeMore: ' ${notifier.translate.seeMoreContent}',
-                              textOverflow: TextOverflow.visible,
-                              normStyle: Theme.of(context).textTheme.bodyText2,
-                              hrefStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                              expandStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary));
-                        })
-                      ],
-                    ),
-                  )
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Text(
+                    "$_loadingPercent%",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
+          )
+      ],
     );
   }
 }
+

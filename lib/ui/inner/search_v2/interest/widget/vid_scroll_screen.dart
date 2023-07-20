@@ -404,6 +404,14 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
               child: Builder(builder: (context) {
                 return VidPlayerPage(
                   orientation: Orientation.portrait,
+                  onShowAds: (ads){
+                    setState(() {
+                      vidData[index].adsShowing = ads != null;
+                    });
+                  },
+                  betweenAds: (ads){
+
+                  },
                   playMode: (vidData[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                   dataSourceMap: map,
                   data: vidData[index] ,

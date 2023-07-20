@@ -73,6 +73,13 @@ class VideoNotifier with ChangeNotifier{
     notifyListeners();
   }
 
+  String _currentPostID = '';
+  String get currentPostID => _currentPostID;
+  set currentPostID(String value){
+    _currentPostID = value;
+    notifyListeners();
+  }
+
   initVideo(){
     _hasShowedAds = false;
     _isFullScreen = false;
@@ -80,6 +87,7 @@ class VideoNotifier with ChangeNotifier{
 
   AliPlayerView? adsAliPlayerView;
   FlutterAliplayer? adsAliplayer;
+  FlutterAliplayer? betweenPlayer;
 
 
   Future getAdsVideo(BuildContext context, int videoDuration) async {

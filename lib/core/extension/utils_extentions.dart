@@ -5,8 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/ui/inner/home/widget/ads_in_between.dart';
+import 'package:hyppe/ui/inner/home/widget/ads_video_in_between.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../initial/hyppe/translate_v2.dart';
 import '../../ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -94,6 +97,17 @@ extension ContextScreen on BuildContext {
     return data;
   }
 
+  Widget getAdsInBetween(AdsData? adsData, String postID, Function(VisibilityInfo)? onVisible){
+    if(adsData != null){
+      if(adsData.mediaType == 'video'){
+        return AdsVideoInBetween(postID: postID, onVisibility: onVisible, ratio: 16/9, data: adsData ?? AdsData(),);
+      }else{
+        return AdsInBetween(data: adsData);
+      }
+    }
+    return const SizedBox.shrink();
+  }
+
   String getCurrentDate() {
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
@@ -109,8 +123,8 @@ extension ContextScreen on BuildContext {
       maxLines: 3,
       borderRadius: 8,
       color: kHyppeTextLightPrimary,
-      padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
-      margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
+      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 25),
     );
   }
 
