@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -107,7 +108,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
             actions: [
               IconButton(
                 onPressed: () {
-                  Routing().move(Routes.chalengeAchievement);
+                  Routing().move(Routes.chalengeAchievement, argument: GeneralArgument(id: cn.leaderBoardData?.challengeId));
                 },
                 icon: const CustomIconWidget(
                   iconData: "${AssetPath.vectorPath}achievement.svg",
@@ -129,145 +130,147 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
             return notification.depth == 0;
           },
           onRefresh: () async {},
-          child: ScrollConfiguration(
-            behavior: const ScrollBehavior().copyWith(overscroll: false),
-            child: NestedScrollView(
-              key: globalKey,
-              controller: context.read<MainNotifier>().scrollController,
-              physics: const NeverScrollableScrollPhysics(),
-              // dragStartBehavior: DragStartBehavior.start,
-              headerSliverBuilder: (context, bool innerBoxIsScrolled) {
-                return [
-                  SliverOverlapAbsorber(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                    sliver: SliverList(
-                      delegate: SliverChildListDelegate([
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
-                          child: Text("Challenge Utama",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                              )),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                          child: CarouselSlider(
-                            options: CarouselOptions(
-                                // height: 300
-                                enlargeCenterPage: true,
-                                enableInfiniteScroll: false,
-                                // viewportFraction: 1.0,
-                                aspectRatio: 343 / 103,
-                                // height: 100,
-                                autoPlayInterval: const Duration(seconds: 3),
-                                onPageChanged: (index, reason) {
-                                  setState(() {
-                                    print("=======change");
-                                    _current = index;
-                                    _tabController.index = 0;
-                                    cn.getLeaderBoard(context, cn.bannerSearchData[index].sId ?? '');
-                                  });
-                                }),
-                            items: cn.bannerSearchData
-                                .map((item) => ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Center(
-                                          child: Image.network(
-                                        item.bannerLandingpage ?? '',
-                                        width: SizeConfig.screenWidth,
-                                        fit: BoxFit.cover,
-                                        loadingBuilder: (context, child, loadingProgress) {
-                                          if (loadingProgress == null) return child;
-                                          return Center(
-                                            child: Container(
-                                              height: SizeConfig.screenHeight,
+          child: cn.isLoadingLeaderboard || cn.leaderBoardData?.sId == null
+              ? const ShimmerListLeaderboard()
+              : ScrollConfiguration(
+                  behavior: const ScrollBehavior().copyWith(overscroll: false),
+                  child: NestedScrollView(
+                    key: globalKey,
+                    controller: context.read<MainNotifier>().scrollController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    // dragStartBehavior: DragStartBehavior.start,
+                    headerSliverBuilder: (context, bool innerBoxIsScrolled) {
+                      return [
+                        SliverOverlapAbsorber(
+                          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                          sliver: SliverList(
+                            delegate: SliverChildListDelegate([
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+                                child: Text("Challenge Utama",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                    )),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                                child: CarouselSlider(
+                                  options: CarouselOptions(
+                                      // height: 300
+                                      enlargeCenterPage: true,
+                                      enableInfiniteScroll: false,
+                                      // viewportFraction: 1.0,
+                                      aspectRatio: 343 / 103,
+                                      // height: 100,
+                                      autoPlayInterval: const Duration(seconds: 3),
+                                      onPageChanged: (index, reason) {
+                                        setState(() {
+                                          print("=======change");
+                                          _current = index;
+                                          _tabController.index = 0;
+                                          cn.getLeaderBoard(context, cn.bannerSearchData[index].sId ?? '');
+                                        });
+                                      }),
+                                  items: cn.bannerSearchData
+                                      .map((item) => ClipRRect(
+                                            borderRadius: BorderRadius.circular(10),
+                                            child: Center(
+                                                child: Image.network(
+                                              item.bannerLandingpage ?? '',
                                               width: SizeConfig.screenWidth,
-                                              color: Colors.black,
-                                              child: UnconstrainedBox(
-                                                child: Container(
-                                                  height: 50,
-                                                  width: 50,
-                                                  child: const CircularProgressIndicator(
-                                                      // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                              fit: BoxFit.cover,
+                                              loadingBuilder: (context, child, loadingProgress) {
+                                                if (loadingProgress == null) return child;
+                                                return Center(
+                                                  child: Container(
+                                                    height: SizeConfig.screenHeight,
+                                                    width: SizeConfig.screenWidth,
+                                                    color: Colors.black,
+                                                    child: UnconstrainedBox(
+                                                      child: Container(
+                                                        height: 50,
+                                                        width: 50,
+                                                        child: const CircularProgressIndicator(
+                                                            // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                            ),
                                                       ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            )),
+                                          ))
+                                      .toList(),
+                                ),
+                              ),
+                              sixPx,
+                              //Tab
+                              hideTab
+                                  ? Container()
+                                  : Container(
+                                      padding: const EdgeInsets.all(16),
+                                      child: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8),
+                                          color: kHyppeLightSurface,
+                                        ),
+                                        child: TabBar(
+                                          controller: _tabController,
+                                          indicator: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              8.0,
+                                            ),
+                                            color: kHyppeLightButtonText,
+                                          ),
+                                          labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                                          labelColor: kHyppeTextLightPrimary,
+                                          unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                                          labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                          // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                                          unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                          tabs: [
+                                            ...List.generate(
+                                              nameTab.length,
+                                              (index) => Padding(
+                                                padding: EdgeInsets.all(9),
+                                                child: Text(
+                                                  nameTab[index],
+                                                  style: TextStyle(fontFamily: 'Lato', fontSize: 14),
                                                 ),
                                               ),
                                             ),
-                                          );
-                                        },
-                                      )),
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                        sixPx,
-                        //Tab
-                        hideTab
-                            ? Container()
-                            : Container(
-                                padding: const EdgeInsets.all(16),
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: kHyppeLightSurface,
-                                  ),
-                                  child: TabBar(
-                                    controller: _tabController,
-                                    indicator: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                        8.0,
-                                      ),
-                                      color: kHyppeLightButtonText,
-                                    ),
-                                    labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                                    labelColor: kHyppeTextLightPrimary,
-                                    unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                                    labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                    // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                                    unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                    tabs: [
-                                      ...List.generate(
-                                        nameTab.length,
-                                        (index) => Padding(
-                                          padding: EdgeInsets.all(9),
-                                          child: Text(
-                                            nameTab[index],
-                                            style: TextStyle(fontFamily: 'Lato', fontSize: 14),
-                                          ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                      ]),
+                                    ),
+                            ]),
+                          ),
+                        ),
+
+                        // FilterLanding(),
+                        // HyppePreviewVid(),
+                        // HyppePreviewDiary(),
+                      ];
+                    },
+                    body: TabBarView(
+                      controller: _tabController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        const ListOnGoing(),
+                        // Container(
+                        //   height: 40,
+                        //   padding: const EdgeInsets.only(left: 6.0, right: 6),
+                        // ),
+                        Container(
+                          height: 40,
+                          padding: const EdgeInsets.only(left: 6.0, right: 6),
+                        ),
+                      ],
                     ),
                   ),
-
-                  // FilterLanding(),
-                  // HyppePreviewVid(),
-                  // HyppePreviewDiary(),
-                ];
-              },
-              body: TabBarView(
-                controller: _tabController,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  cn.isLoadingLeaderboard || cn.leaderBoardData?.sId == null ? const ShimmerListLeaderboard() : const ListOnGoing(),
-                  // Container(
-                  //   height: 40,
-                  //   padding: const EdgeInsets.only(left: 6.0, right: 6),
-                  // ),
-                  Container(
-                    height: 40,
-                    padding: const EdgeInsets.only(left: 6.0, right: 6),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                ),
         ),
       ),
     );

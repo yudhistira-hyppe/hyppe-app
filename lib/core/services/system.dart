@@ -1662,10 +1662,9 @@ class System {
     var d1 = DateTime.utc(temp.year, temp.month, temp.day, temp.hour, temp.minute, temp.second);
     var startDay = DateTime.utc(startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute, startDate.second);
     var endDay = DateTime.utc(endDate.year, endDate.month, endDate.day, endDate.hour, endDate.minute, endDate.second);
+    print("======= compare ${startDay.compareTo(d1)}");
     if (startDay.compareTo(d1) <= -1) {
       //tanggal lewat ("berakhir dalam");
-      print(d1);
-      print(endDay);
       final difference = endDay.difference(d1);
       return [true, difference];
     } else {

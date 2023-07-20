@@ -446,4 +446,6 @@ class UrlConstants {
   static const String getLeaderBoard = "$challange/listleaderboard";
   static const String getOtherChallange = "$challange/allchallenge";
   static const String joinChallange = "$challange/join";
+  static const String listAchievement = "$challange/listbadgebyuser";
+  static const String collectionBadge = "$challange/listbadgeuserdetail";
 }

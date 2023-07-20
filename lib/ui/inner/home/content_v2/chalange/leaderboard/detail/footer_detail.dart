@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -19,7 +18,7 @@ class FooterChallangeDetail extends StatelessWidget {
     return Consumer<ChallangeNotifier>(
       builder: (_, cn, __) {
         bool twoWidget = false;
-        var challengeData = cn.leaderBoardData?.challengeData?[0];
+        var challengeData = cn.leaderBoardDetailData?.challengeData?[0];
         if (challengeData?.objectChallenge == "AKUN") {
           if (challengeData?.metrik?[0].aktivitasAkun?.isNotEmpty ?? [].isEmpty) {
             if ((challengeData?.metrik?[0].aktivitasAkun?[0].ikuti ?? 0) > 0 && (challengeData?.metrik?[0].aktivitasAkun?[0].referal ?? 0) > 0) {
@@ -55,7 +54,7 @@ class FooterChallangeDetail extends StatelessWidget {
     bool referral = false;
     Color bgColor = kHyppePrimary;
     Color textColors = kHyppeLightButtonText;
-    var challengeData = cn.leaderBoardData?.challengeData?[0];
+    var challengeData = cn.leaderBoardDetailData?.challengeData?[0];
     if (widgetTwo) {
       if (challengeData?.objectChallenge == "AKUN") {
         if (challengeData?.metrik?[0].aktivitasAkun?.isNotEmpty ?? [].isEmpty) {
@@ -126,6 +125,29 @@ class FooterChallangeDetail extends StatelessWidget {
                 }
               }
             }
+          }
+        }
+      } else {
+        var list = challengeData?.metrik?[0].interaksiKonten?[0];
+        var hyppeDiary = ((list?.suka?[0].hyppeDiary ?? 0) >= 1 ? 1 : 0) + ((list?.tonton?[0].hyppeDiary ?? 0) >= 1 ? 1 : 0);
+        var hyppePic = ((list?.suka?[0].hyppePic ?? 0) >= 1 ? 1 : 0);
+        var hyppeVid = ((list?.suka?[0].hyppeVid ?? 0) >= 1 ? 1 : 0) + ((list?.tonton?[0].hyppeVid ?? 0) >= 1 ? 1 : 0);
+        var tot = hyppeDiary + hyppePic + hyppeVid;
+        titleText = "Ikuti challenge dan unggah ide terbaikmu disini!";
+        textColors = kHyppeLightButtonText;
+
+        if (tot > 1) {
+          titleText = "Ikuti challenge dan unggah ide terbaikmu disini22!";
+          buttonText = "Posting Sekarang";
+        } else {
+          if (hyppePic >= 1) {
+            buttonText = "Posting HyppePic Kamu Sekarang";
+          }
+          if (hyppeVid >= 1) {
+            buttonText = "Posting HyppeVid Kamu Sekarang";
+          }
+          if (hyppeDiary >= 1) {
+            buttonText = "Posting HyppeDiary Kamu Sekarang";
           }
         }
       }

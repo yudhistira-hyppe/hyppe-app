@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 
-class ShimmerListLeaderboard extends StatelessWidget {
-  const ShimmerListLeaderboard({super.key});
+class ShimmerListAchievement extends StatelessWidget {
+  const ShimmerListAchievement({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class ShimmerListLeaderboard extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-            child: const CustomShimmer(width: 300, height: 100, radius: 8),
+            child: CustomShimmer(width: SizeConfig.screenWidth, height: 50, radius: 8),
           ),
           ListView.builder(
               shrinkWrap: true,
@@ -24,16 +25,16 @@ class ShimmerListLeaderboard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
                         child: Row(
                           children: [
-                            const ClipOval(child: CustomShimmer(width: 24, height: 24, radius: 4)),
-                            twelvePx,
                             const ClipOval(child: CustomShimmer(width: 43, height: 41, radius: 50)),
                             twelvePx,
-                            Column(
-                              children: const [
-                                CustomShimmer(width: 200, height: 11, radius: 50),
-                                sixPx,
-                                CustomShimmer(width: 200, height: 11, radius: 50),
-                              ],
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  CustomShimmer(width: (SizeConfig.screenWidth ?? 0) * 0.8, height: 11, radius: 50),
+                                  sixPx,
+                                  CustomShimmer(width: (SizeConfig.screenWidth ?? 0) * 0.8, height: 11, radius: 50),
+                                ],
+                              ),
                             ),
                           ],
                         ),

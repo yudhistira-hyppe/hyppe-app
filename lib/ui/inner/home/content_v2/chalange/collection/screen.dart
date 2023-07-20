@@ -1,8 +1,11 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
@@ -10,6 +13,8 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/collection/badge.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/home/widget/profile.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +35,7 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
 
     Future.delayed(Duration.zero, () {
       var cn = context.read<ChallangeNotifier>();
-      cn.initLeaderboard(context);
+      cn.collectionBadgeInit(context);
     });
 
     super.initState();
@@ -42,6 +47,7 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
   @override
   Widget build(BuildContext context) {
     var cn = context.watch<ChallangeNotifier>();
+    final hn = Provider.of<HomeNotifier>(context);
     isFromSplash = false;
     return Scaffold(
         appBar: AppBar(
@@ -76,13 +82,13 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
                     alignment: Alignment.center,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         CustomProfileImage(
                           following: true,
                           forStory: false,
                           width: 80,
                           height: 80,
-                          imageUrl: "",
+                          imageUrl: System().showUserPicture(hn.profileImage) ?? '',
                         ),
                         sixteenPx,
                         Text(
@@ -115,7 +121,10 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
                       ),
                     ),
                     twentyFourPx,
-                    BadgeWidget(),
+                    BadgeWidget(
+                      badgeData: cn.collectionBadgeData?[0].badgeAktif,
+                      avatar: hn.profileImage,
+                    ),
                   ],
                 ),
               ),
@@ -138,7 +147,7 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
                       ),
                     ),
                     twentyFourPx,
-                    BadgeWidget(),
+                    // BadgeWidget(badgeData: cn.collectionBadgeData?[0].badgeNonAktif),
                   ],
                 ),
               ),

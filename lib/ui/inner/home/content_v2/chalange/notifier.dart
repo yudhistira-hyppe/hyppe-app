@@ -3,6 +3,8 @@ import 'package:hyppe/core/bloc/challange/bloc.dart';
 import 'package:hyppe/core/bloc/challange/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/models/collection/chalange/achievement_model.dart';
+import 'package:hyppe/core/models/collection/chalange/badge_collection_model.dart';
 import 'package:hyppe/core/models/collection/chalange/banner_chalange_model.dart';
 import 'package:hyppe/core/models/collection/chalange/challange_model.dart';
 import 'package:hyppe/core/models/collection/chalange/leaderboard_challange_model.dart';
@@ -10,6 +12,7 @@ import 'package:hyppe/core/models/collection/localization_v2/localization_model.
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 
 class ChallangeNotifier with ChangeNotifier {
   static final _system = System();
@@ -23,13 +26,24 @@ class ChallangeNotifier with ChangeNotifier {
   bool isConnect = false;
   bool isLoading = false;
   bool isLoadingLeaderboard = false;
+  bool isLoadingAchivement = false;
 
   int pageGetChallange = 0;
+  int pageAchievement = 0;
+  int pageCollection = 0;
 
   List<BannerChalangeModel> bannerData = [];
   List<BannerChalangeModel> bannerSearchData = [];
   List<ChallangeModel> listChallangeData = [];
+  List<LeaderboardChallangeModel>? leaderBoardDataArray = [];
   LeaderboardChallangeModel? leaderBoardData;
+  LeaderboardChallangeModel? leaderBoardDetailData;
+  List<AcievementModel>? achievementData = [];
+  List<BadgeCollectionModel>? collectionBadgeData = [];
+
+  String berlangsung = "BERLANGSUNG";
+  String berakhir = "BERAKHIR";
+  String akanDatang = "AKAN DATANG";
 
   ///////
 
@@ -106,12 +120,12 @@ class ChallangeNotifier with ChangeNotifier {
     isLoadingLeaderboard = true;
     notifyListeners();
     checkInet(context);
-    await getLeaderBoard(context, id);
+    await getLeaderBoard(context, id, isDetail: true);
     isLoadingLeaderboard = false;
     notifyListeners();
   }
 
-  Future getLeaderBoard(BuildContext context, String idchallenge) async {
+  Future getLeaderBoard(BuildContext context, String idchallenge, {bool isDetail = false}) async {
     Map param = {
       "idchallenge": idchallenge,
       // "idchallenge": "6486f6d4b8ab34f61602f85a",
@@ -125,22 +139,38 @@ class ChallangeNotifier with ChangeNotifier {
 
     if (bannerFatch.challengeState == ChallengeState.getPostSuccess) {
       if (bannerFatch.data.isNotEmpty) {
-        leaderBoardData = LeaderboardChallangeModel.fromJson(bannerFatch.data[0]);
-        if (leaderBoardData?.startDatetime != '' || leaderBoardData?.startDatetime != null) {
-          var dateNote = await System().compareDate(leaderBoardData?.startDatetime ?? '', leaderBoardData?.endDatetime ?? '');
-          leaderBoardData?.onGoing = dateNote[0];
+        LeaderboardChallangeModel? getdata;
+        leaderBoardDataArray = [];
+        bannerFatch.data.forEach((v) => leaderBoardDataArray?.add(LeaderboardChallangeModel.fromJson(v)));
+        getdata = leaderBoardDataArray?.firstWhereOrNull((element) => element.status == berlangsung);
+        getdata ??= leaderBoardDataArray?.firstWhereOrNull((element) => element.status == akanDatang);
+
+        if (getdata?.startDatetime != '' || getdata?.startDatetime != null) {
+          var dateNote = await System().compareDate(getdata?.startDatetime ?? '', getdata?.endDatetime ?? '');
+          getdata?.onGoing = dateNote[0];
+          print("===000000");
           if (dateNote[1].inDays == 0) {
             if (dateNote[1].inHours == 0) {
-              leaderBoardData?.totalDays = dateNote[1].inMinutes;
-              leaderBoardData?.noteTime = 'inMinutes';
+              getdata?.totalDays = dateNote[1].inMinutes;
+              getdata?.noteTime = 'inMinutes';
             } else {
-              leaderBoardData?.totalDays = dateNote[1].inHours;
-              leaderBoardData?.noteTime = 'inHours';
+              getdata?.totalDays = dateNote[1].inHours;
+              getdata?.noteTime = 'inHours';
             }
           } else {
-            leaderBoardData?.totalDays = dateNote[1].inDays;
-            leaderBoardData?.noteTime = 'inDays';
+            getdata?.totalDays = dateNote[1].inDays;
+            getdata?.noteTime = 'inDays';
           }
+          print("===000 ${getdata?.totalDays}");
+        }
+
+        if (isDetail) {
+          print("===1");
+          leaderBoardDetailData = getdata;
+          print("leaderBoardDetailData ${leaderBoardDetailData?.onGoing} - ${leaderBoardDetailData?.totalDays}  - ${leaderBoardDetailData?.noteTime}");
+        } else {
+          print("===2");
+          leaderBoardData = getdata;
         }
       }
 
@@ -151,7 +181,12 @@ class ChallangeNotifier with ChangeNotifier {
   }
 
   Future getOtherChallange(BuildContext context) async {
-    Map param = {"iduser": SharedPreference().readStorage(SpKeys.userID), "page": pageGetChallange, "limit": 10};
+    Map param = {
+      "iduser": SharedPreference().readStorage(SpKeys.userID),
+      "page": pageGetChallange,
+      "limit": 10,
+      "jenischallenge": "64706cbfd3d174ff4989b167",
+    };
     final bannerNotifier = ChallangeBloc();
     await bannerNotifier.postChallange(context, data: param, url: UrlConstants.getOtherChallange);
     final bannerFatch = bannerNotifier.userFetch;
@@ -184,6 +219,52 @@ class ChallangeNotifier with ChangeNotifier {
 
     if (bannerFatch.challengeState == ChallengeState.getPostSuccess) {
       isLoading = false;
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future achievementInit(BuildContext context) async {
+    isLoadingAchivement = true;
+    Map param = {
+      "page": pageAchievement,
+      "limit": 10,
+      "iduser": "62c25b765f458435760af2dd",
+      // "iduser": SharedPreference().readStorage(SpKeys.userID),
+    };
+    final achivementNotifier = ChallangeBloc();
+    await achivementNotifier.postChallange(context, data: param, url: UrlConstants.listAchievement);
+    final achievementFatch = achivementNotifier.userFetch;
+
+    if (achievementFatch.challengeState == ChallengeState.getPostSuccess) {
+      achievementData = [];
+      achievementFatch.data.forEach((v) => achievementData?.add(AcievementModel.fromJson(v)));
+      isLoadingAchivement = false;
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future collectionBadgeInit(BuildContext context) async {
+    isLoadingAchivement = true;
+    Map param = {
+      "page": pageCollection,
+      "limit": 10,
+      // "iduser": "62c25b765f458435760af2dd",
+      "iduser": SharedPreference().readStorage(SpKeys.userID),
+    };
+    final achivementNotifier = ChallangeBloc();
+    await achivementNotifier.postChallange(context, data: param, url: UrlConstants.collectionBadge);
+    final achievementFatch = achivementNotifier.userFetch;
+
+    if (achievementFatch.challengeState == ChallengeState.getPostSuccess) {
+      collectionBadgeData = [];
+      achievementFatch.data.forEach((v) => collectionBadgeData?.add(BadgeCollectionModel.fromJson(v)));
+      isLoadingAchivement = false;
       notifyListeners();
       return true;
     } else {

@@ -110,7 +110,7 @@ class Getlastrank {
     sId = json['_id'];
     idUser = json['idUser'];
     idSubChallenge = json['idSubChallenge'];
-    ranking = json['ranking'];
+    ranking = json['ranking'] ?? 1;
     score = json['score'] ?? 0;
     if (json['history'] != null) {
       history = <History>[];
@@ -155,14 +155,18 @@ class PostChallengess {
   String? postID;
   String? postType;
   int? index;
+  String? mediaThumbEndpoint;
+  String? description;
 
-  PostChallengess({this.sId, this.postID, this.postType, this.index});
+  PostChallengess({this.sId, this.postID, this.postType, this.index, this.mediaThumbEndpoint, this.description});
 
   PostChallengess.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     postID = json['postID'];
     postType = json['postType'];
     index = json['index'];
+    mediaThumbEndpoint = json['mediaThumbEndpoint'];
+    description = json['description'];
   }
 }
 
@@ -426,7 +430,11 @@ class LeaderBoard {
   LeaderBoard({this.tampilBadge, this.height, this.weight, this.maxSize, this.minSize, this.warnaBackground, this.formatFile, this.bannerLeaderboard});
 
   LeaderBoard.fromJson(Map<String, dynamic> json) {
-    tampilBadge = json['tampilBadge'];
+    tampilBadge = json['tampilBadge'] is String
+        ? json['tampilBadge'] == "true"
+            ? true
+            : false
+        : json['tampilBadge'] ?? false;
     height = json['Height'];
     weight = json['Weight'];
     maxSize = json['maxSize'];

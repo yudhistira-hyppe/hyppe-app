@@ -19,6 +19,7 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimm
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class ChalangeDetailScreen extends StatefulWidget {
@@ -57,7 +58,6 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
 
       var cn = context.read<ChallangeNotifier>();
       cn.initLeaderboardDetail(context, widget.arguments?.id ?? '');
-      toHideTab(cn);
     });
 
     super.initState();
@@ -67,7 +67,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
   void afterFirstLayout(BuildContext context) {}
 
   void toHideTab(ChallangeNotifier cn) {
-    if ((cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1) || cn.leaderBoardData?.session == 1) {
+    if ((cn.leaderBoardDetailData?.onGoing == true && cn.leaderBoardDetailData?.session == 1) || cn.leaderBoardDetailData?.session == 1) {
       hideTab = true;
     } else {
       hideTab = false;
@@ -75,7 +75,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
 
     String inTime = '';
 
-    switch (cn.leaderBoardData?.noteTime) {
+    switch (cn.leaderBoardDetailData?.noteTime) {
       case "inDays":
         inTime = "Hari";
         break;
@@ -86,10 +86,10 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
         inTime = "Menit";
     }
 
-    if (cn.leaderBoardData?.onGoing == true) {
-      dateText = "Berakhir dalam ${cn.leaderBoardData?.totalDays} $inTime Lagi";
+    if (cn.leaderBoardDetailData?.onGoing == true) {
+      dateText = "Berakhir dalam ${cn.leaderBoardDetailData?.totalDays} $inTime Lagi";
     } else {
-      dateText = "Mulai  dalam ${cn.leaderBoardData?.totalDays} $inTime Lagi";
+      dateText = "Mulai  dalam ${cn.leaderBoardDetailData?.totalDays} $inTime Lagi";
     }
   }
 
@@ -97,6 +97,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
   Widget build(BuildContext context) {
     var cn = context.watch<ChallangeNotifier>();
     var tn = context.read<TranslateNotifierV2>();
+    toHideTab(cn);
     return Scaffold(
       backgroundColor: kHyppeLightSurface,
       appBar: PreferredSize(
@@ -109,10 +110,12 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                 color: kHyppeTextLightPrimary,
                 size: 16,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Routing().moveBack();
+              },
             ),
             title: Text(
-              '${cn.leaderBoardData?.challengeData?[0].nameChallenge}',
+              '${cn.leaderBoardDetailData?.challengeData?[0].nameChallenge}',
               style: const TextStyle(
                 fontSize: 16,
                 fontFamily: 'Lato',
@@ -143,142 +146,162 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
             return notification.depth == 0;
           },
           onRefresh: () async {},
-          child: ScrollConfiguration(
-            behavior: const ScrollBehavior().copyWith(overscroll: false),
-            child: NestedScrollView(
-              key: globalKey,
-              controller: context.read<MainNotifier>().scrollController,
-              physics: const NeverScrollableScrollPhysics(),
-              // dragStartBehavior: DragStartBehavior.start,
-              headerSliverBuilder: (context, bool innerBoxIsScrolled) {
-                return [
-                  SliverOverlapAbsorber(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                    sliver: SliverList(
-                      delegate: SliverChildListDelegate([
-                        CustomBaseCacheImage(
-                          memCacheWidth: 100,
-                          memCacheHeight: 100,
-                          widthPlaceHolder: 80,
-                          heightPlaceHolder: 80,
-                          imageUrl: (cn.leaderBoardData?.challengeData?[0].leaderBoard?[0].bannerLeaderboard),
-                          imageBuilder: (context, imageProvider) => Image(
-                            image: imageProvider,
-                            fit: BoxFit.fitHeight,
-                            width: SizeConfig.screenWidth,
-                          ),
-                          emptyWidget: GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                                decoration: BoxDecoration(color: kHyppeNotConnect),
-                                width: SizeConfig.screenWidth,
-                                height: 250,
-                                alignment: Alignment.center,
-                                child: CustomTextWidget(textToDisplay: tn.translate.couldntLoadImage ?? 'Error')),
-                          ),
-                          errorWidget: (context, url, error) {
-                            return GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                  decoration: BoxDecoration(color: kHyppeNotConnect),
+          child: cn.isLoadingLeaderboard || cn.leaderBoardDetailData?.sId == null
+              ? const ShimmerListLeaderboard()
+              : ScrollConfiguration(
+                  behavior: const ScrollBehavior().copyWith(overscroll: false),
+                  child: NestedScrollView(
+                    key: globalKey,
+                    controller: context.read<MainNotifier>().scrollController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    // dragStartBehavior: DragStartBehavior.start,
+                    headerSliverBuilder: (context, bool innerBoxIsScrolled) {
+                      return [
+                        SliverOverlapAbsorber(
+                          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                          sliver: SliverList(
+                            delegate: SliverChildListDelegate([
+                              CustomBaseCacheImage(
+                                memCacheWidth: 100,
+                                memCacheHeight: 100,
+                                widthPlaceHolder: 80,
+                                heightPlaceHolder: 80,
+                                imageUrl: (cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].bannerLeaderboard),
+                                imageBuilder: (context, imageProvider) => Image(
+                                  image: imageProvider,
+                                  fit: BoxFit.fitHeight,
                                   width: SizeConfig.screenWidth,
-                                  height: 250,
-                                  alignment: Alignment.center,
-                                  child: CustomTextWidget(textToDisplay: tn.translate.couldntLoadImage ?? 'Error')),
-                            );
-                          },
-                        ),
-                        twelvePx,
-                        Center(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: ShapeDecoration(
-                                  color: Colors.black.withOpacity(0.5),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                                 ),
-                                child: Text(
-                                  dateText,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white,
-                                  ),
+                                emptyWidget: GestureDetector(
+                                  onTap: () {},
+                                  child: Container(
+                                      decoration: BoxDecoration(color: kHyppeNotConnect),
+                                      width: SizeConfig.screenWidth,
+                                      height: 250,
+                                      alignment: Alignment.center,
+                                      child: CustomTextWidget(textToDisplay: tn.translate.couldntLoadImage ?? 'Error')),
                                 ),
+                                errorWidget: (context, url, error) {
+                                  return GestureDetector(
+                                    onTap: () {},
+                                    child: Container(
+                                        decoration: BoxDecoration(color: kHyppeNotConnect),
+                                        width: SizeConfig.screenWidth,
+                                        height: 250,
+                                        alignment: Alignment.center,
+                                        child: CustomTextWidget(textToDisplay: tn.translate.couldntLoadImage ?? 'Error')),
+                                  );
+                                },
                               ),
-                            ],
-                          ),
-                        ),
-
-                        sixPx,
-                        //Tab
-                        hideTab
-                            ? Container()
-                            : Container(
-                                padding: const EdgeInsets.all(16),
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: kHyppeLightSurface,
-                                  ),
-                                  child: TabBar(
-                                    controller: _tabController,
-                                    indicator: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                        8.0,
+                              twelvePx,
+                              Center(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(8),
+                                      decoration: ShapeDecoration(
+                                        color: Colors.black.withOpacity(0.5),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                                       ),
-                                      color: kHyppeLightButtonText,
-                                    ),
-                                    labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                                    labelColor: kHyppeTextLightPrimary,
-                                    unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                                    labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                    // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                                    unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                    tabs: [
-                                      ...List.generate(
-                                        nameTab.length,
-                                        (index) => Padding(
-                                          padding: EdgeInsets.all(9),
-                                          child: Text(
-                                            nameTab[index],
-                                            style: TextStyle(fontFamily: 'Lato', fontSize: 14),
-                                          ),
+                                      child: Text(
+                                        dateText,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white,
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                      ]),
+                              sixPx,
+                              Center(
+                                child: Container(
+                                    width: SizeConfig.screenWidth,
+                                    padding: const EdgeInsets.only(top: 24, bottom: 24),
+                                    margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
+                                    decoration: ShapeDecoration(
+                                      color: Colors.white,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8))),
+                                    ),
+                                    child: Center(
+                                      child: Text("Leaderboard",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                          )),
+                                    )),
+                              ),
+                              //Tab
+                              hideTab
+                                  ? Container()
+                                  : Container(
+                                      margin: const EdgeInsets.only(left: 16.0, right: 16),
+                                      padding: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
+                                      color: Colors.white,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8),
+                                          color: kHyppeLightSurface,
+                                        ),
+                                        child: TabBar(
+                                          controller: _tabController,
+                                          indicator: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              8.0,
+                                            ),
+                                            color: kHyppeLightButtonText,
+                                          ),
+                                          labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                                          labelColor: kHyppeTextLightPrimary,
+                                          unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                                          labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                          // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                                          unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                          tabs: [
+                                            ...List.generate(
+                                              nameTab.length,
+                                              (index) => Padding(
+                                                padding: EdgeInsets.all(9),
+                                                child: Text(
+                                                  nameTab[index],
+                                                  style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                            ]),
+                          ),
+                        ),
+
+                        // FilterLanding(),
+                        // HyppePreviewVid(),
+                        // HyppePreviewDiary(),
+                      ];
+                    },
+                    body: TabBarView(
+                      controller: _tabController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        const ListOnGoingDetail(),
+                        // Container(
+                        //   height: 40,
+                        //   padding: const EdgeInsets.only(left: 6.0, right: 6),
+                        // ),
+                        Container(
+                          height: 40,
+                          padding: const EdgeInsets.only(left: 6.0, right: 6),
+                        ),
+                      ],
                     ),
                   ),
-
-                  // FilterLanding(),
-                  // HyppePreviewVid(),
-                  // HyppePreviewDiary(),
-                ];
-              },
-              body: TabBarView(
-                controller: _tabController,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  cn.isLoadingLeaderboard || cn.leaderBoardData?.sId == null ? const ShimmerListLeaderboard() : const ListOnGoingDetail(),
-                  // Container(
-                  //   height: 40,
-                  //   padding: const EdgeInsets.only(left: 6.0, right: 6),
-                  // ),
-                  Container(
-                    height: 40,
-                    padding: const EdgeInsets.only(left: 6.0, right: 6),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                ),
         ),
       ),
     );

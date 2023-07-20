@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_commingsoon_page.dart';
 import 'package:hyppe/ui/constant/widget/custom_empty_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/card_chalange.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/content_leader.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/litem_leader.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ux/path.dart';
@@ -29,7 +29,7 @@ class _ListOnGoingState extends State<ListOnGoing> {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1
+            cn.leaderBoardData?.onGoing == false
                 ? const Padding(
                     padding: EdgeInsets.all(32.0),
                     child: CustomCommingSoon(
@@ -47,17 +47,29 @@ class _ListOnGoingState extends State<ListOnGoing> {
                               subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                             ),
                           )
-                        : ScrollConfiguration(
-                            behavior: const ScrollBehavior().copyWith(overscroll: false),
-                            child: ListView.builder(
-                              itemCount: cn.leaderBoardData?.getlastrank?.length,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return ItemLeader(data: cn.leaderBoardData?.getlastrank?[index]);
-                              },
-                            ),
-                          ),
+                        : cn.leaderBoardData?.getlastrank?[0].score == 0
+                            ? const Padding(
+                                padding: EdgeInsets.all(32.0),
+                                child: CustomEmptyWidget(
+                                  title: 'Belum ada Leaderboard Tersedia',
+                                  subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                                ),
+                              )
+                            : ScrollConfiguration(
+                                behavior: const ScrollBehavior().copyWith(overscroll: false),
+                                child: ListView.builder(
+                                  itemCount: cn.leaderBoardData?.getlastrank?.length,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    if (cn.leaderBoardData?.challengeData?[0].objectChallenge == 'KONTEN') {
+                                      return ContentLeaderboard(data: cn.leaderBoardData?.getlastrank?[index]);
+                                    } else {
+                                      return ItemLeader(data: cn.leaderBoardData?.getlastrank?[index]);
+                                    }
+                                  },
+                                ),
+                              ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
               child: ButtonChallangeWidget(

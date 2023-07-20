@@ -89,11 +89,13 @@ class ItemLeader extends StatelessWidget {
                     data?.ranking == 1 || data?.ranking == 2 || data?.ranking == 3
                         ? Positioned.fill(
                             child: Center(
-                              child: Image.network(
-                                "${data?.winnerBadgeOther}",
-                                width: 50 * SizeConfig.scaleDiagonal,
-                                height: 50 * SizeConfig.scaleDiagonal,
-                              ),
+                              child: data?.winnerBadgeOther != null
+                                  ? Image.network(
+                                      "${data?.winnerBadgeOther}",
+                                      width: 50 * SizeConfig.scaleDiagonal,
+                                      height: 50 * SizeConfig.scaleDiagonal,
+                                    )
+                                  : Container(),
                             ),
                           )
                         : Container()

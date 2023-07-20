@@ -7,6 +7,7 @@ import 'package:hyppe/ui/constant/widget/custom_empty_page.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/footer_detail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/content_leader.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/litem_leader.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,13 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ChallangeNotifier>(builder: (_, cn, __) {
+      var boollUser = false;
+      cn.leaderBoardDetailData?.getlastrank?.forEach((e) {
+        print(e.isUserLogin);
+        if (e.isUserLogin == true) {
+          boollUser = true;
+        }
+      });
       return SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         child: Column(
@@ -31,14 +39,15 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
-              decoration: BoxDecoration(
+              margin: const EdgeInsets.only(left: 16.0, right: 16),
+              padding: EdgeInsets.only(bottom: 16),
+              decoration: const BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
               ),
               child: Column(
                 children: [
-                  cn.leaderBoardData?.onGoing == false
+                  cn.leaderBoardDetailData?.onGoing == false
                       ? const Padding(
                           padding: EdgeInsets.all(32.0),
                           child: CustomCommingSoon(
@@ -48,7 +57,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                         )
                       : cn.isLoadingLeaderboard
                           ? Container()
-                          : cn.leaderBoardData?.getlastrank?.isEmpty ?? [].isEmpty
+                          : cn.leaderBoardDetailData?.getlastrank?.isEmpty ?? [].isEmpty
                               ? const Padding(
                                   padding: EdgeInsets.all(32.0),
                                   child: CustomEmptyWidget(
@@ -56,39 +65,54 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                     subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                                   ),
                                 )
-                              : ScrollConfiguration(
-                                  behavior: const ScrollBehavior().copyWith(overscroll: false),
-                                  child: ListView.builder(
-                                    itemCount: cn.leaderBoardData?.getlastrank?.length,
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      return ItemLeader(data: cn.leaderBoardData?.getlastrank?[index]);
-                                    },
-                                  ),
-                                ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                    child: ButtonChallangeWidget(
-                        bgColor: kHyppePrimary,
-                        text: "Ikuti Challange",
-                        isloading: false,
-                        function: () async {
-                          if (!isloadingButton) {
-                            isloadingButton = true;
-                            await cn.joinChallange(context, cn.leaderBoardData?.challengeId ?? '').then((value) {
-                              if (value == true) {
-                                isloadingButton = false;
-                                ShowGeneralDialog.joinChallange(context).then((value) => print("kelar om")).whenComplete(() {
-                                  cn.initLeaderboardDetail(context, cn.leaderBoardData?.challengeId ?? '');
-                                });
-                              } else {
-                                isloadingButton = false;
-                              }
-                            });
-                          }
-                        }),
-                  ),
+                              : cn.leaderBoardDetailData?.getlastrank?[0].score == 0
+                                  ? const Padding(
+                                      padding: EdgeInsets.all(32.0),
+                                      child: CustomEmptyWidget(
+                                        title: 'Belum ada Leaderboard Tersedia',
+                                        subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                                      ),
+                                    )
+                                  : ScrollConfiguration(
+                                      behavior: const ScrollBehavior().copyWith(overscroll: false),
+                                      child: ListView.builder(
+                                        itemCount: cn.leaderBoardDetailData?.getlastrank?.length,
+                                        shrinkWrap: true,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          if (cn.leaderBoardDetailData?.challengeData?[0].objectChallenge == 'KONTEN') {
+                                            return ContentLeaderboard(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                          } else {
+                                            return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                          }
+                                          // return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                        },
+                                      ),
+                                    ),
+                  boollUser
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                          child: ButtonChallangeWidget(
+                              bgColor: cn.leaderBoardDetailData?.joined == 'NOT ALLOWED' ? kHyppeBottomNavBarIcon : kHyppePrimary,
+                              text: "Ikuti Challange",
+                              isloading: false,
+                              function: () async {
+                                if (!isloadingButton) {
+                                  isloadingButton = true;
+                                  await cn.joinChallange(context, cn.leaderBoardDetailData?.challengeId ?? '').then((value) {
+                                    if (value == true) {
+                                      isloadingButton = false;
+                                      ShowGeneralDialog.joinChallange(context).then((value) => print("kelar om")).whenComplete(() {
+                                        cn.initLeaderboardDetail(context, cn.leaderBoardDetailData?.challengeId ?? '');
+                                      });
+                                    } else {
+                                      isloadingButton = false;
+                                    }
+                                  });
+                                }
+                              }),
+                        ),
                 ],
               ),
             ),
@@ -102,7 +126,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                 ),
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       "Deskripsi",
                       style: TextStyle(
                         fontSize: 16,
@@ -110,10 +134,10 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                       ),
                     ),
                     twentyPx,
-                    Text("${cn.leaderBoardData?.challengeData?[0].description}"),
+                    Text("${cn.leaderBoardDetailData?.challengeData?[0].description}"),
                   ],
                 )),
-            cn.leaderBoardData?.onGoing == false
+            cn.leaderBoardDetailData?.onGoing == false || !boollUser
                 ? Container()
                 : Container(
                     width: SizeConfig.screenWidth,
@@ -122,7 +146,8 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: FooterChallangeDetail()),
+                    child: const FooterChallangeDetail(),
+                  ),
           ],
         ),
       );
