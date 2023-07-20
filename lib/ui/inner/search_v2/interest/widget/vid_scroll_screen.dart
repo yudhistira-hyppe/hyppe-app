@@ -406,7 +406,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                   orientation: Orientation.portrait,
                   onShowAds: (ads){
                     setState(() {
-                      vidData[index].adsShowing = ads != null;
+                      vidData[index].inBetweenAds = ads;
                     });
                   },
                   betweenAds: (ads){

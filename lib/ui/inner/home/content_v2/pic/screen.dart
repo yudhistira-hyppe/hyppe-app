@@ -1074,7 +1074,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             ],
           ),
         ),
-        context.getAdsInBetween(notifier.pic?[index].adsData, notifier.pic?[index].postID ?? '', (info){
+        context.getAdsInBetween(notifier.pic?[index].inBetweenAds, notifier.pic?[index].postID ?? '', (info){
           fAliplayer?.stop();
         })
       ],

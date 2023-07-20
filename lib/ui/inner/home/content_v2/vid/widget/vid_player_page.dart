@@ -51,6 +51,7 @@ class VidPlayerPage extends StatefulWidget {
   final Function(FlutterAliplayer)? getAdsPlayer;
   final Function(ContentData)? onPlay;
   final Function(AdsData?)? onShowAds;
+  final Function(int) timeVid;
   final Orientation orientation;
   final Function(AdsData?) betweenAds;
   // FlutterAliplayer? fAliplayer;
@@ -70,6 +71,7 @@ class VidPlayerPage extends StatefulWidget {
     this.getPlayer,
     this.getAdsPlayer,
     this.onShowAds,
+    required this.timeVid,
     required this.orientation,
     required this.betweenAds,
     // this.fAliplayer,
@@ -200,15 +202,9 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
         WidgetsBinding.instance.addObserver(this);
         bottomIndex = 0;
 
-        // fAliplayer?.setAutoPlay(widget.fromDeeplink);
-        // if (widget.fromDeeplink) {
-        //   isPlay = true;
-        // }
 
         _dataSourceMap = widget.dataSourceMap;
         _dataSourceAdsMap = {};
-        // isPlay = false;
-        // isPrepare = false;
         setState(() {});
 
         //Turn on mix mode
@@ -275,8 +271,6 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
             isPrepare = true;
           });
         });
-        // isPlay = true;
-        // isPause = false;
       });
       fAliplayer?.setOnRenderingStart((playerId) {
         // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
@@ -380,6 +374,9 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                 setState(() {
                   adsData = notifier.tempAdsData;
                 });
+                if(widget.onShowAds != null){
+                  widget.onShowAds!(adsData);
+                }
               }
 
 
@@ -749,13 +746,16 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           setState(() {
             adsData = null;
           });
+          if(widget.onShowAds != null){
+            widget.onShowAds!(adsData);
+          }
           },
           onFullscreen: (){
             onFullscreen(notifier);
           },
           onClose: (){
             setState(() {
-              isPlay = true;
+              isPlay = false;
 
               adsData = null;
               if(widget.onShowAds != null){
@@ -912,7 +912,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                     widget.height ?? 0,
                   ),
                 ),
-              if(adsData != null)
+              if(adsData != null && isPlay)
                 Positioned.fill(child: adsPlayerPage!)
             ],
           ),
@@ -1412,20 +1412,6 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           ),
           settings: const RouteSettings()));
       notifier.isShowingAds = adsData != null;
-      // VideoIndicator value = await showDialog(
-      //     context: context,
-      //     builder: (context) {
-      //       return VideoFullscreenPage(
-      //         aliPlayerView: aliPlayerView!,
-      //         fAliplayer: fAliplayer,
-      //         data: widget.data ?? ContentData(),
-      //         onClose: () {
-      //           // Routing().moveBack();
-      //         },
-      //         slider: _buildContentWidget(context, widget.orientation),
-      //         videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
-      //       );
-      //     });
       if (mounted) {
         setState(() {
 
@@ -1530,27 +1516,5 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
     } else {
       Navigator.pop(context, changeValue);
     }
-  }
-
-  void adsComleteOrSkip() {
-    _showTipsWidget = true;
-    _showLoading = false;
-    _tipsContent = "Play Again";
-    isPause = true;
-    setState(() {
-      isPlay = true;
-    });
-    // fAliplayerAds?.stop();
-    // fAliplayerAds?.destroy();
-    fAliplayer?.prepare().whenComplete(() => _showLoading = false);
-    fAliplayer?.isAutoPlay();
-    fAliplayer?.play();
-
-    ///
-    // fAliplayerAds?.stop();
-    adsData = null;
-    widget.onShowAds!(adsData);
-    context.read<VidDetailNotifier>().adsData = null;
-    setState(() {});
   }
 }

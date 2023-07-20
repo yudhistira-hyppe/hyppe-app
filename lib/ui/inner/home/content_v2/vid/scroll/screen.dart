@@ -503,7 +503,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         dataSourceMap: map,
                         onShowAds: (ads){
                           setState(() {
-                            vidData?[index].adsShowing = ads != null;
+                            vidData?[index].inBetweenAds = ads;
                           });
                         },
                         betweenAds: (ads){

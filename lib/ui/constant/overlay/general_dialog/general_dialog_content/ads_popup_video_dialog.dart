@@ -121,9 +121,12 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
 
   var loadLaunch = false;
 
+  bool isMute = false;
+
   @override
   void initState() {
     // TODO: implement initState
+    _showLoading = true;
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
@@ -197,6 +200,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
         _animationController?.forward();
         setState(() {
           isPrepare = true;
+          _showLoading = false;
         });
       });
       isPlay = true;
@@ -228,6 +232,11 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             Wakelock.disable();
+            if (mounted) {
+              setState(() {
+                _showLoading = false;
+              });
+            }
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
             Wakelock.disable();
@@ -249,16 +258,34 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
         _showLoading = true;
       });
     }, loadingProgress: (percent, netSpeed, playerId) {
-      _loadingPercent = percent;
       if (percent == 100) {
         _showLoading = false;
+      }
+      try {
+        if (mounted) {
+          setState(() {
+            _loadingPercent = percent;
+          });
+        } else {
+          _loadingPercent = percent;
+        }
+      } catch (e) {
+        print('error loadingProgress: $e');
       }
       setState(() {});
     }, loadingEnd: (playerId) {
       _animationController?.forward();
-      setState(() {
-        _showLoading = false;
-      });
+      try {
+        if (mounted) {
+          setState(() {
+            _showLoading = false;
+          });
+        } else {
+          _showLoading = false;
+        }
+      } catch (e) {
+        print('error loadingEnd: $e');
+      }
     });
     fAliplayer?.setOnSeekComplete((playerId) {
       _inSeek = false;
@@ -280,11 +307,17 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
           print("*************last ${secondsSkip}");
           lastDetik = detik;
         }
-        // if (!_inSeek) {
-        //   setState(() {
-        //     _currentPositionText = extraValue ?? 0;
-        //   });
-        // }
+        try {
+          if (mounted) {
+            setState(() {
+              _currentPositionText = extraValue ?? 0;
+            });
+          } else {
+            _currentPositionText = extraValue ?? 0;
+          }
+        } catch (e) {
+          print('error setOnInfo: $e');
+        }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
         _bufferPosition = extraValue ?? 0;
         if (mounted) {
@@ -445,6 +478,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
     fAliplayer?.stop();
     fAliplayer?.destroy();
     super.dispose();
+    adsGlobalAliPlayer = null;
     WidgetsBinding.instance.removeObserver(this);
     if (_networkSubscriptiion != null) {
       _networkSubscriptiion?.cancel();
@@ -595,17 +629,80 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                   children: [
                                     AspectRatio(
                                       aspectRatio: 16/9,
-                                      child: ClipRRect(
-                                        borderRadius:
-                                        const BorderRadius.all(Radius.circular(16.0)),
-                                        child: AliPlayerView(
-                                          onCreated: onViewPlayerCreated,
-                                          x: 0,
-                                          y: 0,
-                                          height:
-                                          MediaQuery.of(context).size.width * 16/9,
-                                          width: MediaQuery.of(context).size.width,
-                                        ),
+                                      child: Stack(
+                                        children: [
+                                          Positioned.fill(
+                                            child: ClipRRect(
+                                              borderRadius:
+                                              const BorderRadius.all(Radius.circular(16.0)),
+                                              child: AliPlayerView(
+                                                onCreated: onViewPlayerCreated,
+                                                x: 0,
+                                                y: 0,
+                                                height:
+                                                MediaQuery.of(context).size.width * 16/9,
+                                                width: MediaQuery.of(context).size.width,
+                                              ),
+                                            ),
+                                          ),
+                                          if (_showLoading)
+                                            Positioned.fill(
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    const CircularProgressIndicator(
+                                                      backgroundColor: Colors.white,
+                                                      strokeWidth: 3.0,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10.0,
+                                                    ),
+                                                    Text(
+                                                      "$_loadingPercent%",
+                                                      style: const TextStyle(color: Colors.white),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          Positioned(
+                                            top: 12,
+                                            right: 12,
+                                            child: Container(
+                                              padding: const EdgeInsets.all(2),
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(5),
+                                                  color: Colors.black.withOpacity(0.5)),
+                                              child: Text(
+                                                System.getTimeformatByMs(_currentPositionText),
+                                                style: const TextStyle(color: Colors.white, fontSize: 11),
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                              bottom: 12,
+                                              right: 12,
+                                              child: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                isMute = !isMute;
+                                              });
+                                              fAliplayer?.setMuted(isMute);
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(right: 2.0),
+                                              child: CustomIconWidget(
+                                                iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                                                defaultColor: false,
+                                                height: 24,
+                                              ),
+                                            ),
+                                          ),),
+                                        ],
                                       ),
                                     ),
                                     // Image.asset('${AssetPath.pngPath}avatar_ads_exp.png', width: double.infinity, fit: BoxFit.cover,),

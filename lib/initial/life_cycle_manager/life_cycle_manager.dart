@@ -126,6 +126,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           print('globalAudioPlayer!.resume');
           globalAudioPlayer!.resume();
         }
+        if (adsGlobalAliPlayer != null){
+          adsGlobalAliPlayer?.play();
+        }
 
         final _userToken = SharedPreference().readStorage(SpKeys.userToken);
 

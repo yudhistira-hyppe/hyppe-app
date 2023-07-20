@@ -151,10 +151,11 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDSuccess');
     super.initState();
-
+    final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+    notifier.initAdsContent();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
-        final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+
         notifier.secondsSkip = widget.data?.adsSkip ?? 0;
         notifier.adsAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.adsId ?? 'video_player_landing');
 
@@ -357,9 +358,14 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
           }
         } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
           _bufferPosition = extraValue ?? 0;
-          if (mounted) {
-            setState(() {});
+          try{
+            if (mounted) {
+              setState(() {});
+            }
+          }catch(e){
+            e.logger();
           }
+
         } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
           // Fluttertoast.showToast(msg: "AutoPlay");
         } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
@@ -608,7 +614,8 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
     final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
     notifier.adsAliplayer?.stop();
     notifier.adsAliplayer?.destroy();
-
+    widget.onClose();
+    adsGlobalAliPlayer = null;
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
     if (_networkSubscriptiion != null) {

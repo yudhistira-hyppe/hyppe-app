@@ -45,6 +45,11 @@ class VideoNotifier with ChangeNotifier{
     notifyListeners();
   }
 
+  initAdsContent(){
+    _adsCurrentPosition = 0;
+    _adsCurrentPositionText = 0;
+  }
+
   int _secondsSkip = 0;
   int get secondsSkip => _secondsSkip;
   set secondsSkip (int value){

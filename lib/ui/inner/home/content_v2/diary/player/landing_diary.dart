@@ -1063,7 +1063,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
             ],
           ),
         ),
-        context.getAdsInBetween(notifier.diaryData?[index].adsData, notifier.diaryData?[index].postID ?? '', (info){
+        context.getAdsInBetween(notifier.diaryData?[index].inBetweenAds, notifier.diaryData?[index].postID ?? '', (info){
           fAliplayer?.stop();
         })
       ],

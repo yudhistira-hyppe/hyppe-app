@@ -120,7 +120,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void setAdsData(int index, AdsData adsData){
-    pic?[index].adsData = adsData;
+    pic?[index].inBetweenAds = adsData;
     notifyListeners();
   }
 

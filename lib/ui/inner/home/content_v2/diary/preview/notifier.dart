@@ -79,7 +79,7 @@ class PreviewDiaryNotifier with ChangeNotifier {
   }
 
   void setAdsData(int index, AdsData adsData){
-    diaryData?[index].adsData = adsData;
+    diaryData?[index].inBetweenAds = adsData;
     notifyListeners();
   }
 

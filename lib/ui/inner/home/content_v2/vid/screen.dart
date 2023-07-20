@@ -228,6 +228,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
     );
   }
 
+  var secondsVideo = 0;
+
   Widget itemVid(BuildContext context, ContentData vidData, PreviewVidNotifier notifier, int index) {
     var map = {
       DataSourceRelated.vidKey: vidData.apsaraId,
@@ -370,6 +372,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                       }
                     }
                   }
+                  if(info.visibleFraction > 0.9){
+                    context.read<VideoNotifier>().currentPostID = '';
+                  }
+                  if(info.visibleFraction == 1.0){
+                    ads.adsAliplayer?.play();
+                  }
                 },
                 child: globalInternetConnection
                     ? Container(
@@ -378,13 +386,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                           return VidPlayerPage(
                             orientation: Orientation.portrait,
                             onShowAds: (ads){
-                              setState(() {
-                                vidData.adsShowing = ads != null;
-                              });
+                              notifier.setAdsData(index, ads);
                             },
                             betweenAds: (ads){
                               if(ads != null){
-                                notifier.setAdsData(index, ads);
+                                notifier.setInBetweenAds(index, ads);
                               }
                             },
                             playMode: (vidData.isApsara ?? false)
@@ -476,7 +482,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                             )),
                       ),
               ),
-              if(vidData.adsShowing ?? true)
+              if(vidData.adsData != null)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 decoration: const BoxDecoration(color: kHyppeLightSurface),
@@ -500,7 +506,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomTextWidget(
-                            textToDisplay: 'nike.official',
+                            textToDisplay: vidData.adsData?.fullName ?? '',
                             textStyle: context
                                 .getTextTheme()
                                 .caption
@@ -517,7 +523,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                                         .caption
                                         ?.copyWith(fontWeight: FontWeight.w700, color: Colors.black)),
                                 TextSpan(
-                                    text: ' www.example.com',
+                                    text: ' ${vidData.adsData?.adsUrlLink}',
                                     style: context.getTextTheme().caption)
                               ]),
                             ),
@@ -534,7 +540,65 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                             color: KHyppeButtonAds),
                         child: InkWell(
                           splashColor: context.getColorScheme().secondary,
-                          onTap: () async {},
+                          onTap: () async {
+                            final data = vidData.adsData;
+                            if(data != null){
+                              if (data.adsUrlLink?.isEmail() ?? false) {
+                                final email = data.adsUrlLink!.replaceAll('email:', '');
+                                setState(() {
+                                  loadLaunch = true;
+                                });
+
+                                print('second close ads: $secondsVideo');
+                                // Navigator.pop(context);
+                                // Future.delayed(const Duration(milliseconds: 800), () {
+                                //   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                // });
+                                adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
+                                  Navigator.pop(context);
+                                  Future.delayed(const Duration(milliseconds: 800), () {
+                                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                  });
+                                });
+                              } else {
+                                try {
+                                  final uri = Uri.parse(data.adsUrlLink ?? '');
+                                  print('bottomAdsLayout ${data.adsUrlLink}');
+                                  if (await canLaunchUrl(uri)) {
+                                    setState(() {
+                                      loadLaunch = true;
+                                    });
+                                    print('second close ads: $secondsVideo');
+                                    // Navigator.pop(context);
+                                    // await launchUrl(
+                                    //   uri,
+                                    //   mode: LaunchMode.externalApplication,
+                                    // );
+                                    adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
+                                      Navigator.pop(context);
+                                      await launchUrl(
+                                        uri,
+                                        mode: LaunchMode.externalApplication,
+                                      );
+                                    });
+                                  } else {
+                                    throw "Could not launch $uri";
+                                  }
+                                  // can't launch url, there is some error
+                                } catch (e) {
+                                  setState(() {
+                                    loadLaunch = true;
+                                  });
+                                  print('second close ads: $secondsVideo');
+                                  // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                  adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
+                                    System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                  });
+                                }
+                              }
+                            }
+
+                          },
                           child: Builder(
                             builder: (context) {
                               final notifier = context.read<TranslateNotifierV2>();
@@ -816,7 +880,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
             ],
           ),
         ),
-        context.getAdsInBetween(vidData.adsData, vidData.postID ?? '', (info){
+        context.getAdsInBetween(vidData.inBetweenAds, vidData.postID ?? '', (info){
           if (notifier.vidData?[_curIdx].fAliplayer != null) {
             notifier.vidData?[_curIdx].fAliplayer?.pause();
           } else {
