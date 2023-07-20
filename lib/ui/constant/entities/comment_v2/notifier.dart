@@ -64,6 +64,11 @@ class CommentNotifierV2 with ChangeNotifier {
 
   bool get showTextInput => _showTextInput;
 
+  bool _isLoadingLoadMore = false;
+  bool get isLoadingLoadMore => _isLoadingLoadMore;
+
+  String inputCaption = '';
+
   set showTextInput(bool value) {
     _showTextInput = value;
     notifyListeners();
@@ -99,6 +104,11 @@ class CommentNotifierV2 with ChangeNotifier {
     notifyListeners();
   }
 
+  set isLoadingLoadMore(bool val) {
+    _isLoadingLoadMore = val;
+    notifyListeners();
+  }
+
   Future initState(
     BuildContext context,
     String? postID,
@@ -123,6 +133,7 @@ class CommentNotifierV2 with ChangeNotifier {
     _showTextInput = false;
     parentID = null;
     _commentData = null;
+    isShowAutoComplete = false;
   }
 
   Future<void> getComment(
@@ -338,6 +349,22 @@ class CommentNotifierV2 with ChangeNotifier {
     notifyListeners();
   }
 
+  // disable load more because interfere swipe to refresh feature
+  // Future scrollListPeopleListener(
+  //   BuildContext context,
+  //   ScrollController scrollController,
+  //   input,
+  // ) async {
+  //   if (input.length > 2) {
+  //     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+  //       isLoadingLoadMore = true;
+  //       _startSearch++;
+  //       searchPeople(context, input: input);
+  //       notifyListeners();
+  //     }
+  //   }
+  // }
+
   void autoComplete(BuildContext context, value) {
     final selection = _commentController.selection;
     String _text = value.toString().substring(0, selection.baseOffset);
@@ -348,6 +375,7 @@ class CommentNotifierV2 with ChangeNotifier {
       String withat = words.last;
       if (_tagRegex.hasMatch(withat)) {
         String withoutat = withat.substring(1);
+        inputCaption = withoutat;
         if (withoutat.length > 2) {
           _startSearch = 0;
           _isShowAutoComplete = true;
@@ -379,6 +407,7 @@ class CommentNotifierV2 with ChangeNotifier {
         });
       }
       _isLoading = false;
+      isLoadingLoadMore = false;
     }
     notifyListeners();
   }
