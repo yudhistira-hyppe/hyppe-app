@@ -40,7 +40,7 @@ class AdsData {
   int? height;
   bool? isReport;
   String? apsaraAuth;
-  bool? isLoading;
+  bool isLoading = false;
 
   AdsData({
     this.adsId,
@@ -65,6 +65,7 @@ class AdsData {
     this.height,
     this.isReport,
     this.apsaraAuth,
+    this.isLoading = false
   });
 
   AdsData.fromJson(Map<String, dynamic> json) {

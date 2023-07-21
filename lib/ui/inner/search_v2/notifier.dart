@@ -64,17 +64,17 @@ class SearchNotifier with ChangeNotifier {
   SearchContentModel? _searchContent;
   SearchContentModel? get searchContent => _searchContent;
 
-  // bool _loadingSearch = true;
-  // bool get loadingSearch => _loadingSearch;
-  // set loadingSearch(bool state){
-  //   _loadingSearch = state;
-  //   notifyListeners();
-  // }
-
   bool _connectionError = false;
   bool get connectionError => _connectionError;
   set connectionError(bool state) {
     _connectionError = state;
+    notifyListeners();
+  }
+
+  bool _isZoom = false;
+  bool get isZoom => _isZoom;
+  set isZoom(bool state){
+    _isZoom = state;
     notifyListeners();
   }
 
@@ -144,7 +144,7 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  bool _isHasNextPic = true;
+  bool _isHasNextPic = false;
   bool get isHasNextPic => _isHasNextPic;
   set isHasNextPic(bool state){
     _isHasNextPic = state;
@@ -154,7 +154,7 @@ class SearchNotifier with ChangeNotifier {
     _isHasNextPic = state;
   }
 
-  bool _isHasNextVid = true;
+  bool _isHasNextVid = false;
   bool get isHasNextVid => _isHasNextVid;
   set isHasNextVid(bool state){
     _isHasNextVid = state;
@@ -164,7 +164,7 @@ class SearchNotifier with ChangeNotifier {
     _isHasNextVid = state;
   }
 
-  bool _isHasNextDiary = true;
+  bool _isHasNextDiary = false;
   bool get isHasNextDiary => _isHasNextDiary;
   set isHasNextDiary(bool state){
     _isHasNextDiary = state;
@@ -172,6 +172,36 @@ class SearchNotifier with ChangeNotifier {
   }
   setHasNextDiary(bool state){
     _isHasNextDiary = state;
+  }
+
+  bool _intHasNextPic = false;
+  bool get intHasNextPic => _intHasNextPic;
+  set intHasNextPic(bool state){
+    _intHasNextPic = state;
+    notifyListeners();
+  }
+  setIntHasNextPic(bool state){
+    _intHasNextPic = state;
+  }
+
+  bool _intHasNextVid = false;
+  bool get intHasNextVid => _intHasNextVid;
+  set intHasNextVid(bool state){
+    _intHasNextVid = state;
+    notifyListeners();
+  }
+  setIntHasNextVid(bool state){
+    _intHasNextVid = state;
+  }
+
+  bool _intHasNextDiary = false;
+  bool get intHasNextDiary => _intHasNextDiary;
+  set intHasNextDiary(bool state){
+    _intHasNextDiary = state;
+    notifyListeners();
+  }
+  setIntHasNextDiary(bool state){
+    _intHasNextDiary = state;
   }
 
   List<ContentData>? _hashtagVid;
@@ -244,15 +274,41 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  bool _loadIntDetail = true;
-  bool get loadIntDetail => _loadIntDetail;
-  set loadIntDetail(bool val){
-    _loadIntDetail = val;
+  bool _loadIntDetailPic = true;
+  bool get loadIntDetailPic => _loadIntDetailPic;
+  set loadIntDetailPic(bool val){
+    _loadIntDetailPic = val;
+    notifyListeners();
+  }
+
+  bool _loadIntDetailDiary = true;
+  bool get loadIntDetailDiary => _loadIntDetailDiary;
+  set loadIntDetailDiary(bool val){
+    _loadIntDetailDiary = val;
+    notifyListeners();
+  }
+
+  bool _loadIntDetailVid = true;
+  bool get loadIntDetailVid => _loadIntDetailVid;
+  set loadIntDetailVid(bool val){
+    _loadIntDetailVid = val;
     notifyListeners();
   }
 
   initDetailInterest(){
-    _loadIntDetail = true;
+    _loadIntDetailPic = true;
+    _loadIntDetailDiary = true;
+    _loadIntDetailVid = true;
+  }
+
+  removeInterestItem(String key, String postID){
+    final interest = interestContents[key];
+    if(interest != null){
+      interest.vid?.removeWhere((element) => element.postID == postID);
+      interest.pict?.removeWhere((element) => element.postID == postID);
+      interest.diary?.removeWhere((element) => element.postID == postID);
+      notifyListeners();
+    }
   }
 
   ContentsDataQuery vidContentsQuery = ContentsDataQuery();
@@ -999,33 +1055,40 @@ class SearchNotifier with ChangeNotifier {
       checkConnection();
       print('the interest id: $keys');
       if (reload) {
-        initAllHasNext();
-        loadIntDetail = true;
-        final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: hyppe);
-        if (_res != null) {
-          interestContents[keys] = _res;
-          notifyListeners();
-          // if (interest.isNotNullAndEmpty()) {
-          //   _currentHashtag = hashtags.first;
-          //   final extraTag = _currentHashtag;
-          //   final count = (extraTag != null ? (extraTag.total ?? 0) : 0);
-          //   if ((pics.isEmpty) && (diaries.isEmpty) && (videos.isEmpty)) {
-          //     _countTag = 0;
-          //   } else {
-          //     _countTag = count;
-          //   }
-          // }
-          // _detailHashTag?.vid = videos;
-          // _detailHashTag?.diary = diaries;
-          // _detailHashTag?.pict = pics;
-          // if (pics.isNotNullAndEmpty()) {
-          //   final data = pics[0];
-          //   final url = data != null ? ((data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? (data.mediaThumbEndPoint ?? '')) : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
-          //   _tagImageMain = url;
-          // }
+        initDetailInterest();
+        if(interestContents[keys] == null){
+          interestContents[keys] = SearchContentModel();
         }
-        await Future.delayed(const Duration(milliseconds: 400));
-        loadIntDetail = false;
+
+        notifyListeners();
+        _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppePic).then((value){
+          if(value != null){
+            interestContents[keys]?.pict = value.pict;
+            notifyListeners();
+            Future.delayed(const Duration(milliseconds: 500), (){
+              loadIntDetailPic = false;
+            });
+          }
+        });
+        _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppeDiary).then((value){
+          if(value != null){
+            interestContents[keys]?.diary = value.diary;
+            notifyListeners();
+            Future.delayed(const Duration(milliseconds: 500), (){
+              loadIntDetailDiary = false;
+            });
+          }
+        });
+        await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppeVid).then((value){
+          if(value != null){
+            interestContents[keys]?.vid = value.vid;
+            notifyListeners();
+            Future.delayed(const Duration(milliseconds: 500), (){
+              loadIntDetailVid = false;
+            });
+          }
+        });
+
       } else {
         final currentSkip = hyppe == HyppeType.HyppeVid
             ? lenghtVid
@@ -1033,70 +1096,100 @@ class SearchNotifier with ChangeNotifier {
                 ? lenghtDiary
                 : hyppe == HyppeType.HyppePic ? lenghtPic : 0;
         if (currentSkip % 12 == 0) {
-          if (!hasNext) {
-            hasNext = true;
-            final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, currentSkip, type: hyppe);
-            if (_res != null) {
-              if(currentSkip != 0){
-                final videos = _res.vid;
-                final diaries = _res.diary;
-                final pics = _res.pict;
-                if(hyppe == HyppeType.HyppeVid){
-                  if(videos?.isEmpty ?? true){
-                    isHasNextVid = false;
-                  }
+          if(hyppe == HyppeType.HyppeVid){
+            intHasNextVid = true;
+          }else if(hyppe == HyppeType.HyppeDiary){
+            intHasNextDiary = true;
+          }else if(hyppe == HyppeType.HyppePic){
+            intHasNextPic = true;
+          }
+          final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, currentSkip, type: hyppe);
+          if (_res != null) {
+            if(currentSkip != 0){
+              final videos = _res.vid;
+              final diaries = _res.diary;
+              final pics = _res.pict;
+              if(hyppe == HyppeType.HyppeVid){
+                if(videos?.isEmpty ?? true){
+                  intHasNextVid = false;
                 }
-                if(hyppe == HyppeType.HyppeDiary){
-                  if(diaries?.isEmpty ?? true){
-                    isHasNextDiary = false;
-                  }
+              }
+              if(hyppe == HyppeType.HyppeDiary){
+                if(diaries?.isEmpty ?? true){
+                  intHasNextDiary = false;
                 }
-                if(hyppe == HyppeType.HyppePic){
-                  if(pics?.isEmpty ?? true){
-                    isHasNextPic = false;
-                  }
+              }
+              if(hyppe == HyppeType.HyppePic){
+                if(pics?.isEmpty ?? true){
+                  intHasNextPic = false;
                 }
-
-                if (hyppe == HyppeType.HyppeVid) {
-                  for (final video in videos ?? []) {
-                    interestContents[keys]?.vid?.add(video);
-                  }
-                  // _hashtagVid = [...(_hashtagVid ?? []), ...(videos ?? [])];
-                } else if (hyppe == HyppeType.HyppeDiary) {
-                  for (final diary in diaries ?? []) {
-                    interestContents[keys]?.diary?.add(diary);
-                  }
-                  // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
-                } else if (hyppe == HyppeType.HyppePic){
-                  for (final pic in pics ?? []) {
-                    interestContents[keys]?.pict?.add(pic);
-                  }
-                  // _hashtagPic = [...(_hashtagPic ?? []), ...(pics ?? [])];
-                }
-                notifyListeners();
               }
 
+              if (hyppe == HyppeType.HyppeVid) {
+                for (final video in videos ?? []) {
+                  interestContents[keys]?.vid?.add(video);
+                }
+                // _hashtagVid = [...(_hashtagVid ?? []), ...(videos ?? [])];
+              } else if (hyppe == HyppeType.HyppeDiary) {
+                for (final diary in diaries ?? []) {
+                  interestContents[keys]?.diary?.add(diary);
+                }
+                // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
+              } else if (hyppe == HyppeType.HyppePic){
+                for (final pic in pics ?? []) {
+                  interestContents[keys]?.pict?.add(pic);
+                }
+                // _hashtagPic = [...(_hashtagPic ?? []), ...(pics ?? [])];
+              }
+              notifyListeners();
             }
+
           }
         }
         hasNext = false;
       }
     } catch (e) {
-      if (loadTagDetail) {
-        loadIntDetail = false;
+      if (loadIntDetailPic) {
+        _loadIntDetailPic = false;
       }
-      if (_hasNext) {
-        hasNext = false;
+      if (loadIntDetailDiary) {
+        _loadIntDetailDiary = false;
       }
+      if (loadIntDetailVid) {
+        _loadIntDetailVid = false;
+      }
+      if(hyppe == HyppeType.HyppeVid){
+        _intHasNextVid = false;
+      }
+      if(hyppe == HyppeType.HyppeDiary){
+        _intHasNextDiary = false;
+      }
+      if(hyppe == HyppeType.HyppePic){
+        _intHasNextPic = false;
+      }
+      notifyListeners();
 
       'Error getDetail: $e'.logger();
     } finally {
-      if (loadTagDetail) {
-        loadTagDetail = false;
+      if (loadIntDetailPic) {
+        _loadIntDetailPic = false;
       }
-      if (_hasNext) {
-        hasNext = false;
+      if (loadIntDetailDiary) {
+        _loadIntDetailDiary = false;
       }
+      if (loadIntDetailVid) {
+        _loadIntDetailVid = false;
+      }
+      if(hyppe == HyppeType.HyppeVid){
+        _intHasNextVid = false;
+      }
+      if(hyppe == HyppeType.HyppeDiary){
+        _intHasNextDiary = false;
+      }
+      if(hyppe == HyppeType.HyppePic){
+        _intHasNextPic = false;
+      }
+      notifyListeners();
     }
   }
 
@@ -1170,7 +1263,12 @@ class SearchNotifier with ChangeNotifier {
       }
 
       final notifier = SearchContentBloc();
-      await notifier.getSearchContent(context, param, type: typeApi);
+      if(typeApi == TypeApiSearch.detailInterest){
+        await notifier.getDetailContents(context, param, type: typeApi);
+      }else{
+        await notifier.getSearchContent(context, param, type: typeApi);
+      }
+
       final fetch = notifier.searchContentFetch;
       if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
         final _res = SearchContentModel.fromJson(fetch.data[0]);
@@ -1277,7 +1375,9 @@ class SearchNotifier with ChangeNotifier {
       }
 
       if (reload) {
-        initAllHasNext();
+        if(typeSearch == TypeApiSearch.detailHashTag){
+          initAllHasNext();
+        }
         isLoading = true;
       }
 
@@ -1370,9 +1470,9 @@ class SearchNotifier with ChangeNotifier {
         final _res = SearchContentModel.fromJson(fetch.data[0]);
         switch (typeSearch) {
           case SearchLoadData.all:
-            isHasNextVid = true;
-            isHasNextDiary = true;
-            isHasNextPic = true;
+            // isHasNextVid = true;
+            // isHasNextDiary = true;
+            // isHasNextPic = true;
             searchUsers = _res.users;
             searchVid = _res.vid;
             searchDiary = _res.diary;

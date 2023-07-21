@@ -45,6 +45,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 
 import '../../../core/bloc/posts_v2/bloc.dart';
+import '../search_v2/notifier.dart';
 
 class HomeNotifier with ChangeNotifier {
   //for visibilty
@@ -675,7 +676,7 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void onReport(BuildContext context, {required String postID, required String content, bool? isReport}) {
+  void onReport(BuildContext context, {required String postID, required String content, bool? isReport, String? key}) {
     ContentData? _updatedData;
     ContentData? _updatedData2;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
@@ -701,6 +702,11 @@ class HomeNotifier with ChangeNotifier {
     diary.diaryData?.removeWhere((element) => element.postID == postID);
     pic.pic?.removeWhere((element) => element.postID == postID);
     stories.peopleStoriesData?.removeWhere((element) => element.postID == postID);
+
+    if(key != null){
+      final search = context.read<SearchNotifier>();
+      search.removeInterestItem(key, postID);
+    }
 
     notifyListeners();
   }

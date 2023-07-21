@@ -11,7 +11,6 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../../core/bloc/posts_v2/bloc.dart';
@@ -26,7 +25,6 @@ import '../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../core/constants/utils.dart';
 import '../../../../../core/models/collection/advertising/ads_video_data.dart';
 import '../../../../../core/models/collection/posts/content_v2/content_data.dart';
-import '../../../../../core/services/error_service.dart';
 import '../../../../../core/services/route_observer_service.dart';
 import '../../../../../core/services/shared_preference.dart';
 import '../../../../../core/services/system.dart';
@@ -55,6 +53,7 @@ import '../../../home/content_v2/pic/widget/pic_top_item.dart';
 import '../../../home/content_v2/vid/notifier.dart';
 import '../../../home/content_v2/vid/playlist/comments_detail/screen.dart';
 import '../../../home/notifier_v2.dart';
+import '../../search_more_complete/widget/all_search_shimmer.dart';
 
 class DiaryScrollScreen extends StatefulWidget {
   final String interestKey;
@@ -91,12 +90,8 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
   String email = '';
   String statusKyc = '';
 
-  final ItemScrollController itemScrollController = ItemScrollController();
-  final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
+  ContentData? dataSelected;
 
-  /// Listener that reports the position of items when the list is scrolled.
-  final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
-  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -128,18 +123,6 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
     });
     var index = 0;
     var lastIndex = 0;
-    itemPositionsListener.itemPositions.addListener(() async {
-      index = itemPositionsListener.itemPositions.value.first.index;
-      if (lastIndex != index) {
-        if (index == (notifier.mapDetailHashtag[widget.interestKey]?.diary?.length ?? 0) - 2) {
-          print("ini reload harusnya");
-          if (!notifier.hasNext) {
-            notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interestKey, reload: false, hyppe: HyppeType.HyppeDiary);
-          }
-        }
-      }
-      lastIndex = index;
-    });
     checkInet(notifier);
 
     super.initState();
@@ -172,6 +155,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
         });
       });
       isPlay = true;
+      dataSelected?.isDiaryPlay = true;
       _initAds(context);
     });
     fAliplayer?.setOnRenderingStart((playerId) {
@@ -296,8 +280,10 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
     fAliplayer?.stop();
+    dataSelected = data;
 
     isPlay = false;
+    dataSelected?.isDiaryPlay = false;
     // fAliplayer?.setVidAuth(
     //   vid: "c1b24d30b2c671edbfcb542280e90102",
     //   region: DataSourceRelated.defaultRegion,
@@ -452,7 +438,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
     fAliplayer?.stop();
-    if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
+    if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps) {
       fAliplayer?.destroy();
     }
     super.dispose();
@@ -519,92 +505,52 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Scaffold(
-      backgroundColor: kHyppeLightSurface,
-      body: WillPopScope(
-        onWillPop: () async {
-          Navigator.pop(context, '$_curIdx');
-          return false;
-        },
-        child: Consumer<SearchNotifier>(builder: (_, notifier, __) {
-          final diaryData = notifier.mapDetailHashtag[widget.interestKey]?.diary;
-          return SafeArea(
-            child: SizedBox(
-              // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: diaryData?.isEmpty ?? true
-                        ? const NoResultFound()
-                        : RefreshIndicator(
-                            onRefresh: () async {
-                              await notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interestKey, hyppe: HyppeType.HyppeDiary);
-                            },
-                            child: NotificationListener<OverscrollIndicatorNotification>(
-                              onNotification: (overscroll) {
-                                overscroll.disallowIndicator();
-                                return false;
-                              },
-                              child: RefreshIndicator(
-                                onRefresh: () async {},
-                                child: ScrollablePositionedList.builder(
-                                  scrollDirection: Axis.vertical,
-                                  itemScrollController: itemScrollController,
-                                  itemPositionsListener: itemPositionsListener,
-                                  scrollOffsetController: scrollOffsetController,
-                                  // controller: notifier.scrollController,
-                                  // scrollDirection: Axis.horizontal,
-                                  physics: const AlwaysScrollableScrollPhysics(),
-                                  shrinkWrap: false,
-                                  itemCount: diaryData?.length ?? 0,
-                                  padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                                  itemBuilder: (context, index) {
-                                    if (diaryData == null || notifier.loadIntDetail) {
-                                      fAliplayer?.pause();
-                                      _lastCurIndex = -1;
-                                      return CustomShimmer(
-                                        width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                                        height: 168,
-                                        radius: 8,
-                                        margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                                      );
-                                    } else if (index == diaryData.length) {
-                                      return UnconstrainedBox(
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          width: 80 * SizeConfig.scaleDiagonal,
-                                          height: 80 * SizeConfig.scaleDiagonal,
-                                          child: const CustomLoading(),
-                                        ),
-                                      );
-                                    }
-                                    if (_curIdx == 0 && diaryData[0].reportedStatus == 'BLURRED') {
-                                      isPlay = false;
-                                      fAliplayer?.stop();
-                                    }
+    return Consumer<SearchNotifier>(builder: (_, notifier, __) {
+      final diaryData = notifier.interestContents[widget.interestKey]?.diary;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          diaryData?.isEmpty ?? true
+              ? const Expanded(child: AllSearchShimmer())
+              : NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (overscroll) {
+                  overscroll.disallowIndicator();
+                  return false;
+                },
+                child: Column(
+                  children: List.generate(diaryData?.length ?? 0, (index){
+                    if (diaryData == null) {
+                      fAliplayer?.pause();
+                      _lastCurIndex = -1;
+                      return CustomShimmer(
+                        width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                        height: 168,
+                        radius: 8,
+                        margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                      );
+                    } else if (index == diaryData.length) {
+                      return UnconstrainedBox(
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: 80 * SizeConfig.scaleDiagonal,
+                          height: 80 * SizeConfig.scaleDiagonal,
+                          child: const CustomLoading(),
+                        ),
+                      );
+                    }
+                    if (_curIdx == 0 && diaryData[0].reportedStatus == 'BLURRED') {
+                      isPlay = false;
+                      fAliplayer?.stop();
+                    }
 
-                                    return itemDiary(notifier, index, diaryData);
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                  ),
-                  notifier.hasNext
-                      ? const SizedBox(
-                          height: 50,
-                          child: Center(child: CustomLoading()),
-                        )
-                      : Container(),
-                ],
+                    return itemDiary(notifier, index, diaryData);
+                  }),
+                ),
               ),
-            ),
-          );
-        }),
-      ),
-    );
+        ],
+      );
+    });
   }
 
   Widget itemDiary(SearchNotifier notifier, int index, List<ContentData> diaryData) {
@@ -614,7 +560,11 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
         color: Colors.white,
       ),
       padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(
+        bottom: 16,
+        top: 10,
+        left: 6,
+        right: 6,),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -678,7 +628,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                 onTap: () {
                   if (diaryData[index].email != email) {
                     // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>().reportContent(context, diaryData[index], fAliplayer: fAliplayer);
+                    context.read<PreviewPicNotifier>().reportContent(context, diaryData[index], fAliplayer: fAliplayer, key: widget.interestKey);
                   } else {
                     fAliplayer?.setMuted(true);
                     fAliplayer?.pause();
@@ -767,78 +717,76 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                             ),
                           )
                         : Positioned.fill(
-                            child: GestureDetector(
-                              onTap: () {
-                                notifier.checkConnection();
-                              },
-                              child: Container(
-                                  decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                  width: SizeConfig.screenWidth,
-                                  height: SizeConfig.screenHeight,
-                                  alignment: Alignment.center,
-                                  child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadVideo ?? 'Error')),
-                            ),
-                          ),
-                    isPlay
+                      child: GestureDetector(
+                        onTap: () {
+                          notifier.checkConnection();
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                            width: SizeConfig.screenWidth,
+                            height: SizeConfig.screenHeight,
+                            alignment: Alignment.center,
+                            child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadVideo ?? 'Error')),
+                      ),
+                    ),
+                    dataSelected?.postID == diaryData[index].postID && isPlay
                         ? Container()
-                        : !notifier.connectionError
-                            ? CustomBaseCacheImage(
-                                memCacheWidth: 100,
-                                memCacheHeight: 100,
-                                widthPlaceHolder: 80,
-                                heightPlaceHolder: 80,
-                                placeHolderWidget: Container(),
-                                imageUrl: (diaryData[index].isApsara ?? false) ? (diaryData[index].mediaThumbEndPoint ?? "") : "${diaryData[index].fullThumbPath}",
-                                imageBuilder: (context, imageProvider) => diaryData[index].reportedStatus == 'BLURRED'
-                                    ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(20), // Image border
-                                        child: ImageFiltered(
-                                          imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                          child: Image(
-                                            height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                            width: MediaQuery.of(context).size.width,
-                                            image: imageProvider,
-                                          ),
-                                        ),
-                                      )
-                                    : Container(
-                                        // const EdgeInsets.symmetric(horizontal: 4.5),
-                                        height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                        width: MediaQuery.of(context).size.width,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover,
-                                          ),
-                                          borderRadius: BorderRadius.circular(16.0),
-                                        ),
-                                      ),
-                                errorWidget: (context, url, error) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      notifier.checkConnection();
-                                    },
-                                    child: Container(
-                                        decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                        width: SizeConfig.screenWidth,
-                                        height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                        alignment: Alignment.center,
-                                        child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadVideo ?? 'Error')),
-                                  );
-                                },
-                                emptyWidget: GestureDetector(
-                                  onTap: () {
-                                    notifier.checkConnection();
-                                  },
-                                  child: Container(
-                                      decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                      width: SizeConfig.screenWidth,
-                                      height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                      alignment: Alignment.center,
-                                      child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadVideo ?? 'Error')),
-                                ),
-                              )
-                            : Container(),
+                        : CustomBaseCacheImage(
+                      memCacheWidth: 100,
+                      memCacheHeight: 100,
+                      widthPlaceHolder: 80,
+                      heightPlaceHolder: 80,
+                      placeHolderWidget: Container(),
+                      imageUrl: (diaryData[index].isApsara ?? false) ? (diaryData[index].mediaThumbEndPoint ?? "") : "${diaryData[index].fullThumbPath}",
+                      imageBuilder: (context, imageProvider) => diaryData[index].reportedStatus == 'BLURRED'
+                          ? ClipRRect(
+                        borderRadius: BorderRadius.circular(20), // Image border
+                        child: ImageFiltered(
+                          imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                          child: Image(
+                            height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                            width: MediaQuery.of(context).size.width,
+                            image: imageProvider,
+                          ),
+                        ),
+                      )
+                          : Container(
+                        // const EdgeInsets.symmetric(horizontal: 4.5),
+                        height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) {
+                        return GestureDetector(
+                          onTap: () {
+                            notifier.checkConnection();
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                              width: SizeConfig.screenWidth,
+                              height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                              alignment: Alignment.center,
+                              child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadVideo ?? 'Error')),
+                        );
+                      },
+                      emptyWidget: GestureDetector(
+                        onTap: () {
+                          notifier.checkConnection();
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                            width: SizeConfig.screenWidth,
+                            height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                            alignment: Alignment.center,
+                            child: CustomTextWidget(textToDisplay: notifier.language.couldntLoadVideo ?? 'Error')),
+                      ),
+                    ),
                     _showLoading
                         ? Positioned.fill(
                             child: Align(
