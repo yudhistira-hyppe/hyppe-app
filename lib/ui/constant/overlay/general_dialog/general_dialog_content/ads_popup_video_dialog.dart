@@ -17,15 +17,12 @@ import 'package:wakelock/wakelock.dart';
 
 import '../../../../../app.dart';
 import '../../../../../core/arguments/other_profile_argument.dart';
-import '../../../../../core/bloc/ads_video/bloc.dart';
-import '../../../../../core/bloc/ads_video/state.dart';
 import '../../../../../core/config/ali_config.dart';
 import '../../../../../core/constants/asset_path.dart';
 import '../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../core/constants/utils.dart';
 import '../../../../../core/models/collection/advertising/ads_video_data.dart';
-import '../../../../../core/models/collection/advertising/view_ads_request.dart';
 import '../../../../../core/services/shared_preference.dart';
 import '../../../../../core/services/system.dart';
 import '../../../../../ux/path.dart';
@@ -33,7 +30,6 @@ import '../../../widget/custom_base_cache_image.dart';
 import '../../../widget/custom_icon_widget.dart';
 import '../../../widget/custom_loading.dart';
 import '../../bottom_sheet/show_bottom_sheet.dart';
-import '../show_general_dialog.dart';
 
 class AdsPopupVideoDialog extends StatefulWidget {
   final AdsData data;
@@ -425,47 +421,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
     }
   }
 
-  Future adsView(AdsData data, int time, {bool isClick = false}) async {
-    try {
-      setState(() {
-        loadingAction = true;
-      });
-
-
-      final notifier = AdsDataBloc();
-      final request = ViewAdsRequest(
-        watchingTime: time,
-        adsId: data.adsId,
-        useradsId: data.useradsId,
-      );
-      await notifier.viewAdsBloc(context, request, isClick: isClick);
-
-      final fetch = notifier.adsDataFetch;
-
-      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-        print("ini hasil ${fetch.data['rewards']}");
-        if (fetch.data['rewards'] == true) {
-          print("ini hasil ${mounted}");
-          if (mounted) {
-            ShowGeneralDialog.adsRewardPop(context).whenComplete(() => null);
-            Timer(const Duration(milliseconds: 800), () {
-              Routing().moveBack();
-              // Routing().moveBack();
-              // Timer(const Duration(milliseconds: 800), () {
-              //   Routing().moveBack();
-              // });
-            });
-          }
-        }
-      }
-    } catch (e) {
-      'Failed hit view ads $e'.logger();
-      setState(() {
-        loadingAction = false;
-      });
-    }
-  }
-
   @override
   void dispose() {
     Wakelock.disable();
@@ -504,6 +459,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
 
   @override
   Widget build(BuildContext context) {
+    final ratio = (widget.data.height != null && widget.data.width != null) ? widget.data.width!/widget.data.height! : 16/9;
     return Builder(
       builder: (context) {
         final language = context.read<TranslateNotifierV2>().translate;
@@ -572,7 +528,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                   Expanded(child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      CustomTextWidget(textToDisplay: widget.data.fullName ?? '', textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, ),),
+                                      CustomTextWidget(textToDisplay: widget.data.username ?? '', textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, ),),
                                       CustomTextWidget(textToDisplay: language.sponsored ?? 'Bersponsor', textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, ),)
                                     ],
                                   ),),
@@ -628,7 +584,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     AspectRatio(
-                                      aspectRatio: 16/9,
+                                      aspectRatio: ratio,
                                       child: Stack(
                                         children: [
                                           Positioned.fill(
@@ -640,7 +596,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                                 x: 0,
                                                 y: 0,
                                                 height:
-                                                MediaQuery.of(context).size.width * 16/9,
+                                                MediaQuery.of(context).size.width * ratio,
                                                 width: MediaQuery.of(context).size.width,
                                               ),
                                             ),
@@ -735,16 +691,12 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                             });
 
                                             print('second close ads: $secondsVideo');
-                                            // Navigator.pop(context);
-                                            // Future.delayed(const Duration(milliseconds: 800), () {
-                                            //   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                                            // });
-                                            // adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
-                                            //   Navigator.pop(context);
-                                            //   Future.delayed(const Duration(milliseconds: 800), () {
-                                            //     Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                                            //   });
-                                            // });
+                                            System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
+                                              Navigator.pop(context);
+                                              Future.delayed(const Duration(milliseconds: 800), () {
+                                                Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                              });
+                                            });
                                           } else {
                                             try {
                                               final uri = Uri.parse(data.adsUrlLink ?? '');
@@ -754,38 +706,30 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                                   loadLaunch = true;
                                                 });
                                                 print('second close ads: $secondsVideo');
-                                                // Navigator.pop(context);
-                                                // await launchUrl(
-                                                //   uri,
-                                                //   mode: LaunchMode.externalApplication,
-                                                // );
-                                                // adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
-                                                //   Navigator.pop(context);
-                                                //   await launchUrl(
-                                                //     uri,
-                                                //     mode: LaunchMode.externalApplication,
-                                                //   );
-                                                // });
+                                                System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
+                                                  Navigator.pop(context);
+                                                  await launchUrl(
+                                                    uri,
+                                                    mode: LaunchMode.externalApplication,
+                                                  );
+                                                });
                                               } else {
                                                 throw "Could not launch $uri";
                                               }
-                                              // can't launch url, there is some error
                                             } catch (e) {
                                               setState(() {
                                                 loadLaunch = true;
                                               });
                                               print('second close ads: $secondsVideo');
-                                              System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                              // adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
-                                              //   System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                              // });
+                                              System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
+                                                System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                              });
                                             }
                                           }
                                         }
                                       },
                                       child: Builder(builder: (context) {
-                                        final notifier = context.read<TranslateNotifierV2>();
-                                        final learnMore = secondsSkip < 1 ? (notifier.translate.learnMore ?? 'Learn More') : "${notifier.translate.learnMore ?? 'Learn More'}($secondsSkip)";
+                                        final learnMore = widget.data.ctaButton ?? 'Learn More';
                                         return Container(
                                           alignment: Alignment.center,
                                           padding: const EdgeInsets.only(top: 10, bottom: 10),

@@ -213,26 +213,10 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
   Future getAdsApsara() async {
     final ads = await getPopUpAds();
     final id = ads.videoId;
-    if (id != null && ads.adsType != null) {
+    if(ads.mediaType?.toLowerCase() == 'image'){
+      await System().adsPopUpV2(context, ads, '');
+    }else if (id != null && ads.adsType != null) {
       try {
-        // final notifier = PostsBloc();
-        // await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
-
-        // final fetch = notifier.postsFetch;
-
-        // if (fetch.postsState == PostsState.videoApsaraSuccess) {
-        //   Map jsonMap = json.decode(fetch.data.toString());
-        //   print('jsonMap video Apsara : $jsonMap');
-        //   final adsUrl = jsonMap['PlayUrl'];
-        //   // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
-        //   print('get Ads Video');
-        //   final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
-        //   if (!isShowAds) {
-        //     System().adsPopUp(context, ads, adsUrl);
-        //   }
-
-        //   // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
-        // }
         final notifier = PostsBloc();
         await notifier.getAuthApsara(context, apsaraId: ads.videoId ?? '');
 

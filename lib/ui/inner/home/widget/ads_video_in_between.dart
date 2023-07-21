@@ -11,8 +11,10 @@ import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../../core/arguments/other_profile_argument.dart';
 import '../../../../core/bloc/posts_v2/bloc.dart';
 import '../../../../core/bloc/posts_v2/state.dart';
 import '../../../../core/config/ali_config.dart';
@@ -21,6 +23,8 @@ import '../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../core/constants/utils.dart';
 import '../../../../core/services/system.dart';
 import '../../../../initial/hyppe/translate_v2.dart';
+import '../../../../ux/path.dart';
+import '../../../../ux/routing.dart';
 import '../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../../constant/widget/custom_base_cache_image.dart';
 import '../../../constant/widget/custom_icon_widget.dart';
@@ -66,6 +70,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
   @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
+    final ratio = (widget.data.height != null && widget.data.width != null) ? widget.data.width!/widget.data.height! : 16/9;
     return Consumer<VideoNotifier>(builder: (context, notifier, _) {
       return Container(
         margin: const EdgeInsets.only(bottom: 20),
@@ -179,11 +184,6 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Image.asset(
-                        //   '${AssetPath.pngPath}avatar_ads_exp.png',
-                        //   width: double.infinity,
-                        //   fit: BoxFit.cover,
-                        // ),
                         VisibilityDetector(
                           key: Key(widget.data.videoId ?? 'ads'),
                           onVisibilityChanged: (info) {
@@ -191,12 +191,6 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                               // _curIdx = index;
                               if (notifier.currentPostID != widget.postID) {
                                 notifier.betweenPlayer?.pause();
-
-                                // if (diaryData[index].certified ?? false) {
-                                //   System().block(context);
-                                // } else {
-                                //   System().disposeBlock();
-                                // }
                               }
                               notifier.currentPostID = widget.postID;
                               if (widget.onVisibility != null) {
@@ -205,12 +199,13 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                             }
                           },
                           child: AspectRatio(
-                            aspectRatio: 1,
+                            aspectRatio: ratio,
                             child: notifier.currentPostID == widget.postID
                                 ? InBetweenScreen(
                                     postID: widget.postID,
                                     adsData: widget.data,
                                     player: widget.player,
+                                    ratio: ratio,
                                   )
                                 : Container(
                                     decoration: const BoxDecoration(
@@ -224,10 +219,50 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                         ),
                         twelvePx,
                         InkWell(
-                          onTap: () async {},
+                          onTap: () async {
+                            final data = widget.data;
+                            if (data.adsUrlLink?.isEmail() ?? false) {
+                              final email = data.adsUrlLink!.replaceAll('email:', '');
+                              setState(() {
+                                loadLaunch = true;
+                              });
+                              System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+                                Navigator.pop(context);
+                                Future.delayed(const Duration(milliseconds: 800), () {
+                                  Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                });
+                              });
+                            } else {
+                              try {
+                                final uri = Uri.parse(data.adsUrlLink ?? '');
+                                print('bottomAdsLayout ${data.adsUrlLink}');
+                                if (await canLaunchUrl(uri)) {
+                                  setState(() {
+                                    loadLaunch = true;
+                                  });
+                                  System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
+                                    Navigator.pop(context);
+                                    await launchUrl(
+                                      uri,
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  });
+                                } else {
+                                  throw "Could not launch $uri";
+                                }
+                              } catch (e) {
+                                setState(() {
+                                  loadLaunch = true;
+                                });
+                                System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+                                  System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                });
+                              }
+                            }
+                          },
                           child: Builder(builder: (context) {
                             final learnMore =
-                                (language.learnMore ?? 'Learn More');
+                                (widget.data.ctaButton ?? 'Learn More');
                             return Container(
                               alignment: Alignment.center,
                               padding:
@@ -299,8 +334,9 @@ class InBetweenScreen extends StatefulWidget {
   final String postID;
   final AdsData adsData;
   final FlutterAliplayer? player;
+  final double ratio;
   const InBetweenScreen(
-      {Key? key, required this.postID, required this.adsData, this.player})
+      {Key? key, required this.postID, required this.adsData, this.player, required this.ratio})
       : super(key: key);
 
   @override
@@ -351,6 +387,7 @@ class _InBetweenScreenState extends State<InBetweenScreen>
       fAliplayer?.pause();
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(false);
+      System().adsView(widget.adsData, widget.adsData.duration?.round() ?? 10);
 
       //Turn on mix mode
       if (Platform.isIOS) {
@@ -455,7 +492,6 @@ class _InBetweenScreenState extends State<InBetweenScreen>
         print('error loadingEnd: $e');
       }
     });
-    ;
     fAliplayer?.setOnSeekComplete((playerId) {
       _inSeek = false;
     });
@@ -627,8 +663,8 @@ class _InBetweenScreenState extends State<InBetweenScreen>
               onCreated: onViewPlayerCreated,
               x: 0,
               y: 0,
-              height: 600,
-              width: 600,
+              height: context.getWidth() * widget.ratio,
+              width: context.getWidth(),
               aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
             ),
           ),

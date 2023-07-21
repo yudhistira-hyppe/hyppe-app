@@ -753,10 +753,14 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                       child: InkWell(
                         onTap: (){
                           if(notifier.secondsSkip <= 0){
-                            notifier.adsAliplayer?.stop();
-                            notifier.adsCurrentPosition = 0;
-                            notifier.adsCurrentPositionText = 0;
-                            widget.onClose();
+                            if(widget.data != null){
+                              System().adsView(widget.data!, widget.data?.duration?.round() ?? 10).whenComplete((){
+                                notifier.adsAliplayer?.stop();
+                                notifier.adsCurrentPosition = 0;
+                                notifier.adsCurrentPositionText = 0;
+                                widget.onClose();
+                              });
+                            }
                           }
                         },
                         child: Row(

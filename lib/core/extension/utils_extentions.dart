@@ -80,11 +80,11 @@ extension ContextScreen on BuildContext {
     }
   }
 
-  Future<AdsData> getPopUpAds() async {
+  Future<AdsData> getInBetweenAds() async {
     var data = AdsData();
     try {
       final notifier = AdsDataBloc();
-      await notifier.adsVideoBlocV2(this, AdsType.popup);
+      await notifier.adsVideoBlocV2(this, AdsType.between);
       final fetch = notifier.adsDataFetch;
 
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {

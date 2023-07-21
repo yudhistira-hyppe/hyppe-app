@@ -51,6 +51,7 @@ import '../../../../../ux/path.dart';
 import '../../../../../ux/routing.dart';
 import '../../../../constant/entities/like/notifier.dart';
 import '../../../../constant/overlay/general_dialog/show_general_dialog.dart';
+import '../../../../constant/widget/custom_base_cache_image.dart';
 
 class HyppePreviewVid extends StatefulWidget {
   const HyppePreviewVid({Key? key}) : super(key: key);
@@ -235,8 +236,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
       ),
     );
   }
-
-  var secondsVideo = 0;
 
   Widget itemVid(BuildContext context, ContentData vidData, PreviewVidNotifier notifier, int index) {
     var map = {
@@ -499,17 +498,46 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                 decoration: const BoxDecoration(color: kHyppeLightSurface),
                 child: Row(
                   children: [
-                    Container(
-                      margin: const EdgeInsets.only(right: 12),
-                      height: 36,
-                      width: 36,
-                      decoration: BoxDecoration(
-                        image: const DecorationImage(
-                          image:
-                              AssetImage('${AssetPath.pngPath}image_ads_exp.png'),
-                          fit: BoxFit.cover,
+                    CustomBaseCacheImage(
+                      imageUrl: vidData.adsData?.avatar?.fullLinkURL,
+                      memCacheWidth: 200,
+                      memCacheHeight: 200,
+                      imageBuilder: (_, imageProvider) {
+                        return Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(Radius.circular(18)),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: imageProvider,
+                            ),
+                          ),
+                        );
+                      },
+                      errorWidget: (_, __, ___) {
+                        return Container(
+                          width: 36,
+                          height: 36,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(18)),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                            ),
+                          ),
+                        );
+                      },
+                      emptyWidget: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(18)),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(18.0),
                       ),
                     ),
                     Expanded(
@@ -553,18 +581,14 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                           splashColor: context.getColorScheme().secondary,
                           onTap: () async {
                             final data = vidData.adsData;
+                            final secondsVideo = vidData.adsData?.duration?.round() ?? 10;
                             if(data != null){
                               if (data.adsUrlLink?.isEmail() ?? false) {
                                 final email = data.adsUrlLink!.replaceAll('email:', '');
                                 setState(() {
                                   loadLaunch = true;
                                 });
-
                                 print('second close ads: $secondsVideo');
-                                // Navigator.pop(context);
-                                // Future.delayed(const Duration(milliseconds: 800), () {
-                                //   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                                // });
                                 adsView(data, secondsVideo, isClick: true).whenComplete(() {
                                   Navigator.pop(context);
                                   Future.delayed(const Duration(milliseconds: 800), () {
@@ -580,11 +604,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                                       loadLaunch = true;
                                     });
                                     print('second close ads: $secondsVideo');
-                                    // Navigator.pop(context);
-                                    // await launchUrl(
-                                    //   uri,
-                                    //   mode: LaunchMode.externalApplication,
-                                    // );
                                     adsView(data, secondsVideo, isClick: true).whenComplete(() async {
                                       Navigator.pop(context);
                                       await launchUrl(
@@ -612,12 +631,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                           },
                           child: Builder(
                             builder: (context) {
-                              final notifier = context.read<TranslateNotifierV2>();
                               return Container(
                                 padding: const EdgeInsets.all(10),
                                 alignment: Alignment.center,
                                 child: Text(
-                                  notifier.translate.learnMore ?? 'Learn More',
+                                  vidData.adsData?.ctaButton ?? 'Learn More',
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: const TextStyle(

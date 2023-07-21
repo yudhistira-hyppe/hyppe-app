@@ -44,7 +44,6 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-// import 'package:connectivity_plus/connectivity_plus.dart';
 
 class AdsPopUpDialog extends StatefulWidget {
   final AdsData data;

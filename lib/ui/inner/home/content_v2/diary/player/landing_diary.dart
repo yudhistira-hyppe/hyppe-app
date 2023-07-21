@@ -680,7 +680,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData(), check: false).whenComplete(() async{
                           final count = context.getAdsCount();
                           if(count == 5){
-                            final adsData = await context.getPopUpAds();
+                            final adsData = await context.getInBetweenAds();
                             notifier.setAdsData(index, adsData);
                           }
                           context.incrementAdsCount();

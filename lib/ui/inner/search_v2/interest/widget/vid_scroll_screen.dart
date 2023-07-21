@@ -335,9 +335,9 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
 
                   },
                   onShowAds: (ads){
-                    setState(() {
-                      vidData[index].inBetweenAds = ads;
-                    });
+                    // setState(() {
+                    //   vidData[index].inBetweenAds = ads;
+                    // });
                   },
                   betweenAds: (ads){
 
@@ -347,7 +347,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                   data: vidData[index] ,
                   height: MediaQuery.of(context).size.width * 9.0 / 16.0,
                   width: MediaQuery.of(context).size.width,
-                  inLanding: true,
+                  inLanding: false,
                   fromDeeplink: false,
                   functionFullTriger: (value) {
                   },

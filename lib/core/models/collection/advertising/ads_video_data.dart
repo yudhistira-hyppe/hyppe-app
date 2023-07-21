@@ -23,6 +23,7 @@ class AdsData {
   String? adsDescription;
   String? useradsId;
   String? idUser;
+  String? username;
   String? fullName;
   String? email;
   AdsAvatar? avatar;
@@ -36,6 +37,7 @@ class AdsData {
   String? mediaUri;
   String? mediaThumBasePath;
   String? mediaThumUri;
+  String? ctaButton;
   int? width;
   int? height;
   bool? isReport;
@@ -48,6 +50,7 @@ class AdsData {
     this.adsDescription,
     this.useradsId,
     this.idUser,
+    this.username,
     this.fullName,
     this.email,
     this.avatar,
@@ -61,6 +64,7 @@ class AdsData {
     this.mediaUri,
     this.mediaThumBasePath,
     this.mediaThumUri,
+    this.ctaButton,
     this.width,
     this.height,
     this.isReport,
@@ -74,6 +78,7 @@ class AdsData {
     adsDescription = json['adsDescription'] ?? '';
     useradsId = json['useradsId'] ?? '';
     idUser = json['idUser'] ?? '';
+    username = json['username'] ?? '';
     fullName = json['fullName'] ?? '';
     email = json['email'] ?? '';
     avatar = json['avartar'] != null ? AdsAvatar.fromJson(json['avartar']) : AdsAvatar();
@@ -88,6 +93,7 @@ class AdsData {
     mediaUri = json['mediaUri'];
     mediaThumBasePath = json['mediaThumBasePath'];
     mediaThumUri = json['mediaThumUri'];
+    ctaButton = json['ctaButton'];
     width = json['width'];
     height = json['height'];
     apsaraAuth = '';
@@ -108,6 +114,7 @@ class AdsData {
     data['adsUrlLink'] = adsUrlLink ?? '';
     data['adsDescription'] = adsDescription ?? '';
     data['useradsId'] = useradsId ?? '';
+    data['username'] = username ?? '';
     data['idUser'] = idUser ?? '';
     data['fullName'] = fullName ?? '';
     data['email'] = email ?? '';
@@ -121,6 +128,7 @@ class AdsData {
     data['mediaUri'] = mediaUri;
     data['mediaThumBasePath'] = mediaThumBasePath;
     data['mediaThumUri'] = mediaThumUri;
+    data['ctaButton'] = ctaButton;
     data['width'] = width;
     data['height'] = height;
     return data;

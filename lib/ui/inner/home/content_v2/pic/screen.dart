@@ -685,7 +685,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           final count = context.getAdsCount();
                           print('Pic count: $count');
                           if(count == 5){
-                            final adsData = await context.getPopUpAds();
+                            final adsData = await context.getInBetweenAds();
                             notifier.setAdsData(index, adsData);
                           }
                           context.incrementAdsCount();

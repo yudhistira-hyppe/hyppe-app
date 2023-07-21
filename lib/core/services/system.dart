@@ -59,9 +59,13 @@ import 'package:intl/intl.dart' as intl;
 import '../../app.dart';
 import '../arguments/ads_argument.dart';
 import '../arguments/general_argument.dart';
+import '../bloc/ads_video/bloc.dart';
+import '../bloc/ads_video/state.dart';
 import '../models/collection/advertising/ads_video_data.dart';
 import 'package:exif/exif.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+
+import '../models/collection/advertising/view_ads_request.dart';
 
 class System {
   System._private();
@@ -1382,24 +1386,63 @@ class System {
   Future adsPopUpV2(BuildContext context, AdsData data, String auth) async {
     String lastTimeAds = SharedPreference().readStorage(SpKeys.datetimeLastShowAds) ?? '';
     print("tanggall ======== $lastTimeAds");
-
-    if (lastTimeAds == '') {
-      if(data.mediaType == 'video'){
-        return ShowGeneralDialog.adsPopUpVideo(context, data, auth);
-      }
-      return ShowGeneralDialog.adsPopUpImage(context, data);
-    } else {
-      DateTime now = DateTime.now();
-      DateTime menitCache = DateTime.parse(lastTimeAds);
-      var jumlahMenit = System().menghitungJumlahMenit(menitCache, now);
-      print(jumlahMenit);
-      if (jumlahMenit >= 14) {
-        // if (lastTimeAds.canShowAds()) {
+    if(!isShowingDialog){
+      isShowingDialog = true;
+      if (lastTimeAds == '') {
         if(data.mediaType == 'video'){
-          return ShowGeneralDialog.adsPopUpVideo(context, data, auth);
+          await ShowGeneralDialog.adsPopUpVideo(context, data, auth);
+        }else{
+          await ShowGeneralDialog.adsPopUpImage(context, data);
         }
-        return ShowGeneralDialog.adsPopUpImage(context, data);
+
+      } else {
+        DateTime now = DateTime.now();
+        DateTime menitCache = DateTime.parse(lastTimeAds);
+        var jumlahMenit = System().menghitungJumlahMenit(menitCache, now);
+        print(jumlahMenit);
+        if (jumlahMenit >= 14) {
+          // if (lastTimeAds.canShowAds()) {
+          if(data.mediaType == 'video'){
+            await ShowGeneralDialog.adsPopUpVideo(context, data, auth);
+          }else{
+            await ShowGeneralDialog.adsPopUpImage(context, data);
+          }
+
+        }
       }
+      isShowingDialog = false;
+    }
+
+  }
+
+  Future adsView( AdsData data, int time, {bool isClick = false}) async {
+    try {
+
+      final notifier = AdsDataBloc();
+      final request = ViewAdsRequest(
+        watchingTime: time,
+        adsId: data.adsId,
+        useradsId: data.useradsId,
+      );
+      await notifier.viewAdsBloc(Routing.navigatorKey.currentContext!, request, isClick: isClick);
+
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        print("ini hasil ${fetch.data['rewards']}");
+        if (fetch.data['rewards'] == true) {
+          ShowGeneralDialog.adsRewardPop(Routing.navigatorKey.currentContext!).whenComplete(() => null);
+          Timer(const Duration(milliseconds: 800), () {
+            Routing().moveBack();
+            // Routing().moveBack();
+            // Timer(const Duration(milliseconds: 800), () {
+            //   Routing().moveBack();
+            // });
+          });
+        }
+      }
+    } catch (e) {
+      'Failed hit view ads $e'.logger();
     }
   }
 

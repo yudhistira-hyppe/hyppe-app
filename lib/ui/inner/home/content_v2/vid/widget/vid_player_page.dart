@@ -36,7 +36,6 @@ import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 
 import '../../../../../../app.dart';
-import '../notifier.dart';
 
 class VidPlayerPage extends StatefulWidget {
   final ModeTypeAliPLayer playMode;
@@ -84,7 +83,6 @@ class VidPlayerPage extends StatefulWidget {
 
 class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserver {
   FlutterAliplayer? fAliplayer;
-  // FlutterAliplayer? fAliplayerAds;
   bool isloading = false;
   bool isPrepare = false;
   bool isPause = false;
@@ -862,7 +860,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
                       System().increaseViewCount2(context, widget.data ?? ContentData()).whenComplete(() async{
                         final count = context.getAdsCount();
                         if(count == 5){
-                          final adsData = await context.getPopUpAds();
+                          final adsData = await context.getInBetweenAds();
                           widget.betweenAds(adsData);
                         }
                         context.incrementAdsCount();
