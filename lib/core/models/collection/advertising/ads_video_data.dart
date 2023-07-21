@@ -32,6 +32,12 @@ class AdsData {
   String? mediaType;
   String? videoId;
   double? duration;
+  String? mediaBasePath;
+  String? mediaUri;
+  String? mediaThumBasePath;
+  String? mediaThumUri;
+  int? width;
+  int? height;
   bool? isReport;
   String? apsaraAuth;
   bool? isLoading;
@@ -51,6 +57,12 @@ class AdsData {
     this.mediaType,
     this.videoId,
     this.duration,
+    this.mediaBasePath,
+    this.mediaUri,
+    this.mediaThumBasePath,
+    this.mediaThumUri,
+    this.width,
+    this.height,
     this.isReport,
     this.apsaraAuth,
   });
@@ -71,6 +83,12 @@ class AdsData {
     videoId = json['videoId'];
     isReport = json['isReport'] ?? false;
     final value = json['duration'];
+    mediaBasePath = json['mediaBasePath'];
+    mediaUri = json['mediaUri'];
+    mediaThumBasePath = json['mediaThumBasePath'];
+    mediaThumUri = json['mediaThumUri'];
+    width = json['width'];
+    height = json['height'];
     apsaraAuth = '';
     try {
       if (value is int) {
@@ -98,6 +116,12 @@ class AdsData {
     data['mediaType'] = mediaType ?? '';
     data['videoId'] = videoId ?? '';
     data['duration'] = duration ?? 0.0;
+    data['mediaBasePath'] = mediaBasePath;
+    data['mediaUri'] = mediaUri;
+    data['mediaThumBasePath'] = mediaThumBasePath;
+    data['mediaThumUri'] = mediaThumUri;
+    data['width'] = width;
+    data['height'] = height;
     return data;
   }
 }

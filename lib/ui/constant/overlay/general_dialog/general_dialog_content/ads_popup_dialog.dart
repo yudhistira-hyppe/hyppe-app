@@ -728,11 +728,6 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                         loadLaunch = true;
                       });
                       print('second close ads: $secondsVideo');
-                      // Navigator.pop(context);
-                      // await launchUrl(
-                      //   uri,
-                      //   mode: LaunchMode.externalApplication,
-                      // );
                       adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
                         Navigator.pop(context);
                         await launchUrl(

@@ -501,6 +501,9 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         orientation: Orientation.portrait,
                         playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                         dataSourceMap: map,
+                        timeVid: (time){
+
+                        },
                         onShowAds: (ads){
                           setState(() {
                             vidData?[index].inBetweenAds = ads;

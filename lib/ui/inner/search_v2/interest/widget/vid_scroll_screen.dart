@@ -404,6 +404,9 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
               child: Builder(builder: (context) {
                 return VidPlayerPage(
                   orientation: Orientation.portrait,
+                  timeVid: (time){
+
+                  },
                   onShowAds: (ads){
                     setState(() {
                       vidData[index].inBetweenAds = ads;

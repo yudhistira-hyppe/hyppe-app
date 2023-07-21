@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -35,14 +37,20 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../../app.dart';
+import '../../../../../core/arguments/other_profile_argument.dart';
+import '../../../../../core/bloc/ads_video/bloc.dart';
+import '../../../../../core/bloc/ads_video/state.dart';
 import '../../../../../core/config/ali_config.dart';
+import '../../../../../core/models/collection/advertising/view_ads_request.dart';
 import '../../../../../core/services/route_observer_service.dart';
 import '../../../../../ux/path.dart';
 import '../../../../../ux/routing.dart';
 import '../../../../constant/entities/like/notifier.dart';
+import '../../../../constant/overlay/general_dialog/show_general_dialog.dart';
 
 class HyppePreviewVid extends StatefulWidget {
   const HyppePreviewVid({Key? key}) : super(key: key);
@@ -385,6 +393,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                         child: Builder(builder: (context) {
                           return VidPlayerPage(
                             orientation: Orientation.portrait,
+                            timeVid: (time){
+
+                            },
                             onShowAds: (ads){
                               notifier.setAdsData(index, ads);
                             },
@@ -554,7 +565,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                                 // Future.delayed(const Duration(milliseconds: 800), () {
                                 //   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                                 // });
-                                adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
+                                adsView(data, secondsVideo, isClick: true).whenComplete(() {
                                   Navigator.pop(context);
                                   Future.delayed(const Duration(milliseconds: 800), () {
                                     Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
@@ -574,7 +585,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                                     //   uri,
                                     //   mode: LaunchMode.externalApplication,
                                     // );
-                                    adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
+                                    adsView(data, secondsVideo, isClick: true).whenComplete(() async {
                                       Navigator.pop(context);
                                       await launchUrl(
                                         uri,
@@ -591,7 +602,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
                                   });
                                   print('second close ads: $secondsVideo');
                                   // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                  adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
+                                  adsView(data, secondsVideo, isClick: true).whenComplete(() {
                                     System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                                   });
                                 }
@@ -890,5 +901,49 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
         })
       ],
     );
+  }
+
+  var loadingAction = false;
+
+  var loadLaunch = false;
+
+  Future adsView(AdsData data, int time, {bool isClick = false}) async {
+    try {
+      setState(() {
+        loadingAction = true;
+      });
+
+      final notifier = AdsDataBloc();
+      final request = ViewAdsRequest(
+        watchingTime: time,
+        adsId: data.adsId,
+        useradsId: data.useradsId,
+      );
+      await notifier.viewAdsBloc(context, request, isClick: isClick);
+
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        print("ini hasil ${fetch.data['rewards']}");
+        if (fetch.data['rewards'] == true) {
+          print("ini hasil ${mounted}");
+          if (mounted) {
+            ShowGeneralDialog.adsRewardPop(context).whenComplete(() => null);
+            Timer(const Duration(milliseconds: 800), () {
+              Routing().moveBack();
+              // Routing().moveBack();
+              // Timer(const Duration(milliseconds: 800), () {
+              //   Routing().moveBack();
+              // });
+            });
+          }
+        }
+      }
+    } catch (e) {
+      'Failed hit view ads $e'.logger();
+      setState(() {
+        loadingAction = false;
+      });
+    }
   }
 }
