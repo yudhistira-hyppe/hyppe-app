@@ -138,7 +138,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;
-      _initAds(context);
+      // _initAds(context);
     });
     fAliplayer?.setOnRenderingStart((playerId) {
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
@@ -681,7 +681,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           final count = context.getAdsCount();
                           if(count == 5){
                             final adsData = await context.getInBetweenAds();
-                            notifier.setAdsData(index, adsData);
+                            if(adsData != null){
+                              notifier.setAdsData(index, adsData);
+                            }
                           }
                           context.incrementAdsCount();
                         });

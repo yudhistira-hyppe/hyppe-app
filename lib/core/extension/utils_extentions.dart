@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -15,6 +16,8 @@ import '../../initial/hyppe/translate_v2.dart';
 import '../../ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../bloc/ads_video/bloc.dart';
 import '../bloc/ads_video/state.dart';
+import '../bloc/posts_v2/bloc.dart';
+import '../bloc/posts_v2/state.dart';
 import '../constants/shared_preference_keys.dart';
 import '../constants/themes/hyppe_colors.dart';
 import '../models/collection/advertising/ads_video_data.dart';
@@ -80,8 +83,8 @@ extension ContextScreen on BuildContext {
     }
   }
 
-  Future<AdsData> getInBetweenAds() async {
-    var data = AdsData();
+  Future<AdsData?> getInBetweenAds() async {
+    AdsData? data;
     try {
       final notifier = AdsDataBloc();
       await notifier.adsVideoBlocV2(this, AdsType.between);
@@ -95,6 +98,23 @@ extension ContextScreen on BuildContext {
       'Failed to fetch ads data $e'.logger();
     }
     return data;
+  }
+
+  Future<String> getAuth(BuildContext context, {String videoId = ''}) async {
+    String result = '';
+    try {
+      final notifier = PostsBloc();
+      await notifier.getAuthApsara(context, apsaraId: videoId);
+      final fetch = notifier.postsFetch;
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        result = jsonMap['PlayAuth'] ?? '';
+      }
+      return result;
+    } catch (e) {
+      return '';
+      // 'Failed to fetch ads data $e'.logger();
+    }
   }
 
   Widget getAdsInBetween(AdsData? adsData, String postID, Function(VisibilityInfo)? onVisible){
