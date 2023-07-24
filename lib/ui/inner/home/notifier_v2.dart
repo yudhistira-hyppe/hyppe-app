@@ -837,7 +837,7 @@ class HomeNotifier with ChangeNotifier {
     print('ke iklan yah $id');
     print('ke iklan yah ${ads.adsType}');
     if(ads.mediaType?.toLowerCase() == 'image'){
-      System().adsPopUpV2(context, ads, '');
+      await System().adsPopUpV2(context, ads, '');
     }else if (id != null && ads.adsType != null) {
       try {
         final notifier = PostsBloc();
@@ -854,7 +854,7 @@ class HomeNotifier with ChangeNotifier {
           print('get Ads Video');
           final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
           // if (!isShowAds) {
-          System().adsPopUpV2(context, ads, auth);
+          await System().adsPopUpV2(context, ads, auth);
           // }
 
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];

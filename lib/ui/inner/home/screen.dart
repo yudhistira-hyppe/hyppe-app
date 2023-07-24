@@ -348,12 +348,17 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       }
       homneNotifier.lastCurIndex = homneNotifier.tabIndex;
     });
-    if (isHomeScreen) {
-      print("isOnHomeScreen hit ads");
-      homneNotifier.getAdsApsara(context, true);
-    }
     var challange = context.read<ChallangeNotifier>();
     await challange.getBannerLanding(context, ispopUp: true);
-    if (challange.bannerData.isNotEmpty) ShowGeneralDialog.showBannerPop(context);
+    if (isHomeScreen) {
+      print("isOnHomeScreen hit ads");
+      homneNotifier.getAdsApsara(context, true).whenComplete((){
+        if (challange.bannerData.isNotEmpty) ShowGeneralDialog.showBannerPop(context);
+      });
+    }else{
+      if (challange.bannerData.isNotEmpty) ShowGeneralDialog.showBannerPop(context);
+    }
+
+
   }
 }
