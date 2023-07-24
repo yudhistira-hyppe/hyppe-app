@@ -316,7 +316,7 @@ class OtherProfileNotifier with ChangeNotifier {
             manyUser.add(user);
             golbalToOther = manyUser.length;
           }
-          print("========== many user $manyUser");
+          print("========== many user 2 $manyUser");
           notifyListeners();
         }
       }
@@ -396,6 +396,8 @@ class OtherProfileNotifier with ChangeNotifier {
               vidContentsQuery.searchText = email;
             }
             user.vids = await vidContentsQuery.reload(context, otherContent: true);
+            manyUser.last.vids = user.vids;
+
             context.read<ScrollVidNotifier>().vidData = user.vids;
             Future.delayed(const Duration(milliseconds: 2000), () {
               isLoading = false;

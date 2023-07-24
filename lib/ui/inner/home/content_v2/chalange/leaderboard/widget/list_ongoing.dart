@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
+import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_commingsoon_page.dart';
 import 'package:hyppe/ui/constant/widget/custom_empty_page.dart';
@@ -23,6 +24,15 @@ class _ListOnGoingState extends State<ListOnGoing> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ChallangeNotifier>(builder: (_, cn, __) {
+      var participant = 0;
+      if (cn.leaderBoardData?.challengeData?[0].objectChallenge == "KONTEN") {
+        cn.leaderBoardData?.getlastrank?.forEach((element) {
+          if (element.postChallengess?.isNotEmpty ?? [].isEmpty) {
+            participant++;
+          }
+        });
+      }
+
       return SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         child: Column(
@@ -47,7 +57,7 @@ class _ListOnGoingState extends State<ListOnGoing> {
                               subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                             ),
                           )
-                        : cn.leaderBoardData?.getlastrank?[0].score == 0
+                        : cn.leaderBoardData?.getlastrank?[0].score == 0 || participant == 0
                             ? const Padding(
                                 padding: EdgeInsets.all(32.0),
                                 child: CustomEmptyWidget(
@@ -63,9 +73,19 @@ class _ListOnGoingState extends State<ListOnGoing> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     if (cn.leaderBoardData?.challengeData?[0].objectChallenge == 'KONTEN') {
-                                      return ContentLeaderboard(data: cn.leaderBoardData?.getlastrank?[index]);
+                                      return GestureDetector(
+                                          onTap: () {
+                                            var post = cn.leaderBoardData?.getlastrank?[index].postChallengess?[0];
+                                            var email = cn.leaderBoardData?.getlastrank?[index].email;
+                                            cn.navigateToScreen(context, post?.index, email, post?.postType);
+                                          },
+                                          child: ContentLeaderboard(data: cn.leaderBoardData?.getlastrank?[index]));
                                     } else {
-                                      return ItemLeader(data: cn.leaderBoardData?.getlastrank?[index]);
+                                      return GestureDetector(
+                                          onTap: () {
+                                            Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardData?.getlastrank?[index].email));
+                                          },
+                                          child: ItemLeader(data: cn.leaderBoardData?.getlastrank?[index]));
                                     }
                                   },
                                 ),

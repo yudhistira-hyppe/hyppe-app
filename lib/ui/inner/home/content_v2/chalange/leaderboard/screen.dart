@@ -161,8 +161,8 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                       enlargeCenterPage: true,
                                       enableInfiniteScroll: false,
                                       // viewportFraction: 1.0,
-                                      aspectRatio: 343 / 103,
-                                      // height: 100,
+                                      // aspectRatio: 343 / 103,
+                                      height: SizeConfig.screenWidth! * 0.22,
                                       autoPlayInterval: const Duration(seconds: 3),
                                       onPageChanged: (index, reason) {
                                         setState(() {

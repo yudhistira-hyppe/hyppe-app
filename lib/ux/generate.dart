@@ -32,6 +32,7 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/achievement/screen.dart'
 import 'package:hyppe/ui/inner/home/content_v2/chalange/collection/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_slider.dart';
 import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/diary_player.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
@@ -415,6 +416,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const CollectionBadgeScreen());
       case Routes.chalengeAchievement:
         return MaterialPageRoute(builder: (_) => const AchievementScreen());
+      case Routes.shimmerSlider:
+        return MaterialPageRoute(builder: (_) => const ShimmerSlider());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

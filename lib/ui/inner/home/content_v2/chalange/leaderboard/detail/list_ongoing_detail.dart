@@ -26,10 +26,17 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
   Widget build(BuildContext context) {
     return Consumer<ChallangeNotifier>(builder: (_, cn, __) {
       var boollUser = false;
+      var participant = 0;
+
       cn.leaderBoardDetailData?.getlastrank?.forEach((e) {
         print(e.isUserLogin);
         if (e.isUserLogin == true) {
           boollUser = true;
+        }
+        if (cn.leaderBoardData?.challengeData?[0].objectChallenge == "KONTEN") {
+          if (e.postChallengess?.isNotEmpty ?? [].isEmpty) {
+            participant++;
+          }
         }
       });
       return SingleChildScrollView(
@@ -40,7 +47,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
           children: [
             Container(
               margin: const EdgeInsets.only(left: 16.0, right: 16),
-              padding: EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.only(bottom: 16),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
@@ -65,7 +72,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                     subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                                   ),
                                 )
-                              : cn.leaderBoardDetailData?.getlastrank?[0].score == 0
+                              : cn.leaderBoardDetailData?.getlastrank?[0].score == 0 || participant == 0
                                   ? const Padding(
                                       padding: EdgeInsets.all(32.0),
                                       child: CustomEmptyWidget(
@@ -96,18 +103,24 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                           child: ButtonChallangeWidget(
                               bgColor: cn.leaderBoardDetailData?.joined == 'NOT ALLOWED' ? kHyppeBottomNavBarIcon : kHyppePrimary,
                               text: "Ikuti Challange",
-                              isloading: false,
+                              isloading: isloadingButton,
                               function: () async {
                                 if (!isloadingButton) {
-                                  isloadingButton = true;
+                                  setState(() {
+                                    isloadingButton = true;
+                                  });
                                   await cn.joinChallange(context, cn.leaderBoardDetailData?.challengeId ?? '').then((value) {
                                     if (value == true) {
-                                      isloadingButton = false;
+                                      setState(() {
+                                        isloadingButton = false;
+                                      });
                                       ShowGeneralDialog.joinChallange(context).then((value) => print("kelar om")).whenComplete(() {
                                         cn.initLeaderboardDetail(context, cn.leaderBoardDetailData?.challengeId ?? '');
                                       });
                                     } else {
-                                      isloadingButton = false;
+                                      setState(() {
+                                        isloadingButton = false;
+                                      });
                                     }
                                   });
                                 }
@@ -137,7 +150,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                     Text("${cn.leaderBoardDetailData?.challengeData?[0].description}"),
                   ],
                 )),
-            cn.leaderBoardDetailData?.onGoing == false || !boollUser
+            cn.leaderBoardDetailData?.onGoing == false || !boollUser || participant == 0
                 ? Container()
                 : Container(
                     width: SizeConfig.screenWidth,

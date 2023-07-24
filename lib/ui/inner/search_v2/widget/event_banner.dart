@@ -65,50 +65,53 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                   )
                 : AspectRatio(
                     aspectRatio: 16 / 7,
-                    child: Container(
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                      child: CarouselSlider(
-                        options: CarouselOptions(
-                            // height: 300
-                            enlargeCenterPage: true,
-                            viewportFraction: 1.0,
-                            aspectRatio: 16 / 7,
-                            autoPlayInterval: const Duration(seconds: 3),
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                _current = index;
-                              });
-                            }),
-                        items: notifier.bannerSearchData
-                            .map((item) => ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Center(
-                                      child: Image.network(
-                                    item.bannerLandingpage ?? '',
-                                    width: SizeConfig.screenWidth,
-                                    fit: BoxFit.cover,
-                                    loadingBuilder: (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                        child: Container(
-                                          height: SizeConfig.screenHeight,
-                                          width: SizeConfig.screenWidth,
-                                          color: Colors.black,
-                                          child: UnconstrainedBox(
-                                            child: Container(
-                                              height: 50,
-                                              width: 50,
-                                              child: CircularProgressIndicator(
-                                                  // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                  ),
+                    child: GestureDetector(
+                      onTap: () => Routing().move(Routes.chalenge),
+                      child: Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                              // height: 300
+                              enlargeCenterPage: true,
+                              viewportFraction: 1.0,
+                              aspectRatio: 16 / 7,
+                              autoPlayInterval: const Duration(seconds: 3),
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  _current = index;
+                                });
+                              }),
+                          items: notifier.bannerSearchData
+                              .map((item) => ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Center(
+                                        child: Image.network(
+                                      item.bannerLandingpage ?? '',
+                                      width: SizeConfig.screenWidth,
+                                      fit: BoxFit.cover,
+                                      loadingBuilder: (context, child, loadingProgress) {
+                                        if (loadingProgress == null) return child;
+                                        return Center(
+                                          child: Container(
+                                            height: SizeConfig.screenHeight,
+                                            width: SizeConfig.screenWidth,
+                                            color: Colors.black,
+                                            child: UnconstrainedBox(
+                                              child: Container(
+                                                height: 50,
+                                                width: 50,
+                                                child: CircularProgressIndicator(
+                                                    // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                    ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                  )),
-                                ))
-                            .toList(),
+                                        );
+                                      },
+                                    )),
+                                  ))
+                              .toList(),
+                        ),
                       ),
                     ),
                   ),
