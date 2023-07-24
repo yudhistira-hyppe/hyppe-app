@@ -494,49 +494,49 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               child: notifier.itemCount == 0
                   ? const NoResultFound()
                   : NotificationListener<OverscrollIndicatorNotification>(
-                      onNotification: (overscroll) {
-                        overscroll.disallowIndicator();
-                        return false;
-                      },
-                      child: ListView.builder(
-                        controller: widget.scrollController,
-                        // scrollDirection: Axis.horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
+                onNotification: (overscroll) {
+                  overscroll.disallowIndicator();
+                  return false;
+                },
+                child: ListView.builder(
+                  controller: widget.scrollController,
+                  // scrollDirection: Axis.horizontal,
+                  physics: const NeverScrollableScrollPhysics(),
 
-                        itemCount: notifier.pic?.length,
-                        padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                        itemBuilder: (context, index) {
-                          if (notifier.pic == null || home.isLoadingPict) {
-                            fAliplayer?.pause();
-                            _lastCurIndex = -1;
-                            return CustomShimmer(
-                              width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                              height: 168,
-                              radius: 8,
-                              margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                            );
-                          } else if (index == notifier.pic?.length && notifier.hasNext) {
-                            return UnconstrainedBox(
-                              child: Container(
-                                alignment: Alignment.center,
-                                width: 80 * SizeConfig.scaleDiagonal,
-                                height: 80 * SizeConfig.scaleDiagonal,
-                                child: const CustomLoading(),
-                              ),
-                            );
-                          }
+                  itemCount: notifier.pic?.length,
+                  padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                  itemBuilder: (context, index) {
+                    if (notifier.pic == null || home.isLoadingPict) {
+                      fAliplayer?.pause();
+                      _lastCurIndex = -1;
+                      return CustomShimmer(
+                        width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                        height: 168,
+                        radius: 8,
+                        margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                      );
+                    } else if (index == notifier.pic?.length && notifier.hasNext) {
+                      return UnconstrainedBox(
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: 80 * SizeConfig.scaleDiagonal,
+                          height: 80 * SizeConfig.scaleDiagonal,
+                          child: const CustomLoading(),
+                        ),
+                      );
+                    }
 
-                          return itemPict(context, notifier, index, home);
-                        },
-                      ),
-                    ),
+                    return itemPict(context, notifier, index, home);
+                  },
+                ),
+              ),
             ),
             home.isLoadingLoadmore
                 ? const SizedBox(
-                    height: 50,
-                    child: Center(child: CustomLoading()),
-                  )
+              height: 50,
+              child: Center(child: CustomLoading()),
+            )
                 : Container(),
           ],
         ),
@@ -562,26 +562,107 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: ProfileLandingPage(
-                  show: true,
-                  // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
-                  onFollow: () {},
-                  following: true,
-                  haveStory: false,
-                  textColor: kHyppeTextLightPrimary,
-                  username: notifier.pic?[index].username,
-                  featureType: FeatureType.other,
-                  // isCelebrity: vidnotifier.pic?[index].privacy?.isCelebrity,
-                  isCelebrity: false,
-                  imageUrl: '${System().showUserPicture(notifier.pic?[index].avatar?.mediaEndpoint)}',
-                  onTapOnProfileImage: () => System().navigateToProfile(context, notifier.pic?[index].email ?? ''),
-                  createdAt: '2022-02-02',
-                  musicName: notifier.pic?[index].music?.musicTitle ?? '',
-                  location: notifier.pic?[index].location ?? '',
-                  isIdVerified: notifier.pic?[index].privacy?.isIdVerified,
-                  badge: notifier.pic?[index].urluserBadge,
-                ),
+              // Text("$_lastCurIndex"),
+              // Text("$_curIdx"),
+              // GestureDetector(
+              //   onScaleStart: (details) {
+              //     widget.functionZoomTriger();
+              //     print("***************** dua jari ***************");
+              //     print(details.pointerCount);
+              //   },
+              //   onScaleEnd: (details) {
+              //     print("***************** satu jari ***************");
+              //   },
+
+              //   child: Container(
+              //     width: 500,
+              //     height: 200,
+              //     color: Colors.red,
+              //   ),
+              // ),
+              // GestureDetector(
+              //   onTap: () {
+              //     Routing().move(Routes.testImage);
+              //   },
+              //   child: Text('hahahah'),
+              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: ProfileLandingPage(
+                      show: true,
+                      // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
+                      onFollow: () {},
+                      following: true,
+                      haveStory: false,
+                      textColor: kHyppeTextLightPrimary,
+                      username: notifier.pic?[index].username,
+                      featureType: FeatureType.other,
+                      // isCelebrity: vidnotifier.pic?[index].privacy?.isCelebrity,
+                      isCelebrity: false,
+                      imageUrl: '${System().showUserPicture(notifier.pic?[index].avatar?.mediaEndpoint)}',
+                      onTapOnProfileImage: () => System().navigateToProfile(context, notifier.pic?[index].email ?? ''),
+                      createdAt: '2022-02-02',
+                      musicName: notifier.pic?[index].music?.musicTitle ?? '',
+                      location: notifier.pic?[index].location ?? '',
+                      isIdVerified: notifier.pic?[index].privacy?.isIdVerified,
+                      badge: notifier.pic?[index].urluserBadge,
+                    ),
+                  ),
+                  if (notifier.pic?[index].email != email && (notifier.pic?[index].isNewFollowing ?? false))
+                    Consumer<PreviewPicNotifier>(
+                      builder: (context, picNot, child) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            if (notifier.pic?[index].insight?.isloadingFollow != true) {
+                              picNot.followUser(context, notifier.pic?[index] ?? ContentData(),
+                                  isUnFollow: notifier.pic?[index].following, isloading: notifier.pic?[index].insight!.isloadingFollow ?? false);
+                            }
+                          },
+                          child: notifier.pic?[index].insight?.isloadingFollow ?? false
+                              ? Container(
+                            height: 40,
+                            width: 30,
+                            child: Align(
+                              alignment: Alignment.bottomRight,
+                              child: CustomLoading(),
+                            ),
+                          )
+                              : Text(
+                            (notifier.pic?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                            style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                          ),
+                        ),
+                      ),
+                    ),
+                  GestureDetector(
+                    onTap: () {
+                      // fAliplayer?.pause();
+                      if (notifier.pic?[index].email != email) {
+                        context.read<PreviewPicNotifier>().reportContent(context, notifier.pic?[index] ?? ContentData(), fAliplayer: fAliplayer);
+                      } else {
+                        fAliplayer?.setMuted(true);
+                        fAliplayer?.pause();
+                        ShowBottomSheet().onShowOptionContent(
+                          context,
+                          contentData: notifier.pic?[index] ?? ContentData(),
+                          captionTitle: hyppePic,
+                          onDetail: false,
+                          isShare: notifier.pic?[index].isShared,
+                          onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                          fAliplayer: fAliplayer,
+                        );
+                      }
+                    },
+                    child: const Icon(
+                      Icons.more_vert,
+                      color: kHyppeTextLightPrimary,
+                    ),
+                  ),
+                ],
               ),
               tenPx,
 
@@ -729,18 +810,18 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                           borderRadius: BorderRadius.circular(20), // Image border
                                           child: notifier.pic?[index].reportedStatus == 'BLURRED'
                                               ? ImageFiltered(
-                                                  imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                                  child: Image(
-                                                    image: imageProvider,
-                                                    fit: BoxFit.fitHeight,
-                                                    width: SizeConfig.screenWidth,
-                                                  ),
-                                                )
+                                            imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                            child: Image(
+                                              image: imageProvider,
+                                              fit: BoxFit.fitHeight,
+                                              width: SizeConfig.screenWidth,
+                                            ),
+                                          )
                                               : Image(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.fitHeight,
-                                                  width: SizeConfig.screenWidth,
-                                                ),
+                                            image: imageProvider,
+                                            fit: BoxFit.fitHeight,
+                                            width: SizeConfig.screenWidth,
+                                          ),
                                         ),
                                         emptyWidget: GestureDetector(
                                           onTap: () {
@@ -790,24 +871,24 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 ),
               ),
               SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                      (notifier.pic?[index].boosted.isEmpty ?? [].isEmpty) &&
-                      (notifier.pic?[index].reportedStatus != 'OWNED' && notifier.pic?[index].reportedStatus != 'BLURRED' && notifier.pic?[index].reportedStatus2 != 'BLURRED') &&
-                      notifier.pic?[index].email == email
+                  (notifier.pic?[index].boosted.isEmpty ?? [].isEmpty) &&
+                  (notifier.pic?[index].reportedStatus != 'OWNED' && notifier.pic?[index].reportedStatus != 'BLURRED' && notifier.pic?[index].reportedStatus2 != 'BLURRED') &&
+                  notifier.pic?[index].email == email
                   ? Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      margin: const EdgeInsets.only(bottom: 16),
-                      child: ButtonBoost(
-                        onDetail: false,
-                        marginBool: true,
-                        contentData: notifier.pic?[index],
-                        startState: () {
-                          SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                        },
-                        afterState: () {
-                          SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-                        },
-                      ),
-                    )
+                width: MediaQuery.of(context).size.width * 0.8,
+                margin: const EdgeInsets.only(bottom: 16),
+                child: ButtonBoost(
+                  onDetail: false,
+                  marginBool: true,
+                  contentData: notifier.pic?[index],
+                  startState: () {
+                    SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                  },
+                  afterState: () {
+                    SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                  },
+                ),
+              )
                   : Container(),
               if (notifier.pic?[index].email == email && (notifier.pic?[index].boostCount ?? 0) >= 0 && (notifier.pic?[index].boosted.isNotEmpty ?? [].isEmpty))
                 Container(
@@ -848,26 +929,26 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             alignment: Alignment.bottomRight,
                             child: notifier.pic?[index].insight?.isloading ?? false
                                 ? const SizedBox(
-                                    height: 28,
-                                    width: 28,
-                                    child: CircularProgressIndicator(
-                                      color: kHyppePrimary,
-                                      strokeWidth: 2,
-                                    ),
-                                  )
+                              height: 28,
+                              width: 28,
+                              child: CircularProgressIndicator(
+                                color: kHyppePrimary,
+                                strokeWidth: 2,
+                              ),
+                            )
                                 : InkWell(
-                                    child: CustomIconWidget(
-                                      defaultColor: false,
-                                      color: (notifier.pic?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                      iconData: '${AssetPath.vectorPath}${(notifier.pic?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                      height: 28,
-                                    ),
-                                    onTap: () {
-                                      if (notifier.pic?[index] != null) {
-                                        likeNotifier.likePost(context, notifier.pic![index]);
-                                      }
-                                    },
-                                  ),
+                              child: CustomIconWidget(
+                                defaultColor: false,
+                                color: (notifier.pic?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                                iconData: '${AssetPath.vectorPath}${(notifier.pic?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                height: 28,
+                              ),
+                              onTap: () {
+                                if (notifier.pic?[index] != null) {
+                                  likeNotifier.likePost(context, notifier.pic![index]);
+                                }
+                              },
+                            ),
                           ),
                         ),
                         if (notifier.pic?[index].allowComments ?? true)
@@ -957,40 +1038,40 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 ),
               (notifier.pic?[index].comment?.length ?? 0) > 0
                   ? Padding(
-                      padding: const EdgeInsets.only(top: 0.0),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: (notifier.pic?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
-                        itemBuilder: (context, indexComment) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 6.0),
-                            child: CustomNewDescContent(
-                              // desc: "${notifier.pic?[index]?.description}",
-                              username: notifier.pic?[index].comment?[indexComment].userComment?.username ?? '',
-                              desc: notifier.pic?[index].comment?[indexComment].txtMessages ?? '',
-                              trimLines: 2,
-                              textAlign: TextAlign.start,
-                              seeLess: ' seeLess', // ${notifier2.translate.seeLess}',
-                              seeMore: '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
-                              normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                              hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                              expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                            ),
-                          );
-                        },
+                padding: const EdgeInsets.only(top: 0.0),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: (notifier.pic?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
+                  itemBuilder: (context, indexComment) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 6.0),
+                      child: CustomNewDescContent(
+                        // desc: "${notifier.pic?[index]?.description}",
+                        username: notifier.pic?[index].comment?[indexComment].userComment?.username ?? '',
+                        desc: notifier.pic?[index].comment?[indexComment].txtMessages ?? '',
+                        trimLines: 2,
+                        textAlign: TextAlign.start,
+                        seeLess: ' seeLess', // ${notifier2.translate.seeLess}',
+                        seeMore: '  Selengkapnya ', //${notifier2.translate.seeMoreContent}',
+                        normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                        hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                        expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
                       ),
-                    )
+                    );
+                  },
+                ),
+              )
                   : Container(),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                padding: EdgeInsets.symmetric(vertical: 4.0),
                 child: Text(
                   "${System().readTimestamp(
                     DateTime.parse(System().dateTimeRemoveT(notifier.pic?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
                     context,
                     fullCaption: true,
                   )}",
-                  style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                  style: TextStyle(fontSize: 12, color: kHyppeBurem),
                 ),
               ),
             ],
@@ -1056,65 +1137,65 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     final transnot = Provider.of<TranslateNotifierV2>(context, listen: false);
     return data.reportedStatus == 'BLURRED'
         ? Positioned.fill(
-            child: Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Spacer(),
-                      const CustomIconWidget(
-                        iconData: "${AssetPath.vectorPath}eye-off.svg",
-                        defaultColor: false,
-                        height: 30,
-                      ),
-                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                      Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                          )),
-                      // data.email == SharedPreference().readStorage(SpKeys.email)
-                      //     ? GestureDetector(
-                      //         onTap: () => Routing().move(Routes.appeal, argument: data),
-                      //         child: Container(
-                      //             padding: const EdgeInsets.all(8),
-                      //             margin: const EdgeInsets.all(18),
-                      //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                      //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                      //       )
-                      //     : const SizedBox(),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          System().increaseViewCount2(context, data);
-                          context.read<ReportNotifier>().seeContent(context, data, hyppePic);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 8),
-                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
-                          width: SizeConfig.screenWidth,
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              top: BorderSide(
-                                color: Colors.white,
-                                width: 1,
-                              ),
-                            ),
-                          ),
-                          child: Text(
-                            "${transnot.translate.see} HyppePic",
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                            textAlign: TextAlign.center,
-                          ),
+      child: Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Spacer(),
+                const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}eye-off.svg",
+                  defaultColor: false,
+                  height: 30,
+                ),
+                Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                    )),
+                // data.email == SharedPreference().readStorage(SpKeys.email)
+                //     ? GestureDetector(
+                //         onTap: () => Routing().move(Routes.appeal, argument: data),
+                //         child: Container(
+                //             padding: const EdgeInsets.all(8),
+                //             margin: const EdgeInsets.all(18),
+                //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                //       )
+                //     : const SizedBox(),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    System().increaseViewCount2(context, data);
+                    context.read<ReportNotifier>().seeContent(context, data, hyppePic);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 8),
+                    margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                    width: SizeConfig.screenWidth,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: Colors.white,
+                          width: 1,
                         ),
                       ),
-                    ],
+                    ),
+                    child: Text(
+                      "${transnot.translate.see} HyppePic",
+                      style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                )),
-          )
+                ),
+              ],
+            ),
+          )),
+    )
         : Container();
   }
 }

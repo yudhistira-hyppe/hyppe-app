@@ -753,7 +753,7 @@ class _VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserv
           },
           onClose: (){
             setState(() {
-              isPlay = false;
+              isPlay = true;
 
               adsData = null;
               if(widget.onShowAds != null){
