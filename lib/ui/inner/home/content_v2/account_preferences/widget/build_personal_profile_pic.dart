@@ -34,6 +34,7 @@ class BuildPersonalProfilePic extends StatelessWidget {
                     width: 100 * SizeConfig.scaleDiagonal,
                     height: 100 * SizeConfig.scaleDiagonal,
                     imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
+                    badge: notifier.user.profile?.urluserBadge,
                     onTap: () {},
                     forStory: false,
                   ),

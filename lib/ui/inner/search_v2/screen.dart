@@ -19,6 +19,7 @@ import 'package:hyppe/ui/inner/search_v2/interest/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
+import 'package:hyppe/ui/inner/search_v2/widget/event_banner.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
@@ -209,44 +210,45 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
         onRefresh: () => notifier.onSearchLandingPage(context),
         child: notifier.connectionError
             ? OfflineMode(
-          function: () {
-            notifier.checkConnection();
-            notifier.onSearchLandingPage(context);
-          },
-        )
+                function: () {
+                  notifier.checkConnection();
+                  notifier.onSearchLandingPage(context);
+                },
+              )
             : SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: CustomSearchBar(
-                  hintText: notifier.language.whatAreYouFindOut,
-                  contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
-                  focusNode: notifier.focusNode1,
-                  controller: notifier.searchController1,
-                  onTap: () {
-                    if (notifier.layout == SearchLayout.searchMore) {
-                      notifier.isFromComplete = true;
-                    }
-                    notifier.layout = SearchLayout.search;
-                  },
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: CustomSearchBar(
+                        hintText: notifier.language.whatAreYouFindOut,
+                        contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                        focusNode: notifier.focusNode1,
+                        controller: notifier.searchController1,
+                        onTap: () {
+                          if (notifier.layout == SearchLayout.searchMore) {
+                            notifier.isFromComplete = true;
+                          }
+                          notifier.layout = SearchLayout.search;
+                        },
+                      ),
+                    ),
+                    EventBannerWidget(),
+                    const HashtagScreen(),
+                    InterestScreen(
+                      onClick: (value) {
+                        notifier.selectedInterest = value;
+                        if (notifier.layout == SearchLayout.searchMore) {
+                          notifier.isFromComplete = true;
+                        }
+                        notifier.layout = SearchLayout.interestDetail;
+                      },
+                    ),
+                    sixtyFourPx,
+                    sixtyFourPx
+                  ],
                 ),
               ),
-              const HashtagScreen(),
-              InterestScreen(
-                onClick: (value) {
-                  notifier.selectedInterest = value;
-                  if (notifier.layout == SearchLayout.searchMore) {
-                    notifier.isFromComplete = true;
-                  }
-                  notifier.layout = SearchLayout.interestDetail;
-                },
-              ),
-              sixtyFourPx,
-              sixtyFourPx
-            ],
-          ),
-        ),
       ),
     );
   }

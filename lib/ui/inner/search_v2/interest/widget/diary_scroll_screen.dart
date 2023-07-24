@@ -596,6 +596,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                   musicName: diaryData[index].music?.musicTitle ?? '',
                   location: diaryData[index].location ?? '',
                   isIdVerified: diaryData[index].privacy?.isIdVerified,
+                  badge: diaryData[index].urluserBadge,
                 ),
               ),
               if (diaryData[index].email != email && (diaryData[index].isNewFollowing ?? false))

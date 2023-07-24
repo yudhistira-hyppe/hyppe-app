@@ -98,6 +98,7 @@ class _OnShowUserViewContentBottomSheetState extends State<OnShowUserViewContent
                                   height: 40,
                                   onTap: () => System().navigateToProfile(context, data.email ?? ''),
                                   imageUrl: System().showUserPicture(data.avatar == null ? '' : data.avatar?.mediaEndpoint),
+                                  badge: data.urluserBadge,
                                   following: true,
                                   onFollow: () {},
                                 ),

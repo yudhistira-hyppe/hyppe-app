@@ -51,6 +51,7 @@ class OnDeleteMessageBottomSheet extends StatelessWidget {
                           height: 48,
                           following: true,
                           imageUrl: System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
+                          badge: data?.senderOrReceiverInfo?.urluserBadge,
                         ),
                       ),
                       sixteenPx,

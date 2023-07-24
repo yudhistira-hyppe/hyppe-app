@@ -121,6 +121,7 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
                                           height: 50,
                                           onTap: () {},
                                           imageUrl: System().showUserPicture(notifier.searchTagPeolpleData[index].avatar?.mediaEndpoint),
+                                          badge: notifier.searchTagPeolpleData[index].urluserBadge,
                                           following: true,
                                           onFollow: () {},
                                         ),

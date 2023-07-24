@@ -198,6 +198,7 @@ class PicDetailTop extends StatelessWidget {
             onTapOnProfileImage: () => _system.navigateToProfile(context, data?.email ?? ''),
             featureType: FeatureType.pic,
             imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',
+            badge: data?.urluserBadge,
             createdAt: '${_system.readTimestamp(
               DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
               context,

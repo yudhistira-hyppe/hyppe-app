@@ -238,6 +238,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                   musicName: vidData[index].music?.musicTitle ?? '',
                   location: vidData[index].location ?? '',
                   isIdVerified: vidData[index].privacy?.isIdVerified,
+                  badge: vidData[index].urluserBadge,
                 ),
               ),
               if (vidData[index].email != email && (vidData[index].isNewFollowing ?? false))

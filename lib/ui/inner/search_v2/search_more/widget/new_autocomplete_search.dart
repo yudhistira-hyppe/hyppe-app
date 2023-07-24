@@ -102,6 +102,7 @@ class _NewAutoCompleteSearchState extends State<NewAutoCompleteSearch> {
                                         height: 40,
                                         onTap: () {},
                                         imageUrl: System().showUserPicture(notifier.searchUsers?[index].avatar?[0].mediaEndpoint?.split('_')[0] ?? ''),
+                                        badge: notifier.searchUsers?[index].urluserBadge,
                                         following: true,
                                         onFollow: () {},
                                       ),

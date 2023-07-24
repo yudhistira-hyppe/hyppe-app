@@ -200,6 +200,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                               isUserVerified: data.isIdVerified ?? false,
                               imageUrl:
                                   '${System().showUserPicture((data.avatar?.mediaEndpoint?.isNotEmpty ?? false) ? data.avatar?.mediaEndpoint : (notifier.savedData?.avatar?.mediaEndpoint ?? ''))}',
+                              badge: data.urluserBadge,
                               createdAt: '${System().readTimestamp(
                                 DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? '')).millisecondsSinceEpoch,
                                 context,

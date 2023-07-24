@@ -12,7 +12,10 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
@@ -331,7 +334,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   final events = [];
 
   @override
-  void afterFirstLayout(BuildContext context) {
+  void afterFirstLayout(BuildContext context) async {
     print("afterrrrrrr============");
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
     var homneNotifier = context.read<HomeNotifier>();
@@ -349,5 +352,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       print("isOnHomeScreen hit ads");
       homneNotifier.getAdsApsara(context, true);
     }
+    var challange = context.read<ChallangeNotifier>();
+    await challange.getBannerLanding(context, ispopUp: true);
+    if (challange.bannerData.isNotEmpty) ShowGeneralDialog.showBannerPop(context);
   }
 }

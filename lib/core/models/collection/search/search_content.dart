@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
 SearchContentModel searchContentFromJson(String str) =>
@@ -213,7 +214,8 @@ class DataUser {
     this.fullName,
     this.email,
     this.statusEN,
-    this.statusID
+    this.statusID,
+    this.urluserBadge,
   });
 
   String? id;
@@ -224,6 +226,7 @@ class DataUser {
   String? email;
   String? statusEN;
   String? statusID;
+  UserBadgeModel? urluserBadge;
 
   factory DataUser.fromJson(Map<String, dynamic> json) => DataUser(
         id: json["_id"],
@@ -235,7 +238,13 @@ class DataUser {
         fullName: json["fullName"],
         email: json["email"],
         statusEN: json['statusEN'],
-        statusID: json['statusID']
+        statusID: json['statusID'],
+        urluserBadge:
+            json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty
+                ? json['urluserBadge'] is List
+                    ? UserBadgeModel.fromJson(json['urluserBadge'].first)
+                    : UserBadgeModel.fromJson(json['urluserBadge'])
+                : null,
       );
 
   // Map<String, dynamic> toJson() => {

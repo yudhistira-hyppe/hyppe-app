@@ -562,106 +562,26 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Text("$_lastCurIndex"),
-              // Text("$_curIdx"),
-              // GestureDetector(
-              //   onScaleStart: (details) {
-              //     widget.functionZoomTriger();
-              //     print("***************** dua jari ***************");
-              //     print(details.pointerCount);
-              //   },
-              //   onScaleEnd: (details) {
-              //     print("***************** satu jari ***************");
-              //   },
-
-              //   child: Container(
-              //     width: 500,
-              //     height: 200,
-              //     color: Colors.red,
-              //   ),
-              // ),
-              // GestureDetector(
-              //   onTap: () {
-              //     Routing().move(Routes.testImage);
-              //   },
-              //   child: Text('hahahah'),
-              // ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: ProfileLandingPage(
-                      show: true,
-                      // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
-                      onFollow: () {},
-                      following: true,
-                      haveStory: false,
-                      textColor: kHyppeTextLightPrimary,
-                      username: notifier.pic?[index].username,
-                      featureType: FeatureType.other,
-                      // isCelebrity: vidnotifier.pic?[index].privacy?.isCelebrity,
-                      isCelebrity: false,
-                      imageUrl: '${System().showUserPicture(notifier.pic?[index].avatar?.mediaEndpoint)}',
-                      onTapOnProfileImage: () => System().navigateToProfile(context, notifier.pic?[index].email ?? ''),
-                      createdAt: '2022-02-02',
-                      musicName: notifier.pic?[index].music?.musicTitle ?? '',
-                      location: notifier.pic?[index].location ?? '',
-                      isIdVerified: notifier.pic?[index].privacy?.isIdVerified,
-                    ),
-                  ),
-                  if (notifier.pic?[index].email != email && (notifier.pic?[index].isNewFollowing ?? false))
-                    Consumer<PreviewPicNotifier>(
-                      builder: (context, picNot, child) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            if (notifier.pic?[index].insight?.isloadingFollow != true) {
-                              picNot.followUser(context, notifier.pic?[index] ?? ContentData(),
-                                  isUnFollow: notifier.pic?[index].following, isloading: notifier.pic?[index].insight!.isloadingFollow ?? false);
-                            }
-                          },
-                          child: notifier.pic?[index].insight?.isloadingFollow ?? false
-                              ? Container(
-                                  height: 40,
-                                  width: 30,
-                                  child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: CustomLoading(),
-                                  ),
-                                )
-                              : Text(
-                                  (notifier.pic?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                  style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                                ),
-                        ),
-                      ),
-                    ),
-                  GestureDetector(
-                    onTap: () {
-                      // fAliplayer?.pause();
-                      if (notifier.pic?[index].email != email) {
-                        context.read<PreviewPicNotifier>().reportContent(context, notifier.pic?[index] ?? ContentData(), fAliplayer: fAliplayer);
-                      } else {
-                        fAliplayer?.setMuted(true);
-                        fAliplayer?.pause();
-                        ShowBottomSheet().onShowOptionContent(
-                          context,
-                          contentData: notifier.pic?[index] ?? ContentData(),
-                          captionTitle: hyppePic,
-                          onDetail: false,
-                          isShare: notifier.pic?[index].isShared,
-                          onUpdate: () => context.read<HomeNotifier>().onUpdate(),
-                          fAliplayer: fAliplayer,
-                        );
-                      }
-                    },
-                    child: const Icon(
-                      Icons.more_vert,
-                      color: kHyppeTextLightPrimary,
-                    ),
-                  ),
-                ],
+              Expanded(
+                child: ProfileLandingPage(
+                  show: true,
+                  // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
+                  onFollow: () {},
+                  following: true,
+                  haveStory: false,
+                  textColor: kHyppeTextLightPrimary,
+                  username: notifier.pic?[index].username,
+                  featureType: FeatureType.other,
+                  // isCelebrity: vidnotifier.pic?[index].privacy?.isCelebrity,
+                  isCelebrity: false,
+                  imageUrl: '${System().showUserPicture(notifier.pic?[index].avatar?.mediaEndpoint)}',
+                  onTapOnProfileImage: () => System().navigateToProfile(context, notifier.pic?[index].email ?? ''),
+                  createdAt: '2022-02-02',
+                  musicName: notifier.pic?[index].music?.musicTitle ?? '',
+                  location: notifier.pic?[index].location ?? '',
+                  isIdVerified: notifier.pic?[index].privacy?.isIdVerified,
+                  badge: notifier.pic?[index].urluserBadge,
+                ),
               ),
               tenPx,
 

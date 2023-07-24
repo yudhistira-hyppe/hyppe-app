@@ -748,6 +748,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                   musicName: diaryData?[index].music?.musicTitle ?? '',
                   location: diaryData?[index].location ?? '',
                   isIdVerified: diaryData?[index].privacy?.isIdVerified,
+                  badge: diaryData?[index].urluserBadge,
                 ),
               ),
               if (diaryData?[index].email != email && (diaryData?[index].isNewFollowing ?? false))

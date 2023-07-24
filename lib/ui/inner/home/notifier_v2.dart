@@ -13,6 +13,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/SqliteData.dart';
@@ -91,6 +92,9 @@ class HomeNotifier with ChangeNotifier {
   String _profileImage = '';
   String get profileImage => _profileImage;
 
+  UserBadgeModel? _profileBadge;
+  UserBadgeModel? get profileBadge => _profileBadge;
+
   String _profileImageKey = '';
   String get profileImageKey => _profileImageKey;
 
@@ -124,6 +128,11 @@ class HomeNotifier with ChangeNotifier {
 
   set profileImage(String url) {
     _profileImage = url;
+    notifyListeners();
+  }
+
+  set profileBadge(UserBadgeModel? badge) {
+    _profileBadge = badge;
     notifyListeners();
   }
 

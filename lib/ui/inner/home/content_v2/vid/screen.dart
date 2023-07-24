@@ -255,30 +255,50 @@ class _HyppePreviewVidState extends State<HyppePreviewVid>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: ProfileLandingPage(
-                      show: true,
-                      // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
-                      onFollow: () {},
-                      following: true,
-                      haveStory: false,
-                      textColor: kHyppeTextLightPrimary,
-                      username: vidData.username,
-                      featureType: FeatureType.other,
-                      // isCelebrity: vidnotifier.diaryData?[index].privacy?.isCelebrity,
-                      isCelebrity: false,
-                      imageUrl:
-                          '${System().showUserPicture(vidData.avatar?.mediaEndpoint)}',
-                      onTapOnProfileImage: () =>
-                          System().navigateToProfile(context, vidData.email ?? ''),
-                      createdAt: '2022-02-02',
-                      musicName: vidData.music?.musicTitle ?? '',
-                      location: vidData.location ?? '',
-                      isIdVerified: vidData.privacy?.isIdVerified,
+              Expanded(
+                child: ProfileLandingPage(
+                  show: true,
+                  // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
+                  onFollow: () {},
+                  following: true,
+                  haveStory: false,
+                  textColor: kHyppeTextLightPrimary,
+                  username: vidData.username,
+                  featureType: FeatureType.other,
+                  // isCelebrity: vidnotifier.diaryData?[index].privacy?.isCelebrity,
+                  isCelebrity: false,
+                  imageUrl: '${System().showUserPicture(vidData.avatar?.mediaEndpoint)}',
+                  onTapOnProfileImage: () => System().navigateToProfile(context, vidData.email ?? ''),
+                  createdAt: '2022-02-02',
+                  musicName: vidData.music?.musicTitle ?? '',
+                  location: vidData.location ?? '',
+                  isIdVerified: vidData.privacy?.isIdVerified,
+                  badge: vidData.urluserBadge,
+                ),
+              ),
+              if (vidData.email != email && (vidData.isNewFollowing ?? false))
+                Consumer<PreviewPicNotifier>(
+                  builder: (context, picNot, child) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (vidData.insight?.isloadingFollow != true) {
+                          picNot.followUser(context, vidData, isUnFollow: vidData.following, isloading: vidData.insight!.isloadingFollow ?? false);
+                        }
+                      },
+                      child: vidData.insight?.isloadingFollow ?? false
+                          ? Container(
+                              height: 40,
+                              width: 30,
+                              child: const Align(
+                                alignment: Alignment.bottomRight,
+                                child: CustomLoading(),
+                              ),
+                            )
+                          : Text(
+                              (vidData.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                              style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                            ),
                     ),
                   ),
                   if (vidData.email != email && (vidData.isNewFollowing ?? false))

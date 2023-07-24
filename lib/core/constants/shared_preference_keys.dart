@@ -9,6 +9,7 @@ class SpKeys {
 
   static const String email = "email";
   static const String userID = "userID";
+  static const String avatar = "avatar";
   static const String fcmToken = 'fcmToken';
   static const String userToken = "userToken";
   static const String isLoginSosmed = 'false';

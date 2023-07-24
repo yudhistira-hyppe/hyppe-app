@@ -85,6 +85,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                       spaceProfileAndId: fourteenPx,
                       featureType: FeatureType.diary,
                       imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
+                      badge: data?.urluserBadge,
                       isCelebrity: data?.privacy?.isCelebrity,
                       isUserVerified: data?.isIdVerified ?? false,
                       createdAt: '${System().readTimestamp(

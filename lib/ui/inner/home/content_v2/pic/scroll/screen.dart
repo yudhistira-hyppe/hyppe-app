@@ -737,6 +737,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                   musicName: pics?[index].music?.musicTitle ?? '',
                   location: pics?[index].location ?? '',
                   isIdVerified: pics?[index].privacy?.isIdVerified,
+                  badge: pics?[index].urluserBadge,
                 ),
               ),
               if (pics?[index].email != email && (pics?[index].isNewFollowing ?? false))

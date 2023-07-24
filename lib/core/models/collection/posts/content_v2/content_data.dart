@@ -4,6 +4,7 @@ import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/boosted.dart';
 import 'package:hyppe/core/models/collection/transaction/bank_account/transaction_history_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
@@ -195,6 +196,7 @@ class ContentData {
   FlutterAliplayer? fAliplayerAds;
   AdsData? inBetweenAds;
   AdsData? adsData;
+  UserBadgeModel? urluserBadge;
 
   ContentData(
       {this.metadata,
@@ -254,7 +256,9 @@ class ContentData {
       this.comments,
       this.isNewFollowing,
       this.isLoading = false,
-      this.fullContent});
+      this.fullContent,
+      this.urluserBadge,
+    });
 
   ContentData.fromJson(Map<String, dynamic> json) {
     metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
@@ -347,6 +351,13 @@ class ContentData {
     isDiaryPlay = false;
     comments = json['comments'] ?? 0;
     isNewFollowing = following ?? false ? false : true;
+    if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
+      if (json['urluserBadge'] is List) {
+        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge'].first);
+      } else {
+        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
+      }
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -406,6 +417,9 @@ class ContentData {
 
     data['isLoading'] = isLoading;
 
+    if (urluserBadge != null) {
+      data['urluserBadge'] = urluserBadge?.toJson();
+    }
     return data;
   }
 
@@ -558,13 +572,19 @@ class TagPeople {
 
   Avatar? avatar;
 
-  TagPeople({this.email, this.username, this.status, this.avatar});
+  UserBadgeModel? urluserBadge;
+
+  TagPeople({this.email, this.username, this.status, this.avatar, this.urluserBadge});
 
   TagPeople.fromJson(Map<String, dynamic> json) {
     email = json["email"];
     username = json["username"];
     status = json["status"];
     avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
+    urluserBadge =
+        json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty
+            ? UserBadgeModel.fromJson(json['urluserBadge'])
+            : null;
   }
 
   Map<String, dynamic> toJson() => {
@@ -572,6 +592,7 @@ class TagPeople {
         "username": username,
         "status": status,
         "avatar": avatar != null ? avatar?.toJson() : '',
+        "urluserBadge": urluserBadge != null ? urluserBadge?.toJson() : '',
       };
 }
 

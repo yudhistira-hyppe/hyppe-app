@@ -73,7 +73,7 @@ class OtherProfilePics extends StatelessWidget {
                                                 thumbnail: ImageUrl(notifier.manyUser.last.pics?[index].postID,
                                                     url: (notifier.manyUser.last.pics?[index].isApsara ?? false)
                                                         ? (notifier.manyUser.last.pics?[index].mediaThumbEndPoint ?? '')
-                                                        : System().showUserPicture(notifier.manyUser.last.pics?[index].mediaEndpoint) ?? ''),
+                                                        : System().showUserPicture(notifier.manyUser.last.pics?[index].mediaThumbEndPoint) ?? ''),
                                               ),
                                             ),
                                             (pics?[index].saleAmount ?? 0) > 0

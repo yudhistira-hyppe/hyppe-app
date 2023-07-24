@@ -275,7 +275,7 @@ class System {
     return OverlayEntry(builder: (context) => widgetToOverlay);
   }
 
-  dateFormatter(String dateParams, int displayOption) {
+  dateFormatter(String dateParams, int displayOption, {String lang = "id"}) {
     String? value;
     if (displayOption == 0) {
       value = DateFormat.yMMMd().format(DateTime.parse(dateParams));
@@ -291,6 +291,8 @@ class System {
       value = DateFormat('dd/MM/yyyy').format(DateTime.parse(dateParams));
     } else if (displayOption == 6) {
       value = DateFormat('HH:mm').format(DateTime.parse(dateParams));
+    } else if (displayOption == 7) {
+      value = DateFormat('d MMMM yyyy', lang).format(DateTime.parse(dateParams));
     }
     return value;
   }
@@ -1686,10 +1688,10 @@ class System {
   }
 
   void checkMemory() {
-    ImageCache _imageCache = PaintingBinding.instance.imageCache;
-    if (_imageCache.liveImageCount >= 50) {
-      _imageCache.clear();
-      _imageCache.clearLiveImages();
+    ImageCache imageCache = PaintingBinding.instance.imageCache;
+    if (imageCache.liveImageCount >= 50) {
+      imageCache.clear();
+      imageCache.clearLiveImages();
     }
   }
 
@@ -1707,12 +1709,31 @@ class System {
     heightIndex = (heightBox * hasilBagi.toInt() - heightBox);
 
     double jumpTo = heightProfileCard + heightIndex;
-    print("============= jumpt to $heightProfileCard =================");
-    print("============= jumpt to $hasilBagi =================");
-    print("============= jumpt to $heightIndex =================");
-    print("============= jumpt to $jumpTo =================");
     return jumpTo;
   }
 
   bool isInteger(num value) => value is int || value == value.roundToDouble();
+
+  Future<List> compareDate(String startDateString, String endtDateString, {String? dari}) async {
+    //get difrent date
+    print("???????? $startDateString");
+    print("???????? $endtDateString");
+    // startDateString = "2023-01-08 13:52:15";
+    var temp = DateTime.now();
+    var startDate = DateTime.parse(startDateString);
+    var endDate = DateTime.parse(endtDateString);
+    var d1 = DateTime.utc(temp.year, temp.month, temp.day, temp.hour, temp.minute, temp.second);
+    var startDay = DateTime.utc(startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute, startDate.second);
+    var endDay = DateTime.utc(endDate.year, endDate.month, endDate.day, endDate.hour, endDate.minute, endDate.second);
+    print("======= compare ${startDay.compareTo(d1)}");
+    if (startDay.compareTo(d1) <= -1) {
+      //tanggal lewat ("berakhir dalam");
+      final difference = endDay.difference(d1);
+      return [true, difference];
+    } else {
+      //tanggal akan datang ("Mulai dalam");
+      final difference = startDay.difference(d1);
+      return [false, difference];
+    }
+  }
 }
