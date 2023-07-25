@@ -4,6 +4,7 @@ import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../core/arguments/other_profile_argument.dart';
 import '../../../../core/constants/asset_path.dart';
@@ -30,14 +31,11 @@ class AdsInBetween extends StatefulWidget {
 
 class _AdsInBetweenState extends State<AdsInBetween> {
   bool loadLaunch = false;
+  bool isSeeing = false;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 1), (){
-
-      System().adsView(widget.data, widget.data.duration?.round() ?? 10);
-    });
   }
 
   @override
@@ -67,25 +65,56 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                     //     borderRadius: BorderRadius.circular(18.0),
                     //   ),
                     // ),
-                    CustomBaseCacheImage(
-                      imageUrl: widget.data.avatar?.fullLinkURL,
-                      memCacheWidth: 200,
-                      memCacheHeight: 200,
-                      imageBuilder: (_, imageProvider) {
-                        return Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(Radius.circular(18)),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: imageProvider,
-                            ),
-                          ),
-                        );
+                    VisibilityDetector(
+                      key: Key(widget.data.adsId ?? ''),
+                      onVisibilityChanged: (VisibilityInfo info) {
+                        if(info.visibleFraction >= 0.9){
+                          setState(() {
+                            isSeeing = true;
+                          });
+                          Future.delayed(const Duration(seconds: 1), (){
+                            if(isSeeing){
+                              System().adsView(widget.data, widget.data.duration?.round() ?? 10);
+                            }
+                          });
+                        }
+                        if(info.visibleFraction < 0.3){
+                          setState(() {
+                            isSeeing = false;
+                          });
+                        }
                       },
-                      errorWidget: (_, __, ___) {
-                        return Container(
+                      child: CustomBaseCacheImage(
+                        imageUrl: widget.data.avatar?.fullLinkURL,
+                        memCacheWidth: 200,
+                        memCacheHeight: 200,
+                        imageBuilder: (_, imageProvider) {
+                          return Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(Radius.circular(18)),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: imageProvider,
+                              ),
+                            ),
+                          );
+                        },
+                        errorWidget: (_, __, ___) {
+                          return Container(
+                            width: 36,
+                            height: 36,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(18)),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                              ),
+                            ),
+                          );
+                        },
+                        emptyWidget: Container(
                           width: 36,
                           height: 36,
                           decoration: const BoxDecoration(
@@ -94,17 +123,6 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               fit: BoxFit.cover,
                               image: AssetImage('${AssetPath.pngPath}content-error.png'),
                             ),
-                          ),
-                        );
-                      },
-                      emptyWidget: Container(
-                        width: 36,
-                        height: 36,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(18)),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
                           ),
                         ),
                       ),

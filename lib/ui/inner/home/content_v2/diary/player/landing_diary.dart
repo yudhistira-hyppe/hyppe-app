@@ -258,7 +258,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     });
   }
 
-  void start(ContentData data) async {
+  Future start(ContentData data) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
     fAliplayer?.stop();
@@ -317,7 +317,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     if (data.reportedStatus == 'BLURRED') {
     } else {
       print("=====prepare=====");
-      fAliplayer?.prepare();
+      await fAliplayer?.prepare();
     }
 
     // fAliplayer?.play();
@@ -677,8 +677,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                     if (_lastCurIndex != _curIdx) {
                       fAliplayer?.stop();
                       Future.delayed(const Duration(milliseconds: 700), () {
-                        start(notifier.diaryData?[index] ?? ContentData());
-                        System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData(), check: false).whenComplete(() async{
+                        start(notifier.diaryData?[index] ?? ContentData()).whenComplete(() async{
                           final count = context.getAdsCount();
                           if(count == 5){
                             final adsData = await context.getInBetweenAds();
@@ -688,6 +687,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           }
                           context.incrementAdsCount();
                         });
+                        System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData(), check: false);
                       });
                       if (notifier.diaryData?[index].certified ?? false) {
                         System().block(context);

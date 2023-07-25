@@ -485,6 +485,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       _groupUserStories = groups;
     } else if (myGroup != null) {
       _groupUserStories.add(StoriesGroup(email: myGroup[email]?[0].email, username: myGroup[email]?[0].username, story: myGroup[email]));
+
     }
   }
 

@@ -681,18 +681,21 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                       } else {
                         fAliplayer?.stop();
                       }
-                      Future.delayed(const Duration(milliseconds: 100), () {
-                        System().increaseViewCount2(context, notifier.pic?[index] ?? ContentData(), check: false).whenComplete(() async{
-                          final count = context.getAdsCount();
-                          print('Pic count: $count');
-                          if(count == 5){
-                            final adsData = await context.getInBetweenAds();
-                            if(adsData != null){
-                              notifier.setAdsData(index, adsData);
+                      Future.delayed(const Duration(milliseconds: 500), () {
+                        if(_curIdx == index){
+                          System().increaseViewCount2(context, notifier.pic?[index] ?? ContentData(), check: false).whenComplete(() async{
+                            final count = context.getAdsCount();
+                            print('Pic count: $count');
+                            if(count == 5){
+                              final adsData = await context.getInBetweenAds();
+                              if(adsData != null){
+                                notifier.setAdsData(index, adsData);
+                              }
                             }
-                          }
-                          context.incrementAdsCount();
-                        });
+                            context.incrementAdsCount();
+                          });
+                        }
+
                       });
                       if (notifier.pic?[index].certified ?? false) {
                         System().block(context);

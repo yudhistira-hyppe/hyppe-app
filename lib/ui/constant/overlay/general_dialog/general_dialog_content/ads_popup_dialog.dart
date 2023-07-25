@@ -180,19 +180,25 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       }
 
       //set player
-      fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      if(widget.data.mediaType == 'video'){
+        fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
+        fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
 
-      if (Platform.isAndroid) {
-        getExternalStorageDirectories().then((value) {
-          if ((value?.length ?? 0) > 0) {
-            _snapShotPath = value![0].path;
-            return _snapShotPath;
-          }
-        });
+        if (Platform.isAndroid) {
+          getExternalStorageDirectories().then((value) {
+            if ((value?.length ?? 0) > 0) {
+              _snapShotPath = value![0].path;
+              return _snapShotPath;
+            }
+          });
+        }
+
+        _initListener();
+      }else{
+        _animationController?.duration = const Duration(milliseconds: 8000);
+        _animationController?.forward();
       }
 
-      _initListener();
     });
   }
 
@@ -500,9 +506,10 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       },
       child: Stack(
         children: [
-          SizedBox(
+          Container(
             width: SizeConfig.screenWidth,
             height: SizeConfig.screenHeight,
+            color: Colors.black,
             child: widget.data.mediaType == 'video' ? AliPlayerView(
               onCreated: onViewPlayerCreated,
               x: 0,
@@ -849,54 +856,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                   height: double.infinity,
                   child: Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),
                 ),
-                // Container(
-                //   color: Colors.black,
-                //   child: CustomBaseCacheImage(
-                //     widthPlaceHolder: 112,
-                //     heightPlaceHolder: 40,
-                //     imageUrl: (_listData?[index].isApsara ?? false) ? "${_listData?[index].mediaThumbEndPoint}" : "${_listData?[index].fullThumbPath}",
-                //     imageBuilder: (context, imageProvider) => Container(
-                //       clipBehavior: Clip.hardEdge,
-                //       width: double.infinity,
-                //       height: double.infinity,
-                //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                //       decoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(8.0),
-                //         image: DecorationImage(
-                //           image: imageProvider,
-                //           fit: BoxFit.contain,
-                //         ),
-                //       ),
-                //       // child: _buildBody(index),
-                //     ),
-                //     errorWidget: (context, url, error) => Container(
-                //       width: double.infinity,
-                //       height: double.infinity,
-                //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                //       decoration: BoxDecoration(
-                //         image: const DecorationImage(
-                //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                //           fit: BoxFit.cover,
-                //         ),
-                //         borderRadius: BorderRadius.circular(8.0),
-                //       ),
-                //       // child: _buildBody(index),
-                //     ),
-                //     emptyWidget: Container(
-                //       width: double.infinity,
-                //       height: double.infinity,
-                //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                //       decoration: BoxDecoration(
-                //         image: const DecorationImage(
-                //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                //           fit: BoxFit.cover,
-                //         ),
-                //         borderRadius: BorderRadius.circular(8.0),
-                //       ),
-                //       // child: _buildBody(index),
-                //     ),
-                //   ),
-                // ),
+
                 _buildFillDiary()
               ],
             )

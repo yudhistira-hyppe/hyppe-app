@@ -358,7 +358,5 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     }else{
       if (challange.bannerData.isNotEmpty) ShowGeneralDialog.showBannerPop(context);
     }
-
-
   }
 }
