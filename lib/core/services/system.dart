@@ -289,6 +289,8 @@ class System {
       value = DateFormat('HH:mm').format(DateTime.parse(dateParams));
     } else if (displayOption == 7) {
       value = DateFormat('d MMMM yyyy', lang).format(DateTime.parse(dateParams));
+    } else if (displayOption == 8) {
+      value = DateFormat('MMMM yyyy', lang).format(DateTime.parse(dateParams));
     }
     return value;
   }

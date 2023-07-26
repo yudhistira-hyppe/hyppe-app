@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_commingsoon_page.dart';
 import 'package:hyppe/ui/constant/widget/custom_empty_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
@@ -13,14 +14,14 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
-class ListOnGoing extends StatefulWidget {
-  const ListOnGoing({super.key});
+class ListEnd extends StatefulWidget {
+  const ListEnd({super.key});
 
   @override
-  State<ListOnGoing> createState() => _ListOnGoingState();
+  State<ListEnd> createState() => _ListEndState();
 }
 
-class _ListOnGoingState extends State<ListOnGoing> {
+class _ListEndState extends State<ListEnd> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ChallangeNotifier>(builder: (_, cn, __) {
@@ -39,6 +40,33 @@ class _ListOnGoingState extends State<ListOnGoing> {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            GestureDetector(
+              onTap: () {
+                ShowBottomSheet.onPeriodChallange(context, cn.leaderBoardData?.session ?? 1);
+              },
+              child: Container(
+                margin: EdgeInsets.all(16),
+                height: 44,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                decoration: BoxDecoration(color: Color(0xFFF5F5F5), borderRadius: BorderRadius.circular(4)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Challenge Periode 1',
+                      style: TextStyle(
+                        color: Color(0xFF9B9B9B),
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: kHyppeTextLightPrimary,
+                    )
+                  ],
+                ),
+              ),
+            ),
             cn.leaderBoardData?.onGoing == false
                 ? const Padding(
                     padding: EdgeInsets.all(32.0),

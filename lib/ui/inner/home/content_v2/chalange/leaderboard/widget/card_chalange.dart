@@ -167,7 +167,7 @@ class CardChalange extends StatelessWidget {
                             SizedBox(
                               width: 234.38,
                               child: Text(
-                                '${System().dateFormatter(data?.startChallenge ?? "2023-01-01", 7, lang: tn.translate.localeDatetime ?? '')} s/d ${System().dateFormatter(data?.endChallenge ?? "2023-01-01", 7, lang: tn.translate.localeDatetime ?? '')} ',
+                                '${System().dateFormatter(data?.startChallenge ?? "2023-01-01", 8, lang: tn.translate.localeDatetime ?? '')} s/d ${System().dateFormatter(data?.endChallenge ?? "2023-01-01", 7, lang: tn.translate.localeDatetime ?? '')} ',
                                 style: const TextStyle(
                                   color: Color(0xFF9B9B9B),
                                   fontSize: 10,

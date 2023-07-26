@@ -14,7 +14,9 @@ import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/list_end_detail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/list_ongoing_detail.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_end.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_list.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -115,7 +117,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
               },
             ),
             title: Text(
-              '${cn.leaderBoardDetailData?.challengeData?[0].nameChallenge}',
+              cn.leaderBoardDetailData?.challengeData?[0].nameChallenge == null ? '' : '${cn.leaderBoardDetailData?.challengeData?[0].nameChallenge}',
               style: const TextStyle(
                 fontSize: 16,
                 fontFamily: 'Lato',
@@ -235,47 +237,48 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                                     )),
                               ),
                               //Tab
-                              hideTab
-                                  ? Container()
-                                  : Container(
-                                      margin: const EdgeInsets.only(left: 16.0, right: 16),
-                                      padding: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
-                                      color: Colors.white,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(8),
-                                          color: kHyppeLightSurface,
-                                        ),
-                                        child: TabBar(
-                                          controller: _tabController,
-                                          indicator: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              8.0,
-                                            ),
-                                            color: kHyppeLightButtonText,
+                              // hideTab
+                              //     ? Container()
+                              //     :
+                              Container(
+                                margin: const EdgeInsets.only(left: 16.0, right: 16),
+                                padding: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
+                                color: Colors.white,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: kHyppeLightSurface,
+                                  ),
+                                  child: TabBar(
+                                    controller: _tabController,
+                                    indicator: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        8.0,
+                                      ),
+                                      color: kHyppeLightButtonText,
+                                    ),
+                                    labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                                    labelColor: kHyppeTextLightPrimary,
+                                    unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                                    labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                    // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                                    unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                    tabs: [
+                                      ...List.generate(
+                                        nameTab.length,
+                                        (index) => Padding(
+                                          padding: EdgeInsets.all(9),
+                                          child: Text(
+                                            nameTab[index],
+                                            style: TextStyle(fontFamily: 'Lato', fontSize: 14),
                                           ),
-                                          labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                                          labelColor: kHyppeTextLightPrimary,
-                                          unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                                          labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                          // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                                          unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                          tabs: [
-                                            ...List.generate(
-                                              nameTab.length,
-                                              (index) => Padding(
-                                                padding: EdgeInsets.all(9),
-                                                child: Text(
-                                                  nameTab[index],
-                                                  style: TextStyle(fontFamily: 'Lato', fontSize: 14),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
                                         ),
                                       ),
-                                    ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ]),
                           ),
                         ),
@@ -294,10 +297,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                         //   height: 40,
                         //   padding: const EdgeInsets.only(left: 6.0, right: 6),
                         // ),
-                        Container(
-                          height: 40,
-                          padding: const EdgeInsets.only(left: 6.0, right: 6),
-                        ),
+                        const ListEndDetail(),
                       ],
                     ),
                   ),

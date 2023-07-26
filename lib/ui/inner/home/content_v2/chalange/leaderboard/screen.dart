@@ -12,6 +12,7 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_end.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_ongoing.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_list.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
@@ -263,10 +264,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                         //   height: 40,
                         //   padding: const EdgeInsets.only(left: 6.0, right: 6),
                         // ),
-                        Container(
-                          height: 40,
-                          padding: const EdgeInsets.only(left: 6.0, right: 6),
-                        ),
+                        const ListEnd(),
                       ],
                     ),
                   ),

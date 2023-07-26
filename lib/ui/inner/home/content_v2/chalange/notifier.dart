@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/challange/bloc.dart';
 import 'package:hyppe/core/bloc/challange/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
@@ -21,6 +20,8 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
 import 'package:provider/provider.dart';
 
 class ChallangeNotifier with ChangeNotifier {
@@ -50,11 +51,23 @@ class ChallangeNotifier with ChangeNotifier {
   List<AcievementModel>? achievementData = [];
   List<BadgeCollectionModel>? collectionBadgeData = [];
 
+  //list untuk option
+  DetailSub optionData = DetailSub();
+  int _selectOptionSession = 0;
+  int get selectOptionSession => _selectOptionSession;
+
   String berlangsung = "BERLANGSUNG";
   String berakhir = "BERAKHIR";
   String akanDatang = "AKAN DATANG";
 
+  DateTime challangeOption = DateTime.now();
+
   ///////
+
+  set selectOptionSession(int val) {
+    _selectOptionSession = val;
+    notifyListeners();
+  }
 
   void checkInet(BuildContext context) async {
     final connect = await _system.checkConnections();
@@ -151,8 +164,13 @@ class ChallangeNotifier with ChangeNotifier {
         LeaderboardChallangeModel? getdata;
         leaderBoardDataArray = [];
         bannerFatch.data.forEach((v) => leaderBoardDataArray?.add(LeaderboardChallangeModel.fromJson(v)));
+
         getdata = leaderBoardDataArray?.firstWhereOrNull((element) => element.status == berlangsung);
         getdata ??= leaderBoardDataArray?.firstWhereOrNull((element) => element.status == akanDatang);
+
+        getdata?.session = 7;
+
+        getOption(getdata ?? LeaderboardChallangeModel());
 
         if (getdata?.startDatetime != '' || getdata?.startDatetime != null) {
           var dateNote = await System().compareDate(getdata?.startDatetime ?? '', getdata?.endDatetime ?? '');
@@ -321,5 +339,29 @@ class ChallangeNotifier with ChangeNotifier {
     print("=da=da=da=da=d $data");
 
     on.navigateToSeeAllScreen(context, index - 1, data: data);
+  }
+
+  Future getOption(LeaderboardChallangeModel data, {int? session}) async {
+    data.subChallenges?.forEach((element) {
+      element.detail?.forEach((e) {
+        e.detail?.forEach((el) {
+          if (session != null) {
+            if (el.session == session) {
+              optionData = e;
+              String month = (e.bulan ?? 0) < 10 ? "0${e.bulan}" : "${e.bulan}";
+              String monthYear = "${e.tahun}-$month-01 00:00:00";
+              challangeOption = DateTime.parse(monthYear);
+            }
+          } else {
+            if (el.session == (data.session ?? 0) - 1) {
+              optionData = e;
+              String month = (e.bulan ?? 0) < 10 ? "0${e.bulan}" : "${e.bulan}";
+              String monthYear = "${e.tahun}-$month-01 00:00:00";
+              challangeOption = DateTime.parse(monthYear);
+            }
+          }
+        });
+      });
+    });
   }
 }

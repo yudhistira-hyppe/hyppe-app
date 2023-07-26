@@ -915,5 +915,8 @@
   "challengePage": "Halaman Challenge",
   "mainChallenge": "Challenge Utama",
   "goingOn": "Berlangsung",
-  "end": "Berakhir"
+  "end": "Berakhir",
+  "selectChallengePeriod": "Pilih Periode Challenge",
+  "selectDate": "Pilih Tanggal",
+  "apply": "Terapkan"
 }

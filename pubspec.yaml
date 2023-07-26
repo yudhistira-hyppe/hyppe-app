@@ -90,6 +90,8 @@ dependencies:
   scrollable_positioned_list: ^0.3.8
   measured_size: ^1.0.0
   flutter_cache_manager: ^3.3.0
+  flutter_cupertino_datetime_picker: ^3.0.0
+
 
 
   dynamic_widget: # Dynamic widget builder

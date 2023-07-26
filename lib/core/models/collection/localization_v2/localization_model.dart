@@ -913,6 +913,9 @@ class LocalizationModelV2 {
   String? otherCompetitions;
   String? challengePage;
   String? goingOn;
+  String? selectChallengePeriod;
+  String? apply;
+  String? selectDate;
   String? end;
 
   LocalizationModelV2({
@@ -1830,6 +1833,9 @@ class LocalizationModelV2 {
     this.otherCompetitions,
     this.challengePage,
     this.goingOn,
+    this.selectChallengePeriod,
+    this.apply,
+    this.selectDate,
     this.end,
   });
 
@@ -2765,7 +2771,10 @@ class LocalizationModelV2 {
     comeOnJoinTheInterestingCompetition = json['comeOnJoinTheInterestingCompetition'];
     otherCompetitions = json['otherCompetitions'];
     challengePage = json['challengePage'];
-    goingOn = json['goingOn'];
     end = json['end'];
+    goingOn = json['goingOn'];
+    selectChallengePeriod = json['selectChallengePeriod'];
+    apply = json['apply'];
+    selectDate = json['selectDate'];
   }
 }
