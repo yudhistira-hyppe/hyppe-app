@@ -10,12 +10,15 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class OnChallangePeriodeBottomSheet extends StatefulWidget {
   final int? session;
-  const OnChallangePeriodeBottomSheet({super.key, this.session});
+  final String? idchallenge;
+  final bool? isDetail;
+  const OnChallangePeriodeBottomSheet({super.key, this.session, this.idchallenge, this.isDetail});
 
   @override
   State<OnChallangePeriodeBottomSheet> createState() => _OnChallangePeriodeBottomSheetState();
@@ -26,7 +29,7 @@ class _OnChallangePeriodeBottomSheetState extends State<OnChallangePeriodeBottom
   @override
   void initState() {
     setState(() {
-      _currentSession = (widget.session ?? 1) - 1;
+      _currentSession = widget.session ?? 1;
     });
 
     super.initState();
@@ -64,7 +67,7 @@ class _OnChallangePeriodeBottomSheetState extends State<OnChallangePeriodeBottom
                 sixteenPx,
                 GestureDetector(
                   onTap: () {
-                    ShowBottomSheet.onDatePickerMonth(context);
+                    ShowBottomSheet.onDatePickerMonth(context, widget.isDetail ?? false);
                   },
                   child: Container(
                     padding: EdgeInsets.only(bottom: 12),
@@ -94,44 +97,63 @@ class _OnChallangePeriodeBottomSheetState extends State<OnChallangePeriodeBottom
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              shrinkWrap: false,
-              itemCount: cn.optionData.detail?.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: RadioListTile<int>(
-                    contentPadding: EdgeInsets.zero,
-                    groupValue: cn.optionData.detail?[index].session,
-                    value: _currentSession,
-                    onChanged: (_) {
-                      if (mounted) {
-                        setState(() {
-                          _currentSession = cn.optionData.detail?[index].session ?? 1;
-                        });
-                      }
+            child: cn.optionData.detail == null
+                ? Center(
+                    child: Container(
+                      padding: EdgeInsets.all(100),
+                      child: Text(
+                        "Oops, no Challenge yet available this month!",
+                        style: TextStyle(
+                          color: Color(0xFF3E3E3E),
+                        ),
+                      ),
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: false,
+                    itemCount: cn.optionData.detail?.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
+                          groupValue: cn.optionData.detail?[index].session,
+                          value: _currentSession,
+                          onChanged: (_) {
+                            if (mounted) {
+                              setState(() {
+                                _currentSession = cn.optionData.detail?[index].session ?? 1;
+                              });
+                            }
+                          },
+                          toggleable: true,
+                          title: CustomTextWidget(
+                            textAlign: TextAlign.left,
+                            textToDisplay: "Period ${cn.optionData.detail?[index].session}",
+                            textStyle: Theme.of(context).primaryTextTheme.titleMedium,
+                          ),
+                          subtitle: CustomTextWidget(
+                            textAlign: TextAlign.left,
+                            textToDisplay:
+                                "${System().dateFormatter(cn.optionData.detail?[index].startDatetime ?? '', 5)} - ${System().dateFormatter(cn.optionData.detail?[index].endDatetime ?? '', 5)}",
+                            textStyle: Theme.of(context).primaryTextTheme.subtitle2,
+                          ),
+                          controlAffinity: ListTileControlAffinity.trailing,
+                          activeColor: Theme.of(context).colorScheme.primary,
+                        ),
+                      );
                     },
-                    toggleable: true,
-                    title: CustomTextWidget(
-                      textAlign: TextAlign.left,
-                      textToDisplay: "Period ${cn.optionData.detail?[index].session}",
-                      textStyle: Theme.of(context).primaryTextTheme.titleMedium,
-                    ),
-                    subtitle: CustomTextWidget(
-                      textAlign: TextAlign.left,
-                      textToDisplay: "${System().dateFormatter(cn.optionData.detail?[index].startDatetime ?? '', 5)} - ${System().dateFormatter(cn.optionData.detail?[index].endDatetime ?? '', 5)}",
-                      textStyle: Theme.of(context).primaryTextTheme.subtitle2,
-                    ),
-                    controlAffinity: ListTileControlAffinity.trailing,
-                    activeColor: Theme.of(context).colorScheme.primary,
                   ),
-                );
-              },
-            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-            child: ButtonChallangeWidget(bgColor: kHyppePrimary, text: "${tn.translate.apply}", function: () {}),
+            child: ButtonChallangeWidget(
+                bgColor: kHyppePrimary,
+                text: "${tn.translate.apply}",
+                function: () {
+                  cn.setFilter(context, widget.idchallenge ?? '', _currentSession, widget.isDetail ?? false);
+                  Routing().moveBack();
+                }),
           ),
         ],
       ),

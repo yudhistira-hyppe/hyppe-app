@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/chalange/leaderboard_challange_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -13,6 +14,9 @@ import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 
 class OnDatepickerMonth extends StatefulWidget {
+  final bool? isDetail;
+
+  const OnDatepickerMonth({super.key, this.isDetail});
   @override
   State<OnDatepickerMonth> createState() => _OnDatepickerMonthState();
 }
@@ -135,8 +139,13 @@ class _OnDatepickerMonthState extends State<OnDatepickerMonth> {
                 bgColor: kHyppePrimary,
                 text: "${tn.translate.apply}",
                 function: () {
-                  // Routing().moveBack();
                   print(_dateTime); // print(cn.leaderBoardData?.challengeId);
+                  var cn = context.read<ChallangeNotifier>();
+                  cn.getOption(
+                    ((widget.isDetail ?? false) ? cn.leaderBoardDetailData : cn.leaderBoardData) ?? LeaderboardChallangeModel(),
+                    dateTime: _dateTime,
+                  );
+                  Routing().moveBack();
                   // Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: cn.leaderBoardData?.challengeId));
                 }),
           ),

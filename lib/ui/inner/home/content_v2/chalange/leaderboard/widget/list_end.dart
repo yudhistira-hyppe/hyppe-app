@@ -26,11 +26,15 @@ class _ListEndState extends State<ListEnd> {
   Widget build(BuildContext context) {
     return Consumer<ChallangeNotifier>(builder: (_, cn, __) {
       var participant = 0;
-      if (cn.leaderBoardData?.challengeData?[0].objectChallenge == "KONTEN") {
-        cn.leaderBoardData?.getlastrank?.forEach((element) {
+      if (cn.leaderBoardEndData?.challengeData?[0].objectChallenge == "KONTEN") {
+        cn.leaderBoardEndData?.getlastrank?.forEach((element) {
           if (element.postChallengess?.isNotEmpty ?? [].isEmpty) {
             participant++;
           }
+        });
+      } else {
+        cn.leaderBoardEndData?.getlastrank?.forEach((element) {
+          participant++;
         });
       }
 
@@ -42,7 +46,7 @@ class _ListEndState extends State<ListEnd> {
           children: [
             GestureDetector(
               onTap: () {
-                ShowBottomSheet.onPeriodChallange(context, cn.leaderBoardData?.session ?? 1);
+                ShowBottomSheet.onPeriodChallange(context, cn.leaderBoardData?.challengeId ?? '', false, cn.selectOptionSession);
               },
               child: Container(
                 margin: EdgeInsets.all(16),
@@ -53,7 +57,7 @@ class _ListEndState extends State<ListEnd> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Challenge Periode 1',
+                      'Challenge Periode ${cn.selectOptionSession}',
                       style: TextStyle(
                         color: Color(0xFF9B9B9B),
                         fontWeight: FontWeight.w400,
@@ -67,7 +71,7 @@ class _ListEndState extends State<ListEnd> {
                 ),
               ),
             ),
-            cn.leaderBoardData?.onGoing == false
+            cn.leaderBoardEndData?.onGoing == false
                 ? const Padding(
                     padding: EdgeInsets.all(32.0),
                     child: CustomCommingSoon(
@@ -77,7 +81,7 @@ class _ListEndState extends State<ListEnd> {
                   )
                 : cn.isLoadingLeaderboard
                     ? Container()
-                    : cn.leaderBoardData?.getlastrank?.isEmpty ?? [].isEmpty
+                    : cn.leaderBoardEndData?.getlastrank?.isEmpty ?? [].isEmpty
                         ? const Padding(
                             padding: EdgeInsets.all(32.0),
                             child: CustomEmptyWidget(
@@ -85,7 +89,7 @@ class _ListEndState extends State<ListEnd> {
                               subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                             ),
                           )
-                        : cn.leaderBoardData?.getlastrank?[0].score == 0 || participant == 0
+                        : cn.leaderBoardEndData?.getlastrank?[0].score == 0 || participant == 0
                             ? const Padding(
                                 padding: EdgeInsets.all(32.0),
                                 child: CustomEmptyWidget(
@@ -96,24 +100,24 @@ class _ListEndState extends State<ListEnd> {
                             : ScrollConfiguration(
                                 behavior: const ScrollBehavior().copyWith(overscroll: false),
                                 child: ListView.builder(
-                                  itemCount: cn.leaderBoardData?.getlastrank?.length,
+                                  itemCount: cn.leaderBoardEndData?.getlastrank?.length,
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
-                                    if (cn.leaderBoardData?.challengeData?[0].objectChallenge == 'KONTEN') {
+                                    if (cn.leaderBoardEndData?.challengeData?[0].objectChallenge == 'KONTEN') {
                                       return GestureDetector(
                                           onTap: () {
-                                            var post = cn.leaderBoardData?.getlastrank?[index].postChallengess?[0];
-                                            var email = cn.leaderBoardData?.getlastrank?[index].email;
+                                            var post = cn.leaderBoardEndData?.getlastrank?[index].postChallengess?[0];
+                                            var email = cn.leaderBoardEndData?.getlastrank?[index].email;
                                             cn.navigateToScreen(context, post?.index, email, post?.postType);
                                           },
-                                          child: ContentLeaderboard(data: cn.leaderBoardData?.getlastrank?[index]));
+                                          child: ContentLeaderboard(data: cn.leaderBoardEndData?.getlastrank?[index]));
                                     } else {
                                       return GestureDetector(
                                           onTap: () {
-                                            Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardData?.getlastrank?[index].email));
+                                            Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardEndData?.getlastrank?[index].email));
                                           },
-                                          child: ItemLeader(data: cn.leaderBoardData?.getlastrank?[index]));
+                                          child: ItemLeader(data: cn.leaderBoardEndData?.getlastrank?[index]));
                                     }
                                   },
                                 ),
@@ -124,8 +128,8 @@ class _ListEndState extends State<ListEnd> {
                   bgColor: kHyppePrimary,
                   text: "Yuk, Join Challenge Sekarang",
                   function: () {
-                    // print(cn.leaderBoardData?.challengeId);
-                    Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: cn.leaderBoardData?.challengeId));
+                    // print(cn.leaderBoardEndData?.challengeId);
+                    Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: cn.leaderBoardEndData?.challengeId));
                   }),
             ),
             cn.listChallangeData.isEmpty

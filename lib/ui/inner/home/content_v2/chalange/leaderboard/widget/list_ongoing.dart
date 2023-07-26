@@ -31,6 +31,10 @@ class _ListOnGoingState extends State<ListOnGoing> {
             participant++;
           }
         });
+      } else {
+        cn.leaderBoardData?.getlastrank?.forEach((element) {
+          participant++;
+        });
       }
 
       return SingleChildScrollView(
@@ -67,31 +71,34 @@ class _ListOnGoingState extends State<ListOnGoing> {
                               )
                             : ScrollConfiguration(
                                 behavior: const ScrollBehavior().copyWith(overscroll: false),
-                                child: ListView.builder(
-                                  itemCount: cn.leaderBoardData?.getlastrank?.length,
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    if (cn.leaderBoardData?.challengeData?[0].objectChallenge == 'KONTEN') {
-                                      return GestureDetector(
-                                          onTap: () {
-                                            var post = cn.leaderBoardData?.getlastrank?[index].postChallengess?[0];
-                                            var email = cn.leaderBoardData?.getlastrank?[index].email;
-                                            cn.navigateToScreen(context, post?.index, email, post?.postType);
-                                          },
-                                          child: ContentLeaderboard(data: cn.leaderBoardData?.getlastrank?[index]));
-                                    } else {
-                                      return GestureDetector(
-                                          onTap: () {
-                                            Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardData?.getlastrank?[index].email));
-                                          },
-                                          child: ItemLeader(data: cn.leaderBoardData?.getlastrank?[index]));
-                                    }
-                                  },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 20),
+                                  child: ListView.builder(
+                                    itemCount: cn.leaderBoardData?.getlastrank?.length,
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemBuilder: (context, index) {
+                                      if (cn.leaderBoardData?.challengeData?[0].objectChallenge == 'KONTEN') {
+                                        return GestureDetector(
+                                            onTap: () {
+                                              var post = cn.leaderBoardData?.getlastrank?[index].postChallengess?[0];
+                                              var email = cn.leaderBoardData?.getlastrank?[index].email;
+                                              cn.navigateToScreen(context, post?.index, email, post?.postType);
+                                            },
+                                            child: ContentLeaderboard(data: cn.leaderBoardData?.getlastrank?[index]));
+                                      } else {
+                                        return GestureDetector(
+                                            onTap: () {
+                                              Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardData?.getlastrank?[index].email));
+                                            },
+                                            child: ItemLeader(data: cn.leaderBoardData?.getlastrank?[index]));
+                                      }
+                                    },
+                                  ),
                                 ),
                               ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: ButtonChallangeWidget(
                   bgColor: kHyppePrimary,
                   text: "Yuk, Join Challenge Sekarang",

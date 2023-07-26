@@ -42,6 +42,8 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
   double offset = 0.0;
   List nameTab = [];
   int _current = 0;
+  int _lastCurrent = 0;
+  String chllangeid = "";
   final CarouselController _controller = CarouselController();
   bool hideTab = false;
 
@@ -62,6 +64,25 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
 
       var cn = context.read<ChallangeNotifier>();
       cn.initLeaderboard(context);
+
+      _tabController.animation?.addListener(() {
+        _tabController.animation?.addListener(() {
+          _current = _tabController.index;
+          if (_lastCurrent != _current) {
+            if (_current == 1) {
+              print("masuk tab slide ${_tabController.index}");
+              print("masuk tab slide");
+              cn.getLeaderBoard(
+                context,
+                chllangeid,
+                oldLeaderboard: true,
+              );
+            }
+            // homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
+          }
+          _lastCurrent = _current;
+        });
+      });
     });
 
     super.initState();
@@ -83,6 +104,10 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
     var cn = context.watch<ChallangeNotifier>();
     isFromSplash = false;
     toHideTab(cn);
+    if (chllangeid == '') {
+      chllangeid = cn.bannerSearchData[0].sId ?? '';
+    }
+
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
@@ -167,9 +192,9 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                       autoPlayInterval: const Duration(seconds: 3),
                                       onPageChanged: (index, reason) {
                                         setState(() {
-                                          print("=======change");
                                           _current = index;
                                           _tabController.index = 0;
+                                          chllangeid = cn.bannerSearchData[index].sId ?? '';
                                           cn.getLeaderBoard(context, cn.bannerSearchData[index].sId ?? '');
                                         });
                                       }),
@@ -258,13 +283,9 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                     body: TabBarView(
                       controller: _tabController,
                       physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        const ListOnGoing(),
-                        // Container(
-                        //   height: 40,
-                        //   padding: const EdgeInsets.only(left: 6.0, right: 6),
-                        // ),
-                        const ListEnd(),
+                      children: const [
+                        ListOnGoing(),
+                        ListEnd(),
                       ],
                     ),
                   ),

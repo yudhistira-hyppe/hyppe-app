@@ -33,14 +33,8 @@ class UrlConstants {
   // static const String productionUploadBaseApi = "https://s1.hyppe.cloud";
 
   /// Staging v2 Base url
-  // static const String stagingBaseApi = "https://prod.hyppe.app";
   static const String stagingBaseApi = "https://s1.hyppe.cloud";
-  // static const String stagingBaseApi = "https://staging.hyppe.app";
-  // static const String stagingBaseApi = "http://192.168.0.135:5002";
-  // static const String stagingUploadBaseApi = "https://stagingupload.hyppe.app";
   static const String stagingUploadBaseApi = "https://s1.hyppe.cloud";
-
-  // static const String stagingBaseApi = "http://192.168.43.179/erp/";
 
   /// Prod Deeplink Base url
   static const String prodDeeplinkUrl = "https://share.hyppe.app";
@@ -444,6 +438,7 @@ class UrlConstants {
   // Get Chalange
   static const String getBannerChalange = "$challange/listing/bannerlandingpage";
   static const String getLeaderBoard = "$challange/listleaderboard";
+  static const String getLeaderBoardSession = "$challange/listleaderboard2";
   static const String getOtherChallange = "$challange/allchallenge";
   static const String joinChallange = "$challange/join";
   static const String listAchievement = "$challange/listbadgebyuser";

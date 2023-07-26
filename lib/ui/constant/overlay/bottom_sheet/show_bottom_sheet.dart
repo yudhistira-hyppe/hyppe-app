@@ -25,6 +25,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_o
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_ownership_EULA.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_people_search.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_privacy_post.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_qrcode.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_account.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_content_form.dart';
@@ -91,10 +92,16 @@ class ShowBottomSheet {
         });
   }
 
-  static onUploadContent(context) async {
+  static onUploadContent(
+    context, {
+    bool isStory = true,
+    bool isPict = true,
+    bool isDiary = true,
+    bool isVid = true,
+  }) async {
     await showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
+      // isScrollControlled: false,
       enableDrag: true,
       isDismissible: true,
       backgroundColor: Colors.transparent,
@@ -102,7 +109,7 @@ class ShowBottomSheet {
         return Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
-            height: SizeConfig.screenHeight! / 1.78,
+            // height: SizeConfig.screenHeight! / 1.78,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -111,7 +118,12 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnUploadContentBottomSheet(),
+            child: OnUploadContentBottomSheet(
+              isDiary: isDiary,
+              isPict: isPict,
+              isStory: isStory,
+              isVid: isVid,
+            ),
           ),
         );
       },
@@ -1399,7 +1411,7 @@ class ShowBottomSheet {
     );
   }
 
-  static onPeriodChallange(context, int session) async {
+  static onPeriodChallange(context, String idchallenge, bool isDetail, int session) async {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -1419,14 +1431,18 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnChallangePeriodeBottomSheet(session: session),
+            child: OnChallangePeriodeBottomSheet(
+              session: session,
+              idchallenge: idchallenge,
+              isDetail: isDetail,
+            ),
           ),
         );
       },
     );
   }
 
-  static onDatePickerMonth(context) async {
+  static onDatePickerMonth(context, bool isDetail) async {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -1448,6 +1464,33 @@ class ShowBottomSheet {
             ),
             padding: const EdgeInsets.all(0),
             child: OnDatepickerMonth(),
+          ),
+        );
+      },
+    );
+  }
+
+  static onQRCodeChallange(context) async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      enableDrag: true,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          child: Container(
+            // height: SizeConfig.screenHeight! / 1.78,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: OnQRCode(),
           ),
         );
       },

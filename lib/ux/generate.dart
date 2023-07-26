@@ -417,7 +417,7 @@ class Generate {
       case Routes.chalengeAchievement:
         return MaterialPageRoute(builder: (_) => const AchievementScreen());
       case Routes.shimmerSlider:
-        return MaterialPageRoute(builder: (_) => const ShimmerSlider());
+        return MaterialPageRoute(builder: (_) => ShimmerSlider(arguments: settings.arguments as SlidedPicDetailScreenArgument));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

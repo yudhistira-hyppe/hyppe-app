@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/challange/bloc.dart';
 import 'package:hyppe/core/bloc/challange/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/chalange/achievement_model.dart';
 import 'package:hyppe/core/models/collection/chalange/badge_collection_model.dart';
 import 'package:hyppe/core/models/collection/chalange/banner_chalange_model.dart';
@@ -17,6 +19,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_slider.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -48,6 +51,8 @@ class ChallangeNotifier with ChangeNotifier {
   List<LeaderboardChallangeModel>? leaderBoardDataArray = [];
   LeaderboardChallangeModel? leaderBoardData;
   LeaderboardChallangeModel? leaderBoardDetailData;
+  LeaderboardChallangeModel? leaderBoardEndData;
+  LeaderboardChallangeModel? leaderBoardDetaiEndlData;
   List<AcievementModel>? achievementData = [];
   List<BadgeCollectionModel>? collectionBadgeData = [];
 
@@ -60,12 +65,23 @@ class ChallangeNotifier with ChangeNotifier {
   String berakhir = "BERAKHIR";
   String akanDatang = "AKAN DATANG";
 
+  String _referralLink = "";
+  String _referralLinkText = "";
+  String get referralLink => _referralLink;
+  String get referralLinkText => _referralLinkText;
+
   DateTime challangeOption = DateTime.now();
 
   ///////
 
   set selectOptionSession(int val) {
     _selectOptionSession = val;
+    notifyListeners();
+  }
+
+  set referralLink(val) {
+    _referralLink = val;
+    _referralLinkText = "Hei, Ayo bergabung dan berkreasi di Hyppe!\nJelajahi Dan Tuangkan Ide Kreatifmu Di Mobile Hyppe App Sekarang!\n\n$val";
     notifyListeners();
   }
 
@@ -125,13 +141,6 @@ class ChallangeNotifier with ChangeNotifier {
     await getBannerLanding(context, isLeaderBoard: true);
     await getLeaderBoard(context, bannerSearchData[0].sId ?? '');
     await getOtherChallange(context);
-    // await getBannerLanding(context, isLeaderBoard: true).then((value) async {
-    //   await getLeaderBoard(context, bannerSearchData[0].sId ?? '').then((value) async {
-    //     print(value);
-    //     await getOtherChallange(context);
-    //   });
-    // });
-    print("selesai");
 
     isLoadingLeaderboard = false;
     notifyListeners();
@@ -143,11 +152,15 @@ class ChallangeNotifier with ChangeNotifier {
     notifyListeners();
     checkInet(context);
     await getLeaderBoard(context, id, isDetail: true);
+    var result = await System().createdReferralLink(context);
+    debugPrint("REFERRAL => " + result.toString());
+    referralLink = result.toString();
     isLoadingLeaderboard = false;
+
     notifyListeners();
   }
 
-  Future getLeaderBoard(BuildContext context, String idchallenge, {bool isDetail = false}) async {
+  Future getLeaderBoard(BuildContext context, String idchallenge, {bool isDetail = false, bool oldLeaderboard = false}) async {
     Map param = {
       "idchallenge": idchallenge,
       // "idchallenge": "6486f6d4b8ab34f61602f85a",
@@ -155,8 +168,11 @@ class ChallangeNotifier with ChangeNotifier {
       // "status":"BERLANGSUNG",
       // "session":1
     };
+    if (oldLeaderboard) {
+      param["session"] = selectOptionSession;
+    }
     final bannerNotifier = ChallangeBloc();
-    await bannerNotifier.postChallange(context, data: param, url: UrlConstants.getLeaderBoard);
+    await bannerNotifier.postChallange(context, data: param, url: oldLeaderboard ? UrlConstants.getLeaderBoardSession : UrlConstants.getLeaderBoard);
     final bannerFatch = bannerNotifier.userFetch;
 
     if (bannerFatch.challengeState == ChallengeState.getPostSuccess) {
@@ -167,10 +183,11 @@ class ChallangeNotifier with ChangeNotifier {
 
         getdata = leaderBoardDataArray?.firstWhereOrNull((element) => element.status == berlangsung);
         getdata ??= leaderBoardDataArray?.firstWhereOrNull((element) => element.status == akanDatang);
+        getdata ??= leaderBoardDataArray?[0];
 
-        getdata?.session = 7;
-
-        getOption(getdata ?? LeaderboardChallangeModel());
+        if (!oldLeaderboard) {
+          getOption(getdata ?? LeaderboardChallangeModel());
+        }
 
         if (getdata?.startDatetime != '' || getdata?.startDatetime != null) {
           var dateNote = await System().compareDate(getdata?.startDatetime ?? '', getdata?.endDatetime ?? '');
@@ -193,11 +210,20 @@ class ChallangeNotifier with ChangeNotifier {
 
         if (isDetail) {
           print("===1");
-          leaderBoardDetailData = getdata;
+
+          if (oldLeaderboard) {
+            leaderBoardDetaiEndlData = getdata;
+          } else {
+            leaderBoardDetailData = getdata;
+          }
           print("leaderBoardDetailData ${leaderBoardDetailData?.onGoing} - ${leaderBoardDetailData?.totalDays}  - ${leaderBoardDetailData?.noteTime}");
         } else {
           print("===2");
-          leaderBoardData = getdata;
+          if (oldLeaderboard) {
+            leaderBoardEndData = getdata;
+          } else {
+            leaderBoardData = getdata;
+          }
         }
       }
 
@@ -300,7 +326,14 @@ class ChallangeNotifier with ChangeNotifier {
   }
 
   void navigateToScreen(BuildContext context, index, email, postType) async {
-    Routing().move(Routes.shimmerSlider);
+    Routing().move(
+      Routes.shimmerSlider,
+      argument: SlidedPicDetailScreenArgument(
+        type: TypePlaylist.mine,
+        titleAppbar: Text("Pict"),
+        pageSrc: PageSrc.otherProfile,
+      ),
+    );
     OtherProfileNotifier on = context.read<OtherProfileNotifier>();
     // await on.initialOtherProfile(context, argument: OtherProfileArgument(senderEmail: email));
     on.user.profile = null;
@@ -320,48 +353,71 @@ class ChallangeNotifier with ChangeNotifier {
     } else {
       on.pageIndex = 2;
     }
-
-    print(email);
+    Widget widgetTitle;
+    String title = "";
 
     await on.getDataPerPgage(context, email: email);
-    print("====${on.manyUser[0].profile}");
-    print("====${on.manyUser[0].diaries}");
-    print("====${on.manyUser[0].vids}");
-    print("====${on.manyUser[0].pics}");
     if (postType == 'pict') {
       data = on.manyUser.last.pics ?? [];
+      title = "Pict";
     } else if (postType == 'diary') {
       data = on.manyUser.last.diaries ?? [];
+      title = "Diary";
     } else {
       data = on.manyUser.last.vids ?? [];
+      title = "Vid";
     }
 
-    print("=da=da=da=da=d $data");
-
-    on.navigateToSeeAllScreen(context, index - 1, data: data);
+    widgetTitle = Text(
+      title,
+      style: TextStyle(color: kHyppeTextLightPrimary),
+    );
+    Routing().moveBack();
+    on.navigateToSeeAllScreen(context, index - 1, data: data, title: widgetTitle);
   }
 
-  Future getOption(LeaderboardChallangeModel data, {int? session}) async {
-    data.subChallenges?.forEach((element) {
-      element.detail?.forEach((e) {
-        e.detail?.forEach((el) {
-          if (session != null) {
-            if (el.session == session) {
-              optionData = e;
-              String month = (e.bulan ?? 0) < 10 ? "0${e.bulan}" : "${e.bulan}";
-              String monthYear = "${e.tahun}-$month-01 00:00:00";
-              challangeOption = DateTime.parse(monthYear);
-            }
-          } else {
+  Future getOption(LeaderboardChallangeModel data, {DateTime? dateTime}) async {
+    print(dateTime);
+    if (dateTime == null) {
+      data.subChallenges?.forEach((element) {
+        element.detail?.forEach((e) {
+          e.detail?.forEach((el) {
             if (el.session == (data.session ?? 0) - 1) {
               optionData = e;
               String month = (e.bulan ?? 0) < 10 ? "0${e.bulan}" : "${e.bulan}";
               String monthYear = "${e.tahun}-$month-01 00:00:00";
               challangeOption = DateTime.parse(monthYear);
+              selectOptionSession = (data.session ?? 0) - 1;
             }
-          }
+          });
         });
       });
-    });
+    } else {
+      data.subChallenges?.forEach((element) {
+        print(element.tahun);
+        if (element.tahun == dateTime.year) {
+          element.detail?.forEach((e) {
+            if (e.bulan == dateTime.month && e.tahun == dateTime.year) {
+              optionData = e;
+              String month = (e.bulan ?? 0) < 10 ? "0${e.bulan}" : "${e.bulan}";
+              String monthYear = "${e.tahun}-$month-01 00:00:00";
+              challangeOption = DateTime.parse(monthYear);
+
+              notifyListeners();
+            } else {
+              optionData = DetailSub();
+              challangeOption = dateTime;
+
+              notifyListeners();
+            }
+          });
+        }
+      });
+    }
+  }
+
+  Future setFilter(BuildContext context, String idchallenge, int session, bool isDetail) async {
+    selectOptionSession = session;
+    getLeaderBoard(context, idchallenge, oldLeaderboard: true, isDetail: isDetail);
   }
 }

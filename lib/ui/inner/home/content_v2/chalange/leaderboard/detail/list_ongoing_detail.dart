@@ -37,6 +37,8 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
           if (e.postChallengess?.isNotEmpty ?? [].isEmpty) {
             participant++;
           }
+        } else {
+          participant++;
         }
       });
       return SingleChildScrollView(
@@ -82,18 +84,21 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                     )
                                   : ScrollConfiguration(
                                       behavior: const ScrollBehavior().copyWith(overscroll: false),
-                                      child: ListView.builder(
-                                        itemCount: cn.leaderBoardDetailData?.getlastrank?.length,
-                                        shrinkWrap: true,
-                                        physics: const NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) {
-                                          if (cn.leaderBoardDetailData?.challengeData?[0].objectChallenge == 'KONTEN') {
-                                            return ContentLeaderboard(data: cn.leaderBoardDetailData?.getlastrank?[index]);
-                                          } else {
-                                            return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
-                                          }
-                                          // return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
-                                        },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 24),
+                                        child: ListView.builder(
+                                          itemCount: cn.leaderBoardDetailData?.getlastrank?.length,
+                                          shrinkWrap: true,
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            if (cn.leaderBoardDetailData?.challengeData?[0].objectChallenge == 'KONTEN') {
+                                              return ContentLeaderboard(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                            } else {
+                                              return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                            }
+                                            // return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                          },
+                                        ),
                                       ),
                                     ),
                   boollUser

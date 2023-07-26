@@ -39,6 +39,8 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
   double offset = 0.0;
   List nameTab = [];
   int _current = 0;
+  int _lastCurrent = 0;
+  String chllangeid = "";
   final CarouselController _controller = CarouselController();
   bool hideTab = false;
   String dateText = '';
@@ -60,6 +62,26 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
 
       var cn = context.read<ChallangeNotifier>();
       cn.initLeaderboardDetail(context, widget.arguments?.id ?? '');
+      chllangeid = widget.arguments?.id ?? '';
+      _tabController.animation?.addListener(() {
+        _tabController.animation?.addListener(() {
+          _current = _tabController.index;
+          if (_lastCurrent != _current) {
+            if (_current == 1) {
+              print("masuk tab slide ${_tabController.index}");
+              print("masuk tab slide");
+              cn.getLeaderBoard(
+                context,
+                chllangeid,
+                oldLeaderboard: true,
+                isDetail: true,
+              );
+            }
+            // homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
+          }
+          _lastCurrent = _current;
+        });
+      });
     });
 
     super.initState();
@@ -100,6 +122,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
     var cn = context.watch<ChallangeNotifier>();
     var tn = context.read<TranslateNotifierV2>();
     toHideTab(cn);
+
     return Scaffold(
       backgroundColor: kHyppeLightSurface,
       appBar: PreferredSize(
@@ -293,10 +316,6 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                       physics: const NeverScrollableScrollPhysics(),
                       children: [
                         const ListOnGoingDetail(),
-                        // Container(
-                        //   height: 40,
-                        //   padding: const EdgeInsets.only(left: 6.0, right: 6),
-                        // ),
                         const ListEndDetail(),
                       ],
                     ),

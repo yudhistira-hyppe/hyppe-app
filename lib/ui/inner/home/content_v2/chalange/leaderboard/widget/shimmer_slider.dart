@@ -1,46 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
+import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 
-class ShimmerSlider extends StatelessWidget {
-  const ShimmerSlider({super.key});
+class ShimmerSlider extends StatefulWidget {
+  final SlidedPicDetailScreenArgument? arguments;
+  const ShimmerSlider({super.key, this.arguments});
 
   @override
+  State<ShimmerSlider> createState() => _ShimmerSliderState();
+}
+
+class _ShimmerSliderState extends State<ShimmerSlider> {
+  @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-            child: const CustomShimmer(width: 300, height: 100, radius: 8),
-          ),
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: 11,
-              itemBuilder: (context, index) => Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                        child: Row(
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              ListTile(
+                title: Align(
+                  alignment: const Alignment(-1.2, 0),
+                  child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
+                ),
+                leading: IconButton(
+                    icon: const Icon(
+                      Icons.chevron_left,
+                      color: kHyppeTextLightPrimary,
+                    ),
+                    onPressed: () {
+                      Future.delayed(Duration.zero, () {
+                        // Navigator.pop(context, '$_curIdx');
+                        Navigator.pop(context);
+                      });
+                    }),
+              ),
+              Container(
+                padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+                margin: const EdgeInsets.only(
+                  top: 18,
+                  left: 6,
+                  right: 6,
+                ),
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: 11,
+                    itemBuilder: (context, index) => Column(
                           children: [
-                            const ClipOval(child: CustomShimmer(width: 24, height: 24, radius: 4)),
+                            CustomShimmer(width: SizeConfig.screenWidth, height: 350, radius: 12),
                             twelvePx,
-                            const ClipOval(child: CustomShimmer(width: 43, height: 41, radius: 50)),
+                            CustomShimmer(width: SizeConfig.screenWidth, height: 18, radius: 8),
                             twelvePx,
-                            Column(
-                              children: const [
-                                CustomShimmer(width: 200, height: 11, radius: 50),
-                                sixPx,
-                                CustomShimmer(width: 200, height: 11, radius: 50),
-                              ],
-                            ),
+                            CustomShimmer(width: SizeConfig.screenWidth, height: 18, radius: 8),
+                            twelvePx,
+                            twelvePx,
+                            twelvePx,
                           ],
-                        ),
-                      )
-                    ],
-                  )),
-        ],
+                        )),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
