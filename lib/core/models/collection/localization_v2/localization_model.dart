@@ -914,6 +914,8 @@ class LocalizationModelV2 {
   String? challengePage;
   String? goingOn;
   String? selectChallengePeriod;
+  String? referralCodeLinkCopiedSuccessfully;
+  String? copiedLinks;
   String? apply;
   String? selectDate;
   String? end;
@@ -1834,6 +1836,8 @@ class LocalizationModelV2 {
     this.challengePage,
     this.goingOn,
     this.selectChallengePeriod,
+    this.referralCodeLinkCopiedSuccessfully,
+    this.copiedLinks,
     this.apply,
     this.selectDate,
     this.end,
@@ -2774,6 +2778,8 @@ class LocalizationModelV2 {
     end = json['end'];
     goingOn = json['goingOn'];
     selectChallengePeriod = json['selectChallengePeriod'];
+    referralCodeLinkCopiedSuccessfully = json['referralCodeLinkCopiedSuccessfully'];
+    copiedLinks = json['copiedLinks'];
     apply = json['apply'];
     selectDate = json['selectDate'];
   }

@@ -28,6 +28,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
@@ -1379,6 +1380,34 @@ class System {
           // if (lastTimeAds.canShowAds()) {
           return ShowGeneralDialog.adsPopUp(context, data, auth, isSponsored: isSponsored, isInAppAds: isInAppAds);
         }
+      }
+    }
+  }
+
+  Future popUpChallange(BuildContext context) async {
+    String lastTime = SharedPreference().readStorage(SpKeys.datetimeLastShowChallange) ?? '';
+    var challange = context.read<ChallangeNotifier>();
+
+    if (lastTime == '') {
+      await challange.getBannerLanding(context, ispopUp: true);
+      SharedPreference().writeStorage(SpKeys.datetimeLastShowChallange, DateTime.now().toString());
+      return ShowGeneralDialog.showBannerPop(context);
+    } else {
+      var temp = DateTime.now();
+      // var temp = DateTime.parse("2023-07-29 08:02:10");
+      var startDate = DateTime.parse(lastTime);
+      var d1 = DateTime.utc(temp.year, temp.month, temp.day, temp.hour, temp.minute, temp.second);
+      var startDay = DateTime.utc(startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute, startDate.second);
+
+      final difference = startDay.difference(d1);
+      print("===============222222 ---- ${difference.inDays}");
+      print("===============222222 ---- ${difference.inHours}");
+      print("===============222222 ---- ${difference.inMinutes}");
+      // if (difference.inHours >= 24) {
+      if (difference.inMinutes <= -15) {
+        await challange.getBannerLanding(context, ispopUp: true);
+        SharedPreference().writeStorage(SpKeys.datetimeLastShowChallange, DateTime.now().toString());
+        return ShowGeneralDialog.showBannerPop(context);
       }
     }
   }

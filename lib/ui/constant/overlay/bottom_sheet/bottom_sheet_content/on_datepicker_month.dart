@@ -141,6 +141,7 @@ class _OnDatepickerMonthState extends State<OnDatepickerMonth> {
                 function: () {
                   print(_dateTime); // print(cn.leaderBoardData?.challengeId);
                   var cn = context.read<ChallangeNotifier>();
+                  print(widget.isDetail);
                   cn.getOption(
                     ((widget.isDetail ?? false) ? cn.leaderBoardDetailData : cn.leaderBoardData) ?? LeaderboardChallangeModel(),
                     dateTime: _dateTime,

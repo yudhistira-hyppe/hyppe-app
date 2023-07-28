@@ -918,5 +918,7 @@
   "end": "Berakhir",
   "selectChallengePeriod": "Pilih Periode Challenge",
   "selectDate": "Pilih Tanggal",
-  "apply": "Terapkan"
+  "apply": "Terapkan",
+  "copiedLinks": "Tautan Tersalin",
+  "referralCodeLinkCopiedSuccessfully": "Tautan kode referral berhasil disalin."
 }

@@ -9,6 +9,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
@@ -342,7 +343,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     _tabController.animation?.addListener(() {
       homneNotifier.tabIndex = _tabController.index;
       print("masuk tab slide");
-
       if (homneNotifier.lastCurIndex != homneNotifier.tabIndex) {
         homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
       }
@@ -352,8 +352,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       print("isOnHomeScreen hit ads");
       homneNotifier.getAdsApsara(context, true);
     }
-    var challange = context.read<ChallangeNotifier>();
-    await challange.getBannerLanding(context, ispopUp: true);
-    if (challange.bannerData.isNotEmpty) ShowGeneralDialog.showBannerPop(context);
+    System().popUpChallange(context);
   }
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
@@ -14,6 +16,7 @@ import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 
 class FooterChallangeDetail extends StatefulWidget {
   const FooterChallangeDetail({super.key});
@@ -202,7 +205,16 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
-                          onTap: () => System().shareText(dynamicLink: cn.referralLink, context: context),
+                          onTap: () {
+                            Clipboard.setData(ClipboardData(text: cn.referralLink));
+                            ShowGeneralDialog.showToastAlert(
+                              context,
+                              '${tn.translate.referralCodeLinkCopiedSuccessfully}',
+                              () async {},
+                              title: "${tn.translate.copiedLinks}",
+                            );
+                            // ShowBottomSheet().onShowColouredSheet(context, "asd", maxLines: 2, color: kHyppeTextLightPrimary);
+                          },
                           child: Container(
                             height: 24,
                             padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),

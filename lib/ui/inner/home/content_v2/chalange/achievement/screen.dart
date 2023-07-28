@@ -12,6 +12,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/achievement/widget/shimmer_list.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/path.dart';
@@ -114,32 +115,59 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Daftar Pencapaian Saya',
-                            style: TextStyle(
-                              color: Color(0xFF3E3E3E),
-                              fontSize: 14,
-                              fontFamily: 'Lato',
-                              fontWeight: FontWeight.w700,
+                      child: cn.achievementData?.isEmpty ?? [].isEmpty
+                          ? empty()
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Daftar Pencapaian Saya',
+                                  style: TextStyle(
+                                    color: Color(0xFF3E3E3E),
+                                    fontSize: 14,
+                                    fontFamily: 'Lato',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                twentyFourPx,
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: cn.achievementData?.length,
+                                  itemBuilder: (context, index) {
+                                    return item(cn.achievementData?[index] ?? AcievementModel());
+                                  },
+                                )
+                              ],
                             ),
-                          ),
-                          twentyFourPx,
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: cn.achievementData?.length,
-                            itemBuilder: (context, index) {
-                              return item(cn.achievementData?[index] ?? AcievementModel());
-                            },
-                          )
-                        ],
-                      ),
                     ),
                   ],
                 ),
               ));
+  }
+
+  Widget empty() {
+    return Container(
+      padding: const EdgeInsets.all(40.0),
+      height: SizeConfig.screenWidth! * 1.1,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: const [
+          Text("Belum Ada Pencapainmu",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              )),
+          twelvePx,
+          Text(
+            "Ikuti challenge dan raihlah kesempatan hadiah menarik lainnya!",
+            textAlign: TextAlign.center,
+          ),
+          twentyFourPx,
+          ButtonChallangeWidget(bgColor: kHyppePrimary, text: "Ikuti Challange"),
+        ],
+      ),
+    );
   }
 
   Widget item(AcievementModel data) {

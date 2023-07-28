@@ -1463,7 +1463,7 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnDatepickerMonth(),
+            child: OnDatepickerMonth(isDetail: isDetail),
           ),
         );
       },

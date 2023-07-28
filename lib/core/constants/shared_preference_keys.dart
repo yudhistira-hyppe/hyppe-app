@@ -32,4 +32,7 @@ class SpKeys {
   static const String canDeppAr = 'canDeppAr';
 
   static const String uniqueKey = 'uniqueKey';
+  static const String endPointTest = 'endPointTest';
+
+  static const String datetimeLastShowChallange = 'datetimeLastShowChallange';
 }

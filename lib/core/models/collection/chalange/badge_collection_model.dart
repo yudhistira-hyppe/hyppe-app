@@ -8,7 +8,7 @@ class BadgeCollectionModel {
   BadgeCollectionModel.fromJson(Map<String, dynamic> json) {
     if (json['badgeAktif'] != null) {
       badgeAktif = <BadgeAktif>[];
-      badgeAktif!.add(BadgeAktif());
+      badgeAktif!.add(BadgeAktif(idBadge: "000"));
       json['badgeAktif'].forEach((v) {
         badgeAktif!.add(BadgeAktif.fromJson(v));
       });

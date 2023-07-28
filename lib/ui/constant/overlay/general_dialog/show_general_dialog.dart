@@ -456,7 +456,14 @@ class ShowGeneralDialog {
     );
   }
 
-  static Future showToastAlert(BuildContext context, String message, Future<dynamic> Function() onDismiss) async {
+  static Future showToastAlert(
+    BuildContext context,
+    String message,
+    Future<dynamic> Function() onDismiss, {
+    String? title,
+    Color? bgColor,
+    bool? withIcon,
+  }) async {
     await showGeneralDialog(
       //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: context,
@@ -470,6 +477,9 @@ class ShowGeneralDialog {
           content: ToastAlert(
             message: message,
             onTap: onDismiss,
+            title: title,
+            bgColor: bgColor,
+            withIcon: withIcon ?? false,
           ),
           contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
           backgroundColor: Colors.transparent,

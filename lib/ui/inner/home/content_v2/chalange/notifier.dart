@@ -11,6 +11,7 @@ import 'package:hyppe/core/models/collection/chalange/badge_collection_model.dar
 import 'package:hyppe/core/models/collection/chalange/banner_chalange_model.dart';
 import 'package:hyppe/core/models/collection/chalange/challange_model.dart';
 import 'package:hyppe/core/models/collection/chalange/leaderboard_challange_model.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
@@ -40,6 +41,7 @@ class ChallangeNotifier with ChangeNotifier {
   bool isLoading = false;
   bool isLoadingLeaderboard = false;
   bool isLoadingAchivement = false;
+  bool isLoadingCollection = false;
 
   int pageGetChallange = 0;
   int pageAchievement = 0;
@@ -55,6 +57,7 @@ class ChallangeNotifier with ChangeNotifier {
   LeaderboardChallangeModel? leaderBoardDetaiEndlData;
   List<AcievementModel>? achievementData = [];
   List<BadgeCollectionModel>? collectionBadgeData = [];
+  UserBadgeModel? badgeUser;
 
   //list untuk option
   DetailSub optionData = DetailSub();
@@ -70,9 +73,17 @@ class ChallangeNotifier with ChangeNotifier {
   String get referralLink => _referralLink;
   String get referralLinkText => _referralLinkText;
 
+  String _iduserbadge = '';
+  String get iduserbadge => _iduserbadge;
+
   DateTime challangeOption = DateTime.now();
 
   ///////
+
+  set iduserbadge(String val) {
+    _iduserbadge = val;
+    notifyListeners();
+  }
 
   set selectOptionSession(int val) {
     _selectOptionSession = val;
@@ -185,6 +196,8 @@ class ChallangeNotifier with ChangeNotifier {
         getdata ??= leaderBoardDataArray?.firstWhereOrNull((element) => element.status == akanDatang);
         getdata ??= leaderBoardDataArray?[0];
 
+        getdata?.session = 3;
+
         if (!oldLeaderboard) {
           getOption(getdata ?? LeaderboardChallangeModel());
         }
@@ -192,7 +205,6 @@ class ChallangeNotifier with ChangeNotifier {
         if (getdata?.startDatetime != '' || getdata?.startDatetime != null) {
           var dateNote = await System().compareDate(getdata?.startDatetime ?? '', getdata?.endDatetime ?? '');
           getdata?.onGoing = dateNote[0];
-          print("===000000");
           if (dateNote[1].inDays == 0) {
             if (dateNote[1].inHours == 0) {
               getdata?.totalDays = dateNote[1].inMinutes;
@@ -281,11 +293,12 @@ class ChallangeNotifier with ChangeNotifier {
 
   Future achievementInit(BuildContext context) async {
     isLoadingAchivement = true;
+    notifyListeners();
     Map param = {
       "page": pageAchievement,
       "limit": 10,
-      "iduser": "62c25b765f458435760af2dd",
-      // "iduser": SharedPreference().readStorage(SpKeys.userID),
+      // "iduser": "62c25b765f458435760af2dd",
+      "iduser": SharedPreference().readStorage(SpKeys.userID),
     };
     final achivementNotifier = ChallangeBloc();
     await achivementNotifier.postChallange(context, data: param, url: UrlConstants.listAchievement);
@@ -303,7 +316,8 @@ class ChallangeNotifier with ChangeNotifier {
   }
 
   Future collectionBadgeInit(BuildContext context) async {
-    isLoadingAchivement = true;
+    isLoadingCollection = true;
+    notifyListeners();
     Map param = {
       "page": pageCollection,
       "limit": 10,
@@ -317,10 +331,12 @@ class ChallangeNotifier with ChangeNotifier {
     if (achievementFatch.challengeState == ChallengeState.getPostSuccess) {
       collectionBadgeData = [];
       achievementFatch.data.forEach((v) => collectionBadgeData?.add(BadgeCollectionModel.fromJson(v)));
-      isLoadingAchivement = false;
+      isLoadingCollection = false;
       notifyListeners();
       return true;
     } else {
+      isLoadingCollection = false;
+      notifyListeners();
       return false;
     }
   }
@@ -377,7 +393,6 @@ class ChallangeNotifier with ChangeNotifier {
   }
 
   Future getOption(LeaderboardChallangeModel data, {DateTime? dateTime}) async {
-    print(dateTime);
     if (dateTime == null) {
       data.subChallenges?.forEach((element) {
         element.detail?.forEach((e) {
@@ -394,23 +409,21 @@ class ChallangeNotifier with ChangeNotifier {
       });
     } else {
       data.subChallenges?.forEach((element) {
-        print(element.tahun);
         if (element.tahun == dateTime.year) {
-          element.detail?.forEach((e) {
+          for (var e in element.detail ?? []) {
             if (e.bulan == dateTime.month && e.tahun == dateTime.year) {
               optionData = e;
               String month = (e.bulan ?? 0) < 10 ? "0${e.bulan}" : "${e.bulan}";
               String monthYear = "${e.tahun}-$month-01 00:00:00";
               challangeOption = DateTime.parse(monthYear);
-
               notifyListeners();
+              break;
             } else {
               optionData = DetailSub();
               challangeOption = dateTime;
-
               notifyListeners();
             }
-          });
+          }
         }
       });
     }
@@ -419,5 +432,41 @@ class ChallangeNotifier with ChangeNotifier {
   Future setFilter(BuildContext context, String idchallenge, int session, bool isDetail) async {
     selectOptionSession = session;
     getLeaderBoard(context, idchallenge, oldLeaderboard: true, isDetail: isDetail);
+  }
+
+  void selectBadge(BadgeAktif? badgeData) {
+    badgeUser = UserBadgeModel(
+      idUserBadge: badgeData?.idBadge,
+      badgeProfile: badgeData?.badgeData?[0].badgeProfile,
+      badgeOther: badgeData?.badgeData?[0].badgeOther,
+    );
+  }
+
+  Future postSelectBadge(BuildContext context, bool mounted, String idUserBadge) async {
+    notifyListeners();
+    Map param = {
+      "iduserbadge": idUserBadge,
+    };
+    final achivementNotifier = ChallangeBloc();
+    await achivementNotifier.postChallange(context, data: param, url: UrlConstants.selectBadge);
+    final achievementFatch = achivementNotifier.userFetch;
+
+    if (achievementFatch.challengeState == ChallengeState.getPostSuccess) {
+      if (mounted) {
+        iduserbadge = idUserBadge;
+        notifyListeners();
+        ShowGeneralDialog.showToastAlert(
+          context,
+          'Badge kamu berhasil diterapkan.',
+          () async {},
+          title: "Selamat!",
+          bgColor: kHyppeGreen,
+          withIcon: true,
+        );
+      }
+      return true;
+    } else {
+      return false;
+    }
   }
 }
