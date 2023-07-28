@@ -71,7 +71,7 @@ class _UserItemState extends State<UserItem> {
                       CustomTextWidget(
                         maxLines: 1,
                         textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
-                        textToDisplay: widget.data?.senderOrReceiverInfo?.fullname ?? widget.data?.senderOrReceiverInfo?.username.camelCase ?? '',
+                        textToDisplay: widget.data?.senderOrReceiverInfo?.fullName ?? widget.data?.senderOrReceiverInfo?.username.camelCase ?? '',
                       )
                     ],
                   ),
