@@ -236,11 +236,12 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
 
       DeviceBloc().activityAwake(context);
 
-      if (signData.interest?.isEmpty ?? false) {
-        Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root, argument: UserInterestScreenArgument());
-      } else {
-        Routing().moveReplacement(Routes.lobby);
-      }
+      // if (signData.interest?.isEmpty ?? false) {
+      //   Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root, argument: UserInterestScreenArgument());
+      // } else {
+      //   Routing().moveReplacement(Routes.lobby);
+      // }
+      Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root, argument: UserInterestScreenArgument());
     } else if (signData.userType == null) {
       clearTextController();
       ShowBottomSheet.onShowSomethingWhenWrong(context);
