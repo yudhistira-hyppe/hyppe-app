@@ -27,6 +27,7 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/
 // import 'package:hyppe/ui/inner/home/content/diary/playlist/notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/win_challange.dart';
 import 'package:hyppe/ux/routing.dart';
 
 import '../../../../core/models/collection/advertising/ads_video_data.dart';
@@ -442,6 +443,31 @@ class ShowGeneralDialog {
           onWillPop: () async => true,
           child: AlertDialog(
             content: JoinChallangePop(),
+            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            backgroundColor: Colors.transparent,
+            insetPadding: EdgeInsets.symmetric(horizontal: SizeConfig.screenWidth! * 0.08),
+          )),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.ease, parent: animation);
+        return SlideTransition(
+          position: Tween(begin: const Offset(0, 1), end: const Offset(0, 0)).animate(animation),
+          child: child,
+        );
+      },
+    );
+  }
+
+  static Future winChallange(BuildContext context, {bool? uploadProses}) async {
+    await showGeneralDialog(
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+      context: Routing.navigatorKey.currentState!.overlay!.context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: true,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) => WillPopScope(
+          onWillPop: () async => true,
+          child: AlertDialog(
+            content: WinChallangePop(),
             contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
             backgroundColor: Colors.transparent,
             insetPadding: EdgeInsets.symmetric(horizontal: SizeConfig.screenWidth! * 0.08),

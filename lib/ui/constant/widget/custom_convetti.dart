@@ -12,7 +12,7 @@ class CustomConvetti extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Lottie.asset(
-      "${AssetPath.jsonPath}convetti.json",
+      "${AssetPath.jsonPath}convetti-2.json",
       width: SizeConfig.screenWidth,
       height: SizeConfig.screenHeight,
     );

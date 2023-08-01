@@ -196,7 +196,7 @@ class ChallangeNotifier with ChangeNotifier {
         getdata ??= leaderBoardDataArray?.firstWhereOrNull((element) => element.status == akanDatang);
         getdata ??= leaderBoardDataArray?[0];
 
-        getdata?.session = 3;
+        // getdata?.session = 3;
 
         if (!oldLeaderboard) {
           getOption(getdata ?? LeaderboardChallangeModel());

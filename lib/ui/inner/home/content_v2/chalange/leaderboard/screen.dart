@@ -92,6 +92,8 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
   void afterFirstLayout(BuildContext context) {}
 
   void toHideTab(ChallangeNotifier cn) {
+    print("!!!@@@@ hide ${((cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1) || cn.leaderBoardData?.session == 1)}");
+    print("${cn.leaderBoardData?.session}");
     if ((cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1) || cn.leaderBoardData?.session == 1) {
       hideTab = true;
     } else {

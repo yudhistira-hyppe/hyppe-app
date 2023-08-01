@@ -58,44 +58,51 @@ class _ToastAlert extends State<ToastAlert> {
                   borderRadius: BorderRadius.circular(8),
                   color: widget.bgColor ?? context.getColorScheme().onBackground,
                 ),
-                child: Row(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    widget.withIcon
-                        ? Container(
-                            height: 24,
-                            width: 24,
-                            margin: EdgeInsets.only(right: 20),
-                            child: CustomIconWidget(
-                              iconData: "${AssetPath.vectorPath}valid-invert.svg",
-                              defaultColor: false,
-                              height: 24,
-                            ),
-                          )
-                        : Container(),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
                       children: [
-                        widget.title != null
-                            ? Padding(
-                                padding: const EdgeInsets.only(bottom: 4.0),
-                                child: CustomTextWidget(
-                                  textAlign: TextAlign.start,
-                                  maxLines: 2,
-                                  textToDisplay: widget.title ?? '',
-                                  textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                        widget.withIcon
+                            ? Container(
+                                height: 24,
+                                width: 24,
+                                margin: EdgeInsets.only(right: 20),
+                                child: CustomIconWidget(
+                                  iconData: "${AssetPath.vectorPath}valid-invert.svg",
+                                  defaultColor: false,
+                                  height: 24,
                                 ),
                               )
                             : Container(),
-                        CustomTextWidget(
-                          textAlign: TextAlign.start,
-                          maxLines: 2,
-                          textToDisplay: widget.message,
-                          textStyle: context.getTextTheme().bodySmall?.copyWith(
-                                color: context.getColorScheme().background,
-                                fontWeight: FontWeight.w400,
-                                fontSize: widget.title != null ? 10 : 14,
-                              ),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            widget.title != null
+                                ? Padding(
+                                    padding: const EdgeInsets.only(bottom: 4.0),
+                                    child: CustomTextWidget(
+                                      textAlign: TextAlign.start,
+                                      maxLines: 2,
+                                      textToDisplay: widget.title ?? '',
+                                      textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                                    ),
+                                  )
+                                : Container(),
+                            CustomTextWidget(
+                              textAlign: TextAlign.start,
+                              maxLines: 2,
+                              textToDisplay: widget.message,
+                              textStyle: context.getTextTheme().bodySmall?.copyWith(
+                                    color: context.getColorScheme().background,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: widget.title != null ? 10 : 14,
+                                  ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

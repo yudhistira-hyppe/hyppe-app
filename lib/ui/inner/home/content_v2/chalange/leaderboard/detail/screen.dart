@@ -7,8 +7,11 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -63,6 +66,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
       var cn = context.read<ChallangeNotifier>();
       cn.initLeaderboardDetail(context, widget.arguments?.id ?? '');
       chllangeid = widget.arguments?.id ?? '';
+
       _tabController.animation?.addListener(() {
         _tabController.animation?.addListener(() {
           _current = _tabController.index;
@@ -82,6 +86,21 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
           _lastCurrent = _current;
         });
       });
+
+      if (widget.arguments?.index == 1) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _tabController.index = widget.arguments?.index ?? 0;
+          cn.getLeaderBoard(
+            context,
+            chllangeid,
+            oldLeaderboard: true,
+            isDetail: true,
+          );
+          Future.delayed(const Duration(milliseconds: 500), () {
+            ShowGeneralDialog.winChallange(context);
+          });
+        });
+      }
     });
 
     super.initState();
@@ -149,14 +168,24 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
             ),
             titleSpacing: 0,
             actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const CustomIconWidget(
-                  iconData: "${AssetPath.vectorPath}share2.svg",
-                  defaultColor: false,
-                  height: 20,
-                ),
-              )
+              cn.isLoadingLeaderboard || cn.leaderBoardDetailData?.sId == null
+                  ? Container()
+                  : IconButton(
+                      onPressed: () {
+                        String thumb = cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].bannerLeaderboard ?? '';
+                        String desc = 'Ikuti challange dan menangkan kesempatan menang';
+                        String fullname = "${cn.leaderBoardDetailData?.challengeData?[0].nameChallenge ?? ''} | Hyppe Challange";
+                        String postId = cn.leaderBoardDetailData?.challengeId ?? '';
+                        String routes = "/chalenge-detail";
+                        DynamicLinkData dynamicLinkData = DynamicLinkData(description: desc, fullName: fullname, postID: postId, routes: routes, thumb: thumb);
+                        System().createdDynamicLink(context, dynamicLinkData: dynamicLinkData);
+                      },
+                      icon: const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}share2.svg",
+                        defaultColor: false,
+                        height: 20,
+                      ),
+                    )
             ],
           )),
       body: DefaultTabController(
@@ -219,6 +248,11 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                                 },
                               ),
                               twelvePx,
+                              // GestureDetector(
+                              //     onTap: () {
+                              //       ShowGeneralDialog.winChallange(context);
+                              //     },
+                              //     child: Text("hahaha")),
                               Center(
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,

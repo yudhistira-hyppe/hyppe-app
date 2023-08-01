@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -105,6 +106,8 @@ class NotificationService {
           final data = NotificationBody.fromJson(map);
           if (data.postType == 'TRANSACTION') {
             Routing().move(Routes.transaction);
+          } else if (data.postType == 'CHALLANGE') {
+            Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: data.postId, index: int.parse(data.index ?? '0')));
           } else if (data.postType == 'FOLLOWER' || data.postType == 'FOLLOWING') {
             materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(materialAppKey.currentContext!, data.postId);
           } else {
@@ -231,14 +234,16 @@ class NotificationBody {
   String? postType;
   String? message;
   String? title;
+  String? index;
 
-  NotificationBody({this.postId, this.postType, this.message});
+  NotificationBody({this.postId, this.postType, this.message, this.index});
 
   NotificationBody.fromJson(Map<String, dynamic> json) {
     postId = json['postID'];
     postType = json['postType'];
     message = json['body'];
     title = json['title'];
+    index = json['index'];
   }
 
   Map<String, dynamic> toJson() {
@@ -246,6 +251,7 @@ class NotificationBody {
     result['postID'] = postId;
     result['postType'] = postType;
     result['message'] = message;
+    result['index'] = index;
     return result;
   }
 }
