@@ -213,15 +213,9 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
             return notification.depth == 0;
           },
           onRefresh: () async {},
-          child: cn.isLoadingLeaderboard || (cn.leaderBoardDetailData?.sId == null || cn.leaderBoardDetaiEndlData?.sId == null)
-              ? Column(
-                  children: [
-                    Text("${cn.isLoadingLeaderboard}"),
-                    Text("${cn.leaderBoardDetailData?.sId != null || cn.leaderBoardDetaiEndlData?.sId != null}"),
-                    Text("${cn.leaderBoardDetaiEndlData?.sId}"),
-                    const ShimmerListLeaderboard(),
-                  ],
-                )
+          child: cn.isLoadingLeaderboard
+              //  || (cn.leaderBoardDetailData?.sId == null || cn.leaderBoardDetaiEndlData?.sId == null)
+              ? const ShimmerListLeaderboard()
               : ScrollConfiguration(
                   behavior: const ScrollBehavior().copyWith(overscroll: false),
                   child: NestedScrollView(

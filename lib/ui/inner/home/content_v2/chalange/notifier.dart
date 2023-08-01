@@ -190,6 +190,8 @@ class ChallangeNotifier with ChangeNotifier {
       if (bannerFatch.data.isNotEmpty) {
         LeaderboardChallangeModel? getdata;
         leaderBoardDataArray = [];
+        leaderBoardDetaiEndlData = LeaderboardChallangeModel();
+        leaderBoardDetailData = LeaderboardChallangeModel();
         bannerFatch.data.forEach((v) => leaderBoardDataArray?.add(LeaderboardChallangeModel.fromJson(v)));
 
         getdata = leaderBoardDataArray?.firstWhereOrNull((element) => element.status == berlangsung);
@@ -225,6 +227,9 @@ class ChallangeNotifier with ChangeNotifier {
 
           if (oldLeaderboard) {
             leaderBoardDetaiEndlData = getdata;
+            if (leaderBoardDetailData?.sId == null) {
+              leaderBoardDetailData = getdata;
+            }
           } else {
             leaderBoardDetailData = getdata;
           }
