@@ -15,6 +15,7 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/core/transitions/line_indicator_transation.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/link_copied_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
@@ -166,14 +167,17 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       _animationController = AnimationController(
         vsync: this,
       )
-        ..addListener(() {
-          setState(() {});
-        })
+      // ..addListener(() { setState(() {});})
         ..addStatusListener(
           (AnimationStatus status) {
             if (status == AnimationStatus.completed) {
               if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
                 storyComplete(notifier);
+              }
+            }
+            if(status == AnimationStatus.forward){
+              if(mounted){
+                setState(() {});
               }
             }
           },
@@ -198,7 +202,10 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       _playMode = ModeTypeAliPLayer.auth;
       isPlay = false;
       isPrepare = false;
-      setState(() {});
+      if(mounted){
+        setState(() {});
+      }
+
 
       //Turn on mix mode
       if (Platform.isIOS) {
@@ -265,12 +272,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
-        if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
-          _animationController?.duration = Duration(milliseconds: _videoDuration > 5000 ? 15000 : 8000);
-        } else {
+        if (!(_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image')) {
           _animationController?.duration = Duration(milliseconds: _videoDuration);
         }
-
         setState(() {
           isPrepare = true;
         });
@@ -317,21 +321,26 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
       _animationController?.stop();
-      setState(() {
-        _loadingPercent = 0;
-        _showLoading = true;
-      });
+      _loadingPercent = 0;
+      _showLoading = true;
+      if(mounted){
+        setState(() {});
+      }
+
     }, loadingProgress: (percent, netSpeed, playerId) {
       _loadingPercent = percent;
       if (percent == 100) {
         _showLoading = false;
       }
-      setState(() {});
+      if(mounted){
+        setState(() {});
+      }
     }, loadingEnd: (playerId) {
       // _animationController?.forward();
-      setState(() {
-        _showLoading = false;
-      });
+      _showLoading = false;
+      if(mounted){
+        setState(() {});
+      }
     });
     fAliplayer?.setOnSeekComplete((playerId) {
       _inSeek = false;
@@ -373,9 +382,10 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       isPause = true;
       _animationController?.reset();
       storyComplete(notifier);
-      setState(() {
-        _currentPosition = _videoDuration;
-      });
+      _currentPosition = _videoDuration;
+      if (mounted) {
+        setState(() {});
+      }
     });
 
     fAliplayer?.setOnSnapShot((path, playerId) {
@@ -386,7 +396,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       _showTipsWidget = true;
       _showLoading = false;
       _tipsContent = "$errorCode \n $errorMsg";
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
@@ -409,17 +421,20 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       } else {
         _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
         _curChildIdx = 0;
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       }
     } else {
-      setState(() {
-        if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
-          _animationController?.duration = const Duration(milliseconds: 8000);
-        }
-        shown.add(_groupUserStories![_curIdx].story?[_curChildIdx].postID);
-        print(shown);
-        _curChildIdx++;
-      });
+      if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
+        _animationController?.duration = const Duration(milliseconds: 8000);
+      }
+      shown.add(_groupUserStories![_curIdx].story?[_curChildIdx].postID);
+      print(shown);
+      _curChildIdx++;
+      if (mounted) {
+        setState(() {});
+      }
       start();
     }
   }
@@ -431,14 +446,18 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       print("story kurang ${shown.length}");
       shown.removeAt(shown.length - 1);
       print("story setelah kurang ${shown.length}");
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
       start();
     } else {
       if (_curIdx > 0) {
         shown = [];
         _pageController.previousPage(duration: const Duration(milliseconds: 900), curve: Curves.ease);
         _curChildIdx = 0;
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       }
     }
   }
@@ -568,7 +587,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
           onPageChanged: (index) async {
             shown = [];
             _curIdx = index;
-            setState(() {});
+            if (mounted) {
+              setState(() {});
+            }
             if (_lastCurIndex != _curIdx) {
               // notifier.isPreventedEmoji = true;
               _curChildIdx = 0;
@@ -632,20 +653,37 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             padding: const EdgeInsets.only(left: 10.0, right: 10),
             child: Row(
               children: (_groupUserStories?[index].story ?? []).map((it) {
+                print('seconds: ${_animationController?.value}');
                 return Expanded(
                   child: Container(
                     padding: EdgeInsets.only(top: 5, right: _groupUserStories![index].story!.last == it ? 0 : 4),
                     height: 9,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(40.0),
-                      child: LinearProgressIndicator(
-                        value: it.postID == _groupUserStories![index].story?[_curChildIdx].postID ? _animationController?.value : (shown.contains(it.postID) ? 1 : 0),
-                        backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
-                        valueColor: const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
-                      ),
+                      child: LineIndicatorTransition(value: Tween<double>(begin: 0, end: 1.0).animate(CurvedAnimation(parent: _animationController ?? animationController, curve: Curves.easeIn)), color: const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText), backgroundColor: kHyppeLightButtonText.withOpacity(0.4)),
                     ),
                   ),
                 );
+                // return Expanded(
+                //   child: Container(
+                //     padding: EdgeInsets.only(top: 5, right: _groupUserStories![index].story!.last == it ? 0 : 4),
+                //     height: 9,
+                //     child: ClipRRect(
+                //       borderRadius: BorderRadius.circular(40.0),
+                //       child: TweenAnimationBuilder<double>(
+                //         duration: const Duration(milliseconds: 250),
+                //         tween: Tween<double>(begin: 0, end: 1.0).animate(CurvedAnimation(parent: animationController, curve: Curves.easeIn)),
+                //         builder: (context, value, _) {
+                //           return LinearProgressIndicator(
+                //             value: it.postID == _groupUserStories![index].story?[_curChildIdx].postID ? value : (shown.contains(it.postID) ? 1 : 0),
+                //             backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
+                //             valueColor: const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
+                //           );
+                //         }
+                //       ),
+                //     ),
+                //   ),
+                // );
               }).toList(),
             ),
           ),
@@ -862,10 +900,11 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'video') {
       await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].apsaraId ?? '');
       print("startsttt==========");
-      setState(() {
-        _isPause = false;
-        _isFirstRenderShow = false;
-      });
+      _isPause = false;
+      _isFirstRenderShow = false;
+      if (mounted) {
+        setState(() {});
+      }
       // var configMap = {
       //   'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
       //   'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
@@ -908,14 +947,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       }
     }
 
-    // fAliplayer?.play();
-  }
-
-  void _onPlayerHide() {
-    Future.delayed(const Duration(seconds: 4), () {
-      onTapCtrl = false;
-      setState(() {});
-    });
   }
 
   ///Loading
