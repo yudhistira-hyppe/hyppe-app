@@ -96,7 +96,7 @@ class _SelfProfileBottomState extends State<SelfProfileBottom> {
                 child: Row(
                   children: [
                     CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}pause.svg",
+                      iconData: "${AssetPath.vectorPath}vid.svg",
                       width: 20 * SizeConfig.scaleDiagonal,
                       height: 20 * SizeConfig.scaleDiagonal,
                       defaultColor: false,
