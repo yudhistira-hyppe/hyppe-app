@@ -18,11 +18,13 @@ class BuildButton extends StatefulWidget {
   final AnimationController? animationController;
   final ContentData? data;
   final Function? pause;
+  final Function? play;
   const BuildButton({
     this.storyController,
     required this.animationController,
     required this.data,
     this.pause,
+    this.play,
   });
 
   @override
@@ -30,7 +32,6 @@ class BuildButton extends StatefulWidget {
 }
 
 class _BuildButtonState extends State<BuildButton> {
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'BuildButton');
@@ -59,7 +60,7 @@ class _BuildButtonState extends State<BuildButton> {
               InkWell(
                 onTap: () {
                   print('sdsdfsdf');
-                  if(widget.pause != null){
+                  if (widget.pause != null) {
                     widget.pause!();
                   }
                   notifier.showMyReaction(
@@ -68,12 +69,13 @@ class _BuildButtonState extends State<BuildButton> {
                     widget.data,
                     widget.storyController,
                     widget.animationController,
+                    widget.play!,
                   );
                 },
                 child: CustomIconWidget(
                   defaultColor: false,
                   iconData: '${AssetPath.vectorPath}reaction.svg',
-                  color: notifier.loadReaction ? kHyppeLightSecondary :kHyppeLightButtonText,
+                  color: notifier.loadReaction ? kHyppeLightSecondary : kHyppeLightButtonText,
                 ),
               ),
               InkWell(
@@ -83,11 +85,10 @@ class _BuildButtonState extends State<BuildButton> {
                   color: kHyppeLightButtonText,
                 ),
                 onTap: () async {
-                  if(widget.pause != null){
+                  if (widget.pause != null) {
                     widget.pause!();
                   }
                   await notifier.createdDynamicLink(context, widget.data, storyController: widget.storyController);
-
                 },
               )
             ],

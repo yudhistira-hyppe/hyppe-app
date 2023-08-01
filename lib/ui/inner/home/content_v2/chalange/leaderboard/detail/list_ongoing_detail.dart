@@ -91,11 +91,16 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                           shrinkWrap: true,
                                           physics: const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, index) {
-                                            if (cn.leaderBoardDetailData?.challengeData?[0].objectChallenge == 'KONTEN') {
-                                              return ContentLeaderboard(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                            if (cn.leaderBoardData?.getlastrank?[index].score == 0) {
+                                              return Container();
                                             } else {
-                                              return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                              if (cn.leaderBoardDetailData?.challengeData?[0].objectChallenge == 'KONTEN') {
+                                                return ContentLeaderboard(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                              } else {
+                                                return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                              }
                                             }
+
                                             // return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
                                           },
                                         ),

@@ -717,6 +717,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                     animationController: emojiController,
                     currentIndex: _curChildIdx,
                     pause: pause,
+                    play: play,
                     // play: play,
                   ),
                 ),

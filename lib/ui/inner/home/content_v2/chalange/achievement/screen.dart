@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -171,87 +172,98 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
   }
 
   Widget item(AcievementModel data) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          twelvePx,
-          Stack(
-            fit: StackFit.passthrough,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 3.0, left: 3, right: 3, bottom: 3),
-                child: ClipOval(
-                  child: CustomProfileImage(
-                    following: true,
-                    forStory: false,
-                    width: 43,
-                    height: 43,
-                    // imageUrl: "https://hips.hearstapps.com/hmg-prod/images/sam-worthington-avatar-the-way-of-the-water-1670323169.jpg?crop=0.528xw:1.00xh;0.134xw,0&resize=1200:*",
-                    imageUrl: data.avatar?.mediaEndpoint != null ? System().showUserPicture("${data.avatar?.mediaEndpoint}") : '',
-                  ),
-                ),
-              ),
-              Positioned.fill(
-                child: Center(
-                  child: data.badgeData != null
-                      ? Image.network(
-                          "${data.badgeData?[0].badgeOther}",
-                          width: 50 * SizeConfig.scaleDiagonal,
-                          height: 50 * SizeConfig.scaleDiagonal,
-                        )
-                      : Container(),
-                ),
-              )
-            ],
+    return GestureDetector(
+      onTap: () {
+        Routing().move(
+          Routes.chalengeDetail,
+          argument: GeneralArgument(
+            id: data.subChallengeData?[0].challengeId,
+            session: data.subChallengeData?[0].session,
           ),
-          twelvePx,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            twelvePx,
+            Stack(
+              fit: StackFit.passthrough,
               children: [
-                Text(
-                  data.subChallengeData?[0].nameChallenge ?? '',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Color(0xFF3E3E3E),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                Container(
+                  margin: const EdgeInsets.only(top: 3.0, left: 3, right: 3, bottom: 3),
+                  child: ClipOval(
+                    child: CustomProfileImage(
+                      following: true,
+                      forStory: false,
+                      width: 43,
+                      height: 43,
+                      // imageUrl: "https://hips.hearstapps.com/hmg-prod/images/sam-worthington-avatar-the-way-of-the-water-1670323169.jpg?crop=0.528xw:1.00xh;0.134xw,0&resize=1200:*",
+                      imageUrl: data.avatar?.mediaEndpoint != null ? System().showUserPicture("${data.avatar?.mediaEndpoint}") : '',
+                    ),
                   ),
                 ),
-                fourPx,
-                Text(
-                  'Periode ${data.session}',
-                  style: const TextStyle(
-                    color: Color(0xFF3E3E3E),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
+                Positioned.fill(
+                  child: Center(
+                    child: data.badgeData != null
+                        ? Image.network(
+                            "${data.badgeData?[0].badgeOther}",
+                            width: 50 * SizeConfig.scaleDiagonal,
+                            height: 50 * SizeConfig.scaleDiagonal,
+                          )
+                        : Container(),
                   ),
-                ),
-                fourPx,
-                Text(
-                  '${System().dateFormatter(data.startDatetime ?? '2023-01-01', 5)} - ${System().dateFormatter(data.startDatetime ?? '2023-01-01', 5)}',
-                  style: const TextStyle(
-                    color: Color(0xFF9B9B9B),
-                    fontSize: 10,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+                )
               ],
             ),
-          ),
-          twelvePx,
-          const CustomIconWidget(
-            iconData: "${AssetPath.vectorPath}arrow_right.svg",
-            defaultColor: false,
-          )
-        ],
+            twelvePx,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data.subChallengeData?[0].nameChallenge ?? '',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Color(0xFF3E3E3E),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  fourPx,
+                  Text(
+                    'Periode ${data.session}',
+                    style: const TextStyle(
+                      color: Color(0xFF3E3E3E),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  fourPx,
+                  Text(
+                    '${System().dateFormatter(data.startDatetime ?? '2023-01-01', 5)} - ${System().dateFormatter(data.startDatetime ?? '2023-01-01', 5)}',
+                    style: const TextStyle(
+                      color: Color(0xFF9B9B9B),
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            twelvePx,
+            const CustomIconWidget(
+              iconData: "${AssetPath.vectorPath}arrow_right.svg",
+              defaultColor: false,
+            )
+          ],
+        ),
       ),
     );
   }

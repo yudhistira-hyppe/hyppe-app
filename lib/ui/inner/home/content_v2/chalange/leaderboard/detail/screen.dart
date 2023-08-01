@@ -101,6 +101,19 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
           });
         });
       }
+
+      if (widget.arguments?.session != null) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _tabController.index = 1;
+          cn.selectOptionSession = widget.arguments?.session ?? 0;
+          cn.getLeaderBoard(
+            context,
+            chllangeid,
+            oldLeaderboard: true,
+            isDetail: true,
+          );
+        });
+      }
     });
 
     super.initState();
@@ -110,7 +123,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
   void afterFirstLayout(BuildContext context) {}
 
   void toHideTab(ChallangeNotifier cn) {
-    if ((cn.leaderBoardDetailData?.onGoing == true && cn.leaderBoardDetailData?.session == 1) || cn.leaderBoardDetailData?.session == 1) {
+    if ((cn.leaderBoardDetailData?.onGoing == true && cn.leaderBoardDetailData?.session == 1) || cn.leaderBoardDetailData?.session == 1 || cn.leaderBoardDetailData?.status == 'BERAKHIR') {
       hideTab = true;
     } else {
       hideTab = false;
@@ -200,8 +213,15 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
             return notification.depth == 0;
           },
           onRefresh: () async {},
-          child: cn.isLoadingLeaderboard || cn.leaderBoardDetailData?.sId == null
-              ? const ShimmerListLeaderboard()
+          child: cn.isLoadingLeaderboard || (cn.leaderBoardDetailData?.sId == null || cn.leaderBoardDetaiEndlData?.sId == null)
+              ? Column(
+                  children: [
+                    Text("${cn.isLoadingLeaderboard}"),
+                    Text("${cn.leaderBoardDetailData?.sId != null || cn.leaderBoardDetaiEndlData?.sId != null}"),
+                    Text("${cn.leaderBoardDetaiEndlData?.sId}"),
+                    const ShimmerListLeaderboard(),
+                  ],
+                )
               : ScrollConfiguration(
                   behavior: const ScrollBehavior().copyWith(overscroll: false),
                   child: NestedScrollView(
@@ -347,9 +367,9 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                     body: TabBarView(
                       controller: _tabController,
                       physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        const ListOnGoingDetail(),
-                        const ListEndDetail(),
+                      children: const [
+                        ListOnGoingDetail(),
+                        ListEndDetail(),
                       ],
                     ),
                   ),
