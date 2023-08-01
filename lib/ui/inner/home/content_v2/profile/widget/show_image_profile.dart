@@ -41,7 +41,8 @@ class _ShowImageProfileState extends State<ShowImageProfile> {
           child: Stack(
             children: [
               Image.asset(
-                '${AssetPath.pngPath}abstrak.jpg',
+                // '${AssetPath.pngPath}abstrak.jpg',
+                '${AssetPath.pngPath}abstract.png',
                 height: SizeConfig.screenHeight,
                 fit: BoxFit.fitHeight,
               ),

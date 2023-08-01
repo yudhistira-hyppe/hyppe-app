@@ -104,7 +104,7 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                 child: Row(
                   children: [
                     CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}pause.svg",
+                      iconData: "${AssetPath.vectorPath}vid.svg",
                       width: 20 * SizeConfig.scaleDiagonal,
                       height: 20 * SizeConfig.scaleDiagonal,
                       defaultColor: false,
