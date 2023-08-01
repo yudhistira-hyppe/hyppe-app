@@ -340,7 +340,17 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
     cameraNotifier.stopVideoRecording().then((file) async {
       final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-      notifier.fileContent = [file?.path ?? ''];
+      if(file?.path != null){
+        notifier.fileContent = [file?.path ?? ''];
+      }else{
+        if (canDeppAr == 'true') {
+          final newFile = await Provider.of<CameraDevicesNotifier>(context, listen: false).cameraController?.stopVideoRecording();
+          notifier.fileContent = [newFile?.path ?? ''];
+        } else {
+          final newFile = await Provider.of<CameraNotifier>(context, listen: false).deepArController?.stopVideoRecording();
+          notifier.fileContent = [newFile?.path ?? ''];
+        }
+      }
       notifier.featureType = featureType;
       notifier.aspectRation = cameraNotifier.cameraAspectRatio;
 
