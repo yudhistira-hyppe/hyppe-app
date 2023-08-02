@@ -93,9 +93,11 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                     children: [
                       MeasuredSize(
                         onChange: (value){
-                          setState(() {
-                            heightTab = value.height;
-                          });
+                          if(mounted){
+                            setState(() {
+                              heightTab = value.height;
+                            });
+                          }
                         },
                         child: Container(
                           margin: const EdgeInsets.only(left: 16, right: 12, top: 10, bottom: 16),

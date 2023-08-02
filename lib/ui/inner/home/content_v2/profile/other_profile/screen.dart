@@ -252,7 +252,10 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                           SliverToBoxAdapter(
                             child: MeasuredSize(
                               onChange: (e) async {
-                                heightProfileCard = e.height;
+                                if(mounted){
+                                  heightProfileCard = e.height;
+                                }
+
                                 // await Future.delayed(Duration(milliseconds: 300), () {
                                 //   isloading = true;
                                 // });

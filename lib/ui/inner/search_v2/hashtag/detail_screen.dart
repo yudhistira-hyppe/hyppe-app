@@ -140,9 +140,12 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
             children: [
               MeasuredSize(
                 onChange: (value){
-                  setState(() {
-                    heightTab = value.height;
-                  });
+                  if(mounted){
+                    setState(() {
+                      heightTab = value.height;
+                    });
+                  }
+
                 },
                 child: Container(
                   padding: const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 12),

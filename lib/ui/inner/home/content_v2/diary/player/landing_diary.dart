@@ -129,10 +129,16 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       // Fluttertoast.showToast(msg: "OnPrepared ");
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
-        setState(() {
+        try{
           isPrepare = true;
           _showLoading = false;
-        });
+          if(mounted){
+            setState(() {});
+          }
+        }catch(e){
+          e.logger();
+        }
+
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;
@@ -147,10 +153,16 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-          setState(() {
+          try{
             _showLoading = false;
             isPause = false;
-          });
+            if(mounted){
+              setState(() {});
+            }
+          }catch(e){
+            e.logger();
+          }
+
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
@@ -160,20 +172,36 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       }
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-      setState(() {
+      try{
         _loadingPercent = 0;
         _showLoading = true;
-      });
-    }, loadingProgress: (percent, netSpeed, playerId) {
-      _loadingPercent = percent;
-      if (percent == 100) {
-        _showLoading = false;
+        if(mounted){
+          setState(() {});
+        }
+      }catch(e){
+        e.logger();
       }
-      setState(() {});
+    }, loadingProgress: (percent, netSpeed, playerId) {
+      try{
+        _loadingPercent = percent;
+        if (percent == 100) {
+          _showLoading = false;
+        }
+        if(mounted){
+          setState(() {});
+        }
+      }catch(e){
+        e.logger();
+      }
     }, loadingEnd: (playerId) {
-      setState(() {
+      try{
         _showLoading = false;
-      });
+        if(mounted){
+          setState(() {});
+        }
+      }catch(e){
+        e.logger();
+      }
     });
     fAliplayer?.setOnSeekComplete((playerId) {
       _inSeek = false;
@@ -205,13 +233,19 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       }
     });
     fAliplayer?.setOnCompletion((playerId) {
-      _showLoading = false;
+      try{
+        _showLoading = false;
 
-      isPause = true;
+        isPause = true;
 
-      setState(() {
         _currentPosition = _videoDuration;
-      });
+        if(mounted){
+          setState(() {});
+        }
+      }catch(e){
+        e.logger();
+      }
+
     });
 
     fAliplayer?.setOnSnapShot((path, playerId) {
@@ -219,9 +253,14 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       // Fluttertoast.showToast(msg: "SnapShot Save : $path");
     });
     fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-      _showLoading = false;
+      try{
+        _showLoading = false;
 
-      setState(() {});
+        setState(() {});
+      }catch(e){
+        e.logger();
+      }
+
     });
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
@@ -322,11 +361,13 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   }
 
   Future getAuth(String apsaraId) async {
-    setState(() {
+
+    try {
       isloading = true;
       _showLoading = true;
-    });
-    try {
+      if(mounted){
+        setState(() {});
+      }
       final notifier = PostsBloc();
       await notifier.getAuthApsara(context, apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
@@ -341,15 +382,17 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           definitionList: [DataSourceRelated.definitionList],
         );
 
-        setState(() {
-          isloading = false;
-        });
+        isloading = false;
+        if(mounted){
+          setState(() {});
+        }
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
-      setState(() {
-        isloading = false;
-      });
+      isloading = false;
+      if(mounted){
+        setState(() {});
+      }
       // 'Failed to fetch ads data $e'.logger();
     }
   }
@@ -827,12 +870,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                             ),
                           ),
                     _showLoading && !homeNotifier.connectionError
-                        ? Positioned.fill(
+                        ? const Positioned.fill(
                             child: Align(
                             alignment: Alignment.center,
                             child: CircularProgressIndicator(),
-                          ))
-                        : Container(),
+                          ),)
+                        : const SizedBox.shrink(),
                     _buildBody(context, SizeConfig.screenWidth, notifier.diaryData?[index] ?? ContentData()),
                     blurContentWidget(context, notifier.diaryData?[index] ?? ContentData()),
                   ],

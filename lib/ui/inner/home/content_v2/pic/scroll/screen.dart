@@ -541,7 +541,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         break;
       case AppLifecycleState.resumed:
         print("========= resumed");
-        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
+        if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
           fAliplayer?.play();
         }
         break;

@@ -60,9 +60,11 @@ class _BottomDetailState extends State<BottomDetail> {
           children: [
             MeasuredSize(
               onChange: (value){
-                setState(() {
-                  bottomTab = value.height;
-                });
+                if(mounted){
+                  setState(() {
+                    bottomTab = value.height;
+                  });
+                }
               },
               child: Container(
                 margin: const EdgeInsets.only(left: 12, right: 12, top: 10, bottom: 16),

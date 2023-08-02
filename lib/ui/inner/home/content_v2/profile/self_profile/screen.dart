@@ -291,15 +291,17 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                           SliverToBoxAdapter(
                             child: MeasuredSize(
                                 onChange: (e) async {
-                                  heightProfileCard = e.height;
-                                  await Future.delayed(Duration(milliseconds: 300), () {
-                                    isloading = true;
-                                  });
-                                  // await Future.delayed(Duration(milliseconds: 1000), () {
-                                  isloading = false;
-                                  // });
-                                  print("=============================== height");
-                                  print(heightProfileCard);
+                                  if(mounted){
+                                    heightProfileCard = e.height;
+                                    await Future.delayed(Duration(milliseconds: 300), () {
+                                      isloading = true;
+                                    });
+                                    // await Future.delayed(Duration(milliseconds: 1000), () {
+                                    isloading = false;
+                                    // });
+                                    print("=============================== height");
+                                    print(heightProfileCard);
+                                  }
                                 },
                                 child: Container(child: notifier.user.profile != null ? const SelfProfileTop() : BothProfileTopShimmer())),
                           ),

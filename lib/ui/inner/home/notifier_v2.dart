@@ -205,11 +205,11 @@ class HomeNotifier with ChangeNotifier {
 
     if (isConnected) {
       if (!mounted) return;
-      final profile = Provider.of<MainNotifier>(context, listen: false);
-      final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
-      final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
-      final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
-      final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
+      final profile = Provider.of<MainNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+      final vid = Provider.of<PreviewVidNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+      final diary = Provider.of<PreviewDiaryNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+      final pic = Provider.of<PreviewPicNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+      final stories = Provider.of<PreviewStoriesNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
 
       print("data pic ${(pic.pic?.isNotEmpty ?? [].isNotEmpty) && (diary.diaryData?.isNotEmpty ?? [].isNotEmpty)}");
       if ((!isreload && !isgetMore) && ((pic.pic?.isNotEmpty ?? [].isNotEmpty) && (diary.diaryData?.isNotEmpty ?? [].isNotEmpty) && (vid.vidData?.isNotEmpty ?? [].isNotEmpty))) {
@@ -262,17 +262,17 @@ class HomeNotifier with ChangeNotifier {
           break;
       }
       if (stories.peopleStoriesData == null) {
-        stories.initialStories(context);
+        stories.initialStories(Routing.navigatorKey.currentContext ?? context);
       }
       // if (isreload) {
       //   await stories.initialStories(context);
       // }
 
-      final allContents = await reload(context, data);
+      final allContents = await reload(Routing.navigatorKey.currentContext ?? context, data);
 
       if (profileImage == '') {
         try {
-          await profile.initMain(context, onUpdateProfile: true);
+          await profile.initMain(Routing.navigatorKey.currentContext ?? context, onUpdateProfile: true);
         } catch (e) {
           'profile.initMain error $e'.logger();
         }
@@ -286,7 +286,7 @@ class HomeNotifier with ChangeNotifier {
       switch (index) {
         case 0:
           if (!mounted) return;
-          await pic.initialPic(context, reload: isreload || isNew, list: allContents).then((value) async {
+          await pic.initialPic(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents).then((value) async {
             if (diary.diaryData == null) {
               await initNewHome(context, mounted, forceIndex: 1);
               // diary.initialDiary(context, reload: isreload || isNew, list: allContents);
@@ -299,11 +299,11 @@ class HomeNotifier with ChangeNotifier {
           break;
         case 1:
           if (!mounted) return;
-          await diary.initialDiary(context, reload: isreload || isNew, list: allContents);
+          await diary.initialDiary(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
           break;
         case 2:
           if (!mounted) return;
-          await vid.initialVid(context, reload: isreload || isNew, list: allContents);
+          await vid.initialVid(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
           break;
       }
     }
