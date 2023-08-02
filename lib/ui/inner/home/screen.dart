@@ -20,6 +20,7 @@ import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 // v2 view
@@ -67,13 +68,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   @override
   void didPopNext() {
     Future.delayed(const Duration(milliseconds: 500), () async {
+      final fixContext = Routing.navigatorKey.currentContext;
       isHomeScreen = true;
       'didPopNext isOnHomeScreen $isHomeScreen'.logger();
-      context.read<ReportNotifier>().inPosition = contentPosition.home;
+      (fixContext ?? context).read<ReportNotifier>().inPosition = contentPosition.home;
       if (isHomeScreen) {
         print("isOnHomeScreen hit ads");
-        var homneNotifier = context.read<HomeNotifier>();
-        await homneNotifier.getAdsApsara(context, true);
+        var homneNotifier = (fixContext ?? context).read<HomeNotifier>();
+        await homneNotifier.getAdsApsara((fixContext ?? context), true);
       }
     });
 

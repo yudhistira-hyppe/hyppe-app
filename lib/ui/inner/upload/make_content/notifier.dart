@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/file_extension.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/create_post_response.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -213,23 +214,27 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   }
 
   Future onClose(BuildContext context) async {
-    bool? _sheetResponse;
-    if (isRecordingVideo) {
-      _sheetResponse = await ShowBottomSheet().onShowColouredSheet(
-        context,
-        language.cancelRecording ?? '',
-        color: kHyppeTextWarning,
-      );
-    }
-
-    if (_sheetResponse == null || _sheetResponse) {
+    try{
+      bool? _sheetResponse;
       if (isRecordingVideo) {
-        await context.read<CameraNotifier>().stopVideoRecording();
-        resetVariable(dispose: false);
-      } else {
-        resetVariable(dispose: true);
-        _routing.moveBack();
+        _sheetResponse = await ShowBottomSheet().onShowColouredSheet(
+          context,
+          language.cancelRecording ?? '',
+          color: kHyppeTextWarning,
+        );
       }
+
+      if (_sheetResponse == null || _sheetResponse) {
+        if (isRecordingVideo) {
+          await context.read<CameraNotifier>().stopVideoRecording();
+          resetVariable(dispose: false);
+        } else {
+          resetVariable(dispose: true);
+          _routing.moveBack();
+        }
+      }
+    }catch(e){
+      e.logger();
     }
   }
 
@@ -323,40 +328,45 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   @override
   void onStopRecordedVideo(BuildContext context) {
-    dynamic cameraNotifier;
+    try{
+      dynamic cameraNotifier;
 
-    Wakelock.disable();
-    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
-    if (canDeppAr == 'true') {
-      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
-    } else {
-      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+      Wakelock.disable();
+      final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+      if (canDeppAr == 'true') {
+        cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+      } else {
+        cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+      }
+
+      cancelTimer();
+      _progressDev = 0.0;
+      _progressHuman = 0;
+      _elapsedProgress = 0;
+
+      cameraNotifier.stopVideoRecording().then((file) async {
+        final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
+        if(file?.path != null){
+          notifier.fileContent = [file?.path ?? ''];
+        }else{
+          if (canDeppAr == 'true') {
+            final newFile = await Provider.of<CameraDevicesNotifier>(context, listen: false).cameraController?.stopVideoRecording();
+            notifier.fileContent = [newFile?.path ?? ''];
+          } else {
+            final newFile = await Provider.of<CameraNotifier>(context, listen: false).deepArController?.stopVideoRecording();
+            notifier.fileContent = [newFile?.path ?? ''];
+          }
+        }
+        notifier.featureType = featureType;
+        notifier.aspectRation = cameraNotifier.cameraAspectRatio;
+
+        notifyListeners();
+        await _routing.move(Routes.previewContent);
+      });
+    }catch(e){
+      e.logger();
     }
 
-    cancelTimer();
-    _progressDev = 0.0;
-    _progressHuman = 0;
-    _elapsedProgress = 0;
-
-    cameraNotifier.stopVideoRecording().then((file) async {
-      final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-      if(file?.path != null){
-        notifier.fileContent = [file?.path ?? ''];
-      }else{
-        if (canDeppAr == 'true') {
-          final newFile = await Provider.of<CameraDevicesNotifier>(context, listen: false).cameraController?.stopVideoRecording();
-          notifier.fileContent = [newFile?.path ?? ''];
-        } else {
-          final newFile = await Provider.of<CameraNotifier>(context, listen: false).deepArController?.stopVideoRecording();
-          notifier.fileContent = [newFile?.path ?? ''];
-        }
-      }
-      notifier.featureType = featureType;
-      notifier.aspectRation = cameraNotifier.cameraAspectRatio;
-
-      notifyListeners();
-      await _routing.move(Routes.previewContent);
-    });
   }
 
   @override

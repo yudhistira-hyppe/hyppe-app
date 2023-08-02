@@ -551,7 +551,9 @@ class OtherProfileNotifier with ChangeNotifier {
   void onExit() {
     print("==========Exit==================");
     Future.delayed(const Duration(milliseconds: 500), () {
-      manyUser.removeLast();
+      if(manyUser.isNotEmpty){
+        manyUser.removeLast();
+      }
     });
     print("==========Exit 2==================");
     if (golbalToOther == 1) {

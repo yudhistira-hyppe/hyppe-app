@@ -297,7 +297,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
           isPrepare = true;
         });
       });
-      System().increaseViewCount(context,
+      final fixContext = Routing.navigatorKey.currentContext;
+      System().increaseViewCount(fixContext ?? context,
           _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData());
       isPlay = true;
     });
@@ -971,8 +972,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
   void start() async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
     _animationController?.reset();
+    final fixContext = Routing.navigatorKey.currentContext;
     System()
-        .increaseViewCount(context,
+        .increaseViewCount(fixContext ?? context,
             _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData())
         .whenComplete(() {});
     fAliplayer?.stop();

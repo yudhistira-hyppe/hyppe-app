@@ -144,7 +144,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
       if (res != null) page++;
     } catch (e) {
       '$e'.logger();
-      rethrow;
+      // rethrow;
     } finally {
       loading = false;
     }

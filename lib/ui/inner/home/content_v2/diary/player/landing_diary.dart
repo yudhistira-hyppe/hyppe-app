@@ -295,7 +295,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     });
   }
 
-  void start(ContentData data) async {
+  void start(BuildContext context, ContentData data) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
     fAliplayer?.stop();
@@ -312,7 +312,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     if (data.reportedStatus != 'BLURRED') {
       if (data.isApsara ?? false) {
         _playMode = ModeTypeAliPLayer.auth;
-        await getAuth(data.apsaraId ?? '');
+        await getAuth(context, data.apsaraId ?? '');
       } else {
         _playMode = ModeTypeAliPLayer.url;
         await getOldVideoUrl(data.postID ?? '');
@@ -360,16 +360,17 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     // fAliplayer?.play();
   }
 
-  Future getAuth(String apsaraId) async {
+  Future getAuth(BuildContext context, String apsaraId) async {
 
     try {
+      final fixContext = Routing.navigatorKey.currentContext;
       isloading = true;
       _showLoading = true;
       if(mounted){
         setState(() {});
       }
       final notifier = PostsBloc();
-      await notifier.getAuthApsara(context, apsaraId: apsaraId, check: false);
+      await notifier.getAuthApsara(fixContext ?? context, apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
@@ -715,7 +716,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 if (_lastCurIndex != _curIdx) {
                   fAliplayer?.stop();
                   Future.delayed(const Duration(milliseconds: 700), () {
-                    start(notifier.diaryData?[index] ?? ContentData());
+                    start(context, notifier.diaryData?[index] ?? ContentData());
                     System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData(), check: false);
                   });
                   if (notifier.diaryData?[index].certified ?? false) {
@@ -1206,7 +1207,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       GestureDetector(
                         onTap: () {
                           data.reportedStatus = '';
-                          start(data);
+                          start(context, data);
                           context.read<ReportNotifier>().seeContent(context, data, hyppeDiary);
                           fAliplayer?.prepare();
                           fAliplayer?.play();

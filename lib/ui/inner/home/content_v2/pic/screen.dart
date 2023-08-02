@@ -268,7 +268,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     });
   }
 
-  void start(ContentData data) async {
+  void start(BuildContext context, ContentData data) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
     fAliplayer?.stop();
@@ -287,7 +287,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // await getAuth(data.music?.apsaraMusic ?? '');
     if (data.reportedStatus != 'BLURRED') {
       _playMode = ModeTypeAliPLayer.auth;
-      await getAuth(data.music?.apsaraMusic ?? '');
+      await getAuth(context, data.music?.apsaraMusic ?? '');
     }
 
     setState(() {
@@ -331,13 +331,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // fAliplayer?.play();
   }
 
-  Future getAuth(String apsaraId) async {
+  Future getAuth(BuildContext context, String apsaraId) async {
     setState(() {
       isloading = true;
     });
     try {
+      final fixContext = Routing.navigatorKey.currentContext;
       final notifier = PostsBloc();
-      await notifier.getAuthApsara(context, apsaraId: apsaraId);
+      await notifier.getAuthApsara(fixContext ?? context, apsaraId: apsaraId);
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
@@ -669,7 +670,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   if (notifier.pic?[index].music != null) {
                     print("ada musiknya ${notifier.pic?[index].music}");
                     Future.delayed(const Duration(milliseconds: 100), () {
-                      start(notifier.pic?[index] ?? ContentData());
+                      start(context, notifier.pic?[index] ?? ContentData());
                     });
                   } else {
                     fAliplayer?.stop();

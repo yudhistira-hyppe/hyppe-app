@@ -962,9 +962,10 @@ class PreUploadContentNotifier with ChangeNotifier {
         });
       }
     } else {
+      final fixContext = Routing.navigatorKey.currentContext;
       if (!mounted) return;
       ShowBottomSheet().onShowColouredSheet(
-        context,
+        fixContext ?? context,
         _validateDescription() ? language.categoryCanOnlyWithMin1Characters ?? '' : language.descriptionCanOnlyWithMin5Characters ?? '',
         color: Theme.of(context).colorScheme.error,
         maxLines: 2,
