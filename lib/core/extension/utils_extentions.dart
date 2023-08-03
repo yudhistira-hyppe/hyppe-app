@@ -211,6 +211,14 @@ extension StringDefine on String {
     RegExp exp = new RegExp(r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+');
     return exp.hasMatch(this);
   }
+
+  int convertInteger(){
+    try{
+      return int.parse(this);
+    }catch(e){
+      return 0;
+    }
+  }
 }
 
 extension IntegerExtension on int {
