@@ -856,7 +856,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   (notifier.pic?[index].reportedStatus != 'OWNED' && notifier.pic?[index].reportedStatus != 'BLURRED' && notifier.pic?[index].reportedStatus2 != 'BLURRED') &&
                   notifier.pic?[index].email == email
               ? Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: double.infinity,
                   margin: const EdgeInsets.only(bottom: 16),
                   child: ButtonBoost(
                     onDetail: false,
