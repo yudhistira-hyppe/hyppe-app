@@ -443,4 +443,8 @@ class UrlConstants {
 
   // Get Chalange
   static const String getBannerChalange = "$challange/listing/bannerlandingpage";
+
+  // Get Effect
+  static const String getEffects = "/api/assets/filter/list";
+  static const String downloadEffect = "/api/assets/filter/file";
 }

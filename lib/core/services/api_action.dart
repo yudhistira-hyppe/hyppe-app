@@ -1,10 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:dio_http_formatter/dio_http_formatter.dart';
+import 'package:flutter/material.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/status_code.dart';
 import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'dart:io';
+
+import 'package:hyppe/core/extension/log_extension.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -264,6 +267,7 @@ class ApiAction {
     Map<String, dynamic>? headers,
     responseType = ResponseType.json,
     ProgressCallback? onReceiveProgress,
+    VoidCallback? whenComplete,
   }) async {
     Map<String, dynamic> _headers = <String, dynamic>{};
 
@@ -287,6 +291,11 @@ class ApiAction {
             ),
             onReceiveProgress: onReceiveProgress,
           )
+          .whenComplete(() {
+            if (whenComplete != null) {
+              whenComplete();
+            }
+          })
           .timeout(
             const Duration(seconds: TIMEOUT_DURATION),
             onTimeout: () => throw DioError(

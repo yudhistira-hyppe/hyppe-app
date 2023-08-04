@@ -66,6 +66,8 @@ enum ErrorType {
   getViewerStories,
   getWelcomeNotes,
   getLanguage,
+  getEffect,
+  downloadEffect,
   unknown,
   register,
   login,

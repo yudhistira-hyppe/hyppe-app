@@ -48,6 +48,7 @@ class Repos {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
     required Map<String, dynamic>? headers,
+    VoidCallback? whenComplete,
   }) {
     switch (methodType) {
       case MethodType.get:
@@ -73,6 +74,7 @@ class Repos {
           savePath ?? '',
           headers: headers,
           onReceiveProgress: onReceiveProgress,
+          whenComplete: whenComplete,
         );
       case MethodType.postUploadProfile:
         return _apiAction.postUploadProfile(
@@ -123,6 +125,7 @@ class Repos {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
     bool? postLogsError = false,
+    VoidCallback? whenComplete,
   }) async {
     // print('kkkkkk');
     final _language =
@@ -177,6 +180,7 @@ class Repos {
         cancelToken: cancelToken,
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
+        whenComplete: whenComplete,
       );
       print('_hitApiGetSearchData#4 ${System().getCurrentDate()}');
 
