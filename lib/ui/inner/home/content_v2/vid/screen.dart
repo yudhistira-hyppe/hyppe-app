@@ -320,7 +320,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
           ),
           tenPx,
           VisibilityDetector(
-            key: Key(index.toString()),
+            // key: Key(index.toString()),
+            key: Key(notifier.vidData?[index].postID ?? index.toString()),
             onVisibilityChanged: (info) {
               if (info.visibleFraction >= 0.6) {
                 if (_curIdx != index) {

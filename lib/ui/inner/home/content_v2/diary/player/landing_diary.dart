@@ -75,8 +75,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   int _currentPosition = 0;
   int _bufferPosition = 0;
   int _currentPositionText = 0;
-  int _curIdx = 0;
-  int _lastCurIndex = -1;
+  // int _curIdx = 0;
+  // int _lastCurIndex = -1;
+  String _curPostId = '';
+  String _lastCurPostId = '';
 
   String auth = '';
   String url = '';
@@ -529,7 +531,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         itemBuilder: (context, index) {
                           if (notifier.diaryData == null || home.isLoadingDiary) {
                             fAliplayer?.pause();
-                            _lastCurIndex = -1;
+                            // _lastCurIndex = -1;
+                            _lastCurPostId = '';
                             return CustomShimmer(
                               width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
                               height: 168,
@@ -547,7 +550,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                               ),
                             );
                           }
-                          if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                          // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                          if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
                             isPlay = false;
                             fAliplayer?.stop();
                           }
@@ -665,11 +669,14 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           ),
           tenPx,
           VisibilityDetector(
-            key: Key(index.toString()),
+            // key: Key(index.toString()),
+            key: Key(notifier.diaryData?[index].postID ?? index.toString()),
             onVisibilityChanged: (info) {
               if (info.visibleFraction >= 0.6) {
-                _curIdx = index;
-                if (_lastCurIndex != _curIdx) {
+                // _curIdx = index;
+                _curPostId = notifier.diaryData?[index].postID ?? index.toString();
+                // if (_lastCurIndex != _curIdx) {
+                if (_lastCurPostId != _curPostId) {
                   fAliplayer?.stop();
                   Future.delayed(const Duration(milliseconds: 700), () {
                     start(notifier.diaryData?[index] ?? ContentData());
@@ -681,10 +688,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                     System().disposeBlock();
                   }
                 }
-                _lastCurIndex = _curIdx;
+                // _lastCurIndex = _curIdx;
+                _lastCurPostId = _curPostId;
               }
             },
-            child: Container(
+            child:  Container(
               margin: EdgeInsets.only(bottom: 20),
               // width: MediaQuery.of(context).size.width,
               // height: MediaQuery.of(context).size.width * 16.0 / 10.8,
@@ -696,7 +704,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 aspectRatio: 9 / 16,
                 child: Stack(
                   children: [
-                    _curIdx == index
+                    // _curIdx == index
+                    _curPostId == (notifier.diaryData?[index].postID ?? index.toString())
                         ? ClipRRect(
                             borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                             child: AliPlayerView(
