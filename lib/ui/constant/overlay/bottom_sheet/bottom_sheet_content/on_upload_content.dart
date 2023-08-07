@@ -242,6 +242,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                             ),
                           )
                         : Container(),
+                    thirtyTwoPx,
                   ],
                 )
               ],

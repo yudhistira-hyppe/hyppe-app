@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
@@ -16,7 +15,6 @@ import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 
 class FooterChallangeDetail extends StatefulWidget {
   const FooterChallangeDetail({super.key});
@@ -74,48 +72,49 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
     if (widgetTwo) {
       if (challengeData?.objectChallenge == "AKUN") {
         if (challengeData?.metrik?[0].aktivitasAkun?.isNotEmpty ?? [].isEmpty) {
-          titleText = "Ikuti akun - akun TerhHyppe untuk memenangkan kompetisi";
-          buttonText = "Jelajahi dan Ikuti Akun Terhyppe disini!";
+          titleText = "${tn.translate.followMostHyppeAccountsToWinTheCompetition}"; //Ikuti akun - akun TerhHyppe untuk memenangkan kompetisi
+          buttonText = "${tn.translate.exploreAndFollowtheHyppeAccountsHere}"; //Jelajahi dan Ikuti Akun Terhyppe disini!";
         }
       }
       if (challengeData?.metrik?[0].interaksiKonten?.isNotEmpty ?? [].isEmpty) {
         if (((challengeData?.metrik?[0].interaksiKonten?[0].suka?.isNotEmpty ?? [].isEmpty) || (challengeData?.metrik?[0].interaksiKonten?[0].tonton?.isNotEmpty ?? [].isEmpty)) &&
             (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty)) {
-          titleText = "Unggah konten sebanyak mungkin untuk menangin challenge nya!";
-          buttonText = "Unggah Konten - Konten Menarik Disini!";
+          titleText = "${tn.translate.uploadasmuchcontentaspossibletowinthechallenge}"; //Unggah konten sebanyak mungkin untuk menangin challenge nya!";
+          buttonText = "${tn.translate.uploadInterestingContentHere}"; //Unggah Konten - Konten Menarik Disini!";
         }
       }
     } else {
       if (challengeData?.objectChallenge == "AKUN") {
         if (challengeData?.metrik?[0].aktivitasAkun?.isNotEmpty ?? [].isEmpty) {
           if ((challengeData?.metrik?[0].aktivitasAkun?[0].referal ?? 0) > 0) {
-            titleText = "Gabung dan undang temanmu ke Hyppe sekarang!";
-            buttonText = "Lihat QR Kode";
+            titleText = "${tn.translate.joinandinviteyourfriendstoHyppenow}"; //Gabung dan undang temanmu ke Hyppe sekarang!";
+            buttonText = "${tn.translate.viewQRCode}"; //Lihat QR Kode";
             bgColor = kHyppeLightButtonText;
             textColors = kHyppePrimary;
             referral = true;
           } else {
-            titleText = "Ikuti akun - akun TerhHyppe untuk memenangkan kompetisi";
-            buttonText = "Jelajahi dan Ikuti Akun Terhyppe disini!";
+            titleText = "${tn.translate.followMostHyppeAccountsToWinTheCompetition}"; //"Ikuti akun - akun TerhHyppe untuk memenangkan kompetisi";
+            buttonText = "${tn.translate.exploreAndFollowtheHyppeAccountsHere}"; // "Jelajahi dan Ikuti Akun Terhyppe disini!";
           }
         }
         if (challengeData?.metrik?[0].interaksiKonten?.isNotEmpty ?? [].isEmpty) {
           if (((challengeData?.metrik?[0].interaksiKonten?[0].suka?.isNotEmpty ?? [].isEmpty) || (challengeData?.metrik?[0].interaksiKonten?[0].tonton?.isNotEmpty ?? [].isEmpty)) &&
               (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty)) {
-            titleText = "Yuk!! Like dan Tonton konten-konten menarik sebanyak mungkin untuk menangin challenge nya!";
-            buttonText = "Jelajahi Konten - Konten Menarik Disini!";
+            titleText =
+                "${tn.translate.comeonLikeandwatchasmuchinterestingcontentaspossibletowinthechallenge}"; //Yuk!! Like dan Tonton konten-konten menarik sebanyak mungkin untuk menangin challenge nya!";
+            buttonText = "${tn.translate.exploreInterestingContentHere}"; //Jelajahi Konten - Konten Menarik Disini!";
             bgColor = kHyppeLightButtonText;
             textColors = kHyppePrimary;
           } else {
             if (challengeData?.metrik?[0].interaksiKonten?[0].suka?.isNotEmpty ?? [].isEmpty) {
-              titleText = "Tonton konten-konten menarik disini!";
-              buttonText = "Tonton konten-konten menarik disini!";
+              titleText = "${tn.translate.watchinterestingcontenthere}"; //Tonton konten-konten menarik disini!";
+              buttonText = "${tn.translate.watchinterestingcontenthere}"; //"Tonton konten-konten menarik disini!";
               bgColor = kHyppeLightButtonText;
               textColors = kHyppePrimary;
             }
             if (challengeData?.metrik?[0].interaksiKonten?[0].tonton?.isNotEmpty ?? [].isEmpty) {
-              titleText = "Like konten-konten Hyppe disini!";
-              buttonText = "Jelajahi Konten - Konten Menarik Disini!";
+              titleText = "${tn.translate.likeHyppecontenthere}"; //Like konten-konten Hyppe disini!";
+              buttonText = "${tn.translate.exploreInterestingContentHere}"; //"Jelajahi Konten - Konten Menarik Disini!";
               bgColor = kHyppeLightButtonText;
               textColors = kHyppePrimary;
             }
@@ -126,18 +125,18 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
               var hyppeVid = list?[0].hyppeVid ?? 0;
               var tot = hyppeDiary + hyppePic + hyppeVid;
               if (tot > 1) {
-                titleText = "Gabung dan unggah  ide terbaikmu ke Hyppe sekarang!";
-                buttonText = "Posting Sekarang";
+                titleText = "${tn.translate.joinanduploadyourbestideastoHyppenow}"; // Gabung dan unggah  ide terbaikmu ke Hyppe sekarang!";
+                buttonText = "${tn.translate.postNow}"; // "Posting Sekarang";
               } else {
-                titleText = "Gabung dan unggah  ide terbaikmu ke Hyppe sekarang!";
+                titleText = "${tn.translate.joinanduploadyourbestideastoHyppenow}"; //Gabung dan unggah  ide terbaikmu ke Hyppe sekarang!";
                 if (hyppePic >= 1) {
-                  buttonText = "Posting HyppePic Kamu Sekarang";
+                  buttonText = "${tn.translate.postYourHyppePicNow}"; // ]Posting HyppePic Kamu Sekarang";
                 }
                 if (hyppeVid >= 1) {
-                  buttonText = "Posting HyppeVid Kamu Sekarang";
+                  buttonText = "${tn.translate.postYourHyppeVidNow}"; // "Posting HyppeVid Kamu Sekarang";
                 }
                 if (hyppeDiary >= 1) {
-                  buttonText = "Posting HyppeDiary Kamu Sekarang";
+                  buttonText = "${tn.translate.postYourHyppeDiaryNow}"; // "Posting HyppeDiary Kamu Sekarang";
                 }
               }
             }
@@ -149,21 +148,21 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
         var hyppePic = ((list?.suka?[0].hyppePic ?? 0) >= 1 ? 1 : 0);
         var hyppeVid = ((list?.suka?[0].hyppeVid ?? 0) >= 1 ? 1 : 0) + ((list?.tonton?[0].hyppeVid ?? 0) >= 1 ? 1 : 0);
         var tot = hyppeDiary + hyppePic + hyppeVid;
-        titleText = "Ikuti challenge dan unggah ide terbaikmu disini!";
+        titleText = "${tn.translate.takeonthechallengeanduploadyourbestideashere}"; //Ikuti challenge dan unggah ide terbaikmu disini!";
         textColors = kHyppeLightButtonText;
 
         if (tot > 1) {
-          titleText = "Ikuti challenge dan unggah ide terbaikmu disini!";
-          buttonText = "Posting Sekarang";
+          titleText = "${tn.translate.takeonthechallengeanduploadyourbestideashere}"; // "Ikuti challenge dan unggah ide terbaikmu disini!";
+          buttonText = "${tn.translate.postNow}"; //"Posting Sekarang";
         } else {
           if (hyppePic >= 1) {
-            buttonText = "Posting HyppePic Kamu Sekarang";
+            buttonText = "${tn.translate.postYourHyppePicNow}"; // ]Posting HyppePic Kamu Sekarang";
           }
           if (hyppeVid >= 1) {
-            buttonText = "Posting HyppeVid Kamu Sekarang";
+            buttonText = "${tn.translate.postYourHyppeVidNow}"; //"Posting HyppeVid Kamu Sekarang";
           }
           if (hyppeDiary >= 1) {
-            buttonText = "Posting HyppeDiary Kamu Sekarang";
+            buttonText = "${tn.translate.postYourHyppeDiaryNow}"; //"Posting HyppeDiary Kamu Sekarang";
           }
         }
       }

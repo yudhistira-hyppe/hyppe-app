@@ -262,10 +262,9 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
             } else {
               await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(profile: result, senderEmail: result.email));
             }
-            if(isPlay){
+            if (isPlay) {
               globalAliPlayer?.play();
             }
-
           } else {
             throw "Couldn't find the user ";
           }

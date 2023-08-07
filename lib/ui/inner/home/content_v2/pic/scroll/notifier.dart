@@ -36,7 +36,7 @@ class ScrollPicNotifier with ChangeNotifier {
 
   set pics(List<ContentData>? val) {
     _pics = val;
-    notifyListeners();
+    // notifyListeners();
   }
 
   void onUpdate() => notifyListeners();

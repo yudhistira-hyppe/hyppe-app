@@ -10,9 +10,9 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class WinChallangePop extends StatefulWidget {
-  const WinChallangePop({
-    Key? key,
-  }) : super(key: key);
+  final String title;
+  final String body;
+  const WinChallangePop({Key? key, required this.body, required this.title}) : super(key: key);
 
   @override
   State<WinChallangePop> createState() => _WinChallangePopState();
@@ -47,28 +47,26 @@ class _WinChallangePopState extends State<WinChallangePop> {
                         children: [
                           sixteenPx,
                           Image.asset(
-                            "${AssetPath.pngPath}comingsoon.png",
+                            "${AssetPath.pngPath}won.png",
                             height: 160,
                           ),
                           sixteenPx,
-                          const Text(
-                            'Selamat Kamu Menjadi Pemenang!',
+                          Text(
+                            widget.title,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Color(0xFF3E3E3E),
                               fontSize: 18,
-                              fontFamily: 'Lato',
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                           sixteenPx,
-                          const Text(
-                            'Yipii, akhirnya kamu berhasil jadi pemenang! Jangan lupa untuk temukan hadiahmu di halaman pencapaian, ya!',
+                          Text(
+                            widget.body,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Color(0xFF9B9B9B),
                               fontSize: 14,
-                              fontFamily: 'Lato',
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -100,14 +98,14 @@ class _WinChallangePopState extends State<WinChallangePop> {
                       child: Column(
                         children: [
                           sixteenPx,
-                          SizedBox(
+                          const SizedBox(
                             height: 160,
                           ),
                           sixteenPx,
-                          const Text(
-                            'Selamat Kamu Menjadi Pemenang!',
+                          Text(
+                            widget.title,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.transparent,
                               fontSize: 18,
                               fontFamily: 'Lato',
@@ -115,10 +113,10 @@ class _WinChallangePopState extends State<WinChallangePop> {
                             ),
                           ),
                           sixteenPx,
-                          const Text(
-                            'Yipii, akhirnya kamu berhasil jadi pemenang! Jangan lupa untuk temukan hadiahmu di halaman pencapaian, ya!',
+                          Text(
+                            widget.title,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.transparent,
                               fontSize: 14,
                               fontFamily: 'Lato',

@@ -107,7 +107,15 @@ class NotificationService {
           if (data.postType == 'TRANSACTION') {
             Routing().move(Routes.transaction);
           } else if (data.postType == 'CHALLANGE') {
-            Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: data.postId, index: int.parse(data.index ?? '0')));
+            Routing().move(
+              Routes.chalengeDetail,
+              argument: GeneralArgument(
+                id: data.postId,
+                index: int.parse(data.index ?? '0'),
+                title: data.title,
+                body: data.message,
+              ),
+            );
           } else if (data.postType == 'FOLLOWER' || data.postType == 'FOLLOWING') {
             materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(materialAppKey.currentContext!, data.postId);
           } else {

@@ -712,7 +712,7 @@ class HomeNotifier with ChangeNotifier {
     pic.pic?.removeWhere((element) => element.postID == postID);
     stories.peopleStoriesData?.removeWhere((element) => element.postID == postID);
 
-    if(key != null){
+    if (key != null) {
       final search = context.read<SearchNotifier>();
       search.removeInterestItem(key, postID);
     }

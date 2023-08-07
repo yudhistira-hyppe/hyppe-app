@@ -28,7 +28,9 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/win_challange.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/models/collection/advertising/ads_video_data.dart';
 
@@ -420,7 +422,7 @@ class ShowGeneralDialog {
             content: BannerPop(uploadProses: uploadProses ?? false),
             contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
             backgroundColor: Colors.transparent,
-            insetPadding: EdgeInsets.symmetric(horizontal: SizeConfig.screenWidth! * 0.08),
+            insetPadding: EdgeInsets.symmetric(horizontal: SizeConfig.screenWidth! * 0.02),
           )),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         animation = CurvedAnimation(curve: Curves.ease, parent: animation);
@@ -432,7 +434,7 @@ class ShowGeneralDialog {
     );
   }
 
-  static Future joinChallange(BuildContext context, {bool? uploadProses}) async {
+  static Future joinChallange(BuildContext context, bool mounted, String id, {bool? uploadProses}) async {
     await showGeneralDialog(
       //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
@@ -454,10 +456,12 @@ class ShowGeneralDialog {
           child: child,
         );
       },
-    );
+    ).whenComplete(() {
+      context.read<ChallangeNotifier>().initLeaderboardDetail(Routing.navigatorKey.currentState!.overlay!.context, mounted, id);
+    });
   }
 
-  static Future winChallange(BuildContext context, {bool? uploadProses}) async {
+  static Future winChallange(BuildContext context, String title, String body, {bool? uploadProses}) async {
     await showGeneralDialog(
       //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
@@ -467,7 +471,10 @@ class ShowGeneralDialog {
       pageBuilder: (context, animation, secondAnimation) => WillPopScope(
           onWillPop: () async => true,
           child: AlertDialog(
-            content: WinChallangePop(),
+            content: WinChallangePop(
+              body: body,
+              title: title,
+            ),
             contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
             backgroundColor: Colors.transparent,
             insetPadding: EdgeInsets.symmetric(horizontal: SizeConfig.screenWidth! * 0.08),

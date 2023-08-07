@@ -30,15 +30,19 @@ class ButtonChallangeWidget extends StatelessWidget {
             function?.call();
           },
           child: Container(
-            height: 44,
+            // height: 44,
             width: SizeConfig.screenWidth,
             padding: isloading ? null : const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             child: isloading
-                ? const CustomLoading()
+                ? const SizedBox(
+                    height: 12 + 12 + 14,
+                    child: CustomLoading(),
+                  )
                 : Text(
                     text ?? '',
                     textAlign: TextAlign.center,
                     style: TextStyle(
+                      fontSize: 14,
                       color: textColors,
                       fontWeight: FontWeight.w700,
                     ),

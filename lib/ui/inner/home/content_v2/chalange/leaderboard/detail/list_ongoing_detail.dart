@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_commingsoon_page.dart';
 import 'package:hyppe/ui/constant/widget/custom_empty_page.dart';
@@ -10,6 +11,7 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/butto
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/content_leader.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/litem_leader.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class ListOnGoingDetail extends StatefulWidget {
@@ -24,12 +26,11 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
 
   @override
   Widget build(BuildContext context) {
+    TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
     return Consumer<ChallangeNotifier>(builder: (_, cn, __) {
       var boollUser = false;
       var participant = 0;
-
       cn.leaderBoardDetailData?.getlastrank?.forEach((e) {
-        print(e.isUserLogin);
         if (e.isUserLogin == true) {
           boollUser = true;
         }
@@ -56,6 +57,11 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
               ),
               child: Column(
                 children: [
+                  // GestureDetector(
+                  //     onTap: () {
+                  //       ShowGeneralDialog.joinChallange(context, mounted, cn.leaderBoardDetailData?.challengeId ?? '');
+                  //     },
+                  //     child: Text("sdsd")),
                   cn.leaderBoardDetailData?.onGoing == false
                       ? const Padding(
                           padding: EdgeInsets.all(32.0),
@@ -106,36 +112,38 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                         ),
                                       ),
                                     ),
-                  boollUser
+                  cn.leaderBoardDetailData?.onGoing == false
                       ? Container()
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                          child: ButtonChallangeWidget(
-                              bgColor: cn.leaderBoardDetailData?.joined == 'NOT ALLOWED' ? kHyppeBottomNavBarIcon : kHyppePrimary,
-                              text: "Ikuti Challange",
-                              isloading: isloadingButton,
-                              function: () async {
-                                if (!isloadingButton) {
-                                  setState(() {
-                                    isloadingButton = true;
-                                  });
-                                  await cn.joinChallange(context, cn.leaderBoardDetailData?.challengeId ?? '').then((value) {
-                                    if (value == true) {
+                      : boollUser
+                          ? Container()
+                          : Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                              child: ButtonChallangeWidget(
+                                  bgColor: cn.leaderBoardDetailData?.joined == 'NOT ALLOWED' ? kHyppeBottomNavBarIcon : kHyppePrimary,
+                                  text: "${tn.translate.joinTheChallengeNow}",
+                                  isloading: isloadingButton,
+                                  function: () async {
+                                    if (!isloadingButton) {
                                       setState(() {
-                                        isloadingButton = false;
+                                        isloadingButton = true;
                                       });
-                                      ShowGeneralDialog.joinChallange(context).then((value) => print("kelar om")).whenComplete(() {
-                                        cn.initLeaderboardDetail(context, cn.leaderBoardDetailData?.challengeId ?? '');
-                                      });
-                                    } else {
-                                      setState(() {
-                                        isloadingButton = false;
+                                      await cn.joinChallange(context, cn.leaderBoardDetailData?.challengeId ?? '').then((value) {
+                                        if (value == true) {
+                                          setState(() {
+                                            isloadingButton = false;
+                                          });
+                                          ShowGeneralDialog.joinChallange(context, mounted, cn.leaderBoardDetailData?.challengeId ?? '').then((value) => print("kelar om")).whenComplete(() {
+                                            // cn.initLeaderboardDetail(context, mounted, cn.leaderBoardDetailData?.challengeId ?? '');
+                                          });
+                                        } else {
+                                          setState(() {
+                                            isloadingButton = false;
+                                          });
+                                        }
                                       });
                                     }
-                                  });
-                                }
-                              }),
-                        ),
+                                  }),
+                            ),
                 ],
               ),
             ),

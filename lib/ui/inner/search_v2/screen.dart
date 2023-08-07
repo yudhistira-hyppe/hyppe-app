@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
@@ -41,8 +42,11 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final CarouselController _controllerSlider = CarouselController();
+
   late TabController _tabController;
   int _currentIndex = 0;
+  int _currentIndexSlider = 0;
 
   @override
   void didChangeDependencies() {
@@ -104,10 +108,13 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     Future.delayed(const Duration(milliseconds: 500), () {
       (Routing.navigatorKey.currentContext ?? context).read<ReportNotifier>().inPosition = contentPosition.searchFirst;
       final notifier = Routing.navigatorKey.currentContext!.read<SearchNotifier>();
+      _controllerSlider.jumpToPage(_currentIndexSlider);
       if (notifier.layout == SearchLayout.searchMore) {
         // notifier.getDataSearch(context);
       }
     });
+    // debugPrint(_currentIndexSlider.toString());
+    //
 
     super.didPopNext();
   }
@@ -130,6 +137,11 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   void didPush() {
     'didPush searchFirst false'.logger();
     super.didPush();
+  }
+
+  void changeIndexSlide(int val) {
+    _currentIndexSlider = val;
+    print(_currentIndexSlider); //newValue
   }
 
   @override
@@ -233,7 +245,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
                         },
                       ),
                     ),
-                    EventBannerWidget(),
+                    EventBannerWidget(controller: _controllerSlider, callback: changeIndexSlide),
                     const HashtagScreen(),
                     InterestScreen(
                       onClick: (value) {

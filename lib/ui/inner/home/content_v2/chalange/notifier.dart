@@ -49,6 +49,7 @@ class ChallangeNotifier with ChangeNotifier {
 
   List<BannerChalangeModel> bannerData = [];
   List<BannerChalangeModel> bannerSearchData = [];
+  List<BannerChalangeModel> bannerLeaderboardData = [];
   List<ChallangeModel> listChallangeData = [];
   List<LeaderboardChallangeModel>? leaderBoardDataArray = [];
   LeaderboardChallangeModel? leaderBoardData;
@@ -112,7 +113,7 @@ class ChallangeNotifier with ChangeNotifier {
     }
   }
 
-  Future getBannerLanding(BuildContext context, {bool ispopUp = false, bool isLeaderBoard = false}) async {
+  Future getBannerLanding(BuildContext context, {bool ispopUp = false, bool isSearch = false, bool isLeaderBoard = false}) async {
     checkInet(context);
     isLoading = true;
     notifyListeners();
@@ -136,8 +137,13 @@ class ChallangeNotifier with ChangeNotifier {
         bannerData = [];
         bannerFatch.data.forEach((v) => bannerData.add(BannerChalangeModel.fromJson(v)));
       } else {
-        bannerSearchData = [];
-        bannerFatch.data.forEach((v) => bannerSearchData.add(BannerChalangeModel.fromJson(v)));
+        if (isSearch) {
+          bannerSearchData = [];
+          bannerFatch.data.forEach((v) => bannerSearchData.add(BannerChalangeModel.fromJson(v)));
+        } else {
+          bannerLeaderboardData = [];
+          bannerFatch.data.forEach((v) => bannerLeaderboardData.add(BannerChalangeModel.fromJson(v)));
+        }
       }
       isLoading = false;
       notifyListeners();
@@ -157,15 +163,18 @@ class ChallangeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future initLeaderboardDetail(BuildContext context, String id) async {
+  Future initLeaderboardDetail(BuildContext context, bool mounted, String id) async {
     print("=========asdasdasd");
     isLoadingLeaderboard = true;
     notifyListeners();
     checkInet(context);
     await getLeaderBoard(context, id, isDetail: true);
-    var result = await System().createdReferralLink(context);
-    debugPrint("REFERRAL => " + result.toString());
-    referralLink = result.toString();
+    if (mounted) {
+      var result = await System().createdReferralLink(context);
+      referralLink = result.toString();
+      print("hahahaha $referralLink");
+    }
+
     isLoadingLeaderboard = false;
 
     notifyListeners();
@@ -229,6 +238,7 @@ class ChallangeNotifier with ChangeNotifier {
             leaderBoardDetaiEndlData = getdata;
             if (leaderBoardDetailData?.sId == null) {
               leaderBoardDetailData = getdata;
+              getOption(getdata ?? LeaderboardChallangeModel(), session: selectOptionSession);
             }
           } else {
             leaderBoardDetailData = getdata;
@@ -397,17 +407,27 @@ class ChallangeNotifier with ChangeNotifier {
     on.navigateToSeeAllScreen(context, index - 1, data: data, title: widgetTitle);
   }
 
-  Future getOption(LeaderboardChallangeModel data, {DateTime? dateTime}) async {
+  Future getOption(LeaderboardChallangeModel data, {DateTime? dateTime, int? session}) async {
     if (dateTime == null) {
       data.subChallenges?.forEach((element) {
         element.detail?.forEach((e) {
           e.detail?.forEach((el) {
-            if (el.session == (data.session ?? 0) - 1) {
-              optionData = e;
-              String month = (e.bulan ?? 0) < 10 ? "0${e.bulan}" : "${e.bulan}";
-              String monthYear = "${e.tahun}-$month-01 00:00:00";
-              challangeOption = DateTime.parse(monthYear);
-              selectOptionSession = (data.session ?? 0) - 1;
+            if (session != null) {
+              if (el.session == session) {
+                optionData = e;
+                String month = (e.bulan ?? 0) < 10 ? "0${e.bulan}" : "${e.bulan}";
+                String monthYear = "${e.tahun}-$month-01 00:00:00";
+                challangeOption = DateTime.parse(monthYear);
+                selectOptionSession = session;
+              }
+            } else {
+              if (el.session == (data.session ?? 0) - 1) {
+                optionData = e;
+                String month = (e.bulan ?? 0) < 10 ? "0${e.bulan}" : "${e.bulan}";
+                String monthYear = "${e.tahun}-$month-01 00:00:00";
+                challangeOption = DateTime.parse(monthYear);
+                selectOptionSession = (data.session ?? 0) - 1;
+              }
             }
           });
         });

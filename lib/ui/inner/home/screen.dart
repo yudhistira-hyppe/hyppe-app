@@ -13,6 +13,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -24,6 +25,7 @@ import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 // v2 view
@@ -245,6 +247,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                             sixPx,
                             const HyppePreviewStories(),
                             sixPx,
+                            // GestureDetector(
+                            //     onTap: () {
+                            //       _showMessage("hahaha");
+                            //     },
+                            //     child: Text("hahahahaha")),
                             Container(
                               padding: const EdgeInsets.all(16),
                               color: kHyppeLightSurface,

@@ -64,7 +64,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
       });
 
       var cn = context.read<ChallangeNotifier>();
-      cn.initLeaderboardDetail(context, widget.arguments?.id ?? '');
+      cn.initLeaderboardDetail(context, mounted, widget.arguments?.id ?? '');
       chllangeid = widget.arguments?.id ?? '';
 
       _tabController.animation?.addListener(() {
@@ -97,7 +97,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
             isDetail: true,
           );
           Future.delayed(const Duration(milliseconds: 500), () {
-            ShowGeneralDialog.winChallange(context);
+            ShowGeneralDialog.winChallange(context, widget.arguments?.title ?? '', widget.arguments?.body ?? '');
           });
         });
       }
@@ -142,11 +142,21 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
         inTime = "Menit";
     }
 
-    if (cn.leaderBoardDetailData?.onGoing == true) {
-      dateText = "Berakhir dalam ${cn.leaderBoardDetailData?.totalDays} $inTime Lagi";
+    if (cn.leaderBoardDetailData?.status == "BERAKHIR") {
+      dateText = "Kompetisi telah berakhir";
     } else {
-      dateText = "Mulai  dalam ${cn.leaderBoardDetailData?.totalDays} $inTime Lagi";
+      if (cn.leaderBoardDetailData?.onGoing == true) {
+        dateText = "Berakhir dalam ${cn.leaderBoardDetailData?.totalDays} $inTime Lagi";
+      } else {
+        dateText = "Mulai  dalam ${cn.leaderBoardDetailData?.totalDays} $inTime Lagi";
+      }
     }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -212,7 +222,9 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
             }
             return notification.depth == 0;
           },
-          onRefresh: () async {},
+          onRefresh: () async {
+            await cn.initLeaderboardDetail(context, mounted, widget.arguments?.id ?? '');
+          },
           child: cn.isLoadingLeaderboard
               //  || (cn.leaderBoardDetailData?.sId == null || cn.leaderBoardDetaiEndlData?.sId == null)
               ? const ShimmerListLeaderboard()

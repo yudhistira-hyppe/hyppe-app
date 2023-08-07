@@ -37,10 +37,11 @@ class _BannerPopState extends State<BannerPop> {
             children: [
               Container(
                 decoration: BoxDecoration(
+                  // color: Colors.red,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                height: size.width + 16,
-                width: size.width,
+                height: size.width + 20,
+                width: size.width - 20,
                 child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
                   // return Container(
                   //   width: size.width,
@@ -54,57 +55,66 @@ class _BannerPopState extends State<BannerPop> {
                   //       )),
                   // );
                   return Container(
+                    padding: EdgeInsets.only(bottom: 12),
                     width: size.width,
                     height: constraints.maxHeight,
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                    child: CarouselSlider(
-                      options: CarouselOptions(
-                          // height: 300
-                          enlargeCenterPage: false,
-                          viewportFraction: 1.0,
-                          aspectRatio: 1 / 1,
-                          autoPlayInterval: Duration(seconds: 3),
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _current = index;
-                            });
-                          }),
-                      items: notifier.bannerData
-                          .map((item) => ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Routing().moveBack();
-                                    Routing().move(Routes.chalengeDetail, argument: GeneralArgument()..id = item.sId);
-                                  },
-                                  child: Center(
-                                      child: Image.network(
-                                    item.bannerLandingpage ?? '',
-                                    height: constraints.maxHeight,
-                                    fit: BoxFit.cover,
-                                    loadingBuilder: (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                        child: Container(
-                                          height: SizeConfig.screenHeight,
-                                          width: SizeConfig.screenWidth,
-                                          color: Colors.black,
-                                          child: UnconstrainedBox(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Container(
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                              // height: size.width,
+                              enlargeCenterPage: false,
+                              viewportFraction: 1.2,
+                              aspectRatio: 1 / 1,
+                              padEnds: true,
+                              enableInfiniteScroll: false,
+                              autoPlayInterval: Duration(seconds: 3),
+                              disableCenter: true,
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  _current = index;
+                                });
+                              }),
+                          items: notifier.bannerData
+                              .map((item) => ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Routing().moveBack();
+                                        Routing().move(Routes.chalengeDetail, argument: GeneralArgument()..id = item.sId);
+                                      },
+                                      child: Center(
+                                          child: Image.network(
+                                        item.bannerLandingpage ?? '',
+                                        height: constraints.maxHeight,
+                                        fit: BoxFit.cover,
+                                        loadingBuilder: (context, child, loadingProgress) {
+                                          if (loadingProgress == null) return child;
+                                          return Center(
                                             child: Container(
-                                              height: 50,
-                                              width: 50,
-                                              child: CircularProgressIndicator(
-                                                  // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                  ),
+                                              height: size.width - 20,
+                                              width: SizeConfig.screenWidth,
+                                              color: Colors.black,
+                                              child: UnconstrainedBox(
+                                                child: Container(
+                                                  height: 50,
+                                                  width: 50,
+                                                  child: CircularProgressIndicator(
+                                                      // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                      ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  )),
-                                ),
-                              ))
-                          .toList(),
+                                          );
+                                        },
+                                      )),
+                                    ),
+                                  ))
+                              .toList(),
+                        ),
+                      ),
                     ),
                   );
                 }),
@@ -120,14 +130,16 @@ class _BannerPopState extends State<BannerPop> {
                 },
                 child: ClipOval(
                   child: Container(
-                    padding: EdgeInsets.all(4),
-                    color: kHyppeTextLightPrimary,
+                    padding: EdgeInsets.only(
+                      right: 2,
+                    ),
+                    // color: kHyppeTextLightPrimary,
                     child: const CustomIconWidget(
-                      width: 20,
-                      height: 20,
-                      iconData: "${AssetPath.vectorPath}close.svg",
+                      width: 32,
+                      height: 32,
+                      iconData: "${AssetPath.vectorPath}close-solid.svg",
                       defaultColor: false,
-                      color: Colors.white,
+                      // color: Colors.white,
                     ),
                   ),
                 ),
@@ -145,8 +157,8 @@ class _BannerPopState extends State<BannerPop> {
                     child: Container(
                       width: _current == entry.key ? 12 : 6.0,
                       height: 6.0,
-                      margin: const EdgeInsets.only(top: 20, left: 4, right: 4),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: (_current == entry.key ? kHyppePrimary : Color(0xffcecece))),
+                      margin: const EdgeInsets.only(top: 30, left: 4, right: 4),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: (_current == entry.key ? Color(0xffAB23B0) : Color(0xffcecece))),
                     ),
                   );
                 }).toList(),

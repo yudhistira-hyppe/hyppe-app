@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/models/collection/notification_v2/notification.dart';
@@ -33,7 +34,7 @@ class _ComponentState extends State<Component> {
     SizeConfig().init(context);
     return InkWell(
       onTap: () async {
-        if(!isLoading){
+        if (!isLoading) {
           setState(() {
             isLoading = true;
           });
@@ -47,6 +48,8 @@ class _ComponentState extends State<Component> {
 
           if (listTransacation.contains(eventType)) {
             await Routing().move(Routes.transaction);
+          } else if (eventType == NotificationCategory.challange) {
+            Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: widget.data?.postID));
           } else {
             await context.read<NotificationNotifier>().navigateToContent(context, widget.data?.postType, widget.data?.postID);
           }
@@ -108,8 +111,9 @@ class _ComponentState extends State<Component> {
                       ),
                       sixPx,
                       CustomTextWidget(
-                        textToDisplay:
-                        widget.data?.createdAt != null ? System().readTimestamp(DateFormat("yyyy-MM-dd hh:mm:ss").parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true) : '',
+                        textToDisplay: widget.data?.createdAt != null
+                            ? System().readTimestamp(DateFormat("yyyy-MM-dd hh:mm:ss").parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true)
+                            : '',
                         textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
                       ),
                     ],
@@ -124,4 +128,3 @@ class _ComponentState extends State<Component> {
     );
   }
 }
-

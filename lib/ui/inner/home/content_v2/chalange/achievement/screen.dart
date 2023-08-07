@@ -62,8 +62,8 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
               Routing().moveBack();
             },
           ),
-          title: const Text(
-            'Halaman Pencapaian',
+          title: Text(
+            lang?.achievementsPage ?? '',
             style: TextStyle(
               fontSize: 16,
               fontFamily: 'Lato',
@@ -102,7 +102,7 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
                               ),
                               twelvePx,
                               Text(
-                                "Lihat Koleksi Badge Saya",
+                                "${lang?.seeMyBadgeCollection}",
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
@@ -122,8 +122,8 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Daftar Pencapaian Saya',
-                                  style: TextStyle(
+                                  '${lang?.myListOfAchievements}',
+                                  style: const TextStyle(
                                     color: Color(0xFF3E3E3E),
                                     fontSize: 14,
                                     fontFamily: 'Lato',
@@ -153,19 +153,19 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
-        children: const [
-          Text("Belum Ada Pencapainmu",
-              style: TextStyle(
+        children: [
+          Text("${lang?.youHaveNotAchievedAnythingYet}",
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
               )),
           twelvePx,
           Text(
-            "Ikuti challenge dan raihlah kesempatan hadiah menarik lainnya!",
+            "${lang?.joinTheChallengeAndGetOther}",
             textAlign: TextAlign.center,
           ),
           twentyFourPx,
-          ButtonChallangeWidget(bgColor: kHyppePrimary, text: "Ikuti Challange"),
+          ButtonChallangeWidget(bgColor: kHyppePrimary, text: "${lang?.joinTheChallengeNow}"),
         ],
       ),
     );
@@ -238,7 +238,7 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
                   ),
                   fourPx,
                   Text(
-                    'Periode ${data.session}',
+                    'Period ${data.session}',
                     style: const TextStyle(
                       color: Color(0xFF3E3E3E),
                       fontSize: 12,

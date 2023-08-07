@@ -904,6 +904,8 @@ class System {
         return 'ADS CLICK';
       case NotificationCategory.adsView:
         return 'ADS VIEW';
+      case NotificationCategory.challange:
+        return 'CHALLANGE';
     }
   }
 
@@ -927,6 +929,8 @@ class System {
         return NotificationCategory.adsClick;
       case 'ADS VIEW':
         return NotificationCategory.adsView;
+      case 'CHALLANGE':
+        return NotificationCategory.challange;
       default:
         return NotificationCategory.all;
     }
@@ -1043,7 +1047,8 @@ class System {
   }
 
   Future<Uri> createdReferralLink(BuildContext context) async {
-    final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
+    // final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
+    final notifier = context.read<SelfProfileNotifier>();
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: Env.data.deeplinkBaseUrl,
       link: Uri.parse('${Env.data.deeplinkBaseUrl}${Routes.otherProfile}?referral=1&sender_email=${notifier.user.profile?.email}'),
@@ -1404,7 +1409,7 @@ class System {
       print("===============222222 ---- ${difference.inHours}");
       print("===============222222 ---- ${difference.inMinutes}");
       // if (difference.inHours >= 24) {
-      if (difference.inMinutes <= -15) {
+      if (difference.inMinutes <= -0) {
         await challange.getBannerLanding(context, ispopUp: true);
         SharedPreference().writeStorage(SpKeys.datetimeLastShowChallange, DateTime.now().toString());
         return ShowGeneralDialog.showBannerPop(context);

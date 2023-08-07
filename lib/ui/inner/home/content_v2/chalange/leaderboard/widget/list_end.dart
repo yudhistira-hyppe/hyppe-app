@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_commingsoon_page.dart';
 import 'package:hyppe/ui/constant/widget/custom_empty_page.dart';
@@ -24,6 +26,7 @@ class ListEnd extends StatefulWidget {
 class _ListEndState extends State<ListEnd> {
   @override
   Widget build(BuildContext context) {
+    TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
     return Consumer<ChallangeNotifier>(builder: (_, cn, __) {
       var participant = 0;
       if (cn.leaderBoardEndData?.challengeData?[0].objectChallenge == "KONTEN") {
@@ -57,7 +60,7 @@ class _ListEndState extends State<ListEnd> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Challenge Periode ${cn.selectOptionSession}',
+                      '${tn.translate.challengePeriod} ${cn.selectOptionSession}',
                       style: TextStyle(
                         color: Color(0xFF9B9B9B),
                         fontWeight: FontWeight.w400,
@@ -72,29 +75,29 @@ class _ListEndState extends State<ListEnd> {
               ),
             ),
             cn.leaderBoardEndData?.onGoing == false
-                ? const Padding(
-                    padding: EdgeInsets.all(32.0),
+                ? Padding(
+                    padding: const EdgeInsets.all(32.0),
                     child: CustomCommingSoon(
-                      title: 'Yuk, Ikut Kompetisi Menarik',
-                      subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                      title: '${tn.translate.theresNoLeaderboardAvailable}',
+                      subtitle: '${tn.translate.getFirstPlaceByFollowingThisExciting}',
                     ),
                   )
                 : cn.isLoadingLeaderboard
                     ? Container()
                     : cn.leaderBoardEndData?.getlastrank?.isEmpty ?? [].isEmpty
-                        ? const Padding(
-                            padding: EdgeInsets.all(32.0),
+                        ? Padding(
+                            padding: const EdgeInsets.all(32.0),
                             child: CustomEmptyWidget(
-                              title: 'Belum ada Leaderboard Tersedia',
-                              subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                              title: '${tn.translate.theresNoLeaderboardAvailable}',
+                              subtitle: '${tn.translate.getFirstPlaceByFollowingThisExciting}',
                             ),
                           )
                         : cn.leaderBoardEndData?.getlastrank?[0].score == 0 || participant == 0
-                            ? const Padding(
-                                padding: EdgeInsets.all(32.0),
+                            ? Padding(
+                                padding: const EdgeInsets.all(32.0),
                                 child: CustomEmptyWidget(
-                                  title: 'Belum ada Leaderboard Tersedia',
-                                  subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                                  title: '${tn.translate.theresNoLeaderboardAvailable}',
+                                  subtitle: '${tn.translate.getFirstPlaceByFollowingThisExciting}',
                                 ),
                               )
                             : ScrollConfiguration(
@@ -104,34 +107,39 @@ class _ListEndState extends State<ListEnd> {
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
-                                    if (cn.leaderBoardEndData?.challengeData?[0].objectChallenge == 'KONTEN') {
-                                      return GestureDetector(
-                                          onTap: () {
-                                            var post = cn.leaderBoardEndData?.getlastrank?[index].postChallengess?[0];
-                                            var email = cn.leaderBoardEndData?.getlastrank?[index].email;
-                                            cn.navigateToScreen(context, post?.index, email, post?.postType);
-                                          },
-                                          child: ContentLeaderboard(data: cn.leaderBoardEndData?.getlastrank?[index]));
+                                    if (cn.leaderBoardEndData?.getlastrank?[index].score == 0) {
+                                      return Container();
                                     } else {
-                                      return GestureDetector(
-                                          onTap: () {
-                                            Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardEndData?.getlastrank?[index].email));
-                                          },
-                                          child: ItemLeader(data: cn.leaderBoardEndData?.getlastrank?[index]));
+                                      if (cn.leaderBoardEndData?.challengeData?[0].objectChallenge == 'KONTEN') {
+                                        return GestureDetector(
+                                            onTap: () {
+                                              var post = cn.leaderBoardEndData?.getlastrank?[index].postChallengess?[0];
+                                              var email = cn.leaderBoardEndData?.getlastrank?[index].email;
+                                              cn.navigateToScreen(context, post?.index, email, post?.postType);
+                                            },
+                                            child: ContentLeaderboard(data: cn.leaderBoardEndData?.getlastrank?[index]));
+                                      } else {
+                                        return GestureDetector(
+                                            onTap: () {
+                                              System().navigateToProfile(context, cn.leaderBoardEndData?.getlastrank?[index].email ?? '');
+                                              // Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardEndData?.getlastrank?[index].email));
+                                            },
+                                            child: ItemLeader(data: cn.leaderBoardEndData?.getlastrank?[index]));
+                                      }
                                     }
                                   },
                                 ),
                               ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              child: ButtonChallangeWidget(
-                  bgColor: kHyppePrimary,
-                  text: "Yuk, Join Challenge Sekarang",
-                  function: () {
-                    // print(cn.leaderBoardEndData?.challengeId);
-                    Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: cn.leaderBoardEndData?.challengeId));
-                  }),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            //   child: ButtonChallangeWidget(
+            //       bgColor: kHyppePrimary,
+            //       text: "Yuk, Join Challenge Sekarang",
+            //       function: () {
+            //         // print(cn.leaderBoardEndData?.challengeId);
+            //         Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: cn.leaderBoardEndData?.challengeId));
+            //       }),
+            // ),
             cn.listChallangeData.isEmpty
                 ? Container()
                 : Column(
@@ -144,7 +152,7 @@ class _ListEndState extends State<ListEnd> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                         child: Text(
-                          "Ikuti Challenge Menarik Lainnya",
+                          tn.translate.joinOtherInterestingChallenges ?? '',
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -160,9 +168,9 @@ class _ListEndState extends State<ListEnd> {
                           itemBuilder: (context, index) {
                             var dateText = "";
                             if (cn.listChallangeData[index].onGoing == true) {
-                              dateText = "Berakhir dalam ${cn.listChallangeData[index].totalDays} Hari Lagi";
+                              dateText = "${tn.translate.endsIn} ${cn.listChallangeData[index].totalDays} ${tn.translate.hariLagi}";
                             } else {
-                              dateText = "Mulai dalam ${cn.listChallangeData[index].totalDays} Hari Lagi";
+                              dateText = "${tn.translate.startIn} ${cn.listChallangeData[index].totalDays} ${tn.translate.hariLagi}";
                             }
                             return CardChalange(
                               data: cn.listChallangeData[index],

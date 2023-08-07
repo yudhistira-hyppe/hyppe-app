@@ -99,6 +99,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   int _currentPositionText = 0;
   int _curIdx = 0;
   int _lastCurIndex = -1;
+  int scrollIndex = 0;
 
   String auth = '';
   String url = '';
@@ -115,6 +116,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
+  final ScrollOffsetListener scrollOffsetListener = ScrollOffsetListener.create();
 
   /// Listener that reports the position of items when the list is scrolled.
   final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
@@ -152,14 +154,46 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
       itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
+      scrollIndex = widget.arguments?.page ?? 0;
+      print("00000000000000 ${widget.arguments?.page}");
       _initListener();
     });
     var index = 0;
     var lastIndex = 0;
     final pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
 
+    bool isScroll = false;
+    scrollOffsetListener.changes.listen((event) {
+      if (event.isNegative == false) {
+        scrollIndex++;
+      } else {
+        scrollIndex--;
+        // itemScrollController.scrollTo(
+        //   index: scrollIndex,
+        //   // alignment:
+        //   duration: Duration(milliseconds: 300),
+        // );
+      }
+      print("-=-=-event=-=-=");
+      print(event);
+      print(event.sign);
+      print(event.isNegative);
+      print(event.isInfinite);
+      // itemScrollController.scrollTo(
+      //   index: scrollIndex,
+      //   // alignment:
+      //   duration: Duration(milliseconds: 300),
+      // );
+    });
+
     itemPositionsListener.itemPositions.addListener(() async {
+      print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
+      print(itemPositionsListener.itemPositions.value.first);
+      print(itemPositionsListener.itemPositions.value.last);
+
       index = itemPositionsListener.itemPositions.value.first.index;
+
       if (lastIndex != index) {
         bool connect = await System().checkConnections();
 
@@ -186,11 +220,15 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
           }
         }
         lastIndex = index;
+        // itemScrollController.scrollTo(
+        //   index: itemPositionsListener.itemPositions.value.last.index,
+        //   // alignment:
+        //   duration: Duration(milliseconds: 300),
+        // );
       }
     });
 
     checkInet();
-
     super.initState();
   }
 
@@ -564,6 +602,18 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   int _currentItem = 0;
   ValueNotifier<int> _networklHasErrorNotifier = ValueNotifier(0);
 
+  _onStartScroll(ScrollMetrics metrics) {
+    print("Scroll Start");
+  }
+
+  _onUpdateScroll(ScrollMetrics metrics) {
+    print("Scroll Update");
+  }
+
+  _onEndScroll(ScrollMetrics metrics) {
+    print("Scroll End");
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -624,9 +674,19 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               }
                             }
                           },
-                          child: NotificationListener<OverscrollIndicatorNotification>(
-                            onNotification: (overscroll) {
-                              overscroll.disallowIndicator();
+                          child: NotificationListener<ScrollNotification>(
+                            onNotification: (scrollNotification) {
+                              print("scrollNotification ===== $scrollNotification");
+                              // scrollNotification.disallowIndicator();
+                              if (scrollNotification is ScrollStartNotification) {
+                                print("=======start=======");
+                                // _onStartScroll(scrollNotification.metrics);
+                              } else if (scrollNotification is ScrollUpdateNotification) {
+                                // _onUpdateScroll(scrollNotification.metrics);
+                              } else if (scrollNotification is ScrollEndNotification) {
+                                print("=======end=======");
+                                // _onEndScroll(scrollNotification.metrics);
+                              }
 
                               return false;
                             },
@@ -635,11 +695,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               itemScrollController: itemScrollController,
                               itemPositionsListener: itemPositionsListener,
                               scrollOffsetController: scrollOffsetController,
+                              scrollOffsetListener: scrollOffsetListener,
                               // scrollDirection: Axis.horizontal,
-                              physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
+                              physics: isZoom ? const NeverScrollableScrollPhysics() : const PageScrollPhysics(),
                               shrinkWrap: false,
                               itemCount: pics?.length ?? 0,
                               padding: const EdgeInsets.symmetric(horizontal: 11.5),
+
                               itemBuilder: (context, index) {
                                 if (pics == null || home.isLoadingPict) {
                                   fAliplayer?.pause();
@@ -1328,13 +1390,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                           )),
                       data.email == SharedPreference().readStorage(SpKeys.email)
                           ? GestureDetector(
-                              onTap: ()async{
-                                System().checkConnections().then((value){
-                                  if(value){
+                              onTap: () async {
+                                System().checkConnections().then((value) {
+                                  if (value) {
                                     Routing().move(Routes.appeal, argument: data);
                                   }
                                 });
-
                               },
                               child: Container(
                                   padding: const EdgeInsets.all(8),

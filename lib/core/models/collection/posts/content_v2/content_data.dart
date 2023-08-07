@@ -195,67 +195,67 @@ class ContentData {
   FlutterAliplayer? fAliplayerAds;
   UserBadgeModel? urluserBadge;
 
-  ContentData(
-      {this.metadata,
-      this.mediaBasePath,
-      this.postType,
-      this.mediaUri,
-      this.isLiked,
-      this.description,
-      this.active,
-      this.privacy,
-      this.mediaType,
-      this.mediaThumbEndPoint,
-      this.postID,
-      this.isIdVerified,
-      this.title,
-      this.isViewed,
-      this.tags = const [],
-      this.allowComments,
-      this.certified,
-      this.createdAt,
-      this.insight,
-      this.mediaThumbUri,
-      this.mediaEndpoint,
-      this.email,
-      this.updatedAt,
-      this.username,
-      this.fullThumbPath,
-      this.fullContentPath,
-      this.avatar,
-      this.location,
-      this.visibility,
-      this.cats,
-      this.tagPeople,
-      this.likes,
-      this.saleAmount,
-      this.saleView,
-      this.saleLike,
-      this.isApsara,
-      this.apsaraId,
-      this.apsaraThumbId,
-      this.isReport,
-      this.boosted = const [],
-      this.boostCount,
-      this.isBoost,
-      this.boostJangkauan,
-      this.statusBoost,
-      this.reportedStatus,
-      this.reportedStatus2,
-      this.music,
-      this.reportedUserCount,
-      this.media,
-      this.apsara,
-      this.isShared,
-      this.following,
-      this.comment,
-      this.isDiaryPlay,
-      this.comments,
-      this.isNewFollowing,
-      this.isLoading = false,
-      this.fullContent,
-      this.urluserBadge,
-    });
+  ContentData({
+    this.metadata,
+    this.mediaBasePath,
+    this.postType,
+    this.mediaUri,
+    this.isLiked,
+    this.description,
+    this.active,
+    this.privacy,
+    this.mediaType,
+    this.mediaThumbEndPoint,
+    this.postID,
+    this.isIdVerified,
+    this.title,
+    this.isViewed,
+    this.tags = const [],
+    this.allowComments,
+    this.certified,
+    this.createdAt,
+    this.insight,
+    this.mediaThumbUri,
+    this.mediaEndpoint,
+    this.email,
+    this.updatedAt,
+    this.username,
+    this.fullThumbPath,
+    this.fullContentPath,
+    this.avatar,
+    this.location,
+    this.visibility,
+    this.cats,
+    this.tagPeople,
+    this.likes,
+    this.saleAmount,
+    this.saleView,
+    this.saleLike,
+    this.isApsara,
+    this.apsaraId,
+    this.apsaraThumbId,
+    this.isReport,
+    this.boosted = const [],
+    this.boostCount,
+    this.isBoost,
+    this.boostJangkauan,
+    this.statusBoost,
+    this.reportedStatus,
+    this.reportedStatus2,
+    this.music,
+    this.reportedUserCount,
+    this.media,
+    this.apsara,
+    this.isShared,
+    this.following,
+    this.comment,
+    this.isDiaryPlay,
+    this.comments,
+    this.isNewFollowing,
+    this.isLoading = false,
+    this.fullContent,
+    this.urluserBadge,
+  });
 
   ContentData.fromJson(Map<String, dynamic> json) {
     metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
@@ -345,16 +345,16 @@ class ContentData {
     } else {
       comment = [];
     }
-    isDiaryPlay = false;
-    comments = json['comments'] ?? 0;
-    isNewFollowing = following ?? false ? false : true;
-    if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
-      if (json['urluserBadge'] is List) {
-        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge'].first);
-      } else {
-        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
-      }
-    }
+    // isDiaryPlay = false;
+    // comments = json['comments'] ?? 0;
+    // isNewFollowing = following ?? false ? false : true;
+    // if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
+    //   if (json['urluserBadge'] is List) {
+    //     urluserBadge = UserBadgeModel.fromJson(json['urluserBadge'].first);
+    //   } else {
+    //     urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
+    //   }
+    // }
   }
 
   Map<String, dynamic> toJson() {
@@ -578,10 +578,7 @@ class TagPeople {
     username = json["username"];
     status = json["status"];
     avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
-    urluserBadge =
-        json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty
-            ? UserBadgeModel.fromJson(json['urluserBadge'])
-            : null;
+    urluserBadge = json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty ? UserBadgeModel.fromJson(json['urluserBadge']) : null;
   }
 
   Map<String, dynamic> toJson() => {

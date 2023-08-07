@@ -69,6 +69,8 @@ class HyppePreviewPic extends StatefulWidget {
 class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   FlutterAliplayer? fAliplayer;
   TransformationController _transformationController = TransformationController();
+  var itemKey = GlobalKey();
+  final scrollController = ScrollController();
 
   bool isPrepare = false;
   bool isPlay = false;
@@ -109,6 +111,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     // stopwatch = new Stopwatch()..start();
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // scrollController.addListener(() {
+      //   print("===== ${itemKey.currentContext!.findRenderObject()!}");
+      //   scrollController.position.ensureVisible(
+      //     itemKey.currentContext!.findRenderObject()!,
+      //     alignment: 0.5, // How far into view the item should be scrolled (between 0 and 1).
+      //     duration: const Duration(seconds: 1),
+      //   );
+      // });
+
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
       WidgetsBinding.instance.addObserver(this);
 
@@ -497,7 +508,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         return false;
                       },
                       child: ListView.builder(
-                        controller: widget.scrollController,
+                        // controller: scrollController,
                         // scrollDirection: Axis.horizontal,
                         physics: const NeverScrollableScrollPhysics(),
 
@@ -547,6 +558,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   Widget itemPict(BuildContext context, PreviewPicNotifier notifier, int index, HomeNotifier homeNotifier) {
     return Column(
+      // key: itemKey,
+      // key: index == 3 ? itemKey : Key(notifier.pic?[index].postID ?? ''),
+
       children: [
         Container(
           decoration: BoxDecoration(
@@ -939,7 +953,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             padding: EdgeInsets.only(left: 21.0),
                             child: GestureDetector(
                               onTap: () {
-                                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: notifier.pic?[index].postID ?? '', fromFront: true, data: notifier.pic?[index] ?? ContentData()));
+                                Routing()
+                                    .move(Routes.commentsDetail, argument: CommentsArgument(postID: notifier.pic?[index].postID ?? '', fromFront: true, data: notifier.pic?[index] ?? ContentData()));
                                 // ShowBottomSheet.onShowCommentV2(context, postID: notifier.pic?[index].postID);
                               },
                               child: const CustomIconWidget(
@@ -1061,11 +1076,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           ),
         ),
         homeNotifier.isLoadingLoadmore && notifier.pic?[index] == notifier.pic?.last
-          ? const Padding(
-              padding: EdgeInsets.only(bottom: 32),
-              child: Center(child: CustomLoading()),
-            )
-          : Container(),
+            ? const Padding(
+                padding: EdgeInsets.only(bottom: 32),
+                child: Center(child: CustomLoading()),
+              )
+            : Container(),
       ],
     );
   }

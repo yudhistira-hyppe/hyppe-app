@@ -121,20 +121,24 @@ class _ListEndDetailState extends State<ListEndDetail> {
                                           shrinkWrap: true,
                                           physics: const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, index) {
-                                            if (cn.leaderBoardDetaiEndlData?.challengeData?[0].objectChallenge == 'KONTEN') {
-                                              return GestureDetector(
-                                                  onTap: () {
-                                                    var post = cn.leaderBoardDetaiEndlData?.getlastrank?[index].postChallengess?[0];
-                                                    var email = cn.leaderBoardDetaiEndlData?.getlastrank?[index].email;
-                                                    cn.navigateToScreen(context, post?.index, email, post?.postType);
-                                                  },
-                                                  child: ContentLeaderboard(data: cn.leaderBoardDetaiEndlData?.getlastrank?[index]));
+                                            if (cn.leaderBoardEndData?.getlastrank?[index].score == 0) {
+                                              return Container();
                                             } else {
-                                              return GestureDetector(
-                                                  onTap: () {
-                                                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardDetaiEndlData?.getlastrank?[index].email));
-                                                  },
-                                                  child: ItemLeader(data: cn.leaderBoardDetaiEndlData?.getlastrank?[index]));
+                                              if (cn.leaderBoardDetaiEndlData?.challengeData?[0].objectChallenge == 'KONTEN') {
+                                                return GestureDetector(
+                                                    onTap: () {
+                                                      var post = cn.leaderBoardDetaiEndlData?.getlastrank?[index].postChallengess?[0];
+                                                      var email = cn.leaderBoardDetaiEndlData?.getlastrank?[index].email;
+                                                      cn.navigateToScreen(context, post?.index, email, post?.postType);
+                                                    },
+                                                    child: ContentLeaderboard(data: cn.leaderBoardDetaiEndlData?.getlastrank?[index]));
+                                              } else {
+                                                return GestureDetector(
+                                                    onTap: () {
+                                                      Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardDetaiEndlData?.getlastrank?[index].email));
+                                                    },
+                                                    child: ItemLeader(data: cn.leaderBoardDetaiEndlData?.getlastrank?[index]));
+                                              }
                                             }
                                           },
                                         ),

@@ -298,12 +298,22 @@ class OtherProfileNotifier with ChangeNotifier {
 
     if (isConnect) {
       if (argument?.profile != null) {
-        user.profile = argument?.profile;
+        manyUser.forEach((element) {
+          print(element.profile?.username);
+        });
+
         if (!refresh) {
-          manyUser.add(user);
+          UserInfoModel user2 = UserInfoModel();
+          user2.profile = argument?.profile;
+          user2.pics = [];
+          // user.profile = argument?.profile;
+          manyUser.add(user2);
           golbalToOther = manyUser.length;
         }
         print("========== many user $manyUser");
+        manyUser.forEach((element) {
+          print(element.profile?.username);
+        });
         notifyListeners();
       } else {
         final usersNotifier = UserBloc();
@@ -311,12 +321,21 @@ class OtherProfileNotifier with ChangeNotifier {
         final usersFetch = usersNotifier.userFetch;
 
         if (usersFetch.userState == UserState.getUserProfilesSuccess) {
-          user.profile = usersFetch.data;
+          // user.profile = usersFetch.data;
+
           if (!refresh) {
-            manyUser.add(user);
+            UserInfoModel user2 = UserInfoModel();
+            user2.profile = usersFetch.data;
+            user2.pics = [];
+            // user.profile = argument?.profile;
+            manyUser.add(user2);
+            // manyUser.add(user);
             golbalToOther = manyUser.length;
           }
           print("========== many user 2 $manyUser");
+          manyUser.forEach((element) {
+            print(element.profile?.username);
+          });
           notifyListeners();
         }
       }
@@ -327,9 +346,9 @@ class OtherProfileNotifier with ChangeNotifier {
     }
     // user.vids ??= await vidContentsQuery.reload(context, otherContent: true);
     // user.pics = await picContentsQuery.reload(context, otherContent: true);
-    user.pics = null;
-    user.vids = null;
-    user.diaries = null;
+    // user.pics = null;
+    // user.vids = null;
+    // user.diaries = null;
 
     await getDataPerPgage(context);
 
@@ -353,57 +372,73 @@ class OtherProfileNotifier with ChangeNotifier {
     switch (pageIndex) {
       case 0:
         {
-          if (user.pics == null) {
-            isLoading = true;
-            notifyListeners();
-            if (email != null) {
-              picContentsQuery.searchText = email;
-            }
-            user.pics = await picContentsQuery.reload(context, otherContent: true);
-            manyUser.last.pics = user.pics;
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              isLoading = false;
-            });
-            notifyListeners();
+          // if (user.pics == null) {
+          isLoading = true;
+          notifyListeners();
+          if (email != null) {
+            picContentsQuery.searchText = email;
           }
+
+          UserInfoModel user2 = UserInfoModel();
+          user2.pics = await picContentsQuery.reload(context, otherContent: true);
+          // user.pics = await picContentsQuery.reload(context, otherContent: true);
+          manyUser.forEach((element) {
+            print(element.pics);
+          });
+          print("222222222222222222222");
+          print(user2.pics);
+          manyUser.last.pics = user2.pics;
+          print(manyUser.length);
+          manyUser.forEach((element) {
+            print(element.pics);
+          });
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            isLoading = false;
+          });
+          notifyListeners();
+          // }
         }
         break;
       case 1:
         {
-          if (user.diaries == null) {
-            isLoading = true;
-            notifyListeners();
-            if (email != null) {
-              diaryContentsQuery.searchText = email;
-            }
-            user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
-            manyUser.last.diaries = user.diaries;
-
-            context.read<ScrollDiaryNotifier>().diaryData = user.diaries;
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              isLoading = false;
-            });
-            notifyListeners();
+          // if (user.diaries == null) {
+          isLoading = true;
+          notifyListeners();
+          if (email != null) {
+            diaryContentsQuery.searchText = email;
           }
+          UserInfoModel user2 = UserInfoModel();
+          user2.diaries = await diaryContentsQuery.reload(context, otherContent: true);
+          // user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
+          manyUser.last.diaries = user2.diaries;
+
+          context.read<ScrollDiaryNotifier>().diaryData = manyUser.last.diaries;
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            isLoading = false;
+          });
+          notifyListeners();
+          // }
         }
         break;
       case 2:
         {
-          if (user.vids == null) {
-            isLoading = true;
-            notifyListeners();
-            if (email != null) {
-              vidContentsQuery.searchText = email;
-            }
-            user.vids = await vidContentsQuery.reload(context, otherContent: true);
-            manyUser.last.vids = user.vids;
-
-            context.read<ScrollVidNotifier>().vidData = user.vids;
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              isLoading = false;
-            });
-            notifyListeners();
+          // if (user.vids == null) {
+          isLoading = true;
+          notifyListeners();
+          if (email != null) {
+            vidContentsQuery.searchText = email;
           }
+          UserInfoModel user2 = UserInfoModel();
+          user2.vids = await vidContentsQuery.reload(context, otherContent: true);
+          // user.vids = await vidContentsQuery.reload(context, otherContent: true);
+          manyUser.last.vids = user2.vids;
+
+          context.read<ScrollVidNotifier>().vidData = manyUser.last.vids;
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            isLoading = false;
+          });
+          notifyListeners();
+          // }
         }
 
         break;
@@ -550,16 +585,15 @@ class OtherProfileNotifier with ChangeNotifier {
     // }
   }
 
-  void onExit() {
+  void onExit() async {
     print("==========Exit==================");
-    Future.delayed(const Duration(milliseconds: 500), () {
-      manyUser.removeLast();
-    });
+    // Future.delayed(const Duration(milliseconds: 500), () {
+    manyUser.removeLast();
+    // });
     print("==========Exit 2==================");
     if (golbalToOther == 1) {
       golbalToOther = 0;
     }
-
     routing.moveBack();
     userEmail = null;
   }
