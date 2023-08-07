@@ -245,7 +245,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
                         },
                       ),
                     ),
-                    EventBannerWidget(controller: _controllerSlider, callback: changeIndexSlide),
+                    // EventBannerWidget(controller: _controllerSlider, callback: changeIndexSlide),
                     const HashtagScreen(),
                     InterestScreen(
                       onClick: (value) {

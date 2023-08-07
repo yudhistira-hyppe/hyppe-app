@@ -359,6 +359,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       print("isOnHomeScreen hit ads");
       homneNotifier.getAdsApsara(context, true);
     }
-    System().popUpChallange(context);
+    // System().popUpChallange(context);
   }
 }
