@@ -497,6 +497,7 @@ class ShowBottomSheet {
     final Function()? functionSubCaption,
     final String? subCaptionButton,
     final int? milisecond,
+    Function()? onClose,
   }) async {
     final _result = await showModalBottomSheet<bool>(
       isScrollControlled: enableDrag,
@@ -527,7 +528,7 @@ class ShowBottomSheet {
               )),
         );
       },
-    );
+    ).whenComplete(onClose ?? () {});
     return _result ?? false;
   }
 
