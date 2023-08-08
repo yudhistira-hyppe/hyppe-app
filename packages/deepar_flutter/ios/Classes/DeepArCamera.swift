@@ -98,12 +98,18 @@ class DeepARCameraView: NSObject, FlutterPlatformView, DeepARDelegate {
     func methodHandler(_ call: FlutterMethodCall, result: @escaping FlutterResult){
         let args = call.arguments as? [String : Any]
         switch call.method{
+        // custom code to load effect from downloaded files
         case "switch_effect":
             let effect:String = args?["effect"] as! String
-            let key = registrar?.lookupKey(forAsset: effect)
-            let path = Bundle.main.path(forResource: key, ofType: nil)
-            deepAR.switchEffect(withSlot: "effect", path: path)
+            deepAR.switchEffect(withSlot: "effect", path: effect)
             result("switchEffect called successfully")
+        // original code
+        // case "switch_effect":
+        //     let effect:String = args?["effect"] as! String
+        //     let key = registrar?.lookupKey(forAsset: effect)
+        //     let path = Bundle.main.path(forResource: key, ofType: nil)
+        //     deepAR.switchEffect(withSlot: "effect", path: path)
+        //     result("switchEffect called successfully")
             
         case "switch_face_mask":
             let mask:String = args?["effect"] as! String
