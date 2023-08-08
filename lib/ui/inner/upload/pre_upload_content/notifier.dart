@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -30,6 +30,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_c
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
@@ -624,7 +625,11 @@ class PreUploadContentNotifier with ChangeNotifier {
       final height = size.height;
 
       print('featureType : $featureType');
-      if (_boostContent == null) clearUpAndBackToHome(context);
+      if (_boostContent == null) {
+        context.read<HomeNotifier>().preventReloadAfterUploadPost = true;
+        context.read<HomeNotifier>().uploadedPostType = featureType ?? FeatureType.pic;
+        clearUpAndBackToHome(context);
+      }
       // await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: 100));
       if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
         ShowBottomSheet().onShowColouredSheet(
@@ -695,14 +700,20 @@ class PreUploadContentNotifier with ChangeNotifier {
         eventService.notifyUploadSuccess(_uploadSuccess);
         // final decode = json.decode(_uploadSuccess.toString());
         // _postIdPanding = decode['data']['postID'];
+        if (value is dio.Response) {
+          dio.Response res = value;
+          "return data ${jsonEncode(res.data['data'])}".loggerV2();
+          ContentData uploadedData = ContentData.fromJson(res.data['data']);
+          (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().onUploadedSelfUserContent(context: context, contentData: uploadedData);
+        }
         if (_boostContent != null) _boostContentBuy(context);
         context.read<PreviewVidNotifier>().canPlayOpenApps = true;
       });
     } catch (e) {
       print('Error create post : $e');
       eventService.notifyUploadFailed(
-        DioError(
-          requestOptions: RequestOptions(
+        dio.DioError(
+          requestOptions: dio.RequestOptions(
             path: UrlConstants.createuserposts,
           ),
           error: e,

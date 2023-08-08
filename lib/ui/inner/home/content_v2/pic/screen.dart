@@ -83,8 +83,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   int _currentPosition = 0;
   int _bufferPosition = 0;
   int _currentPositionText = 0;
-  int _curIdx = 0;
-  int _lastCurIndex = -1;
+  // int _curIdx = 0;
+  // int _lastCurIndex = -1;
+  String _curPostId = '';
+  String _lastCurPostId = '';
 
   String auth = '';
   String url = '';
@@ -507,7 +509,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         itemBuilder: (context, index) {
                           if (notifier.pic == null || home.isLoadingPict) {
                             fAliplayer?.pause();
-                            _lastCurIndex = -1;
+                            // _lastCurIndex = -1;
+                            _lastCurPostId = '';
                             return CustomShimmer(
                               width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
                               height: 168,
@@ -661,12 +664,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           tenPx,
 
           VisibilityDetector(
-            key: Key(index.toString()),
+            // key: Key(index.toString()),
+            key: Key(notifier.pic?[index].postID ?? index.toString()),
             onVisibilityChanged: (info) {
               print("ada musiknya ${info.visibleFraction}");
               if (info.visibleFraction >= 0.6) {
-                _curIdx = index;
-                if (_lastCurIndex != _curIdx) {
+                // _curIdx = index;
+                _curPostId = notifier.pic?[index].postID ?? index.toString();
+                // if (_lastCurIndex != _curIdx) {
+                if (_lastCurPostId != _curPostId) {
                   if (notifier.pic?[index].music != null) {
                     print("ada musiknya ${notifier.pic?[index].music}");
                     Future.delayed(const Duration(milliseconds: 100), () {
@@ -684,7 +690,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     System().disposeBlock();
                   }
                 }
-                _lastCurIndex = _curIdx;
+                // _lastCurIndex = _curIdx;
+                _lastCurPostId = _curPostId;
               }
             },
             child: Container(

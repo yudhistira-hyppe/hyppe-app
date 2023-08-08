@@ -57,6 +57,20 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _preventReloadAfterUploadPost = false;
+  bool get preventReloadAfterUploadPost => _preventReloadAfterUploadPost;
+  set preventReloadAfterUploadPost(val) {
+    _preventReloadAfterUploadPost = val;
+    notifyListeners();
+  }
+
+  FeatureType _uploadedPostType = FeatureType.pic; // set default to pic because pic is at 0 index
+  FeatureType get uploadedPostType => _uploadedPostType;
+  set uploadedPostType(val) {
+    _uploadedPostType = val;
+    notifyListeners();
+  }
+
   bool _isLoadingVid = false;
   bool _isLoadingDiary = false;
   bool _isLoadingPict = false;
@@ -286,15 +300,15 @@ class HomeNotifier with ChangeNotifier {
       switch (index) {
         case 0:
           if (!mounted) return;
-          await pic.initialPic(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents).then((value) async {
-            if (diary.diaryData == null) {
-              await initNewHome(context, mounted, forceIndex: 1);
-              // diary.initialDiary(context, reload: isreload || isNew, list: allContents);
-            }
-            if (vid.vidData == null) {
-              // vid.initialVid(context, reload: isreload || isNew, list: allContents);
-              await initNewHome(context, mounted, forceIndex: 2);
-            }
+          await pic.initialPic(context, reload: isreload || isNew, list: allContents).then((value) async {
+            // if (diary.diaryData == null) {
+            //   await initNewHome(context, mounted, forceIndex: 1);
+            //   // diary.initialDiary(context, reload: isreload || isNew, list: allContents);
+            // }
+            // if (vid.vidData == null) {
+            //   // vid.initialVid(context, reload: isreload || isNew, list: allContents);
+            //   await initNewHome(context, mounted, forceIndex: 2);
+            // }
           });
           break;
         case 1:
@@ -1001,6 +1015,47 @@ class HomeNotifier with ChangeNotifier {
       }
 
       notifyListeners();
+    }
+  }
+
+  void onUploadedSelfUserContent({
+    required BuildContext context,
+    required ContentData contentData,
+  }) async {
+    final pic = (Routing.navigatorKey.currentContext ?? context).read<PreviewPicNotifier>();
+    final diary = (Routing.navigatorKey.currentContext ?? context).read<PreviewDiaryNotifier>();
+    final vid = (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>();
+    final stories = (Routing.navigatorKey.currentContext ?? context).read<PreviewStoriesNotifier>();
+    switch (contentData.postType) {
+      case 'pict':
+        if (pic.pic != null) {
+          pic.pic = [contentData] + [...(pic.pic ?? [] as List<ContentData>)];
+        } else {
+          pic.initialPic(Routing.navigatorKey.currentContext ?? context);
+        }
+        break;
+      case 'diary':
+        if (diary.diaryData != null) {
+          diary.diaryData = [contentData] + [...(diary.diaryData ?? [] as List<ContentData>)];
+        } else {
+          diary.initialDiary(Routing.navigatorKey.currentContext ?? context);
+        }
+        break;
+      case 'vid':
+        if (vid.vidData != null) {
+          vid.vidData = [contentData] + [...(vid.vidData ?? [] as List<ContentData>)];
+        } else {
+          vid.initialVid(Routing.navigatorKey.currentContext ?? context);
+        }
+        break;
+      case 'story':
+        // String email = await SharedPreference().readStorage(SpKeys.email);
+        // email.loggerV2();
+        // stories.myStoryGroup[email] = [contentData] + [...(stories.myStoryGroup[email] ?? [] as List<ContentData>)];
+        stories.initialMyStoryGroup(Routing.navigatorKey.currentContext ?? context);
+        break;
+      default:
+
     }
   }
 }

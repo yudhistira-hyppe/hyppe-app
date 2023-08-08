@@ -311,7 +311,7 @@ class ContentData {
 
     apsaraId = json['apsaraId'] ?? '';
     apsaraThumbId = json['apsaraThumbId'];
-    music = json['music'] != null ? Music.fromJson(json['music']) : null;
+    music = json['music'] != null && json['music'].isNotEmpty ? Music.fromJson(json['music']) : null;
     isReport = json['isReport'] ?? false;
     if (json['boosted'] != null) {
       boosted = [];

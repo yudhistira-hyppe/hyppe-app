@@ -86,6 +86,8 @@ class PostsBloc {
     }
 
     if (myContent) {
+      formData.fields.add(MapEntry('email', email));
+      // url = UrlConstants.getMyUserPostsV2;
       url = UrlConstants.getMyUserPosts;
     }
 
