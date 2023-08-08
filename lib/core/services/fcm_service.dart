@@ -100,7 +100,7 @@ class FcmService {
       FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
         RemoteNotification? notification = message.notification;
         """ 
-            Foreground incoming message data => ${message.data},
+            Foreground incoming message data 1 => ${message.data},
             Foreground incoming message category => ${message.category},
             Foreground incoming message category => ${message.category},
             Foreground incoming message messageId => ${message.messageId},
@@ -122,6 +122,7 @@ class FcmService {
         // isHaveNotification.value = true;
 
         // _notifyApp(message, () => _eventService.notifyForegroundMessage(message));
+        setHaveNotification(true);
         _notificationService.showNotification(message);
         // if (notification != null) {
         //
