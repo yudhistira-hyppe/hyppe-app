@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/register/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/widget/sign_up_button.dart';
 import 'package:hyppe/ui/outer/sign_up/widget/sign_up_form_field.dart';
@@ -40,7 +41,18 @@ class RegisterForm extends StatelessWidget {
                     SignUpForm(
                       onChangeValue: notifier.email,
                       focusNode: notifier.emailNode,
-                      onChange: (v) => notifier.email = v,
+                      onChange: (v){
+                        notifier.email = v;
+                        if(System().validateEmail(v)){
+                          notifier.invalidEmail = null;
+                        }else{
+                          if(v.isNotEmpty){
+                            notifier.invalidEmail = notifier.language.messageInvalidEmail;
+                          }else{
+                            notifier.invalidEmail = null;
+                          }
+                        }
+                      },
                       labelText: notifier.language.email ?? '',
                       suffixIcon: notifier.checkBoxSuffix(System().validateEmail(notifier.email), isEmail: true),
                       suffixIconSize: 1,
@@ -48,6 +60,9 @@ class RegisterForm extends StatelessWidget {
                       textInputType: TextInputType.emailAddress,
                       textEditingController: notifier.emailController,
                       prefixIcon: Icon(Icons.email_outlined, color: Theme.of(context).iconTheme.color),
+                      errorText: notifier.invalidEmail,
+                      inputAreaHeight: (notifier.invalidEmail != null ? 70 : 55) * SizeConfig.scaleDiagonal,
+                      contentPadding: EdgeInsets.only(left: 16, bottom: (notifier.invalidEmail != null) ? 0 : 16, right: 16),
                     ),
                     twentyFourPx,
                     SignUpForm(
@@ -68,39 +83,82 @@ class RegisterForm extends StatelessWidget {
                     //         child: Text('Referral from ${SharedPreference().readStorage(SpKeys.referralFrom)}'),
                     //       ),
                     thirtySixPx,
+                    // Row(
+                    //   mainAxisSize: MainAxisSize.min,
+                    //   children: [
+                    //     notifier.checkBoxSuffix(notifier.password.isNotEmpty),
+                    //     CustomTextWidget(
+                    //       textToDisplay: notifier.language.mustNotContainYourNameOrEmail ?? '',
+                    //       textStyle: Theme.of(context).textTheme.caption,
+                    //     ),
+                    //   ],
+                    // ),
+                    // Row(
+                    //   mainAxisSize: MainAxisSize.min,
+                    //   children: [
+                    //     notifier.checkBoxSuffix(System().atLeastEightCharacter(text: notifier.password)),
+                    //     CustomTextWidget(
+                    //       textToDisplay: notifier.language.atLeast8Characters ?? '',
+                    //       textStyle: Theme.of(context).textTheme.caption,
+                    //     )
+                    //   ],
+                    // ),
+                    // Row(
+                    //   mainAxisSize: MainAxisSize.min,
+                    //   children: [
+                    //     notifier.checkBoxSuffix(System().atLeastContainOneCharacterAndOneNumber(text: notifier.password)),
+                    //     CustomTextWidget(
+                    //       textToDisplay: notifier.language.atLeastContain1CharacterAnd1Number ?? '',
+                    //       textStyle: Theme.of(context).textTheme.caption,
+                    //     )
+                    //   ],
+                    // )
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        notifier.checkBoxSuffix(notifier.password.isNotEmpty),
+                        notifier.checkBoxSuffix(System().atLeastEightUntilTwentyCharacter(text: notifier.passwordController.text)),
                         CustomTextWidget(
-                          textToDisplay: notifier.language.mustNotContainYourNameOrEmail ?? '',
-                          textStyle: Theme.of(context).textTheme.caption,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        notifier.checkBoxSuffix(System().atLeastEightCharacter(text: notifier.password)),
-                        CustomTextWidget(
-                          textToDisplay: notifier.language.atLeast8Characters ?? '',
-                          textStyle: Theme.of(context).textTheme.caption,
+                          textToDisplay: notifier.language.atLeast8til20Chars ?? '',
+                          textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
                         )
                       ],
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        notifier.checkBoxSuffix(System().atLeastContainOneCharacterAndOneNumber(text: notifier.password)),
+                        notifier.checkBoxSuffix(System().atLeastContainOneCharacterAndOneNumber(text: notifier.passwordController.text)),
                         CustomTextWidget(
                           textToDisplay: notifier.language.atLeastContain1CharacterAnd1Number ?? '',
-                          textStyle: Theme.of(context).textTheme.caption,
+                          textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        notifier.checkBoxSuffix(System().specialCharPass(notifier.passwordController.text)),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextWidget(
+                              textToDisplay: notifier.language.oneSpecialCharacter ?? '',
+                              textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
+                            ),
+                            onePx,
+                            CustomTextWidget(
+                              textToDisplay: notifier.language.labelExampleSpecialChar ?? '',
+                              textStyle: Theme.of(context).textTheme.caption,
+                            )
+                          ],
                         )
                       ],
                     )
                   ],
                 ),
               ),
+              thirtySixPx,
               SignUpButton(
                 loading: notifier.loading,
                 caption: notifier.language.next,

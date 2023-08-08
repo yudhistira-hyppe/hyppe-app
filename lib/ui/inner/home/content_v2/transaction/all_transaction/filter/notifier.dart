@@ -77,6 +77,7 @@ class FilterTransactionNotifier extends ChangeNotifier {
       {"id": 4, 'name': "${language.withdrawal}", 'icon': ''},
       {"id": 5, 'name': "${language.postBoost}", 'icon': ''},
       {"id": 6, 'name': "${language.reward}", 'icon': ''},
+      {'id': 7, 'name': "Voucher", 'icon': ''},
     ];
   }
 
@@ -88,6 +89,7 @@ class FilterTransactionNotifier extends ChangeNotifier {
       {'id': 3, 'name': language.withdrawal},
       {'id': 4, 'name': language.postBoost},
       {'id': 5, 'name': language.reward},
+      {'id': 6, 'name': "Voucher"},
       // {'id': 4, 'name': language.ownership},
     ];
   }
@@ -100,6 +102,7 @@ class FilterTransactionNotifier extends ChangeNotifier {
       {'id': 4, 'selected': false, 'name': language.withdrawal},
       {'id': 5, 'selected': false, 'name': language.postBoost},
       {'id': 6, 'selected': false, 'name': language.reward},
+      {'id': 7, 'selected': false, 'name': "Voucher"},
       // {'id': 5, 'selected': false, 'name': language.ownership},
     ];
   }
@@ -128,6 +131,7 @@ class FilterTransactionNotifier extends ChangeNotifier {
       (id == 4) ? _param.addAll({"withdrawal": true}) : _param.addAll({"withdrawal": false});
       (id == 5) ? _param.addAll({"boost": true}) : _param.addAll({"boost": false});
       (id == 6) ? _param.addAll({"rewards": true}) : _param.addAll({"rewards": false});
+      (id == 7) ? _param.addAll({"voucher": true}) : _param.addAll({"voucher": false});
       final email = SharedPreference().readStorage(SpKeys.email);
       _skip = 0;
       _param.addAll({"skip": _skip, "limit": _limit, "email": email});
@@ -215,6 +219,14 @@ class FilterTransactionNotifier extends ChangeNotifier {
       newFilterList[index]['selected'] = true;
     } else {
       _param.addAll({"rewards": false});
+    }
+
+    if (filterChecked.contains(6)) {
+      _param.addAll({"voucher": true});
+      final index = newFilterList.indexWhere((element) => element['id'] == 7);
+      newFilterList[index]['selected'] = true;
+    } else {
+      _param.addAll({"voucher": false});
     }
     // (filterChecked.contains(3)) ? _param.addAll({"withdrawal": true}) : _param.addAll({"withdrawal": false});
     final email = SharedPreference().readStorage(SpKeys.email);

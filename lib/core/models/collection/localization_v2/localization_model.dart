@@ -469,6 +469,9 @@ class LocalizationModelV2 {
   String? likeK;
   String? pinTopText1;
   String? pinTopText2;
+  String? otpRegisterText1;
+  String? otpRegisterText2;
+  String? otpRegisterText3;
   String? yourEmailHasBeenVerified;
   String? hiYouHaveNewContentPleasePullDownToRefresh;
   String? sorryUnexpectedError;
@@ -871,6 +874,8 @@ class LocalizationModelV2 {
   String? seeLess;
   String? pleaseSelectOneortheMaxFileis;
   String? pleaseVerifyYourEmailFrst;
+  String? emailHasRegistered;
+  String? emailVerification;
   String? fileMayBeInErrorChooseAnotherFile;
   String? blockThisAccount;
   String? confirmPasswordCorrect;
@@ -1381,6 +1386,9 @@ class LocalizationModelV2 {
     this.likeK,
     this.pinTopText1,
     this.pinTopText2,
+    this.otpRegisterText1,
+    this.otpRegisterText2,
+    this.otpRegisterText3,
     this.yourEmailHasBeenVerified,
     this.hiYouHaveNewContentPleasePullDownToRefresh,
     this.sorryUnexpectedError,
@@ -1783,6 +1791,8 @@ class LocalizationModelV2 {
     this.seeLess,
     this.pleaseSelectOneortheMaxFileis,
     this.pleaseVerifyYourEmailFrst,
+    this.emailVerification,
+    this.emailHasRegistered,
     this.fileMayBeInErrorChooseAnotherFile,
     this.blockThisAccount,
     this.confirmPasswordCorrect,
@@ -2295,6 +2305,9 @@ class LocalizationModelV2 {
     likeK = json['likeK'];
     pinTopText1 = json['pinTopText1'];
     pinTopText2 = json['pinTopText2'];
+    otpRegisterText1 = json['otpRegisterText1'];
+    otpRegisterText2 = json['otpRegisterText2'];
+    otpRegisterText3 = json['otpRegisterText3'];
     yourEmailHasBeenVerified = json['yourEmailHasBeenVerified'];
     hiYouHaveNewContentPleasePullDownToRefresh = json['hiYouHaveNewContentPleasePullDownToRefresh'];
     sorryUnexpectedError = json['sorryUnexpectedError'];
@@ -2714,6 +2727,8 @@ class LocalizationModelV2 {
     seeLess = json['seeLess'];
     pleaseSelectOneortheMaxFileis = json['pleaseSelectOneortheMaxFileis'];
     pleaseVerifyYourEmailFrst = json['pleaseVerifyYourEmailFrst'];
+    emailVerification = json['emailVerification'];
+    emailHasRegistered = json['emailHasRegistered'];
     fileMayBeInErrorChooseAnotherFile = json['fileMayBeInErrorChooseAnotherFile'];
     blockThisAccount = json['blockThisAccount'];
     confirmPasswordCorrect = json['confirmPasswordCorrect'];

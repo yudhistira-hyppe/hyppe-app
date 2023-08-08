@@ -82,19 +82,24 @@ class VoucherWidget extends StatelessWidget {
                         textStyle: Theme.of(context).textTheme.button?.copyWith(color: titleColor),
                       ),
                     ),
-                    Row(
-                      children: [
-                        CustomTextWidget(
-                          textToDisplay: data?.status ?? '',
-                          textStyle: Theme.of(context).textTheme.caption,
-                        ),
-                        sixPx,
-                        CustomIconWidget(
-                          iconData: "${AssetPath.vectorPath}unread.svg",
-                          defaultColor: false,
-                          color: (data?.status ?? '') == 'Cancel' ? Colors.red : Colors.green,
-                        ),
-                      ],
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: CustomTextWidget(
+                              textToDisplay: data?.status ?? '',
+                              textStyle: Theme.of(context).textTheme.caption,
+                              textAlign: TextAlign.end,
+                            ),
+                          ),
+                          sixPx,
+                          CustomIconWidget(
+                            iconData: "${AssetPath.vectorPath}unread.svg",
+                            defaultColor: false,
+                            color: (data?.status ?? '') == 'Cancel' ? Colors.red : Colors.green,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

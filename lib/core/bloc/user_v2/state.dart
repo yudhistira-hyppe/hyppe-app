@@ -1,3 +1,5 @@
+import '../../response/generic_response.dart';
+
 enum UserState {
   init,
   loading,
@@ -49,8 +51,9 @@ enum UserState {
 class UserFetch {
   final data;
   final UserState userState;
+  final Messages? message;
   final String? version;
   final String? versionIos;
 
-  UserFetch(this.userState, {this.data, this.version, this.versionIos});
+  UserFetch(this.userState, {this.data, this.version, this.versionIos, this.message});
 }

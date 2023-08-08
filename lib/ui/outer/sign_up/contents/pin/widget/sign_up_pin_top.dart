@@ -92,14 +92,24 @@ class _SignUpPinTopState extends State<SignUpPinTop> {
           fortyTwoPx,
           CustomTextWidget(
             textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.w700),
-            textToDisplay: "${notifier.language.pinTopText1} ${notifier.email}",
+            textToDisplay: "${notifier.language.otpRegisterText1}",
           ),
           eightPx,
-          CustomTextWidget(
-            textStyle: Theme.of(context).textTheme.bodyText2,
-            maxLines: 3,
-            textToDisplay: "${notifier.language.pinTopText2} ${notifier.argument.email}",
-          ),
+          RichText(
+            textAlign: TextAlign.center,
+              text: TextSpan(
+              children: [
+                TextSpan(
+                  text: notifier.language.otpRegisterText2,
+                  style: Theme.of(context).textTheme.bodyText2,),
+                TextSpan(
+                  text: "${notifier.argument.email}. ",
+                  style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w700),),
+                TextSpan(
+                  text: notifier.language.otpRegisterText3,
+                  style: Theme.of(context).textTheme.bodyText2,),
+              ]
+          )),
           twentyFourPx,
           CustomRectangleInput(afterSuccess: (){
             stopTime(isReset: true);

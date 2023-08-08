@@ -19,6 +19,7 @@ import 'package:hyppe/core/services/dynamic_link_service.dart';
 
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/bloc/ads_video/bloc.dart';
@@ -85,7 +86,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
     print("Status Lifecycle: $state");
     try {
-      final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+      final notifier = Routing.navigatorKey.currentContext!.read<PreviewContentNotifier>();
       if (state == AppLifecycleState.inactive) {
         if (notifier.listMusics.isNotEmpty || notifier.listExpMusics.isNotEmpty) {
           notifier.forceResetPlayer(true);

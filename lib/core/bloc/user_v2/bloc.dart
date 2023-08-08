@@ -259,7 +259,7 @@ class UserBloc {
       if ((onResult.statusCode ?? 300) > HTTP_CODE) {
         setUserFetch(UserFetch(UserState.signUpError, data: GenericResponse.fromJson(onResult.data).responseData));
       } else {
-        setUserFetch(UserFetch(UserState.signUpSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+        setUserFetch(UserFetch(UserState.signUpSuccess, data: GenericResponse.fromJson(onResult.data).responseData, message: GenericResponse.fromJson(onResult.data).messages));
       }
     }, (errorData) {
       ShowBottomSheet.onInternalServerError(context);
