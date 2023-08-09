@@ -15,6 +15,8 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 
 import 'package:hyppe/core/models/collection/notification_v2/notification.dart';
 
+import '../../../../core/services/fcm_service.dart';
+
 class PageComponent extends StatefulWidget {
   final int itemCount;
   final IndexedWidgetBuilder builder;
@@ -58,6 +60,7 @@ class _PageComponentState extends State<PageComponent> {
       onRefresh: () async {
         imageCache.clear();
         imageCache.clearLiveImages();
+        FcmService().setHaveNotification(false);
         await context.read<NotificationNotifier>().getNotifications(context, reload: true);
       },
       child: _buildWidget(),

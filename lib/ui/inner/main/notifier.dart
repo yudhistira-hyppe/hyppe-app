@@ -188,6 +188,10 @@ class MainNotifier with ChangeNotifier {
     }
   }
 
+  setPageIndex(int index){
+    _pageIndex = index;
+  }
+
   void setNotification() => FcmService().setHaveNotification(false);
 
   Future onShowPostContent(BuildContext context) async {

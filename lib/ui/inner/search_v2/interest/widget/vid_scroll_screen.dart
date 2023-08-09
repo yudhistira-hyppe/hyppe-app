@@ -36,7 +36,6 @@ import '../../../../constant/widget/custom_newdesc_content_widget.dart';
 import '../../../../constant/widget/custom_shimmer.dart';
 import '../../../../constant/widget/custom_spacer.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
-import '../../../../constant/widget/no_result_found.dart';
 import '../../../../constant/widget/profile_landingpage.dart';
 import '../../../home/content_v2/diary/playlist/widget/content_violation.dart';
 import '../../../home/content_v2/pic/notifier.dart';

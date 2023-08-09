@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/home/widget/profile.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -26,15 +27,19 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
   late MainNotifier _mainNotifier;
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    _mainNotifier.initMain(context, isInitSocket: true);
+  }
 
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'MainScreen');
     _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
-    _mainNotifier.pageIndex = 0;
-    _mainNotifier.initMain(context, isInitSocket: true);
+    _mainNotifier.setPageIndex(0);
     ScrollController(initialScrollOffset: 50.0);
 
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
@@ -241,4 +246,6 @@ class _MainScreenState extends State<MainScreen> {
       await notifier.onShowPostContent(consumerContext);
     }
   }
+
+
 }

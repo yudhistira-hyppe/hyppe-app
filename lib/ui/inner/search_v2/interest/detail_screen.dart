@@ -5,14 +5,12 @@ import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/interest/widget/tab_layout.dart';
 import 'package:hyppe/ux/routing.dart';
-import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/asset_path.dart';
 import '../../../../core/models/collection/search/search_content.dart';
 import '../../../../core/services/route_observer_service.dart';
 import '../../../constant/widget/icon_button_widget.dart';
-import '../../home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import '../notifier.dart';
 
 class InterestDetailScreen extends StatefulWidget {
