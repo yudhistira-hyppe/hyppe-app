@@ -76,43 +76,7 @@ class RegisterForm extends StatelessWidget {
                       textEditingController: notifier.passwordController,
                       prefixIcon: const CustomIconWidget(iconData: '${AssetPath.vectorPath}lock.svg'),
                     ),
-                    // SharedPreference().readStorage(SpKeys.referralFrom) == null
-                    //     ? Container()
-                    //     : Padding(
-                    //         padding: const EdgeInsets.all(16.0),
-                    //         child: Text('Referral from ${SharedPreference().readStorage(SpKeys.referralFrom)}'),
-                    //       ),
                     thirtySixPx,
-                    // Row(
-                    //   mainAxisSize: MainAxisSize.min,
-                    //   children: [
-                    //     notifier.checkBoxSuffix(notifier.password.isNotEmpty),
-                    //     CustomTextWidget(
-                    //       textToDisplay: notifier.language.mustNotContainYourNameOrEmail ?? '',
-                    //       textStyle: Theme.of(context).textTheme.caption,
-                    //     ),
-                    //   ],
-                    // ),
-                    // Row(
-                    //   mainAxisSize: MainAxisSize.min,
-                    //   children: [
-                    //     notifier.checkBoxSuffix(System().atLeastEightCharacter(text: notifier.password)),
-                    //     CustomTextWidget(
-                    //       textToDisplay: notifier.language.atLeast8Characters ?? '',
-                    //       textStyle: Theme.of(context).textTheme.caption,
-                    //     )
-                    //   ],
-                    // ),
-                    // Row(
-                    //   mainAxisSize: MainAxisSize.min,
-                    //   children: [
-                    //     notifier.checkBoxSuffix(System().atLeastContainOneCharacterAndOneNumber(text: notifier.password)),
-                    //     CustomTextWidget(
-                    //       textToDisplay: notifier.language.atLeastContain1CharacterAnd1Number ?? '',
-                    //       textStyle: Theme.of(context).textTheme.caption,
-                    //     )
-                    //   ],
-                    // )
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

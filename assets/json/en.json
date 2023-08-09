@@ -886,6 +886,7 @@
   "messageInvalidEmail": "Please enter your valid email address",
   "titleEmailIsGmail": "Your account is already registered",
   "messageEmailIsGmail": "Please sign in using your Gmail account.",
+  "messageSuccessVerification": "Your account has been successfully verified.",
   "pleaseEnterRegisteredEmail": "Enter registered email address.",
   "contentPreferences": "Content Preferences",
   "customization": "Customization",

@@ -886,6 +886,7 @@
   "messageInvalidEmail": "Masukan alamat email yang valid",
   "titleEmailIsGmail": "Akun Kamu Telah Terdaftar",
   "messageEmailIsGmail": "Silakan masuk menggunakan akun Gmail.",
+  "messageSuccessVerification": "Akun kamu berhasil terverifikasi.",
   "pleaseEnterRegisteredEmail": "Masukan alamat email yang terdaftar",
   "contentPreferences": "Preferensi Konten",
   "customization": "Kustomisasi",

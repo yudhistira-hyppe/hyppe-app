@@ -17,6 +17,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../../core/constants/asset_path.dart';
 import '../../../../constant/entities/loading/notifier.dart';
 
 class SignUpPinNotifier extends ChangeNotifier with WidgetsBindingObserver, LoadingNotifier {
@@ -363,12 +364,28 @@ class SignUpPinNotifier extends ChangeNotifier with WidgetsBindingObserver, Load
             SharedPreference().removeValue(SpKeys.referralFrom);
 
             // DynamicLinkService.hitReferralBackend(context);
+            ShowBottomSheet().onShowColouredSheet(
+                context,
+                language.congrats ?? '',
+                subCaption: language.messageSuccessVerification,
+                maxLines: 3,
+                borderRadius: 8,
+                sizeIcon: 20,
+                color: kHyppeLightSuccess,
+                isArrow: false,
+                iconColor: kHyppeBorder,
+                padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
+                margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
+                iconSvg: "${AssetPath.vectorPath}ic_success.svg",
+                function: (){
 
-            _handleVerifyAction(
-              context: context,
-              verifyPageArgument: argument,
-              message: language.yourEmailHasBeenVerified ?? '',
+                }
             );
+            Future.delayed(const Duration(seconds: 2), (){
+              _setUserCompleteData(context);
+              Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root, argument: UserInterestScreenArgument(fromSetting: false, userInterested: []));
+            });
+
           } else {
             _loading = false;
             _inCorrectCode = true;

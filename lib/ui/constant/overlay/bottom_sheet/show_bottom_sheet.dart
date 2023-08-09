@@ -479,7 +479,7 @@ class ShowBottomSheet {
 
   Future<bool> onShowColouredSheet(
     _,
-    String caption, {
+    String? caption, {
     int? maxLines,
     TextOverflow? textOverflow,
     Color color = kHyppeTextSuccess,

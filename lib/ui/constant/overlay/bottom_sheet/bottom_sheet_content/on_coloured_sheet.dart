@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 class OnColouredSheet extends StatefulWidget {
   final int? maxLines;
   final String? iconSvg;
-  final String caption;
+  final String? caption;
   final double? sizeIcon;
   final String? subCaption;
   final bool fromSnackBar;
@@ -123,7 +123,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                         child: CustomTextWidget(
                           maxLines: widget.maxLines,
                           textOverflow: widget.textOverflow,
-                          textToDisplay: widget.caption,
+                          textToDisplay: widget.caption ?? '',
                           textAlign: TextAlign.left,
                           textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
                         ),
@@ -217,10 +217,11 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if(widget.caption != null)
               CustomTextWidget(
                 maxLines: widget.maxLines,
                 textOverflow: widget.textOverflow,
-                textToDisplay: widget.caption,
+                textToDisplay: widget.caption!,
                 textAlign: TextAlign.left,
                 textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText, fontSize: 10, fontWeight: FontWeight.w700),
               ),

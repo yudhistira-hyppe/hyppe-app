@@ -886,6 +886,7 @@ class LocalizationModelV2 {
   String? messageInvalidEmail;
   String? titleEmailIsGmail;
   String? messageEmailIsGmail;
+  String? messageSuccessVerification;
   String? pleaseEnterRegisteredEmail;
   String? contentPreferences;
   String? customization;
@@ -1804,6 +1805,7 @@ class LocalizationModelV2 {
     this.messageInvalidEmail,
     this.titleEmailIsGmail,
     this.messageEmailIsGmail,
+    this.messageSuccessVerification,
     this.pleaseEnterRegisteredEmail,
     this.contentPreferences,
     this.customization,
@@ -2741,6 +2743,7 @@ class LocalizationModelV2 {
     messageInvalidEmail = json['messageInvalidEmail'];
     titleEmailIsGmail = json['titleEmailIsGmail'];
     messageEmailIsGmail = json['messageEmailIsGmail'];
+    messageSuccessVerification = json['messageSuccessVerification'];
     pleaseEnterRegisteredEmail = json['pleaseEnterRegisteredEmail'];
     contentPreferences = json['contentPreferences'];
     customization = json['customization'];

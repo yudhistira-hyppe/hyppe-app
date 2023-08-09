@@ -166,11 +166,3 @@ class _SignUpPinTopState extends State<SignUpPinTop> {
     );
   }
 }
-
-
-// class SignUpPinTop extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return
-//   }
-// }
