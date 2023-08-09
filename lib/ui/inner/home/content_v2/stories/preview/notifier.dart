@@ -126,6 +126,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   Future initialStories(BuildContext context /*, {List<ContentData>? list}*/) async {
     // initialMyStories(context);
+    "story initialStories".loggerV2();
     initialMyStoryGroup(context);
     print('initialStories');
     // initialPeopleStories(context, reload: true, list: list);

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
 
 import '../../../../../../core/config/ali_config.dart';
 import '../../../../../../core/models/collection/posts/content_v2/content_data.dart';
@@ -19,6 +21,10 @@ class VideoFullscreenPage extends StatefulWidget {
   final FlutterAliplayer? fAliplayer;
   final Widget? slider;
   final VideoIndicator videoIndicator;
+  final List<ContentData>? vidData;
+  final int? index;
+  final Function()? loadMoreFunction;
+  final Function()? clearPostId; //netral player
   const VideoFullscreenPage({
     Key? key,
     required this.aliPlayerView,
@@ -27,6 +33,10 @@ class VideoFullscreenPage extends StatefulWidget {
     this.fAliplayer,
     this.slider,
     required this.videoIndicator,
+    this.vidData,
+    this.index,
+    this.loadMoreFunction,
+    this.clearPostId,
   }) : super(key: key);
 
   @override
@@ -34,6 +44,7 @@ class VideoFullscreenPage extends StatefulWidget {
 }
 
 class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFirstLayoutMixin {
+  PageController controller = PageController();
   int seekValue = 0;
   bool isMute = false;
   bool _inSeek = false;
@@ -47,6 +58,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   int _currentPlayerState = 0;
 
   bool isloading = true;
+  bool isScrolled = false;
 
   @override
   void afterFirstLayout(BuildContext context) {
@@ -142,6 +154,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         _currentPosition = _videoDuration;
       });
     });
+    controller = PageController(initialPage: widget.index ?? 0);
+
+    controller.addListener(() {
+      isScrolled = true;
+    });
   }
 
   @override
@@ -185,34 +202,111 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                   child: CircularProgressIndicator(),
                 ),
               )
-            : GestureDetector(
-                onTap: () {
-                  onTapCtrl = true;
-                  setState(() {});
-                },
-                child: Stack(
-                  children: [
-                    Container(width: context.getWidth(), height: SizeConfig.screenHeight, decoration: const BoxDecoration(color: Colors.black), child: widget.aliPlayerView),
-                    if (!_showTipsWidget)
-                      SizedBox(
-                        width: context.getWidth(),
-                        height: SizeConfig.screenHeight,
-                        // padding: EdgeInsets.only(bottom: 25.0),
-                        child: Offstage(offstage: false, child: _buildContentWidget(context, Orientation.portrait)),
+            : PageView.builder(
+                controller: controller,
+                scrollDirection: Axis.vertical,
+                itemCount: widget.vidData?.length ?? 0,
+                itemBuilder: (context, index) {
+                  if (isScrolled) {
+                    return VidPlayerPage(
+                      // vidData: notifier.vidData,
+                      fromFullScreen: true,
+                      orientation: Orientation.portrait,
+                      playMode: (widget.vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                      dataSourceMap: map,
+                      data: widget.vidData?[index],
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      inLanding: true,
+                      fromDeeplink: false,
+                      clearPostId: widget.clearPostId,
+                      clearing: true,
+                      functionFullTriger: (value) {
+                        print('===========hahhahahahaa===========');
+                        // fullscreen();
+                        // notifier.vidData?[_curIdx].fAliplayer?.pause();
+                        // showDialog(context: context, builder: (context){
+                        //     return VideoFullscreenPage(data: notifier.vidData?[_curIdx] ?? ContentData(), onClose: (){
+                        //       // Routing().moveBack();
+                        //     }, seekValue: value ?? 0);
+                        //   });
+                      },
+                      onPlay: (exec) {
+                        // try {
+                        //   if (_curIdx != -1) {
+                        //     if (_curIdx != index) {
+                        //       print('Vid Landing Page: stop $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                        //       if (notifier.vidData?[_curIdx].fAliplayer != null) {
+                        //         notifier.vidData?[_curIdx].fAliplayer?.stop();
+                        //       } else {
+                        //         final player = dataAli[_curIdx];
+                        //         if (player != null) {
+                        //           // notifier.vidData?[_curIdx].fAliplayer = player;
+                        //           player.stop();
+                        //         }
+                        //       }
+                        //       // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
+                        //     }
+                        //   }
+                        // } catch (e) {
+                        //   e.logger();
+                        // } finally {
+                        //   setState(() {
+                        //     _curIdx = index;
+                        //   });
+                        // }
+                        // _lastCurIndex = _curIdx;
+                      },
+                      getPlayer: (main) {
+                        // print('Vid Player1: screen ${main}');
+                        // notifier.setAliPlayer(index, main);
+                        // setState(() {
+                        //   dataAli[index] = main;
+                        // });
+                        // print('Vid Player1: after $index ${globalAliPlayer} : ${notifier.vidData?[index].fAliplayer}');
+                      },
+                      getAdsPlayer: (ads) {
+                        // notifier.vidData?[index].fAliplayerAds = ads;
+                      },
+                      // fAliplayer: notifier.vidData?[index].fAliplayer,
+                      // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
+                    );
+                  } else {
+                    return GestureDetector(
+                      onTap: () {
+                        onTapCtrl = true;
+                        setState(() {});
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: context.getWidth(),
+                            height: SizeConfig.screenHeight,
+                            decoration: const BoxDecoration(color: Colors.black),
+                            child: widget.aliPlayerView,
+                          ),
+                          if (!_showTipsWidget)
+                            SizedBox(
+                              width: context.getWidth(),
+                              height: SizeConfig.screenHeight,
+                              // padding: EdgeInsets.only(bottom: 25.0),
+                              child: Offstage(offstage: false, child: _buildContentWidget(context, Orientation.portrait)),
+                            ),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: _buildController(
+                              Colors.transparent,
+                              Colors.white,
+                              100,
+                              context.getWidth(),
+                              SizeConfig.screenHeight ?? 0,
+                            ),
+                          ),
+                        ],
                       ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: _buildController(
-                        Colors.transparent,
-                        Colors.white,
-                        100,
-                        context.getWidth(),
-                        SizeConfig.screenHeight ?? 0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                    );
+                  }
+                }),
       ),
     );
     // return WillPopScope(

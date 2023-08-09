@@ -194,6 +194,7 @@ class ContentData {
   FlutterAliplayer? fAliplayer;
   FlutterAliplayer? fAliplayerAds;
   UserBadgeModel? urluserBadge;
+  bool? isPlay;
 
   ContentData({
     this.metadata,
@@ -255,6 +256,7 @@ class ContentData {
     this.isLoading = false,
     this.fullContent,
     this.urluserBadge,
+    this.isPlay = false,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -315,7 +317,7 @@ class ContentData {
 
     apsaraId = json['apsaraId'] ?? '';
     apsaraThumbId = json['apsaraThumbId'];
-    music = json['music'] != null ? Music.fromJson(json['music']) : null;
+    music = json['music'] != null && json['music'].isNotEmpty ? Music.fromJson(json['music']) : null;
     isReport = json['isReport'] ?? false;
     if (json['boosted'] != null) {
       boosted = [];
@@ -345,16 +347,17 @@ class ContentData {
     } else {
       comment = [];
     }
-    // isDiaryPlay = false;
-    // comments = json['comments'] ?? 0;
-    // isNewFollowing = following ?? false ? false : true;
-    // if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
-    //   if (json['urluserBadge'] is List) {
-    //     urluserBadge = UserBadgeModel.fromJson(json['urluserBadge'].first);
-    //   } else {
-    //     urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
-    //   }
-    // }
+    isDiaryPlay = false;
+    comments = json['comments'] ?? 0;
+    isNewFollowing = following ?? false ? false : true;
+    isPlay = false;
+    if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
+      if (json['urluserBadge'] is List) {
+        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge'].first);
+      } else {
+        urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
+      }
+    }
   }
 
   Map<String, dynamic> toJson() {

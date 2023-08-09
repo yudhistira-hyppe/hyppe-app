@@ -20,6 +20,7 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -128,7 +129,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       final _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
 
-      notifier.initNewHome(context, mounted, isreload: false, isNew: true);
+      if (notifier.preventReloadAfterUploadPost) {
+        notifier.preventReloadAfterUploadPost = false;
+      } else {
+        notifier.initNewHome(context, mounted, isreload: false, isNew: true);
+        "initNewHome from initState".logger();
+      }
       if (notifierFollow.listFollow.isEmpty) {
         notifierFollow.listFollow = [
           {'name': "${_language.follow}", 'code': 'TOFOLLOW'},
@@ -206,6 +212,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           return false;
         },
         child: Scaffold(
+          key: vidPlayerState,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
             child: HomeAppBar(name: selfnotifier.user.profile?.fullName, offset: offset),
@@ -346,6 +353,15 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     print("afterrrrrrr============");
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
     var homneNotifier = context.read<HomeNotifier>();
+    if (homneNotifier.preventReloadAfterUploadPost) {
+      if (homneNotifier.uploadedPostType == FeatureType.pic) {
+        homneNotifier.tabIndex = 0;
+      } else if (homneNotifier.uploadedPostType == FeatureType.diary) {
+        homneNotifier.tabIndex = 1;
+      } else if (homneNotifier.uploadedPostType == FeatureType.vid) {
+        homneNotifier.tabIndex = 2;
+      }
+    }
     _tabController.index = homneNotifier.tabIndex;
     _tabController.animation?.addListener(() {
       homneNotifier.tabIndex = _tabController.index;

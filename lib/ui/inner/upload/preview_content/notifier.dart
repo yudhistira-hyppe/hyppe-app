@@ -1,9 +1,10 @@
+import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:better_player/better_player.dart';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
@@ -17,6 +18,7 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_service.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -24,6 +26,8 @@ import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_field_for_overlay.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -593,7 +597,7 @@ class PreviewContentNotifier with ChangeNotifier {
         print('res length = ${res?.length}');
         return res ?? [];
       } else if (fetch.musicDataState == MusicState.getMusicBlocError) {
-        throw '${(fetch.data as DioError).message}';
+        throw '${(fetch.data as dio.DioError).message}';
       }
     } catch (e) {
       print('Error getMusics : $e');
@@ -612,7 +616,7 @@ class PreviewContentNotifier with ChangeNotifier {
       if (fetch.musicDataState == MusicState.getMusicsBlocSuccess) {
         res = (fetch.data as List<dynamic>?)?.map((item) => MusicType.fromJson(item as Map<String, dynamic>)).toList();
       } else if (fetch.musicDataState == MusicState.getMusicBlocError) {
-        throw '${(fetch.data as DioError).message}';
+        throw '${(fetch.data as dio.DioError).message}';
       }
     } catch (e) {
       print('Error getMusicCategories : $e');
@@ -1179,6 +1183,7 @@ class PreviewContentNotifier with ChangeNotifier {
 
   Future postStoryContent(BuildContext context) async {
     final _orientation = context.read<CameraNotifier>().orientation;
+    final homeNotifier = context.read<HomeNotifier>();
     try {
       // _connectAndListenToSocket(context);
       final notifier = PostsBloc();
@@ -1212,15 +1217,24 @@ class PreviewContentNotifier with ChangeNotifier {
       ).then((value) {
         _uploadSuccess = value;
         'Create post content with value $value'.logger();
-        // _eventService.notifyUploadFinishingUp(_uploadSuccess);
         eventService.notifyUploadSuccess(_uploadSuccess);
+        // _eventService.notifyUploadFinishingUp(_uploadSuccess);
+        if (value is dio.Response) {
+          dio.Response res = value;
+          "return data ${jsonEncode(res.data['data'])}".loggerV2();
+          ContentData uploadedData = ContentData.fromJson(res.data['data']);
+          (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().onUploadedSelfUserContent(context: context, contentData: uploadedData);
+        }
       });
+      
+      homeNotifier.preventReloadAfterUploadPost = true;
+      homeNotifier.uploadedPostType = FeatureType.story;
       Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
     } catch (e) {
       print('Error create post : $e');
       eventService.notifyUploadFailed(
-        DioError(
-          requestOptions: RequestOptions(
+        dio.DioError(
+          requestOptions: dio.RequestOptions(
             path: UrlConstants.createuserposts,
           ),
           error: e,

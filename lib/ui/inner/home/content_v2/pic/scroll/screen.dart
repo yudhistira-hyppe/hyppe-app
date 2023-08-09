@@ -132,8 +132,11 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     // statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     // stopwatch = new Stopwatch()..start();
     super.initState();
+    print("================profile");
+    print("${widget.arguments?.picData}");
     pics = widget.arguments?.picData;
     notifier.pics = widget.arguments?.picData;
+    print("${pics}");
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic-${pics?.first.postID}');
@@ -154,7 +157,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
       itemScrollController.jumpTo(index: widget.arguments?.page ?? 0);
-      scrollIndex = widget.arguments?.page ?? 0;
+      // scrollIndex = widget.arguments?.page ?? 0;
       print("00000000000000 ${widget.arguments?.page}");
       _initListener();
     });
@@ -163,28 +166,28 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     final pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
 
     bool isScroll = false;
-    scrollOffsetListener.changes.listen((event) {
-      if (event.isNegative == false) {
-        scrollIndex++;
-      } else {
-        scrollIndex--;
-        // itemScrollController.scrollTo(
-        //   index: scrollIndex,
-        //   // alignment:
-        //   duration: Duration(milliseconds: 300),
-        // );
-      }
-      print("-=-=-event=-=-=");
-      print(event);
-      print(event.sign);
-      print(event.isNegative);
-      print(event.isInfinite);
-      // itemScrollController.scrollTo(
-      //   index: scrollIndex,
-      //   // alignment:
-      //   duration: Duration(milliseconds: 300),
-      // );
-    });
+    // scrollOffsetListener.changes.listen((event) {
+    //   if (event.isNegative == false) {
+    //     scrollIndex++;
+    //   } else {
+    //     scrollIndex--;
+    //     // itemScrollController.scrollTo(
+    //     //   index: scrollIndex,
+    //     //   // alignment:
+    //     //   duration: Duration(milliseconds: 300),
+    //     // );
+    //   }
+    //   print("-=-=-event=-=-=");
+    //   print(event);
+    //   print(event.sign);
+    //   print(event.isNegative);
+    //   print(event.isInfinite);
+    //   // itemScrollController.scrollTo(
+    //   //   index: scrollIndex,
+    //   //   // alignment:
+    //   //   duration: Duration(milliseconds: 300),
+    //   // );
+    // });
 
     itemPositionsListener.itemPositions.addListener(() async {
       print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");

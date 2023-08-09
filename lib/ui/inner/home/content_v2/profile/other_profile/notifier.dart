@@ -332,7 +332,7 @@ class OtherProfileNotifier with ChangeNotifier {
             // manyUser.add(user);
             golbalToOther = manyUser.length;
           }
-          print("========== many user 2 $manyUser");
+          print("========== many user 2 ${manyUser.length}");
           manyUser.forEach((element) {
             print(element.profile?.username);
           });
@@ -382,17 +382,8 @@ class OtherProfileNotifier with ChangeNotifier {
           UserInfoModel user2 = UserInfoModel();
           user2.pics = await picContentsQuery.reload(context, otherContent: true);
           // user.pics = await picContentsQuery.reload(context, otherContent: true);
-          manyUser.forEach((element) {
-            print(element.pics);
-          });
-          print("222222222222222222222");
-          print(user2.pics);
           manyUser.last.pics = user2.pics;
-          print(manyUser.length);
-          manyUser.forEach((element) {
-            print(element.pics);
-          });
-          Future.delayed(const Duration(milliseconds: 2000), () {
+          Future.delayed(const Duration(milliseconds: 1000), () {
             isLoading = false;
           });
           notifyListeners();
@@ -407,13 +398,26 @@ class OtherProfileNotifier with ChangeNotifier {
           if (email != null) {
             diaryContentsQuery.searchText = email;
           }
+          print("diary 222222222222222222222");
+          print("${manyUser.length}");
+          print("${manyUser.last.diaries}");
+          manyUser.last.diaries = [];
           UserInfoModel user2 = UserInfoModel();
           user2.diaries = await diaryContentsQuery.reload(context, otherContent: true);
           // user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
           manyUser.last.diaries = user2.diaries;
+          notifyListeners();
 
-          context.read<ScrollDiaryNotifier>().diaryData = manyUser.last.diaries;
-          Future.delayed(const Duration(milliseconds: 2000), () {
+          print("======diary========");
+          print(manyUser.last.diaries);
+          print(user2.diaries);
+          print(manyUser.length);
+          manyUser.forEach((element) {
+            print(element.diaries);
+          });
+
+          // context.read<ScrollDiaryNotifier>().diaryData = manyUser.last.diaries;
+          Future.delayed(const Duration(milliseconds: 1000), () {
             isLoading = false;
           });
           notifyListeners();
