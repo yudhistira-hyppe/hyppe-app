@@ -56,6 +56,7 @@ class VidPlayerPage extends StatefulWidget {
   final Function()? clearPostId; //netral player
   final bool? isPlaying;
   final bool clearing;
+  final bool? isAutoPlay;
   // FlutterAliplayer? fAliplayer;
   // FlutterAliplayer? fAliplayerAds;
 
@@ -80,6 +81,7 @@ class VidPlayerPage extends StatefulWidget {
     this.isPlaying,
     this.clearPostId,
     this.clearing = false,
+    this.isAutoPlay = false,
 
     // this.fAliplayer,
     // this.fAliplayerAds
@@ -199,7 +201,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
         fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.postID ?? 'video_player_landing');
+        print("-=-=-=-= auto playy ${widget.isAutoPlay}");
+        // if (widget.isAutoPlay ?? false) {
+        print("-=-=-=-= auto playy");
         fAliplayer?.setAutoPlay(true);
+        // }
 
         final getPlayers = widget.getPlayer;
 

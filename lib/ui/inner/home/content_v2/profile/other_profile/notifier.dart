@@ -84,13 +84,16 @@ class OtherProfileNotifier with ChangeNotifier {
   bool _isCheckLoading = false;
   bool get isCheckLoading => _isCheckLoading;
 
-  int get vidCount => vidContentsQuery.hasNext ? (user.vids?.length ?? 0) + 2 : (user.vids?.length ?? 0);
+  // int get vidCount => vidContentsQuery.hasNext ? (user.vids?.length ?? 0) + 2 : (user.vids?.length ?? 0);
+  int get vidCount => vidContentsQuery.hasNext ? (manyUser.last.vids?.length ?? 0) + 2 : (manyUser.last.vids?.length ?? 0);
   bool get vidHasNext => vidContentsQuery.hasNext;
 
-  int get diaryCount => diaryContentsQuery.hasNext ? (user.diaries?.length ?? 0) + 2 : (user.diaries?.length ?? 0);
+  // int get diaryCount => diaryContentsQuery.hasNext ? (user.diaries?.length ?? 0) + 2 : (user.diaries?.length ?? 0);
+  int get diaryCount => diaryContentsQuery.hasNext ? (manyUser.last.diaries?.length ?? 0) + 2 : (manyUser.last.diaries?.length ?? 0);
   bool get diaryHasNext => diaryContentsQuery.hasNext;
 
-  int get picCount => picContentsQuery.hasNext ? (user.pics?.length ?? 0) + 2 : (user.pics?.length ?? 0);
+  // int get picCount => picContentsQuery.hasNext ? (user.pics?.length ?? 0) + 2 : (user.pics?.length ?? 0);
+  int get picCount => picContentsQuery.hasNext ? (manyUser.last.pics?.length ?? 0) + 2 : (manyUser.last.pics?.length ?? 0);
   bool get picHasNext => picContentsQuery.hasNext;
 
   int _heightBox = 0;
@@ -214,10 +217,13 @@ class OtherProfileNotifier with ChangeNotifier {
       switch (pageIndex) {
         case 0:
           {
+            print("===== hahaha ${picContentsQuery.loading} ");
+            print("===== hahaha ${picHasNext} ");
             if (!picContentsQuery.loading && picHasNext) {
               List<ContentData> _res = await picContentsQuery.loadNext(context, otherContent: true);
               if (_res.isNotEmpty) {
                 user.pics = [...(user.pics ?? []), ..._res];
+                manyUser.last.pics = [...(manyUser.last.pics ?? []), ..._res];
               } else {
                 print("Post Pic Dah Mentok");
               }

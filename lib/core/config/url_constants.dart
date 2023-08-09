@@ -448,4 +448,8 @@ class UrlConstants {
   static const String listAchievement = "$challange/listbadgebyuser";
   static const String collectionBadge = "$challange/listbadgeuserdetail";
   static const String selectBadge = "$challange/badgechoice";
+
+  // Get Effect
+  static const String getEffects = "/api/assets/filter/list";
+  static const String downloadEffect = "/api/assets/filter/file";
 }

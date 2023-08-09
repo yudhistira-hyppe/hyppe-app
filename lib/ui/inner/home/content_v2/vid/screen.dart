@@ -455,8 +455,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             inLanding: true,
                             fromDeeplink: false,
                             isPlaying: vidData.isPlay,
+                            isAutoPlay: true,
                             clearPostId: () {
-                              function();
                               postIdVisibility = '';
                             },
                             functionFullTriger: (value) {

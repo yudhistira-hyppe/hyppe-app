@@ -63,7 +63,6 @@ dependencies:
   crypto: ^3.0.0
   uuid: ^3.0.6
   light_compressor: ^1.2.2
-  deepar_flutter: ^0.0.5
   flutter_html: ^3.0.0-alpha.3
 #  hive: ^2.2.3
 #  hive_flutter: ^1.1.0
@@ -104,6 +103,10 @@ dependencies:
 
   story_view: # Story viewer
     path: packages/story_view
+
+  # deepar_flutter: ^0.0.5
+  deepar_flutter: # Flutter DeepAR
+    path: packages/deepar_flutter
   
   qr_flutter: ^4.0.0
   pattern_formatter: ^2.0.0
@@ -146,33 +149,6 @@ flutter:
     - assets/png/
     - assets/vector/
     - assets/dummy_md/
-    - assets/effect/
-    - assets/effect/BurningEffect/
-    - assets/effect/DevilNeonHorns/
-    - assets/effect/ElephantTrunk/
-    - assets/effect/EmotionMeter/
-    - assets/effect/EmotionsExaggerator/
-    - assets/effect/FireEffect/
-    - assets/effect/FlowerFace/
-    - assets/effect/Hope/
-    - assets/effect/Humanoid/
-    - assets/effect/MakeupLookw_Slipt/
-    - assets/effect/PingPongMinigame/
-    - assets/effect/Snail/
-    - assets/effect/Stallone/
-    - assets/effect/VendettaMask/
-    - assets/effect/VikingHelmetPBR/
-    - assets/effect/BabyChewbacca/
-    - assets/effect/BigGlasses/
-    - assets/effect/Chief/
-    - assets/effect/CrossedEyes/
-    - assets/effect/FreeBeauty/
-    - assets/effect/Jokester/
-    - assets/effect/LizardSkin/
-    - assets/effect/NeonWires/
-    - assets/effect/Peter/
-    - assets/effect/PopFace/
-    - assets/effect/Samurai/
  
   fonts:
     - family: Lato

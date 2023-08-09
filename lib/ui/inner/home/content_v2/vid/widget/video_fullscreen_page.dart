@@ -158,6 +158,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
     controller.addListener(() {
       isScrolled = true;
+      widget.fAliplayer?.stop();
     });
   }
 
@@ -221,6 +222,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       fromDeeplink: false,
                       clearPostId: widget.clearPostId,
                       clearing: true,
+                      isAutoPlay: true,
                       functionFullTriger: (value) {
                         print('===========hahhahahahaa===========');
                         // fullscreen();
