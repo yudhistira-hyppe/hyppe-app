@@ -724,6 +724,7 @@ class LocalizationModelV2 {
   String? yourTransactionisBeingProcessedNow;
   String? backtoTransaction;
   String? successfullyAdded;
+  String? contentNotAvailable;
   String? spam;
   String? nudityOrSexualActivity;
   String? hateSpeechOrSymbols;
@@ -1643,6 +1644,7 @@ class LocalizationModelV2 {
     this.yourTransactionisBeingProcessedNow,
     this.backtoTransaction,
     this.successfullyAdded,
+    this.contentNotAvailable,
     this.spam,
     this.nudityOrSexualActivity,
     this.hateSpeechOrSymbols,
@@ -2580,6 +2582,7 @@ class LocalizationModelV2 {
     yourTransactionisBeingProcessedNow = json["yourTransactionisBeingProcessedNow"];
     backtoTransaction = json["backtoTransaction"];
     successfullyAdded = json["successfullyAdded"];
+    contentNotAvailable = json["contentNotAvailable"];
     spam = json["spam"];
     nudityOrSexualActivity = json["nudityOrSexualActivity"];
     hateSpeechOrSymbols = json["hateSpeechOrSymbols"];

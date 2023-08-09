@@ -8,13 +8,17 @@ import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/notification_v2/notification.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:provider/provider.dart';
 
 class ImageComponent extends StatefulWidget {
   final double width;
@@ -46,6 +50,8 @@ class _ImageComponentState extends State<ImageComponent> {
           callback(_listContentData[0]);
         }
         callback(_listContentData);
+      } else {
+        callback(null);
       }
     }
   }
@@ -62,46 +68,53 @@ class _ImageComponentState extends State<ImageComponent> {
       return isLoading ? const CircularProgressIndicator() : InkWell(
         onTap: () async {
           print('klklklklkl');
+          final language = context.read<TranslateNotifierV2>().translate;
           final featureType = System().getFeatureTypeV2(widget.postType ?? '');
           print(featureType);
           if(!isLoading){
-            setState(() {
-              isLoading = true;
-            });
+            setState(() => isLoading = true);
             switch (featureType) {
               case FeatureType.vid:
                 onGetContentData(context, featureType, (v) async{
-                  await Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v));
-                  setState(() {
-                    isLoading = false;
-                  });
+                  if (v != null) {
+                    await Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v));
+                  } else {
+                    ShowBottomSheet().onShowColouredSheet(context, language.contentNotAvailable ?? '', color: kHyppeLightDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+                  }
+                  setState(() => isLoading = false);
                 });
 
                 break;
               case FeatureType.diary:
                 onGetContentData(context, featureType, (v) async{
-                  await Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v, type: TypePlaylist.none));
-                  setState(() {
-                    isLoading = false;
-                  });
+                  if (v != null) {
+                    await Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v, type: TypePlaylist.none));
+                  } else {
+                    ShowBottomSheet().onShowColouredSheet(context, language.contentNotAvailable ?? '', color: kHyppeLightDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+                  }
+                  setState(() => isLoading = false);
                 });
 
                 break;
               case FeatureType.pic:
                 onGetContentData(context, featureType, (v) async{
-                  Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v));
-                  setState(() {
-                    isLoading = false;
-                  });
+                  if (v != null) {
+                    Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v));
+                  } else {
+                    ShowBottomSheet().onShowColouredSheet(context, language.contentNotAvailable ?? '', color: kHyppeLightDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+                  }
+                  setState(() => isLoading = false);
                 });
                 // context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, 0);
                 break;
               case FeatureType.story:
                 onGetContentData(context, featureType, (v) async {
-                  Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v));
-                  setState(() {
-                    isLoading = false;
-                  });
+                  if (v != null) {
+                    Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v));
+                  } else {
+                    ShowBottomSheet().onShowColouredSheet(context, language.contentNotAvailable ?? '', color: kHyppeLightDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+                  }
+                  setState(() => isLoading = false);
                 });
                 break;
               case FeatureType.txtMsg:
