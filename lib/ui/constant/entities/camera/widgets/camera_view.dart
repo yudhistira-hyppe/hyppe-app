@@ -124,8 +124,10 @@ class _CameraViewState extends State<CameraView> {
                   alignment: Alignment.center,
                   child: GestureDetector(
                     onTap: () {
-                      setState(() => effected = index);
-                      notifier.setDeepAREffect(context, _effect);
+                      if (!notifier.isDownloadingEffect) {
+                        setState(() => effected = index);
+                        notifier.setDeepAREffect(context, _effect);
+                      }
                     },
                     child: Container(
                         width: effected == index ? 60 : 40,
@@ -141,6 +143,7 @@ class _CameraViewState extends State<CameraView> {
                               image: NetworkImage('${Env.data.baseUrl}/api/assets/filter/image/thumb/${_effect.postID}?x-auth-user=$email&x-auth-token=$token'),
                           ),
                         ),
+                        child: (effected == index && notifier.isDownloadingEffect) ? const CustomLoading() : Container(),
                       ),
                   ),
                 );
