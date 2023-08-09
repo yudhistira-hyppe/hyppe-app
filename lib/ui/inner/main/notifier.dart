@@ -50,7 +50,12 @@ class MainNotifier with ChangeNotifier {
   Timer? countdownTimer;
   Duration myDuration = const Duration(minutes: 1);
 
-  final ScrollController scrollController = ScrollController();
+  ScrollController _scrollController = ScrollController();
+  ScrollController get scrollController => _scrollController;
+  set scrollController(val) {
+    _scrollController = val;
+    notifyListeners();
+  }
 
   set openValidationIDCamera(bool val) {
     _openValidationIDCamera = val;
@@ -153,7 +158,7 @@ class MainNotifier with ChangeNotifier {
       ),
       SearchScreen(),
       NotificationScreen(),
-      SelfProfileScreen()
+      const SelfProfileScreen()
     ];
     late Widget screen;
 

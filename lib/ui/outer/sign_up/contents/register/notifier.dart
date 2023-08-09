@@ -38,11 +38,13 @@ class RegisterNotifier with ChangeNotifier {
 
   String _password = "";
   String _email = "";
+  String? _invalidEmail = null;
   bool _hidePassword = true;
   bool _loading = false;
 
   String get password => _password;
   String get email => _email;
+  String? get invalidEmail => _invalidEmail;
   bool get hidePassword => _hidePassword;
   bool get loading => _loading;
 
@@ -53,6 +55,11 @@ class RegisterNotifier with ChangeNotifier {
 
   set email(String val) {
     _email = val;
+    notifyListeners();
+  }
+
+  set invalidEmail(String? val){
+    _invalidEmail = val;
     notifyListeners();
   }
 
@@ -215,26 +222,64 @@ class RegisterNotifier with ChangeNotifier {
             loading = false;
             if (fetch.userState == UserState.signUpSuccess) {
               final SignUpResponse _result = SignUpResponse.fromJson(fetch.data);
+              final message = fetch.message;
+              if(message != null){
+                await ShowBottomSheet().onShowColouredSheet(
+                    context,
+                    language.emailVerification ?? '',
+                    subCaption: language.emailHasRegistered,
+                    maxLines: 3,
+                    borderRadius: 8,
+                    sizeIcon: 20,
+                    color: kHyppeTextLightPrimary,
+                    isArrow: true,
+                    iconColor: kHyppeBorder,
+                    padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
+                    margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
+                    iconSvg: "${AssetPath.vectorPath}info_white.svg",
+                    function: (){
+                      SharedPreference().writeStorage(SpKeys.email, _result.email);
+                      SharedPreference().writeStorage(SpKeys.isUserInOTP, true);
+                      // signUpPinNotifier.userToken = fetch.data['token'];
+                      // signUpPinNotifier.userID = _result.userID; >>>>> Backend tidak memberikan key userID
+                      signUpPinNotifier.username = _result.userName ?? "";
+                      signUpPinNotifier.email = _result.email ?? "";
+                      // signUpEulaNotifier.fullName = _result.fullName ?? "";
+                      // signUpEulaNotifier.userName = _result.userName ?? "";
+                      // signUpEulaNotifier.email = _result.email ?? "";
 
-              SharedPreference().writeStorage(SpKeys.email, _result.email);
-              SharedPreference().writeStorage(SpKeys.isUserInOTP, true);
-              // signUpPinNotifier.userToken = fetch.data['token'];
-              // signUpPinNotifier.userID = _result.userID; >>>>> Backend tidak memberikan key userID
-              signUpPinNotifier.username = _result.userName ?? "";
-              signUpPinNotifier.email = _result.email ?? "";
-              // signUpEulaNotifier.fullName = _result.fullName ?? "";
-              // signUpEulaNotifier.userName = _result.userName ?? "";
-              // signUpEulaNotifier.email = _result.email ?? "";
+                      _hidePassword = true;
+                      final tempEmail = email;
+                      onReset();
+                      notifyListeners();
+                      Routing().move(
+                        Routes.signUpPin,
+                        argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: tempEmail),
+                      );
+                    }
+                );
+              }else{
+                SharedPreference().writeStorage(SpKeys.email, _result.email);
+                SharedPreference().writeStorage(SpKeys.isUserInOTP, true);
+                // signUpPinNotifier.userToken = fetch.data['token'];
+                // signUpPinNotifier.userID = _result.userID; >>>>> Backend tidak memberikan key userID
+                signUpPinNotifier.username = _result.userName ?? "";
+                signUpPinNotifier.email = _result.email ?? "";
+                // signUpEulaNotifier.fullName = _result.fullName ?? "";
+                // signUpEulaNotifier.userName = _result.userName ?? "";
+                // signUpEulaNotifier.email = _result.email ?? "";
 
-              _hidePassword = true;
-              final tempEmail = email;
-              onReset();
-              notifyListeners();
-              Routing().moveAndRemoveUntil(
-                Routes.signUpPin,
-                Routes.root,
-                argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: tempEmail),
-              );
+                _hidePassword = true;
+                final tempEmail = email;
+                onReset();
+                notifyListeners();
+                Routing().move(
+                  Routes.signUpPin,
+                  argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: tempEmail),
+                );
+              }
+
+
             } else {
               // loading = false;
               // // >>>>> Agar failed tetap ke signUpPin page

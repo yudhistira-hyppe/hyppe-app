@@ -115,7 +115,7 @@ class CustomContentModeratedWidget extends StatelessWidget {
                         height: height,
                       ),
                     ),
-              if (featureType != FeatureType.pic)
+              if (featureType != FeatureType.pic && featureType != FeatureType.diary)
                 CustomIconWidget(
                   defaultColor: false,
                   width: 24 * SizeConfig.scaleDiagonal,

@@ -13,8 +13,11 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:intl/intl.dart';
 import 'package:pattern_formatter/numeric_formatter.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../constant/widget/custom_currency_input_formatter.dart';
 
 class OwnershipSellingScreen extends StatelessWidget {
   const OwnershipSellingScreen({Key? key}) : super(key: key);
@@ -190,7 +193,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                                       cursorColor: const Color(0xff8A3181),
                                       textInputAction: TextInputAction.done,
                                       keyboardType: TextInputType.number,
-                                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly, ThousandsFormatter()], // Only numbers can be entered
+                                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly, CurrencyInputFormatter()], // Only numbers can be entered
                                       style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
                                       decoration: InputDecoration(
                                         errorBorder: InputBorder.none,

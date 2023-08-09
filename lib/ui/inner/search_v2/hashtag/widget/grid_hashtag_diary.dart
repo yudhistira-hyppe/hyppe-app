@@ -62,9 +62,11 @@ class _GridHashtagDiaryState extends State<GridHashtagDiary> {
                     }
                     return MeasuredSize(
                       onChange: (value){
-                        setState(() {
-                          heightItem = value.height + 20;
-                        });
+                        if(mounted){
+                          setState(() {
+                            heightItem = value.height + 20;
+                          });
+                        }
                       },
                       child: GestureDetector(
                         onTap: (){

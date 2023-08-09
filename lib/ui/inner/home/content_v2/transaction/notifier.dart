@@ -613,6 +613,7 @@ class TransactionNotifier extends ChangeNotifier {
 
   Future summaryWithdrawal(BuildContext context) async {
     final email = SharedPreference().readStorage(SpKeys.email);
+    final language = context.read<TranslateNotifierV2>().translate;
     if ((accountBalance?.totalsaldo ?? 0) < int.parse(amountWithDrawal ?? '0')) {
       _errorNoBalance = "Insufficient balance";
       notifyListeners();
@@ -634,18 +635,17 @@ class TransactionNotifier extends ChangeNotifier {
         iconSvg: "${AssetPath.vectorPath}close.svg",
       );
     }
-
     for (var e in dataAcccount ?? []) {
       if (e.noRek == params['norek']) {
         if (e.statusInquiry != null && !e.statusInquiry) {
           return ShowBottomSheet().onShowColouredSheet(
             context,
-            'Bank account name and your ID did not matched. Click Here to visit our Help Center',
+            language.messageBankNotMatched ?? 'Bank account name and your ID did not matched. Click Here to visit our Help Center',
             maxLines: 4,
             color: Theme.of(context).colorScheme.error,
             iconSvg: "${AssetPath.vectorPath}close.svg",
             function: () {
-              print('asdasd');
+              Routing().move(Routes.help);
             },
           );
         }
@@ -656,6 +656,7 @@ class TransactionNotifier extends ChangeNotifier {
 
   Future _summaryWithdrawal(BuildContext context, params) async {
     bool connect = await System().checkConnections();
+    final language = context.read<TranslateNotifierV2>().translate;
     if (connect) {
       isLoadingSummaryWithdraw = true;
       _errorNoBalance = '';
@@ -675,12 +676,12 @@ class TransactionNotifier extends ChangeNotifier {
         } else {
           ShowBottomSheet().onShowColouredSheet(
             context,
-            'Bank account name and your ID did not matched. Click Here to visit our Help Center',
+            language.messageBankNotMatched ?? 'Bank account name and your ID did not matched. Click Here to visit our Help Center',
             maxLines: 2,
             color: Theme.of(context).colorScheme.error,
             iconSvg: "${AssetPath.vectorPath}close.svg",
             function: () {
-              // print('asdasd');
+              Routing().move(Routes.help);
             },
           );
         }

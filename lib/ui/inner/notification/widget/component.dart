@@ -34,29 +34,29 @@ class _ComponentState extends State<Component> {
     SizeConfig().init(context);
     return InkWell(
       onTap: () async {
-        if (!isLoading) {
-          setState(() {
-            isLoading = true;
-          });
-          context.read<NotificationNotifier>().markAsRead(context, widget.data ?? NotificationModel());
-          final eventType = System().getNotificationCategory(widget.data?.eventType ?? '');
-          var listTransacation = [
-            NotificationCategory.transactions,
-            NotificationCategory.adsClick,
-            NotificationCategory.adsView,
-          ];
+        if (widget.data?.eventType != 'CONTENTMOD') {
+          if (!isLoading) {
+            setState(() {
+              isLoading = true;
+            });
+            context.read<NotificationNotifier>().markAsRead(context, widget.data ?? NotificationModel());
+            final eventType = System().getNotificationCategory(widget.data?.eventType ?? '');
+            var listTransacation = [
+              NotificationCategory.transactions,
+              NotificationCategory.adsClick,
+              NotificationCategory.adsView,
+            ];
 
-          if (listTransacation.contains(eventType)) {
-            await Routing().move(Routes.transaction);
-          } else if (eventType == NotificationCategory.challange) {
-            Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: widget.data?.postID));
-          } else {
-            await context.read<NotificationNotifier>().navigateToContent(context, widget.data?.postType, widget.data?.postID);
+            if (listTransacation.contains(eventType)) {
+              await Routing().move(Routes.transaction);
+            } else {
+              await context.read<NotificationNotifier>().navigateToContent(context, widget.data?.postType, widget.data?.postID);
+            }
           }
+          setState(() {
+            isLoading = false;
+          });
         }
-        setState(() {
-          isLoading = false;
-        });
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),

@@ -795,7 +795,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     sixteenPx,
                     detailText(notifier.language.includeTotalLikes, notifier.includeTotalLikes ? ya : tidak),
                     sixteenPx,
-                    detailText(notifier.language.sellingPrice, 'Rp ${notifier.priceController.text}'),
+                    detailText(notifier.language.sellingPrice, System().currencyFormat(amount: (notifier.priceController.text.replaceAll('.', '')).convertInteger())),
                   ],
                 )
               : Container()

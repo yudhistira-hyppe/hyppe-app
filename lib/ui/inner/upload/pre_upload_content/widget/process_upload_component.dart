@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -83,7 +85,18 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
       if (isCheckedOwnership) {
         ShowBottomSheet.onShowSuccessPostContentOwnership(context);
       } else {
-        ShowBottomSheet().onShowColouredSheet(context, _uploadNotifier.message, color: kHyppeTextSuccess, maxLines: 2);
+        ShowBottomSheet().onShowColouredSheet(
+          context,
+          _uploadNotifier.message,
+          color: kHyppeTextSuccess,
+          maxLines: 2,
+          onClose: () {
+            context.read<MainNotifier>().scrollController.animateTo(
+              context.read<MainNotifier>().scrollController.initialScrollOffset,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn);
+          },
+        );
       }
     }
   }

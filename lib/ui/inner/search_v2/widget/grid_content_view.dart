@@ -80,9 +80,11 @@ class _GridContentViewState extends State<GridContentView> {
                   // print('GridContentView URL Image: $thumb');
                   return MeasuredSize(
                     onChange: (value){
-                      setState(() {
-                        heightItem = value.height;
-                      });
+                      if(mounted){
+                        setState(() {
+                          heightItem = value.height;
+                        });
+                      }
                     },
                     child: Builder(
                       builder: (context){

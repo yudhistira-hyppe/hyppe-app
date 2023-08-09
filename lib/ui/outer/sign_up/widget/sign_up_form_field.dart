@@ -20,7 +20,9 @@ class SignUpForm extends StatelessWidget {
   final Function(String)? onChange;
   final String? onChangeValue;
   final bool obscure;
-  final double contentPadding;
+  final EdgeInsets? contentPadding;
+  final String? errorText;
+  final double? inputAreaHeight;
   const SignUpForm({
     Key? key,
     required this.labelText,
@@ -28,7 +30,7 @@ class SignUpForm extends StatelessWidget {
     this.focusNode,
     this.labelStyle,
     this.textInputType = TextInputType.text,
-    this.contentPadding = 0,
+    this.contentPadding,
     this.readOnly = false,
     this.obscure = false,
     this.borderColor,
@@ -39,6 +41,8 @@ class SignUpForm extends StatelessWidget {
     this.onTap,
     this.onChange,
     this.onChangeValue,
+    this.errorText,
+    this.inputAreaHeight
   }) : super(key: key);
 
   @override
@@ -60,7 +64,7 @@ class SignUpForm extends StatelessWidget {
         ),
         child: CustomTextFormField(
           inputAreaWidth: SizeConfig.screenWidth!,
-          inputAreaHeight: 50,
+          inputAreaHeight: inputAreaHeight ?? 50,
           focusNode: focusNode,
           obscuringCharacter: '*',
           onChanged: onChange,
@@ -70,7 +74,7 @@ class SignUpForm extends StatelessWidget {
           onTap: onTap,
           readOnly: readOnly,
           inputDecoration: InputDecoration(
-            contentPadding: EdgeInsets.only(top: contentPadding),
+            contentPadding: contentPadding ?? const EdgeInsets.only(top: 0),
             labelText: labelText,
             labelStyle: Theme.of(context).primaryTextTheme.bodyText1!.copyWith(
                   color:
@@ -95,6 +99,7 @@ class SignUpForm extends StatelessWidget {
                     child: suffixIcon,
                   )
                 : const SizedBox.shrink(),
+            errorText: errorText
           ),
         ),
       ),

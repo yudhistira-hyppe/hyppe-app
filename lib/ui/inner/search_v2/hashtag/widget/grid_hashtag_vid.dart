@@ -63,9 +63,11 @@ class _GridHashtagVidState extends State<GridHashtagVid> {
 
                     return MeasuredSize(
                       onChange: (value){
-                        setState(() {
-                          heightItem = value.height + 20;
-                        });
+                        if(mounted){
+                          setState(() {
+                            heightItem = value.height + 20;
+                          });
+                        }
                       },
                       child: GestureDetector(
                         onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen4(context, ref.item1?.vid ?? [], index, HyppeType.HyppeVid, TypeApiSearch.detailHashTag, tag, PageSrc.hashtag, widget.controller, heightItem, widget.top),
