@@ -28,6 +28,11 @@ import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/page_not_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/delete_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/achievement/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/collection/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_slider.dart';
 import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/diary_player.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
@@ -402,6 +407,17 @@ class Generate {
         return MaterialPageRoute(builder: (_) => ScrollDiary(arguments: settings.arguments as SlidedDiaryDetailScreenArgument));
       case Routes.scrollVid:
         return MaterialPageRoute(builder: (_) => ScrollVid(arguments: settings.arguments as SlidedVidDetailScreenArgument));
+
+      case Routes.chalenge:
+        return MaterialPageRoute(builder: (_) => const ChalangeScreen());
+      case Routes.chalengeDetail:
+        return MaterialPageRoute(builder: (_) => ChalangeDetailScreen(arguments: settings.arguments as GeneralArgument));
+      case Routes.chalengeCollectionBadge:
+        return MaterialPageRoute(builder: (_) => const CollectionBadgeScreen());
+      case Routes.chalengeAchievement:
+        return MaterialPageRoute(builder: (_) => const AchievementScreen());
+      case Routes.shimmerSlider:
+        return MaterialPageRoute(builder: (_) => ShimmerSlider(arguments: settings.arguments as SlidedPicDetailScreenArgument));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

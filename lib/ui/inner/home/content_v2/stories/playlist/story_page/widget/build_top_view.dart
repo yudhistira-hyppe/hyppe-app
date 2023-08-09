@@ -80,6 +80,7 @@ class _BuildTopViewState extends State<BuildTopView> {
                             imageUrl: notifier.onProfilePicShow(
                               "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.avatar?.mediaEndpoint : valueNotifier?.avatar?.mediaEndpoint ?? ''}",
                             ),
+                            badge: widget.data?.urluserBadge,
                             // onTapOnProfileImage: () => System().navigateToProfileScreen(context, null, storyData: data, userIdStory: userID),
                           );
                         },

@@ -1,10 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:dio_http_formatter/dio_http_formatter.dart';
+import 'package:flutter/material.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/config/url_constants.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/status_code.dart';
 import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'dart:io';
+import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -57,6 +61,13 @@ class ApiAction {
     // } else {
     //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
     // }
+    // if (Env.data.debug == true) {
+    //   var sessionEndPoint = SharedPreference().readStorage(SpKeys.endPointTest);
+    //   if (sessionEndPoint != null) {
+    //     _dio.options.baseUrl = sessionEndPoint;
+    //   }
+    // }
+
     try {
       final _response = await _dio.post(
         url,
@@ -89,22 +100,25 @@ class ApiAction {
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
 
+    // if (Env.data.debug == true) {
+    //   var sessionEndPoint = SharedPreference().readStorage(SpKeys.endPointTest);
+    //   if (sessionEndPoint != null) {
+    //     _dio.options.baseUrl = sessionEndPoint;
+    //   }
+    // }
+
     if (url == UrlConstants.createuserposts) {
       if (Env.data.debug == true) {
+        var sessionEndPoint = SharedPreference().readStorage(SpKeys.endPointTest);
+        if (sessionEndPoint != null) {
+          _dio.options.baseUrl = sessionEndPoint;
+        }
         url = UrlConstants.stagingUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
       } else {
         // url = UrlConstants.stagingUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
         url = UrlConstants.productionUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
       }
     }
-
-    // url = "${UrlConstants.stagingBaseApi}/v5/api/posts/taslim/bangke/createpost";
-
-    // if (Env.dataUrlv4.contains(url)) {
-    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
-    // } else {
-    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
-    // }
 
     try {
       final _response = await _dio.post(
@@ -144,6 +158,12 @@ class ApiAction {
     //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
     // } else {
     //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
+    // }
+    // if (Env.data.debug == true) {
+    //   var sessionEndPoint = SharedPreference().readStorage(SpKeys.endPointTest);
+    //   if (sessionEndPoint != null) {
+    //     _dio.options.baseUrl = sessionEndPoint;
+    //   }
     // }
 
     try {
@@ -190,6 +210,13 @@ class ApiAction {
     //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
     // }
 
+    // if (Env.data.debug == true) {
+    //   var sessionEndPoint = SharedPreference().readStorage(SpKeys.endPointTest);
+    //   if (sessionEndPoint != null) {
+    //     _dio.options.baseUrl = sessionEndPoint;
+    //   }
+    // }
+
     try {
       final _response = await _dio
           .get(
@@ -233,6 +260,12 @@ class ApiAction {
     // } else {
     //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
     // }
+    // if (Env.data.debug == true) {
+    //   var sessionEndPoint = SharedPreference().readStorage(SpKeys.endPointTest);
+    //   if (sessionEndPoint != null) {
+    //     _dio.options.baseUrl = sessionEndPoint;
+    //   }
+    // }
 
     try {
       final _response = await _dio
@@ -264,6 +297,7 @@ class ApiAction {
     Map<String, dynamic>? headers,
     responseType = ResponseType.json,
     ProgressCallback? onReceiveProgress,
+    VoidCallback? whenComplete,
   }) async {
     Map<String, dynamic> _headers = <String, dynamic>{};
 
@@ -276,24 +310,35 @@ class ApiAction {
     //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
     // }
 
+    // if (Env.data.debug == true) {
+    //   var sessionEndPoint = SharedPreference().readStorage(SpKeys.endPointTest);
+    //   if (sessionEndPoint != null) {
+    //     _dio.options.baseUrl = sessionEndPoint;
+    //   }
+    // }
+
     try {
       final _response = await _dio
           .download(
-            url,
-            path,
-            options: Options(
-              headers: _headers,
-              responseType: responseType,
-            ),
-            onReceiveProgress: onReceiveProgress,
-          )
-          .timeout(
-            const Duration(seconds: TIMEOUT_DURATION),
-            onTimeout: () => throw DioError(
-              type: DioErrorType.connectionTimeout,
-              requestOptions: RequestOptions(path: url),
-            ),
-          );
+        url,
+        path,
+        options: Options(
+          headers: _headers,
+          responseType: responseType,
+        ),
+        onReceiveProgress: onReceiveProgress,
+      )
+          .whenComplete(() {
+        if (whenComplete != null) {
+          whenComplete();
+        }
+      }).timeout(
+        const Duration(seconds: TIMEOUT_DURATION),
+        onTimeout: () => throw DioError(
+          type: DioErrorType.connectionTimeout,
+          requestOptions: RequestOptions(path: url),
+        ),
+      );
       return _response;
     } on DioError {
       rethrow;

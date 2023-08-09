@@ -16,6 +16,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
 
 import 'core/services/SqliteData.dart';
 import 'core/services/api_action.dart';
@@ -23,6 +24,8 @@ import 'firebase_options.dart';
 
 final InAppLocalhostServer localhostServer = InAppLocalhostServer();
 final GlobalKey<ScaffoldState> materialAppKey = GlobalKey<ScaffoldState>();
+GlobalKey<VidPlayerPageState> vidPlayerState = GlobalKey();
+
 AudioPlayer? globalAudioPlayer;
 // ScrollController? globalScroller;
 FlutterAliplayer? globalAliPlayer;

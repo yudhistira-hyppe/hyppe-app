@@ -816,6 +816,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
                     animationController: emojiController,
                     currentIndex: _curChildIdx,
                     pause: pause,
+                    play: play,
                     // play: play,
                   ),
                 ),

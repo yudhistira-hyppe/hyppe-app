@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
@@ -19,6 +20,7 @@ import 'package:hyppe/ui/inner/search_v2/interest/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
+import 'package:hyppe/ui/inner/search_v2/widget/event_banner.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
@@ -40,8 +42,11 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final CarouselController _controllerSlider = CarouselController();
+
   late TabController _tabController;
   int _currentIndex = 0;
+  int _currentIndexSlider = 0;
 
   @override
   void didChangeDependencies() {
@@ -103,10 +108,13 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     Future.delayed(const Duration(milliseconds: 500), () {
       (Routing.navigatorKey.currentContext ?? context).read<ReportNotifier>().inPosition = contentPosition.searchFirst;
       final notifier = Routing.navigatorKey.currentContext!.read<SearchNotifier>();
+      _controllerSlider.jumpToPage(_currentIndexSlider);
       if (notifier.layout == SearchLayout.searchMore) {
         // notifier.getDataSearch(context);
       }
     });
+    // debugPrint(_currentIndexSlider.toString());
+    //
 
     super.didPopNext();
   }
@@ -129,6 +137,11 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   void didPush() {
     'didPush searchFirst false'.logger();
     super.didPush();
+  }
+
+  void changeIndexSlide(int val) {
+    _currentIndexSlider = val;
+    print(_currentIndexSlider); //newValue
   }
 
   @override
@@ -209,44 +222,45 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
         onRefresh: () => notifier.onSearchLandingPage(context),
         child: notifier.connectionError
             ? OfflineMode(
-          function: () {
-            notifier.checkConnection();
-            notifier.onSearchLandingPage(context);
-          },
-        )
+                function: () {
+                  notifier.checkConnection();
+                  notifier.onSearchLandingPage(context);
+                },
+              )
             : SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: CustomSearchBar(
-                  hintText: notifier.language.whatAreYouFindOut,
-                  contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
-                  focusNode: notifier.focusNode1,
-                  controller: notifier.searchController1,
-                  onTap: () {
-                    if (notifier.layout == SearchLayout.searchMore) {
-                      notifier.isFromComplete = true;
-                    }
-                    notifier.layout = SearchLayout.search;
-                  },
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: CustomSearchBar(
+                        hintText: notifier.language.whatAreYouFindOut,
+                        contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                        focusNode: notifier.focusNode1,
+                        controller: notifier.searchController1,
+                        onTap: () {
+                          if (notifier.layout == SearchLayout.searchMore) {
+                            notifier.isFromComplete = true;
+                          }
+                          notifier.layout = SearchLayout.search;
+                        },
+                      ),
+                    ),
+                    // EventBannerWidget(controller: _controllerSlider, callback: changeIndexSlide),
+                    const HashtagScreen(),
+                    InterestScreen(
+                      onClick: (value) {
+                        notifier.selectedInterest = value;
+                        if (notifier.layout == SearchLayout.searchMore) {
+                          notifier.isFromComplete = true;
+                        }
+                        notifier.layout = SearchLayout.interestDetail;
+                      },
+                    ),
+                    sixtyFourPx,
+                    sixtyFourPx
+                  ],
                 ),
               ),
-              const HashtagScreen(),
-              InterestScreen(
-                onClick: (value) {
-                  notifier.selectedInterest = value;
-                  if (notifier.layout == SearchLayout.searchMore) {
-                    notifier.isFromComplete = true;
-                  }
-                  notifier.layout = SearchLayout.interestDetail;
-                },
-              ),
-              sixtyFourPx,
-              sixtyFourPx
-            ],
-          ),
-        ),
       ),
     );
   }

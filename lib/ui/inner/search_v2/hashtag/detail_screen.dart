@@ -127,6 +127,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
             color: Theme.of(context).colorScheme.onSurface,
           ),
+          titleSpacing: 0,
           title: CustomTextWidget(
             textToDisplay: widget.argument.isTitle ? (context.read<SearchNotifier>().language.popularHashtag ?? 'Popular Hashtag') : ('#${widget.argument.hashtag.tag}'),
             textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700),

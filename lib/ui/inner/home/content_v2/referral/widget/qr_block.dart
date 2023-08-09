@@ -68,6 +68,7 @@ class _QRBlockState extends State<QRBlock> {
                             width: 80 * SizeConfig.scaleDiagonal,
                             height: 80 * SizeConfig.scaleDiagonal,
                             imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
+                            badge: notifier.user.profile?.urluserBadge,
                             onTap: () => notifier.viewStory(context),
                           ),
                           const SizedBox(

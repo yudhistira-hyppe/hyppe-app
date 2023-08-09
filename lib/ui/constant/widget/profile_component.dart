@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/ui/constant/widget/custom_stroke_text_widget.dart';
 
 import '../../../core/constants/asset_path.dart';
@@ -33,6 +34,7 @@ class ProfileComponent extends StatelessWidget {
   final FeatureType featureType;
   final String? cacheKey;
   final bool isUserVerified;
+  final UserBadgeModel? badge;
 
   const ProfileComponent(
       {Key? key,
@@ -54,8 +56,9 @@ class ProfileComponent extends StatelessWidget {
       this.cacheKey,
       this.haveStory = false,
       required this.featureType,
-      required this.isUserVerified})
-      : super(key: key);
+      required this.isUserVerified,
+      this.badge,  
+    }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +82,7 @@ class ProfileComponent extends StatelessWidget {
                   imageUrl: imageUrl,
                   following: following,
                   onFollow: onFollow,
+                  badge: badge,
                 ),
               ),
               Visibility(visible: showNameAndTimeStamp, child: spaceProfileAndId),

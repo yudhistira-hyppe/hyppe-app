@@ -9,10 +9,15 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
@@ -208,6 +213,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           return false;
         },
         child: Scaffold(
+          key: vidPlayerState,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
             child: HomeAppBar(name: selfnotifier.user.profile?.fullName, offset: offset),
@@ -249,6 +255,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                             sixPx,
                             const HyppePreviewStories(),
                             sixPx,
+                            // GestureDetector(
+                            //     onTap: () {
+                            //       _showMessage("hahaha");
+                            //     },
+                            //     child: Text("hahahahaha")),
                             Container(
                               padding: const EdgeInsets.all(16),
                               color: kHyppeLightSurface,
@@ -339,7 +350,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   final events = [];
 
   @override
-  void afterFirstLayout(BuildContext context) {
+  void afterFirstLayout(BuildContext context) async {
     print("afterrrrrrr============");
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
     var homneNotifier = context.read<HomeNotifier>();
@@ -356,7 +367,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     _tabController.animation?.addListener(() {
       homneNotifier.tabIndex = _tabController.index;
       print("masuk tab slide");
-
       if (homneNotifier.lastCurIndex != homneNotifier.tabIndex) {
         homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
       }
@@ -366,5 +376,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       print("isOnHomeScreen hit ads");
       homneNotifier.getAdsApsara(context, true);
     }
+    // System().popUpChallange(context);
   }
 }

@@ -36,7 +36,7 @@ class ScrollPicNotifier with ChangeNotifier {
 
   set pics(List<ContentData>? val) {
     _pics = val;
-    notifyListeners();
+    // notifyListeners();
   }
 
   void onUpdate() => notifyListeners();
@@ -47,11 +47,16 @@ class ScrollPicNotifier with ChangeNotifier {
     connectionError = !connect;
     final searchNotifier = context.read<SearchNotifier>();
     if (connect) {
+      print("masuk");
+      print(pageSrc);
       if (pageSrc == PageSrc.selfProfile) {
         final sp = context.read<SelfProfileNotifier>();
         sp.pageIndex = 0;
         await sp.onScrollListener(context, scrollController, isLoad: true);
-        pics = sp.user.pics;
+        if (sp.user.pics == null || (sp.user.pics?.isEmpty ?? [].isEmpty)) {
+        } else {
+          pics = sp.user.pics;
+        }
         isLoadingLoadmore = false;
       }
 
@@ -59,7 +64,11 @@ class ScrollPicNotifier with ChangeNotifier {
         final op = context.read<OtherProfileNotifier>();
         op.pageIndex = 0;
         await op.onScrollListener(context, scrollController, isLoad: true);
-        pics = op.user.pics;
+        if (op.user.pics == null || (op.user.pics?.isEmpty ?? [].isEmpty)) {
+        } else {
+          pics = op.user.pics;
+        }
+
         isLoadingLoadmore = false;
       }
 

@@ -692,6 +692,9 @@ class PreUploadContentNotifier with ChangeNotifier {
             print('progress $progress');
             await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: progress, total: total.toDouble()));
           }
+          if (received == total) {
+            eventService.notifyUploadFinishingUp(_uploadSuccess);
+          }
         },
       ).then((value) {
         _uploadSuccess = value;

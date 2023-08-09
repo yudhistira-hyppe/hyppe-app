@@ -36,7 +36,7 @@ class _GridContentViewState extends State<GridContentView> {
 
   @override
   void initState() {
-    context.read<SearchNotifier>().initAllHasNext();
+    // context.read<SearchNotifier>().initAllHasNext();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'GridContentView');
     super.initState();
   }

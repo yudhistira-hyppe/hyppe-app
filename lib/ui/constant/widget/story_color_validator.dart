@@ -5,6 +5,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 
 class StoryColorValidator extends StatelessWidget {
   final double width;
+  final double borderRadius;
   final Widget child;
   final bool haveStory;
   final FeatureType featureType;
@@ -15,6 +16,7 @@ class StoryColorValidator extends StatelessWidget {
   const StoryColorValidator({
     Key? key,
     this.width = 2.0,
+    this.borderRadius = 27,
     required this.child,
     required this.haveStory,
     this.contentData,
@@ -30,7 +32,7 @@ class StoryColorValidator extends StatelessWidget {
     return Container(
       // padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(27),
+        borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
             width: width,
             color: haveStory

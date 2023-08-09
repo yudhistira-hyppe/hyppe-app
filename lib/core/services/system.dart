@@ -28,6 +28,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
@@ -271,7 +272,7 @@ class System {
     return OverlayEntry(builder: (context) => widgetToOverlay);
   }
 
-  dateFormatter(String dateParams, int displayOption) {
+  dateFormatter(String dateParams, int displayOption, {String lang = "id"}) {
     String? value;
     if (displayOption == 0) {
       value = DateFormat.yMMMd().format(DateTime.parse(dateParams));
@@ -287,6 +288,10 @@ class System {
       value = DateFormat('dd/MM/yyyy').format(DateTime.parse(dateParams));
     } else if (displayOption == 6) {
       value = DateFormat('HH:mm').format(DateTime.parse(dateParams));
+    } else if (displayOption == 7) {
+      value = DateFormat('d MMMM yyyy', lang).format(DateTime.parse(dateParams));
+    } else if (displayOption == 8) {
+      value = DateFormat('MMMM yyyy', lang).format(DateTime.parse(dateParams));
     }
     return value;
   }
@@ -899,6 +904,8 @@ class System {
         return 'ADS CLICK';
       case NotificationCategory.adsView:
         return 'ADS VIEW';
+      case NotificationCategory.challange:
+        return 'CHALLANGE';
     }
   }
 
@@ -922,6 +929,8 @@ class System {
         return NotificationCategory.adsClick;
       case 'ADS VIEW':
         return NotificationCategory.adsView;
+      case 'CHALLANGE':
+        return NotificationCategory.challange;
       default:
         return NotificationCategory.all;
     }
@@ -1038,7 +1047,8 @@ class System {
   }
 
   Future<Uri> createdReferralLink(BuildContext context) async {
-    final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
+    // final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
+    final notifier = context.read<SelfProfileNotifier>();
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: Env.data.deeplinkBaseUrl,
       link: Uri.parse('${Env.data.deeplinkBaseUrl}${Routes.otherProfile}?referral=1&sender_email=${notifier.user.profile?.email}'),
@@ -1379,6 +1389,34 @@ class System {
     }
   }
 
+  Future popUpChallange(BuildContext context) async {
+    String lastTime = SharedPreference().readStorage(SpKeys.datetimeLastShowChallange) ?? '';
+    var challange = context.read<ChallangeNotifier>();
+
+    if (lastTime == '') {
+      await challange.getBannerLanding(context, ispopUp: true);
+      SharedPreference().writeStorage(SpKeys.datetimeLastShowChallange, DateTime.now().toString());
+      return ShowGeneralDialog.showBannerPop(context);
+    } else {
+      var temp = DateTime.now();
+      // var temp = DateTime.parse("2023-07-29 08:02:10");
+      var startDate = DateTime.parse(lastTime);
+      var d1 = DateTime.utc(temp.year, temp.month, temp.day, temp.hour, temp.minute, temp.second);
+      var startDay = DateTime.utc(startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute, startDate.second);
+
+      final difference = startDay.difference(d1);
+      print("===============222222 ---- ${difference.inDays}");
+      print("===============222222 ---- ${difference.inHours}");
+      print("===============222222 ---- ${difference.inMinutes}");
+      // if (difference.inHours >= 24) {
+      if (difference.inMinutes <= -0) {
+        await challange.getBannerLanding(context, ispopUp: true);
+        SharedPreference().writeStorage(SpKeys.datetimeLastShowChallange, DateTime.now().toString());
+        return ShowGeneralDialog.showBannerPop(context);
+      }
+    }
+  }
+
   Future userVerified(status) async {
     switch (status) {
       case VERIFIED:
@@ -1623,10 +1661,10 @@ class System {
   }
 
   void checkMemory() {
-    ImageCache _imageCache = PaintingBinding.instance.imageCache;
-    if (_imageCache.liveImageCount >= 50) {
-      _imageCache.clear();
-      _imageCache.clearLiveImages();
+    ImageCache imageCache = PaintingBinding.instance.imageCache;
+    if (imageCache.liveImageCount >= 50) {
+      imageCache.clear();
+      imageCache.clearLiveImages();
     }
   }
 
@@ -1644,12 +1682,31 @@ class System {
     heightIndex = (heightBox * hasilBagi.toInt() - heightBox);
 
     double jumpTo = heightProfileCard + heightIndex;
-    print("============= jumpt to $heightProfileCard =================");
-    print("============= jumpt to $hasilBagi =================");
-    print("============= jumpt to $heightIndex =================");
-    print("============= jumpt to $jumpTo =================");
     return jumpTo;
   }
 
   bool isInteger(num value) => value is int || value == value.roundToDouble();
+
+  Future<List> compareDate(String startDateString, String endtDateString, {String? dari}) async {
+    //get difrent date
+    print("???????? $startDateString");
+    print("???????? $endtDateString");
+    // startDateString = "2023-01-08 13:52:15";
+    var temp = DateTime.now();
+    var startDate = DateTime.parse(startDateString);
+    var endDate = DateTime.parse(endtDateString);
+    var d1 = DateTime.utc(temp.year, temp.month, temp.day, temp.hour, temp.minute, temp.second);
+    var startDay = DateTime.utc(startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute, startDate.second);
+    var endDay = DateTime.utc(endDate.year, endDate.month, endDate.day, endDate.hour, endDate.minute, endDate.second);
+    print("======= compare ${startDay.compareTo(d1)}");
+    if (startDay.compareTo(d1) <= -1) {
+      //tanggal lewat ("berakhir dalam");
+      final difference = endDay.difference(d1);
+      return [true, difference];
+    } else {
+      //tanggal akan datang ("Mulai dalam");
+      final difference = startDay.difference(d1);
+      return [false, difference];
+    }
+  }
 }

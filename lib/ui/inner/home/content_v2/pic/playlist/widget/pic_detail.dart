@@ -150,6 +150,7 @@ class _PicDetailState extends State<PicDetail> {
                             isCelebrity: widget.arguments?.privacy?.isCelebrity,
                             isUserVerified: widget.arguments?.isIdVerified ?? false,
                             imageUrl: '${System().showUserPicture(widget.arguments?.avatar?.mediaEndpoint)}',
+                            badge: widget.arguments?.urluserBadge,
                             createdAt: '${System().readTimestamp(
                               DateTime.parse(System().dateTimeRemoveT(widget.arguments?.createdAt ?? '')).millisecondsSinceEpoch,
                               context,

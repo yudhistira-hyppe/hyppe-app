@@ -78,6 +78,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                               height: 35,
                               following: true,
                               imageUrl: notifier.argument.photoReceiver,
+                              badge: notifier.argument.badgeReceiver,
                               // imageUrl:
                               //     notifier.photoUrl.endsWith(JPG) || notifier.photoUrl.endsWith(JPEG) ? notifier.photoUrl : notifier.photoUrl + SMALL,
                             ),

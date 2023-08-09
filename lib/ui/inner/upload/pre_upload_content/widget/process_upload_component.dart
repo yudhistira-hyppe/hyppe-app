@@ -66,6 +66,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
 
   @override
   void onUploadFinishingUp() {
+    print("================onUploadFinishingUp");
     _uploadNotifier.message = "${_language.translate.finishingUp}...";
   }
 

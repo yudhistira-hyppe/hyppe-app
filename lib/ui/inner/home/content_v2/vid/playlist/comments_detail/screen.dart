@@ -5,6 +5,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/widget/comment_tile.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/user_template.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_auto_complete_user_tag_comment.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -137,10 +138,12 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                 },
                               ),
                             ))
-                          : Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 100.0),
-                              child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
-                            )
+                          : Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 100.0),
+                                child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
+                              ),
+                          )
                     ],
                   ),
                 ),
@@ -188,7 +191,9 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                       padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16, top: 10),
                       child: Column(
                         children: [
-                          Row(
+                          notifier.isShowAutoComplete
+                          ? const AutoCompleteUserTagComment()
+                          : Row(
                             children: List.generate(emoji.length, (index) {
                               return Expanded(
                                   child: InkWell(
@@ -224,6 +229,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                     width: 26,
                                     height: 26,
                                     imageUrl: System().showUserPicture(comments?.first.comment?.senderInfo?.avatar?.mediaEndpoint ?? (urlImage ?? '')),
+                                    badge: comments?.first.comment?.senderInfo?.urluserBadge,
                                     following: true,
                                   );
                                 }),
@@ -277,6 +283,7 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
             height: 36,
             onTap: () => System().navigateToProfile(context, data.email ?? ''),
             imageUrl: System().showUserPicture(data.avatar?.mediaEndpoint),
+            badge: data.urluserBadge,
             following: true,
             onFollow: () {},
           ),

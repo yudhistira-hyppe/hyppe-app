@@ -148,7 +148,6 @@ class ContentsDataQuery extends PaginationQueryInterface {
     } finally {
       loading = false;
     }
-
     return res ?? [];
   }
 }

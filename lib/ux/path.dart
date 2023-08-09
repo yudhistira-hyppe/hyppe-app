@@ -138,4 +138,11 @@ class Routes {
   static const String scrollPic = '/scroll-pict';
   static const String scrollDiary = '/scroll-diary';
   static const String scrollVid = '/scroll-vid';
+
+  //======================== chalange ============
+  static const String chalenge = '/chalenge';
+  static const String chalengeDetail = '/chalenge-detail';
+  static const String chalengeCollectionBadge = '/chalenge-collection-badge';
+  static const String chalengeAchievement = '/chalenge-achievement';
+  static const String shimmerSlider = '/shimmer-slider';
 }

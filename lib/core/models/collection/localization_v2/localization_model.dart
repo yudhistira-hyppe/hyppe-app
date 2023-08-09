@@ -917,6 +917,52 @@ class LocalizationModelV2 {
   String? captureYourMoment;
   String? howAreYouToday;
   String? shareWithUsYourCreatifity;
+  String? comeOnJoinTheInterestingCompetition;
+  String? otherCompetitions;
+  String? challengePage;
+  String? goingOn;
+  String? selectChallengePeriod;
+  String? referralCodeLinkCopiedSuccessfully;
+  String? theresNoLeaderboardAvailable;
+  String? getFirstPlaceByFollowingThisExciting;
+  String? letsJoinTheCompetition;
+  String? getFirstPlaceByEnteringThisExcitingCompetition;
+  String? joinTheChallengeNow;
+  String? viewChallenge;
+  String? joinOtherInterestingChallenges;
+  String? startIn;
+  String? hariLagi;
+  String? endsIn;
+  String? nonParticipant;
+  String? yourAchievements;
+  String? seeMyBadgeCollection;
+  String? youHaveNotAchievedAnythingYet;
+  String? joinTheChallengeAndGetOther;
+  String? followMostHyppeAccountsToWinTheCompetition;
+  String? exploreAndFollowtheHyppeAccountsHere;
+  String? uploadasmuchcontentaspossibletowinthechallenge;
+  String? uploadInterestingContentHere;
+  String? joinandinviteyourfriendstoHyppenow;
+  String? viewQRCode;
+  String? comeonLikeandwatchasmuchinterestingcontentaspossibletowinthechallenge;
+  String? exploreInterestingContentHere;
+  String? watchinterestingcontenthere;
+  String? likeHyppecontenthere;
+  String? joinanduploadyourbestideastoHyppenow;
+  String? postNow;
+  String? takeonthechallengeanduploadyourbestideashere;
+  String? postYourHyppePicNow;
+  String? postYourHyppeVidNow;
+  String? postYourHyppeDiaryNow;
+  String? myListOfAchievements;
+  String? achievementsPage;
+  String? participant;
+  String? challengePeriod;
+  String? mainChallenge;
+  String? copiedLinks;
+  String? apply;
+  String? selectDate;
+  String? end;
 
   LocalizationModelV2({
     this.login,
@@ -1837,6 +1883,52 @@ class LocalizationModelV2 {
     this.captureYourMoment,
     this.howAreYouToday,
     this.shareWithUsYourCreatifity,
+    this.comeOnJoinTheInterestingCompetition,
+    this.otherCompetitions,
+    this.challengePage,
+    this.goingOn,
+    this.selectChallengePeriod,
+    this.referralCodeLinkCopiedSuccessfully,
+    this.theresNoLeaderboardAvailable,
+    this.getFirstPlaceByFollowingThisExciting,
+    this.letsJoinTheCompetition,
+    this.getFirstPlaceByEnteringThisExcitingCompetition,
+    this.joinTheChallengeNow,
+    this.viewChallenge,
+    this.joinOtherInterestingChallenges,
+    this.startIn,
+    this.hariLagi,
+    this.endsIn,
+    this.nonParticipant,
+    this.yourAchievements,
+    this.seeMyBadgeCollection,
+    this.youHaveNotAchievedAnythingYet,
+    this.joinTheChallengeAndGetOther,
+    this.followMostHyppeAccountsToWinTheCompetition,
+    this.exploreAndFollowtheHyppeAccountsHere,
+    this.uploadasmuchcontentaspossibletowinthechallenge,
+    this.uploadInterestingContentHere,
+    this.joinandinviteyourfriendstoHyppenow,
+    this.viewQRCode,
+    this.comeonLikeandwatchasmuchinterestingcontentaspossibletowinthechallenge,
+    this.exploreInterestingContentHere,
+    this.watchinterestingcontenthere,
+    this.likeHyppecontenthere,
+    this.joinanduploadyourbestideastoHyppenow,
+    this.postNow,
+    this.takeonthechallengeanduploadyourbestideashere,
+    this.postYourHyppePicNow,
+    this.postYourHyppeVidNow,
+    this.postYourHyppeDiaryNow,
+    this.myListOfAchievements,
+    this.achievementsPage,
+    this.participant,
+    this.challengePeriod,
+    this.mainChallenge,
+    this.copiedLinks,
+    this.apply,
+    this.selectDate,
+    this.end,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2776,5 +2868,51 @@ class LocalizationModelV2 {
     captureYourMoment = json['captureYourMoment'];
     howAreYouToday = json['howAreYouToday'];
     shareWithUsYourCreatifity = json['shareWithUsYourCreatifity'];
+    comeOnJoinTheInterestingCompetition = json['comeOnJoinTheInterestingCompetition'];
+    otherCompetitions = json['otherCompetitions'];
+    challengePage = json['challengePage'];
+    end = json['end'];
+    goingOn = json['goingOn'];
+    selectChallengePeriod = json['selectChallengePeriod'];
+    mainChallenge = json['mainChallenge'];
+    copiedLinks = json['copiedLinks'];
+    apply = json['apply'];
+    selectDate = json['selectDate'];
+    referralCodeLinkCopiedSuccessfully = json['referralCodeLinkCopiedSuccessfully'];
+    theresNoLeaderboardAvailable = json['theresNoLeaderboardAvailable'];
+    getFirstPlaceByFollowingThisExciting = json['getFirstPlaceByFollowingThisExciting'];
+    letsJoinTheCompetition = json['letsJoinTheCompetition'];
+    getFirstPlaceByEnteringThisExcitingCompetition = json['getFirstPlaceByEnteringThisExcitingCompetition'];
+    joinTheChallengeNow = json['joinTheChallengeNow'];
+    viewChallenge = json['viewChallenge'];
+    joinOtherInterestingChallenges = json['joinOtherInterestingChallenges'];
+    startIn = json['startIn'];
+    hariLagi = json['hariLagi'];
+    endsIn = json['endsIn'];
+    nonParticipant = json['nonParticipant'];
+    yourAchievements = json['yourAchievements'];
+    seeMyBadgeCollection = json['seeMyBadgeCollection'];
+    myListOfAchievements = json['myListOfAchievements'];
+    achievementsPage = json['achievementsPage'];
+    participant = json['participant'];
+    challengePeriod = json['challengePeriod'];
+    youHaveNotAchievedAnythingYet = json['youHaveNotAchievedAnythingYet'];
+    joinTheChallengeAndGetOther = json['joinTheChallengeAndGetOther'];
+    followMostHyppeAccountsToWinTheCompetition = json['followMostHyppeAccountsToWinTheCompetition'];
+    exploreAndFollowtheHyppeAccountsHere = json['exploreAndFollowtheHyppeAccountsHere'];
+    uploadasmuchcontentaspossibletowinthechallenge = json['uploadasmuchcontentaspossibletowinthechallenge'];
+    uploadInterestingContentHere = json['uploadInterestingContentHere'];
+    joinandinviteyourfriendstoHyppenow = json['joinandinviteyourfriendstoHyppenow'];
+    viewQRCode = json['viewQRCode'];
+    comeonLikeandwatchasmuchinterestingcontentaspossibletowinthechallenge = json['comeonLikeandwatchasmuchinterestingcontentaspossibletowinthechallenge'];
+    exploreInterestingContentHere = json['exploreInterestingContentHere'];
+    watchinterestingcontenthere = json['watchinterestingcontenthere'];
+    likeHyppecontenthere = json['likeHyppecontenthere'];
+    joinanduploadyourbestideastoHyppenow = json['joinanduploadyourbestideastoHyppenow'];
+    postNow = json['postNow'];
+    takeonthechallengeanduploadyourbestideashere = json['takeonthechallengeanduploadyourbestideashere'];
+    postYourHyppePicNow = json['postYourHyppePicNow'];
+    postYourHyppeVidNow = json['postYourHyppeVidNow'];
+    postYourHyppeDiaryNow = json['postYourHyppeDiaryNow'];
   }
 }

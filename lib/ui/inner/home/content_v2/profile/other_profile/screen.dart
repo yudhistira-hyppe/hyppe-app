@@ -54,12 +54,12 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
     print('other profile');
     final notifier = Provider.of<OtherProfileNotifier>(context, listen: false);
     final sn = Provider.of<PreviewStoriesNotifier>(context, listen: false);
-    notifier.user.profile = null;
+    // notifier.user.profile = null;
     isloading = true;
     Future.delayed(Duration.zero, () async {
       notifier.pageIndex = 0;
       await notifier.initialOtherProfile(context, argument: widget.arguments).then((value) => isloading = false);
-      userData = notifier.user;
+      userData = notifier.manyUser.last;
       otherStoryGroup = sn.otherStoryGroup;
     });
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
@@ -186,12 +186,15 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                         onPressed: () => notifier.onExit(),
                         icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
                       ),
-                      CustomTextWidget(
-                        // textToDisplay: notifier.displayUserName(),
-                        textToDisplay: userData?.profile?.username == null ? '' : "@${userData?.profile?.username}",
-                        textAlign: TextAlign.start,
-                        textStyle: Theme.of(context).textTheme.subtitle1,
-                      ),
+                      notifier.manyUser.isNotEmpty
+                          ? CustomTextWidget(
+                              // textToDisplay: notifier.displayUserName(),
+                              textToDisplay: notifier.manyUser.last.profile?.username ?? '',
+                              //  userData?.profile?.username == null ? '' : "@${userData?.profile?.username}",
+                              textAlign: TextAlign.start,
+                              textStyle: Theme.of(context).textTheme.subtitle1,
+                            )
+                          : Text(""),
                     ],
                   ),
                   IconButton(
@@ -266,18 +269,18 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                                 // print(heightProfileCard);
                               },
                               child: Container(
-                                child: notifier.user.profile != null
+                                child: notifier.manyUser.last.profile != null
                                     ? notifier.statusFollowing == StatusFollowing.following
                                         ? OtherProfileTop(
                                             // email: widget.arguments.senderEmail ?? '',
-                                            email: userData?.profile?.email ?? '',
-                                            profile: userData?.profile,
+                                            email: notifier.manyUser.last.profile?.email ?? '',
+                                            profile: notifier.manyUser.last.profile,
                                             otherStoryGroup: otherStoryGroup,
                                           )
                                         : OtherProfileTop(
                                             // email: widget.arguments.senderEmail ?? '',
-                                            email: userData?.profile?.email ?? '',
-                                            profile: userData?.profile,
+                                            email: notifier.manyUser.last.profile?.email ?? '',
+                                            profile: notifier.manyUser.last.profile,
                                             otherStoryGroup: otherStoryGroup,
                                           )
                                     : BothProfileTopShimmer(),

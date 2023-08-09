@@ -280,6 +280,7 @@ class VidDetailBottom extends StatelessWidget {
 
           featureType: FeatureType.vid,
           imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',
+          badge: data?.urluserBadge,
           createdAt: '${_system.readTimestamp(
             DateTime.parse(_system.dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
             context,

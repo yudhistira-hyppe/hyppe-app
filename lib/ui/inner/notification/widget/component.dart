@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/models/collection/notification_v2/notification.dart';
@@ -33,8 +34,8 @@ class _ComponentState extends State<Component> {
     SizeConfig().init(context);
     return InkWell(
       onTap: () async {
-        if(widget.data?.eventType != 'CONTENTMOD'){
-          if(!isLoading){
+        if (widget.data?.eventType != 'CONTENTMOD') {
+          if (!isLoading) {
             setState(() {
               isLoading = true;
             });
@@ -56,7 +57,6 @@ class _ComponentState extends State<Component> {
             isLoading = false;
           });
         }
-
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
@@ -74,6 +74,7 @@ class _ComponentState extends State<Component> {
                 height: 50 * SizeConfig.scaleDiagonal,
                 onTap: () => System().navigateToProfile(context, widget.data?.mate ?? ''),
                 imageUrl: '${System().showUserPicture(widget.data?.senderOrReceiverInfo?.avatar?.mediaEndpoint)}',
+                badge: widget.data?.urluserBadge,
               ),
             ),
             sixteenPx,
@@ -110,8 +111,9 @@ class _ComponentState extends State<Component> {
                       ),
                       sixPx,
                       CustomTextWidget(
-                        textToDisplay:
-                        widget.data?.createdAt != null ? System().readTimestamp(DateFormat("yyyy-MM-dd hh:mm:ss").parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true) : '',
+                        textToDisplay: widget.data?.createdAt != null
+                            ? System().readTimestamp(DateFormat("yyyy-MM-dd hh:mm:ss").parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true)
+                            : '',
                         textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
                       ),
                     ],
@@ -126,4 +128,3 @@ class _ComponentState extends State<Component> {
     );
   }
 }
-

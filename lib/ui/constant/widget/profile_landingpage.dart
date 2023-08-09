@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/user_template.dart';
 
@@ -34,6 +35,7 @@ class ProfileLandingPage extends StatelessWidget {
   final String? location;
   final String? musicName;
   final bool? isIdVerified;
+  final UserBadgeModel? badge;
 
   const ProfileLandingPage(
       {Key? key,
@@ -57,7 +59,9 @@ class ProfileLandingPage extends StatelessWidget {
       this.musicName,
       this.location,
       this.isIdVerified,
-      required this.featureType})
+      required this.featureType,
+      this.badge,
+    })
       : super(key: key);
 
   @override
@@ -80,6 +84,7 @@ class ProfileLandingPage extends StatelessWidget {
               imageUrl: imageUrl,
               following: following,
               onFollow: onFollow,
+              badge: badge,
             ),
           ),
           Visibility(visible: showNameAndTimeStamp, child: spaceProfileAndId),

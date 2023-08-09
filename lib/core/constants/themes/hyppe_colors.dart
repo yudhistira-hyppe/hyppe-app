@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' show Alignment, Color, LinearGradient;
 
 const kHyppePrimary = Color(0xffAB22AF);
+const kHyppePrimaryTransparent = Color(0xffF4EDFB);
 const kHyppePrimaryShadow = Color(0xff91299E);
 
 /// Light Mode
@@ -88,3 +89,8 @@ const kHyppePrimaryLight = Color(0xfff6ebf7);
 const kHyppeJingga = Color(0xffF29924);
 const kHyppeJinggaLight = Color(0xfffef5e9);
 const kHyppeSoftYellow = Color(0xffFDF3D1);
+
+const kHyppeRank1 = Color(0xffEFBB01);
+const kHyppeRank2 = Color(0xff9b9b9b);
+const kHyppeRank3 = Color(0xffCD7F31);
+const kHyppeRank4 = Color(0xffe8e8e8);

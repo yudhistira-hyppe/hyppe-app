@@ -79,7 +79,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
             color: Colors.black,
             height: SizeConfig.screenHeight,
             width: SizeConfig.screenWidth,
-            child: Center(
+            child: const Center(
               child: CustomLoading(),
             ))
         : AnimatedSwitcher(
