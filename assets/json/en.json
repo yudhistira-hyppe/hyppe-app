@@ -599,6 +599,7 @@
   "selectBank": "Select Bank",
   "bankName": "Bank Name",
   "noBankAccount": "Bank Account Number",
+  "messageBankNotMatched": "Bank account name and your ID did not matched. Click Here to visit our Help Center",
   "accountOwnerName": "Account Owner Name",
   "keepThisAccount": "Keep This Account?",
   "youWillAdd": "you will add",

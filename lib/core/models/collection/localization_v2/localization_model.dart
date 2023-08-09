@@ -596,6 +596,7 @@ class LocalizationModelV2 {
   String? selectBank;
   String? bankName;
   String? noBankAccount;
+  String? messageBankNotMatched;
   String? accountOwnerName;
   String? keepThisAccount;
   String? youWillAdd;
@@ -1513,6 +1514,7 @@ class LocalizationModelV2 {
     this.selectBank,
     this.bankName,
     this.noBankAccount,
+    this.messageBankNotMatched,
     this.accountOwnerName,
     this.keepThisAccount,
     this.youWillAdd,
@@ -2447,6 +2449,7 @@ class LocalizationModelV2 {
     selectBank = json['selectBank'];
     bankName = json['bankName'];
     noBankAccount = json['noBankAccount'];
+    messageBankNotMatched = json['messageBankNotMatched'];
     accountOwnerName = json['accountOwnerName'];
     keepThisAccount = json['keepThisAccount'];
     youWillAdd = json['youWillAdd'];

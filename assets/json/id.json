@@ -599,6 +599,7 @@
   "selectBank": "Pilih Bank",
   "bankName": "Nama Bank",
   "noBankAccount": "No Akun Bank",
+  "messageBankNotMatched": "Nama bank akun dan ID Anda tidak sesuai. Klik di sini untuk ke Help Center kamu",
   "accountOwnerName": "Nama Pemilik Akun",
   "keepThisAccount": "Simpan Akun Ini?",
   "youWillAdd": "Anda akan menambahkan rekening ",

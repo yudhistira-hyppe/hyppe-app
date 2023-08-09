@@ -226,8 +226,8 @@ class RegisterNotifier with ChangeNotifier {
               if(message != null){
                 await ShowBottomSheet().onShowColouredSheet(
                     context,
-                    language.titleEmailIsGmail ?? '',
-                    subCaption: language.messageEmailIsGmail,
+                    language.emailVerification ?? '',
+                    subCaption: language.emailHasRegistered,
                     maxLines: 3,
                     borderRadius: 8,
                     sizeIcon: 20,

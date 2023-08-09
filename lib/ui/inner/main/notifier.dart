@@ -157,7 +157,7 @@ class MainNotifier with ChangeNotifier {
       ),
       SearchScreen(),
       NotificationScreen(),
-      SelfProfileScreen()
+      const SelfProfileScreen()
     ];
     late Widget screen;
 
