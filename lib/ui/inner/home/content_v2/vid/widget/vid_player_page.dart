@@ -177,6 +177,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   AdsVideo? _newClipData;
   int newIndex = 0;
 
+  String vidId = "";
+  String vidAuth = "";
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDSuccess');
@@ -201,10 +204,10 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
         fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.postID ?? 'video_player_landing');
+        fAliplayer?.setAutoPlay(true);
         print("-=-=-=-= auto playy ${widget.isAutoPlay}");
         // if (widget.isAutoPlay ?? false) {
         print("-=-=-=-= auto playy");
-        fAliplayer?.setAutoPlay(true);
         // }
 
         final getPlayers = widget.getPlayer;
@@ -519,9 +522,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   }
 
   Future getAuth({String videoId = ''}) async {
-    // setState(() {
-    //   isloading = true;
-    // });
+    setState(() {
+      isloading = true;
+    });
     try {
       final notifier = PostsBloc();
       String apsaraId = '';
@@ -540,16 +543,18 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           print("-======= auth iklan ${jsonMap['PlayAuth']}");
           // _dataSourceAdsMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
         } else {
-          _dataSourceMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
+          // _dataSourceMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
           print("-======= auth konten ${_dataSourceMap?[DataSourceRelated.playAuth]}");
           print("-======= auth konten ${_dataSourceMap?[DataSourceRelated.vidKey]}");
           fAliplayer?.setVidAuth(
             vid: apsaraId,
             region: _dataSourceMap?[DataSourceRelated.regionKey],
-            playAuth: _dataSourceMap?[DataSourceRelated.playAuth],
+            playAuth: jsonMap['PlayAuth'],
             definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
             // previewTime: _dataSourceMap?[DataSourceRelated.previewTime]
           );
+          vidAuth = jsonMap['PlayAuth'] ?? '';
+          vidId = apsaraId;
           var configMap = {
             'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
             'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
@@ -577,7 +582,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             /// Specify whether to enable the cache feature.
           };
           // fAliplayer?.setCacheConfig(map);
-          fAliplayer?.prepare();
+          fAliplayer?.prepare().then((value) {
+            setState(() {
+              isloading = false;
+            });
+          });
           print('=2=2=2=2=2=2=2prepare done');
         }
       }
@@ -924,15 +933,17 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     }
 
     if (isloading) {
-      return SizedBox(
+      return Container(
+        color: Colors.red,
         width: widget.width,
         height: widget.height,
         // padding: EdgeInsets.only(bottom: 25.0),
         child: Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),
       );
     } else {
-      // print("onViewPlayerCreated ${onViewPlayerCreated}");
-      aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
+      if (vidAuth != "") {
+        aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
+      }
       // AliPlayerView aliPlayerAdsView = AliPlayerView(onCreated: onViewPlayerAdsCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
 
       return GestureDetector(
@@ -1115,20 +1126,22 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     await fAliplayer?.setPlayerView(viewId);
     final getPlayers = widget.getPlayer;
     if (getPlayers != null) {
-      print('Vid Player1: getPlayer ${fAliplayer}');
+      print('Vid Player1: getPlayer ${vidAuth}');
       if (fAliplayer != null) {
         getPlayers(fAliplayer!);
       }
     }
     switch (widget.data?.apsara) {
       case false:
+        print("00000000000009090909090110");
         fAliplayer?.setUrl(urlVid);
         break;
       case true:
+        print("000000000000090909090900");
         fAliplayer?.setVidAuth(
-          vid: _dataSourceMap?[DataSourceRelated.vidKey],
+          vid: vidId,
+          playAuth: vidAuth,
           region: _dataSourceMap?[DataSourceRelated.regionKey],
-          playAuth: _dataSourceMap?[DataSourceRelated.playAuth],
           definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
           // previewTime: _dataSourceMap?[DataSourceRelated.previewTime]
         );

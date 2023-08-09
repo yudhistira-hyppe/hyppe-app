@@ -209,70 +209,135 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                 itemCount: widget.vidData?.length ?? 0,
                 itemBuilder: (context, index) {
                   if (isScrolled) {
-                    return VidPlayerPage(
-                      // vidData: notifier.vidData,
-                      fromFullScreen: true,
-                      orientation: Orientation.portrait,
-                      playMode: (widget.vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                      dataSourceMap: map,
-                      data: widget.vidData?[index],
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      inLanding: true,
-                      fromDeeplink: false,
-                      clearPostId: widget.clearPostId,
-                      clearing: true,
-                      isAutoPlay: true,
-                      functionFullTriger: (value) {
-                        print('===========hahhahahahaa===========');
-                        // fullscreen();
-                        // notifier.vidData?[_curIdx].fAliplayer?.pause();
-                        // showDialog(context: context, builder: (context){
-                        //     return VideoFullscreenPage(data: notifier.vidData?[_curIdx] ?? ContentData(), onClose: (){
-                        //       // Routing().moveBack();
-                        //     }, seekValue: value ?? 0);
-                        //   });
-                      },
-                      onPlay: (exec) {
-                        // try {
-                        //   if (_curIdx != -1) {
-                        //     if (_curIdx != index) {
-                        //       print('Vid Landing Page: stop $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
-                        //       if (notifier.vidData?[_curIdx].fAliplayer != null) {
-                        //         notifier.vidData?[_curIdx].fAliplayer?.stop();
-                        //       } else {
-                        //         final player = dataAli[_curIdx];
-                        //         if (player != null) {
-                        //           // notifier.vidData?[_curIdx].fAliplayer = player;
-                        //           player.stop();
-                        //         }
-                        //       }
-                        //       // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
-                        //     }
-                        //   }
-                        // } catch (e) {
-                        //   e.logger();
-                        // } finally {
-                        //   setState(() {
-                        //     _curIdx = index;
-                        //   });
-                        // }
-                        // _lastCurIndex = _curIdx;
-                      },
-                      getPlayer: (main) {
-                        // print('Vid Player1: screen ${main}');
-                        // notifier.setAliPlayer(index, main);
-                        // setState(() {
-                        //   dataAli[index] = main;
-                        // });
-                        // print('Vid Player1: after $index ${globalAliPlayer} : ${notifier.vidData?[index].fAliplayer}');
-                      },
-                      getAdsPlayer: (ads) {
-                        // notifier.vidData?[index].fAliplayerAds = ads;
-                      },
-                      // fAliplayer: notifier.vidData?[index].fAliplayer,
-                      // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
-                    );
+                    return index == widget.index
+                        ? VidPlayerPage(
+                            // vidData: notifier.vidData,
+                            fromFullScreen: true,
+                            orientation: Orientation.portrait,
+                            playMode: (widget.vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                            dataSourceMap: map,
+                            data: widget.vidData?[index],
+                            height: MediaQuery.of(context).size.height,
+                            width: MediaQuery.of(context).size.width,
+                            inLanding: true,
+                            fromDeeplink: false,
+                            clearPostId: widget.clearPostId,
+                            clearing: true,
+                            isAutoPlay: true,
+                            functionFullTriger: (value) {
+                              print('===========hahhahahahaa===========');
+                              // fullscreen();
+                              // notifier.vidData?[_curIdx].fAliplayer?.pause();
+                              // showDialog(context: context, builder: (context){
+                              //     return VideoFullscreenPage(data: notifier.vidData?[_curIdx] ?? ContentData(), onClose: (){
+                              //       // Routing().moveBack();
+                              //     }, seekValue: value ?? 0);
+                              //   });
+                            },
+                            onPlay: (exec) {
+                              // try {
+                              //   if (_curIdx != -1) {
+                              //     if (_curIdx != index) {
+                              //       print('Vid Landing Page: stop $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                              //       if (notifier.vidData?[_curIdx].fAliplayer != null) {
+                              //         notifier.vidData?[_curIdx].fAliplayer?.stop();
+                              //       } else {
+                              //         final player = dataAli[_curIdx];
+                              //         if (player != null) {
+                              //           // notifier.vidData?[_curIdx].fAliplayer = player;
+                              //           player.stop();
+                              //         }
+                              //       }
+                              //       // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
+                              //     }
+                              //   }
+                              // } catch (e) {
+                              //   e.logger();
+                              // } finally {
+                              //   setState(() {
+                              //     _curIdx = index;
+                              //   });
+                              // }
+                              // _lastCurIndex = _curIdx;
+                            },
+                            getPlayer: (main) {
+                              // print('Vid Player1: screen ${main}');
+                              // notifier.setAliPlayer(index, main);
+                              // setState(() {
+                              //   dataAli[index] = main;
+                              // });
+                              // print('Vid Player1: after $index ${globalAliPlayer} : ${notifier.vidData?[index].fAliplayer}');
+                            },
+                            getAdsPlayer: (ads) {
+                              // notifier.vidData?[index].fAliplayerAds = ads;
+                            },
+                            // fAliplayer: notifier.vidData?[index].fAliplayer,
+                            // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
+                          )
+                        : VidPlayerPage(
+                            // vidData: notifier.vidData,
+                            fromFullScreen: true,
+                            orientation: Orientation.portrait,
+                            playMode: (widget.vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                            dataSourceMap: map,
+                            data: widget.vidData?[index],
+                            height: MediaQuery.of(context).size.height,
+                            width: MediaQuery.of(context).size.width,
+                            inLanding: true,
+                            fromDeeplink: false,
+                            clearPostId: widget.clearPostId,
+                            clearing: true,
+                            isAutoPlay: true,
+                            functionFullTriger: (value) {
+                              print('===========hahhahahahaa===========');
+                              // fullscreen();
+                              // notifier.vidData?[_curIdx].fAliplayer?.pause();
+                              // showDialog(context: context, builder: (context){
+                              //     return VideoFullscreenPage(data: notifier.vidData?[_curIdx] ?? ContentData(), onClose: (){
+                              //       // Routing().moveBack();
+                              //     }, seekValue: value ?? 0);
+                              //   });
+                            },
+                            onPlay: (exec) {
+                              // try {
+                              //   if (_curIdx != -1) {
+                              //     if (_curIdx != index) {
+                              //       print('Vid Landing Page: stop $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                              //       if (notifier.vidData?[_curIdx].fAliplayer != null) {
+                              //         notifier.vidData?[_curIdx].fAliplayer?.stop();
+                              //       } else {
+                              //         final player = dataAli[_curIdx];
+                              //         if (player != null) {
+                              //           // notifier.vidData?[_curIdx].fAliplayer = player;
+                              //           player.stop();
+                              //         }
+                              //       }
+                              //       // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
+                              //     }
+                              //   }
+                              // } catch (e) {
+                              //   e.logger();
+                              // } finally {
+                              //   setState(() {
+                              //     _curIdx = index;
+                              //   });
+                              // }
+                              // _lastCurIndex = _curIdx;
+                            },
+                            getPlayer: (main) {
+                              // print('Vid Player1: screen ${main}');
+                              // notifier.setAliPlayer(index, main);
+                              // setState(() {
+                              //   dataAli[index] = main;
+                              // });
+                              // print('Vid Player1: after $index ${globalAliPlayer} : ${notifier.vidData?[index].fAliplayer}');
+                            },
+                            getAdsPlayer: (ads) {
+                              // notifier.vidData?[index].fAliplayerAds = ads;
+                            },
+                            // fAliplayer: notifier.vidData?[index].fAliplayer,
+                            // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
+                          );
                   } else {
                     return GestureDetector(
                       onTap: () {
