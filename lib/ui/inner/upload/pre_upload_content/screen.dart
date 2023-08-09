@@ -51,6 +51,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     // Provider.of<PreUploadContentNotifier>(context, listen: false);
     super.initState();
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+    // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
   }
 
   @override

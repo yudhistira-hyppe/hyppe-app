@@ -6,6 +6,7 @@ import 'package:hyppe/core/event/upload_event_handler.dart';
 import 'package:hyppe/core/event/cloud_messaging_handler.dart';
 import 'package:hyppe/core/event/interactive_event_handler.dart';
 import 'package:hyppe/core/event/root_socket_event_handler.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 
 import 'package:hyppe/core/services/stream_service.dart';
@@ -118,7 +119,7 @@ class EventService {
     }
   }
 
-  void notifyUploadFinishingUp(dio.Response response) {
+  void notifyUploadFinishingUp(bool response) {
     streamService.uploadFinishingUp.add(response);
 
     for (var element in _uploadHandlers.values) {

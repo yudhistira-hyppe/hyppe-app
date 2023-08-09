@@ -300,7 +300,7 @@ class HomeNotifier with ChangeNotifier {
       switch (index) {
         case 0:
           if (!mounted) return;
-          await pic.initialPic(context, reload: isreload || isNew, list: allContents).then((value) async {
+          await pic.initialPic(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents).then((value) async {
             // if (diary.diaryData == null) {
             //   await initNewHome(context, mounted, forceIndex: 1);
             //   // diary.initialDiary(context, reload: isreload || isNew, list: allContents);
