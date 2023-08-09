@@ -88,59 +88,6 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            MeasuredSize(
-              onChange: (value) {
-                if (mounted) {
-                  setState(() {
-                    heightTab = value.height;
-                  });
-                }
-              },
-              child: Container(
-                margin: const EdgeInsets.only(left: 16, right: 12, top: 10, bottom: 16),
-                padding: const EdgeInsets.all(3),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: context.getColorScheme().background),
-                child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: listTab.map((e) {
-                      final isActive = e == currentType;
-                      return Expanded(
-                        child: Material(
-                            color: Colors.transparent,
-                            child: Ink(
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: isActive ? context.getColorScheme().primary : context.getColorScheme().background,
-                                borderRadius: const BorderRadius.all(Radius.circular(18)),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    currentType = e;
-                                    scrollController..animateTo(0, duration: Duration(milliseconds: 70), curve: Curves.fastOutSlowIn);
-                                  });
-                                },
-                                borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                splashColor: context.getColorScheme().primary,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 36,
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(18)),
-                                  ),
-                                  child: CustomTextWidget(
-                                    textToDisplay: System().getTitleHyppe(e),
-                                    textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
-                                  ),
-                                ),
-                              ),
-                            )),
-                      );
-                    }).toList()),
-              ),
-            ),
             Expanded(
               child: AbsorbPointer(
                 absorbing: notifier.isZoom,
