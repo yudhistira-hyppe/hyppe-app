@@ -944,6 +944,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       if (vidAuth != "") {
         aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
       }
+      print("=============================");
+      // print(fAliplayer?.getVideoHeight());
+      // print(fAliplayer?.isAutoPlay());
       // AliPlayerView aliPlayerAdsView = AliPlayerView(onCreated: onViewPlayerAdsCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
 
       return GestureDetector(
