@@ -182,28 +182,26 @@ class OtherProfileTop extends StatelessWidget {
                 textStyle: Theme.of(context).textTheme.subtitle1,
               ),
             ),
-            displayBio().length > 2
-                ? Container(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.2),
-                    child: SingleChildScrollView(
-                        child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomDescContent(
-                          desc: displayBio(),
-                          trimLines: 5,
-                          textAlign: TextAlign.start,
-                          seeLess: ' ${notifier.language.seeLess}',
-                          seeMore: ' ${notifier.language.seeMoreContent}',
-                          normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
-                          hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
-                          expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                        ),
-                      ],
-                    )),
-                  )
-                : const SizedBox.shrink(),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.2),
+              child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomDescContent(
+                        desc: displayBio(),
+                        trimLines: 5,
+                        textAlign: TextAlign.start,
+                        seeLess: ' ${notifier.language.seeLess}',
+                        seeMore: ' ${notifier.language.seeMoreContent}',
+                        normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
+                        hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
+                        expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                      ),
+                    ],
+                  )),
+            ),
             displayPlace() != null
                 ? Padding(
                     padding: EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),

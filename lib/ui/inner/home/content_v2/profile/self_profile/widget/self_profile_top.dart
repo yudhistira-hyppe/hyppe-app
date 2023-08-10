@@ -297,9 +297,7 @@ class SelfProfileTop extends StatelessWidget {
                 textStyle: Theme.of(context).textTheme.subtitle1,
               ),
             ),
-
-            notifier.displayBio().length > 2
-                ? notifier.isLoadingBio
+            notifier.isLoadingBio
                     ? Builder(builder: (context) {
                         Future.delayed(Duration(milliseconds: 500), () {
                           notifier.isLoadingBio = false;
@@ -328,8 +326,7 @@ class SelfProfileTop extends StatelessWidget {
                                     )),
                           ],
                         )),
-                      )
-                : const SizedBox.shrink(),
+                      ),
             notifier.displayPlace() != null
                 ? Padding(
                     padding: EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),
