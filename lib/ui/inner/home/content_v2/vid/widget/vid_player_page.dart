@@ -200,15 +200,18 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       widget.clearPostId?.call();
     }
 
+    bool autoPlay = widget.isAutoPlay ?? false;
+
     _playMode = widget.playMode;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
         fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.postID ?? 'video_player_landing');
-        fAliplayer?.setAutoPlay(true);
-        print("-=-=-=-= auto playy ${widget.isAutoPlay}");
-        // if (widget.isAutoPlay ?? false) {
-        print("-=-=-=-= auto playy");
-        // }
+        fAliplayer?.setAutoPlay(autoPlay);
+        if (autoPlay) {
+          setState(() {
+            isloading = true;
+          });
+        }
 
         final getPlayers = widget.getPlayer;
 
@@ -522,9 +525,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   }
 
   Future getAuth({String videoId = ''}) async {
-    setState(() {
-      isloading = true;
-    });
+    // setState(() {
+    //   isloading = true;
+    // });
     try {
       final notifier = PostsBloc();
       String apsaraId = '';
@@ -544,7 +547,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           // _dataSourceAdsMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
         } else {
           // _dataSourceMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
-          print("-======= auth konten ${_dataSourceMap?[DataSourceRelated.playAuth]}");
+          print("-======= auth konten ${jsonMap['PlayAuth']}");
           print("-======= auth konten ${_dataSourceMap?[DataSourceRelated.vidKey]}");
           fAliplayer?.setVidAuth(
             vid: apsaraId,
@@ -553,8 +556,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
             // previewTime: _dataSourceMap?[DataSourceRelated.previewTime]
           );
-          vidAuth = jsonMap['PlayAuth'] ?? '';
-          vidId = apsaraId;
+          setState(() {
+            vidAuth = jsonMap['PlayAuth'] ?? '';
+            vidId = apsaraId;
+          });
+
           var configMap = {
             'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
             'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
@@ -582,6 +588,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             /// Specify whether to enable the cache feature.
           };
           // fAliplayer?.setCacheConfig(map);
+
           fAliplayer?.prepare().then((value) {
             setState(() {
               isloading = false;
@@ -872,11 +879,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   void didUpdateWidget(covariant VidPlayerPage oldWidget) {
     // If you want to react only to changes you could check
     // oldWidget.selectedIndex != widget.selectedIndex
-    print("masuk didUpdateWidget");
-    print(widget.data?.description);
-    print(oldWidget.isPlaying);
-    print(widget.isPlaying);
-    if (widget.isPlaying ?? false) playVideo();
     // if (oldWidget.data != widget.data)
 
     super.didUpdateWidget(oldWidget);
@@ -934,17 +936,20 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
 
     if (isloading) {
       return Container(
-        color: Colors.red,
         width: widget.width,
         height: widget.height,
         // padding: EdgeInsets.only(bottom: 25.0),
         child: Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),
       );
     } else {
-      if (vidAuth != "") {
-        aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
-      }
-      print("=============================");
+      // if (vidAuth != "") {
+      aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
+      // }
+      // print("=============================");
+      // fAliplayer?.getMediaInfo().then((value) {
+      //   print(value);
+      // });
+
       // print(fAliplayer?.getVideoHeight());
       // print(fAliplayer?.isAutoPlay());
       // AliPlayerView aliPlayerAdsView = AliPlayerView(onCreated: onViewPlayerAdsCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
@@ -1109,14 +1114,16 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             _buildProgressBar(widget.width ?? 0, widget.height ?? 0),
             // _buildTipsWidget(widget.width ?? 0, widget.height ?? 0),
             if (isPlay)
-              Align(
-                alignment: Alignment.topCenter,
-                child: _buildController(
-                  Colors.transparent,
-                  Colors.white,
-                  100,
-                  widget.width ?? 0,
-                  widget.height ?? 0,
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: _buildController(
+                    Colors.transparent,
+                    Colors.white,
+                    100,
+                    widget.width ?? 0,
+                    widget.height ?? 0,
+                  ),
                 ),
               ),
           ],
@@ -1129,18 +1136,15 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     await fAliplayer?.setPlayerView(viewId);
     final getPlayers = widget.getPlayer;
     if (getPlayers != null) {
-      print('Vid Player1: getPlayer ${vidAuth}');
       if (fAliplayer != null) {
         getPlayers(fAliplayer!);
       }
     }
     switch (widget.data?.apsara) {
       case false:
-        print("00000000000009090909090110");
         fAliplayer?.setUrl(urlVid);
         break;
       case true:
-        print("000000000000090909090900");
         fAliplayer?.setVidAuth(
           vid: vidId,
           playAuth: vidAuth,
@@ -1628,6 +1632,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                         vidData: widget.vidData,
                                         index: widget.index,
                                         clearPostId: widget.clearPostId,
+                                        loadMoreFunction: () {
+                                          print("loadmore function vidplayer");
+                                          widget.loadMoreFunction?.call();
+                                        },
+                                        isAutoPlay: widget.isAutoPlay,
                                       ),
                                   settings: const RouteSettings()));
                               // VideoIndicator value = await showDialog(

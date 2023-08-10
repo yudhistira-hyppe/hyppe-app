@@ -422,23 +422,48 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                 ),
               ],
             ),
-            Text("${postIdVisibility}"),
+            // Text("${postIdVisibility}"),
             tenPx,
             globalInternetConnection
                 ? postIdVisibility != vidData.postID
-                    ? Container(
-                        margin: const EdgeInsets.only(bottom: 20),
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                        width: MediaQuery.of(context).size.width,
-                        child: VideoThumbnail(
-                          videoData: vidData,
-                          onDetail: false,
-                          fn: () {},
-                          withMargin: true,
+                    ? GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            postIdVisibility = vidData.postID ?? '';
+                          });
+                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 20),
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                              width: MediaQuery.of(context).size.width,
+                              child: VideoThumbnail(
+                                videoData: vidData,
+                                onDetail: false,
+                                fn: () {},
+                                withMargin: true,
+                              ),
+                            ),
+                            // Center(
+                            //     child: Align(
+                            //   alignment: Alignment.center,
+                            //   child: SizedBox(
+                            //     height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                            //     width: MediaQuery.of(context).size.width,
+                            //     child: const CustomIconWidget(
+                            //       defaultColor: false,
+                            //       width: 40,
+                            //       iconData: '${AssetPath.vectorPath}pause2.svg',
+                            //       // color: kHyppeLightButtonText,
+                            //     ),
+                            //   ),
+                            // )),
+                          ],
                         ),
                       )
                     : Container(
@@ -507,6 +532,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               // notifier.vidData?[index].fAliplayerAds = ads;
                             },
                             index: index,
+                            loadMoreFunction: () {
+                              print("vid screen widget");
+                              notifier.initialVid(context);
+                            },
                             // fAliplayer: notifier.vidData?[index].fAliplayer,
                             // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
                           );
