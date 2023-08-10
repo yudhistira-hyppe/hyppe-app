@@ -95,10 +95,13 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                                   textAlign: TextAlign.start,
                                   textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                                 ),
-                                subtitle: CustomTextWidget(
-                                  textToDisplay: notifier.language.shareYourMoment ?? '',
-                                  textAlign: TextAlign.start,
-                                  textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
+                                subtitle: Container(
+                                  margin: const EdgeInsets.only(top: 5),
+                                  child: CustomTextWidget(
+                                    textToDisplay: notifier.language.shareYourMoment ?? '',
+                                    textAlign: TextAlign.start,
+                                    textStyle: const TextStyle(fontSize: 16, color: Color(0xffaaaaaa)),
+                                  ),
                                 ),
                                 leading: CustomIconWidget(
                                   iconData: "${AssetPath.vectorPath}story.svg",
@@ -138,10 +141,13 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                                   textAlign: TextAlign.start,
                                   textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                                 ),
-                                subtitle: CustomTextWidget(
-                                  textToDisplay: notifier.language.shareWithUsYourCreatifity ?? '',
-                                  textAlign: TextAlign.start,
-                                  textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
+                                subtitle: Container(
+                                  margin: const EdgeInsets.only(top: 5),
+                                  child: CustomTextWidget(
+                                    textToDisplay: notifier.language.shareWithUsYourCreatifity ?? '',
+                                    textAlign: TextAlign.start,
+                                    textStyle: const TextStyle(fontSize: 16, color: Color(0xffaaaaaa)),
+                                  ),
                                 ),
                                 leading: CustomIconWidget(
                                   iconData: "${AssetPath.vectorPath}vid.svg",
@@ -181,10 +187,13 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                                   textAlign: TextAlign.start,
                                   textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                                 ),
-                                subtitle: CustomTextWidget(
-                                  textToDisplay: notifier.language.howAreYouToday ?? '',
-                                  textAlign: TextAlign.start,
-                                  textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
+                                subtitle: Container(
+                                  margin: const EdgeInsets.only(top: 5),
+                                  child: CustomTextWidget(
+                                    textToDisplay: notifier.language.howAreYouToday ?? '',
+                                    textAlign: TextAlign.start,
+                                    textStyle: const TextStyle(fontSize: 16, color: Color(0xffaaaaaa)),
+                                  ),
                                 ),
                                 leading: CustomIconWidget(
                                   iconData: "${AssetPath.vectorPath}diary.svg",
@@ -229,10 +238,13 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                               textAlign: TextAlign.start,
                               textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                             ),
-                            subtitle: CustomTextWidget(
-                              textToDisplay: notifier.language.captureYourMoment ?? '',
-                              textAlign: TextAlign.start,
-                              textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
+                            subtitle: Container(
+                              margin: const EdgeInsets.only(top: 5),
+                              child: CustomTextWidget(
+                                textToDisplay: notifier.language.captureYourMoment ?? '',
+                                textAlign: TextAlign.start,
+                                textStyle: const TextStyle(fontSize: 16, color: Color(0xffaaaaaa)),
+                              ),
                             ),
                             leading: CustomIconWidget(
                               iconData: "${AssetPath.vectorPath}pic.svg",
