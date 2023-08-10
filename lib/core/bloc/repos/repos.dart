@@ -351,28 +351,28 @@ class Repos {
 
   void _showSnackBar(
       BuildContext context, Color color, String message, String desc) {
-    ShowBottomSheet().onShowColouredSheet(
-        context,
-        null,
-        subCaption: message,
-        maxLines: 3,
-        borderRadius: 8,
-        sizeIcon: 20,
-        color: color,
-        isArrow: false,
-        padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
-        margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
-        function: (){
-
-        }
-    );
     // ShowBottomSheet().onShowColouredSheet(
-    //   context,
-    //   message,
-    //   subCaption: desc,
-    //   iconSvg: "${AssetPath.vectorPath}remove.svg",
-    //   maxLines: 2,
-    //   color: color,
+    //     context,
+    //     null,
+    //     subCaption: message,
+    //     maxLines: 3,
+    //     borderRadius: 8,
+    //     sizeIcon: 20,
+    //     color: color,
+    //     isArrow: false,
+    //     padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
+    //     margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
+    //     function: (){
+    //
+    //     }
     // );
+    ShowBottomSheet().onShowColouredSheet(
+      context,
+      message,
+      subCaption: desc,
+      iconSvg: "${AssetPath.vectorPath}remove.svg",
+      maxLines: 2,
+      color: color,
+    );
   }
 }
