@@ -7,6 +7,7 @@ import 'package:hyppe/ui/inner/search_v2/interest/widget/diary_scroll_screen.dar
 import 'package:hyppe/ui/inner/search_v2/interest/widget/pic_scroll_screen.dart';
 import 'package:hyppe/ui/inner/search_v2/interest/widget/vid_scroll_screen.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
+import 'package:hyppe/ui/inner/search_v2/shimmer/search_shimmer.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +16,6 @@ import '../../../../../core/constants/enum.dart';
 import '../../../../../core/services/system.dart';
 import '../../../../constant/widget/custom_loading.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
-import '../../../home/content_v2/profile/widget/both_profile_content_shimmer.dart';
-import '../../search_more_complete/widget/all_search_shimmer.dart';
 import '../../widget/search_no_result_image.dart';
 
 class InterestTabLayout extends StatefulWidget {
@@ -200,24 +199,24 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
       switch (type) {
         case HyppeType.HyppeVid:
           if (notifier.loadIntDetailVid) {
-            return const AllSearchShimmer();
+            return const SearchShimmer();
           }
           return data.vid.isNotNullAndEmpty() ? VidScrollScreen(interestKey: widget.interest.id ?? '') : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
         case HyppeType.HyppeDiary:
           if (notifier.loadIntDetailDiary) {
-            return const AllSearchShimmer();
+            return const SearchShimmer();
           }
           return data.diary.isNotNullAndEmpty()
               ? DiaryScrollScreen(interestKey: widget.interest.id ?? '')
               : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
         case HyppeType.HyppePic:
           if (notifier.loadIntDetailPic) {
-            return const AllSearchShimmer();
+            return const SearchShimmer();
           }
           return data.pict.isNotNullAndEmpty() ? PicScrollScreen(interestKey: widget.interest.id ?? '') : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
       }
     } else {
-      return const AllSearchShimmer();
+      return const SearchShimmer();
       return SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
     }
   }

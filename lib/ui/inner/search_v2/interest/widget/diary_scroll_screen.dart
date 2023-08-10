@@ -9,6 +9,7 @@ import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
+import 'package:hyppe/ui/inner/search_v2/shimmer/search_shimmer.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -511,7 +512,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           diaryData?.isEmpty ?? true
-              ? const Expanded(child: AllSearchShimmer())
+              ? const Expanded(child: SearchShimmer())
               : NotificationListener<OverscrollIndicatorNotification>(
                 onNotification: (overscroll) {
                   overscroll.disallowIndicator();

@@ -638,6 +638,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
                 //         height: MediaQuery.of(context).size.height,
                 //       )
                 //     : Container(),
+                Positioned.fill(child: Container(color: Colors.black,)),
                 Builder(builder: (context) {
                   return !isOnPageTurning
                       ? AliPlayerView(
@@ -654,15 +655,16 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
                           height: MediaQuery.of(context).size.height,
                         )
                       : Container(
-                          color: Colors.transparent,
+                          color: Colors.black,
                           alignment: Alignment.center,
                           child: const CircularProgressIndicator(),
                         );
                 }),
 
-                SizedBox(
+                Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
+                  color: Colors.transparent,
                   // padding: EdgeInsets.only(bottom: 25.0),
                   child: _buildFillStory(value, index),
                 ),

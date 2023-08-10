@@ -108,10 +108,13 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     Future.delayed(const Duration(milliseconds: 500), () {
       (Routing.navigatorKey.currentContext ?? context).read<ReportNotifier>().inPosition = contentPosition.searchFirst;
       final notifier = Routing.navigatorKey.currentContext!.read<SearchNotifier>();
-      _controllerSlider.jumpToPage(_currentIndexSlider);
-      if (notifier.layout == SearchLayout.searchMore) {
-        // notifier.getDataSearch(context);
+      if(mounted){
+        _controllerSlider.jumpToPage(_currentIndexSlider);
+        if (notifier.layout == SearchLayout.searchMore) {
+          // notifier.getDataSearch(context);
+        }
       }
+
     });
     // debugPrint(_currentIndexSlider.toString());
     //

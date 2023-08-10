@@ -129,7 +129,7 @@ class Repos {
   }) async {
     // print('kkkkkk');
     final _language =
-        Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+        Provider.of<TranslateNotifierV2>(Routing.navigatorKey.currentContext ?? context, listen: false).translate;
     // print(_language);
     bool? connection;
     String? token = SharedPreference().readStorage(SpKeys.userToken);
@@ -146,16 +146,16 @@ class Repos {
 
         /// connect with ErrorService if property [errorService] not null
         if (errorServiceType != null) {
-          context.read<ErrorService>().addErrorObject(
+          (Routing.navigatorKey.currentContext ?? context).read<ErrorService>().addErrorObject(
               errorServiceType, _language.noInternetConnection ?? '');
         }
         print('trigger onNoInternetConnection');
         if (withCheckConnection) {
           if (!isShowingDialog) {
             isShowingDialog = true;
-            final language = context.read<TranslateNotifierV2>().translate;
+            final language = (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate;
             ShowGeneralDialog.showToastAlert(
-              context,
+              Routing.navigatorKey.currentContext ?? context,
               language.internetConnectionLost ?? ' Error', checkInternet,
             );
             isShowingDialog = false;
@@ -214,7 +214,7 @@ class Repos {
 
         /// connect with ErrorService if property [errorService] not null
         if (errorServiceType != null) {
-          context.read<ErrorService>().addErrorObject(errorServiceType,
+          (Routing.navigatorKey.currentContext ?? context).read<ErrorService>().addErrorObject(errorServiceType,
               _errorData.message ?? _language.somethingWentWrong ?? '');
 
           if (withAlertMessage) {
@@ -229,13 +229,13 @@ class Repos {
                 alertMessage = _language.alreadyRegistered ?? '';
               }
             }
-            _showSnackBar(context, kHyppeDanger, alertMessage, "");
+            _showSnackBar(Routing.navigatorKey.currentContext ?? context, kHyppeDanger, alertMessage, "");
           }
         } else {
           print('dadasdasd');
           if (withAlertMessage) {
             // _showSnackBar(context, kHyppeDanger, _language.unfortunately, "${_errorData.message}");
-            _showSnackBar(context, kHyppeDanger, _language.unfortunately ?? '',
+            _showSnackBar(Routing.navigatorKey.currentContext ?? context, kHyppeDanger, _language.unfortunately ?? '',
                 "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
           }
 
@@ -261,12 +261,12 @@ class Repos {
 
           /// connect with ErrorService if property [errorService] not null
           if (errorServiceType != null) {
-            context.read<ErrorService>().addErrorObject(errorServiceType,
+            (Routing.navigatorKey.currentContext ?? context).read<ErrorService>().addErrorObject(errorServiceType,
                 _errorData.message ?? _language.somethingWentWrong ?? '');
           }
 
           if (withAlertMessage) {
-            _showSnackBar(context, kHyppeDanger, _language.unfortunately ?? '',
+            _showSnackBar(Routing.navigatorKey.currentContext ?? context, kHyppeDanger, _language.unfortunately ?? '',
                 "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
           }
         } else {
@@ -279,7 +279,7 @@ class Repos {
     } on DioError catch (e) {
       /// connect with ErrorService if property [errorService] not null
       if (errorServiceType != null) {
-        context
+        (Routing.navigatorKey.currentContext ?? context)
             .read<ErrorService>()
             .addErrorObject(errorServiceType, e.message);
       }
@@ -304,7 +304,7 @@ class Repos {
       try {
         /// connect with ErrorService if property [errorService] not null
         if (errorServiceType != null) {
-          context
+          (Routing.navigatorKey.currentContext ?? context)
               .read<ErrorService>()
               .addErrorObject(errorServiceType, e.toString());
         }
@@ -312,7 +312,7 @@ class Repos {
         eIn.toString().logger();
       }
       if (withAlertMessage) {
-        _showSnackBar(context, kHyppeDanger, _language.unfortunately ?? '',
+        _showSnackBar(Routing.navigatorKey.currentContext ?? context, kHyppeDanger, _language.unfortunately ?? '',
             "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
       } else {
         'Error detail with no alertMessage ${e.toString()}'.logger();
@@ -351,28 +351,28 @@ class Repos {
 
   void _showSnackBar(
       BuildContext context, Color color, String message, String desc) {
-    ShowBottomSheet().onShowColouredSheet(
-        context,
-        null,
-        subCaption: message,
-        maxLines: 3,
-        borderRadius: 8,
-        sizeIcon: 20,
-        color: color,
-        isArrow: false,
-        padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
-        margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
-        function: (){
-
-        }
-    );
     // ShowBottomSheet().onShowColouredSheet(
-    //   context,
-    //   message,
-    //   subCaption: desc,
-    //   iconSvg: "${AssetPath.vectorPath}remove.svg",
-    //   maxLines: 2,
-    //   color: color,
+    //     context,
+    //     null,
+    //     subCaption: message,
+    //     maxLines: 3,
+    //     borderRadius: 8,
+    //     sizeIcon: 20,
+    //     color: color,
+    //     isArrow: false,
+    //     padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
+    //     margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
+    //     function: (){
+    //
+    //     }
     // );
+    ShowBottomSheet().onShowColouredSheet(
+      context,
+      message,
+      subCaption: desc,
+      iconSvg: "${AssetPath.vectorPath}remove.svg",
+      maxLines: 2,
+      color: color,
+    );
   }
 }
