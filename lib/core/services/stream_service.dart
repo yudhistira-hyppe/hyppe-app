@@ -14,7 +14,7 @@ class StreamService {
   late StreamController<dio.DioError> _uploadFailedController;
   late StreamController<dio.DioError> _uploadCancelController;
   late StreamController<dio.Response> _uploadSuccessController;
-  late StreamController<dio.Response> _uploadFinishingUp;
+  late StreamController<bool> _uploadFinishingUp;
   late StreamController<ProgressUploadArgument> _uploadSendProgressController;
   late StreamController<ProgressUploadArgument> _uploadReceiveProgressController;
 
@@ -36,7 +36,7 @@ class StreamService {
     _uploadFailedController = StreamController<dio.DioError>.broadcast();
     _uploadCancelController = StreamController<dio.DioError>.broadcast();
     _uploadSuccessController = StreamController<dio.Response>.broadcast();
-    _uploadFinishingUp = StreamController<dio.Response>.broadcast();
+    _uploadFinishingUp = StreamController<bool>.broadcast();
     _uploadSendProgressController = StreamController<ProgressUploadArgument>.broadcast();
     _uploadReceiveProgressController = StreamController<ProgressUploadArgument>.broadcast();
     _reactionContentController = StreamController<ReactionInteractive>.broadcast();
@@ -50,7 +50,7 @@ class StreamService {
   StreamController<dio.DioError> get uploadFailed => _uploadFailedController;
   StreamController<dio.DioError> get uploadCancel => _uploadCancelController;
   StreamController<dio.Response> get uploadSuccess => _uploadSuccessController;
-  StreamController<dio.Response> get uploadFinishingUp => _uploadFinishingUp;
+  StreamController<bool> get uploadFinishingUp => _uploadFinishingUp;
   StreamController<ProgressUploadArgument> get uploadSendProgress => _uploadSendProgressController;
   StreamController<ProgressUploadArgument> get uploadReceiveProgress => _uploadReceiveProgressController;
   StreamController<ReactionInteractive> get reactionContent => _reactionContentController;
@@ -77,7 +77,7 @@ class StreamService {
     _uploadFailedController = StreamController<dio.DioError>.broadcast();
     _uploadCancelController = StreamController<dio.DioError>.broadcast();
     _uploadSuccessController = StreamController<dio.Response>.broadcast();
-    _uploadFinishingUp = StreamController<dio.Response>.broadcast();
+    _uploadFinishingUp = StreamController<bool>.broadcast();
     _uploadSendProgressController = StreamController<ProgressUploadArgument>.broadcast();
     _uploadReceiveProgressController = StreamController<ProgressUploadArgument>.broadcast();
     _reactionContentController = StreamController<ReactionInteractive>.broadcast();

@@ -693,7 +693,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: progress, total: total.toDouble()));
           }
           if (received == total) {
-            eventService.notifyUploadFinishingUp(_uploadSuccess);
+            eventService.notifyUploadFinishingUp(true);
           }
         },
       ).then((value) {
@@ -874,8 +874,8 @@ class PreUploadContentNotifier with ChangeNotifier {
       _desFile = await _destinationFile;
       _lightCompressor.onProgressUpdated.listen((val) {
         _progressCompress = val / 2;
-        print("compress : $_progressCompress");
-        eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: 100));
+        "+++++++++++++++compress : $_progressCompress".logger();
+        eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: 100, isCompressing: true));
         notifyListeners();
       });
 

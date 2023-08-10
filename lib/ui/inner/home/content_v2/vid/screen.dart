@@ -159,7 +159,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   void scrollAuto() {
     print("====== nomor index $_curIdx");
-    itemScrollController.scrollTo(index: _curIdx + 1, duration: Duration(milliseconds: 500));
+    // itemScrollController.scrollTo(index: _curIdx + 1, duration: Duration(milliseconds: 500));
   }
 
   @override

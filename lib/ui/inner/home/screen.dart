@@ -19,8 +19,11 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dar
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -133,8 +136,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       if (notifier.preventReloadAfterUploadPost) {
         notifier.preventReloadAfterUploadPost = false;
       } else {
-        notifier.initNewHome(context, mounted, isreload: false, isNew: true);
-        "initNewHome from initState".logger();
+        var pic = context.read<PreviewPicNotifier>();
+        var diary = context.read<PreviewDiaryNotifier>();
+        var vid = context.read<PreviewVidNotifier>();
+        if (pic.pic == null && diary.diaryData == null && vid.vidData == null) {
+          notifier.initNewHome(context, mounted, isreload: false, isNew: true);
+        }
       }
       if (notifierFollow.listFollow.isEmpty) {
         notifierFollow.listFollow = [
@@ -359,9 +366,17 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       if (homneNotifier.uploadedPostType == FeatureType.pic) {
         homneNotifier.tabIndex = 0;
       } else if (homneNotifier.uploadedPostType == FeatureType.diary) {
+        var diary = context.read<PreviewDiaryNotifier>();
         homneNotifier.tabIndex = 1;
+        if (diary.diaryData == null) {
+          diary.initialDiary(context, reload: true);
+        }
       } else if (homneNotifier.uploadedPostType == FeatureType.vid) {
+        var vid = context.read<PreviewVidNotifier>();
         homneNotifier.tabIndex = 2;
+        if (vid.vidData == null) {
+          vid.initialVid(context, reload: true);
+        }
       }
     }
     _tabController.index = homneNotifier.tabIndex;

@@ -55,11 +55,15 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   }
 
   @override
-  void onUploadSendProgress(double count, double total) {
+  void onUploadSendProgress(double count, double total, bool isCompressing) {
     print("================onUploadSendProgress");
-    _uploadNotifier.message = "${_language.translate.processUpload}";
     if (!_uploadNotifier.isUploading) {
       _uploadNotifier.isUploading = true;
+    }
+    if (isCompressing) {
+      _uploadNotifier.message = "${_language.translate.contentProcessing}";
+    } else {
+      _uploadNotifier.message = "${_language.translate.processUpload}";
     }
     _uploadNotifier.progress = count / total;
   }
