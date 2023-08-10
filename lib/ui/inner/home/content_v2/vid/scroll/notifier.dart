@@ -49,7 +49,7 @@ class ScrollVidNotifier with ChangeNotifier {
         final op = context.read<OtherProfileNotifier>();
         op.pageIndex = 2;
         await op.onScrollListener(context, scrollController, isLoad: true);
-        vidData = op.user.vids;
+        vidData = op.manyUser.last.vids;
         isLoadingLoadmore = false;
       }
 
@@ -97,7 +97,7 @@ class ScrollVidNotifier with ChangeNotifier {
         final op = context.read<OtherProfileNotifier>();
         op.pageIndex = 2;
         await op.initialOtherProfile(context, refresh: true);
-        vidData = op.user.vids;
+        vidData = op.manyUser.last.vids;
         isLoadingLoadmore = false;
       }
 

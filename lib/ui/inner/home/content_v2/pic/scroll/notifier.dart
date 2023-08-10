@@ -64,9 +64,9 @@ class ScrollPicNotifier with ChangeNotifier {
         final op = context.read<OtherProfileNotifier>();
         op.pageIndex = 0;
         await op.onScrollListener(context, scrollController, isLoad: true);
-        if (op.user.pics == null || (op.user.pics?.isEmpty ?? [].isEmpty)) {
+        if (op.manyUser.last.pics == null || (op.manyUser.last.pics?.isEmpty ?? [].isEmpty)) {
         } else {
-          pics = op.user.pics;
+          pics = op.manyUser.last.pics;
         }
 
         isLoadingLoadmore = false;
@@ -138,7 +138,7 @@ class ScrollPicNotifier with ChangeNotifier {
         final op = context.read<OtherProfileNotifier>();
         op.pageIndex = 0;
         await op.initialOtherProfile(context, refresh: true);
-        pics = op.user.pics;
+        pics = op.manyUser.last.pics;
         isLoadingLoadmore = false;
       }
 

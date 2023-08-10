@@ -507,6 +507,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         width: MediaQuery.of(context).size.width,
                         inLanding: true,
                         fromDeeplink: false,
+                        isAutoPlay: false,
                         functionFullTriger: (value) {
                           print('===========hahhahahahaa===========');
                           // fullscreen();
@@ -1173,13 +1174,12 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           )),
                       data.email == SharedPreference().readStorage(SpKeys.email)
                           ? GestureDetector(
-                              onTap: ()async{
-                                System().checkConnections().then((value){
-                                  if(value){
+                              onTap: () async {
+                                System().checkConnections().then((value) {
+                                  if (value) {
                                     Routing().move(Routes.appeal, argument: data);
                                   }
                                 });
-
                               },
                               child: Container(
                                   padding: const EdgeInsets.all(8),

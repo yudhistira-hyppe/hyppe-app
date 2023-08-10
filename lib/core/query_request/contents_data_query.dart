@@ -27,10 +27,11 @@ class ContentsDataQuery extends PaginationQueryInterface {
   Future<List<ContentData>> loadNext(BuildContext context, {bool myContent = false, bool otherContent = false, bool isLandingPage = false}) async {
     print('loadnext : $page');
     print('loadnext : $limit');
+    print('loadnext : $hasNext');
     print('skip limit : $hasNext');
     if (featureType == null) throw Exception('Feature Type must be provided');
     if (loading) throw Exception('Query operation is in progress');
-    if (!hasNext) return [];
+    // if (!hasNext) return [];
 
     final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
 

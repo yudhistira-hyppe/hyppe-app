@@ -700,7 +700,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                               scrollOffsetController: scrollOffsetController,
                               scrollOffsetListener: scrollOffsetListener,
                               // scrollDirection: Axis.horizontal,
-                              physics: isZoom ? const NeverScrollableScrollPhysics() : const PageScrollPhysics(),
+                              physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
                               shrinkWrap: false,
                               itemCount: pics?.length ?? 0,
                               padding: const EdgeInsets.symmetric(horizontal: 11.5),
@@ -858,6 +858,9 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
             ],
           ),
           tenPx,
+          // Text("${pics?[index].isApsara ?? false}"),
+          // SelectableText("${pics?[index].fullContent}"),
+          // SelectableText("${(pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2'}"),
           // ZoomableCachedNetworkImage(
           //   url: (pics?[index].isApsara ?? false) ? (pics?[index].mediaThumbEndPoint ?? "") : "${pics?[index].fullThumbPath}",
           // ),

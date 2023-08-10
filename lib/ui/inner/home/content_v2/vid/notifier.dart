@@ -90,7 +90,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
 
   bool _isLoved = false;
   bool get isLoved => _isLoved;
-  set isLoved(bool state){
+  set isLoved(bool state) {
     _isLoved = state;
     notifyListeners();
   }
@@ -187,6 +187,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void scrollListener(BuildContext context) {
+    print("kanjut kuda");
     if (pageController.offset >= pageController.position.maxScrollExtent && !pageController.position.outOfRange && !contentsQuery.loading && hasNext) {
       initialVid(context);
     }
@@ -204,7 +205,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void setAliPlayer(int index, FlutterAliplayer player){
+  void setAliPlayer(int index, FlutterAliplayer player) {
     vidData?[index].fAliplayer = player;
     notifyListeners();
   }
