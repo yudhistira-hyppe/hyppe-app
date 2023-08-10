@@ -529,6 +529,8 @@ class LocalizationModelV2 {
   String? noResultsFoundTryAnother;
   String? afterthatThisTagWillBePermanentlyRemoved;
   String? caption;
+  String? contentProcessing;
+  String? contentWaiting;
   String? contentUploaded;
   String? reportThisAccount;
   String? signInWithGoogleAccount;
@@ -1447,6 +1449,8 @@ class LocalizationModelV2 {
     this.noResultsFoundTryAnother,
     this.afterthatThisTagWillBePermanentlyRemoved,
     this.caption,
+    this.contentProcessing,
+    this.contentWaiting,
     this.contentUploaded,
     this.reportThisAccount,
     this.signInWithGoogleAccount,
@@ -2369,6 +2373,8 @@ class LocalizationModelV2 {
     noResultsFoundTryAnother = json['noResultsFoundTryAnother'];
     afterthatThisTagWillBePermanentlyRemoved = json['afterthatThisTagWillBePermanentlyRemoved'];
     caption = json['caption'];
+    contentProcessing = json['contentProcessing'];
+    contentWaiting = json['contentWaiting'];
     contentUploaded = json['contentUploaded'];
     reportThisAccount = json['reportThisAccount'];
     signInWithGoogleAccount = json['signInWithGoogleAccount'];

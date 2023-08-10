@@ -534,6 +534,8 @@
   "noResultsFoundTryAnother": "Hasil tidak ditemukan, coba lainnya",
   "afterthatThisTagWillBePermanentlyRemoved": "Setelah itu, tag ini akan dihapus secara permanen",
   "caption": "Keterangan",
+  "contentProcessing": "Konten mu sedang di proses",
+  "contentWaiting": "Sebentar lagi yaa",
   "contentUploaded": "Konten berhasil diunggah",
   "reportThisAccount": "Laporkan akun ini",
   "signInWithGoogleAccount": "Masuk dengan akun Google",

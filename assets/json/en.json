@@ -534,6 +534,8 @@
   "noResultsFoundTryAnother": "No results found, try another",
   "afterthatThisTagWillBePermanentlyRemoved": "After that, this tag will be permanently removed",
   "caption": "Caption",
+  "contentProcessing": "Your post is being processed",
+  "contentWaiting": "Wait a few more minutes",
   "contentUploaded": "Content uploaded",
   "reportThisAccount": "Report this account",
   "signInWithGoogleAccount": "Sign in with Google account",

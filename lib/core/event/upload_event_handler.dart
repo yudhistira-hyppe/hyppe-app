@@ -4,7 +4,7 @@ import 'package:hyppe/core/services/event_service.dart';
 class UploadEventHandler implements EventHandler {
   void onUploadReceiveProgress(double count, double total) {}
 
-  void onUploadSendProgress(double count, double total) {}
+  void onUploadSendProgress(double count, double total, bool isCompressing) {}
 
   void onUploadFinishingUp() {}
 

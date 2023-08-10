@@ -115,7 +115,7 @@ class EventService {
     streamService.uploadSendProgress.add(sendProgress);
 
     for (var element in _uploadHandlers.values) {
-      element.onUploadSendProgress(sendProgress.count, sendProgress.total);
+      element.onUploadSendProgress(sendProgress.count, sendProgress.total, sendProgress.isCompressing);
     }
   }
 
