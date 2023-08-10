@@ -316,6 +316,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                 getAdsPlayer: (ads) {
                                   // notifier.vidData?[index].fAliplayerAds = ads;
                                 },
+
                                 // fAliplayer: notifier.vidData?[index].fAliplayer,
                                 // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
                               );

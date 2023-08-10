@@ -50,7 +50,7 @@ class SignUpButton extends StatelessWidget {
                   overlayColor: MaterialStateProperty.all<Color>(buttonColor),
                   foregroundColor: MaterialStateProperty.all<Color>(buttonColor),
                   shadowColor: MaterialStateProperty.all<Color>(buttonColor)),
-              function: onTap,
+              function: !loading ? onTap : null,
               child: loading
                   ? const CustomLoading()
                   : CustomTextWidget(

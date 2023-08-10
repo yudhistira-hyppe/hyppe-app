@@ -196,6 +196,7 @@ class RegisterNotifier with ChangeNotifier {
           return;
         } else {
           if (!loading) {
+            loading = true;
             bool connection = await System().checkConnections();
             if (connection) {
               email = email.toLowerCase();
@@ -205,7 +206,6 @@ class RegisterNotifier with ChangeNotifier {
               await FcmService().initializeFcmIfNot();
 
               // update loading state
-              loading = true;
 
               String realDeviceId = await System().getDeviceIdentifier();
               String platForm = Platform.isAndroid ? "android" : "ios";
