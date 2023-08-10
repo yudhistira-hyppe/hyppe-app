@@ -187,7 +187,6 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void scrollListener(BuildContext context) {
-    print("kanjut kuda");
     if (pageController.offset >= pageController.position.maxScrollExtent && !pageController.position.outOfRange && !contentsQuery.loading && hasNext) {
       initialVid(context);
     }

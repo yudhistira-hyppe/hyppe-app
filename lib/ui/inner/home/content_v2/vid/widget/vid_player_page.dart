@@ -13,6 +13,7 @@ import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
@@ -57,6 +58,8 @@ class VidPlayerPage extends StatefulWidget {
   final bool? isPlaying;
   final bool clearing;
   final bool? isAutoPlay;
+  final Function()? autoScroll; //netral player
+
   // FlutterAliplayer? fAliplayer;
   // FlutterAliplayer? fAliplayerAds;
 
@@ -82,6 +85,7 @@ class VidPlayerPage extends StatefulWidget {
     this.clearPostId,
     this.clearing = false,
     this.isAutoPlay = false,
+    this.autoScroll,
 
     // this.fAliplayer,
     // this.fAliplayerAds
@@ -352,14 +356,21 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             } catch (e) {
               e.logger();
             }
-
             setState(() {});
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
             Wakelock.disable();
+            if (widget.isAutoPlay ?? false) {
+              widget.autoScroll?.call();
+            }
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusError:
             Wakelock.disable();
+            break;
+          case FlutterAvpdef.AVPStatus_AVPStatusPrepared:
+            setState(() {
+              _showLoading = true;
+            });
             break;
           default:
         }
@@ -935,11 +946,31 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     }
 
     if (isloading) {
-      return Container(
-        width: widget.width,
-        height: widget.height,
-        // padding: EdgeInsets.only(bottom: 25.0),
-        child: Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),
+      return Stack(
+        children: [
+          Container(
+            height: widget.height,
+            width: widget.width,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: VideoThumbnail(
+              videoData: widget.data,
+              onDetail: false,
+              fn: () {},
+              withMargin: true,
+            ),
+          ),
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(
+                color: kHyppePrimary,
+              ),
+            ),
+          )
+        ],
       );
     } else {
       // if (vidAuth != "") {
@@ -1024,7 +1055,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                 : Container(),
             // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
             // if (isPlay && adsData != null) skipAds(),
-            if (!isPlay && !_showLoading)
+            if (!isPlay && !_showLoading & !(widget.isAutoPlay ?? false))
               Center(
                 child: GestureDetector(
                   onTap: () async {
