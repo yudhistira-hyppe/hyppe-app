@@ -636,6 +636,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           fAliplayer?.setUrl(urlVid);
           isloading = false;
         });
+        fAliplayer?.prepare().then((value) {
+          setState(() {
+            isloading = false;
+          });
+        });
       }
     } catch (e) {
       setState(() {

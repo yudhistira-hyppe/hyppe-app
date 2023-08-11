@@ -229,13 +229,18 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                           ),
                         ),
                       )
-                : const AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: CustomShimmer(
-                      height: double.infinity,
-                      width: double.infinity,
-                    ),
-                  ),
+                : ListView.builder(
+                    itemCount: 5,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return const AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: CustomShimmer(
+                          height: double.infinity,
+                          width: double.infinity,
+                        ),
+                      );
+                    }),
             homeNotifier.isLoadingLoadmore
                 ? const SizedBox(
                     height: 50,
@@ -264,6 +269,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         }
         if (info.visibleFraction >= 0.8) {
           _curIdx = index;
+          if (_lastCurIndex != _curIdx) {
+            if (_curIdx >= (notifier.vidData?.length ?? 0) - 2) {
+              context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
+            }
+          }
           if (_curIdx != index) {
             Future.delayed(const Duration(milliseconds: 400), () {
               try {

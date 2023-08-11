@@ -75,8 +75,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   int _currentPosition = 0;
   int _bufferPosition = 0;
   int _currentPositionText = 0;
-  // int _curIdx = 0;
-  // int _lastCurIndex = -1;
+  int _curIdx = 0;
+  int _lastCurIndex = -1;
   String _curPostId = '';
   String _lastCurPostId = '';
 
@@ -131,16 +131,15 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       // Fluttertoast.showToast(msg: "OnPrepared ");
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
-        try{
+        try {
           isPrepare = true;
           _showLoading = false;
-          if(mounted){
+          if (mounted) {
             setState(() {});
           }
-        }catch(e){
+        } catch (e) {
           e.logger();
         }
-
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;
@@ -155,13 +154,13 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-          try{
+          try {
             _showLoading = false;
             isPause = false;
-            if(mounted){
+            if (mounted) {
               setState(() {});
             }
-          }catch(e){
+          } catch (e) {
             e.logger();
           }
 
@@ -174,34 +173,34 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       }
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-      try{
+      try {
         _loadingPercent = 0;
         _showLoading = true;
-        if(mounted){
+        if (mounted) {
           setState(() {});
         }
-      }catch(e){
+      } catch (e) {
         e.logger();
       }
     }, loadingProgress: (percent, netSpeed, playerId) {
-      try{
+      try {
         _loadingPercent = percent;
         if (percent == 100) {
           _showLoading = false;
         }
-        if(mounted){
+        if (mounted) {
           setState(() {});
         }
-      }catch(e){
+      } catch (e) {
         e.logger();
       }
     }, loadingEnd: (playerId) {
-      try{
+      try {
         _showLoading = false;
-        if(mounted){
+        if (mounted) {
           setState(() {});
         }
-      }catch(e){
+      } catch (e) {
         e.logger();
       }
     });
@@ -235,19 +234,18 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       }
     });
     fAliplayer?.setOnCompletion((playerId) {
-      try{
+      try {
         _showLoading = false;
 
         isPause = true;
 
         _currentPosition = _videoDuration;
-        if(mounted){
+        if (mounted) {
           setState(() {});
         }
-      }catch(e){
+      } catch (e) {
         e.logger();
       }
-
     });
 
     fAliplayer?.setOnSnapShot((path, playerId) {
@@ -255,14 +253,13 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       // Fluttertoast.showToast(msg: "SnapShot Save : $path");
     });
     fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-      try{
+      try {
         _showLoading = false;
 
         setState(() {});
-      }catch(e){
+      } catch (e) {
         e.logger();
       }
-
     });
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
@@ -363,12 +360,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   }
 
   Future getAuth(BuildContext context, String apsaraId) async {
-
     try {
       final fixContext = Routing.navigatorKey.currentContext;
       isloading = true;
       _showLoading = true;
-      if(mounted){
+      if (mounted) {
         setState(() {});
       }
       final notifier = PostsBloc();
@@ -386,14 +382,14 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         );
 
         isloading = false;
-        if(mounted){
+        if (mounted) {
           setState(() {});
         }
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
       isloading = false;
-      if(mounted){
+      if (mounted) {
         setState(() {});
       }
       // 'Failed to fetch ads data $e'.logger();
@@ -718,7 +714,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
             key: Key(notifier.diaryData?[index].postID ?? index.toString()),
             onVisibilityChanged: (info) {
               if (info.visibleFraction >= 0.6) {
-                // _curIdx = index;
+                if (_lastCurIndex != _curIdx) {
+                  if (_curIdx >= (notifier.diaryData?.length ?? 0) - 2) {
+                    print("======hahahaha mobil");
+                    context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
+                  }
+                }
                 _curPostId = notifier.diaryData?[index].postID ?? index.toString();
                 // if (_lastCurIndex != _curIdx) {
                 if (_lastCurPostId != _curPostId) {
@@ -733,11 +734,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                     System().disposeBlock();
                   }
                 }
-                // _lastCurIndex = _curIdx;
+                _lastCurIndex = _curIdx;
                 _lastCurPostId = _curPostId;
               }
             },
-            child:  Container(
+            child: Container(
               margin: EdgeInsets.only(bottom: 20),
               // width: MediaQuery.of(context).size.width,
               // height: MediaQuery.of(context).size.width * 16.0 / 10.8,
@@ -883,9 +884,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                     _showLoading && !homeNotifier.connectionError
                         ? const Positioned.fill(
                             child: Align(
-                            alignment: Alignment.center,
-                            child: CircularProgressIndicator(),
-                          ),)
+                              alignment: Alignment.center,
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
                         : const SizedBox.shrink(),
                     _buildBody(context, SizeConfig.screenWidth, notifier.diaryData?[index] ?? ContentData()),
                     blurContentWidget(context, notifier.diaryData?[index] ?? ContentData()),
