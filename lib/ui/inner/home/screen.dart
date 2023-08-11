@@ -220,7 +220,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           return false;
         },
         child: Scaffold(
-          key: vidPlayerState,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
             child: HomeAppBar(name: selfnotifier.user.profile?.fullName, offset: offset),

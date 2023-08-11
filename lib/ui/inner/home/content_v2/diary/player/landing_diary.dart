@@ -714,6 +714,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
             key: Key(notifier.diaryData?[index].postID ?? index.toString()),
             onVisibilityChanged: (info) {
               if (info.visibleFraction >= 0.6) {
+                _curIdx = index;
                 if (_lastCurIndex != _curIdx) {
                   if (_curIdx >= (notifier.diaryData?.length ?? 0) - 2) {
                     print("======hahahaha mobil");

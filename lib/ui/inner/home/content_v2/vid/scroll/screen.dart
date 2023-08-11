@@ -557,6 +557,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         getAdsPlayer: (ads) {
                           // vidData?[index].fAliplayerAds = ads;
                         },
+                        loadMoreFunction: () {},
                         // fAliplayer: vidData?[index].fAliplayer,
                         // fAliplayerAds: vidData?[index].fAliplayerAds,
                       );

@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:ui';
-
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
@@ -233,12 +230,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                     itemCount: 5,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
-                      return const AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child: CustomShimmer(
-                          height: double.infinity,
-                          width: double.infinity,
-                        ),
+                      return CustomShimmer(
+                        margin: const EdgeInsets.only(bottom: 30, right: 16, left: 16),
+                        height: context.getHeight() / 8,
+                        width: double.infinity,
                       );
                     }),
             homeNotifier.isLoadingLoadmore
