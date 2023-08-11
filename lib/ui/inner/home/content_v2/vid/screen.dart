@@ -63,6 +63,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   String auth = '';
   String email = '';
   String postIdVisibility = '';
+  String postIdVisibilityTemp = '';
   LocalizationModelV2? lang;
   ContentData? dataSelected;
   ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
@@ -132,6 +133,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       setState(() {
         postIdVisibility == '';
       });
+      Future.delayed(Duration(milliseconds: 400), () {
+        setState(() {
+          postIdVisibility = postIdVisibilityTemp;
+        });
+      });
     }
 
     // System().disposeBlock();
@@ -165,9 +171,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     // final vidNotifier = context.watch<PreviewVidNotifier>();
     // final error = context.select((ErrorService value) => value.getError(ErrorType.vid));
     // final likeNotifier = Provider.of<LikeNotifier>(context, listen: false);
-    clearPostId() {
-      postIdVisibility = '';
-    }
 
     return Consumer3<PreviewVidNotifier, TranslateNotifierV2, HomeNotifier>(
       builder: (context, vidNotifier, translateNotifier, homeNotifier, widget) => SizedBox(
@@ -221,7 +224,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               // }
                               final vidData = vidNotifier.vidData?[index];
 
-                              return itemVid(vidData ?? ContentData(), vidNotifier, index, clearPostId, homeNotifier);
+                              return itemVid(vidData ?? ContentData(), vidNotifier, index, homeNotifier);
                             },
                           ),
                         ),
@@ -242,7 +245,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     );
   }
 
-  Widget itemVid(ContentData vidData, PreviewVidNotifier notifier, int index, Function function, HomeNotifier homeNotifier) {
+  Widget itemVid(ContentData vidData, PreviewVidNotifier notifier, int index, HomeNotifier homeNotifier) {
     var map = {
       DataSourceRelated.vidKey: vidData.apsaraId,
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
@@ -300,6 +303,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                     print("${notifier.vidData?[_curIdx].description}");
                     setState(() {
                       postIdVisibility = notifier.vidData?[_curIdx].postID ?? '';
+                      postIdVisibilityTemp = notifier.vidData?[_curIdx].postID ?? '';
                     });
 
                     // VidPlayerPageState().playVideo();
@@ -463,22 +467,22 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                     withMargin: true,
                                   ),
                                 ),
-                                postIdVisibility == ''
-                                    ? Center(
-                                        child: Align(
-                                        alignment: Alignment.center,
-                                        child: SizedBox(
-                                          height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                                          width: MediaQuery.of(context).size.width,
-                                          child: const CustomIconWidget(
-                                            defaultColor: false,
-                                            width: 40,
-                                            iconData: '${AssetPath.vectorPath}pause2.svg',
-                                            // color: kHyppeLightButtonText,
-                                          ),
-                                        ),
-                                      ))
-                                    : Container(),
+                                // postIdVisibility == ''
+                                //     ? Center(
+                                //         child: Align(
+                                //         alignment: Alignment.center,
+                                //         child: SizedBox(
+                                //           height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                                //           width: MediaQuery.of(context).size.width,
+                                //           child: const CustomIconWidget(
+                                //             defaultColor: false,
+                                //             width: 40,
+                                //             iconData: '${AssetPath.vectorPath}pause2.svg',
+                                //             // color: kHyppeLightButtonText,
+                                //           ),
+                                //         ),
+                                //       ))
+                                //     : Container(),
                               ],
                             ),
                           )

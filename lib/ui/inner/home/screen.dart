@@ -237,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
               },
               onRefresh: () async {
                 if (!isZoom) {
-                  Future.delayed(Duration(milliseconds: 800), () async {
+                  Future.delayed(Duration(milliseconds: 400), () async {
                     imageCache.clear();
                     imageCache.clearLiveImages();
                     await notifier.initNewHome(context, mounted, isreload: true);
