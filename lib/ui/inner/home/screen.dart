@@ -156,7 +156,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
             offset = globalKey.currentState?.innerController.position.pixels ?? 0;
             // print(offset);
           });
-          print("=========scrolll");
           if ((globalKey.currentState?.innerController.position.pixels ?? 0) >= (globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
               !(globalKey.currentState?.innerController.position.outOfRange ?? true)) {
             notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);
@@ -221,7 +220,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           return false;
         },
         child: Scaffold(
-          key: vidPlayerState,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
             child: HomeAppBar(name: selfnotifier.user.profile?.fullName, offset: offset),

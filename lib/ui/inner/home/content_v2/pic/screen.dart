@@ -83,8 +83,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   int _currentPosition = 0;
   int _bufferPosition = 0;
   int _currentPositionText = 0;
-  // int _curIdx = 0;
-  // int _lastCurIndex = -1;
+  int _curIdx = 0;
+  int _lastCurIndex = -1;
   String _curPostId = '';
   String _lastCurPostId = '';
 
@@ -669,8 +669,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             onVisibilityChanged: (info) {
               print("ada musiknya ${info.visibleFraction}");
               if (info.visibleFraction >= 0.6) {
-                // _curIdx = index;
+                _curIdx = index;
                 _curPostId = notifier.pic?[index].postID ?? index.toString();
+                if (_lastCurIndex != _curIdx) {
+                  if (_curIdx >= (notifier.pic?.length ?? 0) - 2) {
+                    context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
+                  }
+                }
+
                 // if (_lastCurIndex != _curIdx) {
                 if (_lastCurPostId != _curPostId) {
                   if (notifier.pic?[index].music != null) {
@@ -690,7 +696,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     System().disposeBlock();
                   }
                 }
-                // _lastCurIndex = _curIdx;
+                _lastCurIndex = _curIdx;
                 _lastCurPostId = _curPostId;
               }
             },

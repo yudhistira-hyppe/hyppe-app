@@ -368,9 +368,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             Wakelock.disable();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusPrepared:
-            setState(() {
-              _showLoading = true;
-            });
+            if (widget.isAutoPlay ?? false) {
+              setState(() {
+                _showLoading = true;
+              });
+            }
             break;
           default:
         }
@@ -635,6 +637,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           urlVid = jsonMap['data']['url'];
           fAliplayer?.setUrl(urlVid);
           isloading = false;
+        });
+        fAliplayer?.prepare().then((value) {
+          setState(() {
+            isloading = false;
+          });
         });
       }
     } catch (e) {
@@ -1505,26 +1512,27 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   ///Loading
   _buildProgressBar(double width, double height) {
     if (_showLoading) {
-      return SizedBox(
-        width: width,
-        height: height,
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(
-                backgroundColor: Colors.white,
-                strokeWidth: 3.0,
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                "$_loadingPercent%",
-                style: TextStyle(color: Colors.white),
-              ),
-            ],
+      return Positioned.fill(
+        child: Align(
+          alignment: Alignment.center,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                  strokeWidth: 3.0,
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Text(
+                  "$_loadingPercent%",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
           ),
         ),
       );

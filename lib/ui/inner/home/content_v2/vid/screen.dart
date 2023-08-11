@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:ui';
-
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
@@ -229,13 +226,16 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                           ),
                         ),
                       )
-                : const AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: CustomShimmer(
-                      height: double.infinity,
-                      width: double.infinity,
-                    ),
-                  ),
+                : ListView.builder(
+                    itemCount: 5,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return CustomShimmer(
+                        margin: const EdgeInsets.only(bottom: 30, right: 16, left: 16),
+                        height: context.getHeight() / 8,
+                        width: double.infinity,
+                      );
+                    }),
             homeNotifier.isLoadingLoadmore
                 ? const SizedBox(
                     height: 50,
@@ -264,6 +264,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         }
         if (info.visibleFraction >= 0.8) {
           _curIdx = index;
+          if (_lastCurIndex != _curIdx) {
+            if (_curIdx >= (notifier.vidData?.length ?? 0) - 2) {
+              context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
+            }
+          }
           if (_curIdx != index) {
             Future.delayed(const Duration(milliseconds: 400), () {
               try {
