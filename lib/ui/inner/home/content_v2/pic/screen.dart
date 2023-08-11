@@ -489,6 +489,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         height: SizeWidget.barHyppePic,
         // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
               child: notifier.itemCount == 0
@@ -502,6 +503,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         controller: widget.scrollController,
                         // scrollDirection: Axis.horizontal,
                         physics: const NeverScrollableScrollPhysics(),
+
                         itemCount: notifier.pic?.length,
                         padding: const EdgeInsets.symmetric(horizontal: 11.5),
                         itemBuilder: (context, index) {

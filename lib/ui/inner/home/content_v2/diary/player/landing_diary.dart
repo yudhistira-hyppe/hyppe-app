@@ -550,6 +550,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         height: SizeWidget.barHyppePic,
         // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
               child: notifier.itemCount == 0
