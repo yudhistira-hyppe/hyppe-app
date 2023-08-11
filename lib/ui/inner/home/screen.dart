@@ -229,11 +229,15 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
             child: RefreshIndicator(
               color: kHyppePrimary,
               notificationPredicate: (notification) {
-                // with NestedScrollView local(depth == 2) OverscrollNotification are not sent
-                if (notification is OverscrollNotification || Platform.isIOS) {
-                  return notification.depth == 2;
+                if (notifier.isLoadingPict || notifier.isLoadingDiary || notifier.isLoadingVid) {
+                  return false;
+                } else {
+                  // with NestedScrollView local(depth == 2) OverscrollNotification are not sent
+                  if (notification is OverscrollNotification || Platform.isIOS) {
+                    return notification.depth == 2;
+                  }
+                  return notification.depth == 0;
                 }
-                return notification.depth == 0;
               },
               onRefresh: () async {
                 if (!isZoom) {

@@ -549,54 +549,59 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         width: SizeConfig.screenWidth,
         height: SizeWidget.barHyppePic,
         // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
-        child: Expanded(
-          child: notifier.itemCount == 0
-              ? const NoResultFound()
-              : NotificationListener<OverscrollIndicatorNotification>(
-                  onNotification: (overscroll) {
-                    overscroll.disallowIndicator();
-                    return false;
-                  },
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    // controller: notifier.scrollController,
-                    // scrollDirection: Axis.horizontal,
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: notifier.diaryData?.length,
-                    padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                    itemBuilder: (context, index) {
-                      if (notifier.diaryData == null || home.isLoadingDiary) {
-                        fAliplayer?.pause();
-                        // _lastCurIndex = -1;
-                        _lastCurPostId = '';
-                        return CustomShimmer(
-                          width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                          height: 168,
-                          radius: 8,
-                          margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                        );
-                      } else if (index == notifier.diaryData?.length && notifier.hasNext) {
-                        return UnconstrainedBox(
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: 80 * SizeConfig.scaleDiagonal,
-                            height: 80 * SizeConfig.scaleDiagonal,
-                            child: const CustomLoading(),
-                          ),
-                        );
-                      }
-                      // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                      if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                        isPlay = false;
-                        fAliplayer?.stop();
-                      }
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: notifier.itemCount == 0
+                  ? const NoResultFound()
+                  : NotificationListener<OverscrollIndicatorNotification>(
+                      onNotification: (overscroll) {
+                        overscroll.disallowIndicator();
+                        return false;
+                      },
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        // controller: notifier.scrollController,
+                        // scrollDirection: Axis.horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: notifier.diaryData?.length,
+                        padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                        itemBuilder: (context, index) {
+                          if (notifier.diaryData == null || home.isLoadingDiary) {
+                            fAliplayer?.pause();
+                            // _lastCurIndex = -1;
+                            _lastCurPostId = '';
+                            return CustomShimmer(
+                              width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                              height: 168,
+                              radius: 8,
+                              margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                            );
+                          } else if (index == notifier.diaryData?.length && notifier.hasNext) {
+                            return UnconstrainedBox(
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: 80 * SizeConfig.scaleDiagonal,
+                                height: 80 * SizeConfig.scaleDiagonal,
+                                child: const CustomLoading(),
+                              ),
+                            );
+                          }
+                          // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                          if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                            isPlay = false;
+                            fAliplayer?.stop();
+                          }
 
-                      return itemDiary(notifier, index, home);
-                    },
-                  ),
-                ),
+                          return itemDiary(notifier, index, home);
+                        },
+                      ),
+                    ),
+            ),
+          ],
         ),
       );
     });

@@ -488,48 +488,53 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         width: SizeConfig.screenWidth,
         height: SizeWidget.barHyppePic,
         // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
-        child: Expanded(
-          child: notifier.itemCount == 0
-              ? const NoResultFound()
-              : NotificationListener<OverscrollIndicatorNotification>(
-                  onNotification: (overscroll) {
-                    overscroll.disallowIndicator();
-                    return false;
-                  },
-                  child: ListView.builder(
-                    controller: widget.scrollController,
-                    // scrollDirection: Axis.horizontal,
-                    physics: const NeverScrollableScrollPhysics(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: notifier.itemCount == 0
+                  ? const NoResultFound()
+                  : NotificationListener<OverscrollIndicatorNotification>(
+                      onNotification: (overscroll) {
+                        overscroll.disallowIndicator();
+                        return false;
+                      },
+                      child: ListView.builder(
+                        controller: widget.scrollController,
+                        // scrollDirection: Axis.horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
 
-                    itemCount: notifier.pic?.length,
-                    padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                    itemBuilder: (context, index) {
-                      if (notifier.pic == null || home.isLoadingPict) {
-                        fAliplayer?.pause();
-                        // _lastCurIndex = -1;
-                        _lastCurPostId = '';
-                        return CustomShimmer(
-                          width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                          height: 168,
-                          radius: 8,
-                          margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                        );
-                      } else if (index == notifier.pic?.length && notifier.hasNext) {
-                        return UnconstrainedBox(
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: 80 * SizeConfig.scaleDiagonal,
-                            height: 80 * SizeConfig.scaleDiagonal,
-                            child: const CustomLoading(),
-                          ),
-                        );
-                      }
+                        itemCount: notifier.pic?.length,
+                        padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                        itemBuilder: (context, index) {
+                          if (notifier.pic == null || home.isLoadingPict) {
+                            fAliplayer?.pause();
+                            // _lastCurIndex = -1;
+                            _lastCurPostId = '';
+                            return CustomShimmer(
+                              width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                              height: 168,
+                              radius: 8,
+                              margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                            );
+                          } else if (index == notifier.pic?.length && notifier.hasNext) {
+                            return UnconstrainedBox(
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: 80 * SizeConfig.scaleDiagonal,
+                                height: 80 * SizeConfig.scaleDiagonal,
+                                child: const CustomLoading(),
+                              ),
+                            );
+                          }
 
-                      return itemPict(context, notifier, index, home);
-                    },
-                  ),
-                ),
+                          return itemPict(context, notifier, index, home);
+                        },
+                      ),
+                    ),
+            ),
+          ],
         ),
       ),
     );
