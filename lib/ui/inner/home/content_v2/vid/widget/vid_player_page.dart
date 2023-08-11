@@ -333,6 +333,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
             Wakelock.enable();
             try {
+              if (widget.isAutoPlay ?? false) {
+                System().increaseViewCount2(context, widget.data ?? ContentData());
+              }
               setState(() {
                 _showTipsWidget = false;
                 _showLoading = false;
@@ -960,7 +963,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             width: widget.width,
             decoration: BoxDecoration(
               color: Colors.black,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(widget.fromFullScreen ?? false ? 0 : 16),
             ),
             child: VideoThumbnail(
               videoData: widget.data,
@@ -1021,8 +1024,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               widget.data!.isLoading
                   ? Container(color: Colors.black, width: widget.width, height: widget.height)
                   : ClipRRect(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(16),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(widget.fromFullScreen ?? false ? 0 : 16),
                       ),
                       child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
 

@@ -166,7 +166,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     });
     controller = PageController(initialPage: widget.index ?? 0);
     controller.addListener(() {
-      widget.fAliplayer?.pause();
+      // widget.fAliplayer?.pause();
+      setState(() {
+        isScrolled = true;
+      });
     });
     curentIndex = widget.index ?? 0;
     if ((vidData?.length ?? 0) - 1 == curentIndex) {
@@ -270,7 +273,6 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                     scrollDirection: Axis.vertical,
                     itemCount: vidData?.length ?? 0,
                     onPageChanged: (value) {
-                      isScrolled = true;
                       curentIndex = value;
                       scrollPage(vidData?[value].metadata?.height, vidData?[value].metadata?.width);
                       if ((vidData?.length ?? 0) - 1 == curentIndex) {
