@@ -46,6 +46,7 @@ import '../../../../../core/services/route_observer_service.dart';
 import '../../../../../ux/path.dart';
 import '../../../../../ux/routing.dart';
 import '../../../../constant/entities/like/notifier.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class HyppePreviewVid extends StatefulWidget {
   const HyppePreviewVid({Key? key}) : super(key: key);
@@ -70,6 +71,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
 
   Map<int, FlutterAliplayer> dataAli = {};
+  final ItemScrollController itemScrollController = ItemScrollController();
+  final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
+
+  /// Listener that reports the position of items when the list is scrolled.
+  final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
 
   @override
   void initState() {
@@ -151,6 +157,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     return context.read<PreviewVidNotifier>();
   }
 
+  void scrollAuto() {
+    print("====== nomor index $_curIdx");
+    // itemScrollController.scrollTo(index: _curIdx + 1, duration: Duration(milliseconds: 500));
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -171,10 +182,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                     : Expanded(
                         child: NotificationListener<OverscrollIndicatorNotification>(
                           onNotification: (overscroll) {
+                            print(overscroll);
                             overscroll.disallowIndicator();
-                            return false;
+                            return true;
                           },
                           child: ListView.builder(
+                            // child: ScrollablePositionedList.builder(
                             // controller: vidNotifier.pageController,
                             // onPageChanged: (index) async {
                             //   print('HyppePreviewVid index : $index');
@@ -187,6 +200,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             //   // context.read<PreviewVidNotifier>().nextVideo = false;
                             //   // context.read<PreviewVidNotifier>().initializeVideo = false;
                             // },
+                            physics: NeverScrollableScrollPhysics(),
+                            // itemScrollController: itemScrollController,
+                            // itemPositionsListener: itemPositionsListener,
+                            // scrollOffsetController: scrollOffsetController,
                             shrinkWrap: true,
                             itemCount: vidNotifier.itemCount,
                             itemBuilder: (BuildContext context, int index) {
@@ -246,10 +263,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
           print(_curIdx);
         }
         if (info.visibleFraction >= 0.8) {
-          print("kokokokokokokoko");
-          print(_curIdx);
-          print(_lastCurIndex);
-          print(index);
           _curIdx = index;
           if (_curIdx != index) {
             Future.delayed(const Duration(milliseconds: 400), () {
@@ -449,20 +462,22 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                 withMargin: true,
                               ),
                             ),
-                            // Center(
-                            //     child: Align(
-                            //   alignment: Alignment.center,
-                            //   child: SizedBox(
-                            //     height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                            //     width: MediaQuery.of(context).size.width,
-                            //     child: const CustomIconWidget(
-                            //       defaultColor: false,
-                            //       width: 40,
-                            //       iconData: '${AssetPath.vectorPath}pause2.svg',
-                            //       // color: kHyppeLightButtonText,
-                            //     ),
-                            //   ),
-                            // )),
+                            postIdVisibility == ''
+                                ? Center(
+                                    child: Align(
+                                    alignment: Alignment.center,
+                                    child: SizedBox(
+                                      height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: const CustomIconWidget(
+                                        defaultColor: false,
+                                        width: 40,
+                                        iconData: '${AssetPath.vectorPath}pause2.svg',
+                                        // color: kHyppeLightButtonText,
+                                      ),
+                                    ),
+                                  ))
+                                : Container(),
                           ],
                         ),
                       )
@@ -483,6 +498,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             isAutoPlay: true,
                             clearPostId: () {
                               postIdVisibility = '';
+                            },
+                            autoScroll: () {
+                              scrollAuto();
                             },
                             functionFullTriger: (value) {
                               print('===========hahhahahahaa===========');
