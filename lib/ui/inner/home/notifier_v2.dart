@@ -80,7 +80,7 @@ class HomeNotifier with ChangeNotifier {
   int skipPic = 0;
   int skipDiary = 0;
   int skipvid = 0;
-  int limit = 15;
+  int limit = 2;
 
   bool get isLoadingVid => _isLoadingVid;
   bool get isLoadingDiary => _isLoadingDiary;
@@ -248,12 +248,9 @@ class HomeNotifier with ChangeNotifier {
       if (isgetMore) {
         isLoadingLoadmore = true;
         notifyListeners();
-        // if (index == 0) skipPic = skipPic + limit;
-        // if (index == 1) skipDiary = skipDiary + limit;
-        // if (index == 2) skipvid = skipvid + limit;
-        if (index == 0) skipPic = skipPic + 1;
-        if (index == 1) skipDiary = skipDiary + 1;
-        if (index == 2) skipvid = skipvid + 1;
+        if (index == 0) skipPic = skipPic + limit;
+        if (index == 1) skipDiary = skipDiary + limit;
+        if (index == 2) skipvid = skipvid + limit;
         isreload = false;
       }
 
@@ -313,6 +310,9 @@ class HomeNotifier with ChangeNotifier {
         case 0:
           if (!mounted) return;
           await pic.initialPic(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents).then((value) async {
+            if (pic.pic != null && isNew) {
+              limit = pic.pic?.first.limitLandingpage ?? 2;
+            }
             // if (diary.diaryData == null) {
             //   await initNewHome(context, mounted, forceIndex: 1);
             //   // diary.initialDiary(context, reload: isreload || isNew, list: allContents);

@@ -195,6 +195,7 @@ class ContentData {
   FlutterAliplayer? fAliplayerAds;
   UserBadgeModel? urluserBadge;
   bool? isPlay;
+  int? limitLandingpage;
 
   ContentData({
     this.metadata,
@@ -257,6 +258,7 @@ class ContentData {
     this.fullContent,
     this.urluserBadge,
     this.isPlay = false,
+    this.limitLandingpage,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -358,6 +360,7 @@ class ContentData {
         urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
       }
     }
+    limitLandingpage = json['limitLandingpage'] ?? 0;
   }
 
   Map<String, dynamic> toJson() {

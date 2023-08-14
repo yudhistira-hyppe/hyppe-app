@@ -212,6 +212,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.postID ?? 'video_player_landing');
         fAliplayer?.setAutoPlay(autoPlay);
         if (autoPlay) {
+          print("==================masuk wake lok");
+          Wakelock.enable();
           setState(() {
             isloading = true;
           });
@@ -373,15 +375,15 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           case FlutterAvpdef.AVPStatus_AVPStatusPrepared:
             Wakelock.enable();
             if (widget.isAutoPlay ?? false) {
-              try{
-                if(mounted){
+              try {
+                if (mounted) {
                   setState(() {
                     _showLoading = true;
                   });
-                }else{
+                } else {
                   _showLoading = true;
                 }
-              }catch(e){
+              } catch (e) {
                 e.logger();
               }
             }
