@@ -669,7 +669,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     _curPostId = notifier.pic?[index].postID ?? index.toString();
                     if (_lastCurIndex != _curIdx) {
                       if (_curIdx >= (notifier.pic?.length ?? 0) - 2) {
-                        context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
+                        // context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
                       }
                     }
 

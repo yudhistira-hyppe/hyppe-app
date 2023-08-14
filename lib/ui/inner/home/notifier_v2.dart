@@ -226,7 +226,7 @@ class HomeNotifier with ChangeNotifier {
     rp.inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
     connectionError = !isConnected;
-
+    if (isLoadingLoadmore) return;
     if (isConnected) {
       if (!mounted) return;
       final profile = Provider.of<MainNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
@@ -248,9 +248,12 @@ class HomeNotifier with ChangeNotifier {
       if (isgetMore) {
         isLoadingLoadmore = true;
         notifyListeners();
-        if (index == 0) skipPic = skipPic + limit;
-        if (index == 1) skipDiary = skipDiary + limit;
-        if (index == 2) skipvid = skipvid + limit;
+        // if (index == 0) skipPic = skipPic + limit;
+        // if (index == 1) skipDiary = skipDiary + limit;
+        // if (index == 2) skipvid = skipvid + limit;
+        if (index == 0) skipPic = skipPic + 1;
+        if (index == 1) skipDiary = skipDiary + 1;
+        if (index == 2) skipvid = skipvid + 1;
         isreload = false;
       }
 
@@ -302,7 +305,6 @@ class HomeNotifier with ChangeNotifier {
         }
       }
 
-      isLoadingLoadmore = false;
       _isLoadingPict = false;
       _isLoadingDiary = false;
       _isLoadingVid = false;
@@ -330,6 +332,7 @@ class HomeNotifier with ChangeNotifier {
           await vid.initialVid(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
           break;
       }
+      isLoadingLoadmore = false;
     }
   }
 
@@ -1070,7 +1073,6 @@ class HomeNotifier with ChangeNotifier {
         stories.initialMyStoryGroup(Routing.navigatorKey.currentContext ?? context);
         break;
       default:
-
     }
   }
 }

@@ -714,7 +714,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                     if (_lastCurIndex != _curIdx) {
                       if (_curIdx >= (notifier.diaryData?.length ?? 0) - 2) {
                         print("======hahahaha mobil");
-                        context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
+                        // context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
                       }
                     }
                     _curPostId = notifier.diaryData?[index].postID ?? index.toString();

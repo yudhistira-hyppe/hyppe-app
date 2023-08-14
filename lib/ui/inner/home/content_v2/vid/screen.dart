@@ -265,7 +265,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
               _curIdx = index;
               if (_lastCurIndex != _curIdx) {
                 if (_curIdx >= (notifier.vidData?.length ?? 0) - 2) {
-                  context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
+                  // context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
                 }
               }
               if (_curIdx != index) {
