@@ -199,7 +199,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;
-      _initAds(context);
+      // _initAds(context);
     });
     fAliplayer?.setOnRenderingStart((playerId) {
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
