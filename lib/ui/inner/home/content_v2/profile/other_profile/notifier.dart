@@ -237,6 +237,7 @@ class OtherProfileNotifier with ChangeNotifier {
               List<ContentData> _res = await diaryContentsQuery.loadNext(context, otherContent: true);
               if (_res.isNotEmpty) {
                 user.diaries = [...(user.diaries ?? []), ..._res];
+                manyUser.last.diaries = [...(manyUser.last.diaries ?? []), ..._res];
               } else {
                 print("Post Diary Dah Mentok");
               }
@@ -250,6 +251,7 @@ class OtherProfileNotifier with ChangeNotifier {
               List<ContentData> _res = await vidContentsQuery.loadNext(context, otherContent: true);
               if (_res.isNotEmpty) {
                 user.vids = [...(user.vids ?? []), ..._res];
+                manyUser.last.vids = [...(manyUser.last.vids ?? []), ..._res];
               } else {
                 print("Post Vid Dah Mentok");
               }

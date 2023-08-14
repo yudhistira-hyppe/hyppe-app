@@ -163,11 +163,16 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       setState(() {
         _currentPosition = _videoDuration;
       });
+      nextPage();
     });
     controller = PageController(initialPage: widget.index ?? 0);
     controller.addListener(() {
       widget.fAliplayer?.pause();
+      setState(() {
+        isScrolled = true;
+      });
     });
+
     curentIndex = widget.index ?? 0;
     if ((vidData?.length ?? 0) - 1 == curentIndex) {
       getNewData();
@@ -220,20 +225,26 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
         isloadingRotate = true;
       });
       if (orientation == Orientation.landscape) {
-        await SystemChrome.setPreferredOrientations([
+        SystemChrome.setPreferredOrientations([
           DeviceOrientation.landscapeLeft,
           DeviceOrientation.landscapeRight,
         ]);
       } else {
-        await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+        // await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
         await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
       }
-      Future.delayed(const Duration(seconds: 1), () {
+      Future.delayed(const Duration(milliseconds: 1000), () {
         setState(() {
           isloadingRotate = false;
         });
       });
     }
+  }
+
+  void nextPage() {
+    Future.delayed(Duration(milliseconds: 500), () {
+      controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    });
   }
 
   @override
@@ -270,7 +281,6 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                     scrollDirection: Axis.vertical,
                     itemCount: vidData?.length ?? 0,
                     onPageChanged: (value) {
-                      isScrolled = true;
                       curentIndex = value;
                       scrollPage(vidData?[value].metadata?.height, vidData?[value].metadata?.width);
                       if ((vidData?.length ?? 0) - 1 == curentIndex) {
@@ -315,6 +325,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                 getPlayer: (main) {},
                                 getAdsPlayer: (ads) {
                                   // notifier.vidData?[index].fAliplayerAds = ads;
+                                },
+                                autoScroll: () {
+                                  nextPage();
                                 },
 
                                 // fAliplayer: notifier.vidData?[index].fAliplayer,
