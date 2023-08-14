@@ -369,9 +369,17 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusPrepared:
             if (widget.isAutoPlay ?? false) {
-              setState(() {
-                _showLoading = true;
-              });
+              try{
+                if(mounted){
+                  setState(() {
+                    _showLoading = true;
+                  });
+                }else{
+                  _showLoading = true;
+                }
+              }catch(e){
+                e.logger();
+              }
             }
             break;
           default:

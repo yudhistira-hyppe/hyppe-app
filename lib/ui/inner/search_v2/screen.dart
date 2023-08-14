@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/hashtag_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -20,7 +19,6 @@ import 'package:hyppe/ui/inner/search_v2/interest/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
-import 'package:hyppe/ui/inner/search_v2/widget/event_banner.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
