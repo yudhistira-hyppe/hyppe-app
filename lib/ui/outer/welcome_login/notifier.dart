@@ -33,6 +33,8 @@ import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../../core/constants/themes/hyppe_colors.dart';
+
 class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   final _routing = Routing();
   final _googleSignInService = GoogleSignInService();
@@ -261,28 +263,59 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       final signUpPinNotifier = Provider.of<SignUpPinNotifier>(context, listen: false);
 
       await ShowBottomSheet().onShowColouredSheet(
-        context,
-        language.pleaseVerifyYourEmailFrst ?? '',
-        maxLines: 2,
-        enableDrag: false,
-        dismissible: false,
-        color: Theme.of(context).colorScheme.error,
-        iconSvg: "${AssetPath.vectorPath}close.svg",
+          context,
+          language.emailVerification ?? '',
+          subCaption: language.emailHasRegistered,
+          maxLines: 3,
+          borderRadius: 8,
+          sizeIcon: 20,
+          color: kHyppeTextLightPrimary,
+          isArrow: true,
+          iconColor: kHyppeBorder,
+          padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
+          margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
+          iconSvg: "${AssetPath.vectorPath}info_white.svg",
+          function: (){
+            _googleSignInService.handleSignOut();
+            passwordController.clear();
+            emailController.clear();
+            signUpPinNotifier.username = signData.username ?? '';
+            signUpPinNotifier.email = signData.email ?? '';
+            // signUpPinNotifier.resend(context);
+            signUpPinNotifier.resendPilih = true;
+            // signUpPinNotifier.timer = '00:00';
+
+            signUpPinNotifier.userToken = signData.token ?? '';
+            // signUpPinNotifier.userID = signData.profileID;
+            Routing().move(Routes.signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toLogin, email: email)).whenComplete(() {
+              clearTextController();
+            });
+          }
       );
 
-      _googleSignInService.handleSignOut();
-
-      signUpPinNotifier.username = signData.username ?? '';
-      signUpPinNotifier.email = signData.email ?? '';
-      // signUpPinNotifier.resend(context);
-      signUpPinNotifier.resendPilih = true;
-      // signUpPinNotifier.timer = '00:00';
-
-      signUpPinNotifier.userToken = signData.token ?? '';
-      // signUpPinNotifier.userID = signData.profileID;
-      Routing().move(Routes.signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toLogin, email: email)).whenComplete(() {
-        clearTextController();
-      });
+      // await ShowBottomSheet().onShowColouredSheet(
+      //   context,
+      //   language.pleaseVerifyYourEmailFrst ?? '',
+      //   maxLines: 2,
+      //   enableDrag: false,
+      //   dismissible: false,
+      //   color: Theme.of(context).colorScheme.error,
+      //   iconSvg: "${AssetPath.vectorPath}close.svg",
+      // );
+      //
+      // _googleSignInService.handleSignOut();
+      //
+      // signUpPinNotifier.username = signData.username ?? '';
+      // signUpPinNotifier.email = signData.email ?? '';
+      // // signUpPinNotifier.resend(context);
+      // signUpPinNotifier.resendPilih = true;
+      // // signUpPinNotifier.timer = '00:00';
+      //
+      // signUpPinNotifier.userToken = signData.token ?? '';
+      // // signUpPinNotifier.userID = signData.profileID;
+      // Routing().move(Routes.signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toLogin, email: email)).whenComplete(() {
+      //   clearTextController();
+      // });
     }
   }
 

@@ -80,7 +80,7 @@ class HomeNotifier with ChangeNotifier {
   int skipPic = 0;
   int skipDiary = 0;
   int skipvid = 0;
-  int limit = 15;
+  int limit = 2;
 
   bool get isLoadingVid => _isLoadingVid;
   bool get isLoadingDiary => _isLoadingDiary;
@@ -226,7 +226,7 @@ class HomeNotifier with ChangeNotifier {
     rp.inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
     connectionError = !isConnected;
-
+    if (isLoadingLoadmore) return;
     if (isConnected) {
       if (!mounted) return;
       final profile = Provider.of<MainNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
@@ -302,7 +302,6 @@ class HomeNotifier with ChangeNotifier {
         }
       }
 
-      isLoadingLoadmore = false;
       _isLoadingPict = false;
       _isLoadingDiary = false;
       _isLoadingVid = false;
@@ -311,6 +310,9 @@ class HomeNotifier with ChangeNotifier {
         case 0:
           if (!mounted) return;
           await pic.initialPic(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents).then((value) async {
+            if (pic.pic != null && isNew) {
+              limit = pic.pic?.first.limitLandingpage ?? 2;
+            }
             // if (diary.diaryData == null) {
             //   await initNewHome(context, mounted, forceIndex: 1);
             //   // diary.initialDiary(context, reload: isreload || isNew, list: allContents);
@@ -330,6 +332,7 @@ class HomeNotifier with ChangeNotifier {
           await vid.initialVid(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
           break;
       }
+      isLoadingLoadmore = false;
     }
   }
 
@@ -1070,7 +1073,6 @@ class HomeNotifier with ChangeNotifier {
         stories.initialMyStoryGroup(Routing.navigatorKey.currentContext ?? context);
         break;
       default:
-
     }
   }
 }

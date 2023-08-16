@@ -145,7 +145,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;
-      _initAds(context);
+      // _initAds(context);
     });
     fAliplayer?.setOnRenderingStart((playerId) {
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
@@ -243,21 +243,17 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         isPause = true;
 
         _currentPosition = _videoDuration;
-
         double position = 0.0;
         for (var i = 0; i <= _curIdx; i++) {
           position += notifier.diaryData?[i].height ?? 0.0;
         }
-
         print("+++++++++++ current index: $_curIdx");
         print("+++++++++++ position: $position");
-
         context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
           position,
           duration: const Duration(milliseconds: 700),
           curve: Curves.easeOut,
         );
-        
         if (mounted) {
           setState(() {});
         }
@@ -315,7 +311,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   void start(BuildContext context, ContentData data) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
-    // fAliplayer?.stop();
+    fAliplayer?.stop();
     dataSelected = data;
 
     isPlay = false;
@@ -392,7 +388,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         Map jsonMap = json.decode(fetch.data.toString());
         auth = jsonMap['PlayAuth'];
 
-        print("+++++++++++ setVidAtuh");
         fAliplayer?.setVidAuth(
           vid: apsaraId,
           region: DataSourceRelated.defaultRegion,
@@ -572,7 +567,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
-              child: notifier.diaryData?.isEmpty ?? true
+              child: notifier.diaryData != null && (notifier.diaryData?.isEmpty ?? true)
                   ? const NoResultFound()
                   : NotificationListener<OverscrollIndicatorNotification>(
                       onNotification: (overscroll) {
@@ -615,7 +610,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                             fAliplayer?.stop();
                           }
 
-                          return itemDiary(notifier, index, home);
+                          return itemDiary(context, notifier, index, home);
                         },
                       ),
                     ),
@@ -626,9 +621,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     });
   }
 
-  Widget itemDiary(PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
+  Widget itemDiary(BuildContext context,PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
     return WidgetSize(
-      onChange: (Size size) {
+       onChange: (Size size) {
         notifier.diaryData?[index].height = size.height;
       },
       child: Column(
@@ -737,7 +732,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       if (_lastCurIndex != _curIdx) {
                         if (_curIdx >= (notifier.diaryData?.length ?? 0) - 2) {
                           print("======hahahaha mobil");
-                          context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
+                          // context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
                         }
                       }
                       _curPostId = notifier.diaryData?[index].postID ?? index.toString();
@@ -746,11 +741,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         fAliplayer?.stop();
                         fAliplayer?.clearScreen();
                         Future.delayed(const Duration(milliseconds: 700), () {
-                          start(context, notifier.diaryData?[index] ?? ContentData());
-                          System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData(), check: false);
+                          start(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData());
+                          System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData(), check: false);
                         });
                         if (notifier.diaryData?[index].certified ?? false) {
-                          System().block(context);
+                          System().block(Routing.navigatorKey.currentContext ?? context);
                         } else {
                           System().disposeBlock();
                         }
@@ -1075,7 +1070,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 ),
                 GestureDetector(
                   onTap: () {
-                    Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: notifier.diaryData?[index].postID ?? '', fromFront: true, data: notifier.diaryData?[index] ?? ContentData()));
+                    Routing()
+                        .move(Routes.commentsDetail, argument: CommentsArgument(postID: notifier.diaryData?[index].postID ?? '', fromFront: true, data: notifier.diaryData?[index] ?? ContentData()));
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -1127,11 +1123,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
             ),
           ),
           homeNotifier.isLoadingLoadmore && notifier.diaryData?[index] == notifier.diaryData?.last
-            ? const Padding(
-                padding: EdgeInsets.only(bottom: 32),
-                child: Center(child: CustomLoading()),
-              )
-            : Container(),
+              ? const Padding(
+                  padding: EdgeInsets.only(bottom: 32),
+                  child: Center(child: CustomLoading()),
+                )
+              : Container(),
         ],
       ),
     );
@@ -1280,7 +1276,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         : Container();
   }
 }
-
 class WidgetSize extends StatefulWidget {
   final Widget child;
   final Function onChange;

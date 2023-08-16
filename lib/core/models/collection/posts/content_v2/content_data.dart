@@ -196,6 +196,7 @@ class ContentData {
   UserBadgeModel? urluserBadge;
   bool? isPlay;
   double? height;
+  int? limitLandingpage;
 
   ContentData({
     this.metadata,
@@ -259,6 +260,7 @@ class ContentData {
     this.urluserBadge,
     this.isPlay = false,
     this.height = 0.0,
+    this.limitLandingpage,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -361,6 +363,7 @@ class ContentData {
         urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
       }
     }
+    limitLandingpage = json['limitLandingpage'] ?? 0;
   }
 
   Map<String, dynamic> toJson() {

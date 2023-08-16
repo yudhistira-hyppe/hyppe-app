@@ -1022,9 +1022,27 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                                         width: SizeConfig.screenWidth,
                                                       ),
                                               ),
-                                              emptyWidget: GestureDetector(
-                                                onTap: () {
+                                              emptyWidget: notifier.connectionError ? GestureDetector(
+                                                onTap: () async {
                                                   _networklHasErrorNotifier.value++;
+                                                  bool connect = await System().checkConnections();
+                                                  if (connect) {
+                                                    setState(() {
+                                                      isloading = true;
+                                                    });
+                                                    await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                                    setState(() {
+                                                      pics = notifier.pics;
+                                                    });
+                                                  } else {
+                                                    if (mounted) {
+                                                      ShowGeneralDialog.showToastAlert(
+                                                        context,
+                                                        lang?.internetConnectionLost ?? ' Error',
+                                                            () async {},
+                                                      );
+                                                    }
+                                                  }
                                                 },
                                                 child: Container(
                                                     decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
@@ -1038,11 +1056,30 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                                             textToDisplay: lang?.couldntLoadImage ?? 'Error',
                                                             maxLines: 3,
                                                           )),
-                                              ),
+                                              ) : Image.network((pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2', fit: BoxFit.fitHeight,
+                                                width: SizeConfig.screenWidth,),
                                               errorWidget: (context, url, error) {
-                                                return GestureDetector(
-                                                  onTap: () {
+                                                return notifier.connectionError ? GestureDetector(
+                                                  onTap: () async {
                                                     _networklHasErrorNotifier.value++;
+                                                    bool connect = await System().checkConnections();
+                                                    if (connect) {
+                                                      setState(() {
+                                                        isloading = true;
+                                                      });
+                                                      await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                                      setState(() {
+                                                        pics = notifier.pics;
+                                                      });
+                                                    } else {
+                                                      if (mounted) {
+                                                        ShowGeneralDialog.showToastAlert(
+                                                          context,
+                                                          lang?.internetConnectionLost ?? ' Error',
+                                                              () async {},
+                                                        );
+                                                      }
+                                                    }
                                                   },
                                                   child: Container(
                                                       decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
@@ -1056,7 +1093,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                                               textToDisplay: lang?.couldntLoadImage ?? 'Error',
                                                               maxLines: 3,
                                                             )),
-                                                );
+                                                ) : Image.network((pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2', fit: BoxFit.fitHeight,
+                                                  width: SizeConfig.screenWidth,);
                                               },
                                             );
                                           }),

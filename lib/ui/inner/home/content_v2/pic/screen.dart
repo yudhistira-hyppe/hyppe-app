@@ -669,7 +669,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     _curPostId = notifier.pic?[index].postID ?? index.toString();
                     if (_lastCurIndex != _curIdx) {
                       if (_curIdx >= (notifier.pic?.length ?? 0) - 2) {
-                        context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
+                        // context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
                       }
                     }
 
@@ -946,7 +946,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             padding: EdgeInsets.only(left: 21.0),
                             child: GestureDetector(
                               onTap: () {
-                                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: notifier.pic?[index].postID ?? '', fromFront: true, data: notifier.pic?[index] ?? ContentData()));
+                                Routing()
+                                    .move(Routes.commentsDetail, argument: CommentsArgument(postID: notifier.pic?[index].postID ?? '', fromFront: true, data: notifier.pic?[index] ?? ContentData()));
                                 // ShowBottomSheet.onShowCommentV2(context, postID: notifier.pic?[index].postID);
                               },
                               child: const CustomIconWidget(
@@ -1068,11 +1069,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           ),
         ),
         homeNotifier.isLoadingLoadmore && notifier.pic?[index] == notifier.pic?.last
-          ? const Padding(
-              padding: EdgeInsets.only(bottom: 32),
-              child: Center(child: CustomLoading()),
-            )
-          : Container(),
+            ? const Padding(
+                padding: EdgeInsets.only(bottom: 32),
+                child: Center(child: CustomLoading()),
+              )
+            : Container(),
       ],
     );
   }

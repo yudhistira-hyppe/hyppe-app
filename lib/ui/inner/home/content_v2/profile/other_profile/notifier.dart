@@ -237,6 +237,7 @@ class OtherProfileNotifier with ChangeNotifier {
               List<ContentData> _res = await diaryContentsQuery.loadNext(context, otherContent: true);
               if (_res.isNotEmpty) {
                 user.diaries = [...(user.diaries ?? []), ..._res];
+                manyUser.last.diaries = [...(manyUser.last.diaries ?? []), ..._res];
               } else {
                 print("Post Diary Dah Mentok");
               }
@@ -250,6 +251,7 @@ class OtherProfileNotifier with ChangeNotifier {
               List<ContentData> _res = await vidContentsQuery.loadNext(context, otherContent: true);
               if (_res.isNotEmpty) {
                 user.vids = [...(user.vids ?? []), ..._res];
+                manyUser.last.vids = [...(manyUser.last.vids ?? []), ..._res];
               } else {
                 print("Post Vid Dah Mentok");
               }
@@ -506,10 +508,12 @@ class OtherProfileNotifier with ChangeNotifier {
 
   navigateToSeeAllScreen(BuildContext context, int index, {contentPosition? inPosition, Widget? title, List<ContentData>? data, scrollController, double? heightProfile}) async {
     context.read<ReportNotifier>().inPosition = contentPosition.otherprofile;
-    // final connect = await _system.checkConnections();
+    final connect = await _system.checkConnections();
+
     // if (connect) {
     var result;
     if (pageIndex == 0) {
+      (Routing.navigatorKey.currentContext ?? context).read<ScrollPicNotifier>().connectionError = !connect;
       _routing.move(Routes.scrollPic,
           argument: SlidedPicDetailScreenArgument(
             page: index,
@@ -526,6 +530,7 @@ class OtherProfileNotifier with ChangeNotifier {
       // scrollAuto(result);
     }
     if (pageIndex == 1) {
+      (Routing.navigatorKey.currentContext ?? context).read<ScrollDiaryNotifier>().connectionError = !connect;
       _routing.move(Routes.scrollDiary,
           argument: SlidedDiaryDetailScreenArgument(
             page: index,
@@ -542,6 +547,7 @@ class OtherProfileNotifier with ChangeNotifier {
       // scrollAuto(result);
     }
     if (pageIndex == 2) {
+      (Routing.navigatorKey.currentContext ?? context).read<ScrollVidNotifier>().connectionError = !connect;
       _routing.move(Routes.scrollVid,
           argument: SlidedVidDetailScreenArgument(
             page: index,

@@ -15,6 +15,8 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/reward_widget.
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/witdhdrawal_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../widget/voucher_widget.dart';
+
 class AllTransaction extends StatefulWidget {
   const AllTransaction({Key? key}) : super(key: key);
 
@@ -196,6 +198,12 @@ class _AllTransactionState extends State<AllTransaction> {
                                         data: notifier.dataAllTransaction?[index],
                                       );
                                     default:
+                                      if (notifier.dataAllTransaction?[index].jenis == "VOUCHER") {
+                                        return VoucherWidget(
+                                          data: notifier.dataAllTransaction?[index],
+                                          language: notifier2.translate,
+                                        );
+                                      }
                                       return BuySellWidget(
                                         data: notifier.dataAllTransaction?[index],
                                         language: notifier2.translate,
