@@ -143,7 +143,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;
-      _initAds(context);
+      // _initAds(context);
     });
     fAliplayer?.setOnRenderingStart((playerId) {
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
@@ -596,7 +596,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                             fAliplayer?.stop();
                           }
 
-                          return itemDiary(notifier, index, home);
+                          return itemDiary(context, notifier, index, home);
                         },
                       ),
                     ),
@@ -607,7 +607,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     });
   }
 
-  Widget itemDiary(PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
+  Widget itemDiary(BuildContext context,PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
     return Column(
       children: [
         Container(
@@ -722,11 +722,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                     if (_lastCurPostId != _curPostId) {
                       fAliplayer?.stop();
                       Future.delayed(const Duration(milliseconds: 700), () {
-                        start(context, notifier.diaryData?[index] ?? ContentData());
-                        System().increaseViewCount2(context, notifier.diaryData?[index] ?? ContentData(), check: false);
+                        start(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData());
+                        System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData(), check: false);
                       });
                       if (notifier.diaryData?[index].certified ?? false) {
-                        System().block(context);
+                        System().block(Routing.navigatorKey.currentContext ?? context);
                       } else {
                         System().disposeBlock();
                       }

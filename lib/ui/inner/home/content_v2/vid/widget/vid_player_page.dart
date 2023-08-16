@@ -1043,7 +1043,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                           width: widget.width,
                           height: widget.height,
                           // padding: EdgeInsets.only(bottom: 25.0),
-                          child: Offstage(offstage: _isLock, child: _buildContentWidget(context, widget.orientation)),
+                          child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation)),
                         ),
                       if (!isPlay)
                         SizedBox(
@@ -1525,18 +1525,18 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       return Positioned.fill(
         child: Align(
           alignment: Alignment.center,
-          child: Center(
+          child: Container(
+            height: 40,
+            alignment: Alignment.center,
             child: Column(
-              mainAxisSize: MainAxisSize.max,
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(
+                const CircularProgressIndicator(
                   backgroundColor: Colors.white,
                   strokeWidth: 3.0,
                 ),
-                SizedBox(
-                  height: 10.0,
-                ),
+                fourPx,
                 Text(
                   "$_loadingPercent%",
                   style: TextStyle(color: Colors.white),
@@ -1676,7 +1676,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                         onClose: () {
                                           // Routing().moveBack();
                                         },
-                                        slider: _buildContentWidget(context, widget.orientation),
+                                        slider: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation),
                                         videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
                                         vidData: widget.vidData,
                                         index: widget.index,
