@@ -195,6 +195,7 @@ class ContentData {
   FlutterAliplayer? fAliplayerAds;
   UserBadgeModel? urluserBadge;
   bool? isPlay;
+  double? height;
 
   ContentData({
     this.metadata,
@@ -257,6 +258,7 @@ class ContentData {
     this.fullContent,
     this.urluserBadge,
     this.isPlay = false,
+    this.height = 0.0,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -351,6 +353,7 @@ class ContentData {
     comments = json['comments'] ?? 0;
     isNewFollowing = following ?? false ? false : true;
     isPlay = false;
+    height = 0.0;
     if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
       if (json['urluserBadge'] is List) {
         urluserBadge = UserBadgeModel.fromJson(json['urluserBadge'].first);

@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:deepar_flutter/deepar_flutter.dart';
@@ -8,7 +8,6 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
-import 'dart:convert';
 import 'package:provider/provider.dart';
 
 class CameraView extends StatefulWidget {
@@ -106,7 +105,7 @@ class _CameraViewState extends State<CameraView> {
     var email = SharedPreference().readStorage(SpKeys.email);
 
     return Positioned(
-        top: 40,
+        top: Platform.isIOS ? 80 : 40,
         left: 0,
         right: 0,
         child: SizedBox(

@@ -12,8 +12,6 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
-import 'package:hyppe/core/services/check_version.dart';
-import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/services/notification_service.dart';
@@ -24,9 +22,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
-import 'package:hyppe/ui/inner/home/screen%20copy.dart';
 import 'package:hyppe/ui/inner/home/screen.dart';
-import 'package:hyppe/ui/inner/message_v2/screen.dart';
 import 'package:hyppe/ui/inner/notification/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/search_v2/screen.dart';
@@ -36,6 +32,14 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class MainNotifier with ChangeNotifier {
+
+  GlobalKey<NestedScrollViewState> _globalKey = GlobalKey();
+  GlobalKey<NestedScrollViewState> get globalKey => _globalKey;
+  set globalKey(val) {
+    _globalKey = val;
+    notifyListeners();
+  }
+
   final _eventService = EventService();
   SocketService get socketService => _socketService;
 

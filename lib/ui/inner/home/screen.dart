@@ -51,7 +51,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
   // final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
-  final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
+  // final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
 
   late TabController _tabController;
   double offset = 0.0;
@@ -132,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       notifier.setSessionID();
       final _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
+      final notifierMain = context.read<MainNotifier>();
 
       if (notifier.preventReloadAfterUploadPost) {
         notifier.preventReloadAfterUploadPost = false;
@@ -150,14 +151,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         ];
       }
 
-      globalKey.currentState?.innerController.addListener(() {
+      notifierMain.globalKey.currentState?.innerController.addListener(() {
         try {
           setState(() {
-            offset = globalKey.currentState?.innerController.position.pixels ?? 0;
+            offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
             // print(offset);
           });
-          if ((globalKey.currentState?.innerController.position.pixels ?? 0) >= (globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
-              !(globalKey.currentState?.innerController.position.outOfRange ?? true)) {
+          if ((notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0) >= (notifierMain.globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
+              !(notifierMain.globalKey.currentState?.innerController.position.outOfRange ?? true)) {
             notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);
           }
         } catch (e) {
@@ -251,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
               child: AbsorbPointer(
                 absorbing: isZoom,
                 child: NestedScrollView(
-                  key: globalKey,
+                  key: context.read<MainNotifier>().globalKey,
                   controller: context.read<MainNotifier>().scrollController,
                   physics: const NeverScrollableScrollPhysics(),
                   // dragStartBehavior: DragStartBehavior.start,
