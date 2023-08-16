@@ -49,6 +49,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
 import '../../../../../ux/path.dart';
 import '../../../../constant/entities/report/notifier.dart';
+import 'package:snappy_list_view/snappy_list_view.dart';
 
 class HyppePreviewPic extends StatefulWidget {
   final ScrollController? scrollController;
@@ -490,6 +491,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: notifier.itemCount == 0

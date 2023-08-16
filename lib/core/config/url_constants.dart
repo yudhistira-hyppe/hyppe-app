@@ -27,8 +27,7 @@ class UrlConstants {
   /// Production Base url
   static const String productionBaseApi = "https://p1.hyppe.cloud";
   static const String productionUploadBaseApi = "https://p1.hyppe.cloud";
-  // static const String productionBaseApi = "https://p1-5003.hyppe.cloud";
-  // static const String productionUploadBaseApi = "https://p1-5003.hyppe.cloud";
+
   // static const String productionBaseApi = "https://prod.hyppe.app"; //lama
   // static const String productionUploadBaseApi = "https://upload.hyppe.app"; //lama
   // static const String productionBaseApi = "https://s1.hyppe.cloud";
@@ -37,8 +36,10 @@ class UrlConstants {
   /// Staging v2 Base url
   // static const String stagingBaseApi = "https://s1.hyppe.cloud";
   // static const String stagingUploadBaseApi = "https://s1.hyppe.cloud";
-  static const String stagingBaseApi = "https://s1-5003.hyppe.cloud";
-  static const String stagingUploadBaseApi = "https://s1-5003.hyppe.cloud";
+  // static const String stagingBaseApi = "https://s1-5003.hyppe.cloud";
+  // static const String stagingUploadBaseApi = "https://s1-5003.hyppe.cloud";
+  static const String stagingBaseApi = "https://p1-5003.hyppe.cloud";
+  static const String stagingUploadBaseApi = "https://p1-5003.hyppe.cloud";
 
   /// Prod Deeplink Base url
   static const String prodDeeplinkUrl = "https://share.hyppe.app";
