@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
@@ -46,10 +45,8 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'package:pinch_zoom/pinch_zoom.dart';
 import '../../../../../ux/path.dart';
 import '../../../../constant/entities/report/notifier.dart';
-import 'package:snappy_list_view/snappy_list_view.dart';
 
 class HyppePreviewPic extends StatefulWidget {
   final ScrollController? scrollController;
@@ -637,7 +634,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     onTap: () {
                       // fAliplayer?.pause();
                       if (notifier.pic?[index].email != email) {
-                        context.read<PreviewPicNotifier>().reportContent(context, notifier.pic?[index] ?? ContentData(), fAliplayer: fAliplayer);
+                        context.read<PreviewPicNotifier>().reportContent(
+                            context,
+                            notifier.pic?[index] ?? ContentData(),
+                            fAliplayer: fAliplayer, onCompleted: () async {
+                              imageCache.clear();
+                              imageCache.clearLiveImages();
+                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                        });
                       } else {
                         fAliplayer?.setMuted(true);
                         fAliplayer?.pause();

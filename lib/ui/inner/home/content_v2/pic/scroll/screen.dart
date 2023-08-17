@@ -835,7 +835,30 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                 onTap: () {
                   // fAliplayer?.pause();
                   if (pics?[index].email != email) {
-                    context.read<PreviewPicNotifier>().reportContent(context, pics?[index] ?? ContentData(), fAliplayer: fAliplayer);
+                    context.read<PreviewPicNotifier>()
+                        .reportContent(
+                        context,
+                        pics?[index] ?? ContentData(),
+                        fAliplayer: fAliplayer, onCompleted: () async{
+                      bool connect = await System().checkConnections();
+                      if (connect) {
+                        setState(() {
+                          isloading = true;
+                        });
+                        await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                        setState(() {
+                          pics = notifier.pics;
+                        });
+                      } else {
+                        if (mounted) {
+                          ShowGeneralDialog.showToastAlert(
+                            context,
+                            lang?.internetConnectionLost ?? ' Error',
+                                () async {},
+                          );
+                        }
+                      }
+                    });
                   } else {
                     fAliplayer?.setMuted(true);
                     fAliplayer?.pause();

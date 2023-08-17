@@ -53,6 +53,7 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:wakelock/wakelock.dart';
 
 class LandingDiaryPage extends StatefulWidget {
   const LandingDiaryPage({Key? key}) : super(key: key);
@@ -700,7 +701,14 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       onTap: () {
                         if (notifier.diaryData?[index].email != email) {
                           // FlutterAliplayer? fAliplayer
-                          context.read<PreviewPicNotifier>().reportContent(context, notifier.diaryData?[index] ?? ContentData(), fAliplayer: fAliplayer);
+                          context.read<PreviewPicNotifier>().reportContent(
+                              context,
+                              notifier.diaryData?[index] ?? ContentData(),
+                              fAliplayer: fAliplayer, onCompleted: () async {
+                            imageCache.clear();
+                            imageCache.clearLiveImages();
+                            await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                          });
                         } else {
                           fAliplayer?.setMuted(true);
                           fAliplayer?.pause();
@@ -727,6 +735,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                   // key: Key(index.toString()),
                   key: Key(notifier.diaryData?[index].postID ?? index.toString()),
                   onVisibilityChanged: (info) {
+                    if(info.visibleFraction == 1.0){
+                      Wakelock.enable();
+                    }
                     if (info.visibleFraction >= 0.6) {
                       _curIdx = index;
                       if (_lastCurIndex != _curIdx) {
@@ -740,6 +751,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       if (_lastCurPostId != _curPostId) {
                         fAliplayer?.stop();
                         fAliplayer?.clearScreen();
+                        Wakelock.disable();
                         Future.delayed(const Duration(milliseconds: 700), () {
                           start(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData());
                           System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData(), check: false);

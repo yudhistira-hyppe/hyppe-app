@@ -703,10 +703,12 @@ class PreUploadContentNotifier with ChangeNotifier {
         eventService.notifyUploadSuccess(_uploadSuccess);
         // final decode = json.decode(_uploadSuccess.toString());
         // _postIdPanding = decode['data']['postID'];
+
         if (value is dio.Response) {
           dio.Response res = value;
           "return data ${jsonEncode(res.data['data'])}".loggerV2();
           ContentData uploadedData = ContentData.fromJson(res.data['data']);
+          (Routing.navigatorKey.currentContext ?? context).read<SelfProfileNotifier>().updateProfilePost(featureType ?? FeatureType.pic, uploadedData);
           (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().onUploadedSelfUserContent(context: context, contentData: uploadedData);
         }
         if (_boostContent != null) _boostContentBuy(context);

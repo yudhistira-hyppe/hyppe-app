@@ -781,7 +781,29 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                 onTap: () {
                   if (diaryData?[index].email != email) {
                     // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>().reportContent(context, diaryData?[index] ?? ContentData(), fAliplayer: fAliplayer);
+                    context.read<PreviewPicNotifier>().reportContent(
+                        context,
+                        diaryData?[index] ?? ContentData(),
+                        fAliplayer: fAliplayer, onCompleted: () async {
+                      bool connect = await System().checkConnections();
+                      if (connect) {
+                        setState(() {
+                          isloading = true;
+                        });
+                        await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                        setState(() {
+                          diaryData = notifier.diaryData;
+                        });
+                      } else {
+                        if (mounted) {
+                          ShowGeneralDialog.showToastAlert(
+                            context,
+                            lang?.internetConnectionLost ?? ' Error',
+                                () async {},
+                          );
+                        }
+                      }
+                      });
                   } else {
                     fAliplayer?.setMuted(true);
                     fAliplayer?.pause();

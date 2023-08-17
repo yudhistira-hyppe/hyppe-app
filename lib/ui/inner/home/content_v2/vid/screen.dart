@@ -37,6 +37,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:wakelock/wakelock.dart';
 import '../../../../../app.dart';
 import '../../../../../core/config/ali_config.dart';
 import '../../../../../core/services/route_observer_service.dart';
@@ -260,6 +261,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
               print(index);
               _curIdx = index;
               print(_curIdx);
+              Wakelock.enable();
             }
             if (info.visibleFraction >= 0.8) {
               _curIdx = index;
@@ -278,6 +280,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                         dataAli[_curIdx]?.pause();
                       }
 
+                      Wakelock.disable();
                       // notifier.vidData?[_curIdx].fAliplayerAds?.pause();
                       // setState(() {
                       //   _curIdx = -1;
@@ -415,7 +418,15 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                       onTap: () {
                         if (vidData.email != email) {
                           // FlutterAliplayer? fAliplayer
-                          context.read<PreviewPicNotifier>().reportContent(context, vidData, fAliplayer: vidData.fAliplayer);
+                          context.read<PreviewPicNotifier>().reportContent(
+                              context,
+                              vidData,
+                              fAliplayer: vidData.fAliplayer,
+                              onCompleted: () async {
+                            imageCache.clear();
+                            imageCache.clearLiveImages();
+                            await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                          });
                         } else {
                           if (_curIdx != -1) {
                             print('Vid Landing Page: pause $_curIdx');

@@ -195,10 +195,10 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void reportContent(BuildContext context, ContentData data, {FlutterAliplayer? fAliplayer, String? key}) {
+  void reportContent(BuildContext context, ContentData data, {FlutterAliplayer? fAliplayer, String? key, required Function() onCompleted}) {
     if (fAliplayer != null) {
       fAliplayer.pause();
     }
-    ShowBottomSheet().onReportContent(context, postData: data, type: hyppePic, inDetail: false, fAliplayer: fAliplayer, key: key);
+    ShowBottomSheet().onReportContent(context, postData: data, type: hyppePic, inDetail: false, fAliplayer: fAliplayer, onCompleted: onCompleted, key: key);
   }
 }

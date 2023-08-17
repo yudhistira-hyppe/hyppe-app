@@ -976,10 +976,14 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
     _animationController?.reset();
     final fixContext = Routing.navigatorKey.currentContext;
+    final storyRef = (Routing.navigatorKey.currentContext ?? context).read<PreviewStoriesNotifier>();
+
     System()
         .increaseViewCount(fixContext ?? context,
             _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData())
-        .whenComplete(() {});
+        .whenComplete(() {
+      storyRef.setViewed(_curIdx, _curChildIdx);
+    });
     fAliplayer?.stop();
     isPlay = false;
     print("ini index1 $_curIdx");

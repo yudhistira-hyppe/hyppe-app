@@ -733,6 +733,7 @@ class ShowBottomSheet {
     Function? onUpdate,
     bool? inDetail,
     FlutterAliplayer? fAliplayer,
+    Function()? onCompleted,
     String? key,
   }) async {
     await showModalBottomSheet(
@@ -764,6 +765,9 @@ class ShowBottomSheet {
     ).whenComplete(() {
       if (fAliplayer != null) {
         fAliplayer.pause();
+      }
+      if(onCompleted != null){
+        onCompleted();
       }
     });
   }

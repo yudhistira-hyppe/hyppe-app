@@ -184,6 +184,17 @@ class SelfProfileNotifier with ChangeNotifier {
     }
   }
 
+  updateProfilePost(FeatureType type, ContentData data){
+    if(type == FeatureType.pic){
+      user.pics?.insert(0, data);
+    }else if(type == FeatureType.diary){
+      user.diaries?.insert(0, data);
+    }else if(type == FeatureType.vid){
+      user.vids?.insert(0, data);
+    }
+    notifyListeners();
+  }
+
   navigateToEditProfile() => Routing().move(Routes.accountPreferences).whenComplete(() => notifyListeners());
 
   onScrollListener(BuildContext context, ScrollController scrollController, {bool isLoad = false}) async {
