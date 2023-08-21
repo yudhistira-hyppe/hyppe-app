@@ -250,10 +250,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         print("+++++++++++ current index: $_curIdx");
         print("+++++++++++ position: $position");
         context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
-          position,
-          duration: const Duration(milliseconds: 700),
-          curve: Curves.easeOut,
-        );
+              position,
+              duration: const Duration(milliseconds: 700),
+              curve: Curves.easeOut,
+            );
         if (mounted) {
           setState(() {});
         }
@@ -621,9 +621,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     });
   }
 
-  Widget itemDiary(BuildContext context,PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
+  Widget itemDiary(BuildContext context, PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
     return WidgetSize(
-       onChange: (Size size) {
+      onChange: (Size size) {
         notifier.diaryData?[index].height = size.height;
       },
       child: Column(
@@ -730,9 +730,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                     if (info.visibleFraction >= 0.6) {
                       _curIdx = index;
                       if (_lastCurIndex != _curIdx) {
-                        if (_curIdx >= (notifier.diaryData?.length ?? 0) - 2) {
+                        if (_curIdx == (notifier.diaryData?.length ?? 0) - 1) {
                           print("======hahahaha mobil");
-                          // context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
+                          context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
                         }
                       }
                       _curPostId = notifier.diaryData?[index].postID ?? index.toString();
@@ -1276,6 +1276,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         : Container();
   }
 }
+
 class WidgetSize extends StatefulWidget {
   final Widget child;
   final Function onChange;
