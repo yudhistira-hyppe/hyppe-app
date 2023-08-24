@@ -292,7 +292,7 @@ class HomeNotifier with ChangeNotifier {
           data['skip'] = skipvid;
           break;
       }
-      if (stories.peopleStoriesData == null) {
+      if (!isgetMore && stories.peopleStoriesData == null) {
         stories.initialStories(Routing.navigatorKey.currentContext ?? context);
       }
       // if (isreload) {
