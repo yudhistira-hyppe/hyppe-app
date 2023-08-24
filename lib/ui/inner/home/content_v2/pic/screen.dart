@@ -738,7 +738,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             captionTitle: hyppePic,
                             onDetail: false,
                             isShare: notifier.picTemp?[index].isShared,
-                            onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                            onUpdate: (){
+                              (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                            },
                             fAliplayer: fAliplayer,
                           );
                         }

@@ -447,7 +447,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               captionTitle: hyppeVid,
                               onDetail: false,
                               isShare: vidData.isShared,
-                              onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                              onUpdate: (){
+                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                              },
                               fAliplayer: vidData.fAliplayer,
                             );
                           }
