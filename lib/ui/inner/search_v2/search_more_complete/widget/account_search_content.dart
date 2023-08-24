@@ -43,7 +43,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
         final lenght = notifier.searchUsers?.length;
         if (lenght != null) {
           if (lenght % 12 == 0) {
-            notifier.getDataSearch(context, typeSearch: SearchLoadData.user, reload: false);
+            notifier.getDataSearch(context, typeSearch: SearchLoadData.user, reload: false, forceLoad: true);
           }
         }
       }

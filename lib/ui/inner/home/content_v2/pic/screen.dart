@@ -37,6 +37,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -123,7 +124,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'aliPic');
       WidgetsBinding.instance.addObserver(this);
-
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(true);
 
@@ -609,7 +609,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           // );
 
                           return Visibility(
-                            visible: (_curIdx - 1) == index || _curIdx == index || (_curIdx + 1) == index,
+                            // visible: (_curIdx - 1) == index || _curIdx == index || (_curIdx + 1) == index,
+                            visible: true,
                             child: itemPict(context, notifier, index, home),
                           );
                         },
@@ -642,7 +643,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("total ${notifier.picTemp?.length}"),
+                // Text("total ${notifier.picTemp?.length}"),
                 // Text("itemHeight $itemHeight"),
                 // Text("$_lastCurIndex"),
                 // Text("$_curIdx"),
@@ -758,6 +759,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     if (info.visibleFraction >= 0.6) {
                       _curIdx = index;
                       _curPostId = notifier.picTemp?[index].postID ?? index.toString();
+                      if (_lastCurIndex > _curIdx) {
+                        double position = 0.0;
+                        for (var i = 0; i < _curIdx; i++) {
+                          position += notifier.picTemp?[i].height ?? 0.0;
+                          // position = position - (notifier.picTemp?[_curIdx].height);
+                        }
+                        // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
+                      }
 
                       // if (_lastCurIndex != _curIdx) {
                       if (_lastCurPostId != _curPostId) {

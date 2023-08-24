@@ -166,8 +166,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         }
       });
 
-      context.read<MainNotifier>().scrollController.addListener(() {
-        if (context.read<MainNotifier>().scrollController.offset >= 160) {
+      Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.addListener(() {
+        if ((Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
           setState(() {
             appbarSeen = false;
           });

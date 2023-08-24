@@ -977,7 +977,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
     _animationController?.reset();
     final fixContext = Routing.navigatorKey.currentContext;
     final storyRef = (Routing.navigatorKey.currentContext ?? context).read<PreviewStoriesNotifier>();
-
+    (Routing.navigatorKey.currentContext ?? context).read<StoriesPlaylistNotifier>().textEditingController.clear();
+    emojiController.reset();
     System()
         .increaseViewCount(fixContext ?? context,
             _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData())
