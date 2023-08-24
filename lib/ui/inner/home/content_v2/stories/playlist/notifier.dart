@@ -228,6 +228,13 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  setViewed(int index, int indexItem){
+    if(groupUserStories.isNotEmpty){
+      groupUserStories[index].story?[indexItem].isViewed = true;
+    }
+    notifyListeners();
+  }
+
   void onUpdate() => notifyListeners();
 
   onChangeHandler(BuildContext context, String value) {

@@ -36,8 +36,8 @@ class UrlConstants {
   /// Staging v2 Base url
   static const String stagingBaseApi = "https://s1.hyppe.cloud";
   static const String stagingUploadBaseApi = "https://s1.hyppe.cloud";
-  // static const String stagingBaseApi = "https://s1-5003.hyppe.cloud";
-  // static const String stagingUploadBaseApi = "https://s1-5003.hyppe.cloud";
+  // static const String stagingBaseApi = "https://p1-5003.hyppe.cloud";
+  // static const String stagingUploadBaseApi = "https://p1-5003.hyppe.cloud";
   // static const String stagingBaseApi = "https://p1-5003.hyppe.cloud";
   // static const String stagingUploadBaseApi = "https://p1-5003.hyppe.cloud";
 

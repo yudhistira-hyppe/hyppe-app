@@ -39,6 +39,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:wakelock/wakelock.dart';
 import '../../../../../app.dart';
 import '../../../../../core/config/ali_config.dart';
 import '../../../../../core/services/route_observer_service.dart';
@@ -69,6 +70,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   LocalizationModelV2? lang;
   ContentData? dataSelected;
   ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
+  String _curPostId = '';
+  String _lastCurPostId = '';
 
   Map<int, FlutterAliplayer> dataAli = {};
   final ItemScrollController itemScrollController = ItemScrollController();
@@ -207,7 +210,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             // itemPositionsListener: itemPositionsListener,
                             // scrollOffsetController: scrollOffsetController,
                             shrinkWrap: true,
-                            itemCount: vidNotifier.itemCount,
+                            // itemCount: vidNotifier.itemCount,
+                            itemCount: vidNotifier.vidDataTemp?.length,
                             itemBuilder: (BuildContext context, int index) {
                               if (vidNotifier.vidData == null || homeNotifier.isLoadingVid) {
                                 vidNotifier.vidData?[index].fAliplayer?.pause();
@@ -224,8 +228,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               //   isPlay = false;
                               //   vidNotifier.vidData?[index].fAliplayer?.stop();
                               // }
-                              final vidData = vidNotifier.vidData?[index];
-
+                              final vidData = vidNotifier.vidDataTemp?[index];
                               return itemVid(vidData ?? ContentData(), vidNotifier, index, homeNotifier);
                             },
                           ),
@@ -259,9 +262,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       },
       child: Column(
         children: [
+          // Text("total ${notifier.vidDataTemp?.length}"),
           VisibilityDetector(
-            key: Key(notifier.vidData?[index].postID ?? index.toString()),
-            onVisibilityChanged: (info) {
+            key: Key(vidData.postID ?? index.toString()),
+            onVisibilityChanged: (info) async {
               if (info.visibleFraction >= 1) {
                 print(index);
                 _curIdx = index;
@@ -269,12 +273,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
               }
               if (info.visibleFraction >= 0.8) {
                 _curIdx = index;
-                if (_lastCurIndex != _curIdx) {
-                  if (_curIdx >= (notifier.vidData?.length ?? 0) - 2) {
-                    // context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
-                  }
-                }
-                if (_curIdx != index) {
+                _curPostId = vidData.postID ?? index.toString();
+
+                final indexList = notifier.vidData?.indexWhere((element) => element.postID == _curPostId);
+                final latIndexList = notifier.vidData?.indexWhere((element) => element.postID == _lastCurPostId);
+
+                if (_lastCurPostId != _curPostId) {
                   Future.delayed(const Duration(milliseconds: 400), () {
                     try {
                       if (_curIdx != -1) {
@@ -284,6 +288,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                           dataAli[_curIdx]?.pause();
                         }
 
+                        Wakelock.disable();
                         // notifier.vidData?[_curIdx].fAliplayerAds?.pause();
                         // setState(() {
                         //   _curIdx = -1;
@@ -299,14 +304,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                   } else {
                     System().disposeBlock();
                   }
-                }
 
-                if (_lastCurIndex != _curIdx) {
                   try {
                     Future.delayed(const Duration(milliseconds: 400), () {
-                      print("09090909090909");
-                      print("${_curIdx}");
-                      print("${notifier.vidData?[_curIdx].description}");
                       setState(() {
                         postIdVisibility = notifier.vidData?[_curIdx].postID ?? '';
                         postIdVisibilityTemp = notifier.vidData?[_curIdx].postID ?? '';
@@ -335,11 +335,19 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                   } catch (e) {
                     print("hahahha $e");
                   }
+                  if (indexList == (notifier.vidData?.length ?? 0) - 1) {
+                    Future.delayed(const Duration(milliseconds: 2000), () async {
+                      await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+                        notifier.getTemp(indexList, latIndexList, indexList);
+                      });
+                    });
+                  } else {
+                    Future.delayed(const Duration(milliseconds: 2000), () {
+                      notifier.getTemp(indexList, latIndexList, indexList);
+                    });
+                  }
                 }
-                print("lolololololo");
-                print(_curIdx);
-                print(_lastCurIndex);
-                print(index);
+
                 // if (_curIdx != index) {
                 //   print('Vid Landing Page: stop pause $_curIdx ${notifier.vidData?[_lastCurIndex].fAliplayer} ${dataAli[_curIdx]}');
                 //   if (notifier.vidData?[_lastCurIndex].fAliplayer != null) {
@@ -354,6 +362,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                 //   // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
                 // }
                 _lastCurIndex = _curIdx;
+                _lastCurPostId = _curPostId;
               }
             },
             child: Container(
@@ -421,7 +430,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                         onTap: () {
                           if (vidData.email != email) {
                             // FlutterAliplayer? fAliplayer
-                            context.read<PreviewPicNotifier>().reportContent(context, vidData, fAliplayer: vidData.fAliplayer);
+                            context.read<PreviewPicNotifier>().reportContent(context, vidData, fAliplayer: vidData.fAliplayer, onCompleted: () async {
+                              imageCache.clear();
+                              imageCache.clearLiveImages();
+                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                            });
                           } else {
                             if (_curIdx != -1) {
                               print('Vid Landing Page: pause $_curIdx');
@@ -564,7 +577,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                     setState(() {
                                       dataAli[index] = main;
                                     });
-                                    print('Vid Player1: after $index ${globalAliPlayer} : ${notifier.vidData?[index].fAliplayer}');
+                                    print('Vid Player1: after $index ${globalAliPlayer} : ${vidData.fAliplayer}');
                                   },
                                   getAdsPlayer: (ads) {
                                     // notifier.vidData?[index].fAliplayerAds = ads;
@@ -805,7 +818,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
               ),
             ),
           ),
-          homeNotifier.isLoadingLoadmore && notifier.vidData?[index] == notifier.vidData?.last
+          homeNotifier.isLoadingLoadmore && notifier.vidDataTemp?[index] == notifier.vidDataTemp?.last
               ? const Padding(
                   padding: EdgeInsets.only(bottom: 32),
                   child: Center(child: CustomLoading()),

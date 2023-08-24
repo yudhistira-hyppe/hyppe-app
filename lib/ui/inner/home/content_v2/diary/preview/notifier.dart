@@ -42,6 +42,13 @@ class PreviewDiaryNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  List<ContentData>? _diaryDataTemp;
+  List<ContentData>? get diaryDataTemp => _diaryDataTemp;
+  set diaryDataTemp(List<ContentData>? val) {
+    _diaryDataTemp = val;
+    notifyListeners();
+  }
+
   void onUpdate() => notifyListeners();
 
   int get itemCount => _diaryData == null ? 3 : (_diaryData?.length ?? 0);
@@ -115,6 +122,12 @@ class PreviewDiaryNotifier with ChangeNotifier {
 
       if (reload) {
         diaryData = res;
+        if ((diaryData?.length ?? 0) >= 2) {
+          diaryDataTemp = [];
+          for (var i = 0; i < 2; i++) {
+            diaryDataTemp?.add(diaryData![i]);
+          }
+        }
 
         if (scrollController.hasClients) {
           scrollController.animateTo(
@@ -207,5 +220,24 @@ class PreviewDiaryNotifier with ChangeNotifier {
     } catch (e) {
       'Failed to fetch ads data $e'.logger();
     }
+  }
+
+  void getTemp(index, lastIndex, indexArray) {
+    if (index != 0) {
+      if (lastIndex < index && (diaryData?.length ?? 0) > (diaryDataTemp?.length ?? 0)) {
+        diaryDataTemp?.add(diaryData![indexArray + 1]);
+        var total = diaryDataTemp?.length;
+        if (total == 4) {
+          // picTemp?.removeAt(0);
+        }
+      } else {
+        // picTemp?.insert(0, pic![indexArray - 1]);
+        // var total = picTemp?.length;
+        // if (total == 4) {
+        //   picTemp?.removeLast();
+        // }
+      }
+    }
+    notifyListeners();
   }
 }

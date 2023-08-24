@@ -835,7 +835,26 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                 onTap: () {
                   // fAliplayer?.pause();
                   if (pics?[index].email != email) {
-                    context.read<PreviewPicNotifier>().reportContent(context, pics?[index] ?? ContentData(), fAliplayer: fAliplayer);
+                    context.read<PreviewPicNotifier>().reportContent(context, pics?[index] ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
+                      bool connect = await System().checkConnections();
+                      if (connect) {
+                        setState(() {
+                          isloading = true;
+                        });
+                        await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                        setState(() {
+                          pics = notifier.pics;
+                        });
+                      } else {
+                        if (mounted) {
+                          ShowGeneralDialog.showToastAlert(
+                            context,
+                            lang?.internetConnectionLost ?? ' Error',
+                            () async {},
+                          );
+                        }
+                      }
+                    });
                   } else {
                     fAliplayer?.setMuted(true);
                     fAliplayer?.pause();
@@ -1022,79 +1041,89 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                                         width: SizeConfig.screenWidth,
                                                       ),
                                               ),
-                                              emptyWidget: notifier.connectionError ? GestureDetector(
-                                                onTap: () async {
-                                                  _networklHasErrorNotifier.value++;
-                                                  bool connect = await System().checkConnections();
-                                                  if (connect) {
-                                                    setState(() {
-                                                      isloading = true;
-                                                    });
-                                                    await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                                                    setState(() {
-                                                      pics = notifier.pics;
-                                                    });
-                                                  } else {
-                                                    if (mounted) {
-                                                      ShowGeneralDialog.showToastAlert(
-                                                        context,
-                                                        lang?.internetConnectionLost ?? ' Error',
-                                                            () async {},
-                                                      );
-                                                    }
-                                                  }
-                                                },
-                                                child: Container(
-                                                    decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                                    width: SizeConfig.screenWidth,
-                                                    height: 250,
-                                                    alignment: Alignment.center,
-                                                    padding: const EdgeInsets.all(20),
-                                                    child: pics?[index].reportedStatus == 'BLURRED'
-                                                        ? Container()
-                                                        : CustomTextWidget(
-                                                            textToDisplay: lang?.couldntLoadImage ?? 'Error',
-                                                            maxLines: 3,
-                                                          )),
-                                              ) : Image.network((pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2', fit: BoxFit.fitHeight,
-                                                width: SizeConfig.screenWidth,),
-                                              errorWidget: (context, url, error) {
-                                                return notifier.connectionError ? GestureDetector(
-                                                  onTap: () async {
-                                                    _networklHasErrorNotifier.value++;
-                                                    bool connect = await System().checkConnections();
-                                                    if (connect) {
-                                                      setState(() {
-                                                        isloading = true;
-                                                      });
-                                                      await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                                                      setState(() {
-                                                        pics = notifier.pics;
-                                                      });
-                                                    } else {
-                                                      if (mounted) {
-                                                        ShowGeneralDialog.showToastAlert(
-                                                          context,
-                                                          lang?.internetConnectionLost ?? ' Error',
+                                              emptyWidget: notifier.connectionError
+                                                  ? GestureDetector(
+                                                      onTap: () async {
+                                                        _networklHasErrorNotifier.value++;
+                                                        bool connect = await System().checkConnections();
+                                                        if (connect) {
+                                                          setState(() {
+                                                            isloading = true;
+                                                          });
+                                                          await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                                          setState(() {
+                                                            pics = notifier.pics;
+                                                          });
+                                                        } else {
+                                                          if (mounted) {
+                                                            ShowGeneralDialog.showToastAlert(
+                                                              context,
+                                                              lang?.internetConnectionLost ?? ' Error',
                                                               () async {},
-                                                        );
-                                                      }
-                                                    }
-                                                  },
-                                                  child: Container(
-                                                      decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                                            );
+                                                          }
+                                                        }
+                                                      },
+                                                      child: Container(
+                                                          decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                                          width: SizeConfig.screenWidth,
+                                                          height: 250,
+                                                          alignment: Alignment.center,
+                                                          padding: const EdgeInsets.all(20),
+                                                          child: pics?[index].reportedStatus == 'BLURRED'
+                                                              ? Container()
+                                                              : CustomTextWidget(
+                                                                  textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                                                  maxLines: 3,
+                                                                )),
+                                                    )
+                                                  : Image.network(
+                                                      (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2',
+                                                      fit: BoxFit.fitHeight,
                                                       width: SizeConfig.screenWidth,
-                                                      height: 250,
-                                                      alignment: Alignment.center,
-                                                      padding: const EdgeInsets.all(20),
-                                                      child: pics?[index].reportedStatus == 'BLURRED'
-                                                          ? Container()
-                                                          : CustomTextWidget(
-                                                              textToDisplay: lang?.couldntLoadImage ?? 'Error',
-                                                              maxLines: 3,
-                                                            )),
-                                                ) : Image.network((pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2', fit: BoxFit.fitHeight,
-                                                  width: SizeConfig.screenWidth,);
+                                                    ),
+                                              errorWidget: (context, url, error) {
+                                                return notifier.connectionError
+                                                    ? GestureDetector(
+                                                        onTap: () async {
+                                                          _networklHasErrorNotifier.value++;
+                                                          bool connect = await System().checkConnections();
+                                                          if (connect) {
+                                                            setState(() {
+                                                              isloading = true;
+                                                            });
+                                                            await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                                            setState(() {
+                                                              pics = notifier.pics;
+                                                            });
+                                                          } else {
+                                                            if (mounted) {
+                                                              ShowGeneralDialog.showToastAlert(
+                                                                context,
+                                                                lang?.internetConnectionLost ?? ' Error',
+                                                                () async {},
+                                                              );
+                                                            }
+                                                          }
+                                                        },
+                                                        child: Container(
+                                                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                                            width: SizeConfig.screenWidth,
+                                                            height: 250,
+                                                            alignment: Alignment.center,
+                                                            padding: const EdgeInsets.all(20),
+                                                            child: pics?[index].reportedStatus == 'BLURRED'
+                                                                ? Container()
+                                                                : CustomTextWidget(
+                                                                    textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                                                    maxLines: 3,
+                                                                  )),
+                                                      )
+                                                    : Image.network(
+                                                        (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2',
+                                                        fit: BoxFit.fitHeight,
+                                                        width: SizeConfig.screenWidth,
+                                                      );
                                               },
                                             );
                                           }),

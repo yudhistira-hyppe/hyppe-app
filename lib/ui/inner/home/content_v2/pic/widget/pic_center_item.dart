@@ -114,7 +114,7 @@ class PicCenterItem extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   if (data?.email != SharedPreference().readStorage(SpKeys.email)) {
-                    context.read<PreviewPicNotifier>().reportContent(context, data!);
+                    context.read<PreviewPicNotifier>().reportContent(context, data!, onCompleted: (){});
                   } else {
                     ShowBottomSheet().onShowOptionContent(
                       context,

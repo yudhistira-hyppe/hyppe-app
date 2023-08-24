@@ -12,7 +12,6 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/empty
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/sensitive_content.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
-import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 
 class SelfProfileDiaries extends StatelessWidget {
