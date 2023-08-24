@@ -65,6 +65,13 @@ class HomeNotifier with ChangeNotifier {
     _preventReloadAfterUploadPost = val;
     notifyListeners();
   }
+  
+  bool _isShowInactiveWarning = false;
+  bool get isShowInactiveWarning => _isShowInactiveWarning;
+  set isShowInactiveWarning(val) {
+    _isShowInactiveWarning = val;
+    notifyListeners();
+  }
 
   FeatureType _uploadedPostType = FeatureType.pic; // set default to pic because pic is at 0 index
   FeatureType get uploadedPostType => _uploadedPostType;

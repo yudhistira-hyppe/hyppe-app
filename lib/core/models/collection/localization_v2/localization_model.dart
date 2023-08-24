@@ -533,6 +533,7 @@ class LocalizationModelV2 {
   String? contentUploading;
   String? contentWaiting;
   String? contentUploaded;
+  String? warningInavtivity;
   String? reportThisAccount;
   String? signInWithGoogleAccount;
   String? signInWithApple;
@@ -1502,6 +1503,7 @@ class LocalizationModelV2 {
     this.contentUploading,
     this.contentWaiting,
     this.contentUploaded,
+    this.warningInavtivity,
     this.reportThisAccount,
     this.signInWithGoogleAccount,
     this.signInWithApple,
@@ -2475,6 +2477,7 @@ class LocalizationModelV2 {
     contentUploading = json['contentUploading'];
     contentWaiting = json['contentWaiting'];
     contentUploaded = json['contentUploaded'];
+    warningInavtivity = json['warningInavtivity'];
     reportThisAccount = json['reportThisAccount'];
     signInWithGoogleAccount = json['signInWithGoogleAccount'];
     signInWithApple = json['signInWithApple'];

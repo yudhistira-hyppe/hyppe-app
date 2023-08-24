@@ -249,7 +249,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         }
         print("+++++++++++ current index: $_curIdx");
         print("+++++++++++ position: $position");
-        if (notifier.diaryData?[_curIdx] != notifier.diaryData?.last) {
+        if (notifier.diaryData?[_curIdx] != notifier.diaryData?.last && !context.read<HomeNotifier>().isShowInactiveWarning) {
           context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
             position,
             duration: const Duration(milliseconds: 400),

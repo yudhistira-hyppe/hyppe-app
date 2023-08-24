@@ -42,7 +42,6 @@ import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'package:flutter/services.dart';
-import 'package:visibility_aware_state/visibility_aware_state.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool canShowAds;
@@ -52,7 +51,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends VisibilityAwareState<HomeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin, WidgetsBindingObserver  {
+class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin, WidgetsBindingObserver  {
   // final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   // final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
 
@@ -64,14 +63,6 @@ class _HomeScreenState extends VisibilityAwareState<HomeScreen> with RouteAware,
     {"id": '3', 'name': "Vid"},
   ];
   Timer? _timer;
-
-  @override
-  void onVisibilityChanged(WidgetVisibility visibility) {
-    "+++++++++++++++ visibility ${WidgetVisibility.VISIBLE}";
-    if (visibility == WidgetVisibility.VISIBLE) {
-    }
-    super.onVisibilityChanged(visibility);
-  }
 
   @override
   void didChangeDependencies() {
@@ -245,7 +236,7 @@ class _HomeScreenState extends VisibilityAwareState<HomeScreen> with RouteAware,
       if (_timer != null) {
         _timer?.cancel();
       }
-      _timer = Timer(const Duration(seconds: 10), () => _handleInactivity());
+      _timer = Timer(const Duration(seconds: 30), () => _handleInactivity());
     }
   }
 
@@ -254,12 +245,14 @@ class _HomeScreenState extends VisibilityAwareState<HomeScreen> with RouteAware,
     _timer = null;
     Wakelock.disable();
     if (_tabController.index == 1 || _tabController.index == 2) {
+      context.read<HomeNotifier>().isShowInactiveWarning = true;
       ShowBottomSheet().onShowColouredSheet(
         context,
-        'lorem ipsum dolor sit amet',
-        color: kHyppeTextWarning,
+        context.read<TranslateNotifierV2>().translate.warningInavtivity,
+        color: kHyppeLightDanger,
         iconSvg: 'close.svg',
         onClose: () {
+          context.read<HomeNotifier>().isShowInactiveWarning = false;
           _initializeTimer();
           _setWakelock();
         },
