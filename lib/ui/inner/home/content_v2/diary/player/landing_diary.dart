@@ -249,11 +249,13 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         }
         print("+++++++++++ current index: $_curIdx");
         print("+++++++++++ position: $position");
-        context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
-          position,
-          duration: const Duration(milliseconds: 700),
-          curve: Curves.easeOut,
-        );
+        if (notifier.diaryData?[_curIdx] != notifier.diaryData?.last) {
+          context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
+            position,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeOut,
+          );
+        }
         if (mounted) {
           setState(() {});
         }

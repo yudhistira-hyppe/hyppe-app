@@ -90,7 +90,7 @@ dependencies:
   measured_size: ^1.0.0
   flutter_cache_manager: ^3.3.0
   flutter_cupertino_datetime_picker: ^3.0.0
-
+  visibility_aware_state: ^1.0.5
 
 
   dynamic_widget: # Dynamic widget builder

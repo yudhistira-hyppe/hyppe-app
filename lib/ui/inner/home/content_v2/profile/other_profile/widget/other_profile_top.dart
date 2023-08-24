@@ -104,12 +104,12 @@ class OtherProfileTop extends StatelessWidget {
                       showPict(context, notifier);
                     },
                     child: Padding(
-                      padding: const EdgeInsets.all(6.0),
+                      padding: const EdgeInsets.all(2),
                       child: CustomProfileImage(
                         following: true,
                         forStory: true,
-                        width: 64 * SizeConfig.scaleDiagonal,
-                        height: 64 * SizeConfig.scaleDiagonal,
+                        width: 76 * SizeConfig.scaleDiagonal,
+                        height: 76 * SizeConfig.scaleDiagonal,
                         imageUrl: System().showUserPicture(profile?.avatar?.mediaEndpoint),
                         badge: profile?.urluserBadge,
                         allwaysUseBadgePadding: true,

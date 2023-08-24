@@ -530,6 +530,7 @@ class LocalizationModelV2 {
   String? afterthatThisTagWillBePermanentlyRemoved;
   String? caption;
   String? contentProcessing;
+  String? contentUploading;
   String? contentWaiting;
   String? contentUploaded;
   String? reportThisAccount;
@@ -1498,6 +1499,7 @@ class LocalizationModelV2 {
     this.afterthatThisTagWillBePermanentlyRemoved,
     this.caption,
     this.contentProcessing,
+    this.contentUploading,
     this.contentWaiting,
     this.contentUploaded,
     this.reportThisAccount,
@@ -2470,6 +2472,7 @@ class LocalizationModelV2 {
     afterthatThisTagWillBePermanentlyRemoved = json['afterthatThisTagWillBePermanentlyRemoved'];
     caption = json['caption'];
     contentProcessing = json['contentProcessing'];
+    contentUploading = json['contentUploading'];
     contentWaiting = json['contentWaiting'];
     contentUploaded = json['contentUploaded'];
     reportThisAccount = json['reportThisAccount'];
