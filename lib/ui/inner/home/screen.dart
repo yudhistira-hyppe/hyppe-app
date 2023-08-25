@@ -167,6 +167,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       });
 
       Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.addListener(() {
+        // print(context.read<MainNotifier>().scrollController.offset);
         if ((Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
           setState(() {
             appbarSeen = false;
@@ -222,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   Widget build(BuildContext context) {
-    print("iszoom $isZoom");
+    // print("iszoom $isZoom");
     isFromSplash = false;
     return Consumer2<HomeNotifier, SelfProfileNotifier>(
       builder: (_, notifier, selfnotifier, __) => WillPopScope(
@@ -348,6 +349,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                             zoom(false);
                           },
                           appbarSeen: appbarSeen,
+                          scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                          // offset: offset,
                         ),
                       ),
                       Container(

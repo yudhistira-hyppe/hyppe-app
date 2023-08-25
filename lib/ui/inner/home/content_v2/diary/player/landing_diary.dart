@@ -715,7 +715,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                             captionTitle: hyppeDiary,
                             onDetail: false,
                             isShare: data?.isShared,
-                            onUpdate: (){
+                            onUpdate: () {
                               (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
                             },
                             fAliplayer: fAliplayer,
