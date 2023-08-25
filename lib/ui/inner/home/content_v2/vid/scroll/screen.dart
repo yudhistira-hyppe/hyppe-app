@@ -428,7 +428,30 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                 onTap: () {
                   if (vidData?[index].email != email) {
                     // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>().reportContent(context, vidData?[index] ?? ContentData(), fAliplayer: vidData?[index].fAliplayer);
+                    context.read<PreviewPicNotifier>()
+                        .reportContent(
+                        context,
+                        vidData?[index] ?? ContentData(),
+                        fAliplayer: vidData?[index].fAliplayer, onCompleted: ()async{
+                      bool connect = await System().checkConnections();
+                      if (connect) {
+                        setState(() {
+                          isloading = true;
+                        });
+                        await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                        setState(() {
+                          vidData = notifier.vidData;
+                        });
+                      } else {
+                        if (mounted) {
+                          ShowGeneralDialog.showToastAlert(
+                            context,
+                            lang?.internetConnectionLost ?? ' Error',
+                                () async {},
+                          );
+                        }
+                      }
+                    });
                   } else {
                     if (_curIdx != -1) {
                       print('Vid Landing Page: pause $_curIdx');

@@ -153,10 +153,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case Routes.lobby:
         return MaterialPageRoute(builder: (_) => MainScreen(args: settings.arguments as MainArgument?));
-
       case Routes.selfProfile:
         return MaterialPageRoute(builder: (_) => SelfProfileScreen(arguments: settings.arguments as GeneralArgument));
-
       case Routes.otherProfile:
         return MaterialPageRoute(builder: (_) => OtherProfileScreen(arguments: settings.arguments as OtherProfileArgument));
 

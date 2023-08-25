@@ -45,6 +45,13 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  List<ContentData>? _picTemp = [];
+  List<ContentData>? get picTemp => _picTemp;
+  set picTemp(List<ContentData>? val) {
+    _picTemp = val;
+    notifyListeners();
+  }
+
   int get itemCount => _pic == null ? 2 : (pic?.length ?? 0);
 
   bool get hasNext => contentsQuery.hasNext;
@@ -53,66 +60,102 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     List<ContentData> res = [];
     'initialPic page : ${contentsQuery.page}'.logger();
     try {
-      if (list != null) {
-        if (reload) {
-          contentsQuery.hasNext = true;
-          contentsQuery.page = 1;
-        }
-        res.addAll(list);
-        contentsQuery.hasNext = list.length == contentsQuery.limit;
-        if (list.isNotEmpty) contentsQuery.page++;
-        'initialPic nextpage : ${contentsQuery.page}'.logger();
+      var index = pic?.indexWhere((element) => element.postID == picTemp?.last.postID) ?? 0;
+      print("-0-0-0-0-0-0-");
+      // print(pic?.length ?? 0);
+      // print(index);
+      // print(picTemp?.last.postID);
+      // print(picTemp?.last.description);
+      if ((pic?.length ?? 0) > (index.toInt() + 1) && !reload) {
+        print("====------ masih ada length-----");
+        // picTemp?.removeAt(0);
+        print(pic?.length);
+        print(picTemp?.last.postID);
+        print(picTemp?.last.description);
+
+        print("------== index ${index}");
+        picTemp?.add(pic![(index) + 1]);
+        notifyListeners();
       } else {
-        if (reload) {
-          'reload contentsQuery : satu'.logger();
-          res = await contentsQuery.reload(context);
+        if (list != null) {
+          if (reload) {
+            contentsQuery.hasNext = true;
+            contentsQuery.page = 1;
+          }
+          res.addAll(list);
+          contentsQuery.hasNext = list.length == contentsQuery.limit;
+          if (list.isNotEmpty) contentsQuery.page++;
+          'initialPic nextpage : ${contentsQuery.page}'.logger();
         } else {
-          res = await contentsQuery.loadNext(context, isLandingPage: true);
+          if (reload) {
+            'reload contentsQuery : satu'.logger();
+            res = await contentsQuery.reload(context);
+          } else {
+            res = await contentsQuery.loadNext(context, isLandingPage: true);
+          }
         }
-      }
 
-      'ini pict initial 3'.logger();
-      if (reload) {
-        pic = res;
+        'ini pict initial 3'.logger();
+        if (reload) {
+          pic = res;
+          if ((pic?.length ?? 0) >= 2) {
+            picTemp = [];
+            for (var i = 0; i < 2; i++) {
+              picTemp?.add(pic![i]);
+            }
+          }
 
-        if (scrollController.hasClients) {
-          scrollController.animateTo(
-            scrollController.initialScrollOffset,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeIn,
-          );
+          if (scrollController.hasClients) {
+            scrollController.animateTo(
+              scrollController.initialScrollOffset,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
+          }
+        } else {
+          pic = [...(pic ?? [] as List<ContentData>)] + res;
+          if ((pic?.length ?? 0) >= 2) {
+            // picTemp?.removeAt(0);
+            var index = picTemp?.indexWhere((element) => element.postID == picTemp?.last.postID);
+            print("------== index ${index}");
+            // picTemp?.add(pic![picTemp?.length ?? 0 + 1]);
+
+            var total = picTemp?.length ?? 0;
+            if ((pic?.length ?? 0) > (total ?? 0)) {
+              picTemp?.add(pic![total + 1]);
+            }
+            notifyListeners();
+          }
         }
-      } else {
-        pic = [...(pic ?? [] as List<ContentData>)] + res;
+        // final _searchData = context.read<SearchNotifier>();
+        // print('ini pict initial');
+        // if (_searchData.initDataPic != null) {
+        //   print('initDataPic is null');
+        //   if (visibility == 'PUBLIC') {
+        //     try {
+        //       _searchData.initDataPic = pic?.sublist(0, 18);
+        //       print('initDataPic is ${_searchData.initDataPic?.length}');
+        //     } catch (e) {
+        //       _searchData.initDataPic = pic;
+        //       print('initDataPic is ${_searchData.initDataPic?.length}');
+        //     }
+        //   }else{
+        //     if(_searchData.initDataPic!.isEmpty){
+        //       if (visibility == 'PUBLIC') {
+        //         try {
+        //           _searchData.initDataPic = pic?.sublist(0, 18);
+        //           print('initDataVid is ${_searchData.initDataPic?.length}');
+        //         } catch (e) {
+        //           _searchData.initDataPic = pic;
+        //           print('initDataVid is ${_searchData.initDataPic?.length}');
+        //         }
+        //       }
+        //     }
+        //   }
+        //   // _searchData.picContentsQuery.featureType = FeatureType.pic;
+        //   // _searchData.allContents.pics = pic;
+        // }
       }
-      // final _searchData = context.read<SearchNotifier>();
-      // print('ini pict initial');
-      // if (_searchData.initDataPic != null) {
-      //   print('initDataPic is null');
-      //   if (visibility == 'PUBLIC') {
-      //     try {
-      //       _searchData.initDataPic = pic?.sublist(0, 18);
-      //       print('initDataPic is ${_searchData.initDataPic?.length}');
-      //     } catch (e) {
-      //       _searchData.initDataPic = pic;
-      //       print('initDataPic is ${_searchData.initDataPic?.length}');
-      //     }
-      //   }else{
-      //     if(_searchData.initDataPic!.isEmpty){
-      //       if (visibility == 'PUBLIC') {
-      //         try {
-      //           _searchData.initDataPic = pic?.sublist(0, 18);
-      //           print('initDataVid is ${_searchData.initDataPic?.length}');
-      //         } catch (e) {
-      //           _searchData.initDataPic = pic;
-      //           print('initDataVid is ${_searchData.initDataPic?.length}');
-      //         }
-      //       }
-      //     }
-      //   }
-      //   // _searchData.picContentsQuery.featureType = FeatureType.pic;
-      //   // _searchData.allContents.pics = pic;
-      // }
     } catch (e) {
       'load pic list: ERROR: $e'.logger();
     }
@@ -123,6 +166,27 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
       'initialPic : 2'.logger();
       initialPic(context);
     }
+  }
+
+  void getTemp(index, lastIndex, indexArray) {
+    if (index != 0) {
+      if (lastIndex < index && (pic?.length ?? 0) > (picTemp?.length ?? 0)) {
+        picTemp?.add(pic![indexArray + 1]);
+        var total = picTemp?.length;
+        if (total == 4) {
+          // picTemp?.removeAt(0);
+        }
+        final ids = picTemp?.map((e) => e.postID).toSet();
+        picTemp?.retainWhere((x) => ids!.remove(x.postID));
+      } else {
+        // picTemp?.insert(0, pic![indexArray - 1]);
+        // var total = picTemp?.length;
+        // if (total == 4) {
+        //   picTemp?.removeLast();
+        // }
+      }
+    }
+    notifyListeners();
   }
 
   void navigateToHyppePicDetail(BuildContext context, ContentData? data) async {
@@ -195,10 +259,10 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void reportContent(BuildContext context, ContentData data, {FlutterAliplayer? fAliplayer, String? key}) {
+  void reportContent(BuildContext context, ContentData data, {FlutterAliplayer? fAliplayer, String? key, required Function() onCompleted}) {
     if (fAliplayer != null) {
       fAliplayer.pause();
     }
-    ShowBottomSheet().onReportContent(context, postData: data, type: hyppePic, inDetail: false, fAliplayer: fAliplayer, key: key);
+    ShowBottomSheet().onReportContent(context, postData: data, type: hyppePic, inDetail: false, fAliplayer: fAliplayer, onCompleted: onCompleted, key: key);
   }
 }

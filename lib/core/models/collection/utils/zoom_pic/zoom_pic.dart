@@ -250,7 +250,7 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
     //   return;
     // }
 
-    print("==========new posisi new banget $position");
+    // print("==========new posisi new banget $position");
     // if (_scale! < 1.0 && _closeOnZoomOut!) {
     //   print("kakakakakaka");
     //   _zoom(Offset.zero, 1.0, context);
@@ -263,8 +263,8 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
       // Ensure that image location under the focal point stays in the same place despite scaling.
       // _offset = _clampOffset(details.focalPoint - _normalizedOffset! * _scale!);
     });
-    print("========scale $_scale");
-    print("========scale $_previousScale");
+    // print("========scale $_scale");
+    // print("========scale $_previousScale");
     if (_scale! > _previousScale!) {
       show();
       widget.onScaleStart?.call();

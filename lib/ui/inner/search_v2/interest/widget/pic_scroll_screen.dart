@@ -594,7 +594,13 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                 onTap: () {
                   // fAliplayer?.pause();
                   if (pics[index].email != email) {
-                    context.read<PreviewPicNotifier>().reportContent(context, pics[index] , fAliplayer: fAliplayer, key: widget.interestKey);
+                    context.read<PreviewPicNotifier>()
+                        .reportContent(
+                        context,
+                        pics[index] ,
+                        fAliplayer: fAliplayer,
+                        onCompleted: (){},
+                        key: widget.interestKey);
                   } else {
                     fAliplayer?.setMuted(true);
                     fAliplayer?.pause();

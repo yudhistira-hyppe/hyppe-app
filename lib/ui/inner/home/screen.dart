@@ -54,7 +54,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin  {
   // final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   // final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
-
+  bool appbarSeen = true;
   late TabController _tabController;
   double offset = 0.0;
   List filterList = [
@@ -168,7 +168,17 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         }
       });
 
-      // context.read<MainNotifier>().scrollController.addListener(() {
+      Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.addListener(() {
+        if ((Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
+          setState(() {
+            appbarSeen = false;
+          });
+        } else {
+          setState(() {
+            appbarSeen = true;
+          });
+        }
+      });
       // });
       context.read<ReportNotifier>().inPosition = contentPosition.home;
       _initLicense();
@@ -242,9 +252,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                     return notification.depth == 2;
                   }
                   return notification.depth == 0;
+                  // if (_tabController.index != 0) {}
+                  // return notification.depth == 0;
                 }
               },
               onRefresh: () async {
+                print(isZoom);
                 if (!isZoom) {
                   Future.delayed(Duration(milliseconds: 400), () async {
                     imageCache.clear();
@@ -258,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                 child: NestedScrollView(
                   key: context.read<MainNotifier>().globalKey,
                   controller: context.read<MainNotifier>().scrollController,
-                  physics: const NeverScrollableScrollPhysics(),
+                  // physics: const NeverScrollableScrollPhysics(),
                   // dragStartBehavior: DragStartBehavior.start,
                   headerSliverBuilder: (context, bool innerBoxIsScrolled) {
                     return [
@@ -338,6 +351,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                           onScaleStop: () {
                             zoom(false);
                           },
+                          appbarSeen: appbarSeen,
                         ),
                       ),
                       Container(

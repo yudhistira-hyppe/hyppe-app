@@ -269,7 +269,13 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                 onTap: () {
                   if (vidData[index].email != email) {
                     // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>().reportContent(context, vidData[index] , fAliplayer: vidData[index].fAliplayer, key: widget.interestKey);
+                    context.read<PreviewPicNotifier>()
+                        .reportContent(
+                        context,
+                        vidData[index] ,
+                        fAliplayer: vidData[index].fAliplayer,
+                        onCompleted: (){},
+                        key: widget.interestKey);
                   } else {
                     if (_curIdx != -1) {
                       print('Vid Landing Page: pause $_curIdx');

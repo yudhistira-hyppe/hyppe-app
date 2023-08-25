@@ -88,16 +88,16 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
       'Upload Success with certified checked $isCheckedOwnership'.logger();
 
       if (isCheckedOwnership) {
-        ShowBottomSheet.onShowSuccessPostContentOwnership(context);
+        ShowBottomSheet.onShowSuccessPostContentOwnership(Routing.navigatorKey.currentContext ?? context);
       } else {
         ShowBottomSheet().onShowColouredSheet(
-          context,
+          Routing.navigatorKey.currentContext ?? context,
           _uploadNotifier.message,
           color: kHyppeTextSuccess,
           maxLines: 2,
           onClose: () {
-            context.read<MainNotifier>().scrollController.animateTo(
-              context.read<MainNotifier>().scrollController.initialScrollOffset,
+            (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.animateTo(
+              (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.initialScrollOffset,
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeIn);
           },
@@ -111,7 +111,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
     _uploadNotifier.isUploading = false;
     'Upload Failed with message ${message.message}'.logger();
     _uploadNotifier.message = '${_language.translate.contentCreatedFailedWithMessage} ${message.message}';
-    ShowBottomSheet().onShowColouredSheet(context, _uploadNotifier.message, color: kHyppeDanger, maxLines: 2, iconSvg: 'close.svg');
+    ShowBottomSheet().onShowColouredSheet(Routing.navigatorKey.currentContext ?? context, _uploadNotifier.message, color: kHyppeDanger, maxLines: 2, iconSvg: 'close.svg');
     // _showSnackBar(color: kHyppeDanger, message: _uploadNotifier.message, icon: 'close.svg');
     _uploadNotifier.reset();
   }

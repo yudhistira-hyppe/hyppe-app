@@ -256,7 +256,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         }
         print("+++++++++++ current index: $_curIdx");
         print("+++++++++++ position: $position");
-        if (notifier.diaryData?[_curIdx] != notifier.diaryData?.last && !context.read<HomeNotifier>().isShowInactiveWarning) {
+        if (notifier.diaryData?[_curIdx] != notifier.diaryData?.last) {
           context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
             position,
             duration: const Duration(milliseconds: 400),
@@ -677,10 +677,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     });
   }
 
-  Widget itemDiary(BuildContext context,PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
+  Widget itemDiary(BuildContext context, PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
+    var data = notifier.diaryDataTemp?[index];
     return WidgetSize(
-       onChange: (Size size) {
-        notifier.diaryData?[index].height = size.height;
+      onChange: (Size size) {
+        data?.height = size.height;
       },
       child: Column(
         children: [
@@ -694,12 +695,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // SelectableText("isApsara : ${notifier.diaryData?[index].isApsara}"),
-                // SelectableText("post id : ${notifier.diaryData?[index].postID})"),
+                // SelectableText("isApsara : ${data?.isApsara}"),
+                // SelectableText("post id : ${data?.postID})"),
                 // sixteenPx,
-                // SelectableText((notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].mediaThumbEndPoint ?? "") : "${notifier.diaryData?[index].fullThumbPath}"),
+                // SelectableText((data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : "${data?.fullThumbPath}"),
                 // sixteenPx,
-                // SelectableText((notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].apsaraId ?? "") : "${UrlConstants.oldVideo + notifier.diaryData![index].postID!}"),
+                // SelectableText((data?.isApsara ?? false) ? (data?.apsaraId ?? "") : "${UrlConstants.oldVideo + notifier.diaryData![index].postID!}"),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -712,31 +713,30 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         following: true,
                         haveStory: false,
                         textColor: kHyppeTextLightPrimary,
-                        username: notifier.diaryData?[index].username,
+                        username: data?.username,
                         featureType: FeatureType.other,
-                        // isCelebrity: vidnotifier.diaryData?[index].privacy?.isCelebrity,
+                        // isCelebrity: viddata?.privacy?.isCelebrity,
                         isCelebrity: false,
-                        imageUrl: '${System().showUserPicture(notifier.diaryData?[index].avatar?.mediaEndpoint)}',
-                        onTapOnProfileImage: () => System().navigateToProfile(context, notifier.diaryData?[index].email ?? ''),
+                        imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
+                        onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
                         createdAt: '2022-02-02',
-                        musicName: notifier.diaryData?[index].music?.musicTitle ?? '',
-                        location: notifier.diaryData?[index].location ?? '',
-                        isIdVerified: notifier.diaryData?[index].privacy?.isIdVerified,
-                        badge: notifier.diaryData?[index].urluserBadge,
+                        musicName: data?.music?.musicTitle ?? '',
+                        location: data?.location ?? '',
+                        isIdVerified: data?.privacy?.isIdVerified,
+                        badge: data?.urluserBadge,
                       ),
                     ),
-                    if (notifier.diaryData?[index].email != email && (notifier.diaryData?[index].isNewFollowing ?? false))
+                    if (data?.email != email && (data?.isNewFollowing ?? false))
                       Consumer<PreviewPicNotifier>(
                         builder: (context, picNot, child) => Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: GestureDetector(
                             onTap: () {
-                              if (notifier.diaryData?[index].insight?.isloadingFollow != true) {
-                                picNot.followUser(context, notifier.diaryData?[index] ?? ContentData(),
-                                    isUnFollow: notifier.diaryData?[index].following, isloading: notifier.diaryData?[index].insight?.isloadingFollow ?? false);
+                              if (data?.insight?.isloadingFollow != true) {
+                                picNot.followUser(context, data ?? ContentData(), isUnFollow: data?.following, isloading: data?.insight?.isloadingFollow ?? false);
                               }
                             },
-                            child: notifier.diaryData?[index].insight?.isloadingFollow ?? false
+                            child: data?.insight?.isloadingFollow ?? false
                                 ? Container(
                                     height: 40,
                                     width: 30,
@@ -746,7 +746,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     ),
                                   )
                                 : Text(
-                                    (notifier.diaryData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                    (data?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
                                     style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
                                   ),
                           ),
@@ -754,19 +754,25 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       ),
                     GestureDetector(
                       onTap: () {
-                        if (notifier.diaryData?[index].email != email) {
+                        if (data?.email != email) {
                           // FlutterAliplayer? fAliplayer
-                          context.read<PreviewPicNotifier>().reportContent(context, notifier.diaryData?[index] ?? ContentData(), fAliplayer: fAliplayer);
+                          context.read<PreviewPicNotifier>().reportContent(context, data ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
+                            imageCache.clear();
+                            imageCache.clearLiveImages();
+                            await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                          });
                         } else {
                           fAliplayer?.setMuted(true);
                           fAliplayer?.pause();
                           ShowBottomSheet().onShowOptionContent(
                             context,
-                            contentData: notifier.diaryData?[index] ?? ContentData(),
+                            contentData: data ?? ContentData(),
                             captionTitle: hyppeDiary,
                             onDetail: false,
-                            isShare: notifier.diaryData?[index].isShared,
-                            onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                            isShare: data?.isShared,
+                            onUpdate: (){
+                              (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                            },
                             fAliplayer: fAliplayer,
                           );
                         }
@@ -781,29 +787,42 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 tenPx,
                 VisibilityDetector(
                   // key: Key(index.toString()),
-                  key: Key(notifier.diaryData?[index].postID ?? index.toString()),
+                  key: Key(data?.postID ?? index.toString()),
                   onVisibilityChanged: (info) {
+                    if (info.visibleFraction == 1.0) {
+                      Wakelock.enable();
+                    }
                     if (info.visibleFraction >= 0.6) {
                       _curIdx = index;
-                      if (_lastCurIndex != _curIdx) {
-                        if (_curIdx >= (notifier.diaryData?.length ?? 0) - 2) {
-                          print("======hahahaha mobil");
-                          // context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true);
-                        }
-                      }
-                      _curPostId = notifier.diaryData?[index].postID ?? index.toString();
+
+                      _curPostId = data?.postID ?? index.toString();
                       // if (_lastCurIndex != _curIdx) {
+                      final indexList = notifier.diaryData?.indexWhere((element) => element.postID == _curPostId);
+                      final latIndexList = notifier.diaryData?.indexWhere((element) => element.postID == _lastCurPostId);
                       if (_lastCurPostId != _curPostId) {
                         fAliplayer?.stop();
                         fAliplayer?.clearScreen();
+                        Wakelock.disable();
                         Future.delayed(const Duration(milliseconds: 700), () {
-                          start(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData());
-                          System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, notifier.diaryData?[index] ?? ContentData(), check: false);
+                          start(Routing.navigatorKey.currentContext ?? context, data ?? ContentData());
+                          System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, data ?? ContentData(), check: false);
                         });
-                        if (notifier.diaryData?[index].certified ?? false) {
+                        if (data?.certified ?? false) {
                           System().block(Routing.navigatorKey.currentContext ?? context);
                         } else {
                           System().disposeBlock();
+                        }
+
+                        if (indexList == (notifier.diaryData?.length ?? 0) - 1) {
+                          Future.delayed(const Duration(milliseconds: 2000), () async {
+                            await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+                              notifier.getTemp(indexList, latIndexList, indexList);
+                            });
+                          });
+                        } else {
+                          Future.delayed(const Duration(milliseconds: 2000), () {
+                            notifier.getTemp(indexList, latIndexList, indexList);
+                          });
                         }
                       }
                       _lastCurIndex = _curIdx;
@@ -823,7 +842,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       child: Stack(
                         children: [
                           // _curIdx == index
-                          _curPostId == (notifier.diaryData?[index].postID ?? index.toString())
+                          _curPostId == (data?.postID ?? index.toString())
                               ? ClipRRect(
                                   borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                                   child: AliPlayerView(
@@ -849,8 +868,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     },
                                     onDoubleTap: () {
                                       final _likeNotifier = context.read<LikeNotifier>();
-                                      if (notifier.diaryData?[index] != null) {
-                                        _likeNotifier.likePost(context, notifier.diaryData?[index] ?? ContentData());
+                                      if (data != null) {
+                                        _likeNotifier.likePost(context, data ?? ContentData());
                                       }
                                     },
                                     child: Container(
@@ -871,7 +890,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                       height: SizeConfig.screenHeight,
                                       alignment: Alignment.center,
                                       padding: EdgeInsets.all(20),
-                                      child: notifier.diaryData?[index].reportedStatus == 'BLURRED'
+                                      child: data?.reportedStatus == 'BLURRED'
                                           ? Container()
                                           : CustomTextWidget(
                                               textToDisplay: lang?.couldntLoadVideo ?? 'Error',
@@ -880,7 +899,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     ),
                                   ),
                                 ),
-                          dataSelected?.postID == notifier.diaryData?[index].postID && isPlay
+                          dataSelected?.postID == data?.postID && isPlay
                               ? Container()
                               : CustomBaseCacheImage(
                                   memCacheWidth: 100,
@@ -888,8 +907,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   widthPlaceHolder: 80,
                                   heightPlaceHolder: 80,
                                   placeHolderWidget: Container(),
-                                  imageUrl: (notifier.diaryData?[index].isApsara ?? false) ? (notifier.diaryData?[index].mediaThumbEndPoint ?? "") : "${notifier.diaryData?[index].fullThumbPath}",
-                                  imageBuilder: (context, imageProvider) => notifier.diaryData?[index].reportedStatus == 'BLURRED'
+                                  imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : "${data?.fullThumbPath}",
+                                  imageBuilder: (context, imageProvider) => data?.reportedStatus == 'BLURRED'
                                       ? ClipRRect(
                                           borderRadius: BorderRadius.circular(20), // Image border
                                           child: ImageFiltered(
@@ -961,24 +980,24 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   ),
                                 )
                               : const SizedBox.shrink(),
-                          _buildBody(context, SizeConfig.screenWidth, notifier.diaryData?[index] ?? ContentData()),
-                          blurContentWidget(context, notifier.diaryData?[index] ?? ContentData()),
+                          _buildBody(context, SizeConfig.screenWidth, data ?? ContentData()),
+                          blurContentWidget(context, data ?? ContentData()),
                         ],
                       ),
                     ),
                   ),
                 ),
                 SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                        (notifier.diaryData?[index].boosted.isEmpty ?? [].isEmpty) &&
-                        (notifier.diaryData?[index].reportedStatus != 'OWNED' && notifier.diaryData?[index].reportedStatus != 'BLURRED' && notifier.diaryData?[index].reportedStatus2 != 'BLURRED') &&
-                        notifier.diaryData?[index].email == email
+                        (data?.boosted.isEmpty ?? [].isEmpty) &&
+                        (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED' && data?.reportedStatus2 != 'BLURRED') &&
+                        data?.email == email
                     ? Container(
                         width: double.infinity,
                         margin: const EdgeInsets.only(bottom: 16),
                         child: ButtonBoost(
                           onDetail: false,
                           marginBool: true,
-                          contentData: notifier.diaryData?[index],
+                          contentData: data,
                           startState: () {
                             SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                           },
@@ -988,7 +1007,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         ),
                       )
                     : Container(),
-                if (notifier.diaryData?[index].email == email && (notifier.diaryData?[index].boostCount ?? 0) >= 0 && (notifier.diaryData?[index].boosted.isNotEmpty ?? [].isEmpty))
+                if (data?.email == email && (data?.boostCount ?? 0) >= 0 && (data?.boosted.isNotEmpty ?? [].isEmpty))
                   Container(
                     padding: const EdgeInsets.all(10),
                     margin: EdgeInsets.only(bottom: 10),
@@ -1008,7 +1027,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         Padding(
                           padding: const EdgeInsets.only(left: 13),
                           child: Text(
-                            "${notifier.diaryData?[index].boostJangkauan ?? '0'} ${lang?.reach}",
+                            "${data?.boostJangkauan ?? '0'} ${lang?.reach}",
                             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
                           ),
                         )
@@ -1026,7 +1045,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                             child: Consumer<LikeNotifier>(
                               builder: (context, likeNotifier, child) => Align(
                                 alignment: Alignment.bottomRight,
-                                child: notifier.diaryData?[index].insight?.isloading ?? false
+                                child: data?.insight?.isloading ?? false
                                     ? const SizedBox(
                                         height: 28,
                                         width: 28,
@@ -1038,26 +1057,25 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     : InkWell(
                                         child: CustomIconWidget(
                                           defaultColor: false,
-                                          color: (notifier.diaryData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                          iconData: '${AssetPath.vectorPath}${(notifier.diaryData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                          color: (data?.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                                          iconData: '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                           height: 28,
                                         ),
                                         onTap: () {
-                                          if (notifier.diaryData?[index] != null) {
-                                            likeNotifier.likePost(context, notifier.diaryData?[index] ?? ContentData());
+                                          if (data != null) {
+                                            likeNotifier.likePost(context, data ?? ContentData());
                                           }
                                         },
                                       ),
                               ),
                             ),
                           ),
-                          if (notifier.diaryData?[index].allowComments ?? false)
+                          if (data?.allowComments ?? false)
                             Padding(
                               padding: const EdgeInsets.only(left: 21.0),
                               child: GestureDetector(
                                 onTap: () {
-                                  Routing().move(Routes.commentsDetail,
-                                      argument: CommentsArgument(postID: notifier.diaryData?[index].postID ?? '', fromFront: true, data: notifier.diaryData?[index] ?? ContentData()));
+                                  Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData()));
                                 },
                                 child: const CustomIconWidget(
                                   defaultColor: false,
@@ -1067,12 +1085,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                 ),
                               ),
                             ),
-                          if ((notifier.diaryData?[index].isShared ?? false))
+                          if ((data?.isShared ?? false))
                             Padding(
                               padding: EdgeInsets.only(left: 21.0),
                               child: GestureDetector(
                                 onTap: () {
-                                  context.read<DiariesPlaylistNotifier>().createdDynamicLink(context, data: notifier.diaryData?[index]);
+                                  context.read<DiariesPlaylistNotifier>().createdDynamicLink(context, data: data);
                                 },
                                 child: CustomIconWidget(
                                   defaultColor: false,
@@ -1082,12 +1100,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                 ),
                               ),
                             ),
-                          if ((notifier.diaryData?[index].saleAmount ?? 0) > 0 && email != notifier.diaryData?[index].email)
+                          if ((data?.saleAmount ?? 0) > 0 && email != data?.email)
                             Expanded(
                               child: GestureDetector(
                                 onTap: () async {
                                   fAliplayer?.pause();
-                                  await ShowBottomSheet.onBuyContent(context, data: notifier.diaryData?[index], fAliplayer: fAliplayer);
+                                  await ShowBottomSheet.onBuyContent(context, data: data, fAliplayer: fAliplayer);
                                   // fAliplayer?.play();
                                 },
                                 child: const Align(
@@ -1105,7 +1123,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       ),
                       twelvePx,
                       Text(
-                        "${notifier.diaryData?[index].insight?.likes}  ${lang?.like}",
+                        "${data?.insight?.likes}  ${lang?.like}",
                         style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                       ),
                     ],
@@ -1114,8 +1132,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 twelvePx,
                 CustomNewDescContent(
                   // desc: "${data?.description}",
-                  username: notifier.diaryData?[index].username ?? '',
-                  desc: "${notifier.diaryData?[index].description}",
+                  username: data?.username ?? '',
+                  desc: "${data?.description}",
                   trimLines: 3,
                   textAlign: TextAlign.start,
                   seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
@@ -1126,31 +1144,30 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 ),
                 GestureDetector(
                   onTap: () {
-                    Routing()
-                        .move(Routes.commentsDetail, argument: CommentsArgument(postID: notifier.diaryData?[index].postID ?? '', fromFront: true, data: notifier.diaryData?[index] ?? ContentData()));
+                    Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: data?.postID ?? '', fromFront: true, data: data ?? ContentData()));
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: Text(
-                      "${lang?.seeAll} ${notifier.diaryData?[index].comments} ${lang?.comment}",
+                      "${lang?.seeAll} ${data?.comments} ${lang?.comment}",
                       style: const TextStyle(fontSize: 12, color: kHyppeBurem),
                     ),
                   ),
                 ),
-                (notifier.diaryData?[index].comment?.length ?? 0) > 0
+                (data?.comment?.length ?? 0) > 0
                     ? Padding(
                         padding: const EdgeInsets.only(top: 0.0),
                         child: ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: (notifier.diaryData?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
+                          itemCount: (data?.comment?.length ?? 0) >= 2 ? 2 : 1,
                           itemBuilder: (context, indexComment) {
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 6.0),
                               child: CustomNewDescContent(
-                                // desc: "${notifier.diaryData?[index]?.description}",
-                                username: notifier.diaryData?[index].comment?[indexComment].userComment?.username ?? '',
-                                desc: notifier.diaryData?[index].comment?[indexComment].txtMessages ?? '',
+                                // desc: "${data??.description}",
+                                username: data?.comment?[indexComment].userComment?.username ?? '',
+                                desc: data?.comment?[indexComment].txtMessages ?? '',
                                 trimLines: 3,
                                 textAlign: TextAlign.start,
                                 seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
@@ -1168,7 +1185,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                   padding: EdgeInsets.symmetric(vertical: 4.0),
                   child: Text(
                     "${System().readTimestamp(
-                      DateTime.parse(System().dateTimeRemoveT(notifier.diaryData?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                      DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
                       context,
                       fullCaption: true,
                     )}",
@@ -1178,7 +1195,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
               ],
             ),
           ),
-          homeNotifier.isLoadingLoadmore && notifier.diaryData?[index] == notifier.diaryData?.last
+          homeNotifier.isLoadingLoadmore && data == notifier.diaryData?.last
               ? const Padding(
                   padding: EdgeInsets.only(bottom: 32),
                   child: Center(child: CustomLoading()),
@@ -1308,7 +1325,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         },
                         child: Container(
                           padding: const EdgeInsets.only(top: 8),
-                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
                           width: SizeConfig.screenWidth,
                           decoration: const BoxDecoration(
                             border: Border(
@@ -1332,6 +1348,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         : Container();
   }
 }
+
 class WidgetSize extends StatefulWidget {
   final Widget child;
   final Function onChange;

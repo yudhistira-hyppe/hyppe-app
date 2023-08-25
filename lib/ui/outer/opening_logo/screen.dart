@@ -30,8 +30,10 @@ class _OpeningLogoState extends State<OpeningLogo> with AfterFirstLayoutMixin {
     if (widget.isLaunch) {
       context.read<MainNotifier>().pageIndex = 0;
       final notifier = Provider.of<HyppeNotifier>(context, listen: false);
+      Future.delayed(const Duration(seconds: 2), (){
+        notifier.handleStartUp(mounted);
+      });
 
-      notifier.handleStartUp(mounted);
     }
   }
 

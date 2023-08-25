@@ -477,6 +477,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         setState(() {
           _currentPosition = _videoDuration;
         });
+        widget.functionFullTriger();
       });
 
       fAliplayer?.setOnSnapShot((path, playerId) {

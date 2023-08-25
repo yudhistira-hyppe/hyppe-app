@@ -355,6 +355,13 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
+  setViewed(int index, int indexItem){
+    if(storiesGroups?.isNotEmpty ?? false){
+      storiesGroups?[index].story?[indexItem].isViewed = true;
+    }
+    notifyListeners();
+  }
+
   void navigateToPeopleStoryGroup(BuildContext context, int index) {
     print('navigateToStoryGroup: ${myStoryGroup.isNotEmpty} : $myStoryGroup');
     _routing.move(Routes.showStories,

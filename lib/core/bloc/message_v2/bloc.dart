@@ -30,7 +30,7 @@ class MessageBlocV2 {
     final email = SharedPreference().readStorage(SpKeys.email);
 
     formData.fields.add(MapEntry('email', disqusArgument.email));
-    formData.fields.add(MapEntry('postId', disqusArgument.postID));
+    formData.fields.add(MapEntry('postID', disqusArgument.postID));
     formData.fields.add(MapEntry('txtMessages', disqusArgument.txtMessages));
     formData.fields.add(MapEntry('reactionUri', disqusArgument.reactionUri));
     formData.fields.add(MapEntry('isQuery', disqusArgument.isQuery.toString()));
@@ -85,7 +85,7 @@ class MessageBlocV2 {
     final email = SharedPreference().readStorage(SpKeys.email);
 
     if (disqusArgument.postID.isNotEmpty) {
-      formData.fields.add(MapEntry('postId', disqusArgument.postID));
+      formData.fields.add(MapEntry('postID', disqusArgument.postID));
     }
     if (disqusArgument.txtMessages.isNotEmpty) {
       formData.fields.add(MapEntry('txtMessages', disqusArgument.txtMessages));
