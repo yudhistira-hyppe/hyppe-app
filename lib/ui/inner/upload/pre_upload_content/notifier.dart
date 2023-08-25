@@ -674,22 +674,29 @@ class PreUploadContentNotifier with ChangeNotifier {
         },
         onSendProgress: (received, total) async {
           if (_isCompress) {
-            var progress = 50 + ((received / 2) / 1000000);
-            if (progress < 80) {
-              _progressCompress = progress;
-            } else {
-              progress + 2;
-            }
-            print("ini loading upload $_progressCompress}");
-            var total2 = 100.0;
+            // old progress counting
+            // var progress = 50 + ((received / 2) / 1000000);
+            // if (progress < 80) {
+            //   _progressCompress = progress;
+            // } else {
+            //   progress + 2;
+            // }
+            // var total2 = 100.0;
             // var total2 = (total / 2) / 100000;
             // var total2 = 50 + ((total / 2) / 100000);
-            await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: total2));
+
+            // new progress counting
+            var uploadProgress = ((received / total) * 100) * 0.45; // when compress is done, uploading bar should be in 95% (50% compress + 45% upload)
+            _progressCompress = 50 + uploadProgress;
+            await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: 100));
           } else {
-            if (received < total - total * 5 / 100) {
-              progress = received.toDouble();
-            }
-            print('progress $progress');
+            // old progress counting
+            // if (received < total - total * 5 / 100) {
+            //   progress = received.toDouble();
+            // }
+            
+            // new progress counting
+            progress = received * 0.95;  // when compress is done, uploading bar should be in 95%
             await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: progress, total: total.toDouble()));
           }
           if (received == total) {
@@ -875,7 +882,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       final LightCompressor _lightCompressor = LightCompressor();
       _desFile = await _destinationFile;
       _lightCompressor.onProgressUpdated.listen((val) {
-        _progressCompress = val / 2;
+        _progressCompress = val * 0.5; // when compress is done, uploading bar should be in 50%
         "+++++++++++++++compress : $_progressCompress".logger();
         eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: 100, isCompressing: true));
         notifyListeners();

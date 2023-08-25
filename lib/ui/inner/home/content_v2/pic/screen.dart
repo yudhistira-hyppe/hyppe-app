@@ -139,7 +139,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
       //scroll
       var notifierMain = context.read<MainNotifier>();
-
       notifierMain.globalKey.currentState?.innerController.addListener(() {
         print("==1111=====");
         var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
@@ -834,7 +833,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           System().disposeBlock();
                         }
                         setState(() {
-                          Future.delayed(Duration(milliseconds: 1000), () {
+                          Future.delayed(Duration(milliseconds: 400), () {
                             itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
                           });
                         });

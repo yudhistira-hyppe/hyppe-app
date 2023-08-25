@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
@@ -49,7 +51,11 @@ import '../../../../constant/entities/like/notifier.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class HyppePreviewVid extends StatefulWidget {
-  const HyppePreviewVid({Key? key}) : super(key: key);
+  final ScrollController? scrollController;
+  const HyppePreviewVid({
+    Key? key,
+    this.scrollController,
+  }) : super(key: key);
 
   @override
   _HyppePreviewVidState createState() => _HyppePreviewVidState();
@@ -73,6 +79,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   String _curPostId = '';
   String _lastCurPostId = '';
 
+  Timer? _timer;
+
   Map<int, FlutterAliplayer> dataAli = {};
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
@@ -89,9 +97,58 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     // notifier.initialVid(context, reload: true);
     notifier.pageController.addListener(() => notifier.scrollListener(context));
     lang = context.read<TranslateNotifierV2>().translate;
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      //scroll
+      var notifierMain = context.read<MainNotifier>();
+      notifierMain.globalKey.currentState?.innerController.addListener(() {
+        print("==1111=====");
+        var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
+        print(offset);
+        toPosition(offset);
+      });
+    });
 
+    Wakelock.enable();
+    _initializeTimer();
     super.initState();
+  }
+
+  double lastOffset = 0;
+  void toPosition(offset) async {
+    double totItemHeight = 0;
+    double totItemHeightParam = 0;
+    final notifier = context.read<PreviewVidNotifier>();
+    if (offset > lastOffset) {
+      for (var i = 0; i <= _curIdx; i++) {
+        if (i == _curIdx) {
+          totItemHeightParam += (notifier.vidData?[i].height ?? 0.0) * 30 / 100;
+        } else {
+          totItemHeightParam += notifier.vidData?[i].height ?? 0.0;
+        }
+        totItemHeight += notifier.vidData?[i].height ?? 0.0;
+      }
+      if (offset >= totItemHeightParam) {
+        var position = totItemHeight;
+        await widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 400), curve: Curves.ease);
+      }
+    } else {
+      for (var i = 0; i < _curIdx; i++) {
+        if (i == _curIdx - 1) {
+          totItemHeightParam += (notifier.vidData?[i].height ?? 0.0) * 75 / 100;
+        } else if (i == _curIdx) {
+        } else {
+          totItemHeightParam += notifier.vidData?[i].height ?? 0.0;
+        }
+        totItemHeight += notifier.vidData?[i].height ?? 0.0;
+      }
+      totItemHeight -= notifier.vidData?[_curIdx - 1].height ?? 0.0;
+
+      if (offset <= totItemHeightParam) {
+        var position = totItemHeight;
+        await widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 400), curve: Curves.ease);
+      }
+    }
+    lastOffset = offset;
   }
 
   @override
@@ -103,6 +160,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   @override
   void dispose() {
     isStopVideo = false;
+    _pauseScreen();
     try {
       final notifier = context.read<PreviewVidNotifier>();
       notifier.pageController.dispose();
@@ -133,6 +191,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     final notifier = context.read<PreviewVidNotifier>();
     if (_curIdx != -1) {
       notifier.vidData?[_curIdx].fAliplayer?.play();
+      _initializeTimer();
     }
     if (postIdVisibility == '') {
       setState(() {
@@ -154,11 +213,31 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   void didPushNext() {
     print("========= didPushNext dari diary");
     final notifier = context.read<PreviewVidNotifier>();
+    _pauseScreen();
     if (_curIdx != -1) {
       notifier.vidData?[_curIdx].fAliplayer?.pause();
     }
 
     super.didPushNext();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.inactive:
+        _pauseScreen();
+        break;
+      case AppLifecycleState.resumed:
+        _initializeTimer();
+        break;
+      case AppLifecycleState.paused:
+        _pauseScreen();
+        break;
+      case AppLifecycleState.detached:
+        _pauseScreen();
+        break;
+    }
   }
 
   PreviewVidNotifier getNotifier(BuildContext context) {
@@ -168,6 +247,39 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   void scrollAuto() {
     print("====== nomor index $_curIdx");
     // itemScrollController.scrollTo(index: _curIdx + 1, duration: Duration(milliseconds: 500));
+  }
+
+  _pauseScreen() async {
+    _timer?.cancel();
+    _timer = null;
+    if (await Wakelock.enabled) Wakelock.disable();
+  }
+
+  void _initializeTimer() async {
+    "========== initializeTimer".logger();
+    if (!(await Wakelock.enabled)) Wakelock.enable();
+    if (_timer != null) _timer?.cancel();
+    _timer = Timer(const Duration(seconds: 300), () => _handleInactivity());
+  }
+
+  void _handleInactivity() {
+    final notifier = context.read<PreviewVidNotifier>();
+    notifier.vidData?[_curIdx].fAliplayer?.pause();
+    _pauseScreen();
+    ShowBottomSheet().onShowColouredSheet(
+      context,
+      context.read<TranslateNotifierV2>().translate.warningInavtivityVid,
+      maxLines: 2,
+      color: kHyppeLightBackground,
+      textColor: kHyppeTextLightPrimary,
+      textButtonColor: kHyppePrimary,
+      iconSvg: 'close.svg',
+      textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
+      onClose: () {
+        notifier.vidData?[_curIdx].fAliplayer?.play();
+        _initializeTimer();
+      },
+    );
   }
 
   @override
@@ -211,7 +323,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             // scrollOffsetController: scrollOffsetController,
                             shrinkWrap: true,
                             // itemCount: vidNotifier.itemCount,
-                            itemCount: vidNotifier.vidDataTemp?.length,
+                            itemCount: vidNotifier.vidData?.length,
                             itemBuilder: (BuildContext context, int index) {
                               if (vidNotifier.vidData == null || homeNotifier.isLoadingVid) {
                                 vidNotifier.vidData?[index].fAliplayer?.pause();
@@ -228,7 +340,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               //   isPlay = false;
                               //   vidNotifier.vidData?[index].fAliplayer?.stop();
                               // }
-                              final vidData = vidNotifier.vidDataTemp?[index];
+                              final vidData = vidNotifier.vidData?[index];
                               return itemVid(vidData ?? ContentData(), vidNotifier, index, homeNotifier);
                             },
                           ),
@@ -262,7 +374,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       },
       child: Column(
         children: [
-          // Text("total ${notifier.vidDataTemp?.length}"),
+          // Text("total ${notifier.vidData?.length}"),
           VisibilityDetector(
             key: Key(vidData.postID ?? index.toString()),
             onVisibilityChanged: (info) async {
@@ -447,7 +559,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               captionTitle: hyppeVid,
                               onDetail: false,
                               isShare: vidData.isShared,
-                              onUpdate: (){
+                              onUpdate: () {
                                 (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
                               },
                               fAliplayer: vidData.fAliplayer,
@@ -820,7 +932,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
               ),
             ),
           ),
-          homeNotifier.isLoadingLoadmore && notifier.vidDataTemp?[index] == notifier.vidDataTemp?.last
+          homeNotifier.isLoadingLoadmore && notifier.vidData?[index] == notifier.vidData?.last
               ? const Padding(
                   padding: EdgeInsets.only(bottom: 32),
                   child: Center(child: CustomLoading()),

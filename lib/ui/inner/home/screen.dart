@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -36,6 +37,7 @@ import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/screen.dart';
+import 'package:wakelock/wakelock.dart';
 import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
 import 'package:move_to_background/move_to_background.dart';
@@ -87,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         await homneNotifier.getAdsApsara((fixContext ?? context), true);
       }
     });
-
+    "+++++++++++++ didPopNext".logger();
     // System().disposeBlock();
 
     super.didPopNext();
@@ -191,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       setState(() => {});
     }
     super.initState();
-    'ini iniststate home'.logger();
+    '++++++++++++++++ iniststate'.logger();
   }
 
   _initLicense() {
@@ -356,13 +358,17 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                       Container(
                         padding: const EdgeInsets.only(left: 6.0, right: 6),
                         color: kHyppeLightSurface,
-                        child: const LandingDiaryPage(),
+                        child: LandingDiaryPage(
+                          scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                        ),
                       ),
                       // second tab bar viiew widget
                       Container(
                         padding: const EdgeInsets.only(left: 16.0, right: 16),
                         color: kHyppeLightSurface,
-                        child: const HyppePreviewVid(),
+                        child: HyppePreviewVid(
+                          scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                        ),
                       ),
                     ],
                   ),

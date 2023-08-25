@@ -61,9 +61,9 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
       _uploadNotifier.isUploading = true;
     }
     if (isCompressing) {
-      _uploadNotifier.message = "${_language.translate.contentProcessing}";
+      _uploadNotifier.message = "${_language.translate.contentProcessing}..";
     } else {
-      _uploadNotifier.message = "${_language.translate.processUpload}";
+      _uploadNotifier.message = "${_language.translate.contentUploading}";
     }
     _uploadNotifier.progress = count / total;
   }
@@ -71,7 +71,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   @override
   void onUploadFinishingUp() {
     print("================onUploadFinishingUp");
-    _uploadNotifier.message = "${_language.translate.finishingUp}...";
+    _uploadNotifier.message = "${_language.translate.contentWaiting}";
   }
 
   @override

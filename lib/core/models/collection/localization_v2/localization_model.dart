@@ -530,8 +530,11 @@ class LocalizationModelV2 {
   String? afterthatThisTagWillBePermanentlyRemoved;
   String? caption;
   String? contentProcessing;
+  String? contentUploading;
   String? contentWaiting;
   String? contentUploaded;
+  String? warningInavtivityVid;
+  String? warningInavtivityDiary;
   String? reportThisAccount;
   String? signInWithGoogleAccount;
   String? signInWithApple;
@@ -794,6 +797,7 @@ class LocalizationModelV2 {
   String? by;
   String? night;
   String? boostedPostList;
+  String? stringContinue;
   String? reach;
   String? viewDetails;
   String? scheduled;
@@ -1498,8 +1502,11 @@ class LocalizationModelV2 {
     this.afterthatThisTagWillBePermanentlyRemoved,
     this.caption,
     this.contentProcessing,
+    this.contentUploading,
     this.contentWaiting,
     this.contentUploaded,
+    this.warningInavtivityVid,
+    this.warningInavtivityDiary,
     this.reportThisAccount,
     this.signInWithGoogleAccount,
     this.signInWithApple,
@@ -1762,6 +1769,7 @@ class LocalizationModelV2 {
     this.by,
     this.night,
     this.boostedPostList,
+    this.stringContinue,
     this.reach,
     this.viewDetails,
     this.scheduled,
@@ -2470,8 +2478,11 @@ class LocalizationModelV2 {
     afterthatThisTagWillBePermanentlyRemoved = json['afterthatThisTagWillBePermanentlyRemoved'];
     caption = json['caption'];
     contentProcessing = json['contentProcessing'];
+    contentUploading = json['contentUploading'];
     contentWaiting = json['contentWaiting'];
     contentUploaded = json['contentUploaded'];
+    warningInavtivityVid = json['warningInavtivityVid'];
+    warningInavtivityDiary = json['warningInavtivityDiary'];
     reportThisAccount = json['reportThisAccount'];
     signInWithGoogleAccount = json['signInWithGoogleAccount'];
     signInWithApple = json['signInWithApple'];
@@ -2754,6 +2765,7 @@ class LocalizationModelV2 {
     by = json["by"];
     night = json["night"];
     boostedPostList = json["boostedPostList"];
+    stringContinue = json["stringContinue"];
     reach = json["reach"];
     viewDetails = json["viewDetails"];
     scheduled = json["scheduled"];

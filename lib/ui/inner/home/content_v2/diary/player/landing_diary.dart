@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
@@ -56,7 +57,8 @@ import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wakelock/wakelock.dart';
 
 class LandingDiaryPage extends StatefulWidget {
-  const LandingDiaryPage({Key? key}) : super(key: key);
+  final ScrollController? scrollController;
+  const LandingDiaryPage({Key? key, this.scrollController}) : super(key: key);
 
   @override
   _LandingDiaryPageState createState() => _LandingDiaryPageState();
@@ -91,9 +93,13 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   ContentData? dataSelected;
   String email = '';
   String statusKyc = '';
+  double itemHeight = 0;
+
+  Timer? _timer;
 
   @override
   void initState() {
+    "++++++++++++++ initState".logger();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'LandingDiaryPage');
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
     lang = context.read<TranslateNotifierV2>().translate;
@@ -121,8 +127,18 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
       _initListener();
+      //scroll
+      var notifierMain = context.read<MainNotifier>();
+      notifierMain.globalKey.currentState?.innerController.addListener(() {
+        print("==1111=====");
+        var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
+        print(offset);
+        toPosition(offset);
+      });
     });
 
+    Wakelock.enable();
+    _initializeTimer();
     super.initState();
   }
 
@@ -250,11 +266,13 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         }
         print("+++++++++++ current index: $_curIdx");
         print("+++++++++++ position: $position");
-        context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
-              position,
-              duration: const Duration(milliseconds: 700),
-              curve: Curves.easeOut,
-            );
+        if (notifier.diaryData?[_curIdx] != notifier.diaryData?.last) {
+          context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
+                position,
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeOut,
+              );
+        }
         if (mounted) {
           setState(() {});
         }
@@ -307,6 +325,44 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         setState(() {});
       }
     });
+  }
+
+  double lastOffset = 0;
+  void toPosition(offset) async {
+    double totItemHeight = 0;
+    double totItemHeightParam = 0;
+    final notifier = context.read<PreviewDiaryNotifier>();
+    if (offset > lastOffset) {
+      for (var i = 0; i <= _curIdx; i++) {
+        if (i == _curIdx) {
+          totItemHeightParam += (notifier.diaryData?[i].height ?? 0.0) * 30 / 100;
+        } else {
+          totItemHeightParam += notifier.diaryData?[i].height ?? 0.0;
+        }
+        totItemHeight += notifier.diaryData?[i].height ?? 0.0;
+      }
+      if (offset >= totItemHeightParam) {
+        var position = totItemHeight;
+        await widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 400), curve: Curves.ease);
+      }
+    } else {
+      for (var i = 0; i < _curIdx; i++) {
+        if (i == _curIdx - 1) {
+          totItemHeightParam += (notifier.diaryData?[i].height ?? 0.0) * 75 / 100;
+        } else if (i == _curIdx) {
+        } else {
+          totItemHeightParam += notifier.diaryData?[i].height ?? 0.0;
+        }
+        totItemHeight += notifier.diaryData?[i].height ?? 0.0;
+      }
+      totItemHeight -= notifier.diaryData?[_curIdx - 1].height ?? 0.0;
+
+      if (offset <= totItemHeightParam) {
+        var position = totItemHeight;
+        await widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 400), curve: Curves.ease);
+      }
+    }
+    lastOffset = offset;
   }
 
   void start(BuildContext context, ContentData data) async {
@@ -473,11 +529,45 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       }
       if (context.getAdsCount() == 3 && adsNotifier.adsData != null) {
         fAliplayer?.pause();
+        _pauseScreen();
         System().adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(), adsNotifier.adsData?.data?.apsaraAuth ?? '', isInAppAds: false).whenComplete(() {
           fAliplayer?.play();
+          _initializeTimer();
         });
       }
     }
+  }
+
+  _pauseScreen() async {
+    _timer?.cancel();
+    _timer = null;
+    if (await Wakelock.enabled) Wakelock.disable();
+  }
+
+  void _initializeTimer() async {
+    "========== initializeTimer".logger();
+    if (!(await Wakelock.enabled)) Wakelock.enable();
+    if (_timer != null) _timer?.cancel();
+    _timer = Timer(const Duration(seconds: 300), () => _handleInactivity());
+  }
+
+  void _handleInactivity() {
+    fAliplayer?.pause();
+    _pauseScreen();
+    ShowBottomSheet().onShowColouredSheet(
+      context,
+      context.read<TranslateNotifierV2>().translate.warningInavtivityDiary,
+      maxLines: 2,
+      color: kHyppeLightBackground,
+      textColor: kHyppeTextLightPrimary,
+      textButtonColor: kHyppePrimary,
+      iconSvg: 'close.svg',
+      textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
+      onClose: () {
+        fAliplayer?.play();
+        _initializeTimer();
+      },
+    );
   }
 
   @override
@@ -493,6 +583,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
     fAliplayer?.stop();
+    _pauseScreen();
     // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
     //   fAliplayer?.destroy();
     // }
@@ -517,7 +608,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   void didPopNext() {
     print("======= didPopNext dari diary");
     fAliplayer?.play();
-
+    _initializeTimer();
     // System().disposeBlock();
 
     super.didPopNext();
@@ -527,6 +618,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   void didPushNext() {
     print("========= didPushNext dari diary");
     fAliplayer?.pause();
+    _pauseScreen();
     super.didPushNext();
   }
 
@@ -537,17 +629,21 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     switch (state) {
       case AppLifecycleState.inactive:
         fAliplayer?.pause();
+        _pauseScreen();
         break;
       case AppLifecycleState.resumed:
         if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
           fAliplayer?.play();
+          _initializeTimer();
         }
         break;
       case AppLifecycleState.paused:
         fAliplayer?.pause();
+        _pauseScreen();
         break;
       case AppLifecycleState.detached:
         fAliplayer?.pause();
+        _pauseScreen();
         break;
     }
   }
@@ -560,70 +656,76 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
     return Consumer2<PreviewDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
-      return Container(
-        width: SizeConfig.screenWidth,
-        height: SizeWidget.barHyppePic,
-        // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              child: notifier.diaryData != null && (notifier.diaryData?.isEmpty ?? true)
-                  ? const NoResultFound()
-                  : NotificationListener<OverscrollIndicatorNotification>(
-                      onNotification: (overscroll) {
-                        overscroll.disallowIndicator();
-                        return false;
-                      },
-                      child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        // controller: notifier.scrollController,
-                        // scrollDirection: Axis.horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: notifier.diaryDataTemp?.length,
-                        padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                        itemBuilder: (context, index) {
-                          if (notifier.diaryDataTemp == null || home.isLoadingDiary) {
-                            fAliplayer?.pause();
-                            // _lastCurIndex = -1;
-                            _lastCurPostId = '';
-                            return CustomShimmer(
-                              width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                              height: 168,
-                              radius: 8,
-                              margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                            );
-                          } else if (index == notifier.diaryDataTemp?.length && notifier.hasNext) {
-                            return UnconstrainedBox(
-                              child: Container(
-                                alignment: Alignment.center,
-                                width: 80 * SizeConfig.scaleDiagonal,
-                                height: 80 * SizeConfig.scaleDiagonal,
-                                child: const CustomLoading(),
-                              ),
-                            );
-                          }
-                          // if (_curIdx == 0 && notifier.diaryDataTemp?[0].reportedStatus == 'BLURRED') {
-                          if (notifier.diaryDataTemp?[0].reportedStatus == 'BLURRED') {
-                            isPlay = false;
-                            fAliplayer?.stop();
-                          }
-
-                          return itemDiary(context, notifier, index, home);
+      return GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onPanDown: (detail) {
+          _initializeTimer();
+        },
+        child: Container(
+          width: SizeConfig.screenWidth,
+          height: SizeWidget.barHyppePic,
+          // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: notifier.diaryData != null && (notifier.diaryData?.isEmpty ?? true)
+                    ? const NoResultFound()
+                    : NotificationListener<OverscrollIndicatorNotification>(
+                        onNotification: (overscroll) {
+                          overscroll.disallowIndicator();
+                          return false;
                         },
+                        child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          // controller: notifier.scrollController,
+                          // scrollDirection: Axis.horizontal,
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: notifier.diaryData?.length,
+                          padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                          itemBuilder: (context, index) {
+                            if (notifier.diaryData == null || home.isLoadingDiary) {
+                              fAliplayer?.pause();
+                              // _lastCurIndex = -1;
+                              _lastCurPostId = '';
+                              return CustomShimmer(
+                                width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                height: 168,
+                                radius: 8,
+                                margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                              );
+                            } else if (index == notifier.diaryData?.length && notifier.hasNext) {
+                              return UnconstrainedBox(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 80 * SizeConfig.scaleDiagonal,
+                                  height: 80 * SizeConfig.scaleDiagonal,
+                                  child: const CustomLoading(),
+                                ),
+                              );
+                            }
+                            // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                            if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                              isPlay = false;
+                              fAliplayer?.stop();
+                            }
+
+                            return itemDiary(context, notifier, index, home);
+                          },
+                        ),
                       ),
-                    ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       );
     });
   }
 
   Widget itemDiary(BuildContext context, PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
-    var data = notifier.diaryDataTemp?[index];
+    var data = notifier.diaryData?[index];
     return WidgetSize(
       onChange: (Size size) {
         data?.height = size.height;
@@ -640,6 +742,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Text("itemHeight $itemHeight"),
                 // SelectableText("isApsara : ${data?.isApsara}"),
                 // SelectableText("post id : ${data?.postID})"),
                 // sixteenPx,
@@ -748,6 +851,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         fAliplayer?.stop();
                         fAliplayer?.clearScreen();
                         Wakelock.disable();
+                        setState(() {
+                          Future.delayed(Duration(milliseconds: 400), () {
+                            itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;
+                          });
+                        });
                         Future.delayed(const Duration(milliseconds: 700), () {
                           start(Routing.navigatorKey.currentContext ?? context, data ?? ContentData());
                           System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, data ?? ContentData(), check: false);
@@ -759,14 +867,14 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         }
 
                         if (indexList == (notifier.diaryData?.length ?? 0) - 1) {
-                          Future.delayed(const Duration(milliseconds: 2000), () async {
+                          Future.delayed(const Duration(milliseconds: 1000), () async {
                             await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
-                              notifier.getTemp(indexList, latIndexList, indexList);
+                              // notifier.getTemp(indexList, latIndexList, indexList);
                             });
                           });
                         } else {
                           Future.delayed(const Duration(milliseconds: 2000), () {
-                            notifier.getTemp(indexList, latIndexList, indexList);
+                            // notifier.getTemp(indexList, latIndexList, indexList);
                           });
                         }
                       }
