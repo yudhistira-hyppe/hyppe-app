@@ -122,12 +122,12 @@ class PreviewDiaryNotifier with ChangeNotifier {
 
       if (reload) {
         diaryData = res;
-        if ((diaryData?.length ?? 0) >= 2) {
-          diaryDataTemp = [];
-          for (var i = 0; i < 2; i++) {
-            diaryDataTemp?.add(diaryData![i]);
-          }
-        }
+        // if ((diaryData?.length ?? 0) >= 2) {
+        //   diaryDataTemp = [];
+        //   for (var i = 0; i < 2; i++) {
+        //     diaryDataTemp?.add(diaryData![i]);
+        //   }
+        // }
 
         if (scrollController.hasClients) {
           scrollController.animateTo(

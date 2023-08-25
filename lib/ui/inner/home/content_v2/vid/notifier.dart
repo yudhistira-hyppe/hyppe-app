@@ -129,12 +129,12 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
       if (reload) {
         vidData = res;
 
-        if ((vidData?.length ?? 0) >= 2) {
-          vidDataTemp = [];
-          for (var i = 0; i < 2; i++) {
-            vidDataTemp?.add(vidData![i]);
-          }
-        }
+        // if ((vidData?.length ?? 0) >= 2) {
+        //   vidDataTemp = [];
+        //   for (var i = 0; i < 2; i++) {
+        //     vidDataTemp?.add(vidData![i]);
+        //   }
+        // }
 
         if (pageController.hasClients) {
           pageController.animateToPage(

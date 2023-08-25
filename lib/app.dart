@@ -38,6 +38,7 @@ bool connectInternet = true;
 int golbalToOther = 0;
 bool globalInternetConnection = true;
 bool globalAfterReport = false;
+bool homeClick = false;
 
 void disposeGlobalAudio() async {
   try {
