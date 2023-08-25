@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
@@ -37,6 +39,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:wakelock/wakelock.dart';
 import '../../../../../app.dart';
 import '../../../../../core/config/ali_config.dart';
 import '../../../../../core/services/route_observer_service.dart';
@@ -68,6 +71,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   ContentData? dataSelected;
   ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
 
+  Timer? _timer;
+
   Map<int, FlutterAliplayer> dataAli = {};
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
@@ -86,6 +91,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     lang = context.read<TranslateNotifierV2>().translate;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
 
+    Wakelock.enable();
+    _initializeTimer();
     super.initState();
   }
 
@@ -98,6 +105,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   @override
   void dispose() {
     isStopVideo = false;
+    _pauseScreen();
     try {
       final notifier = context.read<PreviewVidNotifier>();
       notifier.pageController.dispose();
@@ -128,6 +136,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     final notifier = context.read<PreviewVidNotifier>();
     if (_curIdx != -1) {
       notifier.vidData?[_curIdx].fAliplayer?.play();
+      _initializeTimer();
     }
     if (postIdVisibility == '') {
       setState(() {
@@ -149,11 +158,31 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   void didPushNext() {
     print("========= didPushNext dari diary");
     final notifier = context.read<PreviewVidNotifier>();
+    _pauseScreen();
     if (_curIdx != -1) {
       notifier.vidData?[_curIdx].fAliplayer?.pause();
     }
 
     super.didPushNext();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.inactive:
+        _pauseScreen();
+        break;
+      case AppLifecycleState.resumed:
+        _initializeTimer();
+        break;
+      case AppLifecycleState.paused:
+        _pauseScreen();
+        break;
+      case AppLifecycleState.detached:
+        _pauseScreen();
+        break;
+    }
   }
 
   PreviewVidNotifier getNotifier(BuildContext context) {
@@ -163,6 +192,40 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   void scrollAuto() {
     print("====== nomor index $_curIdx");
     // itemScrollController.scrollTo(index: _curIdx + 1, duration: Duration(milliseconds: 500));
+  }
+  
+  _pauseScreen() async {
+    _timer?.cancel();
+    _timer = null;
+    if (await Wakelock.enabled) Wakelock.disable();
+  }
+
+  void _initializeTimer() async {
+    "========== initializeTimer".logger();
+    if (!(await Wakelock.enabled)) Wakelock.enable();
+    if (_timer != null) _timer?.cancel();
+    _timer = Timer(const Duration(seconds: 30), () => _handleInactivity());
+  }
+
+  void _handleInactivity() {
+    final notifier = context.read<PreviewVidNotifier>();
+    notifier.vidData?[_curIdx].fAliplayer?.pause();
+    _pauseScreen();
+    ShowBottomSheet().onShowColouredSheet(
+      context,
+      context.read<TranslateNotifierV2>().translate.warningInavtivityVid,
+      maxLines: 2,
+      color: kHyppeLightBackground,
+      textColor: kHyppeTextLightPrimary,
+      textButtonColor: kHyppePrimary,
+      iconSvg: 'close.svg',
+      textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
+      onClose: () {
+        notifier.vidData?[_curIdx].fAliplayer?.play();
+        _initializeTimer();
+      },
+    );
+    
   }
 
   @override
@@ -174,72 +237,78 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
     return Consumer3<PreviewVidNotifier, TranslateNotifierV2, HomeNotifier>(
       builder: (context, vidNotifier, translateNotifier, homeNotifier, widget) => SizedBox(
-        child: Column(
-          children: [
-            (vidNotifier.vidData != null)
-                ? (vidNotifier.vidData?.isEmpty ?? true)
-                    ? const NoResultFound()
-                    : Expanded(
-                        child: NotificationListener<OverscrollIndicatorNotification>(
-                          onNotification: (overscroll) {
-                            print(overscroll);
-                            overscroll.disallowIndicator();
-                            return true;
-                          },
-                          child: ListView.builder(
-                            // child: ScrollablePositionedList.builder(
-                            // controller: vidNotifier.pageController,
-                            // onPageChanged: (index) async {
-                            //   print('HyppePreviewVid index : $index');
-                            //   if (index == (vidNotifier.itemCount - 1)) {
-                            //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
-                            //     if (values.isNotEmpty) {
-                            //       vidNotifier.vidData = [...(vidNotifier.vidData ?? [] as List<ContentData>)] + values;
-                            //     }
-                            //   }
-                            //   // context.read<PreviewVidNotifier>().nextVideo = false;
-                            //   // context.read<PreviewVidNotifier>().initializeVideo = false;
-                            // },
-                            physics: NeverScrollableScrollPhysics(),
-                            // itemScrollController: itemScrollController,
-                            // itemPositionsListener: itemPositionsListener,
-                            // scrollOffsetController: scrollOffsetController,
-                            shrinkWrap: true,
-                            itemCount: vidNotifier.itemCount,
-                            itemBuilder: (BuildContext context, int index) {
-                              if (vidNotifier.vidData == null || homeNotifier.isLoadingVid) {
-                                vidNotifier.vidData?[index].fAliplayer?.pause();
-                                _lastCurIndex = -1;
-                                return CustomShimmer(
-                                  margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
-                                  height: context.getHeight() / 8,
-                                  width: double.infinity,
-                                );
-                              } else if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
-                                return const CustomLoading(size: 5);
-                              }
-                              // if (_curIdx == 0 && vidNotifier.vidData?[0].reportedStatus == 'BLURRED') {
-                              //   isPlay = false;
-                              //   vidNotifier.vidData?[index].fAliplayer?.stop();
-                              // }
-                              final vidData = vidNotifier.vidData?[index];
-
-                              return itemVid(vidData ?? ContentData(), vidNotifier, index, homeNotifier);
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onPanDown: (detail) {
+            _initializeTimer();
+          },
+          child: Column(
+            children: [
+              (vidNotifier.vidData != null)
+                  ? (vidNotifier.vidData?.isEmpty ?? true)
+                      ? const NoResultFound()
+                      : Expanded(
+                          child: NotificationListener<OverscrollIndicatorNotification>(
+                            onNotification: (overscroll) {
+                              print(overscroll);
+                              overscroll.disallowIndicator();
+                              return true;
                             },
+                            child: ListView.builder(
+                              // child: ScrollablePositionedList.builder(
+                              // controller: vidNotifier.pageController,
+                              // onPageChanged: (index) async {
+                              //   print('HyppePreviewVid index : $index');
+                              //   if (index == (vidNotifier.itemCount - 1)) {
+                              //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
+                              //     if (values.isNotEmpty) {
+                              //       vidNotifier.vidData = [...(vidNotifier.vidData ?? [] as List<ContentData>)] + values;
+                              //     }
+                              //   }
+                              //   // context.read<PreviewVidNotifier>().nextVideo = false;
+                              //   // context.read<PreviewVidNotifier>().initializeVideo = false;
+                              // },
+                              physics: NeverScrollableScrollPhysics(),
+                              // itemScrollController: itemScrollController,
+                              // itemPositionsListener: itemPositionsListener,
+                              // scrollOffsetController: scrollOffsetController,
+                              shrinkWrap: true,
+                              itemCount: vidNotifier.itemCount,
+                              itemBuilder: (BuildContext context, int index) {
+                                if (vidNotifier.vidData == null || homeNotifier.isLoadingVid) {
+                                  vidNotifier.vidData?[index].fAliplayer?.pause();
+                                  _lastCurIndex = -1;
+                                  return CustomShimmer(
+                                    margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
+                                    height: context.getHeight() / 8,
+                                    width: double.infinity,
+                                  );
+                                } else if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
+                                  return const CustomLoading(size: 5);
+                                }
+                                // if (_curIdx == 0 && vidNotifier.vidData?[0].reportedStatus == 'BLURRED') {
+                                //   isPlay = false;
+                                //   vidNotifier.vidData?[index].fAliplayer?.stop();
+                                // }
+                                final vidData = vidNotifier.vidData?[index];
+        
+                                return itemVid(vidData ?? ContentData(), vidNotifier, index, homeNotifier);
+                              },
+                            ),
                           ),
-                        ),
-                      )
-                : ListView.builder(
-                    itemCount: 5,
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return CustomShimmer(
-                        margin: const EdgeInsets.only(bottom: 30, right: 16, left: 16),
-                        height: context.getHeight() / 8,
-                        width: double.infinity,
-                      );
-                    }),
-          ],
+                        )
+                  : ListView.builder(
+                      itemCount: 5,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return CustomShimmer(
+                          margin: const EdgeInsets.only(bottom: 30, right: 16, left: 16),
+                          height: context.getHeight() / 8,
+                          width: double.infinity,
+                        );
+                      }),
+            ],
+          ),
         ),
       ),
     );

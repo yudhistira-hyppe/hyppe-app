@@ -128,7 +128,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     });
 
     Wakelock.enable();
-    "+++++++++++ wakelock enable".logger();
     _initializeTimer();
     super.initState();
   }
@@ -509,7 +508,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     _pauseScreen();
     ShowBottomSheet().onShowColouredSheet(
       context,
-      context.read<TranslateNotifierV2>().translate.warningInavtivity,
+      context.read<TranslateNotifierV2>().translate.warningInavtivityDiary,
       maxLines: 2,
       color: kHyppeLightBackground,
       textColor: kHyppeTextLightPrimary,

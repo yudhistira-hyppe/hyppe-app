@@ -178,7 +178,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
               widget.subCaption != null
                   ? const SizedBox.shrink()
                   : SizedBox(
-                      // width: 50,
+                      width: (widget.textButton?.length ?? 0) <= 2 ? 50 : null,
                       height: 50,
                       child: CustomTextButton(
                         onPressed: () => _conditionalFunction(),
