@@ -796,6 +796,7 @@ class LocalizationModelV2 {
   String? by;
   String? night;
   String? boostedPostList;
+  String? stringContinue;
   String? reach;
   String? viewDetails;
   String? scheduled;
@@ -1766,6 +1767,7 @@ class LocalizationModelV2 {
     this.by,
     this.night,
     this.boostedPostList,
+    this.stringContinue,
     this.reach,
     this.viewDetails,
     this.scheduled,
@@ -2760,6 +2762,7 @@ class LocalizationModelV2 {
     by = json["by"];
     night = json["night"];
     boostedPostList = json["boostedPostList"];
+    stringContinue = json["stringContinue"];
     reach = json["reach"];
     viewDetails = json["viewDetails"];
     scheduled = json["scheduled"];
