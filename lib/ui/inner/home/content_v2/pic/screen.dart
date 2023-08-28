@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
@@ -138,13 +139,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
 
       //scroll
-      var notifierMain = context.read<MainNotifier>();
-      notifierMain.globalKey.currentState?.innerController.addListener(() {
-        print("==1111=====");
-        var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-        print(offset);
-        toPosition(offset);
-      });
+      if (mounted) {
+        var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
+        notifierMain?.globalKey.currentState?.innerController.addListener(() {
+          var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
+          if (mounted) toPosition(offset, notifier, notifierMain);
+        });
+      }
 
       _initListener();
     });
@@ -292,38 +293,44 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   double lastOffset = 0;
 
-  void toPosition(offset) async {
+  void toPosition(offset, notifier, notifierMain) async {
     double totItemHeight = 0;
     double totItemHeightParam = 0;
-    final notifier = context.read<PreviewPicNotifier>();
+
     if (offset > lastOffset) {
+      homeClick = false;
       for (var i = 0; i <= _curIdx; i++) {
         if (i == _curIdx) {
           totItemHeightParam += (notifier.pic?[i].height ?? 0.0) * 30 / 100;
         } else {
+          print("=-=-=-index=-=-=-= $i");
           totItemHeightParam += notifier.pic?[i].height ?? 0.0;
         }
         totItemHeight += notifier.pic?[i].height ?? 0.0;
       }
       if (offset >= totItemHeightParam) {
         var position = totItemHeight;
-        await widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 400), curve: Curves.ease);
+        if (mounted) widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     } else {
-      for (var i = 0; i < _curIdx; i++) {
-        if (i == _curIdx - 1) {
-          totItemHeightParam += (notifier.pic?[i].height ?? 0.0) * 75 / 100;
-        } else if (i == _curIdx) {
-        } else {
-          totItemHeightParam += notifier.pic?[i].height ?? 0.0;
+      if (!homeClick) {
+        for (var i = 0; i < _curIdx; i++) {
+          if (i == _curIdx - 1) {
+            totItemHeightParam += (notifier.pic?[i].height ?? 0.0) * 75 / 100;
+          } else if (i == _curIdx) {
+          } else {
+            totItemHeightParam += notifier.pic?[i].height ?? 0.0;
+          }
+          totItemHeight += notifier.pic?[i].height ?? 0.0;
         }
-        totItemHeight += notifier.pic?[i].height ?? 0.0;
-      }
-      totItemHeight -= notifier.pic?[_curIdx - 1].height ?? 0.0;
+        if (_curIdx > 0) {
+          totItemHeight -= notifier.pic?[_curIdx - 1].height ?? 0.0;
+        }
 
-      if (offset <= totItemHeightParam) {
-        var position = totItemHeight;
-        await widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 400), curve: Curves.ease);
+        if (offset <= totItemHeightParam) {
+          var position = totItemHeight;
+          if (mounted) widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        }
       }
     }
     lastOffset = offset;
@@ -461,6 +468,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   @override
   void dispose() {
     print("---=-=-=-=--===-=-=-=-DiSPOSE--=-=-=-=-=-=-=-=-=-=-=----==-=");
+    fAliplayer?.destroy();
 
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
@@ -804,6 +812,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                       _curIdx = index;
                       _curPostId = picData?.postID ?? index.toString();
                       if (_lastCurIndex > _curIdx) {
+                        // fAliplayer?.destroy();
                         double position = 0.0;
                         for (var i = 0; i < _curIdx; i++) {
                           position += notifier.pic?[i].height ?? 0.0;
@@ -816,6 +825,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                       if (_lastCurPostId != _curPostId) {
                         final indexList = notifier.pic?.indexWhere((element) => element.postID == _curPostId);
                         final latIndexList = notifier.pic?.indexWhere((element) => element.postID == _lastCurPostId);
+                        if (indexList == (notifier.pic?.length ?? 0) - 1) {
+                          context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
+                        }
                         if (picData?.music != null) {
                           print("ada musiknya ${picData?.music}");
                           Future.delayed(const Duration(milliseconds: 100), () {

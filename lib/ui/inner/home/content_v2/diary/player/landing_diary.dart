@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
@@ -128,13 +129,15 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
       _initListener();
       //scroll
-      var notifierMain = context.read<MainNotifier>();
-      notifierMain.globalKey.currentState?.innerController.addListener(() {
-        print("==1111=====");
-        var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-        print(offset);
-        toPosition(offset);
-      });
+      if (mounted) {
+        var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
+        notifierMain?.globalKey.currentState?.innerController.addListener(() {
+          var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
+          if (mounted) {
+            toPosition(offset);
+          }
+        });
+      }
     });
 
     Wakelock.enable();
@@ -153,9 +156,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         try {
           isPrepare = true;
           _showLoading = false;
-          if (mounted) {
-            setState(() {});
-          }
+          if (mounted) {}
         } catch (e) {
           e.logger();
         }
@@ -186,7 +187,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
-          setState(() {});
+          if (mounted) setState(() {});
           break;
         default:
       }
@@ -333,6 +334,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     double totItemHeightParam = 0;
     final notifier = context.read<PreviewDiaryNotifier>();
     if (offset > lastOffset) {
+      homeClick = false;
       for (var i = 0; i <= _curIdx; i++) {
         if (i == _curIdx) {
           totItemHeightParam += (notifier.diaryData?[i].height ?? 0.0) * 30 / 100;
@@ -343,23 +345,27 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       }
       if (offset >= totItemHeightParam) {
         var position = totItemHeight;
-        await widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 400), curve: Curves.ease);
+        if (mounted) widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
       }
     } else {
-      for (var i = 0; i < _curIdx; i++) {
-        if (i == _curIdx - 1) {
-          totItemHeightParam += (notifier.diaryData?[i].height ?? 0.0) * 75 / 100;
-        } else if (i == _curIdx) {
-        } else {
-          totItemHeightParam += notifier.diaryData?[i].height ?? 0.0;
+      if (!homeClick) {
+        for (var i = 0; i < _curIdx; i++) {
+          if (i == _curIdx - 1) {
+            totItemHeightParam += (notifier.diaryData?[i].height ?? 0.0) * 75 / 100;
+          } else if (i == _curIdx) {
+          } else {
+            totItemHeightParam += notifier.diaryData?[i].height ?? 0.0;
+          }
+          totItemHeight += notifier.diaryData?[i].height ?? 0.0;
         }
-        totItemHeight += notifier.diaryData?[i].height ?? 0.0;
-      }
-      totItemHeight -= notifier.diaryData?[_curIdx - 1].height ?? 0.0;
+        if (_curIdx > 0) {
+          totItemHeight -= notifier.diaryData?[_curIdx - 1].height ?? 0.0;
+        }
 
-      if (offset <= totItemHeightParam) {
-        var position = totItemHeight;
-        await widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 400), curve: Curves.ease);
+        if (offset <= totItemHeightParam) {
+          var position = totItemHeight;
+          if (mounted) widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
+        }
       }
     }
     lastOffset = offset;
@@ -388,11 +394,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         await getOldVideoUrl(data.postID ?? '');
       }
     }
-
-    setState(() {
-      isPause = false;
-      // _isFirstRenderShow = false;
-    });
+    if (mounted) {
+      setState(() {
+        isPause = false;
+        // _isFirstRenderShow = false;
+      });
+    }
     // var configMap = {
     //   'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
     //   'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
@@ -468,9 +475,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   }
 
   Future getOldVideoUrl(String postId) async {
-    setState(() {
-      isloading = true;
-    });
+    if (mounted) {
+      setState(() {
+        isloading = true;
+      });
+    }
     try {
       final notifier = PostsBloc();
       await notifier.getOldVideo(context, apsaraId: postId, check: false);
@@ -479,15 +488,19 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         Map jsonMap = json.decode(fetch.data.toString());
 
         fAliplayer?.setUrl(jsonMap['data']['url']);
-        setState(() {
-          isloading = false;
-        });
+        if (mounted) {
+          setState(() {
+            isloading = false;
+          });
+        }
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
-      setState(() {
-        isloading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isloading = false;
+        });
+      }
       // 'Failed to fetch ads data $e'.logger();
     }
   }
@@ -851,11 +864,13 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         fAliplayer?.stop();
                         fAliplayer?.clearScreen();
                         // Wakelock.disable();
-                        setState(() {
-                          Future.delayed(Duration(milliseconds: 400), () {
-                            itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;
+                        if (mounted) {
+                          setState(() {
+                            Future.delayed(Duration(milliseconds: 400), () {
+                              itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;
+                            });
                           });
-                        });
+                        }
                         Future.delayed(const Duration(milliseconds: 700), () {
                           start(Routing.navigatorKey.currentContext ?? context, data ?? ContentData());
                           System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, data ?? ContentData(), check: false);
@@ -914,15 +929,17 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   child: GestureDetector(
                                     onTap: () {
                                       fAliplayer?.play();
-                                      setState(() {
-                                        isMute = !isMute;
-                                      });
+                                      if (mounted) {
+                                        setState(() {
+                                          isMute = !isMute;
+                                        });
+                                      }
                                       fAliplayer?.setMuted(isMute);
                                     },
                                     onDoubleTap: () {
                                       final _likeNotifier = context.read<LikeNotifier>();
                                       if (data != null) {
-                                        _likeNotifier.likePost(context, data ?? ContentData());
+                                        _likeNotifier.likePost(context, data);
                                       }
                                     },
                                     child: Container(
@@ -1313,9 +1330,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
             alignment: Alignment.bottomRight,
             child: GestureDetector(
               onTap: () {
-                setState(() {
-                  isMute = !isMute;
-                });
+                if (mounted) {
+                  setState(() {
+                    isMute = !isMute;
+                  });
+                }
                 fAliplayer?.setMuted(isMute);
               },
               child: Padding(

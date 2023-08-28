@@ -7,6 +7,7 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/home/widget/profile.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -102,7 +103,13 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                       // } else {
                       tapMenu(0, notifier, consumerContext);
                       if (notifier.scrollController.hasClients) {
-                        notifier.scrollController.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.elasticOut);
+                        homeClick = true;
+                        Routing.navigatorKey.currentState?.overlay?.context
+                            .read<MainNotifier>()
+                            .globalKey
+                            .currentState
+                            ?.innerController
+                            .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.ease);
                       }
                       Future.delayed(const Duration(milliseconds: 1000), () {});
 
@@ -246,6 +253,4 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
       await notifier.onShowPostContent(consumerContext);
     }
   }
-
-
 }

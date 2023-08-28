@@ -99,13 +99,13 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     lang = context.read<TranslateNotifierV2>().translate;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       //scroll
-      var notifierMain = context.read<MainNotifier>();
-      notifierMain.globalKey.currentState?.innerController.addListener(() {
-        print("==1111=====");
-        var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-        print(offset);
-        toPosition(offset);
-      });
+      if (mounted) {
+        var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
+        notifierMain?.globalKey.currentState?.innerController.addListener(() {
+          var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
+          if (mounted) toPosition(offset);
+        });
+      }
     });
 
     Wakelock.enable();
@@ -119,6 +119,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     double totItemHeightParam = 0;
     final notifier = context.read<PreviewVidNotifier>();
     if (offset > lastOffset) {
+      homeClick = false;
       for (var i = 0; i <= _curIdx; i++) {
         if (i == _curIdx) {
           totItemHeightParam += (notifier.vidData?[i].height ?? 0.0) * 30 / 100;
@@ -129,23 +130,27 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       }
       if (offset >= totItemHeightParam) {
         var position = totItemHeight;
-        await widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 400), curve: Curves.ease);
+        if (mounted) widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
       }
     } else {
-      for (var i = 0; i < _curIdx; i++) {
-        if (i == _curIdx - 1) {
-          totItemHeightParam += (notifier.vidData?[i].height ?? 0.0) * 75 / 100;
-        } else if (i == _curIdx) {
-        } else {
-          totItemHeightParam += notifier.vidData?[i].height ?? 0.0;
+      if (!homeClick) {
+        for (var i = 0; i < _curIdx; i++) {
+          if (i == _curIdx - 1) {
+            totItemHeightParam += (notifier.vidData?[i].height ?? 0.0) * 75 / 100;
+          } else if (i == _curIdx) {
+          } else {
+            totItemHeightParam += notifier.vidData?[i].height ?? 0.0;
+          }
+          totItemHeight += notifier.vidData?[i].height ?? 0.0;
         }
-        totItemHeight += notifier.vidData?[i].height ?? 0.0;
-      }
-      totItemHeight -= notifier.vidData?[_curIdx - 1].height ?? 0.0;
+        if (_curIdx > 0) {
+          totItemHeight -= notifier.vidData?[_curIdx - 1].height ?? 0.0;
+        }
 
-      if (offset <= totItemHeightParam) {
-        var position = totItemHeight;
-        await widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 400), curve: Curves.ease);
+        if (offset <= totItemHeightParam) {
+          var position = totItemHeight;
+          if (mounted) widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
+        }
       }
     }
     lastOffset = offset;
