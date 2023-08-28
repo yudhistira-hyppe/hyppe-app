@@ -97,6 +97,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   double itemHeight = 0;
 
   Timer? _timer;
+  double lastOffset = -10;
 
   @override
   void initState() {
@@ -107,27 +108,15 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     notifier.scrollController.addListener(() => notifier.scrollListener(context));
     email = SharedPreference().readStorage(SpKeys.email);
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+    lastOffset = -10;
 
     // stopwatch = new Stopwatch()..start();
-    fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingpage');
 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       WidgetsBinding.instance.addObserver(this);
-      fAliplayer?.pause();
-      fAliplayer?.setAutoPlay(true);
-      // fAliplayer?.setLoop(true);
+      initAlipayer();
 
-      //Turn on mix mode
-      if (Platform.isIOS) {
-        FlutterAliplayer.enableMix(true);
-        // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
-      }
-
-      //set player
-      fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-      _initListener();
       //scroll
       if (mounted) {
         var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
@@ -143,6 +132,24 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     Wakelock.enable();
     _initializeTimer();
     super.initState();
+  }
+
+  initAlipayer() {
+    fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingpage');
+    fAliplayer?.pause();
+    fAliplayer?.setAutoPlay(true);
+    // fAliplayer?.setLoop(true);
+
+    //Turn on mix mode
+    if (Platform.isIOS) {
+      FlutterAliplayer.enableMix(true);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
+    }
+
+    //set player
+    fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
+    fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+    _initListener();
   }
 
   _initListener() {
@@ -328,11 +335,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     });
   }
 
-  double lastOffset = 0;
   void toPosition(offset) async {
     double totItemHeight = 0;
     double totItemHeightParam = 0;
     final notifier = context.read<PreviewDiaryNotifier>();
+    print("kkkkkkkkkk");
+    print(lastOffset);
     if (offset > lastOffset) {
       homeClick = false;
       for (var i = 0; i <= _curIdx; i++) {
@@ -596,6 +604,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
     fAliplayer?.stop();
+    fAliplayer?.destroy();
     _pauseScreen();
     // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
     //   fAliplayer?.destroy();
@@ -861,6 +870,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       final indexList = notifier.diaryData?.indexWhere((element) => element.postID == _curPostId);
                       final latIndexList = notifier.diaryData?.indexWhere((element) => element.postID == _lastCurPostId);
                       if (_lastCurPostId != _curPostId) {
+                        fAliplayer?.destroy();
+                        initAlipayer();
                         fAliplayer?.stop();
                         fAliplayer?.clearScreen();
                         Wakelock.disable();
@@ -1133,7 +1144,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                         ),
                                         onTap: () {
                                           if (data != null) {
-                                            likeNotifier.likePost(context, data ?? ContentData());
+                                            likeNotifier.likePost(context, data);
                                           }
                                         },
                                       ),

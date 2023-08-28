@@ -197,6 +197,7 @@ class ContentData {
   bool? isPlay;
   double? height;
   int? limitLandingpage;
+  double? imageHeightTemp;
 
   ContentData({
     this.metadata,
@@ -261,6 +262,7 @@ class ContentData {
     this.isPlay = false,
     this.height = 0.0,
     this.limitLandingpage,
+    this.imageHeightTemp,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -364,6 +366,7 @@ class ContentData {
       }
     }
     limitLandingpage = json['limitLandingpage'] ?? 0;
+    imageHeightTemp = json['imageHeightTemp'] ?? 0;
   }
 
   Map<String, dynamic> toJson() {

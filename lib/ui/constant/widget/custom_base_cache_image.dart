@@ -82,6 +82,7 @@ class CustomBaseCacheImage extends StatelessWidget {
               memCacheHeight: 60,
               memCacheWidth: 45,
               imageBuilder: imageBuilder,
+
               // filterQuality: FilterQuality.none,
               // cacheManager: CacheManager(Config(
               //   'keyImage',

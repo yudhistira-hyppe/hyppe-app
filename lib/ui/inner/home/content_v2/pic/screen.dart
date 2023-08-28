@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/app.dart';
@@ -110,6 +111,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   double itemHeight = 0;
   ScrollController controller = ScrollController();
   ScrollPhysics scrollPhysic = const NeverScrollableScrollPhysics();
+  double lastOffset = 0;
 
   @override
   void initState() {
@@ -120,6 +122,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     email = SharedPreference().readStorage(SpKeys.email);
     // statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     // stopwatch = new Stopwatch()..start();
+    lastOffset = -10;
     super.initState();
     // _primaryScrollController = widget.scrollController!;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -142,7 +145,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       if (mounted) {
         var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
         notifierMain?.globalKey.currentState?.innerController.addListener(() {
-          var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
+          double offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
           if (mounted) toPosition(offset, notifier, notifierMain);
         });
       }
@@ -291,13 +294,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     });
   }
 
-  double lastOffset = 0;
-
   void toPosition(offset, notifier, notifierMain) async {
     double totItemHeight = 0;
     double totItemHeightParam = 0;
+    print("offset $offset");
+    print("lastOffset $lastOffset");
 
-    if (offset > lastOffset) {
+    if (offset >= lastOffset) {
       homeClick = false;
       for (var i = 0; i <= _curIdx; i++) {
         if (i == _curIdx) {
@@ -696,6 +699,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               children: [
                 // Text("total ${notifier.picTemp?.length}"),
                 // Text("itemHeight $itemHeight"),
+                Text("height ${picData?.imageHeightTemp}"),
                 // Text("$_lastCurIndex"),
                 // Text("$_curIdx"),
                 // GestureDetector(
@@ -924,6 +928,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           //     ),
                           //   ),
                           // ),
+
                           GestureDetector(
                             onTap: () {
                               if (picData?.reportedStatus != 'BLURRED') {
@@ -943,8 +948,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             child: Center(
                               child: Container(
                                 color: Colors.transparent,
+
                                 // width: SizeConfig.screenWidth,
-                                // height: SizeConfig.screenHeight,
+                                // height: picData?.imageHeightTemp,
                                 child: ZoomableImage(
                                   enable: homeNotifier.connectionError ? false : true,
                                   onScaleStart: () {
@@ -956,48 +962,41 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   child: ValueListenableBuilder(
                                       valueListenable: _networklHasErrorNotifier,
                                       builder: (BuildContext context, int count, _) {
-                                        return CustomBaseCacheImage(
-                                          cacheKey: "${picData?.postID}-${_networklHasErrorNotifier.value.toString()}",
-                                          memCacheWidth: 100,
-                                          memCacheHeight: 100,
-                                          widthPlaceHolder: 80,
-                                          heightPlaceHolder: 80,
-                                          imageUrl: (picData?.isApsara ?? false) ? (picData?.mediaThumbEndPoint ?? "") : "${picData?.fullThumbPath}",
-                                          imageBuilder: (context, imageProvider) => ClipRRect(
-                                            borderRadius: BorderRadius.circular(20), // Image border
-                                            child: picData?.reportedStatus == 'BLURRED'
-                                                ? ImageFiltered(
-                                                    imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                                    child: Image(
+                                        return ImageSize(
+                                          onChange: (Size size) {
+                                            Future.delayed(Duration(milliseconds: 300), () {
+                                              setState(() {
+                                                picData?.imageHeightTemp = size.height;
+                                              });
+                                            });
+                                          },
+                                          child: CustomBaseCacheImage(
+                                            cacheKey: "${picData?.postID}-${_networklHasErrorNotifier.value.toString()}",
+                                            memCacheWidth: 100,
+                                            memCacheHeight: 100,
+                                            widthPlaceHolder: 80,
+                                            heightPlaceHolder: 80,
+                                            imageUrl: (picData?.isApsara ?? false) ? (picData?.mediaThumbEndPoint ?? "") : "${picData?.fullThumbPath}",
+                                            imageBuilder: (context, imageProvider) => ClipRRect(
+                                              borderRadius: BorderRadius.circular(20), // Image border
+                                              child: picData?.reportedStatus == 'BLURRED'
+                                                  ? ImageFiltered(
+                                                      imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                                      child: Image(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.fitHeight,
+                                                        width: SizeConfig.screenWidth,
+                                                        height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
+                                                      ),
+                                                    )
+                                                  : Image(
                                                       image: imageProvider,
                                                       fit: BoxFit.fitHeight,
                                                       width: SizeConfig.screenWidth,
+                                                      height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
                                                     ),
-                                                  )
-                                                : Image(
-                                                    image: imageProvider,
-                                                    fit: BoxFit.fitHeight,
-                                                    width: SizeConfig.screenWidth,
-                                                  ),
-                                          ),
-                                          emptyWidget: GestureDetector(
-                                            onTap: () {
-                                              _networklHasErrorNotifier.value++;
-                                              // reloadImage(index);
-                                            },
-                                            child: Container(
-                                                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                                width: SizeConfig.screenWidth,
-                                                height: 250,
-                                                padding: EdgeInsets.all(20),
-                                                alignment: Alignment.center,
-                                                child: CustomTextWidget(
-                                                  textToDisplay: lang?.couldntLoadImage ?? 'Error',
-                                                  maxLines: 3,
-                                                )),
-                                          ),
-                                          errorWidget: (context, url, error) {
-                                            return GestureDetector(
+                                            ),
+                                            emptyWidget: GestureDetector(
                                               onTap: () {
                                                 _networklHasErrorNotifier.value++;
                                                 // reloadImage(index);
@@ -1006,14 +1005,32 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                   decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
                                                   width: SizeConfig.screenWidth,
                                                   height: 250,
-                                                  padding: const EdgeInsets.all(20),
+                                                  padding: EdgeInsets.all(20),
                                                   alignment: Alignment.center,
                                                   child: CustomTextWidget(
                                                     textToDisplay: lang?.couldntLoadImage ?? 'Error',
                                                     maxLines: 3,
                                                   )),
-                                            );
-                                          },
+                                            ),
+                                            errorWidget: (context, url, error) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  _networklHasErrorNotifier.value++;
+                                                  // reloadImage(index);
+                                                },
+                                                child: Container(
+                                                    decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                                    width: SizeConfig.screenWidth,
+                                                    height: 250,
+                                                    padding: const EdgeInsets.all(20),
+                                                    alignment: Alignment.center,
+                                                    child: CustomTextWidget(
+                                                      textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                                      maxLines: 3,
+                                                    )),
+                                              );
+                                            },
+                                          ),
                                         );
                                       }),
                                 ),
@@ -1358,5 +1375,45 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 )),
           )
         : Container();
+  }
+}
+
+class ImageSize extends StatefulWidget {
+  final Widget child;
+  final Function onChange;
+
+  const ImageSize({
+    Key? key,
+    required this.onChange,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  State<ImageSize> createState() => _ImageSizeState();
+}
+
+class _ImageSizeState extends State<ImageSize> {
+  @override
+  Widget build(BuildContext context) {
+    SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
+
+    return Container(
+      key: widgetKey,
+      child: widget.child,
+    );
+  }
+
+  var widgetKey = GlobalKey();
+  var oldSize;
+
+  void postFrameCallback(_) {
+    var context = widgetKey.currentContext;
+    if (context == null) return;
+
+    var newSize = context.size;
+    if (oldSize == newSize) return;
+
+    oldSize = newSize;
+    widget.onChange(newSize);
   }
 }
