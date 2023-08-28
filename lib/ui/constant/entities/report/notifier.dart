@@ -174,7 +174,7 @@ class ReportNotifier with ChangeNotifier {
     _loadingOption = false;
   }
 
-  Future reportPost(BuildContext context, {bool inDetail = true}) async {
+  Future reportPost(BuildContext context, {bool inDetail = true, Function()? onComplete}) async {
     isLoading = true;
     final data = {
       "postID": contentData != null ? contentData?.postID ?? '' : adsData?.adsId ?? '',
@@ -210,6 +210,9 @@ class ReportNotifier with ChangeNotifier {
       // if (inDetail) {
       //   Routing().moveBack();
       // }
+      if(onComplete != null){
+        onComplete();
+      }
       final language = context.read<TranslateNotifierV2>().translate;
       ShowBottomSheet()
           .onShowColouredSheet(context, language.reportReceived ?? '', subCaption: language.yourReportWillbeHandledImmediately, color: kHyppeTextSuccess, milisecond: 1000, dismissible: false);

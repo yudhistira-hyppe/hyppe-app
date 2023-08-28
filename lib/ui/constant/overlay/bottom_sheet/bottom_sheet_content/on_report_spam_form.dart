@@ -18,7 +18,7 @@ class OnReportSpamFormBottomSheet extends StatefulWidget {
   final String? type;
   final bool inDetail;
   final String? keyInt;
-  final Function? onUpdate;
+  final Function()? onUpdate;
 
   const OnReportSpamFormBottomSheet({
     Key? key,
@@ -145,8 +145,7 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                                   function: notifier.isLoading
                                       ? null
                                       : () {
-                                          notifier.reportPost(context, inDetail: widget.inDetail).whenComplete(() {
-                                            if (widget.onUpdate != null) widget.onUpdate;
+                                          notifier.reportPost(context, inDetail: widget.inDetail, onComplete: widget.onUpdate).whenComplete(() {
                                             globalAfterReport = true;
                                           });
                                         },

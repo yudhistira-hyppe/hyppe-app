@@ -550,7 +550,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             context.read<PreviewPicNotifier>().reportContent(context, vidData, fAliplayer: vidData.fAliplayer, onCompleted: () async {
                               imageCache.clear();
                               imageCache.clearLiveImages();
-                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
                             });
                           } else {
                             if (_curIdx != -1) {
@@ -565,7 +565,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               onDetail: false,
                               isShare: vidData.isShared,
                               onUpdate: () {
-                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
                               },
                               fAliplayer: vidData.fAliplayer,
                             );

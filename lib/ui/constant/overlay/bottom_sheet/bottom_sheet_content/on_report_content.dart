@@ -18,8 +18,9 @@ class OnReportContentBottomSheet extends StatelessWidget {
   final Function? onUpdate;
   final bool? inDetail;
   final String? keyInt;
+  final Function() onCompleted;
 
-  const OnReportContentBottomSheet({Key? key, this.postData, this.type, this.onUpdate, this.adsData, this.inDetail, this.keyInt}) : super(key: key);
+  const OnReportContentBottomSheet({Key? key, required this.onCompleted, this.postData, this.type, this.onUpdate, this.adsData, this.inDetail, this.keyInt}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -55,7 +56,7 @@ class OnReportContentBottomSheet extends StatelessWidget {
                 print('postData?.postID');
                 print(postData?.postID);
                 Routing().moveBack();
-                ShowBottomSheet.onReportSpamContent(context, postData: postData, type: type, onUpdate: onUpdate, adsData: adsData, inDetail: inDetail, key: keyInt);
+                ShowBottomSheet.onReportSpamContent(context, postData: postData, type: type, onUpdate: onUpdate, adsData: adsData, inDetail: inDetail, key: keyInt, onComplete: onCompleted);
                 context.read<ReportNotifier>().contentData = postData;
                 context.read<ReportNotifier>().adsData = adsData;
                 context.read<ReportNotifier>().typeContent = type ?? '';

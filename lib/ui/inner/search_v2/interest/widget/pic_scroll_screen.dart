@@ -461,7 +461,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
         break;
       case AppLifecycleState.resumed:
         print("========= resumed");
-        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
+        if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
           fAliplayer?.play();
         }
         break;
