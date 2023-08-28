@@ -764,6 +764,7 @@ class ShowBottomSheet {
               adsData: adsData,
               inDetail: inDetail,
               keyInt: key,
+              onCompleted: onCompleted ?? (){},
             ),
           ),
         );
@@ -771,9 +772,6 @@ class ShowBottomSheet {
     ).whenComplete(() {
       if (fAliplayer != null) {
         fAliplayer.pause();
-      }
-      if(onCompleted != null){
-        onCompleted();
       }
     });
   }
@@ -804,7 +802,7 @@ class ShowBottomSheet {
     });
   }
 
-  static onReportSpamContent(_, {StoryController? storyController, ContentData? postData, AdsData? adsData, String? type, Function? onUpdate, bool? inDetail, String? key}) {
+  static onReportSpamContent(_, {StoryController? storyController, ContentData? postData, AdsData? adsData, String? type, Function? onUpdate, bool? inDetail, String? key, Function()? onComplete}) {
     showModalBottomSheet(
       context: _,
       isScrollControlled: true,
@@ -828,6 +826,7 @@ class ShowBottomSheet {
                 type: type,
                 inDetail: inDetail ?? true,
                 keyInt: key,
+                onUpdate: onComplete,
               ),
             ),
           ),

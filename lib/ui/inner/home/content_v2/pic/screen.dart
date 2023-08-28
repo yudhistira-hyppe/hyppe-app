@@ -579,7 +579,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: notifier.itemCount == 0
+              child: (notifier.pic == null || home.isLoadingPict) ? ListView.builder(itemBuilder: (context, index){
+                return CustomShimmer(
+                  width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                  height: 168,
+                  radius: 8,
+                  margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                );
+              }, itemCount: 5,): notifier.itemCount == 0
                   ? const NoResultFound()
                   : NotificationListener<OverscrollIndicatorNotification>(
                       onNotification: (overscroll) {
@@ -636,6 +644,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             fAliplayer?.pause();
                             // _lastCurIndex = -1;
                             _lastCurPostId = '';
+                            // return Container(
+                            //   alignment: Alignment.center,
+                            //   child: Text('Test'),
+                            // );
                             return CustomShimmer(
                               width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
                               height: 168,
@@ -781,7 +793,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           context.read<PreviewPicNotifier>().reportContent(context, picData ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
                             imageCache.clear();
                             imageCache.clearLiveImages();
-                            await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                            await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
                           });
                         } else {
                           fAliplayer?.setMuted(true);
@@ -793,7 +805,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             onDetail: false,
                             isShare: picData?.isShared,
                             onUpdate: () {
-                              (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                              (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 0);
                             },
                             fAliplayer: fAliplayer,
                           );

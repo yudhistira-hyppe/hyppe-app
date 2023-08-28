@@ -91,8 +91,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
 
   @override
   void dispose() {
-    // close = true;
-
+    close = true;
     super.dispose();
   }
 

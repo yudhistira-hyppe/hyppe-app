@@ -691,7 +691,15 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
-                child: notifier.diaryData != null && (notifier.diaryData?.isEmpty ?? true)
+                child: (notifier.diaryData == null || home.isLoadingDiary) ? ListView.builder(itemBuilder: (context, index){
+                  return CustomShimmer(
+                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                    height: 168,
+                    radius: 8,
+                    margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                  );
+                }, itemCount: 5,): notifier.diaryData != null && (notifier.diaryData?.isEmpty ?? true)
                     ? const NoResultFound()
                     : NotificationListener<OverscrollIndicatorNotification>(
                         onNotification: (overscroll) {
@@ -829,7 +837,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           context.read<PreviewPicNotifier>().reportContent(context, data ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
                             imageCache.clear();
                             imageCache.clearLiveImages();
-                            await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                            await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
                           });
                         } else {
                           fAliplayer?.setMuted(true);
@@ -841,7 +849,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                             onDetail: false,
                             isShare: data?.isShared,
                             onUpdate: () {
-                              (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                              (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
                             },
                             fAliplayer: fAliplayer,
                           );

@@ -709,61 +709,64 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
           margin: const EdgeInsets.only(left: 16, right: 16, bottom: 15),
           child: InkWell(
             onTap: () async {
-              if (secondsSkip < 1) {
-                if (data.adsUrlLink?.isEmail() ?? false) {
-                  final email = data.adsUrlLink!.replaceAll('email:', '');
-                  setState(() {
-                    loadLaunch = true;
-                  });
-
-                  print('second close ads: $secondsVideo');
-                  // Navigator.pop(context);
-                  // Future.delayed(const Duration(milliseconds: 800), () {
-                  //   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                  // });
-                  adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
-                    Navigator.pop(context);
-                    Future.delayed(const Duration(milliseconds: 800), () {
-                      Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+              if(!loadingAction){
+                if (secondsSkip < 1) {
+                  if (data.adsUrlLink?.isEmail() ?? false) {
+                    final email = data.adsUrlLink!.replaceAll('email:', '');
+                    setState(() {
+                      loadLaunch = true;
                     });
-                  });
-                } else {
-                  try {
-                    final uri = Uri.parse(data.adsUrlLink ?? '');
-                    print('bottomAdsLayout ${data.adsUrlLink}');
-                    if (await canLaunchUrl(uri)) {
+
+                    print('second close ads: $secondsVideo');
+                    // Navigator.pop(context);
+                    // Future.delayed(const Duration(milliseconds: 800), () {
+                    //   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                    // });
+                    adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
+                      Navigator.pop(context);
+                      Future.delayed(const Duration(milliseconds: 800), () {
+                        Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                      });
+                    });
+                  } else {
+                    try {
+                      final uri = Uri.parse(data.adsUrlLink ?? '');
+                      print('bottomAdsLayout ${data.adsUrlLink}');
+                      if (await canLaunchUrl(uri)) {
+                        setState(() {
+                          loadLaunch = true;
+                        });
+                        print('second close ads: $secondsVideo');
+                        // Navigator.pop(context);
+                        // await launchUrl(
+                        //   uri,
+                        //   mode: LaunchMode.externalApplication,
+                        // );
+                        adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
+                          Navigator.pop(context);
+                          await launchUrl(
+                            uri,
+                            mode: LaunchMode.externalApplication,
+                          );
+                        });
+                      } else {
+                        throw "Could not launch $uri";
+                      }
+                      // can't launch url, there is some error
+                    } catch (e) {
                       setState(() {
                         loadLaunch = true;
                       });
                       print('second close ads: $secondsVideo');
-                      // Navigator.pop(context);
-                      // await launchUrl(
-                      //   uri,
-                      //   mode: LaunchMode.externalApplication,
-                      // );
-                      adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
-                        Navigator.pop(context);
-                        await launchUrl(
-                          uri,
-                          mode: LaunchMode.externalApplication,
-                        );
+                      // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                      adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
+                        System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                       });
-                    } else {
-                      throw "Could not launch $uri";
                     }
-                    // can't launch url, there is some error
-                  } catch (e) {
-                    setState(() {
-                      loadLaunch = true;
-                    });
-                    print('second close ads: $secondsVideo');
-                    // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                    adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
-                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                    });
                   }
                 }
               }
+
             },
             child: Builder(builder: (context) {
               final learnMore = secondsSkip < 1 ? (notifier.translate.learnMore ?? 'Learn More') : "${notifier.translate.learnMore ?? 'Learn More'}($secondsSkip)";
@@ -977,7 +980,9 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
         adsId: data.adsId,
         useradsId: data.useradsId,
       );
-      await notifier.viewAdsBloc(context, request, isClick: isClick);
+
+      await Future.delayed(const Duration(seconds: 1));
+      // await notifier.viewAdsBloc(context, request, isClick: isClick);
 
       final fetch = notifier.adsDataFetch;
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {}
@@ -1310,39 +1315,41 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
           margin: const EdgeInsets.only(left: 16, right: 16, bottom: 15),
           child: InkWell(
             onTap: () async {
-              if (secondsSkip < 1) {
-                if (data.adsUrlLink?.isEmail() ?? false) {
-                  final email = data.adsUrlLink!.replaceAll('email:', '');
-                  Navigator.pop(context);
+              if(!loadingAction){
+                if (secondsSkip < 1) {
+                  if (data.adsUrlLink?.isEmail() ?? false) {
+                    final email = data.adsUrlLink!.replaceAll('email:', '');
 
-                  print('second close ads: $secondsVideo');
-                  await adsView(widget.data, secondsVideo, isClick: true);
-                  Future.delayed(const Duration(milliseconds: 500), () {
-                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                  });
-                } else {
-                  try {
-                    final uri = Uri.parse(data.adsUrlLink ?? '');
-                    print('bottomAdsLayout ${data.adsUrlLink}');
-                    if (await canLaunchUrl(uri)) {
-                      print('second close ads: $secondsVideo');
-                      await adsView(widget.data, secondsVideo, isClick: true);
-                      Navigator.pop(context);
-                      await launchUrl(
-                        uri,
-                        mode: LaunchMode.externalApplication,
-                      );
-                    } else {
-                      throw "Could not launch $uri";
-                    }
-                    // can't launch url, there is some error
-                  } catch (e) {
+
                     print('second close ads: $secondsVideo');
                     await adsView(widget.data, secondsVideo, isClick: true);
-                    System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                    });
+                  } else {
+                    try {
+                      final uri = Uri.parse(data.adsUrlLink ?? '');
+                      print('bottomAdsLayout ${data.adsUrlLink}');
+                      if (await canLaunchUrl(uri)) {
+                        print('second close ads: $secondsVideo');
+                        await adsView(widget.data, secondsVideo, isClick: true);
+                        await launchUrl(
+                          uri,
+                          mode: LaunchMode.externalApplication,
+                        );
+                      } else {
+                        throw "Could not launch $uri";
+                      }
+                      // can't launch url, there is some error
+                    } catch (e) {
+                      print('second close ads: $secondsVideo');
+                      await adsView(widget.data, secondsVideo, isClick: true);
+                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                    }
                   }
                 }
               }
+
             },
             child: Builder(builder: (context) {
               final learnMore = secondsSkip < 1 ? (notifier.translate.learnMore ?? 'Learn More') : "${notifier.translate.learnMore ?? 'Learn More'}($secondsSkip)";
