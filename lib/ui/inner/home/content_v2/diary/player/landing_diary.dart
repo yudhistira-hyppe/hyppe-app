@@ -548,7 +548,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     "========== initializeTimer".logger();
     if (!(await Wakelock.enabled)) Wakelock.enable();
     if (_timer != null) _timer?.cancel();
-    _timer = Timer(const Duration(seconds: 300), () => _handleInactivity());
+    _timer = Timer(const Duration(seconds: 30), () => _handleInactivity());
   }
 
   void _handleInactivity() {
@@ -837,9 +837,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                   // key: Key(index.toString()),
                   key: Key(data?.postID ?? index.toString()),
                   onVisibilityChanged: (info) {
-                    if (info.visibleFraction == 1.0) {
-                      Wakelock.enable();
-                    }
+                    // if (info.visibleFraction == 1.0) {
+                    //   Wakelock.enable();
+                    // }
                     if (info.visibleFraction >= 0.6) {
                       _curIdx = index;
 
@@ -850,7 +850,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       if (_lastCurPostId != _curPostId) {
                         fAliplayer?.stop();
                         fAliplayer?.clearScreen();
-                        Wakelock.disable();
+                        // Wakelock.disable();
                         setState(() {
                           Future.delayed(Duration(milliseconds: 400), () {
                             itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;

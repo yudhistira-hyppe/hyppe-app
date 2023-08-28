@@ -259,7 +259,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     "========== initializeTimer".logger();
     if (!(await Wakelock.enabled)) Wakelock.enable();
     if (_timer != null) _timer?.cancel();
-    _timer = Timer(const Duration(seconds: 300), () => _handleInactivity());
+    _timer = Timer(const Duration(seconds: 30), () => _handleInactivity());
   }
 
   void _handleInactivity() {
@@ -400,7 +400,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                           dataAli[_curIdx]?.pause();
                         }
 
-                        Wakelock.disable();
+                        // Wakelock.disable();
                         // notifier.vidData?[_curIdx].fAliplayerAds?.pause();
                         // setState(() {
                         //   _curIdx = -1;

@@ -125,7 +125,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                       ),
                       eightPx,
                       SizedBox(
-                        width: MediaQuery.of(context).size.width - (16 + 8 + 14 + ((widget.textButton?.length ?? 0) <= 2 ? 60 : 80)),
+                        width: MediaQuery.of(context).size.width - (16 + 8 + 14 + ((widget.textButton?.length ?? 0) <= 2 ? 60 : 90)),
                         child: CustomTextWidget(
                           maxLines: widget.maxLines,
                           textOverflow: widget.textOverflow,
@@ -177,7 +177,8 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
               ),
               widget.subCaption != null
                   ? const SizedBox.shrink()
-                  : SizedBox(
+                  : Container(
+                      padding:  EdgeInsets.only(right: (widget.textButton?.length ?? 0) <= 2 ? 0 : 10),
                       width: (widget.textButton?.length ?? 0) <= 2 ? 50 : null,
                       height: 50,
                       child: CustomTextButton(
