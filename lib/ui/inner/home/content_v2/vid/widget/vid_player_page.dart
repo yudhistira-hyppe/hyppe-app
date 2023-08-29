@@ -20,14 +20,17 @@ import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
@@ -212,8 +215,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.postID ?? 'video_player_landing');
         fAliplayer?.setAutoPlay(autoPlay);
         if (autoPlay) {
-          print("==================masuk wake lok");
-          Wakelock.enable();
+          print("================== vid player index ${widget.index}");
+          "===================== isPlaying ${widget.isPlaying}".logger();
+          // Wakelock.enable();
           setState(() {
             isloading = true;
           });
@@ -333,7 +337,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         print("aliyun : onStateChanged $newState");
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-            Wakelock.enable();
+            // Wakelock.enable();
             try {
               if (widget.isAutoPlay ?? false) {
                 System().increaseViewCount2(context, widget.data ?? ContentData());
@@ -351,29 +355,29 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusPaused:
             isPause = true;
-            Wakelock.disable();
+            // Wakelock.disable();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             isPlay = false;
             _showLoading = false;
             try {
-              Wakelock.disable();
+              // Wakelock.disable();
             } catch (e) {
               e.logger();
             }
             setState(() {});
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
-            Wakelock.disable();
+            // Wakelock.disable();
             if (widget.isAutoPlay ?? false) {
               widget.autoScroll?.call();
             }
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusError:
-            Wakelock.disable();
+            // Wakelock.disable();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusPrepared:
-            Wakelock.enable();
+            // Wakelock.enable();
             if (widget.isAutoPlay ?? false) {
               try {
                 if (mounted) {
@@ -536,6 +540,16 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       print(widget.playMode);
       print(widget.data!.isApsara);
       print(widget.data?.postID);
+      var vidNotifier = context.read<PreviewVidNotifier>();
+      double position = 0.0;
+      for (var i = 0; i < (widget.index ?? 0); i++) {
+        position += vidNotifier.vidData?[i].height ?? 0.0;
+      }
+      context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
+        position,
+        duration: const Duration(milliseconds: 700),
+        curve: Curves.easeOut,
+      );
       if (widget.data!.isApsara ?? false) {
         getAuth();
       } else {
@@ -622,6 +636,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               isloading = false;
             });
           });
+          // fAliplayer?.play();
           print('=2=2=2=2=2=2=2prepare done');
         }
       }
@@ -897,6 +912,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         break;
       case AppLifecycleState.paused:
         if (!_mEnablePlayBack) {
+          "=============== pause 4".logger();
           fAliplayer?.pause();
         }
         if (_networkSubscriptiion != null) {
@@ -912,14 +928,29 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   void didUpdateWidget(covariant VidPlayerPage oldWidget) {
     // If you want to react only to changes you could check
     // oldWidget.selectedIndex != widget.selectedIndex
-    // if (oldWidget.data != widget.data)
+    if (oldWidget.isPlaying != widget.isPlaying) {
+      "===================== isPlaying ${widget.isPlaying}".logger();
+      if (widget.isPlaying ?? true) {
+        fAliplayer?.play();
+      } else {
+        "=============== pause 0".logger();
+        fAliplayer?.pause();
+      }
+      // this syntax below to prevent video play after changing video
+      Future.delayed(const Duration(seconds: 1), () {
+        if (context.read<MainNotifier>().isInactiveState) {
+          "=============== pause 1".logger();
+          fAliplayer?.pause();
+        }
+      });
+    }
 
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
-    Wakelock.disable();
+    // Wakelock.disable();
     globalAliPlayer = null;
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
@@ -1303,6 +1334,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           isPause = false;
           setState(() {});
         } else {
+          "=============== pause 2".logger();
           fAliplayer?.pause();
           isPause = true;
           setState(() {});
@@ -1658,6 +1690,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                               changevalue = _videoDuration;
                             }
                             if (widget.orientation == Orientation.portrait) {
+                              "=============== pause 3".logger();
                               fAliplayer?.pause();
                               SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
                               if ((widget.data?.metadata?.height ?? 0) < (widget.data?.metadata?.width ?? 0)) {

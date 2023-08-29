@@ -96,8 +96,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   String statusKyc = '';
   double itemHeight = 0;
 
-  Timer? _timer;
-
   @override
   void initState() {
     "++++++++++++++ initState".logger();
@@ -140,7 +138,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       }
     });
 
-    Wakelock.enable();
     _initializeTimer();
     super.initState();
   }
@@ -265,14 +262,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         for (var i = 0; i <= _curIdx; i++) {
           position += notifier.diaryData?[i].height ?? 0.0;
         }
-        print("+++++++++++ current index: $_curIdx");
-        print("+++++++++++ position: $position");
         if (notifier.diaryData?[_curIdx] != notifier.diaryData?.last) {
           context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
-                position,
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeOut,
-              );
+            position,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeOut,
+          );
         }
         if (mounted) {
           setState(() {});
@@ -433,6 +428,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       print("=====prepare=====");
       fAliplayer?.prepare();
     }
+    // this syntax below to prevent video play after changing video
+    Future.delayed(const Duration(seconds: 1), () {
+      if (context.read<MainNotifier>().isInactiveState) {
+        fAliplayer?.pause();
+      }
+    });
 
     // fAliplayer?.play();
   }
@@ -552,19 +553,15 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   }
 
   _pauseScreen() async {
-    _timer?.cancel();
-    _timer = null;
-    if (await Wakelock.enabled) Wakelock.disable();
+    context.read<MainNotifier>().removeWakelock();
   }
 
   void _initializeTimer() async {
-    "========== initializeTimer".logger();
-    if (!(await Wakelock.enabled)) Wakelock.enable();
-    if (_timer != null) _timer?.cancel();
-    _timer = Timer(const Duration(seconds: 30), () => _handleInactivity());
+    context.read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
   }
 
   void _handleInactivity() {
+    context.read<MainNotifier>().isInactiveState = true;
     fAliplayer?.pause();
     _pauseScreen();
     ShowBottomSheet().onShowColouredSheet(
@@ -577,6 +574,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       iconSvg: 'close.svg',
       textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
       onClose: () {
+        context.read<MainNotifier>().isInactiveState = false;
         fAliplayer?.play();
         _initializeTimer();
       },
