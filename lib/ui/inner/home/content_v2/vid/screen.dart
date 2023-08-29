@@ -405,7 +405,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                       if (_curIdx != -1) {
                         if (notifier.vidData?[_curIdx].fAliplayer != null) {
                           "=============== pause 9".logger();
-                          notifier.vidData?[_curIdx].fAliplayer?.pause();
+                          // notifier.vidData?[_curIdx].fAliplayer?.pause();
                         } else {
                           "=============== pause 10".logger();
                           dataAli[_curIdx]?.pause();
