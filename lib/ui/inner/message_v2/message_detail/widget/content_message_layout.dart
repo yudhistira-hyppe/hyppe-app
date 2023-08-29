@@ -35,7 +35,7 @@ class ContentMessageLayout extends StatelessWidget {
               Routes.imagePreviewScreen,
               argument: ImagePreviewArgument(
                 heroTag: message.hashCode,
-                sourceImage: message?.medias.first.mediaThumbEndpoint ?? '',
+                sourceImage: ((message?.medias.first.apsara ?? false) ? message?.medias.first.mediaThumbEndpoint ?? '' : System().showUserPicture(message?.medias.first.mediaThumbEndpoint)) ?? '',
               ),
             );
           }

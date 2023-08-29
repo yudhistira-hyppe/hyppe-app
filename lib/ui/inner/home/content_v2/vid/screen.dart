@@ -78,6 +78,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
   String _curPostId = '';
   String _lastCurPostId = '';
+  double lastOffset = 0;
 
   Map<int, FlutterAliplayer> dataAli = {};
   final ItemScrollController itemScrollController = ItemScrollController();
@@ -95,6 +96,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     // notifier.initialVid(context, reload: true);
     notifier.pageController.addListener(() => notifier.scrollListener(context));
     lang = context.read<TranslateNotifierV2>().translate;
+    lastOffset = -10;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       //scroll
       if (mounted) {
@@ -110,7 +112,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     super.initState();
   }
 
-  double lastOffset = 0;
   void toPosition(offset) async {
     double totItemHeight = 0;
     double totItemHeightParam = 0;
@@ -555,7 +556,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             context.read<PreviewPicNotifier>().reportContent(context, vidData, fAliplayer: vidData.fAliplayer, onCompleted: () async {
                               imageCache.clear();
                               imageCache.clearLiveImages();
-                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
                             });
                           } else {
                             if (_curIdx != -1) {
@@ -570,7 +571,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               onDetail: false,
                               isShare: vidData.isShared,
                               onUpdate: () {
-                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true);
+                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
                               },
                               fAliplayer: vidData.fAliplayer,
                             );

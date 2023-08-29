@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/controller/story_controller.dart';
 
@@ -82,6 +83,14 @@ class LikeNotifier with ChangeNotifier {
     _visibiltyList = val;
 
     notifyListeners();
+  }
+
+  initViews(String postId, String eventType){
+    final context = Routing.navigatorKey.currentContext!;
+    _skip = 0;
+    _listLikeView = [];
+    getLikeView(context, postId, eventType, 20);
+
   }
 
   bool? change;

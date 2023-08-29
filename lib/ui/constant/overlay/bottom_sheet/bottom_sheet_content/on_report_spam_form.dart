@@ -11,12 +11,14 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 
+import '../../../widget/after_first_layout_mixin.dart';
+
 class OnReportSpamFormBottomSheet extends StatefulWidget {
   final ContentData? postData;
   final String? type;
   final bool inDetail;
   final String? keyInt;
-  final Function? onUpdate;
+  final Function()? onUpdate;
 
   const OnReportSpamFormBottomSheet({
     Key? key,
@@ -31,7 +33,7 @@ class OnReportSpamFormBottomSheet extends StatefulWidget {
   State<OnReportSpamFormBottomSheet> createState() => _OnReportSpamFormBottomSheetState();
 }
 
-class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomSheet> {
+class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomSheet> with AfterFirstLayoutMixin {
   Map<String, int> report = {};
   // int _currentReport = 1;
   // static final _routing = Routing();
@@ -39,13 +41,18 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
 
   @override
   void initState() {
+
+
+    super.initState();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
     final notifier = context.read<ReportNotifier>();
     notifier.initializeData(context);
     notifier.currentReport = '';
     notifier.currentReportDesc = '';
     notifier.setKey(widget.keyInt ?? '');
-
-    super.initState();
   }
 
   @override
@@ -138,8 +145,7 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                                   function: notifier.isLoading
                                       ? null
                                       : () {
-                                          notifier.reportPost(context, inDetail: widget.inDetail).whenComplete(() {
-                                            if (widget.onUpdate != null) widget.onUpdate;
+                                          notifier.reportPost(context, inDetail: widget.inDetail, onComplete: widget.onUpdate).whenComplete(() {
                                             globalAfterReport = true;
                                           });
                                         },
@@ -160,4 +166,6 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
       ),
     );
   }
+
+
 }

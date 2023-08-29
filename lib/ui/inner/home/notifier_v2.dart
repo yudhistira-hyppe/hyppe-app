@@ -65,7 +65,7 @@ class HomeNotifier with ChangeNotifier {
     _preventReloadAfterUploadPost = val;
     notifyListeners();
   }
-  
+
   bool _isShowInactiveWarning = false;
   bool get isShowInactiveWarning => _isShowInactiveWarning;
   set isShowInactiveWarning(val) {
@@ -316,6 +316,7 @@ class HomeNotifier with ChangeNotifier {
       switch (index) {
         case 0:
           if (!mounted) return;
+          if (!isreload && isNew && pic.pic != null) return;
           await pic.initialPic(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents).then((value) async {
             if (pic.pic != null && isNew) {
               limit = pic.pic?.first.limitLandingpage ?? 2;
@@ -332,10 +333,12 @@ class HomeNotifier with ChangeNotifier {
           break;
         case 1:
           if (!mounted) return;
+          if (!isreload && isNew && diary.diaryData != null) return;
           await diary.initialDiary(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
           break;
         case 2:
           if (!mounted) return;
+          if (!isreload && isNew && vid.vidData != null) return;
           await vid.initialVid(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
           break;
       }
