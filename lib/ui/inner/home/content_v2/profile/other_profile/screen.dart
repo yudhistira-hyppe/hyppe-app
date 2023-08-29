@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
@@ -169,7 +170,7 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
     return Consumer<OtherProfileNotifier>(
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {
-          notifier.onExit();
+          notifier.onExit(context);
           return false;
         },
         child: Scaffold(
@@ -183,7 +184,7 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                   Row(
                     children: [
                       IconButton(
-                        onPressed: () => notifier.onExit(),
+                        onPressed: () => notifier.onExit(context),
                         icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
                       ),
                       notifier.manyUser.isNotEmpty
@@ -255,7 +256,7 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                           SliverToBoxAdapter(
                             child: MeasuredSize(
                               onChange: (e) async {
-                                if(mounted){
+                                if (mounted) {
                                   heightProfileCard = e.height;
                                 }
 
