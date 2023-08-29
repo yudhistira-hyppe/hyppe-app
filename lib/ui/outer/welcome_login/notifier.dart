@@ -262,9 +262,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       print('apa2 ${signData.userType?.index}');
       final signUpPinNotifier = Provider.of<SignUpPinNotifier>(context, listen: false);
 
-      await ShowBottomSheet().onShowColouredSheet(
-          context,
-          language.emailVerification ?? '',
+      await ShowBottomSheet().onShowColouredSheet(context, language.emailVerification ?? '',
           subCaption: language.emailHasRegistered,
           maxLines: 3,
           borderRadius: 8,
@@ -274,24 +272,22 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
           iconColor: kHyppeBorder,
           padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
           margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
-          iconSvg: "${AssetPath.vectorPath}info_white.svg",
-          function: (){
-            _googleSignInService.handleSignOut();
-            passwordController.clear();
-            emailController.clear();
-            signUpPinNotifier.username = signData.username ?? '';
-            signUpPinNotifier.email = signData.email ?? '';
-            // signUpPinNotifier.resend(context);
-            signUpPinNotifier.resendPilih = true;
-            // signUpPinNotifier.timer = '00:00';
+          iconSvg: "${AssetPath.vectorPath}info_white.svg", function: () {
+        _googleSignInService.handleSignOut();
+        passwordController.clear();
+        emailController.clear();
+        signUpPinNotifier.username = signData.username ?? '';
+        signUpPinNotifier.email = signData.email ?? '';
+        // signUpPinNotifier.resend(context);
+        signUpPinNotifier.resendPilih = true;
+        // signUpPinNotifier.timer = '00:00';
 
-            signUpPinNotifier.userToken = signData.token ?? '';
-            // signUpPinNotifier.userID = signData.profileID;
-            Routing().move(Routes.signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toLogin, email: email)).whenComplete(() {
-              clearTextController();
-            });
-          }
-      );
+        signUpPinNotifier.userToken = signData.token ?? '';
+        // signUpPinNotifier.userID = signData.profileID;
+        Routing().move(Routes.signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toLogin, email: email)).whenComplete(() {
+          clearTextController();
+        });
+      });
 
       // await ShowBottomSheet().onShowColouredSheet(
       //   context,
@@ -643,49 +639,49 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   //   }
   // }
 
-  Future testLogin(BuildContext context) async {
-    bool connection = await System().checkConnections();
-    setLoading(true);
-    await System().getLocation(context).then((value) async {
-      print(value);
-      if (value) {
-        if (connection) {
-          await FcmService().initializeFcmIfNot();
-          final notifier = UserBloc();
+  // Future testLogin(BuildContext context) async {
+  //   bool connection = await System().checkConnections();
+  //   setLoading(true);
+  //   await System().getLocation(context).then((value) async {
+  //     print(value);
+  //     if (value) {
+  //       if (connection) {
+  //         await FcmService().initializeFcmIfNot();
+  //         final notifier = UserBloc();
 
-          await notifier.googleSignInBlocV2(
-            context,
-            email: emailController.text,
-            latitude: latitude,
-            longtitude: longitude,
-            function: () => loginGoogleSign(context),
-            uuid: 'asddddfsd',
-          );
-          final fetch = notifier.userFetch;
-          print('ini respone google ${fetch.data}');
-          if (fetch.userState == UserState.LoginSuccess) {
-            hide = true;
-            final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
-            _validateUserData(context, _result, true, onlineVersion: fetch.version);
-          }
-          if (fetch.userState == UserState.LoginError) {
-            _googleSignInService.handleSignOut();
-            if (fetch.data != null) {
-              clearTextController();
-              incorrect = true;
-            }
-          }
+  //         await notifier.googleSignInBlocV2(
+  //           context,
+  //           email: emailController.text,
+  //           latitude: latitude,
+  //           longtitude: longitude,
+  //           function: () => loginGoogleSign(context),
+  //           uuid: 'asddddfsd',
+  //         );
+  //         final fetch = notifier.userFetch;
+  //         print('ini respone google ${fetch.data}');
+  //         if (fetch.userState == UserState.LoginSuccess) {
+  //           hide = true;
+  //           final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
+  //           _validateUserData(context, _result, true, onlineVersion: fetch.version);
+  //         }
+  //         if (fetch.userState == UserState.LoginError) {
+  //           _googleSignInService.handleSignOut();
+  //           if (fetch.data != null) {
+  //             clearTextController();
+  //             incorrect = true;
+  //           }
+  //         }
 
-          // if (data != null) {
-          //   Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
-          //       argument: UserInterestScreenArgument());
-          //   notifyListeners();
-          // }
-        } else {
-          ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
-        }
-      }
-      setLoading(false);
-    });
-  }
+  //         // if (data != null) {
+  //         //   Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
+  //         //       argument: UserInterestScreenArgument());
+  //         //   notifyListeners();
+  //         // }
+  //       } else {
+  //         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
+  //       }
+  //     }
+  //     setLoading(false);
+  //   });
+  // }
 }

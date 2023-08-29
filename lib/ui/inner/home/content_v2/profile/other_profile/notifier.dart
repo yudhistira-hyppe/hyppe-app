@@ -601,7 +601,7 @@ class OtherProfileNotifier with ChangeNotifier {
     // }
   }
 
-  void onExit() async {
+  void onExit(context) async {
     print("==========Exit==================");
     Future.delayed(const Duration(milliseconds: 500), () {
       if (manyUser.isNotEmpty) {
@@ -612,7 +612,8 @@ class OtherProfileNotifier with ChangeNotifier {
     if (golbalToOther == 1) {
       golbalToOther = 0;
     }
-    routing.moveBack();
+    // routing.moveBack();
+    Navigator.pop(context);
     userEmail = null;
   }
 

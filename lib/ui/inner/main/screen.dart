@@ -104,12 +104,16 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                       tapMenu(0, notifier, consumerContext);
                       if (notifier.scrollController.hasClients) {
                         homeClick = true;
-                        Routing.navigatorKey.currentState?.overlay?.context
-                            .read<MainNotifier>()
-                            .globalKey
-                            .currentState
-                            ?.innerController
-                            .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.ease);
+                        notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+                        // Routing.navigatorKey.currentState?.overlay?.context
+                        //     .read<MainNotifier>()
+                        //     .globalKey
+                        //     .currentState
+                        //     ?.innerController
+                        //     .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.ease)
+                        //     .then((value) {
+                        //   notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 200), curve: Curves.elasticOut);
+                        // });
                       }
                       Future.delayed(const Duration(milliseconds: 1000), () {});
 

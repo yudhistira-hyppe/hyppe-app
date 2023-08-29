@@ -30,6 +30,7 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:wakelock/wakelock.dart';
 
 class MainNotifier with ChangeNotifier {
 
@@ -373,5 +374,33 @@ class MainNotifier with ChangeNotifier {
     } else {
       myDuration = Duration(seconds: seconds);
     }
+  }
+
+  bool _isInactiveState = false;
+  bool get isInactiveState => _isInactiveState;
+  set isInactiveState(bool state) {
+    _isInactiveState = state;
+    notifyListeners();
+  }
+
+  Timer? _inactivityTimer;
+  Timer? get inactivityTimer => _inactivityTimer;
+  set inactivityTimer(Timer? state) {
+    _inactivityTimer = state;
+    notifyListeners();
+  }
+
+  removeWakelock() async {
+    "=================== remove wakelock".logger();
+    _inactivityTimer?.cancel();
+    _inactivityTimer = null;
+    if (await Wakelock.enabled) Wakelock.disable();
+  }
+
+  void initWakelockTimer({required Function() onShowInactivityWarning}) async {
+    "=================== init wakelock".logger();
+    if (!(await Wakelock.enabled)) Wakelock.enable();
+    if (_inactivityTimer != null) _inactivityTimer?.cancel();
+    _inactivityTimer = Timer(const Duration(seconds: 30), () => onShowInactivityWarning());
   }
 }

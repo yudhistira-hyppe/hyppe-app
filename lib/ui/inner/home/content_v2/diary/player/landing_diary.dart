@@ -95,8 +95,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   String email = '';
   String statusKyc = '';
   double itemHeight = 0;
-
-  Timer? _timer;
   double lastOffset = -10;
 
   @override
@@ -129,7 +127,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       }
     });
 
-    Wakelock.enable();
     _initializeTimer();
     super.initState();
   }
@@ -138,6 +135,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingpage');
     fAliplayer?.pause();
     fAliplayer?.setAutoPlay(true);
+    vidConfig();
     // fAliplayer?.setLoop(true);
 
     //Turn on mix mode
@@ -272,14 +270,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         for (var i = 0; i <= _curIdx; i++) {
           position += notifier.diaryData?[i].height ?? 0.0;
         }
-        print("+++++++++++ current index: $_curIdx");
-        print("+++++++++++ position: $position");
         if (notifier.diaryData?[_curIdx] != notifier.diaryData?.last) {
           context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
-                position,
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeOut,
-              );
+            position,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeOut,
+          );
         }
         if (mounted) {
           setState(() {});
@@ -379,6 +375,37 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     lastOffset = offset;
   }
 
+  void vidConfig() {
+    var configMap = {
+      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+      'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
+      'mLocalCacheDir': GlobalSettings.mDirController,
+      'mClearFrameWhenStop': true
+    };
+    // Configure the application.
+    fAliplayer?.setConfig(configMap);
+    var map = {
+      "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
+
+      /// The maximum space that can be occupied by the cache directory.
+      "mMaxDurationS": GlobalSettings.mMaxDurationSController,
+
+      /// The maximum cache duration of a single file.
+      "mDir": GlobalSettings.mDirController,
+
+      /// The cache directory.
+      "mEnable": GlobalSettings.mEnableCacheConfig
+
+      /// Specify whether to enable the cache feature.
+    };
+    fAliplayer?.setCacheConfig(map);
+  }
+
   void start(BuildContext context, ContentData data) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
@@ -408,39 +435,18 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         // _isFirstRenderShow = false;
       });
     }
-    // var configMap = {
-    //   'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
-    //   'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
-    //   'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
-    //   'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
-    //   'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
-    //   'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
-    //   'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
-    //   'mLocalCacheDir': GlobalSettings.mDirController,
-    //   'mClearFrameWhenStop': true
-    // };
-    // Configure the application.
-    // fAliplayer?.setConfig(configMap);
-    // var map = {
-    //   "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
 
-    //   /// The maximum space that can be occupied by the cache directory.
-    //   "mMaxDurationS": GlobalSettings.mMaxDurationSController,
-
-    //   /// The maximum cache duration of a single file.
-    //   "mDir": GlobalSettings.mDirController,
-
-    //   /// The cache directory.
-    //   "mEnable": GlobalSettings.mEnableCacheConfig
-
-    //   /// Specify whether to enable the cache feature.
-    // };
-    // fAliplayer?.setCacheConfig(map);
     if (data.reportedStatus == 'BLURRED') {
     } else {
       print("=====prepare=====");
       fAliplayer?.prepare();
     }
+    // this syntax below to prevent video play after changing video
+    Future.delayed(const Duration(seconds: 1), () {
+      if (context.read<MainNotifier>().isInactiveState) {
+        fAliplayer?.pause();
+      }
+    });
 
     // fAliplayer?.play();
   }
@@ -560,19 +566,15 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   }
 
   _pauseScreen() async {
-    _timer?.cancel();
-    _timer = null;
-    if (await Wakelock.enabled) Wakelock.disable();
+    context.read<MainNotifier>().removeWakelock();
   }
 
   void _initializeTimer() async {
-    "========== initializeTimer".logger();
-    if (!(await Wakelock.enabled)) Wakelock.enable();
-    if (_timer != null) _timer?.cancel();
-    _timer = Timer(const Duration(seconds: 300), () => _handleInactivity());
+    context.read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
   }
 
   void _handleInactivity() {
+    context.read<MainNotifier>().isInactiveState = true;
     fAliplayer?.pause();
     _pauseScreen();
     ShowBottomSheet().onShowColouredSheet(
@@ -585,6 +587,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       iconSvg: 'close.svg',
       textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
       onClose: () {
+        context.read<MainNotifier>().isInactiveState = false;
         fAliplayer?.play();
         _initializeTimer();
       },
@@ -691,61 +694,66 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
-                child: (notifier.diaryData == null || home.isLoadingDiary) ? ListView.builder(itemBuilder: (context, index){
-                  return CustomShimmer(
-                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                    height: 168,
-                    radius: 8,
-                    margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                  );
-                }, itemCount: 5,): notifier.diaryData != null && (notifier.diaryData?.isEmpty ?? true)
-                    ? const NoResultFound()
-                    : NotificationListener<OverscrollIndicatorNotification>(
-                        onNotification: (overscroll) {
-                          overscroll.disallowIndicator();
-                          return false;
+                child: (notifier.diaryData == null || home.isLoadingDiary)
+                    ? ListView.builder(
+                        itemBuilder: (context, index) {
+                          return CustomShimmer(
+                            width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                            height: 168,
+                            radius: 8,
+                            margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                          );
                         },
-                        child: ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          // controller: notifier.scrollController,
-                          // scrollDirection: Axis.horizontal,
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: notifier.diaryData?.length,
-                          padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                          itemBuilder: (context, index) {
-                            if (notifier.diaryData == null || home.isLoadingDiary) {
-                              fAliplayer?.pause();
-                              // _lastCurIndex = -1;
-                              _lastCurPostId = '';
-                              return CustomShimmer(
-                                width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                                height: 168,
-                                radius: 8,
-                                margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                              );
-                            } else if (index == notifier.diaryData?.length && notifier.hasNext) {
-                              return UnconstrainedBox(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: 80 * SizeConfig.scaleDiagonal,
-                                  height: 80 * SizeConfig.scaleDiagonal,
-                                  child: const CustomLoading(),
-                                ),
-                              );
-                            }
-                            // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                            if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                              isPlay = false;
-                              fAliplayer?.stop();
-                            }
+                        itemCount: 5,
+                      )
+                    : notifier.diaryData != null && (notifier.diaryData?.isEmpty ?? true)
+                        ? const NoResultFound()
+                        : NotificationListener<OverscrollIndicatorNotification>(
+                            onNotification: (overscroll) {
+                              overscroll.disallowIndicator();
+                              return false;
+                            },
+                            child: ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              // controller: notifier.scrollController,
+                              // scrollDirection: Axis.horizontal,
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: notifier.diaryData?.length,
+                              padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                              itemBuilder: (context, index) {
+                                if (notifier.diaryData == null || home.isLoadingDiary) {
+                                  fAliplayer?.pause();
+                                  // _lastCurIndex = -1;
+                                  _lastCurPostId = '';
+                                  return CustomShimmer(
+                                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                    height: 168,
+                                    radius: 8,
+                                    margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                  );
+                                } else if (index == notifier.diaryData?.length && notifier.hasNext) {
+                                  return UnconstrainedBox(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      width: 80 * SizeConfig.scaleDiagonal,
+                                      height: 80 * SizeConfig.scaleDiagonal,
+                                      child: const CustomLoading(),
+                                    ),
+                                  );
+                                }
+                                // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                                if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                                  isPlay = false;
+                                  fAliplayer?.stop();
+                                }
 
-                            return itemDiary(context, notifier, index, home);
-                          },
-                        ),
-                      ),
+                                return itemDiary(context, notifier, index, home);
+                              },
+                            ),
+                          ),
               ),
             ],
           ),
@@ -867,9 +875,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                   // key: Key(index.toString()),
                   key: Key(data?.postID ?? index.toString()),
                   onVisibilityChanged: (info) {
-                    if (info.visibleFraction == 1.0) {
-                      Wakelock.enable();
-                    }
+                    // if (info.visibleFraction == 1.0) {
+                    //   Wakelock.enable();
+                    // }
                     if (info.visibleFraction >= 0.6) {
                       _curIdx = index;
 
@@ -879,9 +887,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       final latIndexList = notifier.diaryData?.indexWhere((element) => element.postID == _lastCurPostId);
                       if (_lastCurPostId != _curPostId) {
                         fAliplayer?.destroy();
-                        initAlipayer();
                         fAliplayer?.stop();
                         fAliplayer?.clearScreen();
+                        // Wakelock.disable();
+                        initAlipayer();
+
                         Wakelock.disable();
                         if (mounted) {
                           setState(() {

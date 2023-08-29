@@ -80,8 +80,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   String _lastCurPostId = '';
   double lastOffset = 0;
 
-  Timer? _timer;
-
   Map<int, FlutterAliplayer> dataAli = {};
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
@@ -110,7 +108,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       }
     });
 
-    Wakelock.enable();
     _initializeTimer();
     super.initState();
   }
@@ -180,20 +177,20 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   @override
   void deactivate() {
-    print("====== deactivate dari diary");
+    print("====== deactivate dari vid");
     isStopVideo = false;
     super.deactivate();
   }
 
   @override
   void didPop() {
-    print("====== didpop dari diary");
+    print("====== didpop dari vid");
     super.didPop();
   }
 
   @override
   void didPopNext() {
-    print("======= didPopNext dari diary");
+    print("======= didPopNext dari vid");
     final notifier = context.read<PreviewVidNotifier>();
     if (_curIdx != -1) {
       notifier.vidData?[_curIdx].fAliplayer?.play();
@@ -217,10 +214,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   @override
   void didPushNext() {
-    print("========= didPushNext dari diary");
+    print("========= didPushNext dari vid");
     final notifier = context.read<PreviewVidNotifier>();
     _pauseScreen();
     if (_curIdx != -1) {
+      "=============== pause 6".logger();
       notifier.vidData?[_curIdx].fAliplayer?.pause();
     }
 
@@ -256,20 +254,17 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   }
 
   _pauseScreen() async {
-    _timer?.cancel();
-    _timer = null;
-    if (await Wakelock.enabled) Wakelock.disable();
+    context.read<MainNotifier>().removeWakelock();
   }
 
   void _initializeTimer() async {
-    "========== initializeTimer".logger();
-    if (!(await Wakelock.enabled)) Wakelock.enable();
-    if (_timer != null) _timer?.cancel();
-    _timer = Timer(const Duration(seconds: 300), () => _handleInactivity());
+    context.read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
   }
 
   void _handleInactivity() {
     final notifier = context.read<PreviewVidNotifier>();
+    context.read<MainNotifier>().isInactiveState = true;
+    "=============== pause 7".logger();
     notifier.vidData?[_curIdx].fAliplayer?.pause();
     _pauseScreen();
     ShowBottomSheet().onShowColouredSheet(
@@ -282,6 +277,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       iconSvg: 'close.svg',
       textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
       onClose: () {
+        context.read<MainNotifier>().isInactiveState = false;
         notifier.vidData?[_curIdx].fAliplayer?.play();
         _initializeTimer();
       },
@@ -297,72 +293,79 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
     return Consumer3<PreviewVidNotifier, TranslateNotifierV2, HomeNotifier>(
       builder: (context, vidNotifier, translateNotifier, homeNotifier, widget) => SizedBox(
-        child: Column(
-          children: [
-            (vidNotifier.vidData != null)
-                ? (vidNotifier.vidData?.isEmpty ?? true)
-                    ? const NoResultFound()
-                    : Expanded(
-                        child: NotificationListener<OverscrollIndicatorNotification>(
-                          onNotification: (overscroll) {
-                            print(overscroll);
-                            overscroll.disallowIndicator();
-                            return true;
-                          },
-                          child: ListView.builder(
-                            // child: ScrollablePositionedList.builder(
-                            // controller: vidNotifier.pageController,
-                            // onPageChanged: (index) async {
-                            //   print('HyppePreviewVid index : $index');
-                            //   if (index == (vidNotifier.itemCount - 1)) {
-                            //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
-                            //     if (values.isNotEmpty) {
-                            //       vidNotifier.vidData = [...(vidNotifier.vidData ?? [] as List<ContentData>)] + values;
-                            //     }
-                            //   }
-                            //   // context.read<PreviewVidNotifier>().nextVideo = false;
-                            //   // context.read<PreviewVidNotifier>().initializeVideo = false;
-                            // },
-                            physics: NeverScrollableScrollPhysics(),
-                            // itemScrollController: itemScrollController,
-                            // itemPositionsListener: itemPositionsListener,
-                            // scrollOffsetController: scrollOffsetController,
-                            shrinkWrap: true,
-                            // itemCount: vidNotifier.itemCount,
-                            itemCount: vidNotifier.vidData?.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              if (vidNotifier.vidData == null || homeNotifier.isLoadingVid) {
-                                vidNotifier.vidData?[index].fAliplayer?.pause();
-                                _lastCurIndex = -1;
-                                return CustomShimmer(
-                                  margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
-                                  height: context.getHeight() / 8,
-                                  width: double.infinity,
-                                );
-                              } else if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
-                                return const CustomLoading(size: 5);
-                              }
-                              // if (_curIdx == 0 && vidNotifier.vidData?[0].reportedStatus == 'BLURRED') {
-                              //   isPlay = false;
-                              //   vidNotifier.vidData?[index].fAliplayer?.stop();
-                              // }
-                              final vidData = vidNotifier.vidData?[index];
-                              return itemVid(vidData ?? ContentData(), vidNotifier, index, homeNotifier);
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onPanDown: (detail) {
+            _initializeTimer();
+          },
+          child: Column(
+            children: [
+              (vidNotifier.vidData != null)
+                  ? (vidNotifier.vidData?.isEmpty ?? true)
+                      ? const NoResultFound()
+                      : Expanded(
+                          child: NotificationListener<OverscrollIndicatorNotification>(
+                            onNotification: (overscroll) {
+                              print(overscroll);
+                              overscroll.disallowIndicator();
+                              return true;
                             },
+                            child: ListView.builder(
+                              // child: ScrollablePositionedList.builder(
+                              // controller: vidNotifier.pageController,
+                              // onPageChanged: (index) async {
+                              //   print('HyppePreviewVid index : $index');
+                              //   if (index == (vidNotifier.itemCount - 1)) {
+                              //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
+                              //     if (values.isNotEmpty) {
+                              //       vidNotifier.vidData = [...(vidNotifier.vidData ?? [] as List<ContentData>)] + values;
+                              //     }
+                              //   }
+                              //   // context.read<PreviewVidNotifier>().nextVideo = false;
+                              //   // context.read<PreviewVidNotifier>().initializeVideo = false;
+                              // },
+                              physics: NeverScrollableScrollPhysics(),
+                              // itemScrollController: itemScrollController,
+                              // itemPositionsListener: itemPositionsListener,
+                              // scrollOffsetController: scrollOffsetController,
+                              shrinkWrap: true,
+                              // itemCount: vidNotifier.itemCount,
+                              itemCount: vidNotifier.vidData?.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                if (vidNotifier.vidData == null || homeNotifier.isLoadingVid) {
+                                  "=============== pause 8".logger();
+                                  vidNotifier.vidData?[index].fAliplayer?.pause();
+                                  _lastCurIndex = -1;
+                                  return CustomShimmer(
+                                    margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
+                                    height: context.getHeight() / 8,
+                                    width: double.infinity,
+                                  );
+                                } else if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
+                                  return const CustomLoading(size: 5);
+                                }
+                                // if (_curIdx == 0 && vidNotifier.vidData?[0].reportedStatus == 'BLURRED') {
+                                //   isPlay = false;
+                                //   vidNotifier.vidData?[index].fAliplayer?.stop();
+                                // }
+                                final vidData = vidNotifier.vidData?[index];
+                                return itemVid(vidData ?? ContentData(), vidNotifier, index, homeNotifier);
+                              },
+                            ),
                           ),
-                        ),
-                      )
-                : ListView.builder(
-                    itemCount: 5,
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return CustomShimmer(
-                        margin: const EdgeInsets.only(bottom: 30, right: 16, left: 16),
-                        height: context.getHeight() / 8,
-                        width: double.infinity,
-                      );
-                    }),
-          ],
+                        )
+                  : ListView.builder(
+                      itemCount: 5,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return CustomShimmer(
+                          margin: const EdgeInsets.only(bottom: 30, right: 16, left: 16),
+                          height: context.getHeight() / 8,
+                          width: double.infinity,
+                        );
+                      }),
+            ],
+          ),
         ),
       ),
     );
@@ -401,12 +404,14 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                     try {
                       if (_curIdx != -1) {
                         if (notifier.vidData?[_curIdx].fAliplayer != null) {
-                          notifier.vidData?[_curIdx].fAliplayer?.pause();
+                          "=============== pause 9".logger();
+                          // notifier.vidData?[_curIdx].fAliplayer?.pause();
                         } else {
+                          "=============== pause 10".logger();
                           dataAli[_curIdx]?.pause();
                         }
 
-                        Wakelock.disable();
+                        // Wakelock.disable();
                         // notifier.vidData?[_curIdx].fAliplayerAds?.pause();
                         // setState(() {
                         //   _curIdx = -1;
@@ -555,7 +560,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                             });
                           } else {
                             if (_curIdx != -1) {
-                              print('Vid Landing Page: pause $_curIdx');
+                              "=============== pause 11".logger();
                               notifier.vidData?[_curIdx].fAliplayer?.pause();
                             }
 
@@ -846,6 +851,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () async {
+                                    "=============== pause 4".logger();
                                     vidData.fAliplayer?.pause();
                                     await ShowBottomSheet.onBuyContent(context, data: vidData, fAliplayer: vidData.fAliplayer);
                                     // fAliplayer?.play();

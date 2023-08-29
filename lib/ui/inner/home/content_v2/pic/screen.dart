@@ -336,7 +336,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         }
       }
     }
-    lastOffset = offset - 10;
+    lastOffset = offset - 0.10;
   }
 
   void start(BuildContext context, ContentData data) async {
