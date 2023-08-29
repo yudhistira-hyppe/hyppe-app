@@ -95,13 +95,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   String email = '';
   String statusKyc = '';
   double itemHeight = 0;
-
-<<<<<<< HEAD
-=======
-  Timer? _timer;
   double lastOffset = -10;
 
->>>>>>> d99de670ea5627ae45dda030ab8c62fcf3ef4e1e
   @override
   void initState() {
     "++++++++++++++ initState".logger();
