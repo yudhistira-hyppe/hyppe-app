@@ -980,9 +980,9 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
         adsId: data.adsId,
         useradsId: data.useradsId,
       );
-
-      await Future.delayed(const Duration(seconds: 1));
-      // await notifier.viewAdsBloc(context, request, isClick: isClick);
+      //
+      // await Future.delayed(const Duration(seconds: 1));
+      await notifier.viewAdsBloc(context, request, isClick: isClick);
 
       final fetch = notifier.adsDataFetch;
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {}
