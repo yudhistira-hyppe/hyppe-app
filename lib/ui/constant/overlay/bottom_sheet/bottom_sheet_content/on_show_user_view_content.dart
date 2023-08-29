@@ -72,22 +72,7 @@ class _OnShowUserViewContentBottomSheetState extends State<OnShowUserViewContent
                 ],
               ),
               notifier.isLoading
-                  ? const Center(child: CustomLoading())
-                  : (notifier.listLikeView?.isEmpty ?? true) ? Column(
-                children: [
-                  twentyEightPx,
-                  Center(
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(image: AssetImage('${AssetPath.pngPath}content-zero.png'), fit: BoxFit.fill),
-                      ),
-                    ),
-                  ),
-                  Text("${context.read<TranslateNotifierV2>().translate.noResultsFoundTryAnother}")
-                ],
-              ) :Expanded(
+                  ? const Center(child: CustomLoading()) : Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
                         controller: _scrollController,
