@@ -33,7 +33,6 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock/wakelock.dart';
 
 class MainNotifier with ChangeNotifier {
-
   GlobalKey<NestedScrollViewState> _globalKey = GlobalKey();
   GlobalKey<NestedScrollViewState> get globalKey => _globalKey;
   set globalKey(val) {
@@ -193,7 +192,7 @@ class MainNotifier with ChangeNotifier {
     }
   }
 
-  setPageIndex(int index){
+  setPageIndex(int index) {
     _pageIndex = index;
   }
 
@@ -401,6 +400,6 @@ class MainNotifier with ChangeNotifier {
     "=================== init wakelock".logger();
     if (!(await Wakelock.enabled)) Wakelock.enable();
     if (_inactivityTimer != null) _inactivityTimer?.cancel();
-    _inactivityTimer = Timer(const Duration(seconds: 30), () => onShowInactivityWarning());
+    _inactivityTimer = Timer(const Duration(seconds: 3000), () => onShowInactivityWarning());
   }
 }

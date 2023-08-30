@@ -113,6 +113,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   }
 
   void toPosition(offset) async {
+    _initializeTimer();
     double totItemHeight = 0;
     double totItemHeightParam = 0;
     final notifier = context.read<PreviewVidNotifier>();
@@ -293,79 +294,73 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
     return Consumer3<PreviewVidNotifier, TranslateNotifierV2, HomeNotifier>(
       builder: (context, vidNotifier, translateNotifier, homeNotifier, widget) => SizedBox(
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onPanDown: (detail) {
-            _initializeTimer();
-          },
-          child: Column(
-            children: [
-              (vidNotifier.vidData != null)
-                  ? (vidNotifier.vidData?.isEmpty ?? true)
-                      ? const NoResultFound()
-                      : Expanded(
-                          child: NotificationListener<OverscrollIndicatorNotification>(
-                            onNotification: (overscroll) {
-                              print(overscroll);
-                              overscroll.disallowIndicator();
-                              return true;
+        child: Column(
+          children: [
+            (vidNotifier.vidData != null)
+                ? (vidNotifier.vidData?.isEmpty ?? true)
+                    ? const NoResultFound()
+                    : Expanded(
+                        child: NotificationListener<OverscrollIndicatorNotification>(
+                          onNotification: (overscroll) {
+                            print(overscroll);
+                            overscroll.disallowIndicator();
+                            return true;
+                          },
+                          child: ListView.builder(
+                            // child: ScrollablePositionedList.builder(
+                            // controller: vidNotifier.pageController,
+                            // onPageChanged: (index) async {
+                            //   print('HyppePreviewVid index : $index');
+                            //   if (index == (vidNotifier.itemCount - 1)) {
+                            //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
+                            //     if (values.isNotEmpty) {
+                            //       vidNotifier.vidData = [...(vidNotifier.vidData ?? [] as List<ContentData>)] + values;
+                            //     }
+                            //   }
+                            //   // context.read<PreviewVidNotifier>().nextVideo = false;
+                            //   // context.read<PreviewVidNotifier>().initializeVideo = false;
+                            // },
+                            physics: NeverScrollableScrollPhysics(),
+                            // itemScrollController: itemScrollController,
+                            // itemPositionsListener: itemPositionsListener,
+                            // scrollOffsetController: scrollOffsetController,
+                            shrinkWrap: true,
+                            // itemCount: vidNotifier.itemCount,
+                            itemCount: vidNotifier.vidData?.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              if (vidNotifier.vidData == null || homeNotifier.isLoadingVid) {
+                                "=============== pause 8".logger();
+                                vidNotifier.vidData?[index].fAliplayer?.pause();
+                                _lastCurIndex = -1;
+                                return CustomShimmer(
+                                  margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
+                                  height: context.getHeight() / 8,
+                                  width: double.infinity,
+                                );
+                              } else if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
+                                return const CustomLoading(size: 5);
+                              }
+                              // if (_curIdx == 0 && vidNotifier.vidData?[0].reportedStatus == 'BLURRED') {
+                              //   isPlay = false;
+                              //   vidNotifier.vidData?[index].fAliplayer?.stop();
+                              // }
+                              final vidData = vidNotifier.vidData?[index];
+                              return itemVid(vidData ?? ContentData(), vidNotifier, index, homeNotifier);
                             },
-                            child: ListView.builder(
-                              // child: ScrollablePositionedList.builder(
-                              // controller: vidNotifier.pageController,
-                              // onPageChanged: (index) async {
-                              //   print('HyppePreviewVid index : $index');
-                              //   if (index == (vidNotifier.itemCount - 1)) {
-                              //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
-                              //     if (values.isNotEmpty) {
-                              //       vidNotifier.vidData = [...(vidNotifier.vidData ?? [] as List<ContentData>)] + values;
-                              //     }
-                              //   }
-                              //   // context.read<PreviewVidNotifier>().nextVideo = false;
-                              //   // context.read<PreviewVidNotifier>().initializeVideo = false;
-                              // },
-                              physics: NeverScrollableScrollPhysics(),
-                              // itemScrollController: itemScrollController,
-                              // itemPositionsListener: itemPositionsListener,
-                              // scrollOffsetController: scrollOffsetController,
-                              shrinkWrap: true,
-                              // itemCount: vidNotifier.itemCount,
-                              itemCount: vidNotifier.vidData?.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                if (vidNotifier.vidData == null || homeNotifier.isLoadingVid) {
-                                  "=============== pause 8".logger();
-                                  vidNotifier.vidData?[index].fAliplayer?.pause();
-                                  _lastCurIndex = -1;
-                                  return CustomShimmer(
-                                    margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
-                                    height: context.getHeight() / 8,
-                                    width: double.infinity,
-                                  );
-                                } else if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
-                                  return const CustomLoading(size: 5);
-                                }
-                                // if (_curIdx == 0 && vidNotifier.vidData?[0].reportedStatus == 'BLURRED') {
-                                //   isPlay = false;
-                                //   vidNotifier.vidData?[index].fAliplayer?.stop();
-                                // }
-                                final vidData = vidNotifier.vidData?[index];
-                                return itemVid(vidData ?? ContentData(), vidNotifier, index, homeNotifier);
-                              },
-                            ),
                           ),
-                        )
-                  : ListView.builder(
-                      itemCount: 5,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        return CustomShimmer(
-                          margin: const EdgeInsets.only(bottom: 30, right: 16, left: 16),
-                          height: context.getHeight() / 8,
-                          width: double.infinity,
-                        );
-                      }),
-            ],
-          ),
+                        ),
+                      )
+                : ListView.builder(
+                    itemCount: 5,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return CustomShimmer(
+                        margin: const EdgeInsets.only(bottom: 30, right: 16, left: 16),
+                        height: context.getHeight() / 8,
+                        width: double.infinity,
+                      );
+                    }),
+          ],
         ),
       ),
     );

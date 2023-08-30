@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/app.dart';
@@ -57,16 +58,17 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wakelock/wakelock.dart';
 
-class LandingDiaryPage extends StatefulWidget {
+class LandingDiaryPage2 extends StatefulWidget {
   final ScrollController? scrollController;
-  const LandingDiaryPage({Key? key, this.scrollController}) : super(key: key);
+  const LandingDiaryPage2({Key? key, this.scrollController}) : super(key: key);
 
   @override
-  _LandingDiaryPageState createState() => _LandingDiaryPageState();
+  _LandingDiaryPage2State createState() => _LandingDiaryPage2State();
 }
 
-class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
-  FlutterAliplayer? fAliplayer;
+class _LandingDiaryPage2State extends State<LandingDiaryPage2> with WidgetsBindingObserver, TickerProviderStateMixin, WidgetsBindingObserver, RouteAware {
+  // FlutterAliplayer? fAliplayer;
+  FlutterAliListPlayer? fAliListPlayer;
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
@@ -96,14 +98,15 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   String statusKyc = '';
   double itemHeight = 0;
   double lastOffset = -10;
+  bool isEmptyData = true;
 
   @override
   void initState() {
     "++++++++++++++ initState".logger();
-    FirebaseCrashlytics.instance.setCustomKey('layout', 'LandingDiaryPage');
-    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+    FirebaseCrashlytics.instance.setCustomKey('layout', 'LandingDiaryPage2');
+    // final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
     lang = context.read<TranslateNotifierV2>().translate;
-    notifier.scrollController.addListener(() => notifier.scrollListener(context));
+    // notifier.scrollController.addListener(() => notifier.scrollListener(context));
     email = SharedPreference().readStorage(SpKeys.email);
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     lastOffset = -10;
@@ -111,70 +114,42 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     // stopwatch = new Stopwatch()..start();
 
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      WidgetsBinding.instance.addObserver(this);
-      initAlipayer();
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addObserver(this);
+    initAliplayerList();
+    // initAlipayer();
 
-      //scroll
-      if (mounted) {
-        var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
-        notifierMain?.globalKey.currentState?.innerController.addListener(() {
-          var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-          if (mounted) {
-            toPosition(offset);
-          }
-        });
-      }
-    });
+    //scroll
+    if (mounted) {
+      var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
+      notifierMain?.globalKey.currentState?.innerController.addListener(() {
+        var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
+        if (mounted) {
+          toPosition(offset);
+        }
+      });
+    }
+    // });
 
     _initializeTimer();
     super.initState();
   }
 
-  initAlipayer() {
-    fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingpage');
-    fAliplayer?.pause();
-    fAliplayer?.setAutoPlay(true);
-    vidConfig();
-    // fAliplayer?.setLoop(true);
-
-    //Turn on mix mode
-    if (Platform.isIOS) {
-      FlutterAliplayer.enableMix(true);
-      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
-    }
-
-    //set player
-    fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-    fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-    _initListener();
-  }
-
-  _initListener() {
-    fAliplayer?.setOnEventReportParams((params, playerId) {
-      print("EventReportParams=${params}");
-    });
-    fAliplayer?.setOnPrepared((playerId) {
-      // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
-      fAliplayer?.getMediaInfo().then((value) {
-        try {
-          isPrepare = true;
-          _showLoading = false;
-          if (mounted) {}
-        } catch (e) {
-          e.logger();
-        }
-      });
-      isPlay = true;
-      dataSelected?.isDiaryPlay = true;
-      // _initAds(context);
-    });
-    fAliplayer?.setOnRenderingStart((playerId) {
+  initAliplayerList() {
+    fAliListPlayer = FlutterAliPlayerFactory.createAliListPlayer(playerId: 'aliListPlayer');
+    fAliListPlayer?.setAutoPlay(true);
+    fAliListPlayer?.pause();
+    fAliListPlayer?.setLoop(true);
+    var configMap = {
+      'mClearFrameWhenStop': true,
+    };
+    fAliListPlayer?.setConfig(configMap);
+    fAliListPlayer?.setOnRenderingStart((playerId) {
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
+      // _isFirstRenderShow = true;
     });
-    fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
-    fAliplayer?.setOnStateChanged((newState, playerId) {
+
+    fAliListPlayer?.setOnStateChanged((newState, playerId) {
       _currentPlayerState = newState;
       print("aliyun : onStateChanged $newState");
       switch (newState) {
@@ -197,145 +172,249 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         default:
       }
     });
-    fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-      try {
-        _loadingPercent = 0;
-        _showLoading = true;
-        if (mounted) {
-          setState(() {});
-        }
-      } catch (e) {
-        e.logger();
-      }
-    }, loadingProgress: (percent, netSpeed, playerId) {
-      try {
-        _loadingPercent = percent;
-        if (percent == 100) {
-          _showLoading = false;
-        }
-        if (mounted) {
-          setState(() {});
-        }
-      } catch (e) {
-        e.logger();
-      }
-    }, loadingEnd: (playerId) {
+
+    fAliListPlayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
       try {
         _showLoading = false;
-        if (mounted) {
-          setState(() {});
-        }
-      } catch (e) {
-        e.logger();
-      }
-    });
-    fAliplayer?.setOnSeekComplete((playerId) {
-      _inSeek = false;
-    });
-    fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
-      if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
-        if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
-          _currentPosition = extraValue ?? 0;
-        }
-        // if (!_inSeek) {
-        //   setState(() {
-        //     _currentPositionText = extraValue ?? 0;
-        //   });
-        // }
-      } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-        _bufferPosition = extraValue ?? 0;
-        // if (mounted) {
-        //   setState(() {});
-        // }
-      } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
-        // Fluttertoast.showToast(msg: "AutoPlay");
-      } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
-      } else if (infoCode == FlutterAvpdef.CACHEERROR) {
-      } else if (infoCode == FlutterAvpdef.LOOPINGSTART) {
-        // Fluttertoast.showToast(msg: "Looping Start");
-      } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
-        // Fluttertoast.showToast(msg: "change to soft ware decoder");
-        // mOptionsFragment.switchHardwareDecoder();
-      }
-    });
-    fAliplayer?.setOnCompletion((playerId) {
-      final notifier = context.read<PreviewDiaryNotifier>();
-      try {
-        _showLoading = false;
-
-        isPause = true;
-
-        _currentPosition = _videoDuration;
-        double position = 0.0;
-        for (var i = 0; i <= _curIdx; i++) {
-          position += notifier.diaryData?[i].height ?? 0.0;
-        }
-        if (notifier.diaryData?[_curIdx] != notifier.diaryData?.last) {
-          context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
-                position,
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeOut,
-              );
-        }
-        if (mounted) {
-          setState(() {});
-        }
-      } catch (e) {
-        e.logger();
-      }
-    });
-
-    fAliplayer?.setOnSnapShot((path, playerId) {
-      print("aliyun : snapShotPath = $path");
-      // Fluttertoast.showToast(msg: "SnapShot Save : $path");
-    });
-    fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-      try {
-        _showLoading = false;
-
         setState(() {});
       } catch (e) {
         e.logger();
-      }
-    });
-
-    fAliplayer?.setOnTrackChanged((value, playerId) {
-      AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-      if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
-        // trackFragmentKey.currentState.onTrackChanged(info);
-        // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
-      }
-    });
-    fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
-
-    fAliplayer?.setOnThumbnailGetListener(
-        onThumbnailGetSuccess: (bitmap, range, playerId) {
-          // _thumbnailBitmap = bitmap;
-          var provider = MemoryImage(bitmap);
-          precacheImage(provider, context).then((_) {
-            setState(() {});
-          });
-        },
-        onThumbnailGetFail: (playerId) {});
-
-    fAliplayer?.setOnSubtitleHide((trackIndex, subtitleID, playerId) {
-      if (mounted) {
-        setState(() {});
-      }
-    });
-
-    fAliplayer?.setOnSubtitleShow((trackIndex, subtitleID, subtitle, playerId) {
-      if (mounted) {
-        setState(() {});
       }
     });
   }
+
+  _getData() async {
+    final notifier = Provider.of<PreviewDiaryNotifier>(context, listen: false);
+    print("ininttt intintintitnt");
+    if (notifier.diaryData != null && (notifier.diaryData?.isNotEmpty ?? [].isEmpty)) {
+      print("ininttt 23123123123123123");
+      print(notifier.diaryData?.length);
+      try {
+        notifier.diaryData?.forEach((element) {
+          if (element.isApsara ?? false) {
+            fAliListPlayer?.addVidSource(vid: element.apsaraId, uid: element.apsaraId);
+          } else {
+            fAliListPlayer?.addVidSource(vid: element.postID, uid: element.postID);
+          }
+        });
+      } catch (e) {
+        print(e);
+      }
+
+      isEmptyData = false;
+    } else {
+      // _getData();
+    }
+    setState(() {});
+  }
+
+  initAlipayer() {
+    // fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingpage');
+    // fAliplayer?.pause();
+    // fAliplayer?.setAutoPlay(true);
+    vidConfig();
+    // fAliplayer?.setLoop(true);
+
+    //Turn on mix mode
+    if (Platform.isIOS) {
+      FlutterAliplayer.enableMix(true);
+      // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.mix);
+    }
+
+    //set player
+    // fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
+    // fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+    // _initListener();
+  }
+
+  // _initListener() {
+  //   fAliplayer?.setOnEventReportParams((params, playerId) {
+  //     print("EventReportParams=${params}");
+  //   });
+  //   fAliplayer?.setOnPrepared((playerId) {
+  //     // Fluttertoast.showToast(msg: "OnPrepared ");
+  //     fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+  //     fAliplayer?.getMediaInfo().then((value) {
+  //       try {
+  //         isPrepare = true;
+  //         _showLoading = false;
+  //         if (mounted) {}
+  //       } catch (e) {
+  //         e.logger();
+  //       }
+  //     });
+  //     isPlay = true;
+  //     dataSelected?.isDiaryPlay = true;
+  //     // _initAds(context);
+  //   });
+  //   fAliplayer?.setOnRenderingStart((playerId) {
+  //     // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
+  //   });
+  //   fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
+  //   fAliplayer?.setOnStateChanged((newState, playerId) {
+  //     _currentPlayerState = newState;
+  //     print("aliyun : onStateChanged $newState");
+  //     switch (newState) {
+  //       case FlutterAvpdef.AVPStatus_AVPStatusStarted:
+  //         try {
+  //           _showLoading = false;
+  //           isPause = false;
+  //           if (mounted) {
+  //             setState(() {});
+  //           }
+  //         } catch (e) {
+  //           e.logger();
+  //         }
+
+  //         break;
+  //       case FlutterAvpdef.AVPStatus_AVPStatusPaused:
+  //         isPause = true;
+  //         if (mounted) setState(() {});
+  //         break;
+  //       default:
+  //     }
+  //   });
+  //   fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
+  //     try {
+  //       _loadingPercent = 0;
+  //       _showLoading = true;
+  //       if (mounted) {
+  //         setState(() {});
+  //       }
+  //     } catch (e) {
+  //       e.logger();
+  //     }
+  //   }, loadingProgress: (percent, netSpeed, playerId) {
+  //     try {
+  //       _loadingPercent = percent;
+  //       if (percent == 100) {
+  //         _showLoading = false;
+  //       }
+  //       if (mounted) {
+  //         setState(() {});
+  //       }
+  //     } catch (e) {
+  //       e.logger();
+  //     }
+  //   }, loadingEnd: (playerId) {
+  //     try {
+  //       _showLoading = false;
+  //       if (mounted) {
+  //         setState(() {});
+  //       }
+  //     } catch (e) {
+  //       e.logger();
+  //     }
+  //   });
+  //   fAliplayer?.setOnSeekComplete((playerId) {
+  //     _inSeek = false;
+  //   });
+  //   fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
+  //     if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
+  //       if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
+  //         _currentPosition = extraValue ?? 0;
+  //       }
+  //       // if (!_inSeek) {
+  //       //   setState(() {
+  //       //     _currentPositionText = extraValue ?? 0;
+  //       //   });
+  //       // }
+  //     } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
+  //       _bufferPosition = extraValue ?? 0;
+  //       // if (mounted) {
+  //       //   setState(() {});
+  //       // }
+  //     } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
+  //       // Fluttertoast.showToast(msg: "AutoPlay");
+  //     } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
+  //     } else if (infoCode == FlutterAvpdef.CACHEERROR) {
+  //     } else if (infoCode == FlutterAvpdef.LOOPINGSTART) {
+  //       // Fluttertoast.showToast(msg: "Looping Start");
+  //     } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
+  //       // Fluttertoast.showToast(msg: "change to soft ware decoder");
+  //       // mOptionsFragment.switchHardwareDecoder();
+  //     }
+  //   });
+  //   fAliplayer?.setOnCompletion((playerId) {
+  //     final notifier = context.read<PreviewDiaryNotifier>();
+  //     try {
+  //       _showLoading = false;
+
+  //       isPause = true;
+
+  //       _currentPosition = _videoDuration;
+  //       double position = 0.0;
+  //       for (var i = 0; i <= _curIdx; i++) {
+  //         position += notifier.diaryData?[i].height ?? 0.0;
+  //       }
+  //       if (notifier.diaryData?[_curIdx] != notifier.diaryData?.last) {
+  //         context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
+  //               position,
+  //               duration: const Duration(milliseconds: 400),
+  //               curve: Curves.easeOut,
+  //             );
+  //       }
+  //       if (mounted) {
+  //         setState(() {});
+  //       }
+  //     } catch (e) {
+  //       e.logger();
+  //     }
+  //   });
+
+  //   fAliplayer?.setOnSnapShot((path, playerId) {
+  //     print("aliyun : snapShotPath = $path");
+  //     // Fluttertoast.showToast(msg: "SnapShot Save : $path");
+  //   });
+  //   fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
+  //     try {
+  //       _showLoading = false;
+
+  //       setState(() {});
+  //     } catch (e) {
+  //       e.logger();
+  //     }
+  //   });
+
+  //   fAliplayer?.setOnTrackChanged((value, playerId) {
+  //     AVPTrackInfo info = AVPTrackInfo.fromJson(value);
+  //     if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
+  //       // trackFragmentKey.currentState.onTrackChanged(info);
+  //       // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
+  //     }
+  //   });
+  //   fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
+
+  //   fAliplayer?.setOnThumbnailGetListener(
+  //       onThumbnailGetSuccess: (bitmap, range, playerId) {
+  //         // _thumbnailBitmap = bitmap;
+  //         var provider = MemoryImage(bitmap);
+  //         precacheImage(provider, context).then((_) {
+  //           setState(() {});
+  //         });
+  //       },
+  //       onThumbnailGetFail: (playerId) {});
+
+  //   fAliplayer?.setOnSubtitleHide((trackIndex, subtitleID, playerId) {
+  //     if (mounted) {
+  //       setState(() {});
+  //     }
+  //   });
+
+  //   fAliplayer?.setOnSubtitleShow((trackIndex, subtitleID, subtitle, playerId) {
+  //     if (mounted) {
+  //       setState(() {});
+  //     }
+  //   });
+  // }
 
   void toPosition(offset) async {
     _initializeTimer();
     double totItemHeight = 0;
     double totItemHeightParam = 0;
     final notifier = context.read<PreviewDiaryNotifier>();
+    print("kkkkkkkkkk");
+    print(lastOffset);
     if (offset > lastOffset) {
       homeClick = false;
       for (var i = 0; i <= _curIdx; i++) {
@@ -387,7 +466,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       'mClearFrameWhenStop': true
     };
     // Configure the application.
-    fAliplayer?.setConfig(configMap);
+    // fAliplayer?.setConfig(configMap);
     var map = {
       "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
 
@@ -402,31 +481,46 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
       /// Specify whether to enable the cache feature.
     };
-    fAliplayer?.setCacheConfig(map);
+    // fAliplayer?.setCacheConfig(map);
   }
 
   void start(BuildContext context, ContentData data) async {
-    // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
+    print("-==-=-=-=-=-=- ${data.apsaraId}");
+    setState(() {
+      isPause = false;
+    });
+    // fAliListPlayer?.stop();
+    if (data.isApsara ?? false) {
+      final notifier = PostsBloc();
+      final fixContext = Routing.navigatorKey.currentContext;
+      await notifier.getAuthApsara(fixContext ?? context, apsaraId: data.apsaraId ?? '', check: false);
+      final fetch = notifier.postsFetch;
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        print("111111");
+        try {
+          print("22222");
+          fAliListPlayer?.moveTo(
+            // uid: "ded4cdff72874c49b535f12150886884",
+            uid: data.apsaraId,
+            accId: "LTAI5tP2FZeBukPgRq3McSpM",
+            accKey: "Q5hRgEciIYI2g265zbWsh2kc7meBjI",
+            token: jsonMap['PlayAuth'],
+            region: DataSourceRelated.defaultRegion,
+            // region: "cn-shanghai",
+          );
+        } catch (e) {
+          print("video error wkkwkww $e");
+        }
 
-    fAliplayer?.stop();
-    dataSelected = data;
-
-    isPlay = false;
-    dataSelected?.isDiaryPlay = false;
-    // fAliplayer?.setVidAuth(
-    //   vid: "c1b24d30b2c671edbfcb542280e90102",
-    //   region: DataSourceRelated.defaultRegion,
-    //   playAuth:
-    //       "eyJTZWN1cml0eVRva2VuIjoiQ0FJU2lBTjFxNkZ0NUIyeWZTaklyNURISnUvWnJvZFIrb1d2VlY2SmdHa0RPdFZjaDZMRG96ejJJSDFLZlhadEJPQWN0ZlF3bFdwVDdQNGJsckl1RjhJWkdoR2ZONU10dE1RUHJGL3dKb0hidk5ldTBic0hoWnY5bGNNTHJaaWpqcUhvZU96Y1lJNzMwWjdQQWdtMlEwWVJySkwrY1RLOUphYk1VL21nZ29KbWFkSTZSeFN4YVNFOGF2NWRPZ3BscnIwSVZ4elBNdnIvSFJQMnVtN1pIV3R1dEEwZTgzMTQ1ZmFRejlHaTZ4YlRpM2I5ek9FVXFPYVhKNFMvUGZGb05ZWnlTZjZvd093VUVxL2R5M3hvN3hGYjFhRjRpODRpL0N2YzdQMlFDRU5BK3dtbFB2dTJpOE5vSUYxV2E3UVdJWXRncmZQeGsrWjEySmJOa0lpbDVCdFJFZHR3ZUNuRldLR216c3krYjRIUEROc2ljcXZoTUhuZ3k4MkdNb0tQMHprcGVuVUdMZ2hIQ2JGRFF6MVNjVUZ3RjIyRmQvVDlvQTJRTWwvK0YvbS92ZnRvZ2NvbC9UTEI1c0dYSWxXRGViS2QzQnNETjRVMEIwRlNiRU5JaERPOEwvOWNLRndUSWdrOFhlN01WL2xhYUJGUHRLWFdtaUgrV3lOcDAzVkxoZnI2YXVOcGJnUHIxVVFwTlJxQUFaT3kybE5GdndoVlFObjZmbmhsWFpsWVA0V3paN24wTnVCbjlILzdWZHJMOGR5dHhEdCtZWEtKNWI4SVh2c0lGdGw1cmFCQkF3ZC9kakhYTjJqZkZNVFJTekc0T3pMS1dKWXVzTXQycXcwMSt4SmNHeE9iMGtKZjRTcnFpQ1RLWVR6UHhwakg0eDhvQTV6Z0cvZjVIQ3lFV3pISmdDYjhEeW9EM3NwRUh4RGciLCJBdXRoSW5mbyI6IntcIkNJXCI6XCJmOUc0eExxaHg2Tkk3YThaY1Q2N3hObmYrNlhsM05abmJXR1VjRmxTelljS0VKVTN1aVRjQ29Hd3BrcitqL2phVVRXclB2L2xxdCs3MEkrQTJkb3prd0IvKzc5ZlFyT2dLUzN4VmtFWUt6TT1cIixcIkNhbGxlclwiOlwiV2NKTEpvUWJHOXR5UmM2ZXg3LzNpQXlEcS9ya3NvSldhcXJvTnlhTWs0Yz1cIixcIkV4cGlyZVRpbWVcIjpcIjIwMjMtMDMtMTZUMDk6NDE6MzdaXCIsXCJNZWRpYUlkXCI6XCJjMWIyNGQzMGIyYzY3MWVkYmZjYjU0MjI4MGU5MDEwMlwiLFwiUGxheURvbWFpblwiOlwidm9kLmh5cHBlLmNsb3VkXCIsXCJTaWduYXR1cmVcIjpcIk9pbHhxelNyaVVhOGlRZFhaVEVZZEJpbUhJUT1cIn0iLCJWaWRlb01ldGEiOnsiU3RhdHVzIjoiTm9ybWFsIiwiVmlkZW9JZCI6ImMxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyIiwiVGl0bGUiOiIyODg4MTdkYi1jNzdjLWM0ZTQtNjdmYi0zYjk1MTlmNTc0ZWIiLCJDb3ZlclVSTCI6Imh0dHBzOi8vdm9kLmh5cHBlLmNsb3VkL2MxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyL3NuYXBzaG90cy9jYzM0MjVkNzJiYjM0YTE3OWU5NmMzZTA3NTViZjJjNi0wMDAwNC5qcGciLCJEdXJhdGlvbiI6NTkuMDQ5fSwiQWNjZXNzS2V5SWQiOiJTVFMuTlNybVVtQ1hwTUdEV3g4ZGlWNlpwaGdoQSIsIlBsYXlEb21haW4iOiJ2b2QuaHlwcGUuY2xvdWQiLCJBY2Nlc3NLZXlTZWNyZXQiOiIzU1NRUkdkOThGMU04TkZ0b00xa2NlU01IZlRLNkJvZm93VXlnS1Y5aEpQdyIsIlJlZ2lvbiI6ImFwLXNvdXRoZWFzdC01IiwiQ3VzdG9tZXJJZCI6NTQ1NDc1MzIwNTI4MDU0OX0=",
-    // );
-    if (data.reportedStatus != 'BLURRED') {
-      if (data.isApsara ?? false) {
-        _playMode = ModeTypeAliPLayer.auth;
-        await getAuth(context, data.apsaraId ?? '');
-      } else {
-        _playMode = ModeTypeAliPLayer.url;
-        await getOldVideoUrl(data.postID ?? '');
+        // print("ASJDHKSJDHF KSF");
+        // print(data.apsaraId);
+        // print(jsonMap["data"]["accessKeyId"]);
+        // print(jsonMap["data"]["accessKeySecret"]);
+        // print(jsonMap["data"]["securityToken"]);
       }
+    } else {
+      await getOldVideoUrl(data.postID ?? '').then((value) => null);
     }
     if (mounted) {
       setState(() {
@@ -434,58 +528,91 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         // _isFirstRenderShow = false;
       });
     }
-
-    if (data.reportedStatus == 'BLURRED') {
-    } else {
-      print("=====prepare=====");
-      fAliplayer?.prepare();
-    }
-    // this syntax below to prevent video play after changing video
-    Future.delayed(const Duration(seconds: 1), () {
-      if (context.read<MainNotifier>().isInactiveState) {
-        fAliplayer?.pause();
-      }
-    });
-
-    // fAliplayer?.play();
+    // fAliListPlayer?.prepare();
+    fAliListPlayer?.play();
   }
 
-  Future getAuth(BuildContext context, String apsaraId) async {
-    try {
-      final fixContext = Routing.navigatorKey.currentContext;
-      isloading = true;
-      _showLoading = true;
-      if (mounted) {
-        setState(() {});
-      }
-      final notifier = PostsBloc();
-      await notifier.getAuthApsara(fixContext ?? context, apsaraId: apsaraId, check: false);
-      final fetch = notifier.postsFetch;
-      if (fetch.postsState == PostsState.videoApsaraSuccess) {
-        Map jsonMap = json.decode(fetch.data.toString());
-        auth = jsonMap['PlayAuth'];
+  // void start(BuildContext context, ContentData data) async {
+  //   // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
-        fAliplayer?.setVidAuth(
-          vid: apsaraId,
-          region: DataSourceRelated.defaultRegion,
-          playAuth: auth,
-          definitionList: [DataSourceRelated.definitionList],
-        );
+  //   // fAliplayer?.stop();
+  //   dataSelected = data;
 
-        isloading = false;
-        if (mounted) {
-          setState(() {});
-        }
-        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
-      }
-    } catch (e) {
-      isloading = false;
-      if (mounted) {
-        setState(() {});
-      }
-      // 'Failed to fetch ads data $e'.logger();
-    }
-  }
+  //   isPlay = false;
+  //   dataSelected?.isDiaryPlay = false;
+  //   // fAliplayer?.setVidAuth(
+  //   //   vid: "c1b24d30b2c671edbfcb542280e90102",
+  //   //   region: DataSourceRelated.defaultRegion,
+  //   //   playAuth:
+  //   //       "eyJTZWN1cml0eVRva2VuIjoiQ0FJU2lBTjFxNkZ0NUIyeWZTaklyNURISnUvWnJvZFIrb1d2VlY2SmdHa0RPdFZjaDZMRG96ejJJSDFLZlhadEJPQWN0ZlF3bFdwVDdQNGJsckl1RjhJWkdoR2ZONU10dE1RUHJGL3dKb0hidk5ldTBic0hoWnY5bGNNTHJaaWpqcUhvZU96Y1lJNzMwWjdQQWdtMlEwWVJySkwrY1RLOUphYk1VL21nZ29KbWFkSTZSeFN4YVNFOGF2NWRPZ3BscnIwSVZ4elBNdnIvSFJQMnVtN1pIV3R1dEEwZTgzMTQ1ZmFRejlHaTZ4YlRpM2I5ek9FVXFPYVhKNFMvUGZGb05ZWnlTZjZvd093VUVxL2R5M3hvN3hGYjFhRjRpODRpL0N2YzdQMlFDRU5BK3dtbFB2dTJpOE5vSUYxV2E3UVdJWXRncmZQeGsrWjEySmJOa0lpbDVCdFJFZHR3ZUNuRldLR216c3krYjRIUEROc2ljcXZoTUhuZ3k4MkdNb0tQMHprcGVuVUdMZ2hIQ2JGRFF6MVNjVUZ3RjIyRmQvVDlvQTJRTWwvK0YvbS92ZnRvZ2NvbC9UTEI1c0dYSWxXRGViS2QzQnNETjRVMEIwRlNiRU5JaERPOEwvOWNLRndUSWdrOFhlN01WL2xhYUJGUHRLWFdtaUgrV3lOcDAzVkxoZnI2YXVOcGJnUHIxVVFwTlJxQUFaT3kybE5GdndoVlFObjZmbmhsWFpsWVA0V3paN24wTnVCbjlILzdWZHJMOGR5dHhEdCtZWEtKNWI4SVh2c0lGdGw1cmFCQkF3ZC9kakhYTjJqZkZNVFJTekc0T3pMS1dKWXVzTXQycXcwMSt4SmNHeE9iMGtKZjRTcnFpQ1RLWVR6UHhwakg0eDhvQTV6Z0cvZjVIQ3lFV3pISmdDYjhEeW9EM3NwRUh4RGciLCJBdXRoSW5mbyI6IntcIkNJXCI6XCJmOUc0eExxaHg2Tkk3YThaY1Q2N3hObmYrNlhsM05abmJXR1VjRmxTelljS0VKVTN1aVRjQ29Hd3BrcitqL2phVVRXclB2L2xxdCs3MEkrQTJkb3prd0IvKzc5ZlFyT2dLUzN4VmtFWUt6TT1cIixcIkNhbGxlclwiOlwiV2NKTEpvUWJHOXR5UmM2ZXg3LzNpQXlEcS9ya3NvSldhcXJvTnlhTWs0Yz1cIixcIkV4cGlyZVRpbWVcIjpcIjIwMjMtMDMtMTZUMDk6NDE6MzdaXCIsXCJNZWRpYUlkXCI6XCJjMWIyNGQzMGIyYzY3MWVkYmZjYjU0MjI4MGU5MDEwMlwiLFwiUGxheURvbWFpblwiOlwidm9kLmh5cHBlLmNsb3VkXCIsXCJTaWduYXR1cmVcIjpcIk9pbHhxelNyaVVhOGlRZFhaVEVZZEJpbUhJUT1cIn0iLCJWaWRlb01ldGEiOnsiU3RhdHVzIjoiTm9ybWFsIiwiVmlkZW9JZCI6ImMxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyIiwiVGl0bGUiOiIyODg4MTdkYi1jNzdjLWM0ZTQtNjdmYi0zYjk1MTlmNTc0ZWIiLCJDb3ZlclVSTCI6Imh0dHBzOi8vdm9kLmh5cHBlLmNsb3VkL2MxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyL3NuYXBzaG90cy9jYzM0MjVkNzJiYjM0YTE3OWU5NmMzZTA3NTViZjJjNi0wMDAwNC5qcGciLCJEdXJhdGlvbiI6NTkuMDQ5fSwiQWNjZXNzS2V5SWQiOiJTVFMuTlNybVVtQ1hwTUdEV3g4ZGlWNlpwaGdoQSIsIlBsYXlEb21haW4iOiJ2b2QuaHlwcGUuY2xvdWQiLCJBY2Nlc3NLZXlTZWNyZXQiOiIzU1NRUkdkOThGMU04TkZ0b00xa2NlU01IZlRLNkJvZm93VXlnS1Y5aEpQdyIsIlJlZ2lvbiI6ImFwLXNvdXRoZWFzdC01IiwiQ3VzdG9tZXJJZCI6NTQ1NDc1MzIwNTI4MDU0OX0=",
+  //   // );
+  //   if (data.reportedStatus != 'BLURRED') {
+  //     if (data.isApsara ?? false) {
+  //       _playMode = ModeTypeAliPLayer.auth;
+  //       await getAuth(context, data.apsaraId ?? '');
+  //     } else {
+  //       _playMode = ModeTypeAliPLayer.url;
+  //       await getOldVideoUrl(data.postID ?? '');
+  //     }
+  //   }
+  //   if (mounted) {
+  //     setState(() {
+  //       isPause = false;
+  //       // _isFirstRenderShow = false;
+  //     });
+  //   }
+
+  //   if (data.reportedStatus == 'BLURRED') {
+  //   } else {
+  //     print("=====prepare=====");
+  //     fAliplayer?.prepare();
+  //   }
+  //   // this syntax below to prevent video play after changing video
+  //   Future.delayed(const Duration(seconds: 1), () {
+  //     if (context.read<MainNotifier>().isInactiveState) {
+  //       fAliplayer?.pause();
+  //     }
+  //   });
+
+  //   // fAliplayer?.play();
+  // }
+
+  // Future getAuth(BuildContext context, String apsaraId) async {
+  //   try {
+  //     final fixContext = Routing.navigatorKey.currentContext;
+  //     isloading = true;
+  //     _showLoading = true;
+  //     if (mounted) {
+  //       setState(() {});
+  //     }
+  //     final notifier = PostsBloc();
+  //     await notifier.getAuthApsara(fixContext ?? context, apsaraId: apsaraId, check: false);
+  //     final fetch = notifier.postsFetch;
+  //     if (fetch.postsState == PostsState.videoApsaraSuccess) {
+  //       Map jsonMap = json.decode(fetch.data.toString());
+  //       auth = jsonMap['PlayAuth'];
+
+  //       fAliplayer?.setVidAuth(
+  //         vid: apsaraId,
+  //         region: DataSourceRelated.defaultRegion,
+  //         playAuth: auth,
+  //         definitionList: [DataSourceRelated.definitionList],
+  //       );
+
+  //       isloading = false;
+  //       if (mounted) {
+  //         setState(() {});
+  //       }
+  //       // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+  //     }
+  //   } catch (e) {
+  //     isloading = false;
+  //     if (mounted) {
+  //       setState(() {});
+  //     }
+  //     // 'Failed to fetch ads data $e'.logger();
+  //   }
+  // }
 
   Future getOldVideoUrl(String postId) async {
     if (mounted) {
@@ -500,7 +627,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
 
-        fAliplayer?.setUrl(jsonMap['data']['url']);
+        // fAliplayer?.setUrl(jsonMap['data']['url']);
+        fAliListPlayer?.moveTo(uid: jsonMap['data']['url']);
         if (mounted) {
           setState(() {
             isloading = false;
@@ -519,7 +647,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   }
 
   void onViewPlayerCreated(viewId) async {
-    fAliplayer?.setPlayerView(viewId);
+    // fAliplayer?.setPlayerView(viewId);
     // _generatePlayConfigGen();
     // FlutterAliplayer.generatePlayerConfig().then((value) {
     //   fAliplayer?.setVidAuth(
@@ -554,10 +682,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         }
       }
       if (context.getAdsCount() == 3 && adsNotifier.adsData != null) {
-        fAliplayer?.pause();
+        // fAliplayer?.pause();
         _pauseScreen();
         System().adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(), adsNotifier.adsData?.data?.apsaraAuth ?? '', isInAppAds: false).whenComplete(() {
-          fAliplayer?.play();
+          // fAliplayer?.play();
           _initializeTimer();
         });
       }
@@ -574,7 +702,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   void _handleInactivity() {
     context.read<MainNotifier>().isInactiveState = true;
-    fAliplayer?.pause();
+    fAliListPlayer?.pause();
+    // fAliplayer?.pause();
     _pauseScreen();
     ShowBottomSheet().onShowColouredSheet(
       context,
@@ -587,7 +716,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
       onClose: () {
         context.read<MainNotifier>().isInactiveState = false;
-        fAliplayer?.play();
+        fAliListPlayer?.play();
+        // fAliplayer?.play();
         _initializeTimer();
       },
     );
@@ -605,8 +735,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       FlutterAliplayer.enableMix(false);
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
-    fAliplayer?.stop();
-    fAliplayer?.destroy();
+    // fAliplayer?.stop();
+    // fAliplayer?.destroy();
+    fAliListPlayer?.stop();
+    fAliListPlayer?.destroy();
+
     _pauseScreen();
     // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
     //   fAliplayer?.destroy();
@@ -631,7 +764,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   @override
   void didPopNext() {
     print("======= didPopNext dari diary");
-    fAliplayer?.play();
+    // fAliplayer?.play();
+    fAliListPlayer?.play();
+
     _initializeTimer();
     // System().disposeBlock();
 
@@ -641,7 +776,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   @override
   void didPushNext() {
     print("========= didPushNext dari diary");
-    fAliplayer?.pause();
+    // fAliplayer?.pause();
+    fAliListPlayer?.pause();
     _pauseScreen();
     super.didPushNext();
   }
@@ -652,21 +788,25 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
     switch (state) {
       case AppLifecycleState.inactive:
-        fAliplayer?.pause();
+        // fAliplayer?.pause();
+        fAliListPlayer?.pause();
         _pauseScreen();
         break;
       case AppLifecycleState.resumed:
         if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
-          fAliplayer?.play();
+          // fAliplayer?.play();
+          fAliListPlayer?.play();
           _initializeTimer();
         }
         break;
       case AppLifecycleState.paused:
-        fAliplayer?.pause();
+        // fAliplayer?.pause();
+        fAliListPlayer?.pause();
         _pauseScreen();
         break;
       case AppLifecycleState.detached:
-        fAliplayer?.pause();
+        // fAliplayer?.pause();
+        fAliListPlayer?.pause();
         _pauseScreen();
         break;
     }
@@ -676,6 +816,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   Widget build(BuildContext context) {
+    if (isEmptyData) _getData();
     SizeConfig().init(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
@@ -718,7 +859,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                             padding: const EdgeInsets.symmetric(horizontal: 11.5),
                             itemBuilder: (context, index) {
                               if (notifier.diaryData == null || home.isLoadingDiary) {
-                                fAliplayer?.pause();
+                                // fAliplayer?.pause();
+                                fAliListPlayer?.pause();
+
                                 // _lastCurIndex = -1;
                                 _lastCurPostId = '';
                                 return CustomShimmer(
@@ -741,7 +884,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                               // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
                               if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
                                 isPlay = false;
-                                fAliplayer?.stop();
+                                // fAliplayer?.stop();
+                                fAliListPlayer?.stop();
                               }
 
                               return itemDiary(context, notifier, index, home);
@@ -835,14 +979,17 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       onTap: () {
                         if (data?.email != email) {
                           // FlutterAliplayer? fAliplayer
-                          context.read<PreviewPicNotifier>().reportContent(context, data ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
+                          context.read<PreviewPicNotifier>().reportContent(context, data ?? ContentData(), fAliplayer: fAliListPlayer, onCompleted: () async {
                             imageCache.clear();
                             imageCache.clearLiveImages();
                             await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
                           });
                         } else {
-                          fAliplayer?.setMuted(true);
-                          fAliplayer?.pause();
+                          fAliListPlayer?.setMuted(true);
+                          fAliListPlayer?.pause();
+
+                          // fAliplayer?.setMuted(true);
+                          // fAliplayer?.pause();
                           ShowBottomSheet().onShowOptionContent(
                             context,
                             contentData: data ?? ContentData(),
@@ -852,7 +999,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                             onUpdate: () {
                               (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 1);
                             },
-                            fAliplayer: fAliplayer,
+                            fAliplayer: fAliListPlayer,
                           );
                         }
                       },
@@ -879,11 +1026,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                       final indexList = notifier.diaryData?.indexWhere((element) => element.postID == _curPostId);
                       final latIndexList = notifier.diaryData?.indexWhere((element) => element.postID == _lastCurPostId);
                       if (_lastCurPostId != _curPostId) {
-                        fAliplayer?.destroy();
-                        fAliplayer?.stop();
-                        fAliplayer?.clearScreen();
-                        // Wakelock.disable();
-                        initAlipayer();
+                        // fAliListPlayer?.destroy();
+                        // fAliListPlayer?.stop();
+                        // fAliListPlayer?.clearScreen();
+                        // // Wakelock.disable();
+                        // initAlipayer();
                         if (mounted) {
                           setState(() {
                             Future.delayed(Duration(milliseconds: 400), () {
@@ -948,13 +1095,13 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                               ? Positioned.fill(
                                   child: GestureDetector(
                                     onTap: () {
-                                      fAliplayer?.play();
+                                      fAliListPlayer?.play();
                                       if (mounted) {
                                         setState(() {
                                           isMute = !isMute;
                                         });
                                       }
-                                      fAliplayer?.setMuted(isMute);
+                                      fAliListPlayer?.setMuted(isMute);
                                     },
                                     onDoubleTap: () {
                                       final _likeNotifier = context.read<LikeNotifier>();
@@ -1194,8 +1341,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                             Expanded(
                               child: GestureDetector(
                                 onTap: () async {
-                                  fAliplayer?.pause();
-                                  await ShowBottomSheet.onBuyContent(context, data: data, fAliplayer: fAliplayer);
+                                  fAliListPlayer?.pause();
+                                  await ShowBottomSheet.onBuyContent(context, data: data, fAliplayer: fAliListPlayer);
                                   // fAliplayer?.play();
                                 },
                                 child: const Align(
@@ -1336,8 +1483,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
               left: 12,
               child: GestureDetector(
                 onTap: () {
-                  fAliplayer?.pause();
-                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliplayer);
+                  fAliListPlayer?.pause();
+                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID, fAliplayer: fAliListPlayer);
                 },
                 child: const CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}tag_people.svg',
@@ -1355,7 +1502,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                     isMute = !isMute;
                   });
                 }
-                fAliplayer?.setMuted(isMute);
+                fAliListPlayer?.setMuted(isMute);
               },
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -1412,8 +1559,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           data.reportedStatus = '';
                           start(context, data);
                           context.read<ReportNotifier>().seeContent(context, data, hyppeDiary);
-                          fAliplayer?.prepare();
-                          fAliplayer?.play();
+                          fAliListPlayer?.prepare();
+                          fAliListPlayer?.play();
                         },
                         child: Container(
                           padding: const EdgeInsets.only(top: 8),

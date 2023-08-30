@@ -170,8 +170,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
       Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.addListener(() {
         // print(context.read<MainNotifier>().scrollController.offset);
-        try{
-          if(mounted){
+        try {
+          if (mounted) {
             if ((Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
               setState(() {
                 appbarSeen = false;
@@ -181,17 +181,16 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                 appbarSeen = true;
               });
             }
-          }else{
+          } else {
             if ((Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
               appbarSeen = false;
             } else {
               appbarSeen = true;
             }
           }
-        }catch(e){
+        } catch (e) {
           e.logger();
         }
-
       });
       // });
       context.read<ReportNotifier>().inPosition = contentPosition.home;

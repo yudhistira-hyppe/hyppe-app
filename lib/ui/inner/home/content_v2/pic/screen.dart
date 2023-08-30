@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
@@ -38,6 +39,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -52,7 +54,6 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../ux/path.dart';
 import '../../../../constant/entities/report/notifier.dart';
-import 'package:flutter/gestures.dart';
 // import 'package:snappy_list_view/snappy_list_view.dart';
 // import 'package:scroll_snap_list/scroll_snap_list.dart';
 
@@ -144,9 +145,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       //scroll
       if (mounted) {
         var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
-        notifierMain?.globalKey.currentState?.innerController.addListener(() {
+        notifierMain?.globalKey.currentState?.innerController.addListener(() async {
           double offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-          if (mounted) toPosition(offset, notifier, notifierMain);
+          if (mounted) await toPosition(offset, notifier, notifierMain);
         });
       }
 
@@ -294,7 +295,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     });
   }
 
-  void toPosition(offset, notifier, notifierMain) async {
+  Future toPosition(offset, notifier, notifierMain) async {
     double totItemHeight = 0;
     double totItemHeightParam = 0;
     print("offset $offset");
@@ -336,7 +337,23 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         }
       }
     }
-    lastOffset = offset - 0.10;
+    Timer(Duration(milliseconds: 300), () {
+      lastOffset = offset;
+    });
+
+    Timer(Duration(milliseconds: 300), () {
+      if (lastOffset != offset) {
+        print("g0000blookkkk");
+        lastOffset = offset;
+        print("offset222 $offset");
+        print("lastOffset22 $lastOffset");
+      }
+    });
+
+    print("offset2 $offset");
+    print("lastOffset2 $lastOffset");
+
+    print("lastOffset3 $lastOffset");
   }
 
   void start(BuildContext context, ContentData data) async {
@@ -965,6 +982,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             child: Center(
                               child: Container(
                                 color: Colors.transparent,
+                                // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
 
                                 // width: SizeConfig.screenWidth,
                                 // height: picData?.imageHeightTemp,
@@ -982,9 +1000,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         return ImageSize(
                                           onChange: (Size size) {
                                             Future.delayed(Duration(milliseconds: 300), () {
-                                              setState(() {
-                                                picData?.imageHeightTemp = size.height;
-                                              });
+                                              if (mounted) {
+                                                setState(() {
+                                                  picData?.imageHeightTemp = size.height;
+                                                });
+                                              }
                                             });
                                           },
                                           child: CustomBaseCacheImage(
@@ -994,25 +1014,27 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             widthPlaceHolder: 80,
                                             heightPlaceHolder: 80,
                                             imageUrl: (picData?.isApsara ?? false) ? (picData?.mediaThumbEndPoint ?? "") : "${picData?.fullThumbPath}",
-                                            imageBuilder: (context, imageProvider) => ClipRRect(
-                                              borderRadius: BorderRadius.circular(20), // Image border
-                                              child: picData?.reportedStatus == 'BLURRED'
-                                                  ? ImageFiltered(
-                                                      imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                                      child: Image(
+                                            imageBuilder: (context, imageProvider) {
+                                              return ClipRRect(
+                                                borderRadius: BorderRadius.circular(20), // Image border
+                                                child: picData?.reportedStatus == 'BLURRED'
+                                                    ? ImageFiltered(
+                                                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                                        child: Image(
+                                                          image: imageProvider,
+                                                          fit: BoxFit.fitHeight,
+                                                          width: SizeConfig.screenWidth,
+                                                          height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
+                                                        ),
+                                                      )
+                                                    : Image(
                                                         image: imageProvider,
                                                         fit: BoxFit.fitHeight,
                                                         width: SizeConfig.screenWidth,
-                                                        height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
+                                                        height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
                                                       ),
-                                                    )
-                                                  : Image(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.fitHeight,
-                                                      width: SizeConfig.screenWidth,
-                                                      height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
-                                                    ),
-                                            ),
+                                              );
+                                            },
                                             emptyWidget: GestureDetector(
                                               onTap: () {
                                                 _networklHasErrorNotifier.value++;
@@ -1414,6 +1436,45 @@ class _ImageSizeState extends State<ImageSize> {
   Widget build(BuildContext context) {
     SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
 
+    return Container(
+      key: widgetKey,
+      child: widget.child,
+    );
+  }
+
+  var widgetKey = GlobalKey();
+  var oldSize;
+
+  void postFrameCallback(_) {
+    var context = widgetKey.currentContext;
+    if (context == null) return;
+
+    var newSize = context.size;
+    if (oldSize == newSize) return;
+
+    oldSize = newSize;
+    widget.onChange(newSize);
+  }
+}
+
+class WidgetSize extends StatefulWidget {
+  final Widget child;
+  final Function onChange;
+
+  const WidgetSize({
+    Key? key,
+    required this.onChange,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  State<WidgetSize> createState() => _WidgetSizeState();
+}
+
+class _WidgetSizeState extends State<WidgetSize> {
+  @override
+  Widget build(BuildContext context) {
+    SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
     return Container(
       key: widgetKey,
       child: widget.child,

@@ -198,6 +198,7 @@ class ContentData {
   double? height;
   int? limitLandingpage;
   double? imageHeightTemp;
+  double? imageHeightTemp2;
 
   ContentData({
     this.metadata,
@@ -263,6 +264,7 @@ class ContentData {
     this.height = 0.0,
     this.limitLandingpage,
     this.imageHeightTemp,
+    this.imageHeightTemp2,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
