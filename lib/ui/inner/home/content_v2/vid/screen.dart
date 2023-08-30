@@ -407,7 +407,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                         }
 
                         // Wakelock.disable();
-"================ disable wakelock 86".logger();
                         // notifier.vidData?[_curIdx].fAliplayerAds?.pause();
                         // setState(() {
                         //   _curIdx = -1;
