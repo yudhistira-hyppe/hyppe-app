@@ -107,11 +107,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
   @override
   void initState() {
-    _currentPositionText = widget.videoIndicator.positionText;
-    _currentPosition = widget.videoIndicator.seekValue;
+    _currentPositionText = widget.videoIndicator.positionText ?? 0;
+    _currentPosition = widget.videoIndicator.seekValue ?? 0;
     // widget.fAliplayer?.play();
-    _videoDuration = widget.videoIndicator.videoDuration;
-    isMute = widget.videoIndicator.isMute;
+    _videoDuration = widget.videoIndicator.videoDuration ?? 0;
+    isMute = widget.videoIndicator.isMute ?? false;
     vidData = widget.vidData;
     super.initState();
 
@@ -755,10 +755,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 }
 
 class VideoIndicator {
-  final int videoDuration;
-  final int seekValue;
-  final int positionText;
-  final bool showTipsWidget;
-  final bool isMute;
+  final int? videoDuration;
+  final int? seekValue;
+  final int? positionText;
+  final bool? showTipsWidget;
+  final bool? isMute;
   VideoIndicator({required this.videoDuration, required this.seekValue, required this.positionText, this.showTipsWidget = false, required this.isMute});
 }

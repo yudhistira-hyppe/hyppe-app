@@ -694,6 +694,13 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         });
       } finally {
         _textEditingController.clear();
+        // Future.delayed(const Duration(milliseconds: 500), (){
+        //   // FocusScopeNode currentFocus = FocusScope.of(context);
+        //   if (!chatNode.hasPrimaryFocus) {
+        //     chatNode.unfocus();
+        //     _forceStop = false;
+        //   }
+        // });
         FocusScopeNode currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus) {
           currentFocus.unfocus();

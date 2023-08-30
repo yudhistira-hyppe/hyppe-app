@@ -143,12 +143,15 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
 
   bool isOnPageTurning = false;
 
+  late StreamSubscription<bool> keyboardSubscription;
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'StoryPlayerPage');
     print("======================ke initstate");
 
     super.initState();
+
     context.read<StoriesPlaylistNotifier>().setLoadReaction(false);
     _pageController = PageController(initialPage: widget.argument.peopleIndex);
     _pageController.addListener(() {
@@ -171,6 +174,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
         }
       }
     });
+
     animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 7));
     emojiController =
@@ -242,6 +246,12 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
 
       _initListener();
     });
+  }
+
+  @override
+  void didChangeMetrics() {
+    // TODO: implement didChangeMetrics
+    super.didChangeMetrics();
   }
 
   Future getAuth(String apsaraId) async {
@@ -516,6 +526,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
 
   @override
   void dispose() {
+    keyboardSubscription.cancel();
     globalAliPlayer = null;
     Wakelock.disable();
     _animationController?.dispose();
@@ -597,6 +608,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
     //   child: ,
     // );
 
+
+
     return Consumer2<StoriesPlaylistNotifier, PreviewStoriesNotifier>(
         builder: (context, value, storyNot, child) {
       if (MediaQuery.of(context).viewInsets.bottom > 0.0 ||
@@ -606,6 +619,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
         value.setIsKeyboardActive(false);
       }
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: PageView.builder(
           controller: _pageController,
           scrollDirection: Axis.horizontal,
@@ -626,6 +640,19 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
             _lastCurIndex = _curIdx;
           },
           itemBuilder: (context, index) {
+            final player = AliPlayerView(
+              onCreated: (id) {
+                final isImage = _groupUserStories?[index]
+                    .story?[_curChildIdx]
+                    .mediaType ==
+                    'image';
+                onViewPlayerCreated(id, isImage);
+              },
+              x: 0,
+              y: _playerY,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+            );
             return Stack(
               children: [
                 // Text("${_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null || _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType != 'image'}"),
@@ -641,19 +668,11 @@ class _StoryPlayerPageState extends State<StoryPlayerPage>
                 Positioned.fill(child: Container(color: Colors.black,)),
                 Builder(builder: (context) {
                   return !isOnPageTurning
-                      ? AliPlayerView(
-                          onCreated: (id) {
-                            final isImage = _groupUserStories?[index]
-                                    .story?[_curChildIdx]
-                                    .mediaType ==
-                                'image';
-                            onViewPlayerCreated(id, isImage);
-                          },
-                          x: 0,
-                          y: _playerY,
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,
-                        )
+                      ? ( value.onChangingVid ? Container(
+                    color: Colors.black,
+                    alignment: Alignment.center,
+                    child: const CircularProgressIndicator(),
+                  ):player)
                       : Container(
                           color: Colors.black,
                           alignment: Alignment.center,
