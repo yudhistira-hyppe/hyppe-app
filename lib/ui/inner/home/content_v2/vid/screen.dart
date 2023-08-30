@@ -407,6 +407,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                         }
 
                         // Wakelock.disable();
+"================ disable wakelock 86".logger();
                         // notifier.vidData?[_curIdx].fAliplayerAds?.pause();
                         // setState(() {
                         //   _curIdx = -1;
@@ -588,6 +589,16 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                 setState(() {
                                   postIdVisibility = vidData.postID ?? '';
                                 });
+                                var vidNotifier = context.read<PreviewVidNotifier>();
+                                double position = 0.0;
+                                for (var i = 0; i < index; i++) {
+                                  position += vidNotifier.vidData?[i].height ?? 0.0;
+                                }
+                                context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
+                                  position,
+                                  duration: const Duration(milliseconds: 700),
+                                  curve: Curves.easeOut,
+                                );
                               },
                               child: Stack(
                                 children: [

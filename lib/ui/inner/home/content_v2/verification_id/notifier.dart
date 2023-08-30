@@ -775,6 +775,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   void onStopRecordedVideo(BuildContext context) {
     // TODO: implement onStopRecordedVideo
     Wakelock.disable();
+"================ disable wakelock 7".logger();
   }
 
   @override

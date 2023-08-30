@@ -263,12 +263,14 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
           case FlutterAvpdef.AVPStatus_AVPStatusPaused:
             isPause = true;
             Wakelock.disable();
+"================ disable wakelock 23".logger();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             isPlay = false;
             _showLoading = false;
             try {
               Wakelock.disable();
+"================ disable wakelock 55".logger();
             } catch (e) {
               e.logger();
             }
@@ -277,9 +279,11 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
             Wakelock.disable();
+"================ disable wakelock 23".logger();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusError:
             Wakelock.disable();
+"================ disable wakelock 61".logger();
             break;
           default:
         }
@@ -586,6 +590,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
   @override
   void dispose() {
     Wakelock.disable();
+"================ disable wakelock 521".logger();
     globalAliPlayer = null;
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
