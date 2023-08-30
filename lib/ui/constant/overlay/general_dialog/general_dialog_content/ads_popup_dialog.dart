@@ -249,16 +249,20 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
             isPause = true;
             setState(() {});
             Wakelock.disable();
+"================ disable wakelock 92".logger();
             _animationController?.stop();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             Wakelock.disable();
+"================ disable wakelock 75".logger();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
             Wakelock.disable();
+"================ disable wakelock 63".logger();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusError:
             Wakelock.disable();
+"================ disable wakelock 53".logger();
             break;
           default:
         }
@@ -460,6 +464,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
   @override
   void dispose() {
     Wakelock.disable();
+"================ disable wakelock 434".logger();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     _animationController?.dispose();
     if (Platform.isIOS) {

@@ -320,6 +320,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   void cancelVideoRecordingWhenAppIsPausedOrInactive() {
     Wakelock.disable();
+"================ disable wakelock 7".logger();
     cancelTimer();
     _progressDev = 0.0;
     _progressHuman = 0;
@@ -332,6 +333,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       dynamic cameraNotifier;
 
       Wakelock.disable();
+"================ disable wakelock 6".logger();
       final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
       if (canDeppAr == 'true') {
         cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);

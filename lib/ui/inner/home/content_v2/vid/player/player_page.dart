@@ -263,16 +263,20 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
           Wakelock.disable();
+"================ disable wakelock 1".logger();
           setState(() {});
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
           Wakelock.disable();
+"================ disable wakelock 2".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
           Wakelock.disable();
+"================ disable wakelock 3".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusError:
           Wakelock.disable();
+"================ disable wakelock 4".logger();
           break;
         default:
       }
@@ -705,6 +709,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   @override
   void dispose() {
     Wakelock.disable();
+"================ disable wakelock 5".logger();
     globalAliPlayer = null;
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);

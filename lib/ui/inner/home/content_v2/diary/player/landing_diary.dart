@@ -890,9 +890,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         fAliplayer?.stop();
                         fAliplayer?.clearScreen();
                         // Wakelock.disable();
+"================ disable wakelock 346".logger();
                         initAlipayer();
 
-                        Wakelock.disable();
                         if (mounted) {
                           setState(() {
                             Future.delayed(Duration(milliseconds: 400), () {

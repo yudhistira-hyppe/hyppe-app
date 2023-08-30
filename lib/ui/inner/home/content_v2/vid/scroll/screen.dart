@@ -522,6 +522,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                     margin: const EdgeInsets.only(bottom: 20),
                     child: Builder(builder: (context) {
                       return VidPlayerPage(
+                        enableWakelock: false,
                         orientation: Orientation.portrait,
                         playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                         dataSourceMap: map,

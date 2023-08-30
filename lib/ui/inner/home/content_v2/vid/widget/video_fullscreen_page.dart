@@ -36,6 +36,7 @@ class VideoFullscreenPage extends StatefulWidget {
   final Function()? loadMoreFunction;
   final Function()? clearPostId; //netral player
   final bool? isAutoPlay;
+  final bool enableWakelock;
   const VideoFullscreenPage({
     Key? key,
     required this.aliPlayerView,
@@ -49,6 +50,7 @@ class VideoFullscreenPage extends StatefulWidget {
     this.loadMoreFunction,
     this.clearPostId,
     this.isAutoPlay,
+    this.enableWakelock = true,
   }) : super(key: key);
 
   @override
@@ -185,6 +187,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     if ((vidData?.length ?? 0) - 1 == curentIndex) {
       getNewData();
     }
+    
+    _initializeTimer();
   }
 
   _pauseScreen() async {
@@ -192,7 +196,9 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   }
 
   _initializeTimer() async {
-    context.read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
+    if (widget.enableWakelock) {
+      context.read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
+    }
   }
 
   _handleInactivity() {  
@@ -250,6 +256,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
   @override
   void dispose() {
+    _pauseScreen();
     whileDispose();
     super.dispose();
   }

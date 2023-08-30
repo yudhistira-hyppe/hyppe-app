@@ -62,6 +62,7 @@ class VidPlayerPage extends StatefulWidget {
   final bool clearing;
   final bool? isAutoPlay;
   final Function()? autoScroll; //netral player
+  final bool enableWakelock;
 
   // FlutterAliplayer? fAliplayer;
   // FlutterAliplayer? fAliplayerAds;
@@ -89,6 +90,7 @@ class VidPlayerPage extends StatefulWidget {
     this.clearing = false,
     this.isAutoPlay = false,
     this.autoScroll,
+    this.enableWakelock = true,
 
     // this.fAliplayer,
     // this.fAliplayerAds
@@ -191,6 +193,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VerificationIDSuccess');
     super.initState();
+    "================= enable wakelock ${widget.enableWakelock}".logger();
     // if (widget.playMode == ModeTypeAliPLayer.auth) {
     //   getAuth();
     // } else {
@@ -541,16 +544,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       print(widget.playMode);
       print(widget.data!.isApsara);
       print(widget.data?.postID);
-      var vidNotifier = context.read<PreviewVidNotifier>();
-      double position = 0.0;
-      for (var i = 0; i < (widget.index ?? 0); i++) {
-        position += vidNotifier.vidData?[i].height ?? 0.0;
-      }
-      context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
-        position,
-        duration: const Duration(milliseconds: 700),
-        curve: Curves.easeOut,
-      );
       if (widget.data!.isApsara ?? false) {
         getAuth();
       } else {
@@ -1708,6 +1701,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                               }
                               VideoIndicator value = await Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
                                   builder: (_) => VideoFullscreenPage(
+                                        enableWakelock: widget.enableWakelock,
                                         aliPlayerView: aliPlayerView!,
                                         fAliplayer: fAliplayer,
                                         data: widget.data ?? ContentData(),
