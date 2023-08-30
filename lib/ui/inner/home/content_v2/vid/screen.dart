@@ -426,10 +426,16 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
                   try {
                     Future.delayed(const Duration(milliseconds: 400), () {
-                      setState(() {
+                      if(mounted){
+                        setState(() {
+                          postIdVisibility = notifier.vidData?[_curIdx].postID ?? '';
+                          postIdVisibilityTemp = notifier.vidData?[_curIdx].postID ?? '';
+                        });
+                      }else{
                         postIdVisibility = notifier.vidData?[_curIdx].postID ?? '';
                         postIdVisibilityTemp = notifier.vidData?[_curIdx].postID ?? '';
-                      });
+                      }
+
 
                       // VidPlayerPageState().playVideo();
 

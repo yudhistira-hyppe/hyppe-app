@@ -1073,19 +1073,19 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                                 settings: const RouteSettings()));
                             if (mounted) {
                               setState(() {
-                                _videoDuration = value.videoDuration;
-                                _currentPosition = value.seekValue;
-                                _currentPositionText = value.positionText;
-                                _showTipsWidget = value.showTipsWidget;
-                                isMute = value.isMute;
+                                _videoDuration = value.videoDuration ?? 0;
+                                _currentPosition = value.seekValue ?? 0;
+                                _currentPositionText = value.positionText ?? 0;
+                                _showTipsWidget = value.showTipsWidget ?? false;
+                                isMute = value.isMute ?? false;
                                 isPlay = !_showTipsWidget;
                               });
                             } else {
-                              _videoDuration = value.videoDuration;
-                              _currentPosition = value.seekValue;
-                              _currentPositionText = value.positionText;
-                              _showTipsWidget = value.showTipsWidget;
-                              isMute = value.isMute;
+                              _videoDuration = value.videoDuration ?? 0;
+                              _currentPosition = value.seekValue ?? 0;
+                              _currentPositionText = value.positionText ?? 0;
+                              _showTipsWidget = value.showTipsWidget ?? false;
+                              isMute = value.isMute ?? false;
                               isPlay = !_showTipsWidget;
                             }
 

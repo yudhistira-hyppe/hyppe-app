@@ -20,9 +20,7 @@ import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
-import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
@@ -33,10 +31,8 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:path_provider/path_provider.dart';
-// import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
-import 'package:wakelock/wakelock.dart';
 
 import '../../../../../../app.dart';
 
@@ -325,9 +321,14 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         fAliplayer?.getMediaInfo().then((value) {
           print("getMediaInfo==${value}");
           _videoDuration = value['duration'];
-          setState(() {
+          if(mounted){
+            setState(() {
+              isPrepare = true;
+            });
+          }else{
             isPrepare = true;
-          });
+          }
+
         });
         // isPlay = true;
         // isPause = false;
@@ -925,22 +926,25 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   void didUpdateWidget(covariant VidPlayerPage oldWidget) {
     // If you want to react only to changes you could check
     // oldWidget.selectedIndex != widget.selectedIndex
-    if (oldWidget.isPlaying != widget.isPlaying) {
-      "===================== isPlaying ${widget.isPlaying}".logger();
-      if (widget.isPlaying ?? true) {
-        fAliplayer?.play();
-      } else {
-        "=============== pause 0".logger();
-        fAliplayer?.pause();
-      }
-      // this syntax below to prevent video play after changing video
-      Future.delayed(const Duration(seconds: 1), () {
-        if (context.read<MainNotifier>().isInactiveState) {
-          "=============== pause 1".logger();
+    if(mounted){
+      if (oldWidget.isPlaying != widget.isPlaying) {
+        "===================== isPlaying ${widget.isPlaying}".logger();
+        if (widget.isPlaying ?? true) {
+          fAliplayer?.play();
+        } else {
+          "=============== pause 0".logger();
           fAliplayer?.pause();
         }
-      });
+        // this syntax below to prevent video play after changing video
+        Future.delayed(const Duration(seconds: 1), () {
+          if (context.read<MainNotifier>().isInactiveState) {
+            "=============== pause 1".logger();
+            fAliplayer?.pause();
+          }
+        });
+      }
     }
+
 
     super.didUpdateWidget(oldWidget);
   }
@@ -1736,19 +1740,19 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                               //     });
                               if (mounted) {
                                 setState(() {
-                                  _videoDuration = value.videoDuration;
-                                  _currentPosition = value.seekValue;
-                                  _currentPositionText = value.positionText;
-                                  _showTipsWidget = value.showTipsWidget;
-                                  isMute = value.isMute;
+                                  _videoDuration = value.videoDuration ?? 0;
+                                  _currentPosition = value.seekValue ?? 0;
+                                  _currentPositionText = value.positionText ?? 0;
+                                  _showTipsWidget = value.showTipsWidget ?? false;
+                                  isMute = value.isMute ?? false;
                                   isPlay = !_showTipsWidget;
                                 });
                               } else {
-                                _videoDuration = value.videoDuration;
-                                _currentPosition = value.seekValue;
-                                _currentPositionText = value.positionText;
-                                _showTipsWidget = value.showTipsWidget;
-                                isMute = value.isMute;
+                                _videoDuration = value.videoDuration ?? 0;
+                                _currentPosition = value.seekValue ?? 0;
+                                _currentPositionText = value.positionText ?? 0;
+                                _showTipsWidget = value.showTipsWidget ?? false;
+                                isMute = value.isMute ?? false;
                                 isPlay = !_showTipsWidget;
                               }
 

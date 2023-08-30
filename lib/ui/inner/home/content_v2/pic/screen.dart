@@ -17,6 +17,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -999,11 +1000,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                       builder: (BuildContext context, int count, _) {
                                         return ImageSize(
                                           onChange: (Size size) {
-                                            Future.delayed(Duration(milliseconds: 300), () {
-                                              if (mounted) {
-                                                setState(() {
+                                            Future.delayed(const Duration(milliseconds: 300), () {
+                                              try {
+                                                if (mounted) {
+                                                  setState(() {
+                                                    picData?.imageHeightTemp = size.height;
+                                                  });
+                                                } else {
                                                   picData?.imageHeightTemp = size.height;
-                                                });
+                                                }
+                                              } catch (e) {
+                                                e.logger();
                                               }
                                             });
                                           },
