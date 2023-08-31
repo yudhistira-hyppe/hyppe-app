@@ -565,11 +565,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   }
 
   _pauseScreen() async {
-    context.read<MainNotifier>().removeWakelock();
+    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().removeWakelock();
   }
 
   void _initializeTimer() async {
-    context.read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
+    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
   }
 
   void _handleInactivity() {

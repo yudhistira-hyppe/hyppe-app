@@ -23,7 +23,6 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dar
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_fullscreen_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
@@ -59,6 +58,7 @@ class VidPlayerPage extends StatefulWidget {
   final bool? isAutoPlay;
   final Function()? autoScroll; //netral player
   final bool enableWakelock;
+  final bool withThumbnail;
 
   // FlutterAliplayer? fAliplayer;
   // FlutterAliplayer? fAliplayerAds;
@@ -87,6 +87,7 @@ class VidPlayerPage extends StatefulWidget {
     this.isAutoPlay = false,
     this.autoScroll,
     this.enableWakelock = true,
+    this.withThumbnail = true,
 
     // this.fAliplayer,
     // this.fAliplayerAds
@@ -508,23 +509,28 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         }
       });
 
-      fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {
-        _thumbnailSuccess = true;
-      }, preparedFail: (playerId) {
-        _thumbnailSuccess = false;
-      });
 
-      fAliplayer?.setOnThumbnailGetListener(
-          onThumbnailGetSuccess: (bitmap, range, playerId) {
-            // _thumbnailBitmap = bitmap;
-            var provider = MemoryImage(bitmap);
-            precacheImage(provider, context).then((_) {
-              setState(() {
-                _imageProvider = provider;
+
+      if(widget.withThumbnail){
+        fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {
+          _thumbnailSuccess = true;
+        }, preparedFail: (playerId) {
+          _thumbnailSuccess = false;
+        });
+
+        fAliplayer?.setOnThumbnailGetListener(
+            onThumbnailGetSuccess: (bitmap, range, playerId) {
+              // _thumbnailBitmap = bitmap;
+              var provider = MemoryImage(bitmap);
+              precacheImage(provider, context).then((_) {
+                setState(() {
+                  _imageProvider = provider;
+                });
               });
-            });
-          },
-          onThumbnailGetFail: (playerId) {});
+            },
+            onThumbnailGetFail: (playerId) {});
+      }
+
 
       fAliplayer?.setOnSubtitleHide((trackIndex, subtitleID, playerId) {
         if (mounted) {
@@ -1006,7 +1012,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           ? Stack(
               key: ValueKey<bool>(isloading),
               children: [
-                Container(
+                widget.withThumbnail ? Container(
                   height: widget.height,
                   width: widget.width,
                   decoration: BoxDecoration(
@@ -1018,6 +1024,15 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                     onDetail: false,
                     fn: () {},
                     withMargin: true,
+                  ),
+                ): Container(
+                  height: widget.height,
+                  width: widget.width,
+                  color: Colors.black,
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(
+                    backgroundColor: Colors.white,
+                    strokeWidth: 3.0,
                   ),
                 ),
                 Positioned.fill(
@@ -1079,7 +1094,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                           child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation)),
                         ),
                       if (!isPlay)
-                        SizedBox(
+                        widget.withThumbnail ? SizedBox(
                           height: widget.height,
                           width: widget.width,
                           child: VideoThumbnail(
@@ -1087,6 +1102,15 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                             onDetail: false,
                             fn: () {},
                             withMargin: true,
+                          ),
+                        ) : Container(
+                          height: widget.height,
+                          width: widget.width,
+                          color: Colors.black,
+                          alignment: Alignment.center,
+                          child: const CircularProgressIndicator(
+                            backgroundColor: Colors.white,
+                            strokeWidth: 3.0,
                           ),
                         ),
                       (widget.data?.reportedStatus == "BLURRED")
@@ -1284,10 +1308,16 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                           color: Colors.white,
                         )
                       : Container(),
-                  Container(
+                  widget.withThumbnail ? Container(
                       child: Image.network(
                     (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
-                  ))
+                  )): Container(
+                    color: Colors.black,
+                    child: const CircularProgressIndicator(
+                      backgroundColor: Colors.white,
+                      strokeWidth: 3.0,
+                    ),
+                  )
                 ],
               ),
             ),
