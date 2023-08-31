@@ -154,6 +154,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
       _initListener();
     });
+    context.read<MainNotifier>().removeWakelock();
 
     super.initState();
   }

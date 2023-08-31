@@ -657,7 +657,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         break;
       case AppLifecycleState.resumed:
         if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
-          fAliplayer?.play();
+          if (context.read<MainNotifier>().isInactiveState) {
+            fAliplayer?.play();
+          }
           _initializeTimer();
         }
         break;
@@ -883,7 +885,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         fAliplayer?.stop();
                         fAliplayer?.clearScreen();
                         // Wakelock.disable();
-                        "================ disable wakelock 346".logger();
                         initAlipayer();
 
                         if (mounted) {
