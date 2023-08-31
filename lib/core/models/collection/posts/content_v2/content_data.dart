@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
@@ -199,6 +200,7 @@ class ContentData {
   int? limitLandingpage;
   double? imageHeightTemp;
   double? imageHeightTemp2;
+  String? valueCache;
 
   ContentData({
     this.metadata,
@@ -265,6 +267,7 @@ class ContentData {
     this.limitLandingpage,
     this.imageHeightTemp,
     this.imageHeightTemp2,
+    this.valueCache,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -369,6 +372,7 @@ class ContentData {
     }
     limitLandingpage = json['limitLandingpage'] ?? 0;
     imageHeightTemp = json['imageHeightTemp'] ?? 0;
+    valueCache = rundom();
   }
 
   Map<String, dynamic> toJson() {
@@ -432,6 +436,12 @@ class ContentData {
       data['urluserBadge'] = urluserBadge?.toJson();
     }
     return data;
+  }
+
+  String? rundom() {
+    Random random = Random();
+    int randomNumber = random.nextInt(100); // from 0 upto 99 included
+    return randomNumber.toString();
   }
 
   String? concatThumbUri() {
