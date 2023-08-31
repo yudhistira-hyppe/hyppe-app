@@ -100,6 +100,21 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  int _pageIndex = -1;
+  int get pageIndex => _pageIndex;
+
+  set pageIndex(int index) {
+    _pageIndex = index;
+    notifyListeners();
+  }
+
+  double? _currentPage = 0;
+  double? get currentPage => _currentPage;
+  set currentPage(double? val) {
+    _currentPage = val;
+    notifyListeners();
+  }
+
   Future<void> initialVid(BuildContext context, {bool reload = false, List<ContentData>? list}) async {
     List<ContentData> res = [];
 

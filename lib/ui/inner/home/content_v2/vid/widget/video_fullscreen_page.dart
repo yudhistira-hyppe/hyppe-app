@@ -78,6 +78,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   int curentIndex = 0;
   Orientation orientation = Orientation.portrait;
 
+  bool isOnPageTurning = false;
+
   @override
   void afterFirstLayout(BuildContext context) {
     landscape();
@@ -116,6 +118,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     isMute = widget.videoIndicator.isMute ?? false;
     vidData = widget.vidData;
     super.initState();
+
+    if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
+      orientation = Orientation.landscape;
+    } else {
+      orientation = Orientation.portrait;
+    }
 
     int changevalue;
     changevalue = _currentPosition + 1000;
@@ -181,6 +189,20 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       setState(() {
         isScrolled = true;
       });
+      final _notifier = context.read<PreviewVidNotifier>();
+      if (isOnPageTurning && controller.page == controller.page?.roundToDouble()) {
+        _notifier.pageIndex = controller.page?.toInt() ?? 0;
+        setState(() {
+          // current = _controller.page.toInt();
+          isOnPageTurning = false;
+        });
+      } else if (!isOnPageTurning) {
+        if (((_notifier.pageIndex.toDouble()) - (controller.page ?? 0)).abs() > 0.1) {
+          setState(() {
+            isOnPageTurning = true;
+          });
+        }
+      }
     });
 
     curentIndex = widget.index ?? 0;
@@ -276,24 +298,31 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       orientation = Orientation.portrait;
     }
 
+    print('start step -> height: $height width: $width orientation: $lastOrientation');
+
     if (lastOrientation != orientation) {
       setState(() {
         isloadingRotate = true;
       });
+      print('step 1');
       if (orientation == Orientation.landscape) {
         SystemChrome.setPreferredOrientations([
           DeviceOrientation.landscapeLeft,
           DeviceOrientation.landscapeRight,
         ]);
+        print('step 2');
       } else {
         // await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
         await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+        print('step 3');
       }
       Future.delayed(const Duration(milliseconds: 1000), () {
         setState(() {
           isloadingRotate = false;
         });
       });
+    }else{
+
     }
   }
 
@@ -350,13 +379,18 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                         }
                       },
                       itemBuilder: (context, index) {
+                        if(index != curentIndex){
+                          return Container(color: Colors.black,);
+                        }
+                        "================== isPause $isPause $isScrolled".logger();
                         if (isScrolled) {
                           // return Container(
                           //   height: MediaQuery.of(context).size.height,
                           //   width: MediaQuery.of(context).size.width,
                           //   child: Center(child: Text("data ${index}")),
                           // );
-                          "================== isPause $isPause".logger();
+
+
                           return isloadingRotate
                               ? Container(
                                   color: Colors.black,
@@ -366,36 +400,47 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     child: CircularProgressIndicator(),
                                   ),
                                 )
-                              : VidPlayerPage(
-                                  // vidData: notifier.vidData,
-                                  fromFullScreen: true,
-                                  orientation: Orientation.portrait,
-                                  playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                                  dataSourceMap: map,
-                                  data: vidData?[index],
-                                  height: MediaQuery.of(context).size.height,
-                                  width: MediaQuery.of(context).size.width,
-                                  inLanding: true,
-                                  fromDeeplink: false,
-                                  clearPostId: widget.clearPostId,
-                                  clearing: true,
-                                  isAutoPlay: true,
-                                  functionFullTriger: (value) {
-                                    print('===========hahhahahahaa===========');
-                                  },
-                                  isPlaying: !isPause,
-                                  onPlay: (exec) {},
-                                  getPlayer: (main) {},
-                                  getAdsPlayer: (ads) {
-                                    // notifier.vidData?[index].fAliplayerAds = ads;
-                                  },
-                                  autoScroll: () {
-                                    nextPage();
-                                  },
-      
-                                  // fAliplayer: notifier.vidData?[index].fAliplayer,
-                                  // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
-                                );
+                              : OrientationBuilder(
+                                builder: (context, orientation) {
+                                  final player = VidPlayerPage(
+                                    // vidData: notifier.vidData,
+                                    fromFullScreen: true,
+                                    orientation: Orientation.portrait,
+                                    playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                                    dataSourceMap: map,
+                                    data: vidData?[index],
+                                    height: MediaQuery.of(context).size.height,
+                                    width: MediaQuery.of(context).size.width,
+                                    inLanding: true,
+                                    fromDeeplink: false,
+                                    clearPostId: widget.clearPostId,
+                                    clearing: true,
+                                    isAutoPlay: true,
+                                    functionFullTriger: (value) {
+                                      print('===========hahhahahahaa===========');
+                                    },
+                                    isPlaying: !isPause,
+                                    onPlay: (exec) {},
+                                    getPlayer: (main) {},
+                                    getAdsPlayer: (ads) {
+                                      // notifier.vidData?[index].fAliplayerAds = ads;
+                                    },
+                                    autoScroll: () {
+                                      nextPage();
+                                    },
+                                    // fAliplayer: notifier.vidData?[index].fAliplayer,
+                                    // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
+                                  );
+                                  if(orientation == Orientation.landscape){
+                                    return Container(
+                                      width: context.getWidth(),
+                                      height: context.getHeight(),
+                                      child: player,
+                                    );
+                                  }
+                                  return player;
+                                }
+                              );
                         } else {
                           return GestureDetector(
                             onTap: () {
