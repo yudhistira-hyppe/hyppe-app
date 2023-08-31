@@ -393,13 +393,13 @@ class MainNotifier with ChangeNotifier {
     "=================== remove wakelock".logger();
     _inactivityTimer?.cancel();
     _inactivityTimer = null;
-    if (await Wakelock.enabled) Wakelock.disable();
+    Wakelock.disable();
   }
 
   void initWakelockTimer({required Function() onShowInactivityWarning}) async {
     "=================== init wakelock".logger();
-    if (!(await Wakelock.enabled)) Wakelock.enable();
+    Wakelock.enable();
     if (_inactivityTimer != null) _inactivityTimer?.cancel();
-    _inactivityTimer = Timer(const Duration(seconds: 3000), () => onShowInactivityWarning());
+    _inactivityTimer = Timer(const Duration(seconds: 30), () => onShowInactivityWarning());
   }
 }
