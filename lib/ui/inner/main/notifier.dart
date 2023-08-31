@@ -400,6 +400,6 @@ class MainNotifier with ChangeNotifier {
     "=================== init wakelock".logger();
     if (!(await Wakelock.enabled)) Wakelock.enable();
     if (_inactivityTimer != null) _inactivityTimer?.cancel();
-    _inactivityTimer = Timer(const Duration(seconds: 3000), () => onShowInactivityWarning());
+    _inactivityTimer = Timer(const Duration(seconds: 30), () => onShowInactivityWarning());
   }
 }

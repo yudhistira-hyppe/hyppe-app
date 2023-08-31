@@ -332,12 +332,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
           totItemHeight -= notifier.pic?[_curIdx - 1].height ?? 0.0;
         }
 
-        if (offset <= totItemHeightParam) {
+        if (offset <= totItemHeightParam && offset > 0) {
           var position = totItemHeight;
           if (mounted) widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
         }
       }
     }
+
     Timer(Duration(milliseconds: 300), () {
       lastOffset = offset;
     });

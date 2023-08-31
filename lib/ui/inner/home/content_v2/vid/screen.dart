@@ -146,7 +146,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
           totItemHeight -= notifier.vidData?[_curIdx - 1].height ?? 0.0;
         }
 
-        if (offset <= totItemHeightParam) {
+        if (offset <= totItemHeightParam && offset > 0) {
           var position = totItemHeight;
           if (mounted) widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
         }
@@ -407,7 +407,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                         }
 
                         // Wakelock.disable();
-"================ disable wakelock 86".logger();
+                        "================ disable wakelock 86".logger();
                         // notifier.vidData?[_curIdx].fAliplayerAds?.pause();
                         // setState(() {
                         //   _curIdx = -1;
@@ -426,16 +426,15 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
                   try {
                     Future.delayed(const Duration(milliseconds: 400), () {
-                      if(mounted){
+                      if (mounted) {
                         setState(() {
                           postIdVisibility = notifier.vidData?[_curIdx].postID ?? '';
                           postIdVisibilityTemp = notifier.vidData?[_curIdx].postID ?? '';
                         });
-                      }else{
+                      } else {
                         postIdVisibility = notifier.vidData?[_curIdx].postID ?? '';
                         postIdVisibilityTemp = notifier.vidData?[_curIdx].postID ?? '';
                       }
-
 
                       // VidPlayerPageState().playVideo();
 
@@ -601,10 +600,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                   position += vidNotifier.vidData?[i].height ?? 0.0;
                                 }
                                 context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
-                                  position,
-                                  duration: const Duration(milliseconds: 700),
-                                  curve: Curves.easeOut,
-                                );
+                                      position,
+                                      duration: const Duration(milliseconds: 700),
+                                      curve: Curves.easeOut,
+                                    );
                               },
                               child: Stack(
                                 children: [

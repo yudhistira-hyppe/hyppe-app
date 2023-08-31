@@ -365,7 +365,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           totItemHeight -= notifier.diaryData?[_curIdx - 1].height ?? 0.0;
         }
 
-        if (offset <= totItemHeightParam) {
+        if (offset <= totItemHeightParam && offset > 0) {
           var position = totItemHeight;
           if (mounted) widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
         }
