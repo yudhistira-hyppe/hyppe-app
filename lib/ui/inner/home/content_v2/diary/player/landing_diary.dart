@@ -574,21 +574,25 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   }
 
   void _handleInactivity() {
+<<<<<<< HEAD
     context.read<MainNotifier>().isInactiveState = true;
     context.read<PreviewVidNotifier>().canPlayOpenApps = false;
+=======
+    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = true;
+>>>>>>> de7f51f8cde621932deb8a8f3b0bca740778d6e7
     fAliplayer?.pause();
     _pauseScreen();
     ShowBottomSheet().onShowColouredSheet(
-      context,
-      context.read<TranslateNotifierV2>().translate.warningInavtivityDiary,
+      (Routing.navigatorKey.currentContext ?? context),
+      (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.warningInavtivityDiary,
       maxLines: 2,
       color: kHyppeLightBackground,
       textColor: kHyppeTextLightPrimary,
       textButtonColor: kHyppePrimary,
       iconSvg: 'close.svg',
-      textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
+      textButton: (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.stringContinue ?? '',
       onClose: () {
-        context.read<MainNotifier>().isInactiveState = false;
+        (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = false;
         fAliplayer?.play();
         _initializeTimer();
         context.read<PreviewVidNotifier>().canPlayOpenApps = true;
