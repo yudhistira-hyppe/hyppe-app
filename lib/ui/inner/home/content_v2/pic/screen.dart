@@ -114,6 +114,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   ScrollController controller = ScrollController();
   ScrollPhysics scrollPhysic = const NeverScrollableScrollPhysics();
   double lastOffset = 0;
+  bool scroolUp = false;
 
   @override
   void initState() {
@@ -303,7 +304,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     print("offset $offset");
     print("lastOffset $lastOffset");
 
-    if (offset >= lastOffset) {
+    // if (offset >= lastOffset) {
+    if (!scroolUp) {
       homeClick = false;
       for (var i = 0; i <= _curIdx; i++) {
         if (i == _curIdx) {
@@ -620,90 +622,113 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             overscroll.disallowIndicator();
                             return true;
                           },
-                          child: ListView.builder(
-                            // scrollDirection: Axis.horizontal,
-                            // controller: innerScrollController,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: notifier.pic?.length,
-                            padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                            // child: ScrollSnapList(
-                            //   listController: controller,
-                            //   listViewPadding: EdgeInsets.zero,
-                            //   dynamicItemSize: false,
-                            //   itemCount: notifier.pic?.length ?? 0,
-                            //   // itemCount: heightItem.length,
-                            //   onItemFocus: (p0) {
-                            //     print("focuss----- $p0");
-                            //     setState(() {
-                            //       itemHeight = notifier.picTemp?[p0].height ?? 0;
-                            //     });
-                            //   },
-                            //   // itemSize: itemHeight,
-                            //   itemSize: 722,
-                            //   scrollDirection: Axis.vertical,
-                            //   allowAnotherDirection: false,
-                            //   clipBehavior: Clip.antiAlias,
-                            //   scrollPhysics: scrollPhysic,
-                            //   // scrollPhysics: NeverScrollableScrollPhysics(),
-                            //   dispatchScrollNotifications: false,
-                            //   endOfListTolerance: SizeConfig.screenHeight,
-                            // child: SnappyListView(
-                            //   reverse: false,
-                            //   // controller: controller,
-                            //   itemCount: notifier.picTemp?.length ?? 0,
-                            //   itemSnapping: true,
-                            //   allowItemSizes: true,
-                            //   onPageChange: (index, size) {
-                            //     print(index);
-                            //     print(size);
-                            //   },
-                            //   // physics: NeverScrollableScrollPhysics(),
-                            //   // physics: const CustomPageViewScrollPhysics(),
-                            //   // overscrollPhysics: const PageOverscrollPhysics(velocityPerOverscroll: 100),
-                            //   snapAlignment: SnapAlignment.moveAcross(),
-                            //   snapOnItemAlignment: SnapAlignment.moveAcross(),
-                            //   // visualisation: ListVisualisation.perspective(),
-                            //   scrollBehavior: ScrollBehavior(),
-                            itemBuilder: (context, index) {
-                              if (notifier.pic == null || home.isLoadingPict) {
-                                fAliplayer?.pause();
-                                // _lastCurIndex = -1;
-                                _lastCurPostId = '';
-                                // return Container(
-                                //   alignment: Alignment.center,
-                                //   child: Text('Test'),
-                                // );
-                                return CustomShimmer(
-                                  width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                                  height: 168,
-                                  radius: 8,
-                                  margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                  padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                                );
-                              } else if (index == notifier.pic?.length && notifier.hasNext) {
-                                return UnconstrainedBox(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    width: 80 * SizeConfig.scaleDiagonal,
-                                    height: 80 * SizeConfig.scaleDiagonal,
-                                    child: const CustomLoading(),
-                                  ),
-                                );
-                              }
-                              // return Container(
-                              //   width: SizeConfig.screenWidth,
-                              //   height: heightItem[index].toDouble(),
-                              //   color: Colors.red,
-                              //   margin: EdgeInsets.only(bottom: 20),
-                              //   child: Text(index.toString()),
-                              // );
+                          child: NotificationListener<UserScrollNotification>(
+                            onNotification: (notification) {
+                              final ScrollDirection direction = notification.direction;
+                              setState(() {
+                                print("-===========scrollll==========");
+                                if (direction == ScrollDirection.reverse) {
+                                  //down
+                                  setState(() {
+                                    scroolUp = false;
+                                  });
 
-                              return Visibility(
-                                // visible: (_curIdx - 1) == index || _curIdx == index || (_curIdx + 1) == index,
-                                visible: true,
-                                child: itemPict(context, notifier, index, home),
-                              );
+                                  print("-===========reverse==========");
+                                } else if (direction == ScrollDirection.forward) {
+                                  //up
+                                  setState(() {
+                                    scroolUp = true;
+                                  });
+                                  print("-===========forward==========");
+                                }
+                              });
+                              return true;
                             },
+                            child: ListView.builder(
+                              // scrollDirection: Axis.horizontal,
+                              // controller: innerScrollController,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: notifier.pic?.length,
+                              padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                              // child: ScrollSnapList(
+                              //   listController: controller,
+                              //   listViewPadding: EdgeInsets.zero,
+                              //   dynamicItemSize: false,
+                              //   itemCount: notifier.pic?.length ?? 0,
+                              //   // itemCount: heightItem.length,
+                              //   onItemFocus: (p0) {
+                              //     print("focuss----- $p0");
+                              //     setState(() {
+                              //       itemHeight = notifier.picTemp?[p0].height ?? 0;
+                              //     });
+                              //   },
+                              //   // itemSize: itemHeight,
+                              //   itemSize: 722,
+                              //   scrollDirection: Axis.vertical,
+                              //   allowAnotherDirection: false,
+                              //   clipBehavior: Clip.antiAlias,
+                              //   scrollPhysics: scrollPhysic,
+                              //   // scrollPhysics: NeverScrollableScrollPhysics(),
+                              //   dispatchScrollNotifications: false,
+                              //   endOfListTolerance: SizeConfig.screenHeight,
+                              // child: SnappyListView(
+                              //   reverse: false,
+                              //   // controller: controller,
+                              //   itemCount: notifier.picTemp?.length ?? 0,
+                              //   itemSnapping: true,
+                              //   allowItemSizes: true,
+                              //   onPageChange: (index, size) {
+                              //     print(index);
+                              //     print(size);
+                              //   },
+                              //   // physics: NeverScrollableScrollPhysics(),
+                              //   // physics: const CustomPageViewScrollPhysics(),
+                              //   // overscrollPhysics: const PageOverscrollPhysics(velocityPerOverscroll: 100),
+                              //   snapAlignment: SnapAlignment.moveAcross(),
+                              //   snapOnItemAlignment: SnapAlignment.moveAcross(),
+                              //   // visualisation: ListVisualisation.perspective(),
+                              //   scrollBehavior: ScrollBehavior(),
+                              itemBuilder: (context, index) {
+                                if (notifier.pic == null || home.isLoadingPict) {
+                                  fAliplayer?.pause();
+                                  // _lastCurIndex = -1;
+                                  _lastCurPostId = '';
+                                  // return Container(
+                                  //   alignment: Alignment.center,
+                                  //   child: Text('Test'),
+                                  // );
+                                  return CustomShimmer(
+                                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                    height: 168,
+                                    radius: 8,
+                                    margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                  );
+                                } else if (index == notifier.pic?.length && notifier.hasNext) {
+                                  return UnconstrainedBox(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      width: 80 * SizeConfig.scaleDiagonal,
+                                      height: 80 * SizeConfig.scaleDiagonal,
+                                      child: const CustomLoading(),
+                                    ),
+                                  );
+                                }
+                                // return Container(
+                                //   width: SizeConfig.screenWidth,
+                                //   height: heightItem[index].toDouble(),
+                                //   color: Colors.red,
+                                //   margin: EdgeInsets.only(bottom: 20),
+                                //   child: Text(index.toString()),
+                                // );
+
+                                return Visibility(
+                                  // visible: (_curIdx - 1) == index || _curIdx == index || (_curIdx + 1) == index,
+                                  visible: true,
+                                  child: itemPict(context, notifier, index, home),
+                                );
+                              },
+                            ),
                           ),
                         ),
             ),
