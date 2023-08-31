@@ -574,12 +574,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   }
 
   void _handleInactivity() {
-<<<<<<< HEAD
-    context.read<MainNotifier>().isInactiveState = true;
     context.read<PreviewVidNotifier>().canPlayOpenApps = false;
-=======
+
     (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = true;
->>>>>>> de7f51f8cde621932deb8a8f3b0bca740778d6e7
+    (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
     fAliplayer?.pause();
     _pauseScreen();
     ShowBottomSheet().onShowColouredSheet(

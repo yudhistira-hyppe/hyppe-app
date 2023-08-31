@@ -114,7 +114,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   }
 
   void toPosition(offset) async {
-    _initializeTimer();
+    // _initializeTimer();
     double totItemHeight = 0;
     double totItemHeightParam = 0;
     final notifier = context.read<PreviewVidNotifier>();
