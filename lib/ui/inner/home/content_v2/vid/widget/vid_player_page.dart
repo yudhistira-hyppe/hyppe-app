@@ -213,6 +213,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
         fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.postID ?? 'video_player_landing');
+        globalAliPlayer = fAliplayer;
         fAliplayer?.setAutoPlay(autoPlay);
         if (autoPlay) {
           print("================== vid player index ${widget.index}");
@@ -258,8 +259,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         'Error Initialize Ali Player: $e'.logger();
       } finally {}
     });
-
-    globalAliPlayer = fAliplayer;
   }
 
   Future getAdsVideo(bool isContent) async {
