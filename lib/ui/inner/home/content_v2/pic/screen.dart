@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -741,6 +742,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   var initialControllerValue;
   ValueNotifier<int> _networklHasErrorNotifier = ValueNotifier(0);
 
+  final Map cacheDesc = {};
+
   Widget itemPict(BuildContext context, PreviewPicNotifier notifier, int index, HomeNotifier homeNotifier) {
     var picData = notifier.pic?[index];
     return WidgetSize(
@@ -759,6 +762,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // SelectableText(((picData?.isApsara ?? false) ? (picData?.mediaThumbEndPoint ?? "") : "${picData?.fullThumbPath}") + "&key=${cacheDesc[index]}"),
+
                 // Text("total ${notifier.picTemp?.length}"),
                 // Text("itemHeight $itemHeight"),
                 // Text("height ${picData?.imageHeightTemp}"),
@@ -1042,12 +1047,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             });
                                           },
                                           child: CustomBaseCacheImage(
-                                            cacheKey: "${picData?.postID}-${_networklHasErrorNotifier.value.toString()}",
+                                            // cacheKey: "${picData?.postID}-${cacheDesc[index]}",
                                             memCacheWidth: 100,
                                             memCacheHeight: 100,
                                             widthPlaceHolder: 80,
                                             heightPlaceHolder: 80,
-                                            imageUrl: (picData?.isApsara ?? false) ? (picData?.mediaThumbEndPoint ?? "") : "${picData?.fullThumbPath}",
+                                            imageUrl: "${(picData?.isApsara ?? false) ? (picData?.mediaThumbEndPoint ?? "") : "${picData?.fullThumbPath}"}&key=${picData?.valueCache}",
                                             imageBuilder: (context, imageProvider) {
                                               return ClipRRect(
                                                 borderRadius: BorderRadius.circular(20), // Image border
@@ -1072,6 +1077,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             emptyWidget: GestureDetector(
                                               onTap: () {
                                                 _networklHasErrorNotifier.value++;
+                                                Random random = new Random();
+                                                int randomNumber = random.nextInt(100); // from 0 upto 99 included
+
+                                                picData?.valueCache = randomNumber.toString();
+                                                setState(() {});
                                                 // reloadImage(index);
                                               },
                                               child: Container(
@@ -1088,7 +1098,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                             errorWidget: (context, url, error) {
                                               return GestureDetector(
                                                 onTap: () {
+                                                  Random random = new Random();
+                                                  int randomNumber = random.nextInt(100); // from 0 upto 99 included
                                                   _networklHasErrorNotifier.value++;
+                                                  picData?.valueCache = randomNumber.toString();
+                                                  setState(() {});
                                                   // reloadImage(index);
                                                 },
                                                 child: Container(

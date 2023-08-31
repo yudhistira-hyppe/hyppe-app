@@ -33,12 +33,12 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock/wakelock.dart';
 
 class MainNotifier with ChangeNotifier {
-  GlobalKey<NestedScrollViewState> _globalKey = GlobalKey();
-  GlobalKey<NestedScrollViewState> get globalKey => _globalKey;
-  set globalKey(val) {
-    _globalKey = val;
-    notifyListeners();
-  }
+  GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
+  // GlobalKey<NestedScrollViewState> get globalKey => _globalKey;
+  // set globalKey(val) {
+  //   _globalKey = val;
+  //   notifyListeners();
+  // }
 
   final _eventService = EventService();
   SocketService get socketService => _socketService;
