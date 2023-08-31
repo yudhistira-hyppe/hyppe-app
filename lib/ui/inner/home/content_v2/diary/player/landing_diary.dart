@@ -133,6 +133,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   initAlipayer() {
     fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: 'DiaryLandingpage');
+    globalAliPlayer = fAliplayer;
     fAliplayer?.pause();
     fAliplayer?.setAutoPlay(true);
     vidConfig();
@@ -574,6 +575,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   void _handleInactivity() {
     context.read<MainNotifier>().isInactiveState = true;
+    context.read<PreviewVidNotifier>().canPlayOpenApps = false;
     fAliplayer?.pause();
     _pauseScreen();
     ShowBottomSheet().onShowColouredSheet(
@@ -589,6 +591,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         context.read<MainNotifier>().isInactiveState = false;
         fAliplayer?.play();
         _initializeTimer();
+        context.read<PreviewVidNotifier>().canPlayOpenApps = true;
       },
     );
   }

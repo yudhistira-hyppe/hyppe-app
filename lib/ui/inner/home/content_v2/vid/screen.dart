@@ -97,6 +97,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     notifier.pageController.addListener(() => notifier.scrollListener(context));
     lang = context.read<TranslateNotifierV2>().translate;
     lastOffset = -10;
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       //scroll
       if (mounted) {
@@ -172,6 +173,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       e.logger();
     }
     CustomRouteObserver.routeObserver.unsubscribe(this);
+    WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
   }
@@ -255,7 +257,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   }
 
   _pauseScreen() async {
-    context.read<MainNotifier>().removeWakelock();
+    print("===========pause scren=======");
+    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().removeWakelock();
   }
 
   void _initializeTimer() async {
@@ -264,6 +267,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   void _handleInactivity() {
     final notifier = context.read<PreviewVidNotifier>();
+    context.read<PreviewVidNotifier>().canPlayOpenApps = false;
     context.read<MainNotifier>().isInactiveState = true;
     "=============== pause 7".logger();
     notifier.vidData?[_curIdx].fAliplayer?.pause();
@@ -281,6 +285,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         context.read<MainNotifier>().isInactiveState = false;
         notifier.vidData?[_curIdx].fAliplayer?.play();
         _initializeTimer();
+        context.read<PreviewVidNotifier>().canPlayOpenApps = true;
       },
     );
   }

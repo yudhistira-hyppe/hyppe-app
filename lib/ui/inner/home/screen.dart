@@ -235,6 +235,27 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     });
   }
 
+  void _handleInactivity() {
+    context.read<MainNotifier>().isInactiveState = true;
+    context.read<PreviewVidNotifier>().canPlayOpenApps = false;
+    globalAliPlayer?.pause();
+    ShowBottomSheet().onShowColouredSheet(
+      context,
+      context.read<TranslateNotifierV2>().translate.warningInavtivityDiary,
+      maxLines: 2,
+      color: kHyppeLightBackground,
+      textColor: kHyppeTextLightPrimary,
+      textButtonColor: kHyppePrimary,
+      iconSvg: 'close.svg',
+      textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
+      onClose: () {
+        context.read<MainNotifier>().isInactiveState = false;
+        globalAliPlayer?.play();
+        (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: () {});
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // print("iszoom $isZoom");
@@ -254,7 +275,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
             behavior: HitTestBehavior.opaque,
             onPanDown: (val) {
               if (_tabController.index != 0) {
-                (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: () {});
+                (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: () {
+                  _handleInactivity();
+                });
               }
             },
             child: DefaultTabController(

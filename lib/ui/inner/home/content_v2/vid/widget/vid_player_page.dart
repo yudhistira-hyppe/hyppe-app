@@ -322,14 +322,13 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         fAliplayer?.getMediaInfo().then((value) {
           print("getMediaInfo==${value}");
           _videoDuration = value['duration'];
-          if(mounted){
+          if (mounted) {
             setState(() {
               isPrepare = true;
             });
-          }else{
+          } else {
             isPrepare = true;
           }
-
         });
         // isPlay = true;
         // isPause = false;
@@ -509,9 +508,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         }
       });
 
-
-
-      if(widget.withThumbnail){
+      if (widget.withThumbnail) {
         fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {
           _thumbnailSuccess = true;
         }, preparedFail: (playerId) {
@@ -530,7 +527,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             },
             onThumbnailGetFail: (playerId) {});
       }
-
 
       fAliplayer?.setOnSubtitleHide((trackIndex, subtitleID, playerId) {
         if (mounted) {
@@ -932,7 +928,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   void didUpdateWidget(covariant VidPlayerPage oldWidget) {
     // If you want to react only to changes you could check
     // oldWidget.selectedIndex != widget.selectedIndex
-    if(mounted){
+    if (mounted) {
       if (oldWidget.isPlaying != widget.isPlaying) {
         "===================== isPlaying ${widget.isPlaying}".logger();
         if (widget.isPlaying ?? true) {
@@ -950,7 +946,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         });
       }
     }
-
 
     super.didUpdateWidget(oldWidget);
   }
@@ -1012,29 +1007,31 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           ? Stack(
               key: ValueKey<bool>(isloading),
               children: [
-                widget.withThumbnail ? Container(
-                  height: widget.height,
-                  width: widget.width,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(widget.fromFullScreen ?? false ? 0 : 16),
-                  ),
-                  child: VideoThumbnail(
-                    videoData: widget.data,
-                    onDetail: false,
-                    fn: () {},
-                    withMargin: true,
-                  ),
-                ): Container(
-                  height: widget.height,
-                  width: widget.width,
-                  color: Colors.black,
-                  alignment: Alignment.center,
-                  child: const CircularProgressIndicator(
-                    backgroundColor: Colors.white,
-                    strokeWidth: 3.0,
-                  ),
-                ),
+                widget.withThumbnail
+                    ? Container(
+                        height: widget.height,
+                        width: widget.width,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(widget.fromFullScreen ?? false ? 0 : 16),
+                        ),
+                        child: VideoThumbnail(
+                          videoData: widget.data,
+                          onDetail: false,
+                          fn: () {},
+                          withMargin: true,
+                        ),
+                      )
+                    : Container(
+                        height: widget.height,
+                        width: widget.width,
+                        color: Colors.black,
+                        alignment: Alignment.center,
+                        child: const CircularProgressIndicator(
+                          backgroundColor: Colors.white,
+                          strokeWidth: 3.0,
+                        ),
+                      ),
                 Positioned.fill(
                   child: Align(
                     alignment: Alignment.center,
@@ -1094,25 +1091,27 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                           child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation)),
                         ),
                       if (!isPlay)
-                        widget.withThumbnail ? SizedBox(
-                          height: widget.height,
-                          width: widget.width,
-                          child: VideoThumbnail(
-                            videoData: widget.data,
-                            onDetail: false,
-                            fn: () {},
-                            withMargin: true,
-                          ),
-                        ) : Container(
-                          height: widget.height,
-                          width: widget.width,
-                          color: Colors.black,
-                          alignment: Alignment.center,
-                          child: const CircularProgressIndicator(
-                            backgroundColor: Colors.white,
-                            strokeWidth: 3.0,
-                          ),
-                        ),
+                        widget.withThumbnail
+                            ? SizedBox(
+                                height: widget.height,
+                                width: widget.width,
+                                child: VideoThumbnail(
+                                  videoData: widget.data,
+                                  onDetail: false,
+                                  fn: () {},
+                                  withMargin: true,
+                                ),
+                              )
+                            : Container(
+                                height: widget.height,
+                                width: widget.width,
+                                color: Colors.black,
+                                alignment: Alignment.center,
+                                child: const CircularProgressIndicator(
+                                  backgroundColor: Colors.white,
+                                  strokeWidth: 3.0,
+                                ),
+                              ),
                       (widget.data?.reportedStatus == "BLURRED")
                           ? Positioned.fill(
                               child: ClipRRect(
@@ -1308,16 +1307,18 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                           color: Colors.white,
                         )
                       : Container(),
-                  widget.withThumbnail ? Container(
-                      child: Image.network(
-                    (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
-                  )): Container(
-                    color: Colors.black,
-                    child: const CircularProgressIndicator(
-                      backgroundColor: Colors.white,
-                      strokeWidth: 3.0,
-                    ),
-                  )
+                  widget.withThumbnail
+                      ? Container(
+                          child: Image.network(
+                          (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
+                        ))
+                      : Container(
+                          color: Colors.black,
+                          child: const CircularProgressIndicator(
+                            backgroundColor: Colors.white,
+                            strokeWidth: 3.0,
+                          ),
+                        )
                 ],
               ),
             ),
