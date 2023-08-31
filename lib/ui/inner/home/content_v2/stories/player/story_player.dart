@@ -138,8 +138,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   bool isOnPageTurning = false;
 
-  late StreamSubscription<bool> keyboardSubscription;
-
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'StoryPlayerPage');
@@ -508,7 +506,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   @override
   void dispose() {
-    keyboardSubscription.cancel();
     globalAliPlayer = null;
     Wakelock.disable();
     "================ disable wakelock 9".logger();
