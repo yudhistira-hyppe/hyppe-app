@@ -165,6 +165,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   @override
   void dispose() {
     isStopVideo = false;
+    "================ ondispose vid".logger();
     _pauseScreen();
     try {
       final notifier = context.read<PreviewVidNotifier>();
@@ -180,24 +181,25 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   @override
   void deactivate() {
-    print("====== deactivate dari vid");
+    print("============= deactivate dari vid");
     isStopVideo = false;
+    _pauseScreen();
     super.deactivate();
   }
 
   @override
   void didPop() {
-    print("====== didpop dari vid");
+    print("============= didpop dari vid");
     super.didPop();
   }
 
   @override
   void didPopNext() {
-    print("======= didPopNext dari vid");
+    print("============= didPopNext dari vid");
     final notifier = context.read<PreviewVidNotifier>();
+    _initializeTimer();
     if (_curIdx != -1) {
       notifier.vidData?[_curIdx].fAliplayer?.play();
-      _initializeTimer();
     }
     if (postIdVisibility == '') {
       setState(() {
@@ -217,7 +219,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   @override
   void didPushNext() {
-    print("========= didPushNext dari vid");
+    print("=============== didPushNext dari vid");
     final notifier = context.read<PreviewVidNotifier>();
     _pauseScreen();
     if (_curIdx != -1) {
@@ -262,7 +264,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   }
 
   void _initializeTimer() async {
-    context.read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
+    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
   }
 
   void _handleInactivity() {

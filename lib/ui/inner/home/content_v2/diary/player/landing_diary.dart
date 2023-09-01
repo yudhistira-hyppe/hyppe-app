@@ -569,7 +569,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().removeWakelock();
   }
 
-  void _initializeTimer() async {
+  void _initializeTimer() async {      
     (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
   }
 
@@ -622,20 +622,20 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   void deactivate() {
-    print("====== deactivate dari diary");
-
+    print("=============== deactivate dari diary");
+    _pauseScreen();
     super.deactivate();
   }
 
   @override
   void didPop() {
-    print("====== didpop dari diary");
+    print("================ didpop dari diary");
     super.didPop();
   }
 
   @override
   void didPopNext() {
-    print("======= didPopNext dari diary");
+    print("================ didPopNext dari diary");
     fAliplayer?.play();
     _initializeTimer();
     // System().disposeBlock();
@@ -645,7 +645,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   void didPushNext() {
-    print("========= didPushNext dari diary");
+    print("================= didPushNext dari diary");
     fAliplayer?.pause();
     _pauseScreen();
     super.didPushNext();
@@ -661,11 +661,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         _pauseScreen();
         break;
       case AppLifecycleState.resumed:
+        _initializeTimer();
         if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
           if (context.read<MainNotifier>().isInactiveState) {
             fAliplayer?.play();
           }
-          _initializeTimer();
         }
         break;
       case AppLifecycleState.paused:
