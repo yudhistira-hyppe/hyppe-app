@@ -574,28 +574,30 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   }
 
   void _handleInactivity() {
-    context.read<PreviewVidNotifier>().canPlayOpenApps = false;
+    if (mounted) {
+      context.read<PreviewVidNotifier>().canPlayOpenApps = false;
 
-    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = true;
-    (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
-    fAliplayer?.pause();
-    _pauseScreen();
-    ShowBottomSheet().onShowColouredSheet(
-      (Routing.navigatorKey.currentContext ?? context),
-      (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.warningInavtivityDiary,
-      maxLines: 2,
-      color: kHyppeLightBackground,
-      textColor: kHyppeTextLightPrimary,
-      textButtonColor: kHyppePrimary,
-      iconSvg: 'close.svg',
-      textButton: (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.stringContinue ?? '',
-      onClose: () {
-        (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = false;
-        fAliplayer?.play();
-        _initializeTimer();
-        context.read<PreviewVidNotifier>().canPlayOpenApps = true;
-      },
-    );
+      (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = true;
+      (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
+      fAliplayer?.pause();
+      _pauseScreen();
+      ShowBottomSheet().onShowColouredSheet(
+        (Routing.navigatorKey.currentContext ?? context),
+        (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.warningInavtivityDiary,
+        maxLines: 2,
+        color: kHyppeLightBackground,
+        textColor: kHyppeTextLightPrimary,
+        textButtonColor: kHyppePrimary,
+        iconSvg: 'close.svg',
+        textButton: (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.stringContinue ?? '',
+        onClose: () {
+          (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = false;
+          fAliplayer?.play();
+          _initializeTimer();
+          context.read<PreviewVidNotifier>().canPlayOpenApps = true;
+        },
+      );
+    }
   }
 
   @override
