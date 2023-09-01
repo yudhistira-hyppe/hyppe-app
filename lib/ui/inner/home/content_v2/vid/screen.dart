@@ -292,7 +292,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       color: kHyppeLightBackground,
       textColor: kHyppeTextLightPrimary,
       textButtonColor: kHyppePrimary,
-      iconSvg: 'close.svg',
+      iconSvg: '${AssetPath.vectorPath}close.svg',
       textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
       onClose: () {
         context.read<MainNotifier>().isInactiveState = false;

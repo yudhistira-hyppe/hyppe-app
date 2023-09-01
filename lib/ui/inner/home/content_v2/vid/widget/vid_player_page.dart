@@ -366,10 +366,14 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             _showLoading = false;
             try {
               // Wakelock.disable();
+              if(mounted){
+                setState(() {});
+              }
+
             } catch (e) {
               e.logger();
             }
-            setState(() {});
+
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
             // Wakelock.disable();
