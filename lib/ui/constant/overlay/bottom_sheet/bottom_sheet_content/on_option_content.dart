@@ -32,6 +32,7 @@ class OnShowOptionContent extends StatefulWidget {
   final bool isShare;
   final bool visibility;
   final FlutterAliplayer? fAliplayer;
+  final Function? onUpdate;
 
   const OnShowOptionContent({
     Key? key,
@@ -41,6 +42,7 @@ class OnShowOptionContent extends StatefulWidget {
     this.isShare = true,
     this.visibility = true,
     this.fAliplayer,
+    this.onUpdate,
   }) : super(key: key);
 
   @override
@@ -253,6 +255,9 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                     if (value) _handleDelete(context);
                   });
                   widget.fAliplayer?.stop();
+                  if(widget.onUpdate != null){
+                    widget.onUpdate!();
+                  }
                 });
               },
             ),

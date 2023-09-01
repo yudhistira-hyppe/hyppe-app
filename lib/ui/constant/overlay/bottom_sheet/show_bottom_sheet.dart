@@ -648,6 +648,7 @@ class ShowBottomSheet {
             onDetail: onDetail,
             isShare: isShare ?? true,
             fAliplayer: fAliplayer,
+            onUpdate: onUpdate,
           ),
         );
       },
@@ -658,7 +659,7 @@ class ShowBottomSheet {
         fAliplayer.setMuted(false);
       }
 
-      if (onUpdate != null) onUpdate();
+      // if (onUpdate != null) onUpdate();
     });
   }
 
