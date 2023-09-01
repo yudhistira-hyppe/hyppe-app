@@ -167,7 +167,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           e.logger();
         }
       });
-
       Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.addListener(() {
         // print(context.read<MainNotifier>().scrollController.offset);
         try {

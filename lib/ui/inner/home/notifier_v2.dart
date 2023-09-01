@@ -1140,11 +1140,11 @@ class HomeNotifier with ChangeNotifier {
 
   void initWakelockTimer({required Function() onShowInactivityWarning}) async {
     // adding delay to prevent if there's another that not disposed yet
-    Future.delayed(const Duration(milliseconds: 100), () {
+    Future.delayed(const Duration(milliseconds: 2000), () {
       "=================== init wakelock".logger();
       Wakelock.enable();
       if (_inactivityTimer != null) _inactivityTimer?.cancel();
-      _inactivityTimer = Timer(const Duration(seconds: 30), () => onShowInactivityWarning());
+      _inactivityTimer = Timer(const Duration(seconds: 300), () => onShowInactivityWarning());
     });
   }
 }

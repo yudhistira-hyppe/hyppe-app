@@ -213,7 +213,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
         fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.postID ?? 'video_player_landing');
-        globalAliPlayer = fAliplayer;
+        // globalAliPlayer = fAliplayer;
         fAliplayer?.setAutoPlay(autoPlay);
         if (autoPlay) {
           print("================== vid player index ${widget.index}");
@@ -366,10 +366,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             _showLoading = false;
             try {
               // Wakelock.disable();
-              if(mounted){
+              if (mounted) {
                 setState(() {});
               }
-
             } catch (e) {
               e.logger();
             }

@@ -255,9 +255,15 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         _pauseScreen();
         break;
       case AppLifecycleState.resumed:
+        print("============= canPlayOpenApps ${context.read<PreviewVidNotifier>().canPlayOpenApps}-- isInactiveState: ${context.read<MainNotifier>().isInactiveState}");
         if (isHomeScreen) _initializeTimer();
         if (context.read<PreviewVidNotifier>().canPlayOpenApps && !context.read<MainNotifier>().isInactiveState) {
-          notifier.vidData?[_curIdx].fAliplayer?.play();
+          try {
+            // notifier.vidData?[_curIdx].fAliplayer?.prepare();
+            notifier.vidData?[_curIdx].fAliplayer?.play();
+          } catch (e) {
+            print(e);
+          }
         }
         break;
       case AppLifecycleState.paused:
@@ -302,7 +308,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         color: kHyppeLightBackground,
         textColor: kHyppeTextLightPrimary,
         textButtonColor: kHyppePrimary,
-        // iconSvg: '${AssetPath.vectorPath}close.svg',
+        iconSvg: 'close.svg',
         textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
         onClose: () {
           context.read<MainNotifier>().isInactiveState = false;
