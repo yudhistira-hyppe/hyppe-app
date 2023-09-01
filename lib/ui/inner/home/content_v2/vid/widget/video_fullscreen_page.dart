@@ -19,6 +19,7 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../core/config/ali_config.dart';
@@ -214,12 +215,12 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   }
 
   _pauseScreen() async {
-    context.read<MainNotifier>().removeWakelock();
+    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().removeWakelock();
   }
 
   _initializeTimer() async {
     if (widget.enableWakelock) {
-      context.read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
+      (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
     }
   }
 

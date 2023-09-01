@@ -1050,30 +1050,67 @@ class HomeNotifier with ChangeNotifier {
     required BuildContext context,
     required ContentData contentData,
   }) async {
+    print("======-----sukses setelah upload------=========");
     final pic = (Routing.navigatorKey.currentContext ?? context).read<PreviewPicNotifier>();
     final diary = (Routing.navigatorKey.currentContext ?? context).read<PreviewDiaryNotifier>();
     final vid = (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>();
     final stories = (Routing.navigatorKey.currentContext ?? context).read<PreviewStoriesNotifier>();
+    var email = SharedPreference().readStorage(SpKeys.email);
+    Map data = {"email": email, "limit": limit};
+
+    switch (contentData.postType) {
+      case "pict":
+        // if (isreload) {
+        //   skipPic = 0;
+        //   _isLoadingPict = true;
+        //   notifyListeners();
+        // }
+        data['type'] = 'pict';
+        data['skip'] = skipPic;
+        break;
+      case "diary":
+        // if (isreload) {
+        //   skipDiary = 0;
+        //   _isLoadingDiary = true;
+        //   notifyListeners();
+        // }
+        data['type'] = 'diary';
+        data['skip'] = skipDiary;
+        break;
+      case "vid":
+        // if (isreload) {
+        //   skipvid = 0;
+        //   _isLoadingVid = true;
+        //   notifyListeners();
+        // }
+        data['type'] = 'vid';
+        data['skip'] = skipvid;
+        break;
+    }
+
+    final allContents = await reload(Routing.navigatorKey.currentContext ?? context, data);
+    print("======-----sukses setelah upload------=========");
+    print(allContents);
     switch (contentData.postType) {
       case 'pict':
         if (pic.pic != null) {
           pic.pic = [contentData] + [...(pic.pic ?? [] as List<ContentData>)];
         } else {
-          pic.initialPic(Routing.navigatorKey.currentContext ?? context);
+          await pic.initialPic(Routing.navigatorKey.currentContext ?? context, list: allContents);
         }
         break;
       case 'diary':
         if (diary.diaryData != null) {
           diary.diaryData = [contentData] + [...(diary.diaryData ?? [] as List<ContentData>)];
         } else {
-          diary.initialDiary(Routing.navigatorKey.currentContext ?? context);
+          await diary.initialDiary(Routing.navigatorKey.currentContext ?? context, list: allContents);
         }
         break;
       case 'vid':
         if (vid.vidData != null) {
           vid.vidData = [contentData] + [...(vid.vidData ?? [] as List<ContentData>)];
         } else {
-          vid.initialVid(Routing.navigatorKey.currentContext ?? context);
+          await vid.initialVid(Routing.navigatorKey.currentContext ?? context, list: allContents);
         }
         break;
       case 'story':

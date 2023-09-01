@@ -622,20 +622,20 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   void deactivate() {
-    print("====== deactivate dari diary");
-
+    print("=============== deactivate dari diary");
+    _pauseScreen();
     super.deactivate();
   }
 
   @override
   void didPop() {
-    print("====== didpop dari diary");
+    print("================ didpop dari diary");
     super.didPop();
   }
 
   @override
   void didPopNext() {
-    print("======= didPopNext dari diary");
+    print("================ didPopNext dari diary");
     fAliplayer?.play();
     _initializeTimer();
     // System().disposeBlock();
@@ -645,7 +645,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   void didPushNext() {
-    print("========= didPushNext dari diary");
+    print("================= didPushNext dari diary");
     fAliplayer?.pause();
     _pauseScreen();
     super.didPushNext();
@@ -661,11 +661,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         _pauseScreen();
         break;
       case AppLifecycleState.resumed:
+        _initializeTimer();
         if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
           if (context.read<MainNotifier>().isInactiveState) {
             fAliplayer?.play();
           }
-          _initializeTimer();
         }
         break;
       case AppLifecycleState.paused:
@@ -687,76 +687,82 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
     return Consumer2<PreviewDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
-      return Container(
-        width: SizeConfig.screenWidth,
-        height: SizeWidget.barHyppePic,
-        // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              child: (notifier.diaryData == null || home.isLoadingDiary)
-                  ? ListView.builder(
-                      itemBuilder: (context, index) {
-                        return CustomShimmer(
-                          width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                          height: 168,
-                          radius: 8,
-                          margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                        );
-                      },
-                      itemCount: 5,
-                    )
-                  : notifier.diaryData != null && (notifier.diaryData?.isEmpty ?? true)
-                      ? const NoResultFound()
-                      : NotificationListener<OverscrollIndicatorNotification>(
-                          onNotification: (overscroll) {
-                            overscroll.disallowIndicator();
-                            return false;
-                          },
-                          child: ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            // controller: notifier.scrollController,
-                            // scrollDirection: Axis.horizontal,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: notifier.diaryData?.length,
-                            padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                            itemBuilder: (context, index) {
-                              if (notifier.diaryData == null || home.isLoadingDiary) {
-                                fAliplayer?.pause();
-                                // _lastCurIndex = -1;
-                                _lastCurPostId = '';
-                                return CustomShimmer(
-                                  width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                                  height: 168,
-                                  radius: 8,
-                                  margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                  padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                                );
-                              } else if (index == notifier.diaryData?.length && notifier.hasNext) {
-                                return UnconstrainedBox(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    width: 80 * SizeConfig.scaleDiagonal,
-                                    height: 80 * SizeConfig.scaleDiagonal,
-                                    child: const CustomLoading(),
-                                  ),
-                                );
-                              }
-                              // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                              if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                                isPlay = false;
-                                fAliplayer?.stop();
-                              }
-
-                              return itemDiary(context, notifier, index, home);
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onPanDown: (details) {
+          _initializeTimer();
+        },
+        child: Container(
+          width: SizeConfig.screenWidth,
+          height: SizeWidget.barHyppePic,
+          // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: (notifier.diaryData == null || home.isLoadingDiary)
+                    ? ListView.builder(
+                        itemBuilder: (context, index) {
+                          return CustomShimmer(
+                            width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                            height: 168,
+                            radius: 8,
+                            margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                          );
+                        },
+                        itemCount: 5,
+                      )
+                    : notifier.diaryData != null && (notifier.diaryData?.isEmpty ?? true)
+                        ? const NoResultFound()
+                        : NotificationListener<OverscrollIndicatorNotification>(
+                            onNotification: (overscroll) {
+                              overscroll.disallowIndicator();
+                              return false;
                             },
+                            child: ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              // controller: notifier.scrollController,
+                              // scrollDirection: Axis.horizontal,
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: notifier.diaryData?.length,
+                              padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                              itemBuilder: (context, index) {
+                                if (notifier.diaryData == null || home.isLoadingDiary) {
+                                  fAliplayer?.pause();
+                                  // _lastCurIndex = -1;
+                                  _lastCurPostId = '';
+                                  return CustomShimmer(
+                                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                    height: 168,
+                                    radius: 8,
+                                    margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                  );
+                                } else if (index == notifier.diaryData?.length && notifier.hasNext) {
+                                  return UnconstrainedBox(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      width: 80 * SizeConfig.scaleDiagonal,
+                                      height: 80 * SizeConfig.scaleDiagonal,
+                                      child: const CustomLoading(),
+                                    ),
+                                  );
+                                }
+                                // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                                if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                                  isPlay = false;
+                                  fAliplayer?.stop();
+                                }
+
+                                return itemDiary(context, notifier, index, home);
+                              },
+                            ),
                           ),
-                        ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       );
     });
@@ -766,7 +772,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     var data = notifier.diaryData?[index];
     return WidgetSize(
       onChange: (Size size) {
-        data?.height = size.height;
+        if (mounted) {
+          setState(() {
+            data?.height = size.height;
+          });
+        }
       },
       child: Stack(
         children: [

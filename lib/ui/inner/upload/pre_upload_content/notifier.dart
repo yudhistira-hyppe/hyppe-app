@@ -694,9 +694,9 @@ class PreUploadContentNotifier with ChangeNotifier {
             // if (received < total - total * 5 / 100) {
             //   progress = received.toDouble();
             // }
-            
+
             // new progress counting
-            progress = received * 0.95;  // when compress is done, uploading bar should be in 95%
+            progress = received * 0.95; // when compress is done, uploading bar should be in 95%
             await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: progress, total: total.toDouble()));
           }
           if (received == total) {
