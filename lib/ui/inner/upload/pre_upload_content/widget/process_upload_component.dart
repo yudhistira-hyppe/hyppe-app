@@ -96,10 +96,9 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
           color: kHyppeTextSuccess,
           maxLines: 2,
           onClose: () {
-            (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.animateTo(
-              (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.initialScrollOffset,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeIn);
+            homeClick = true;
+            // notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+            (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
           },
         );
       }
