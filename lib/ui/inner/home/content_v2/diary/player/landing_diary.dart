@@ -574,7 +574,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   }
 
   void _handleInactivity() {
-    context.read<PreviewVidNotifier>().canPlayOpenApps = false;
+    (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
 
     (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = true;
     (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;

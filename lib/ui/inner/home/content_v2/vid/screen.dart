@@ -279,26 +279,26 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   }
 
   void _handleInactivity() {
-    final notifier = context.read<PreviewVidNotifier>();
-    context.read<PreviewVidNotifier>().canPlayOpenApps = false;
-    context.read<MainNotifier>().isInactiveState = true;
+    final notifier = (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>();
+    (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
+    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = true;
     "=============== pause 7".logger();
     notifier.vidData?[_curIdx].fAliplayer?.pause();
     _pauseScreen();
     ShowBottomSheet().onShowColouredSheet(
-      context,
-      context.read<TranslateNotifierV2>().translate.warningInavtivityVid,
+      (Routing.navigatorKey.currentContext ?? context),
+      (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.warningInavtivityVid,
       maxLines: 2,
       color: kHyppeLightBackground,
       textColor: kHyppeTextLightPrimary,
       textButtonColor: kHyppePrimary,
       iconSvg: '${AssetPath.vectorPath}close.svg',
-      textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
+      textButton: (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.stringContinue ?? '',
       onClose: () {
-        context.read<MainNotifier>().isInactiveState = false;
+        (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = false;
         notifier.vidData?[_curIdx].fAliplayer?.play();
         _initializeTimer();
-        context.read<PreviewVidNotifier>().canPlayOpenApps = true;
+        (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = true;
       },
     );
   }
@@ -377,7 +377,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                         height: context.getHeight() / 8,
                         width: double.infinity,
                       );
-                    }),
+                    },),
           ],
         ),
       ),
