@@ -312,15 +312,20 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         if (i == _curIdx) {
           totItemHeightParam += (notifier.pic?[i].height ?? 0.0) * 30 / 100;
         } else {
-          print("=-=-=-index=-=-=-= $i");
           totItemHeightParam += notifier.pic?[i].height ?? 0.0;
         }
+
         totItemHeight += notifier.pic?[i].height ?? 0.0;
       }
-      if (offset >= totItemHeightParam) {
+
+      var sizeMax = (SizeConfig.screenHeight ?? 0) + (SizeConfig.screenHeight ?? 0) * 0.633;
+      if (offset >= totItemHeightParam && notifier.pic?[_curIdx + 1].height <= sizeMax) {
         var position = totItemHeight;
+        // if (notifier.pic?[_curIdx + 1].height >= sizeMax) {
+        //   position += notifier.pic?[_curIdx + 1].height;
+        // }
         if (mounted) widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
-      }
+      } else {}
     } else {
       if (!homeClick) {
         for (var i = 0; i < _curIdx; i++) {
@@ -335,8 +340,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         if (_curIdx > 0) {
           totItemHeight -= notifier.pic?[_curIdx - 1].height ?? 0.0;
         }
-
+        var sizeMax = (SizeConfig.screenHeight ?? 0) + (SizeConfig.screenHeight ?? 0) * 0.633;
         if (offset <= totItemHeightParam && offset > 0) {
+          if (_curIdx > 0 && notifier.pic?[_curIdx - 1].height >= sizeMax) {
+            return;
+          }
           var position = totItemHeight;
           if (mounted) widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
         }
@@ -349,17 +357,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
     Timer(Duration(milliseconds: 300), () {
       if (lastOffset != offset) {
-        print("g0000blookkkk");
         lastOffset = offset;
-        print("offset222 $offset");
-        print("lastOffset22 $lastOffset");
       }
     });
-
-    print("offset2 $offset");
-    print("lastOffset2 $lastOffset");
-
-    print("lastOffset3 $lastOffset");
   }
 
   void start(BuildContext context, ContentData data) async {
@@ -766,7 +766,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
                 // Text("total ${notifier.picTemp?.length}"),
                 // Text("itemHeight $itemHeight"),
-                // Text("height ${picData?.imageHeightTemp}"),
+                // Text("height ${picData?.height}"),
                 // Text("$_lastCurIndex"),
                 // Text("$_curIdx"),
                 // GestureDetector(
