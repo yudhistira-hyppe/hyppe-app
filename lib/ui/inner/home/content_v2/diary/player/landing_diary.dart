@@ -559,44 +559,49 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         _pauseScreen();
         System().adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(), adsNotifier.adsData?.data?.apsaraAuth ?? '', isInAppAds: false).whenComplete(() {
           fAliplayer?.play();
+          print("===========dari ads");
           _initializeTimer();
+          print("===========dari ads");
         });
       }
     }
   }
 
   _pauseScreen() async {
-    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().removeWakelock();
+    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().removeWakelock();
   }
 
   void _initializeTimer() async {
-    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
+    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
   }
 
   void _handleInactivity() {
-    if (mounted) {
-      context.read<PreviewVidNotifier>().canPlayOpenApps = false;
+    if (isHomeScreen) {
+      if (mounted) {
+        context.read<PreviewVidNotifier>().canPlayOpenApps = false;
 
-      (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = true;
-      (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
-      fAliplayer?.pause();
-      _pauseScreen();
-      ShowBottomSheet().onShowColouredSheet(
-        (Routing.navigatorKey.currentContext ?? context),
-        (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.warningInavtivityDiary,
-        maxLines: 2,
-        color: kHyppeLightBackground,
-        textColor: kHyppeTextLightPrimary,
-        textButtonColor: kHyppePrimary,
-        iconSvg: 'close.svg',
-        textButton: (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.stringContinue ?? '',
-        onClose: () {
-          (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = false;
-          fAliplayer?.play();
-          _initializeTimer();
-          context.read<PreviewVidNotifier>().canPlayOpenApps = true;
-        },
-      );
+        (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = true;
+        (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
+        fAliplayer?.pause();
+        _pauseScreen();
+        ShowBottomSheet().onShowColouredSheet(
+          (Routing.navigatorKey.currentContext ?? context),
+          (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.warningInavtivityDiary,
+          maxLines: 2,
+          color: kHyppeLightBackground,
+          textColor: kHyppeTextLightPrimary,
+          textButtonColor: kHyppePrimary,
+          iconSvg: 'close.svg',
+          textButton: (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.stringContinue ?? '',
+          onClose: () {
+            (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = false;
+            fAliplayer?.play();
+            print("===========dari close");
+            _initializeTimer();
+            context.read<PreviewVidNotifier>().canPlayOpenApps = true;
+          },
+        );
+      }
     }
   }
 
@@ -637,7 +642,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   void didPopNext() {
-    print("================ didPopNext dari diary");
+    isHomeScreen = true;
     fAliplayer?.play();
     _initializeTimer();
     // System().disposeBlock();
@@ -647,7 +652,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   @override
   void didPushNext() {
-    print("================= didPushNext dari diary");
+    isHomeScreen = false;
     fAliplayer?.pause();
     _pauseScreen();
     super.didPushNext();
@@ -663,7 +668,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         _pauseScreen();
         break;
       case AppLifecycleState.resumed:
-        _initializeTimer();
+        if (isHomeScreen) _initializeTimer();
         if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
           if (context.read<MainNotifier>().isInactiveState) {
             fAliplayer?.play();

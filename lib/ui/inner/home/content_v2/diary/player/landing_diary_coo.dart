@@ -823,11 +823,11 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
   }
 
   _pauseScreen() async {
-    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().removeWakelock();
+    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().removeWakelock();
   }
 
   void _initializeTimer() async {
-    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
+    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
   }
 
   void _handleInactivity() {

@@ -381,28 +381,4 @@ class MainNotifier with ChangeNotifier {
     _isInactiveState = state;
     notifyListeners();
   }
-
-  Timer? _inactivityTimer;
-  Timer? get inactivityTimer => _inactivityTimer;
-  set inactivityTimer(Timer? state) {
-    _inactivityTimer = state;
-    notifyListeners();
-  }
-
-  removeWakelock() async {
-    "=================== remove wakelock".logger();
-    _inactivityTimer?.cancel();
-    _inactivityTimer = null;
-    Wakelock.disable();
-  }
-
-  void initWakelockTimer({required Function() onShowInactivityWarning}) async {
-    // adding delay to prevent if there's another that not disposed yet
-    Future.delayed(const Duration(seconds: 2),() {
-      "=================== init wakelock".logger();
-      Wakelock.enable();
-      if (_inactivityTimer != null) _inactivityTimer?.cancel();
-      _inactivityTimer = Timer(const Duration(seconds: 30), () => onShowInactivityWarning());
-    });
-  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
 import 'package:hyppe/core/bloc/ads_video/state.dart';
 
@@ -130,6 +131,8 @@ class PreviewDiaryNotifier with ChangeNotifier {
         // }
 
         if (scrollController.hasClients) {
+          homeClick = true;
+
           scrollController.animateTo(
             scrollController.initialScrollOffset,
             duration: const Duration(milliseconds: 300),

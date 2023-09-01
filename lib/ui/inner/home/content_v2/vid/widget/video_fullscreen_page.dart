@@ -210,22 +210,22 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     if ((vidData?.length ?? 0) - 1 == curentIndex) {
       getNewData();
     }
-    
+
     _initializeTimer();
   }
 
   _pauseScreen() async {
-    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().removeWakelock();
+    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().removeWakelock();
   }
 
   _initializeTimer() async {
     if (widget.enableWakelock) {
-      (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
+      (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
     }
   }
 
-  _handleInactivity() {  
-    context.read<MainNotifier>().isInactiveState = true;  
+  _handleInactivity() {
+    context.read<MainNotifier>().isInactiveState = true;
     widget.fAliplayer?.pause();
     isPause = true;
     setState(() {});
@@ -322,9 +322,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
           isloadingRotate = false;
         });
       });
-    }else{
-
-    }
+    } else {}
   }
 
   void nextPage() {
@@ -380,8 +378,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                         }
                       },
                       itemBuilder: (context, index) {
-                        if(index != curentIndex){
-                          return Container(color: Colors.black,);
+                        if (index != curentIndex) {
+                          return Container(
+                            color: Colors.black,
+                          );
                         }
                         "================== isPause $isPause $isScrolled".logger();
                         if (isScrolled) {
@@ -390,7 +390,6 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           //   width: MediaQuery.of(context).size.width,
                           //   child: Center(child: Text("data ${index}")),
                           // );
-
 
                           return isloadingRotate
                               ? Container(
@@ -401,8 +400,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     child: CircularProgressIndicator(),
                                   ),
                                 )
-                              : OrientationBuilder(
-                                builder: (context, orientation) {
+                              : OrientationBuilder(builder: (context, orientation) {
                                   final player = VidPlayerPage(
                                     // vidData: notifier.vidData,
                                     fromFullScreen: true,
@@ -432,7 +430,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     // fAliplayer: notifier.vidData?[index].fAliplayer,
                                     // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
                                   );
-                                  if(orientation == Orientation.landscape){
+                                  if (orientation == Orientation.landscape) {
                                     return Container(
                                       width: context.getWidth(),
                                       height: context.getHeight(),
@@ -440,8 +438,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                     );
                                   }
                                   return player;
-                                }
-                              );
+                                });
                         } else {
                           return GestureDetector(
                             onTap: () {

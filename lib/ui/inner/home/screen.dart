@@ -418,6 +418,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         }
       }
       homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
+      homeClick = true;
+      (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
     }
     _tabController.index = homneNotifier.tabIndex;
     _tabController.animation?.addListener(() {

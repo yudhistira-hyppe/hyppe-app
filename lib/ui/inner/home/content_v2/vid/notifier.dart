@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -152,6 +153,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
         // }
 
         if (pageController.hasClients) {
+          homeClick = true;
           pageController.animateToPage(
             0,
             duration: const Duration(milliseconds: 300),
