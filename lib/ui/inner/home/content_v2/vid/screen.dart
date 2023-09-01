@@ -118,6 +118,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     double totItemHeight = 0;
     double totItemHeightParam = 0;
     final notifier = context.read<PreviewVidNotifier>();
+    ;
     if (offset > lastOffset) {
       homeClick = false;
       for (var i = 0; i <= _curIdx; i++) {
@@ -128,9 +129,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         }
         totItemHeight += notifier.vidData?[i].height ?? 0.0;
       }
+
       if (offset >= totItemHeightParam) {
         var position = totItemHeight;
-        if (mounted) widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
+        if (_curIdx != ((notifier.vidData?.length ?? 0) - 1)) {
+          if (mounted) widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
+        }
       }
     } else {
       if (!homeClick) {
