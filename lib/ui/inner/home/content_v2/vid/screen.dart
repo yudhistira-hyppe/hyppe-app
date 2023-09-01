@@ -248,12 +248,21 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
+    
+    final notifier = context.read<PreviewVidNotifier>();
     switch (state) {
       case AppLifecycleState.inactive:
         _pauseScreen();
         break;
       case AppLifecycleState.resumed:
+<<<<<<< HEAD
         if (isHomeScreen) _initializeTimer();
+=======
+        _initializeTimer();
+        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !context.read<MainNotifier>().isInactiveState) {
+          notifier.vidData?[_curIdx].fAliplayer?.play();
+        }
+>>>>>>> 449f3894fb2509651fd384b0e29219949a146c41
         break;
       case AppLifecycleState.paused:
         _pauseScreen();

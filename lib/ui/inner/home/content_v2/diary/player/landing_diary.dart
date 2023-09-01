@@ -669,10 +669,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         break;
       case AppLifecycleState.resumed:
         if (isHomeScreen) _initializeTimer();
-        if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
-          if (context.read<MainNotifier>().isInactiveState) {
-            fAliplayer?.play();
-          }
+        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !context.read<MainNotifier>().isInactiveState) {
+          fAliplayer?.play();
         }
         break;
       case AppLifecycleState.paused:
