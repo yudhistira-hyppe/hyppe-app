@@ -110,6 +110,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     });
 
     _initializeTimer();
+    print("===========dari init");
     super.initState();
   }
 
@@ -206,8 +207,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   @override
   void didPopNext() {
+    isHomeScreen = true;
     print("============= didPopNext dari vid");
     final notifier = context.read<PreviewVidNotifier>();
+    print("===========dari didpopnext");
     _initializeTimer();
     if (_curIdx != -1) {
       notifier.vidData?[_curIdx].fAliplayer?.play();
@@ -230,6 +233,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   @override
   void didPushNext() {
+    isHomeScreen = false;
     print("=============== didPushNext dari vid");
     final notifier = context.read<PreviewVidNotifier>();
     _pauseScreen();
@@ -244,12 +248,23 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
+
+    final notifier = context.read<PreviewVidNotifier>();
     switch (state) {
       case AppLifecycleState.inactive:
         _pauseScreen();
         break;
       case AppLifecycleState.resumed:
-        _initializeTimer();
+        print("============= canPlayOpenApps ${context.read<PreviewVidNotifier>().canPlayOpenApps}-- isInactiveState: ${context.read<MainNotifier>().isInactiveState}");
+        if (isHomeScreen) _initializeTimer();
+        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !context.read<MainNotifier>().isInactiveState) {
+          try {
+            // notifier.vidData?[_curIdx].fAliplayer?.prepare();
+            notifier.vidData?[_curIdx].fAliplayer?.play();
+          } catch (e) {
+            print(e);
+          }
+        }
         break;
       case AppLifecycleState.paused:
         _pauseScreen();
@@ -271,36 +286,39 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   _pauseScreen() async {
     print("===========pause scren=======");
-    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().removeWakelock();
+    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().removeWakelock();
   }
 
   void _initializeTimer() async {
-    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
+    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
   }
 
   void _handleInactivity() {
-    final notifier = (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>();
-    (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
-    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = true;
-    "=============== pause 7".logger();
-    notifier.vidData?[_curIdx].fAliplayer?.pause();
-    _pauseScreen();
-    ShowBottomSheet().onShowColouredSheet(
-      (Routing.navigatorKey.currentContext ?? context),
-      (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.warningInavtivityVid,
-      maxLines: 2,
-      color: kHyppeLightBackground,
-      textColor: kHyppeTextLightPrimary,
-      textButtonColor: kHyppePrimary,
-      iconSvg: '${AssetPath.vectorPath}close.svg',
-      textButton: (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.stringContinue ?? '',
-      onClose: () {
-        (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = false;
-        notifier.vidData?[_curIdx].fAliplayer?.play();
-        _initializeTimer();
-        (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = true;
-      },
-    );
+    if (isHomeScreen) {
+      final notifier = (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>();
+      (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
+      context.read<MainNotifier>().isInactiveState = true;
+      "=============== pause 7".logger();
+      notifier.vidData?[_curIdx].fAliplayer?.pause();
+      _pauseScreen();
+      ShowBottomSheet().onShowColouredSheet(
+        (Routing.navigatorKey.currentContext ?? context),
+        (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.warningInavtivityVid,
+        maxLines: 2,
+        color: kHyppeLightBackground,
+        textColor: kHyppeTextLightPrimary,
+        textButtonColor: kHyppePrimary,
+        iconSvg: 'close.svg',
+        textButton: (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.stringContinue ?? '',
+        onClose: () {
+          (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = false;
+          notifier.vidData?[_curIdx].fAliplayer?.play();
+          print("===========dari close popup");
+          _initializeTimer();
+          (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = true;
+        },
+      );
+    }
   }
 
   @override
@@ -314,6 +332,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       builder: (context, vidNotifier, translateNotifier, homeNotifier, widget) => GestureDetector(
         behavior: HitTestBehavior.opaque,
         onPanDown: (details) {
+          print("dari builder");
           _initializeTimer();
         },
         child: SizedBox(

@@ -13,6 +13,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -95,11 +96,14 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
         // }
 
         if (scrollController.hasClients) {
-          scrollController.animateTo(
-            scrollController.initialScrollOffset,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeIn,
-          );
+          homeClick = true;
+          // notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+          (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+          // scrollController.animateTo(
+          //   scrollController.initialScrollOffset,
+          //   duration: const Duration(milliseconds: 300),
+          //   curve: Curves.easeIn,
+          // );
         }
       } else {
         pic = [...(pic ?? [] as List<ContentData>)] + res;
