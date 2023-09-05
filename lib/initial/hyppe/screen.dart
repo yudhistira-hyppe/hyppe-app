@@ -6,7 +6,7 @@ import 'package:hyppe/ux/generate.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:showcaseview/showcaseview.dart';
 import '../../app.dart';
 
 class Hyppe extends StatefulWidget {
@@ -52,7 +52,26 @@ class _HyppeState extends State<Hyppe> {
               scaffoldMessengerKey: Routing.scaffoldMessengerKey,
               builder: (context, child) => MediaQuery(
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: child ?? Container(),
+                child: ShowCaseWidget(
+                  onStart: (index, key) {
+                    print('onStart: $index, $key');
+                  },
+                  onComplete: (index, key) {
+                    print('onComplete: $index, $key');
+                    // if (index == 4) {
+                    //   SystemChrome.setSystemUIOverlayStyle(
+                    //     SystemUiOverlayStyle.light.copyWith(
+                    //       statusBarIconBrightness: Brightness.dark,
+                    //       statusBarColor: Colors.white,
+                    //     ),
+                    //   );
+                    // }
+                  },
+                  blurValue: 0,
+                  disableMovingAnimation: true,
+                  disableScaleAnimation: true,
+                  builder: Builder(builder: (context) => child ?? Container()),
+                ),
               ),
             );
           },
