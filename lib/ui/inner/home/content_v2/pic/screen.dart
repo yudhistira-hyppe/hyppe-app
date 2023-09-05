@@ -19,6 +19,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -299,7 +300,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     });
   }
 
-  Future toPosition(offset, notifier, notifierMain) async {
+  Future toPosition(double offset, PreviewPicNotifier notifier, MainNotifier notifierMain) async {
     double totItemHeight = 0;
     double totItemHeightParam = 0;
     print("offset $offset");
@@ -319,7 +320,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       }
 
       var sizeMax = (SizeConfig.screenHeight ?? 0) + (SizeConfig.screenHeight ?? 0) * 0.633;
-      if (offset >= totItemHeightParam && notifier.pic?[_curIdx + 1].height <= sizeMax) {
+      if (offset >= totItemHeightParam && (notifier.pic?[_curIdx + 1].height ?? 0) <= sizeMax) {
         var position = totItemHeight;
         // if (notifier.pic?[_curIdx + 1].height >= sizeMax) {
         //   position += notifier.pic?[_curIdx + 1].height;
@@ -342,7 +343,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         }
         var sizeMax = (SizeConfig.screenHeight ?? 0) + (SizeConfig.screenHeight ?? 0) * 0.633;
         if (offset <= totItemHeightParam && offset > 0) {
-          if (_curIdx > 0 && notifier.pic?[_curIdx - 1].height >= sizeMax) {
+          if (_curIdx > 0 && (notifier.pic?[_curIdx - 1].height ?? 0) >= sizeMax) {
             return;
           }
           var position = totItemHeight;
@@ -746,6 +747,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   Widget itemPict(BuildContext context, PreviewPicNotifier notifier, int index, HomeNotifier homeNotifier) {
     var picData = notifier.pic?[index];
+    final isAds = picData?.inBetweenAds != null;
     return WidgetSize(
       onChange: (Size size) {
         picData?.height = size.height;
@@ -880,6 +882,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                   // key: Key(picData?.postID ?? index.toString()),
                   onVisibilityChanged: (info) {
                     if (info.visibleFraction >= 0.6) {
+                      adsGlobalAliPlayer?.pause();
                       _curIdx = index;
                       _curPostId = picData?.postID ?? index.toString();
                       if (_lastCurIndex > _curIdx) {
@@ -907,8 +910,25 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         } else {
                           fAliplayer?.stop();
                         }
-                        Future.delayed(const Duration(milliseconds: 100), () {
-                          System().increaseViewCount2(context, picData ?? ContentData(), check: false);
+                        Future.delayed(const Duration(milliseconds: 500), () {
+                          if(_curIdx == index){
+                            System().increaseViewCount2(context, picData ?? ContentData(), check: false).whenComplete(() async{
+
+                              final count = context.getAdsCount();
+                              print('Pic count: $count');
+                              if(count == 5){
+                                final adsData = await context.getInBetweenAds();
+                                if(adsData != null){
+                                  notifier.setAdsData(index, adsData);
+                                }
+                              }
+                              if(!(picData?.isViewed ?? true)){
+                                context.incrementAdsCount();
+                              }
+                              notifier.setIsViewed(index);
+                            });
+                          }
+
                         });
                         if (picData?.certified ?? false) {
                           System().block(context);
@@ -1338,6 +1358,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               ],
             ),
           ),
+          context.getAdsInBetween(notifier.pic?[index].inBetweenAds, notifier.pic?[index].postID ?? '', (info){
+            fAliplayer?.stop();
+          }),
           homeNotifier.isLoadingLoadmore && picData == notifier.pic?.last
               ? const Padding(
                   padding: EdgeInsets.only(bottom: 32),

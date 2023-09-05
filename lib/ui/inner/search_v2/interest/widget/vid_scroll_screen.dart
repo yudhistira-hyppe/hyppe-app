@@ -345,6 +345,9 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                   fromDeeplink: false,
                   functionFullTriger: (value) {
                   },
+                  betweenAds: (ads){
+
+                  },
                   onPlay: (exec) async {
                     await notifier.checkConnection();
                     try {

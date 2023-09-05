@@ -406,7 +406,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     fAliplayer?.setCacheConfig(map);
   }
 
-  void start(BuildContext context, ContentData data) async {
+  Future start(BuildContext context, ContentData data) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
     fAliplayer?.stop();
@@ -775,6 +775,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   Widget itemDiary(BuildContext context, PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
     var data = notifier.diaryData?[index];
+    final isAds = data?.inBetweenAds != null;
     return WidgetSize(
       onChange: (Size size) {
         if (mounted) {
@@ -896,6 +897,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         //   Wakelock.enable();
                         // }
                         if (info.visibleFraction >= 0.6) {
+                          adsGlobalAliPlayer?.pause();
                           _curIdx = index;
 
                           _curPostId = data?.postID ?? index.toString();
@@ -917,8 +919,21 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                               });
                             }
                             Future.delayed(const Duration(milliseconds: 700), () {
-                              start(Routing.navigatorKey.currentContext ?? context, data ?? ContentData());
-                              System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, data ?? ContentData(), check: false);
+                              start(Routing.navigatorKey.currentContext ?? context, data ?? ContentData()).whenComplete(() async{
+                                final count = context.getAdsCount();
+                                if(count == 5){
+                                  final adsData = await context.getInBetweenAds();
+                                  if(adsData != null){
+                                    notifier.setAdsData(index, adsData);
+                                  }
+                                }
+                              });
+                              System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, data ?? ContentData(), check: false).whenComplete((){
+                                if(!(notifier.diaryData?[index].isViewed ?? true)){
+                                  context.incrementAdsCount();
+                                }
+                                notifier.setIsViewed(index);
+                              });
                             });
                             if (data?.certified ?? false) {
                               System().block(Routing.navigatorKey.currentContext ?? context);
@@ -1310,6 +1325,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                   ],
                 ),
               ),
+              context.getAdsInBetween(notifier.diaryData?[index].inBetweenAds, notifier.diaryData?[index].postID ?? '', (info){
+                fAliplayer?.stop();
+              }),
               homeNotifier.isLoadingLoadmore && data == notifier.diaryData?.last
                   ? const Padding(
                       padding: EdgeInsets.only(bottom: 32),

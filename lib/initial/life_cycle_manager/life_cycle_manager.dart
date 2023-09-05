@@ -26,6 +26,7 @@ import '../../core/bloc/ads_video/bloc.dart';
 import '../../core/bloc/ads_video/state.dart';
 import '../../core/bloc/posts_v2/bloc.dart';
 import '../../core/bloc/posts_v2/state.dart';
+import '../../core/constants/enum.dart';
 import '../../core/models/collection/advertising/ads_video_data.dart';
 import '../../ui/inner/upload/preview_content/notifier.dart';
 import '../../ui/outer/opening_logo/screen.dart';
@@ -55,6 +56,23 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       // Handle Crashlytics enabled status when not in Debug,
       // e.g. allow your users to opt-in to crash reporting.
     }
+  }
+
+  Future<AdsData> getPopUpAds() async {
+    var data = AdsData();
+    try {
+      final notifier = AdsDataBloc();
+      await notifier.adsVideoBlocV2(context, AdsType.popup);
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        // print('data : ${fetch.data.toString()}');
+        data = fetch.data?.data;
+      }
+    } catch (e) {
+      'Failed to fetch ads data $e'.logger();
+    }
+    return data;
   }
 
   @override
@@ -107,6 +125,10 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
         }
 
+        if(adsGlobalAliPlayer != null){
+          adsGlobalAliPlayer?.pause();
+        }
+
         "App Inactive".logger();
         final _userToken = SharedPreference().readStorage(SpKeys.userToken);
         if (_userToken != null) {
@@ -123,6 +145,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         if (globalAudioPlayer != null) {
           print('globalAudioPlayer!.resume');
           globalAudioPlayer!.resume();
+        }
+        if (adsGlobalAliPlayer != null){
+          adsGlobalAliPlayer?.play();
         }
 
         final _userToken = SharedPreference().readStorage(SpKeys.userToken);
@@ -188,22 +213,22 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     SharedPreference().writeStorage(SpKeys.brand, nameDevice);
   }
 
-  Future<AdsData> getPopUpAds() async {
-    var data = AdsData();
-    try {
-      final notifier = AdsDataBloc();
-      await notifier.appAdsBloc(context);
-      final fetch = notifier.adsDataFetch;
-
-      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-        // print('data : ${fetch.data.toString()}');
-        data = fetch.data?.data;
-      }
-    } catch (e) {
-      'Failed to fetch ads data $e'.logger();
-    }
-    return data;
-  }
+  // Future<AdsData> getPopUpAds() async {
+  //   var data = AdsData();
+  //   try {
+  //     final notifier = AdsDataBloc();
+  //     await notifier.appAdsBloc(context);
+  //     final fetch = notifier.adsDataFetch;
+  //
+  //     if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+  //       // print('data : ${fetch.data.toString()}');
+  //       data = fetch.data?.data;
+  //     }
+  //   } catch (e) {
+  //     'Failed to fetch ads data $e'.logger();
+  //   }
+  //   return data;
+  // }
 
   Future getAdsApsara() async {
     final ads = await getPopUpAds();

@@ -41,6 +41,7 @@ const kHyppeSenderBubbleChat = Color(0xff5A1E4C);
 const kHyppeBottomNavBarIcon = Color(0xffC1C1C1);
 const KHyppeButtonAds = Color(0xffB70F90);
 
+const kHyppeAdsProgress = Color(0xffFFC700);
 const kHyppeTextWarning = Color(0xfffa8c16);
 const kHyppeDanger = Color(0xfff5222d);
 const kHyppeBorderDanger = Color(0xFFE6094B);

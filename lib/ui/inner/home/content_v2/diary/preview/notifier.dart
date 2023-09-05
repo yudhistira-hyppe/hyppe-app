@@ -43,6 +43,11 @@ class PreviewDiaryNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  setIsViewed(int index){
+    diaryData?[index].isViewed = true;
+    notifyListeners();
+  }
+
   List<ContentData>? _diaryDataTemp;
   List<ContentData>? get diaryDataTemp => _diaryDataTemp;
   set diaryDataTemp(List<ContentData>? val) {
@@ -83,6 +88,11 @@ class PreviewDiaryNotifier with ChangeNotifier {
 
   set heightTitleFeature(double val) {
     _heightTitleFeature = val;
+    notifyListeners();
+  }
+
+  void setAdsData(int index, AdsData adsData){
+    diaryData?[index].inBetweenAds = adsData;
     notifyListeners();
   }
 

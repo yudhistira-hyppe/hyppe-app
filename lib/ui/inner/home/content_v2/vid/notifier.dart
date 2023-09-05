@@ -53,6 +53,11 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  setIsViewed(int index){
+    vidData?[index].isViewed = true;
+    notifyListeners();
+  }
+
   List<ContentData>? _vidDataTemp;
   List<ContentData>? get vidDataTemp => _vidDataTemp;
   set vidDataTemp(List<ContentData>? val) {
@@ -113,6 +118,16 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   double? get currentPage => _currentPage;
   set currentPage(double? val) {
     _currentPage = val;
+    notifyListeners();
+  }
+
+  setInBetweenAds(int index, AdsData adsData){
+    vidData?[index].inBetweenAds = adsData;
+    notifyListeners();
+  }
+
+  setAdsData(int index, AdsData? adsData){
+    vidData?[index].adsData = adsData;
     notifyListeners();
   }
 

@@ -25,6 +25,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
@@ -387,7 +388,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                 //   vidNotifier.vidData?[index].fAliplayer?.stop();
                                 // }
                                 final vidData = vidNotifier.vidData?[index];
-                                return itemVid(vidData ?? ContentData(), vidNotifier, index, homeNotifier);
+                                return itemVid(context, vidData ?? ContentData(), vidNotifier, index, homeNotifier);
                               },
                             ),
                           ),
@@ -409,12 +410,13 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     );
   }
 
-  Widget itemVid(ContentData vidData, PreviewVidNotifier notifier, int index, HomeNotifier homeNotifier) {
+  Widget itemVid(BuildContext context, ContentData vidData, PreviewVidNotifier notifier, int index, HomeNotifier homeNotifier) {
     var map = {
       DataSourceRelated.vidKey: vidData.apsaraId,
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
     };
 
+    final ads = context.read<VideoNotifier>();
     return WidgetSize(
       onChange: (Size size) {
         if (mounted) {
@@ -435,6 +437,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                 print(_curIdx);
               }
               if (info.visibleFraction >= 0.8) {
+                adsGlobalAliPlayer?.pause();
                 _curIdx = index;
                 _curPostId = vidData.postID ?? index.toString();
 
@@ -693,6 +696,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                 return VidPlayerPage(
                                   vidData: notifier.vidData,
                                   orientation: Orientation.portrait,
+                                  betweenAds: (ads){
+                                    if(ads != null){
+                                      notifier.setInBetweenAds(index, ads);
+                                    }
+                                  },
                                   playMode: (vidData.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                                   dataSourceMap: map,
                                   data: vidData,
@@ -1001,6 +1009,14 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
               ),
             ),
           ),
+          context.getAdsInBetween(vidData.inBetweenAds, vidData.postID ?? '', (info){
+            if (notifier.vidData?[_curIdx].fAliplayer != null) {
+              notifier.vidData?[_curIdx].fAliplayer?.pause();
+            } else {
+              dataAli[_curIdx]?.pause();
+            }
+            ads.adsAliplayer?.pause();
+          }),
           homeNotifier.isLoadingLoadmore && notifier.vidData?[index] == notifier.vidData?.last
               ? const Padding(
                   padding: EdgeInsets.only(bottom: 32),

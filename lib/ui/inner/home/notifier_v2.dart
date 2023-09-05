@@ -891,11 +891,28 @@ class HomeNotifier with ChangeNotifier {
     }
   }
 
+  // Future<AdsData> getPopUpAds(BuildContext context) async {
+  //   var data = AdsData();
+  //   try {
+  //     final notifier = AdsDataBloc();
+  //     await notifier.appAdsBloc(context);
+  //     final fetch = notifier.adsDataFetch;
+  //     print('video ads');
+  //     if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+  //       print('data iklan : ${fetch.data.toString()}');
+  //       data = fetch.data?.data;
+  //     }
+  //   } catch (e) {
+  //     'Failed to fetch ads data $e'.logger();
+  //   }
+  //   return data;
+  // }
+
   Future<AdsData> getPopUpAds(BuildContext context) async {
     var data = AdsData();
     try {
       final notifier = AdsDataBloc();
-      await notifier.appAdsBloc(context);
+      await notifier.adsVideoBlocV2(context, AdsType.popup);
       final fetch = notifier.adsDataFetch;
       print('video ads');
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
