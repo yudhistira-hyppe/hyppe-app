@@ -6,6 +6,9 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../core/services/system.dart';
 
 class BannersLayout extends StatefulWidget {
   final Widget layout;
@@ -95,6 +98,29 @@ class _BannersLayoutState extends State<BannersLayout>
                             itemCount: notifier.banners?.length,
                             itemBuilder: (context, index) {
                               final data = notifier.banners?[index];
+                              return GestureDetector(
+                                onTap: () async {
+                                  try {
+                                    final uri = Uri.parse(data?.url ?? '');
+                                    if (await canLaunchUrl(uri)) {
+                                      Navigator.pop(context);
+                                      await launchUrl(
+                                        uri,
+                                        mode: LaunchMode.externalApplication,
+                                      );
+                                    } else {
+                                      throw "Could not launch $uri";
+                                    }
+                                    // can't launch url, there is some error
+                                  } catch (e) {
+                                    System().goToWebScreen(data?.url ?? '', isPop: true);
+                                  }
+                                },
+                                child: Image.network(
+                                  data?.image ?? '',
+                                  fit: BoxFit.fill,
+                                ),
+                              );
                               return Image.network(
                                 data?.image ?? '',
                                 fit: BoxFit.fill,
