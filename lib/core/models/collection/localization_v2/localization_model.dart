@@ -960,6 +960,12 @@ class LocalizationModelV2 {
   String? postYourHyppePicNow;
   String? postYourHyppeVidNow;
   String? postYourHyppeDiaryNow;
+  String? tutorLanding1;
+  String? tutorLanding2;
+  String? tutorLanding3;
+  String? tutorLanding4;
+  String? tutorLanding5;
+  String? tutorLanding6;
   String? myListOfAchievements;
   String? achievementsPage;
   String? participant;
@@ -1932,6 +1938,12 @@ class LocalizationModelV2 {
     this.postYourHyppePicNow,
     this.postYourHyppeVidNow,
     this.postYourHyppeDiaryNow,
+    this.tutorLanding1,
+    this.tutorLanding2,
+    this.tutorLanding3,
+    this.tutorLanding4,
+    this.tutorLanding5,
+    this.tutorLanding6,
     this.myListOfAchievements,
     this.achievementsPage,
     this.participant,
@@ -2932,5 +2944,11 @@ class LocalizationModelV2 {
     postYourHyppePicNow = json['postYourHyppePicNow'];
     postYourHyppeVidNow = json['postYourHyppeVidNow'];
     postYourHyppeDiaryNow = json['postYourHyppeDiaryNow'];
+    tutorLanding1 = json['tutorLanding1'];
+    tutorLanding2 = json['tutorLanding2'];
+    tutorLanding3 = json['tutorLanding3'];
+    tutorLanding4 = json['tutorLanding4'];
+    tutorLanding5 = json['tutorLanding5'];
+    tutorLanding6 = json['tutorLanding6'];
   }
 }
