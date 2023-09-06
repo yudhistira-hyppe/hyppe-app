@@ -19,6 +19,8 @@ import 'package:hyppe/ui/inner/search_v2/interest/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
+import 'package:hyppe/ui/inner/search_v2/widget/banners_layout.dart';
+import 'package:hyppe/ui/inner/search_v2/widget/event_banner.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
@@ -187,36 +189,36 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   Widget _firstLayout(SearchNotifier notifier) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-        child: AppBar(
-          centerTitle: false,
-          automaticallyImplyLeading: false,
-          actions: [
-            // Doku(),
-            // Profile(),
-            // // AliPlayer(),
-            // sixteenPx,
-            Consumer<MainNotifier>(builder: (context, notifier, _) {
-              final isReceived = notifier.receivedMsg;
-              return GestureDetector(
-                onTap: () {
-                  Routing().move(Routes.message);
-                  notifier.receivedMsg = false;
-                },
-                child: isReceived
-                    ? CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}message_with_dot.svg')
-                    : CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}message.svg'),
-              );
-            }),
-            sixteenPx
-          ],
-          title: const CustomIconWidget(
-            iconData: "${AssetPath.vectorPath}hyppe.svg",
-            color: kHyppeTextLightPrimary,
-          ),
-        ),
-      ),
+      // appBar: PreferredSize(
+      //   preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
+      //   child: AppBar(
+      //     centerTitle: false,
+      //     automaticallyImplyLeading: false,
+      //     actions: [
+      //       // Doku(),
+      //       // Profile(),
+      //       // // AliPlayer(),
+      //       // sixteenPx,
+      //       Consumer<MainNotifier>(builder: (context, notifier, _) {
+      //         final isReceived = notifier.receivedMsg;
+      //         return GestureDetector(
+      //           onTap: () {
+      //             Routing().move(Routes.message);
+      //             notifier.receivedMsg = false;
+      //           },
+      //           child: isReceived
+      //               ? CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}message_with_dot.svg')
+      //               : CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}message.svg'),
+      //         );
+      //       }),
+      //       sixteenPx
+      //     ],
+      //     title: const CustomIconWidget(
+      //       iconData: "${AssetPath.vectorPath}hyppe.svg",
+      //       color: kHyppeTextLightPrimary,
+      //     ),
+      //   ),
+      // ),
       body: RefreshIndicator(
         strokeWidth: 2.0,
         color: context.getColorScheme().primary,
@@ -231,7 +233,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
             : SingleChildScrollView(
                 child: Column(
                   children: [
-                    Padding(
+                    BannersLayout(layout: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: CustomSearchBar(
                         hintText: notifier.language.whatAreYouFindOut,
@@ -245,7 +247,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
                           notifier.layout = SearchLayout.search;
                         },
                       ),
-                    ),
+                    ),),
                     // EventBannerWidget(controller: _controllerSlider, callback: changeIndexSlide),
                     const HashtagScreen(),
                     InterestScreen(

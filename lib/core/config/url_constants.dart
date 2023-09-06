@@ -467,4 +467,7 @@ class UrlConstants {
   // Get Effect
   static const String getEffects = "/api/assets/filter/list";
   static const String downloadEffect = "/api/assets/filter/file";
+
+  //Banner
+  static const String getBanners = "/api/banner/listing";
 }
