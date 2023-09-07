@@ -117,12 +117,12 @@ extension ContextScreen on BuildContext {
     }
   }
 
-  Widget getAdsInBetween(AdsData? adsData, String postID, Function(VisibilityInfo)? onVisible){
+  Widget getAdsInBetween(AdsData? adsData, Function(VisibilityInfo)? onVisible, Function() onComplete){
     if(adsData != null){
       if(adsData.mediaType?.toLowerCase() == 'video'){
-        return AdsVideoInBetween(postID: postID, onVisibility: onVisible, ratio: 16/9, data: adsData,);
+        return AdsVideoInBetween( onVisibility: onVisible, ratio: 16/9, data: adsData, afterReport: onComplete,);
       }else{
-        return AdsInBetween(data: adsData);
+        return AdsInBetween(data: adsData, afterReport: onComplete,);
       }
     }
     return const SizedBox.shrink();

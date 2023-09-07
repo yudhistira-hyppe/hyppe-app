@@ -23,7 +23,8 @@ import '../../../constant/widget/custom_text_widget.dart';
 
 class AdsInBetween extends StatefulWidget {
   final AdsData data;
-  const AdsInBetween({Key? key, required this.data}) : super(key: key);
+  final Function() afterReport;
+  const AdsInBetween({Key? key, required this.data, required this.afterReport}) : super(key: key);
 
   @override
   State<AdsInBetween> createState() => _AdsInBetweenState();
@@ -84,25 +85,41 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                           });
                         }
                       },
-                      child: CustomBaseCacheImage(
-                        imageUrl: widget.data.avatar?.fullLinkURL,
-                        memCacheWidth: 200,
-                        memCacheHeight: 200,
-                        imageBuilder: (_, imageProvider) {
-                          return Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(Radius.circular(18)),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: imageProvider,
-                              ),
-                            ),
-                          );
+                      child: GestureDetector(
+                        onTap:(){
+                          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
                         },
-                        errorWidget: (_, __, ___) {
-                          return Container(
+                        child: CustomBaseCacheImage(
+                          imageUrl: widget.data.avatar?.fullLinkURL,
+                          memCacheWidth: 200,
+                          memCacheHeight: 200,
+                          imageBuilder: (_, imageProvider) {
+                            return Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: imageProvider,
+                                ),
+                              ),
+                            );
+                          },
+                          errorWidget: (_, __, ___) {
+                            return Container(
+                              width: 36,
+                              height: 36,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                ),
+                              ),
+                            );
+                          },
+                          emptyWidget: Container(
                             width: 36,
                             height: 36,
                             decoration: const BoxDecoration(
@@ -112,17 +129,6 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                                 image: AssetImage('${AssetPath.pngPath}content-error.png'),
                               ),
                             ),
-                          );
-                        },
-                        emptyWidget: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                            ),
                           ),
                         ),
                       ),
@@ -131,8 +137,8 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                     Expanded(child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomTextWidget(textToDisplay: widget.data.fullName ?? '', textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, ),),
-                        CustomTextWidget(textToDisplay: language.sponsored ?? 'Sponsored', textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, ),)
+                        CustomTextWidget(textToDisplay: widget.data.username ?? '', textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w700, ),),
+                        CustomTextWidget(textToDisplay: language.sponsored ?? 'Sponsored', textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, ),)
                       ],
                     ),),
                     twelvePx,
@@ -148,6 +154,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               widget.data.isReport = true;
                             });
                           },
+                          onCompleted: widget.afterReport
                         );
                       },
                       child: const CustomIconWidget(
@@ -211,8 +218,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               loadLaunch = true;
                             });
                             System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                              Navigator.pop(context);
-                              Future.delayed(const Duration(milliseconds: 800), () {
+                             Future.delayed(const Duration(milliseconds: 800), () {
                                 Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                               });
                             });

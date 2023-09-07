@@ -91,8 +91,12 @@ class PreviewDiaryNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void setAdsData(int index, AdsData adsData){
-    diaryData?[index].inBetweenAds = adsData;
+  void setAdsData(int index, AdsData? adsData){
+    if(adsData != null){
+      diaryData?.insert(index + 1, ContentData(inBetweenAds: adsData));
+    }else{
+      diaryData?.removeAt(index);
+    }
     notifyListeners();
   }
 

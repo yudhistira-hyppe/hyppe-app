@@ -880,9 +880,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                 VisibilityDetector(
                   key: Key(index.toString()),
                   // key: Key(picData?.postID ?? index.toString()),
-                  onVisibilityChanged: (info) {
-                    if (info.visibleFraction >= 0.6) {
+                  onVisibilityChanged: (info) async {
+                    if(info.visibleFraction == 1){
                       adsGlobalAliPlayer?.pause();
+                    }
+                    if (info.visibleFraction >= 0.6) {
+
                       _curIdx = index;
                       _curPostId = picData?.postID ?? index.toString();
                       if (_lastCurIndex > _curIdx) {
@@ -910,23 +913,16 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         } else {
                           fAliplayer?.stop();
                         }
+                        final adsIndex = index + 1;
+                        if(adsIndex%5 == 0){
+                          final adsData = await context.getInBetweenAds();
+                          if(adsData != null){
+                            notifier.setAdsData(index, adsData);
+                          }
+                        }
                         Future.delayed(const Duration(milliseconds: 500), () {
                           if(_curIdx == index){
-                            System().increaseViewCount2(context, picData ?? ContentData(), check: false).whenComplete(() async{
-
-                              final count = context.getAdsCount();
-                              print('Pic count: $count');
-                              if(count == 5){
-                                final adsData = await context.getInBetweenAds();
-                                if(adsData != null){
-                                  notifier.setAdsData(index, adsData);
-                                }
-                              }
-                              if(!(picData?.isViewed ?? true)){
-                                context.incrementAdsCount();
-                              }
-                              notifier.setIsViewed(index);
-                            });
+                            System().increaseViewCount2(context, picData ?? ContentData(), check: false);
                           }
 
                         });
@@ -1358,8 +1354,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               ],
             ),
           ),
-          context.getAdsInBetween(notifier.pic?[index].inBetweenAds, notifier.pic?[index].postID ?? '', (info){
+          context.getAdsInBetween(notifier.pic?[index].inBetweenAds, (info){
             fAliplayer?.stop();
+          }, (){
+            notifier.setAdsData(index, null);
           }),
           homeNotifier.isLoadingLoadmore && picData == notifier.pic?.last
               ? const Padding(

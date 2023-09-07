@@ -121,7 +121,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  setInBetweenAds(int index, AdsData adsData){
+  setInBetweenAds(int index, AdsData? adsData){
     vidData?[index].inBetweenAds = adsData;
     notifyListeners();
   }

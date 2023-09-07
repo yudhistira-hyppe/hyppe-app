@@ -482,25 +482,41 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                             children: [
                               Row(
                                 children: [
-                                  CustomBaseCacheImage(
-                                    imageUrl: widget.data.avatar?.fullLinkURL,
-                                    memCacheWidth: 200,
-                                    memCacheHeight: 200,
-                                    imageBuilder: (_, imageProvider) {
-                                      return Container(
-                                        width: 36,
-                                        height: 36,
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: imageProvider,
-                                          ),
-                                        ),
-                                      );
+                                  GestureDetector(
+                                    onTap:(){
+                                      Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
                                     },
-                                    errorWidget: (_, __, ___) {
-                                      return Container(
+                                    child: CustomBaseCacheImage(
+                                      imageUrl: widget.data.avatar?.fullLinkURL,
+                                      memCacheWidth: 200,
+                                      memCacheHeight: 200,
+                                      imageBuilder: (_, imageProvider) {
+                                        return Container(
+                                          width: 36,
+                                          height: 36,
+                                          decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: imageProvider,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      errorWidget: (_, __, ___) {
+                                        return Container(
+                                          width: 36,
+                                          height: 36,
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(Radius.circular(18)),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      emptyWidget: Container(
                                         width: 36,
                                         height: 36,
                                         decoration: const BoxDecoration(
@@ -510,17 +526,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                             image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                           ),
                                         ),
-                                      );
-                                    },
-                                    emptyWidget: Container(
-                                      width: 36,
-                                      height: 36,
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(Radius.circular(18)),
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                        ),
                                       ),
                                     ),
                                   ),
@@ -528,8 +533,8 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                   Expanded(child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      CustomTextWidget(textToDisplay: widget.data.username ?? '', textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, ),),
-                                      CustomTextWidget(textToDisplay: language.sponsored ?? 'Bersponsor', textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, ),)
+                                      CustomTextWidget(textToDisplay: widget.data.username ?? '', textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w700, ),),
+                                      CustomTextWidget(textToDisplay: language.sponsored ?? 'Bersponsor', textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, ),)
                                     ],
                                   ),),
                                   twelvePx,
@@ -545,6 +550,9 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                             widget.data.isReport = true;
                                           });
                                         },
+                                        onCompleted: (){
+                                          Routing().moveBack();
+                                        }
                                       );
                                     },
                                     child: const CustomIconWidget(

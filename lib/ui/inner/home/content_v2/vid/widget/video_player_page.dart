@@ -722,25 +722,41 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          CustomBaseCacheImage(
-                            imageUrl: _newClipData?.data?.avatar?.fullLinkURL,
-                            memCacheWidth: 200,
-                            memCacheHeight: 200,
-                            imageBuilder: (_, imageProvider) {
-                              return Container(
-                                width: 27,
-                                height: 27,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: imageProvider,
-                                  ),
-                                ),
-                              );
+                          GestureDetector(
+                            onTap:(){
+                              Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: _newClipData?.data?.email));
                             },
-                            errorWidget: (_, __, ___) {
-                              return Container(
+                            child: CustomBaseCacheImage(
+                              imageUrl: _newClipData?.data?.avatar?.fullLinkURL,
+                              memCacheWidth: 200,
+                              memCacheHeight: 200,
+                              imageBuilder: (_, imageProvider) {
+                                return Container(
+                                  width: 27,
+                                  height: 27,
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: imageProvider,
+                                    ),
+                                  ),
+                                );
+                              },
+                              errorWidget: (_, __, ___) {
+                                return Container(
+                                  width: 27,
+                                  height: 27,
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    ),
+                                  ),
+                                );
+                              },
+                              emptyWidget: Container(
                                 width: 27,
                                 height: 27,
                                 decoration: BoxDecoration(
@@ -749,17 +765,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                                     fit: BoxFit.cover,
                                     image: const AssetImage('${AssetPath.pngPath}content-error.png'),
                                   ),
-                                ),
-                              );
-                            },
-                            emptyWidget: Container(
-                              width: 27,
-                              height: 27,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: const AssetImage('${AssetPath.pngPath}content-error.png'),
                                 ),
                               ),
                             ),

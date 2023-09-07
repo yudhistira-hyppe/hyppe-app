@@ -834,7 +834,7 @@ class ShowBottomSheet {
         );
       },
     ).whenComplete(() {
-      // if (onUpdate != null) onUpdate();
+      if (onUpdate != null) onUpdate();
     });
   }
 

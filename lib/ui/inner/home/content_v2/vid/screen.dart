@@ -1009,13 +1009,15 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
               ),
             ),
           ),
-          context.getAdsInBetween(vidData.inBetweenAds, vidData.postID ?? '', (info){
+          context.getAdsInBetween(vidData.inBetweenAds, (info){
             if (notifier.vidData?[_curIdx].fAliplayer != null) {
               notifier.vidData?[_curIdx].fAliplayer?.pause();
             } else {
               dataAli[_curIdx]?.pause();
             }
             ads.adsAliplayer?.pause();
+          }, (){
+            notifier.setInBetweenAds(index, null);
           }),
           homeNotifier.isLoadingLoadmore && notifier.vidData?[index] == notifier.vidData?.last
               ? const Padding(

@@ -350,16 +350,24 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             // Wakelock.enable();
             try {
               if (widget.isAutoPlay ?? false) {
+
                 System().increaseViewCount2(context, widget.data ?? ContentData()).whenComplete(() async{
-                  final count = context.getAdsCount();
-                  if(count == 5){
+                  final adsIndex = (widget.index ?? 0) + 1;
+                  if(adsIndex%5 == 0){
                     final adsData = await context.getInBetweenAds();
-                    widget.betweenAds(adsData);
+                    if(adsData != null){
+                      (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().setAdsData(widget.index ?? 0, adsData);
+                    }
                   }
-                  if(!(widget.data?.isViewed ?? true)){
-                    context.incrementAdsCount();
-                  }
-                  (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().setIsViewed(widget.index ?? 0);
+                  // final count = context.getAdsCount();
+                  // if(count == 5){
+                  //   final adsData = await context.getInBetweenAds();
+                  //   widget.betweenAds(adsData);
+                  // }
+                  // if(!(widget.data?.isViewed ?? true)){
+                  //   context.incrementAdsCount();
+                  // }
+                  // (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().setIsViewed(widget.index ?? 0);
 
                 });
               }
@@ -1248,12 +1256,12 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                               });
 
                               System().increaseViewCount2(context, widget.data ?? ContentData()).whenComplete(() async{
-                                final count = context.getAdsCount();
-                                if(count == 5){
-                                  final adsData = await context.getInBetweenAds();
-                                  widget.betweenAds(adsData);
-                                }
-                                context.incrementAdsCount();
+                                // final count = context.getAdsCount();
+                                // if(count == 5){
+                                //   final adsData = await context.getInBetweenAds();
+                                //   widget.betweenAds(adsData);
+                                // }
+                                // context.incrementAdsCount();
                               });
                               // if (adsData != null && widget.inLanding) {
                               //   fAliplayerAds?.prepare().whenComplete(() {

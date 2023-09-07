@@ -35,16 +35,16 @@ import '../../../constant/widget/custom_text_widget.dart';
 class AdsVideoInBetween extends StatefulWidget {
   final Function(VisibilityInfo)? onVisibility;
   final FlutterAliplayer? player;
-  final String postID;
   final AdsData data;
   final double ratio;
+  final Function() afterReport;
   const AdsVideoInBetween({
     Key? key,
     this.onVisibility,
     this.player,
-    required this.postID,
     required this.ratio,
     required this.data,
+    required this.afterReport
   }) : super(key: key);
 
   @override
@@ -86,48 +86,53 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                 children: [
                   Row(
                     children: [
-                      CustomBaseCacheImage(
-                        imageUrl: widget.data.avatar?.fullLinkURL,
-                        memCacheWidth: 200,
-                        memCacheHeight: 200,
-                        imageBuilder: (_, imageProvider) {
-                          return Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                              const BorderRadius.all(Radius.circular(18)),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: imageProvider,
-                              ),
-                            ),
-                          );
+                      GestureDetector(
+                        onTap:(){
+                          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
                         },
-                        errorWidget: (_, __, ___) {
-                          return Container(
+                        child: CustomBaseCacheImage(
+                          imageUrl: widget.data.avatar?.fullLinkURL,
+                          memCacheWidth: 200,
+                          memCacheHeight: 200,
+                          imageBuilder: (_, imageProvider) {
+                            return Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                const BorderRadius.all(Radius.circular(18)),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: imageProvider,
+                                ),
+                              ),
+                            );
+                          },
+                          errorWidget: (_, __, ___) {
+                            return Container(
+                              width: 36,
+                              height: 36,
+                              decoration: const BoxDecoration(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(18)),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage(
+                                      '${AssetPath.pngPath}content-error.png'),
+                                ),
+                              ),
+                            );
+                          },
+                          emptyWidget: Container(
                             width: 36,
                             height: 36,
                             decoration: const BoxDecoration(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(18)),
+                              borderRadius: BorderRadius.all(Radius.circular(18)),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: AssetImage(
                                     '${AssetPath.pngPath}content-error.png'),
                               ),
-                            ),
-                          );
-                        },
-                        emptyWidget: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                  '${AssetPath.pngPath}content-error.png'),
                             ),
                           ),
                         ),
@@ -138,16 +143,16 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomTextWidget(
-                              textToDisplay: widget.data.fullName ?? '',
+                              textToDisplay: widget.data.username ?? '',
                               textStyle:
-                              context.getTextTheme().bodyText1?.copyWith(
+                              context.getTextTheme().caption?.copyWith(
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
                             CustomTextWidget(
                               textToDisplay: language.sponsored ?? 'Sponsored',
                               textStyle:
-                              context.getTextTheme().bodyText2?.copyWith(
+                              context.getTextTheme().caption?.copyWith(
                                 fontWeight: FontWeight.w400,
                               ),
                             )
@@ -167,6 +172,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                                 widget.data.isReport = true;
                               });
                             },
+                              onCompleted: widget.afterReport
                           );
                         },
                         child: const CustomIconWidget(
@@ -177,35 +183,29 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                       ),
                     ],
                   ),
-                  Container(
-                    padding:
-                    const EdgeInsets.only(top: 20, left: 18, right: 18),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        VisibilityDetector(
-                          key: Key(widget.data.videoId ?? 'ads'),
-                          onVisibilityChanged: (info) {
-                            if (info.visibleFraction >= 0.6) {
-                              // _curIdx = index;
-                              if (notifier.currentPostID != widget.postID) {
-                                notifier.betweenPlayer?.pause();
-                              }
-                              notifier.currentPostID = widget.postID;
-                              if (widget.onVisibility != null) {
-                                widget.onVisibility!(info);
-                              }
-                            }
-                            if (info.visibleFraction >= 0.8) {
-                              notifier.betweenPlayer?.play();
-                            }
-                          },
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      VisibilityDetector(
+                        key: Key(widget.data.videoId ?? 'ads'),
+                        onVisibilityChanged: (info) {
+                          if (widget.onVisibility != null) {
+                            widget.onVisibility!(info);
+                          }
+                          if (info.visibleFraction >= 0.9) {
+                            notifier.currentPostID = widget.data.adsId ?? '';
+                            adsGlobalAliPlayer?.play();
+                          }
+                        },
+                        child: Container(
+                          color: Colors.white,
+                          margin:
+                          const EdgeInsets.only(top: 20, left: 18, right: 18),
                           child: AspectRatio(
                             aspectRatio: ratio,
-                            child: notifier.currentPostID == widget.postID
+                            child: notifier.currentPostID == widget.data.adsId
                                 ? InBetweenScreen(
-                              postID: widget.postID,
                               adsData: widget.data,
                               player: widget.player,
                               ratio: ratio,
@@ -220,108 +220,107 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                             ),
                           ),
                         ),
-                        twelvePx,
-                        InkWell(
-                          onTap: () async {
-                            final data = widget.data;
-                            if (data.adsUrlLink?.isEmail() ?? false) {
-                              final email = data.adsUrlLink!.replaceAll('email:', '');
+                      ),
+                      twelvePx,
+                      InkWell(
+                        onTap: () async {
+                          final data = widget.data;
+                          if (data.adsUrlLink?.isEmail() ?? false) {
+                            final email = data.adsUrlLink!.replaceAll('email:', '');
+                            setState(() {
+                              loadLaunch = true;
+                            });
+                            System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+                              Navigator.pop(context);
+                              Future.delayed(const Duration(milliseconds: 800), () {
+                                Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                              });
+                            });
+                          } else {
+                            try {
+                              final uri = Uri.parse(data.adsUrlLink ?? '');
+                              print('bottomAdsLayout ${data.adsUrlLink}');
+                              if (await canLaunchUrl(uri)) {
+                                setState(() {
+                                  loadLaunch = true;
+                                });
+                                System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
+                                  await launchUrl(
+                                    uri,
+                                    mode: LaunchMode.externalApplication,
+                                  );
+                                });
+                              } else {
+                                throw "Could not launch $uri";
+                              }
+                            } catch (e) {
                               setState(() {
                                 loadLaunch = true;
                               });
                               System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                                Navigator.pop(context);
-                                Future.delayed(const Duration(milliseconds: 800), () {
-                                  Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                                });
+                                System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                               });
-                            } else {
-                              try {
-                                final uri = Uri.parse(data.adsUrlLink ?? '');
-                                print('bottomAdsLayout ${data.adsUrlLink}');
-                                if (await canLaunchUrl(uri)) {
-                                  setState(() {
-                                    loadLaunch = true;
-                                  });
-                                  System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
-                                    Navigator.pop(context);
-                                    await launchUrl(
-                                      uri,
-                                      mode: LaunchMode.externalApplication,
-                                    );
-                                  });
-                                } else {
-                                  throw "Could not launch $uri";
-                                }
-                              } catch (e) {
-                                setState(() {
-                                  loadLaunch = true;
-                                });
-                                System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                                  System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                });
-                              }
                             }
-                          },
-                          child: Builder(builder: (context) {
-                            final learnMore =
-                            (widget.data.ctaButton ?? 'Learn More');
-                            return Container(
-                              alignment: Alignment.center,
-                              padding:
-                              const EdgeInsets.only(top: 10, bottom: 10),
-                              decoration: const BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                                  color: KHyppeButtonAds),
-                              child: loadLaunch
-                                  ? const SizedBox(
-                                  width: 40,
-                                  height: 20,
-                                  child: CustomLoading())
-                                  : Text(
-                                learnMore,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                          }
+                        },
+                        child: Builder(builder: (context) {
+                          final learnMore =
+                          (widget.data.ctaButton ?? 'Learn More');
+                          return Container(
+                            alignment: Alignment.center,
+                            padding:
+                            const EdgeInsets.only(top: 10, bottom: 10),
+                            decoration: const BoxDecoration(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(5)),
+                                color: KHyppeButtonAds),
+                            child: loadLaunch
+                                ? const SizedBox(
+                                width: 40,
+                                height: 20,
+                                child: CustomLoading())
+                                : Text(
+                              learnMore,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
                               ),
-                            );
-                          }),
-                        ),
-                        twelvePx,
-                        if (widget.data.adsDescription != null)
-                          Builder(builder: (context) {
-                            final notifier =
-                            context.read<TranslateNotifierV2>();
-                            return CustomDescContent(
-                                desc: widget.data.adsDescription ?? '',
-                                trimLines: 2,
-                                textAlign: TextAlign.justify,
-                                seeLess: ' ${notifier.translate.seeLess}',
-                                seeMore:
-                                ' ${notifier.translate.seeMoreContent}',
-                                textOverflow: TextOverflow.visible,
-                                normStyle:
-                                Theme.of(context).textTheme.bodyText2,
-                                hrefStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary),
-                                expandStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary));
-                          })
-                      ],
-                    ),
+                            ),
+                          );
+                        }),
+                      ),
+                      twelvePx,
+                      if (widget.data.adsDescription != null)
+                        Builder(builder: (context) {
+                          final notifier =
+                          context.read<TranslateNotifierV2>();
+                          return CustomDescContent(
+                              desc: widget.data.adsDescription ?? '',
+                              trimLines: 2,
+                              textAlign: TextAlign.justify,
+                              seeLess: ' ${notifier.translate.seeLess}',
+                              seeMore:
+                              ' ${notifier.translate.seeMoreContent}',
+                              textOverflow: TextOverflow.visible,
+                              normStyle:
+                              Theme.of(context).textTheme.bodyText2,
+                              hrefStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary),
+                              expandStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary));
+                        })
+                    ],
                   )
                 ],
               ),
@@ -334,12 +333,11 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
 }
 
 class InBetweenScreen extends StatefulWidget {
-  final String postID;
   final AdsData adsData;
   final FlutterAliplayer? player;
   final double ratio;
   const InBetweenScreen(
-      {Key? key, required this.postID, required this.adsData, this.player, required this.ratio})
+      {Key? key, required this.adsData, this.player, required this.ratio})
       : super(key: key);
 
   @override
@@ -385,7 +383,7 @@ class _InBetweenScreenState extends State<InBetweenScreen>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       // final ref = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
       fAliplayer =
-          FlutterAliPlayerFactory.createAliPlayer(playerId: widget.postID);
+          FlutterAliPlayerFactory.createAliPlayer(playerId: widget.adsData.adsId);
       WidgetsBinding.instance.addObserver(this);
       fAliplayer?.pause();
       fAliplayer?.setAutoPlay(true);
@@ -659,20 +657,18 @@ class _InBetweenScreenState extends State<InBetweenScreen>
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned.fill(
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-            child: AliPlayerView(
-              onCreated: onViewPlayerCreated,
-              x: 0,
-              y: 0,
-              height: context.getWidth() * widget.ratio,
-              width: context.getWidth(),
-              aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
-            ),
+        !_showLoading ? ClipRRect(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+          child: AliPlayerView(
+            onCreated: onViewPlayerCreated,
+            x: 0,
+            y: 0,
+            height: MediaQuery.of(context).size.width * widget.ratio,
+            width: MediaQuery.of(context).size.width,
+            aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
           ),
-        ),
-        if (_showLoading)
+        ):
           Positioned.fill(
             child: Align(
               alignment: Alignment.center,
@@ -700,6 +696,7 @@ class _InBetweenScreenState extends State<InBetweenScreen>
           top: 12,
           right: 12,
           child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 color: Colors.black.withOpacity(0.5)),
