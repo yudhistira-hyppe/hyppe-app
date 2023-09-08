@@ -32,7 +32,6 @@ class _SettingScreenState extends State<SettingScreen> {
   MainNotifier? mn;
   int indexKey = 0;
   int indexreferral = 0;
-  int indexKeyBoost = 0;
 
   @override
   void initState() {
@@ -71,8 +70,11 @@ class _SettingScreenState extends State<SettingScreen> {
                 icon: 'transaction-icon.svg',
                 onTap: () => context.read<SettingNotifier>().validateUser(context, notifier),
                 caption: '${notifier.translate.transaction}',
-                // keyGLobal: keyTransaction,
+                keyGLobal: keyTransaction,
                 descriptionCas: notifier.translate.localeDatetime == 'id' ? mn?.tutorialData[indexKey].textID : mn?.tutorialData[indexKey].textEn,
+                positionTooltip: TooltipPosition.bottom,
+                positionYplus: -10,
+                indexTutor: indexKey,
               ),
               const Padding(
                 padding: EdgeInsets.all(16.0),
@@ -119,9 +121,11 @@ class _SettingScreenState extends State<SettingScreen> {
                     onTap: () => Routing().move(Routes.referralScreen),
                     icon: 'person-plus.svg',
                     caption: '${notifier.translate.referralID}',
-                    // keyGLobal: keyTransaction,
+                    keyGLobal: keyReferral,
                     descriptionCas: notifier.translate.localeDatetime == 'id' ? mn?.tutorialData[indexreferral].textID : mn?.tutorialData[indexreferral].textEn,
                     positionTooltip: TooltipPosition.top,
+                    positionYplus: 25,
+                    indexTutor: indexreferral,
                   ),
                   // SettingTile(
                   //   onTap: () => Routing().move(Routes.contentPreferences),

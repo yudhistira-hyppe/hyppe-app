@@ -7,6 +7,9 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
+import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 class SettingTile extends StatelessWidget {
@@ -17,13 +20,27 @@ class SettingTile extends StatelessWidget {
   final GlobalKey? keyGLobal;
   final TooltipPosition? positionTooltip;
   final String? descriptionCas;
+  final double? positionYplus;
+  final int? indexTutor;
 
-  const SettingTile({Key? key, this.onTap, this.trailing, required this.icon, required this.caption, this.keyGLobal, this.positionTooltip, this.descriptionCas}) : super(key: key);
+  const SettingTile({
+    Key? key,
+    this.onTap,
+    this.trailing,
+    required this.icon,
+    required this.caption,
+    this.keyGLobal,
+    this.positionTooltip,
+    this.descriptionCas,
+    this.positionYplus = 0,
+    this.indexTutor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SettingTile');
     final theme = Theme.of(context);
+    final mn = context.read<MainNotifier>();
 
     return InkWell(
       onTap: onTap,
@@ -55,17 +72,17 @@ class SettingTile extends StatelessWidget {
                   descriptionPadding: EdgeInsets.all(6),
                   textColor: Colors.white,
                   targetShapeBorder: const CircleBorder(),
-                  positionYplus: -15,
+                  positionYplus: positionYplus,
                   onToolTipClick: () {
-                    // context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeySell].key ?? '');
-                    // mn?.tutorialData[indexKeySell].status = true;
-                    ShowCaseWidget.of(context).dismiss();
+                    context.read<TutorNotifier>().postTutor(context, mn.tutorialData[indexTutor ?? 0].key ?? '');
+                    mn.tutorialData[indexTutor ?? 0].status = true;
+                    ShowCaseWidget.of(context).next();
                   },
                   closeWidget: GestureDetector(
                     onTap: () {
-                      // context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeySell].key ?? '');
-                      // mn?.tutorialData[indexKeySell].status = true;
-                      ShowCaseWidget.of(context).dismiss();
+                      context.read<TutorNotifier>().postTutor(context, mn.tutorialData[indexTutor ?? 0].key ?? '');
+                      mn.tutorialData[indexTutor ?? 0].status = true;
+                      ShowCaseWidget.of(context).next();
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),
