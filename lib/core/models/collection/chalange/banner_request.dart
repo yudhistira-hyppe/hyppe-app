@@ -9,7 +9,7 @@ class BannerRequest {
       this.statustayang = true,
       this.ascending = true,
       this.page = 0,
-      this.limit = 10});
+      this.limit = 5});
 
   // BannerRequest.fromJson(Map<String, dynamic> map){
   //   keyword = map['keyword'] ?? '';

@@ -457,6 +457,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                               //   width: MediaQuery.of(context).size.width,
                               //   child: Center(child: Text("data ${index}")),
                               // );
+                              print('view ads: 2');
 
                               return isloadingRotate
                                   ? Container(
@@ -512,6 +513,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                       return player;
                                     });
                             } else {
+                              print('view ads: 2');
                               return GestureDetector(
                                 onTap: () {
                                   onTapCtrl = true;

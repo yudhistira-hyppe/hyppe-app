@@ -92,12 +92,14 @@ class PreviewDiaryNotifier with ChangeNotifier {
   }
 
   void setAdsData(int index, AdsData? adsData){
-    if(adsData != null){
-      diaryData?.insert(index + 1, ContentData(inBetweenAds: adsData));
-    }else{
-      diaryData?.removeAt(index);
+    if(diaryData?[index + 1].inBetweenAds == null){
+      if(adsData != null){
+        diaryData?.insert(index + 1, ContentData(inBetweenAds: adsData));
+      }else{
+        diaryData?.removeAt(index);
+      }
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   double scaleDiary(BuildContext context) {

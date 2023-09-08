@@ -74,6 +74,8 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
   //loading进度
   int _loadingPercent = 0;
 
+  bool loadingBack = false;
+
   //视频时长
   int _videoDuration = 1;
 
@@ -121,7 +123,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
 
   @override
   void initState() {
-    // TODO: implement initState
     _showLoading = true;
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -554,7 +555,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                       ),
                                     ),
                                     tenPx,
-                                    secondsSkip > 0 ? Container(
+                                    loadingBack ? const SizedBox( height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2,)) : secondsSkip > 0 ? Container(
                                       height: 30,
                                       width: 30,
                                       alignment: Alignment.center,
@@ -564,8 +565,14 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                         style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                                       ),
                                     ) : InkWell(
-                                      onTap: (){
-                                        System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
+                                      onTap: () async {
+                                        setState(() {
+                                          loadingBack = true;
+                                        });
+                                        await System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
+                                        setState(() {
+                                          loadingBack = false;
+                                        });
                                       },
                                       child: const Padding(
                                         padding: EdgeInsets.only(left: 8.0),
@@ -587,18 +594,16 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                         aspectRatio: ratio,
                                         child: Stack(
                                           children: [
-                                            Positioned.fill(
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                const BorderRadius.all(Radius.circular(16.0)),
-                                                child: AliPlayerView(
-                                                  onCreated: onViewPlayerCreated,
-                                                  x: 0,
-                                                  y: 0,
-                                                  height:
-                                                  MediaQuery.of(context).size.width * ratio,
-                                                  width: MediaQuery.of(context).size.width,
-                                                ),
+                                            ClipRRect(
+                                              borderRadius:
+                                              const BorderRadius.all(Radius.circular(16.0)),
+                                              child: AliPlayerView(
+                                                onCreated: onViewPlayerCreated,
+                                                x: 0,
+                                                y: 0,
+                                                height:
+                                                MediaQuery.of(context).size.width * ratio,
+                                                width: MediaQuery.of(context).size.width,
                                               ),
                                             ),
                                             if (_showLoading)

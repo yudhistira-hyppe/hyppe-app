@@ -159,8 +159,14 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void setAdsData(int index, AdsData? adsData){
-    pic?[index].inBetweenAds = adsData;
-    notifyListeners();
+    if(pic?[index + 1].inBetweenAds == null){
+      if(adsData != null){
+        pic?.insert(index + 1, ContentData(inBetweenAds: adsData));
+      }else{
+        pic?.removeAt(index);
+      }
+      notifyListeners();
+    }
   }
 
   void scrollListener(BuildContext context) {

@@ -34,6 +34,7 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
   var secondsSkip = 0;
   var loadLaunch = false;
   var secondsImage = 0;
+  bool loadingBack = false;
   Timer? countdownTimer;
 
   @override
@@ -176,7 +177,13 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
                                         ),
                                       ) : InkWell(
                                         onTap: (){
+                                          setState(() {
+                                            loadingBack = true;
+                                          });
                                           System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
+                                          setState(() {
+                                            loadingBack = false;
+                                          });
                                         },
                                         child: const Padding(
                                           padding: EdgeInsets.only(left: 8.0),

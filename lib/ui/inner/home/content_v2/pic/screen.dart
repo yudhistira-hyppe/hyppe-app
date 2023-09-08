@@ -752,7 +752,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       onChange: (Size size) {
         picData?.height = size.height;
       },
-      child: Column(
+      child: isAds ? context.getAdsInBetween(notifier.pic?[index].inBetweenAds, (info){
+        if(info.visibleFraction >= 0.9){
+          fAliplayer?.destroy();
+          fAliplayer?.stop();
+          fAliplayer?.clearScreen();
+          dataSelected = picData;
+        }
+
+      }, (){
+        notifier.setAdsData(index, null);
+      }) : Column(
         children: [
           Container(
             decoration: BoxDecoration(
@@ -913,7 +923,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         } else {
                           fAliplayer?.stop();
                         }
-                        final adsIndex = index + 1;
+                        final totalWithAds = notifier.pic?.where((element) => element.inBetweenAds != null).length;
+
+                        final adsIndex = index + 1 + (totalWithAds ?? 0);
                         if(adsIndex%5 == 0){
                           final adsData = await context.getInBetweenAds();
                           if(adsData != null){
@@ -1354,11 +1366,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               ],
             ),
           ),
-          context.getAdsInBetween(notifier.pic?[index].inBetweenAds, (info){
-            fAliplayer?.stop();
-          }, (){
-            notifier.setAdsData(index, null);
-          }),
           homeNotifier.isLoadingLoadmore && picData == notifier.pic?.last
               ? const Padding(
                   padding: EdgeInsets.only(bottom: 32),

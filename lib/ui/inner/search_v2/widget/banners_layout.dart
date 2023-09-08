@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -10,7 +11,11 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/constants/asset_path.dart';
+import '../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../core/services/system.dart';
+import '../../../constant/widget/custom_base_cache_image.dart';
+import '../../../constant/widget/custom_text_widget.dart';
 
 class BannersLayout extends StatefulWidget {
   final Widget layout;
@@ -76,143 +81,192 @@ class _BannersLayoutState extends State<BannersLayout>
             right: 0,
             child: AspectRatio(
               aspectRatio: 375 / 211,
-              child: Consumer<ChallangeNotifier>(builder: (context, notifier, _) {
-                  return Stack(
-              children: [
-                Positioned.fill(
-                  child: Builder(
-                    builder: (context) {
-                      if (notifier.isLoading || notifier.banners == null) {
-                        return Container(
-                          width: double.infinity,
-                          alignment: Alignment.center,
-                          child: const CustomLoading(),
-                        );
-                      }
-                      return CarouselSlider(
-                        carouselController: controller,
-                        options: CarouselOptions(
-                          // height: 300
-                            enlargeCenterPage: true,
-                            enableInfiniteScroll: true,
-                            // autoPlay: true,
-                            viewportFraction: 1.0,
-                            aspectRatio: 375 / 211,
-                            // aspectRatio: 343 / 103,
-                            // autoPlayInterval: const Duration(seconds: 3),
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                currIndex = index;
-                              });
-                            }),
-                        items: List.generate(notifier.banners?.length ?? 0, (index){
-                          final data = notifier.banners?[index];
-                          return GestureDetector(
-                            onTap: () async {
-                              try {
-                                final uri = Uri.parse(data?.url ?? '');
-                                if (await canLaunchUrl(uri)) {
-                                  await launchUrl(
-                                    uri,
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                } else {
-                                  throw "Could not launch $uri";
-                                }
-                                // can't launch url, there is some error
-                              } catch (e) {
-                                System().goToWebScreen(data?.url ?? '', isPop: true);
-                              }
-                            },
-                            child: Image.network(
-                              data?.image ?? '',
-                              fit: BoxFit.fill,
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Center(
-                                    child: Container(
-                                      height: context.getHeight(),
-                                      width: context.getWidth(),
-                                      color: Colors.black,
-                                      child: UnconstrainedBox(
-                                        child: Container(
-                                          height: 50,
-                                          width: 50,
-                                          child: CircularProgressIndicator(
-                                            // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                          ),
+              child:
+                  Consumer<ChallangeNotifier>(builder: (context, notifier, _) {
+                return Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Builder(
+                        builder: (context) {
+                          if (notifier.isLoading || notifier.banners == null) {
+                            return Container(
+                              width: context.getWidth(),
+                              height: context.getHeight(),
+                              alignment: Alignment.center,
+                              child: const CustomLoading(),
+                            );
+                          }
+                          return CarouselSlider(
+                            carouselController: controller,
+                            options: CarouselOptions(
+                                // height: 300
+                                enlargeCenterPage: true,
+                                enableInfiniteScroll: true,
+                                // autoPlay: true,
+                                viewportFraction: 1.0,
+                                aspectRatio: 375 / 211,
+                                // aspectRatio: 343 / 103,
+                                // autoPlayInterval: const Duration(seconds: 3),
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    currIndex = index;
+                                  });
+                                }),
+                            items: List.generate(
+                              notifier.banners?.length ?? 0,
+                              (index) {
+                                final data = notifier.banners?[index];
+                                final isSvg = (data?.image ?? '').isSVG();
+                                return GestureDetector(
+                                  onTap: () async {
+                                    try {
+                                      final url = data?.url;
+                                      if (url != null) {
+                                        var fixUrl = url;
+                                        if (!fixUrl.withHttp()) {
+                                          fixUrl = 'https://$fixUrl';
+                                        }
+                                        final uri = Uri.parse(fixUrl);
+
+                                        if (await canLaunchUrl(uri)) {
+                                          await launchUrl(
+                                            uri,
+                                            mode:
+                                                LaunchMode.externalApplication,
+                                          );
+                                        } else {
+                                          throw "Could not launch $uri";
+                                        }
+                                      }
+
+                                      // can't launch url, there is some error
+                                    } catch (e) {
+                                      final url = data?.url;
+                                      if (url != null) {
+                                        var fixUrl = url;
+                                        if (!fixUrl.withHttp()) {
+                                          fixUrl = 'https://$fixUrl';
+                                        }
+                                        System()
+                                            .goToWebScreen(fixUrl, isPop: true);
+                                      }
+                                    }
+                                  },
+                                  child: !isSvg
+                                      ? Image.network(data?.image ?? '',
+                                          fit: BoxFit.fill, loadingBuilder:
+                                              (context, child,
+                                                  loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return Center(
+                                            child: Container(
+                                              height: context.getHeight(),
+                                              width: context.getWidth(),
+                                              color: Colors.black,
+                                              child: UnconstrainedBox(
+                                                child: Container(
+                                                  height: 50,
+                                                  width: 50,
+                                                  child: CircularProgressIndicator(
+                                                      // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                      ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        })
+                                      : SvgPicture.network(
+                                          data?.image ?? '',
+                                          height: context.getHeight(),
+                                          width: context.getWidth(),
+                                          fit: BoxFit.fill,
+                                          placeholderBuilder: (context) {
+                                            return Center(
+                                              child: Container(
+                                                height: context.getHeight(),
+                                                width: context.getWidth(),
+                                                color: Colors.black,
+                                                child: UnconstrainedBox(
+                                                  child: Container(
+                                                    height: 50,
+                                                    width: 50,
+                                                    child: CircularProgressIndicator(
+                                                        // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
-                                      ),
-                                    ),
-                                  );
-                                }
+                                );
+                              },
                             ),
                           );
-                        }),
-                      );
-                      // return PageView.builder(
-                      //   controller: controller,
-                      //   onPageChanged: (index) {
-                      //     setState(() {
-                      //       currIndex = index;
-                      //     });
-                      //   },
-                      //   itemCount: notifier.banners?.length,
-                      //   itemBuilder: (context, index) {
-                      //     final data = notifier.banners?[index];
-                      //     return GestureDetector(
-                      //       onTap: () async {
-                      //         try {
-                      //           final uri = Uri.parse(data?.url ?? '');
-                      //           if (await canLaunchUrl(uri)) {
-                      //             await launchUrl(
-                      //               uri,
-                      //               mode: LaunchMode.externalApplication,
-                      //             );
-                      //           } else {
-                      //             throw "Could not launch $uri";
-                      //           }
-                      //           // can't launch url, there is some error
-                      //         } catch (e) {
-                      //           System().goToWebScreen(data?.url ?? '', isPop: true);
-                      //         }
-                      //       },
-                      //       child: Image.network(
-                      //         data?.image ?? '',
-                      //         fit: BoxFit.fill,
-                      //       ),
-                      //     );
-                      //     return Image.network(
-                      //       data?.image ?? '',
-                      //       fit: BoxFit.fill,
-                      //     );
-                      //   },
-                      // );
-                    },
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Builder(builder: (context) {
-                    if (notifier.banners == null) {
-                      return const SizedBox.shrink();
-                    }
-                    return Container(
-                      width: double.infinity,
-                      margin: const EdgeInsets.only(bottom: 40),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                            notifier.banners?.length ?? 0,
-                            (index) => dotWidget(index == currIndex)),
+                          // return PageView.builder(
+                          //   controller: controller,
+                          //   onPageChanged: (index) {
+                          //     setState(() {
+                          //       currIndex = index;
+                          //     });
+                          //   },
+                          //   itemCount: notifier.banners?.length,
+                          //   itemBuilder: (context, index) {
+                          //     final data = notifier.banners?[index];
+                          //     return GestureDetector(
+                          //       onTap: () async {
+                          //         try {
+                          //           final uri = Uri.parse(data?.url ?? '');
+                          //           if (await canLaunchUrl(uri)) {
+                          //             await launchUrl(
+                          //               uri,
+                          //               mode: LaunchMode.externalApplication,
+                          //             );
+                          //           } else {
+                          //             throw "Could not launch $uri";
+                          //           }
+                          //           // can't launch url, there is some error
+                          //         } catch (e) {
+                          //           System().goToWebScreen(data?.url ?? '', isPop: true);
+                          //         }
+                          //       },
+                          //       child: Image.network(
+                          //         data?.image ?? '',
+                          //         fit: BoxFit.fill,
+                          //       ),
+                          //     );
+                          //     return Image.network(
+                          //       data?.image ?? '',
+                          //       fit: BoxFit.fill,
+                          //     );
+                          //   },
+                          // );
+                        },
                       ),
-                    );
-                  }),
-                )
-              ],
-                  );
-                }),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Builder(builder: (context) {
+                        if (notifier.banners == null) {
+                          return const SizedBox.shrink();
+                        }
+                        return Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(bottom: 40),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(
+                                notifier.banners?.length ?? 0,
+                                (index) => dotWidget(index == currIndex)),
+                          ),
+                        );
+                      }),
+                    )
+                  ],
+                );
+              }),
             ),
           ),
           Positioned(left: 0, right: 0, bottom: 0, child: widget.layout)
@@ -226,18 +280,18 @@ Widget dotWidget(bool active) {
   if (active) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 2),
-      width: 17,
-      height: 10,
+      width: 11,
+      height: 5,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5), color: Colors.white),
+          borderRadius: BorderRadius.circular(3), color: Colors.white),
     );
   } else {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 2),
-      width: 10,
-      height: 10,
+      width: 5,
+      height: 5,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(3),
           color: Colors.white.withOpacity(0.5)),
     );
   }

@@ -163,6 +163,14 @@ extension StringDefine on String {
     return '';
   }
 
+  bool withHttp(){
+    return substring(0, 4) == 'http';
+  }
+
+  bool isSVG(){
+    return toLowerCase().contains('.svg');
+  }
+
   String get capitalizeFirstofEach =>
       split(' ')
       .map((element) => element.textToTitleCase())
