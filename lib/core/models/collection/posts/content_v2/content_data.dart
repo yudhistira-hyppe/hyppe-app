@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -202,6 +203,9 @@ class ContentData {
   double? imageHeightTemp2;
   String? valueCache;
 
+  List<Tutorial>? tutorial;
+  GlobalKey? keyGlobal;
+
   ContentData({
     this.metadata,
     this.mediaBasePath,
@@ -268,6 +272,8 @@ class ContentData {
     this.imageHeightTemp,
     this.imageHeightTemp2,
     this.valueCache,
+    this.tutorial,
+    this.keyGlobal,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -373,6 +379,14 @@ class ContentData {
     limitLandingpage = json['limitLandingpage'] ?? 0;
     imageHeightTemp = json['imageHeightTemp'] ?? 0;
     valueCache = rundom();
+
+    if (json['tutorial'] != null) {
+      tutorial = <Tutorial>[];
+      json['tutorial'].forEach((v) {
+        tutorial!.add(Tutorial.fromJson(v));
+      });
+    }
+    keyGlobal = GlobalKey();
   }
 
   Map<String, dynamic> toJson() {
@@ -752,6 +766,31 @@ class UserComment {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
     data['username'] = username;
+    return data;
+  }
+}
+
+class Tutorial {
+  String? key;
+  bool? status;
+  String? textID;
+  String? textEn;
+
+  Tutorial({this.key, this.status, this.textID, this.textEn});
+
+  Tutorial.fromJson(Map<String, dynamic> json) {
+    key = json['key'];
+    status = json['status'];
+    textID = json['textID'];
+    textEn = json['textEn'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['key'] = key;
+    data['status'] = status;
+    data['textID'] = textID;
+    data['textEn'] = textEn;
     return data;
   }
 }

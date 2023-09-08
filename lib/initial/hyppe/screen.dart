@@ -68,8 +68,8 @@ class _HyppeState extends State<Hyppe> {
                     // }
                   },
                   blurValue: 0,
+                  disableBarrierInteraction: true,
                   disableMovingAnimation: true,
-                  disableScaleAnimation: true,
                   builder: Builder(builder: (context) => child ?? Container()),
                 ),
               ),

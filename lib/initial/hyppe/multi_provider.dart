@@ -28,6 +28,7 @@ import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_notifier.dart';
@@ -242,6 +243,7 @@ class AppDependencies {
         ChangeNotifierProvider<ScrollPicNotifier>(create: (context) => ScrollPicNotifier()),
         ChangeNotifierProvider<ScrollDiaryNotifier>(create: (context) => ScrollDiaryNotifier()),
         ChangeNotifierProvider<ScrollVidNotifier>(create: (context) => ScrollVidNotifier()),
-        ChangeNotifierProvider<ChallangeNotifier>(create: (context) => ChallangeNotifier())
+        ChangeNotifierProvider<ChallangeNotifier>(create: (context) => ChallangeNotifier()),
+        ChangeNotifierProvider<TutorNotifier>(create: (context) => TutorNotifier())
       ];
 }

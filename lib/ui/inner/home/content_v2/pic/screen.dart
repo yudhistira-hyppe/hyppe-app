@@ -39,6 +39,7 @@ import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/screen.dart';
@@ -53,6 +54,7 @@ import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../ux/path.dart';
 import '../../../../constant/entities/report/notifier.dart';
@@ -116,12 +118,16 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   ScrollPhysics scrollPhysic = const NeverScrollableScrollPhysics();
   double lastOffset = 0;
   bool scroolUp = false;
+  GlobalKey? keyOwnership;
+  MainNotifier? mn;
+  bool isShowShowcase = false;
 
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppePreviewPic');
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
     lang = context.read<TranslateNotifierV2>().translate;
+    mn = Provider.of<MainNotifier>(context, listen: false);
     // notifier.scrollController.addListener(() => notifier.scrollListener(context));
     email = SharedPreference().readStorage(SpKeys.email);
     // statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
@@ -894,8 +900,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
                       // if (_lastCurIndex != _curIdx) {
                       if (_lastCurPostId != _curPostId) {
+                        if (mounted) {
+                          setState(() {
+                            isShowShowcase = false;
+                          });
+                        }
                         final indexList = notifier.pic?.indexWhere((element) => element.postID == _curPostId);
                         final latIndexList = notifier.pic?.indexWhere((element) => element.postID == _lastCurPostId);
+
                         if (indexList == (notifier.pic?.length ?? 0) - 1) {
                           context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
                         }
@@ -909,6 +921,16 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         }
                         Future.delayed(const Duration(milliseconds: 100), () {
                           System().increaseViewCount2(context, picData ?? ContentData(), check: false);
+                          if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
+                            if (mounted) {
+                              setState(() {
+                                isShowShowcase = true;
+                                keyOwnership = picData?.keyGlobal;
+                              });
+                            }
+
+                            // ShowCaseWidget.of(context).startShowCase([picData?.keyGlobal ?? GlobalKey()]);
+                          }
                         });
                         if (picData?.certified ?? false) {
                           System().block(context);
@@ -1350,12 +1372,27 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   }
 
   Widget _buildBody(BuildContext context, width, ContentData data) {
+    // final indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
+    // final indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
+
+    // String descCase = "";
+    // if ((data.saleAmount ?? 0) > 0) {
+    //   descCase = lang?.localeDatetime == 'id' ? mn?.tutorialData[indexKeySell].textID ?? '' : mn?.tutorialData[indexKeySell].textEn ?? '';
+    // }
+    // if ((data.certified ?? false) && (data.saleAmount ?? 0) == 0) {
+    //   descCase = lang?.localeDatetime == 'id' ? mn?.tutorialData[indexKey].textID ?? '' : mn?.tutorialData[indexKey].textEn ?? '';
+    // }
+
     return Positioned.fill(
       child: Stack(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: PicTopItem(data: data),
+            child: PicTopItem(
+              data: data,
+              isShow: isShowShowcase,
+              globalKey: keyOwnership,
+            ),
           ),
           if (data.tagPeople?.isNotEmpty ?? false)
             Positioned(

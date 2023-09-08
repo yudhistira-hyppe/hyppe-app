@@ -72,7 +72,6 @@ class SignUpPinNotifier extends ChangeNotifier with WidgetsBindingObserver, Load
 
   final String resendLoadKey = 'resendRegistKey';
 
-
   set startTimers(bool val) {
     _startTimers = val;
     notifyListeners();
@@ -323,10 +322,10 @@ class SignUpPinNotifier extends ChangeNotifier with WidgetsBindingObserver, Load
     }
   }
 
-  Future onVerifyButton(BuildContext context, Function afterSuccess) async{
+  Future onVerifyButton(BuildContext context, Function afterSuccess) async {
     try {
       bool connection = await System().checkConnections();
-      if(connection){
+      if (connection) {
         final notifier = UserBloc();
         loading = true;
         SignIn? _accountResponse;
@@ -360,13 +359,12 @@ class SignUpPinNotifier extends ChangeNotifier with WidgetsBindingObserver, Load
             SharedPreference().writeStorage(SpKeys.userID, _accountResponse.data?.userId);
             SharedPreference().writeStorage(SpKeys.userToken, _accountResponse.data?.token);
             SharedPreference().writeStorage(SpKeys.lastHitPost, '');
+            SharedPreference().writeStorage(SpKeys.newUser, 'TRUE');
             SharedPreference().removeValue(SpKeys.isUserInOTP);
             SharedPreference().removeValue(SpKeys.referralFrom);
 
             // DynamicLinkService.hitReferralBackend(context);
-            ShowBottomSheet().onShowColouredSheet(
-                context,
-                language.congrats ?? '',
+            ShowBottomSheet().onShowColouredSheet(context, language.congrats ?? '',
                 subCaption: language.messageSuccessVerification,
                 maxLines: 3,
                 borderRadius: 8,
@@ -377,26 +375,21 @@ class SignUpPinNotifier extends ChangeNotifier with WidgetsBindingObserver, Load
                 padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
                 margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
                 iconSvg: "${AssetPath.vectorPath}ic_success.svg",
-                function: (){
-
-                }
-            );
-            Future.delayed(const Duration(seconds: 2), (){
+                function: () {});
+            Future.delayed(const Duration(seconds: 2), () {
               _setUserCompleteData(context);
               Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root, argument: UserInterestScreenArgument(fromSetting: false, userInterested: []));
             });
-
           } else {
             _loading = false;
             _inCorrectCode = true;
             notifyListeners();
           }
         }
-      }else{
+      } else {
         throw 'No Internet Connection';
       }
-
-    }catch(e){
+    } catch (e) {
       'error pin verification $e'.logger();
       // _loading = false;
     } finally {

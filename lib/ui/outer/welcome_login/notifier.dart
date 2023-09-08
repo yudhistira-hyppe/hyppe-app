@@ -239,6 +239,8 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       DeviceBloc().activityAwake(context);
 
       if (signData.interest?.isEmpty ?? false) {
+        //new user
+        SharedPreference().writeStorage(SpKeys.newUser, "TRUE");
         Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root, argument: UserInterestScreenArgument());
       } else {
         Routing().moveReplacement(Routes.lobby);
@@ -257,7 +259,13 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       // SharedPreference().writeStorage(SpKeys.onlineVersion, onlineVersion);
 
       DeviceBloc().activityAwake(context);
-      Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
+      if (signData.interest?.isEmpty ?? false) {
+        //new user
+        SharedPreference().writeStorage(SpKeys.newUser, "TRUE");
+        Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root, argument: UserInterestScreenArgument());
+      } else {
+        Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
+      }
     } else if (signData.userType == UserType.notVerified) {
       print('apa2 ${signData.userType?.index}');
       final signUpPinNotifier = Provider.of<SignUpPinNotifier>(context, listen: false);

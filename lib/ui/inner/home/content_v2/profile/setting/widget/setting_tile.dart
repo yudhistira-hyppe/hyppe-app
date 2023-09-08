@@ -2,24 +2,23 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class SettingTile extends StatelessWidget {
   final String icon;
   final String caption;
   final Widget? trailing;
   final Function()? onTap;
+  final GlobalKey? keyGLobal;
+  final TooltipPosition? positionTooltip;
+  final String? descriptionCas;
 
-  const SettingTile({
-    Key? key,
-    this.onTap,
-    this.trailing,
-    required this.icon,
-    required this.caption,
-  }) : super(key: key);
+  const SettingTile({Key? key, this.onTap, this.trailing, required this.icon, required this.caption, this.keyGLobal, this.positionTooltip, this.descriptionCas}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +43,43 @@ class SettingTile extends StatelessWidget {
                   iconData: '${AssetPath.vectorPath}$icon',
                 ),
                 sixteenPx,
-                CustomTextWidget(
-                  textToDisplay: caption,
-                  textStyle: theme.textTheme.bodyText1,
+                Showcase(
+                  key: keyGLobal ?? GlobalKey(),
+                  tooltipBackgroundColor: kHyppeTextLightPrimary,
+                  overlayOpacity: 0,
+                  targetPadding: const EdgeInsets.all(0),
+                  tooltipPosition: positionTooltip,
+                  description: descriptionCas,
+                  // description: lang?.localeDatetime == 'id' ? mn?.tutorialData[indexKeySell].textID ?? '' : mn?.tutorialData[indexKeySell].textEn ?? '',
+                  descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+                  descriptionPadding: EdgeInsets.all(6),
+                  textColor: Colors.white,
+                  targetShapeBorder: const CircleBorder(),
+                  positionYplus: -15,
+                  onToolTipClick: () {
+                    // context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeySell].key ?? '');
+                    // mn?.tutorialData[indexKeySell].status = true;
+                    ShowCaseWidget.of(context).dismiss();
+                  },
+                  closeWidget: GestureDetector(
+                    onTap: () {
+                      // context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeySell].key ?? '');
+                      // mn?.tutorialData[indexKeySell].status = true;
+                      ShowCaseWidget.of(context).dismiss();
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CustomIconWidget(
+                        iconData: '${AssetPath.vectorPath}close.svg',
+                        defaultColor: false,
+                        height: 16,
+                      ),
+                    ),
+                  ),
+                  child: CustomTextWidget(
+                    textToDisplay: caption,
+                    textStyle: theme.textTheme.bodyText1,
+                  ),
                 ),
               ],
             ),

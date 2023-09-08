@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui';
-
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -12,50 +9,42 @@ import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/widget/diary.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/widget/pic.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/widget/story.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/widget/vid.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
-import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 // v2 view
-import 'package:hyppe/ui/inner/home/content_v2/pic/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/stories/preview/screen.dart';
 import 'package:showcaseview/showcaseview.dart';
-import 'package:wakelock/wakelock.dart';
-import '../../../core/services/route_observer_service.dart';
-import '../../constant/widget/after_first_layout_mixin.dart';
+import '../../../../../core/services/route_observer_service.dart';
+import '../../../../constant/widget/after_first_layout_mixin.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'package:flutter/services.dart';
 
-class HomeScreen extends StatefulWidget {
+class TutorLandingScreen extends StatefulWidget {
   final bool canShowAds;
   final GlobalKey keyButton;
-  const HomeScreen({Key? key, required this.keyButton, required this.canShowAds}) : super(key: key);
+  const TutorLandingScreen({Key? key, required this.keyButton, required this.canShowAds}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<TutorLandingScreen> createState() => _TutorLandingScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
+class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
   // final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   // final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
   bool appbarSeen = true;
@@ -142,6 +131,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     _tabController = TabController(length: 3, vsync: this);
 
     offset = 0;
+    WidgetsBinding.instance.addPostFrameCallback((_) => show());
 
     Future.delayed(Duration.zero, () {
       final notifier = context.read<HomeNotifier>();
@@ -304,10 +294,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                           handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                           sliver: SliverList(
                             delegate: SliverChildListDelegate([
-                              const ProcessUploadComponent(),
-
                               sixPx,
-                              const HyppePreviewStories(),
+                              const StoryTutor(),
                               sixPx,
                               // GestureDetector(
                               //     onTap: () {
@@ -339,11 +327,91 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                                     unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
                                     tabs: [
                                       ...List.generate(filterList.length, (index) {
+                                        String titleCase = "";
+                                        String descCase = "";
+                                        String stepTitle = '';
+                                        switch (index) {
+                                          case 0:
+                                            titleCase = 'Pic! 📸';
+                                            descCase = _language?.tutorLanding1 ?? '';
+                                            stepTitle = "1/6";
+                                            break;
+                                          case 1:
+                                            if (_tabController.index == 1) {
+                                              titleCase = 'Diary! 🎥';
+                                              descCase = _language?.tutorLanding2 ?? '';
+                                              stepTitle = "2/6";
+                                            } else {
+                                              titleCase = 'Geser 👆';
+                                              descCase = _language?.tutorLanding4 ?? '';
+                                              stepTitle = "4/6";
+                                            }
+                                            break;
+                                          case 2:
+                                            titleCase = 'Video! 🎥';
+                                            descCase = _language?.tutorLanding3 ?? '';
+                                            stepTitle = "3/6";
+                                            break;
+                                        }
                                         return Padding(
                                           padding: EdgeInsets.all(9),
-                                          child: Text(
-                                            filterList[index]['name'],
-                                            style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                          child: Showcase(
+                                            key: index == 0
+                                                ? keyButton
+                                                : index == 1
+                                                    ? keyButton1
+                                                    : keyButton2,
+                                            tooltipBackgroundColor: kHyppeTextLightPrimary,
+                                            overlayOpacity: 0,
+                                            targetPadding: const EdgeInsets.all(0),
+                                            tooltipPosition: TooltipPosition.bottom,
+                                            title: titleCase,
+                                            titleTextStyle: TextStyle(fontSize: 12, color: kHyppeNotConnect),
+                                            titlePadding: EdgeInsets.all(6),
+                                            description: descCase,
+                                            descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+                                            descriptionPadding: EdgeInsets.all(6),
+                                            textColor: Colors.white,
+                                            targetShapeBorder: const CircleBorder(),
+                                            disableDefaultTargetGestures: true,
+                                            onBarrierClick: () {},
+                                            descWidget: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    stepTitle,
+                                                    style: TextStyle(color: kHyppeBurem, fontSize: 10),
+                                                  ),
+                                                  GestureDetector(
+                                                      onTap: () {
+                                                        ShowCaseWidget.of(context).next();
+                                                        switch (index) {
+                                                          case 0:
+                                                            _tabController.index = 1;
+                                                            break;
+                                                          case 1:
+                                                            if (_tabController.index == 1) {
+                                                              _tabController.index = 2;
+                                                            } else {}
+                                                            break;
+                                                          case 2:
+                                                            // _tabController.index = 0;
+                                                            break;
+                                                        }
+                                                      },
+                                                      child: Text(
+                                                        "Selanjutnya",
+                                                        style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                                                      ))
+                                                ],
+                                              ),
+                                            ),
+                                            child: Text(
+                                              filterList[index]['name'],
+                                              style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                            ),
                                           ),
                                         );
                                       }),
@@ -369,13 +437,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                           height: 40,
                           padding: const EdgeInsets.only(left: 6.0, right: 6),
                           color: kHyppeLightSurface,
-                          child: HyppePreviewPic(
-                            onScaleStart: () {
-                              zoom(true);
-                            },
-                            onScaleStop: () {
-                              zoom(false);
-                            },
+                          child: PicTutor(
                             appbarSeen: appbarSeen,
                             scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
                             // offset: offset,
@@ -384,15 +446,15 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                         Container(
                           padding: const EdgeInsets.only(left: 6.0, right: 6),
                           color: kHyppeLightSurface,
-                          child: LandingDiaryPage(
+                          child: DiaryTutor(
                             scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
                           ),
                         ),
                         // second tab bar viiew widget
                         Container(
-                          padding: const EdgeInsets.only(left: 16.0, right: 16),
+                          padding: const EdgeInsets.only(left: 6.0, right: 6),
                           color: kHyppeLightSurface,
-                          child: HyppePreviewVid(
+                          child: VidTutor(
                             scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
                           ),
                         ),

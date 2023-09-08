@@ -61,6 +61,9 @@ class ToolTipWidget extends StatefulWidget {
   final EdgeInsets? descriptionPadding;
   final TextDirection? titleTextDirection;
   final TextDirection? descriptionTextDirection;
+  final Widget? descWidget;
+  final Widget? closeWidget;
+  final double? positionYplus;
 
   const ToolTipWidget({
     Key? key,
@@ -94,6 +97,9 @@ class ToolTipWidget extends StatefulWidget {
     this.descriptionPadding,
     this.titleTextDirection,
     this.descriptionTextDirection,
+    this.descWidget,
+    this.positionYplus,
+    this.closeWidget,
   }) : super(key: key);
 
   @override
@@ -314,7 +320,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget> with TickerProviderStateM
 
     if (widget.container == null) {
       return Positioned(
-        top: contentY,
+        top: contentY + (widget.positionYplus ?? 0),
         left: _getLeft(),
         right: _getRight(),
         child: ScaleTransition(
@@ -377,42 +383,47 @@ class _ToolTipWidgetState extends State<ToolTipWidget> with TickerProviderStateM
                               width: tooltipWidth,
                               padding: widget.tooltipPadding,
                               color: widget.tooltipBackgroundColor,
-                              child: Column(
-                                crossAxisAlignment: widget.title != null ? CrossAxisAlignment.start : CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  if (widget.title != null)
-                                    Padding(
-                                      padding: widget.titlePadding ?? EdgeInsets.zero,
-                                      child: Text(
-                                        widget.title!,
-                                        textAlign: widget.titleAlignment,
-                                        textDirection: widget.titleTextDirection,
-                                        style: widget.titleTextStyle ??
-                                            Theme.of(context).textTheme.titleLarge!.merge(
-                                                  TextStyle(
-                                                    color: widget.textColor,
-                                                  ),
-                                                ),
-                                      ),
-                                    ),
-                                  Padding(
-                                    padding: widget.descriptionPadding ?? EdgeInsets.zero,
-                                    child: Text(
-                                      widget.description!,
-                                      textAlign: widget.descriptionAlignment,
-                                      textDirection: widget.descriptionTextDirection,
-                                      style: widget.descTextStyle ??
-                                          Theme.of(context).textTheme.titleSmall!.merge(
-                                                TextStyle(
-                                                  color: widget.textColor,
-                                                ),
-                                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: widget.title != null ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        if (widget.title != null)
+                                          Padding(
+                                            padding: widget.titlePadding ?? EdgeInsets.zero,
+                                            child: Text(
+                                              widget.title!,
+                                              textAlign: widget.titleAlignment,
+                                              textDirection: widget.titleTextDirection,
+                                              style: widget.titleTextStyle ??
+                                                  Theme.of(context).textTheme.titleLarge!.merge(
+                                                        TextStyle(
+                                                          color: widget.textColor,
+                                                        ),
+                                                      ),
+                                            ),
+                                          ),
+                                        Padding(
+                                          padding: widget.descriptionPadding ?? EdgeInsets.zero,
+                                          child: Text(
+                                            widget.description!,
+                                            textAlign: widget.descriptionAlignment,
+                                            textDirection: widget.descriptionTextDirection,
+                                            style: widget.descTextStyle ??
+                                                Theme.of(context).textTheme.titleSmall!.merge(
+                                                      TextStyle(
+                                                        color: widget.textColor,
+                                                      ),
+                                                    ),
+                                          ),
+                                        ),
+                                        widget.descWidget ?? Container(),
+                                      ],
                                     ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [Text("3/6"), Text("Selanjutnya")],
-                                  )
+                                  widget.closeWidget ?? Container(),
                                 ],
                               ),
                             ),

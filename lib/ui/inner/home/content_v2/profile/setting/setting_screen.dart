@@ -5,6 +5,7 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/widget/my_balance.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -16,9 +17,35 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/widget/setting_tile.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/widget/setting_component.dart';
+import 'package:showcaseview/showcaseview.dart';
 
-class SettingScreen extends StatelessWidget {
+class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SettingScreen> createState() => _SettingScreenState();
+}
+
+class _SettingScreenState extends State<SettingScreen> {
+  GlobalKey keyTransaction = GlobalKey();
+  GlobalKey keyReferral = GlobalKey();
+  MainNotifier? mn;
+  int indexKey = 0;
+  int indexreferral = 0;
+  int indexKeyBoost = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    mn = Provider.of<MainNotifier>(context, listen: false);
+    super.initState();
+    indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'transaction') ?? 0;
+    indexreferral = mn?.tutorialData.indexWhere((element) => element.key == 'idRefferal') ?? 0;
+
+    if (mn?.tutorialData[indexKey].status == false || mn?.tutorialData[indexreferral].status == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keyTransaction, keyReferral]));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +71,8 @@ class SettingScreen extends StatelessWidget {
                 icon: 'transaction-icon.svg',
                 onTap: () => context.read<SettingNotifier>().validateUser(context, notifier),
                 caption: '${notifier.translate.transaction}',
+                // keyGLobal: keyTransaction,
+                descriptionCas: notifier.translate.localeDatetime == 'id' ? mn?.tutorialData[indexKey].textID : mn?.tutorialData[indexKey].textEn,
               ),
               const Padding(
                 padding: EdgeInsets.all(16.0),
@@ -90,6 +119,9 @@ class SettingScreen extends StatelessWidget {
                     onTap: () => Routing().move(Routes.referralScreen),
                     icon: 'person-plus.svg',
                     caption: '${notifier.translate.referralID}',
+                    // keyGLobal: keyTransaction,
+                    descriptionCas: notifier.translate.localeDatetime == 'id' ? mn?.tutorialData[indexreferral].textID : mn?.tutorialData[indexreferral].textEn,
+                    positionTooltip: TooltipPosition.top,
                   ),
                   // SettingTile(
                   //   onTap: () => Routing().move(Routes.contentPreferences),
