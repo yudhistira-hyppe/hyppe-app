@@ -439,7 +439,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
         }
       });
 
-      adsGlobalAliPlayer = notifier.adsAliplayer;
+      globalAdsInContent = notifier.adsAliplayer;
       if (widget.data != null) {
         start(widget.data!, notifier);
       }
@@ -615,7 +615,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
     notifier.adsAliplayer?.stop();
     notifier.adsAliplayer?.destroy();
     widget.onClose();
-    adsGlobalAliPlayer = null;
+    globalAdsInContent = null;
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
     if (_networkSubscriptiion != null) {

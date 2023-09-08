@@ -14,6 +14,7 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Component extends StatefulWidget {
   final Widget rightWidget;
@@ -35,7 +36,27 @@ class _ComponentState extends State<Component> {
     return InkWell(
       onTap: () async {
         if (widget.data?.eventType != 'CONTENTMOD') {
-          if (!isLoading) {
+          if(widget.data?.actionButtons?.isNotEmpty ?? false){
+            final allow = Uri.parse(widget.data?.actionButtons ?? '').isAbsolute;
+            if(allow){
+              try {
+                final uri = Uri.parse(widget.data?.actionButtons ?? '');
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(
+                    uri,
+                    mode: LaunchMode.externalApplication,
+                  );
+                } else {
+                  throw "Could not launch $uri";
+                }
+                // can't launch url, there is some error
+              } catch (e) {
+                // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                System().goToWebScreen(widget.data?.actionButtons ?? '', isPop: true);
+              }
+            }
+
+          }else if (!isLoading) {
             setState(() {
               isLoading = true;
             });

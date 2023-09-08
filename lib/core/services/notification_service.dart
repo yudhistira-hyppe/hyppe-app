@@ -17,6 +17,7 @@ import '../../ui/inner/notification/notifier.dart';
 import '../../ux/path.dart';
 import '../../ux/routing.dart';
 import '../arguments/discuss_argument.dart';
+import '../arguments/main_argument.dart';
 import '../bloc/message_v2/bloc.dart';
 import '../models/collection/message_v2/message_data_v2.dart';
 
@@ -140,21 +141,27 @@ class NotificationService {
           notifier.onClickUser(materialAppKey.currentContext!, result[index1]);
         } else if(map['url'] != null){
           final data = NotificationBody.fromJson(map);
-          try {
-            final uri = Uri.parse(data.url ?? '');
-            if (await canLaunchUrl(uri)) {
-              await launchUrl(
-                uri,
-                mode: LaunchMode.externalApplication,
-              );
-            } else {
-              throw "Could not launch $uri";
-            }
-            // can't launch url, there is some error
-          } catch (e) {
-            // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-            System().goToWebScreen(data.url ?? '', isPop: true);
+          if(data.url?.isNotEmpty ?? false){
+            Routing().moveAndRemoveUntil(
+                Routes.lobby,
+                Routes.root,
+                argument: MainArgument(canShowAds: false, page: 3));
           }
+          // try {
+          //   final uri = Uri.parse(data.url ?? '');
+          //   if (await canLaunchUrl(uri)) {
+          //     await launchUrl(
+          //       uri,
+          //       mode: LaunchMode.externalApplication,
+          //     );
+          //   } else {
+          //     throw "Could not launch $uri";
+          //   }
+          //   // can't launch url, there is some error
+          // } catch (e) {
+          //   // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+          //   System().goToWebScreen(data.url ?? '', isPop: true);
+          // }
         }else {
           throw 'Not recognize the type of the object of the notification ';
         }

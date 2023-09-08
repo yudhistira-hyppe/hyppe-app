@@ -352,13 +352,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               if (widget.isAutoPlay ?? false) {
 
                 System().increaseViewCount2(context, widget.data ?? ContentData()).whenComplete(() async{
-                  final adsIndex = (widget.index ?? 0) + 1;
-                  if(adsIndex%5 == 0){
-                    final adsData = await context.getInBetweenAds();
-                    if(adsData != null){
-                      (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().setAdsData(widget.index ?? 0, adsData);
-                    }
-                  }
+
+
                   // final count = context.getAdsCount();
                   // if(count == 5){
                   //   final adsData = await context.getInBetweenAds();

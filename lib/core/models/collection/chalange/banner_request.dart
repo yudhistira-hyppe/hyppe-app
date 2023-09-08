@@ -1,12 +1,11 @@
 class BannerRequest {
-  String keyword;
   bool statustayang;
   bool ascending;
   int page;
   int limit;
 
   BannerRequest(
-      {this.keyword = 'hyppe',
+      {
       this.statustayang = true,
       this.ascending = true,
       this.page = 0,
@@ -24,7 +23,6 @@ class BannerRequest {
 
   Map<String, dynamic> toJson() {
     final result = <String, dynamic>{};
-    result['keyword'] = keyword;
     result['statustayang'] = statustayang;
     result['ascending'] = ascending;
     result['page'] = page;

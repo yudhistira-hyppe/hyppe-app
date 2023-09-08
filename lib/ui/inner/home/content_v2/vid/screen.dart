@@ -416,7 +416,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
     };
 
-    final ads = context.read<VideoNotifier>();
+    final isAds = vidData.inBetweenAds != null;
     return WidgetSize(
       onChange: (Size size) {
         if (mounted) {
@@ -425,7 +425,21 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
           });
         }
       },
-      child: Column(
+      child: isAds ? context.getAdsInBetween(vidData.inBetweenAds, (info){
+        if(info.visibleFraction >= 0.9){
+          if (notifier.vidData?[_curIdx].fAliplayer != null) {
+            notifier.vidData?[_curIdx].fAliplayer?.pause();
+          } else {
+            dataAli[_curIdx]?.pause();
+          }
+          final ads = context.read<VideoNotifier>();
+          ads.adsAliplayer?.pause();
+          dataSelected = notifier.vidData?[index];
+        }
+
+      }, (){
+        notifier.setInBetweenAds(index, null);
+      }) :Column(
         children: [
           // Text("total ${vidData.height}"),
           VisibilityDetector(
@@ -443,6 +457,14 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
                 final indexList = notifier.vidData?.indexWhere((element) => element.postID == _curPostId);
                 final latIndexList = notifier.vidData?.indexWhere((element) => element.postID == _lastCurPostId);
+
+                final totalWithAds = notifier.vidData?.where((element) => element.inBetweenAds != null).length;
+
+                final adsIndex = index + 1 + (totalWithAds ?? 0);
+                if(adsIndex%5 == 0){
+                  final adsData = await context.getInBetweenAds();
+                  notifier.setInBetweenAds(index, adsData);
+                }
 
                 if (_lastCurPostId != _curPostId) {
                   Future.delayed(const Duration(milliseconds: 400), () {
@@ -1009,16 +1031,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
               ),
             ),
           ),
-          context.getAdsInBetween(vidData.inBetweenAds, (info){
-            if (notifier.vidData?[_curIdx].fAliplayer != null) {
-              notifier.vidData?[_curIdx].fAliplayer?.pause();
-            } else {
-              dataAli[_curIdx]?.pause();
-            }
-            ads.adsAliplayer?.pause();
-          }, (){
-            notifier.setInBetweenAds(index, null);
-          }),
           homeNotifier.isLoadingLoadmore && notifier.vidData?[index] == notifier.vidData?.last
               ? const Padding(
                   padding: EdgeInsets.only(bottom: 32),

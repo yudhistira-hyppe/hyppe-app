@@ -30,6 +30,7 @@ AudioPlayer? globalAudioPlayer;
 // ScrollController? globalScroller;
 FlutterAliplayer? globalAliPlayer;
 FlutterAliplayer? adsGlobalAliPlayer;
+FlutterAliplayer? globalAdsInContent;
 final globalDB = DatabaseHelper();
 bool isHomeScreen = false;
 bool isFromSplash = false;

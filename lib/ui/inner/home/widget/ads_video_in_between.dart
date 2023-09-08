@@ -64,7 +64,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
 
-    super.initState();
+    globalAdsInContent?.pause();
   }
 
   @override
@@ -601,7 +601,6 @@ class _InBetweenScreenState extends State<InBetweenScreen>
       isPause = false;
       // _isFirstRenderShow = false;
     });
-
     fAliplayer?.prepare();
 
     // fAliplayer?.play();

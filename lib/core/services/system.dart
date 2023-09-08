@@ -1399,7 +1399,7 @@ class System {
     if(!isShowingDialog){
       isShowingDialog = true;
       if (lastTimeAds == '') {
-        if(data.mediaType == 'video'){
+        if(data.mediaType?.toLowerCase() == 'video'){
           await ShowGeneralDialog.adsPopUpVideo(context, data, auth);
         }else{
           await ShowGeneralDialog.adsPopUpImage(context, data);
@@ -1412,7 +1412,7 @@ class System {
         print(jumlahMenit);
         if (jumlahMenit >= 14) {
           // if (lastTimeAds.canShowAds()) {
-          if(data.mediaType == 'video'){
+          if(data.mediaType?.toLowerCase() == 'video'){
             await ShowGeneralDialog.adsPopUpVideo(context, data, auth);
           }else{
             await ShowGeneralDialog.adsPopUpImage(context, data);
