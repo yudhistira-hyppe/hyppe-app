@@ -167,7 +167,7 @@ class MainNotifier with ChangeNotifier {
   }
 
   Widget mainScreen(BuildContext context, bool canShowAds, GlobalKey keyPostButton) {
-    String isNewUser = SharedPreference().readStorage(SpKeys.newUser);
+    String isNewUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
     List pages = [];
     if (isNewUser == "TRUE") {
       pages.add(TutorLandingScreen(keyButton: keyPostButton, canShowAds: canShowAds));

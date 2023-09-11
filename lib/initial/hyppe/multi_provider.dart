@@ -11,7 +11,6 @@ import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
@@ -32,6 +31,7 @@ import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -244,6 +244,7 @@ class AppDependencies {
         ChangeNotifierProvider<ScrollDiaryNotifier>(create: (context) => ScrollDiaryNotifier()),
         ChangeNotifierProvider<ScrollVidNotifier>(create: (context) => ScrollVidNotifier()),
         ChangeNotifierProvider<ChallangeNotifier>(create: (context) => ChallangeNotifier()),
-        ChangeNotifierProvider<TutorNotifier>(create: (context) => TutorNotifier())
+        ChangeNotifierProvider<TutorNotifier>(create: (context) => TutorNotifier()),
+        ChangeNotifierProvider<VideoNotifier>(create: (context) => VideoNotifier()),
       ];
 }

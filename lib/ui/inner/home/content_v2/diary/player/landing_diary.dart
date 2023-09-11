@@ -42,6 +42,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
@@ -406,7 +407,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     fAliplayer?.setCacheConfig(map);
   }
 
-  void start(BuildContext context, ContentData data) async {
+  Future start(BuildContext context, ContentData data) async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
 
     fAliplayer?.stop();
@@ -578,7 +579,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   void _handleInactivity() {
     if (isHomeScreen) {
       if (mounted) {
-        context.read<PreviewVidNotifier>().canPlayOpenApps = false;
+        (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
 
         (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = true;
         (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
@@ -775,6 +776,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   Widget itemDiary(BuildContext context, PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
     var data = notifier.diaryData?[index];
+    final isAds = data?.inBetweenAds != null;
     return WidgetSize(
       onChange: (Size size) {
         if (mounted) {
@@ -785,7 +787,17 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       },
       child: Stack(
         children: [
-          Column(
+          isAds ? context.getAdsInBetween(notifier.diaryData?[index].inBetweenAds, (info){
+            if(info.visibleFraction >= 0.9){
+              fAliplayer?.destroy();
+              fAliplayer?.stop();
+              fAliplayer?.clearScreen();
+              dataSelected = data;
+            }
+
+      }, (){
+        notifier.setAdsData(index, null);
+      }) : Column(
             children: [
               Container(
                 decoration: BoxDecoration(
@@ -891,11 +903,13 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                     VisibilityDetector(
                       // key: Key(index.toString()),
                       key: Key(data?.postID ?? index.toString()),
-                      onVisibilityChanged: (info) {
+                      onVisibilityChanged: (info) async {
                         // if (info.visibleFraction == 1.0) {
                         //   Wakelock.enable();
                         // }
                         if (info.visibleFraction >= 0.6) {
+                          adsGlobalAliPlayer?.pause();
+                          context.read<VideoNotifier>().currentPostID = data?.postID ?? '';
                           _curIdx = index;
 
                           _curPostId = data?.postID ?? index.toString();
@@ -915,6 +929,15 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;
                                 });
                               });
+                            }
+                            final totalWithAds = notifier.diaryData?.where((element) => element.inBetweenAds != null).length;
+
+                            final adsIndex = index + 1 + (totalWithAds ?? 0);
+                            if(adsIndex%5 == 0){
+                              final adsData = await context.getInBetweenAds();
+                              if(adsData != null){
+                                notifier.setAdsData(index, adsData);
+                              }
                             }
                             Future.delayed(const Duration(milliseconds: 700), () {
                               start(Routing.navigatorKey.currentContext ?? context, data ?? ContentData());

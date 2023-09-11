@@ -41,7 +41,7 @@ class _HashtagScreenState extends State<HashtagScreen> with AfterFirstLayoutMixi
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
+            margin: const EdgeInsets.only(left: 10, right: 10),
             child: Text(
               notifier.language.popularHashtag ?? 'Popular Hashtag',
               style: const TextStyle(

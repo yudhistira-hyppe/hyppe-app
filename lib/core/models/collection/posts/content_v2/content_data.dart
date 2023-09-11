@@ -13,6 +13,7 @@ import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insight.dart';
 
+import '../../advertising/ads_video_data.dart';
 import '../../music/music.dart';
 
 class StoriesGroup {
@@ -195,6 +196,8 @@ class ContentData {
   bool isLoading = false;
   FlutterAliplayer? fAliplayer;
   FlutterAliplayer? fAliplayerAds;
+  AdsData? inBetweenAds;
+  AdsData? adsData;
   UserBadgeModel? urluserBadge;
   bool? isPlay;
   double? height;
@@ -274,6 +277,7 @@ class ContentData {
     this.valueCache,
     this.tutorial,
     this.keyGlobal,
+    this.inBetweenAds,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {

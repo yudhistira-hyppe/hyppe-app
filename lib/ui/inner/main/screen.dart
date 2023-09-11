@@ -43,7 +43,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'MainScreen');
     _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
-    _mainNotifier.setPageIndex(0);
+    _mainNotifier.setPageIndex(widget.args?.page ?? 0);
     ScrollController(initialScrollOffset: 50.0);
 
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);

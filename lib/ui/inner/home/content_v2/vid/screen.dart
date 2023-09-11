@@ -25,6 +25,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
@@ -295,27 +296,27 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   void _handleInactivity() {
     if (isHomeScreen) {
-      final notifier = context.read<PreviewVidNotifier>();
-      context.read<PreviewVidNotifier>().canPlayOpenApps = false;
+      final notifier = (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>();
+      (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = false;
       context.read<MainNotifier>().isInactiveState = true;
       "=============== pause 7".logger();
       notifier.vidData?[_curIdx].fAliplayer?.pause();
       _pauseScreen();
       ShowBottomSheet().onShowColouredSheet(
-        context,
-        context.read<TranslateNotifierV2>().translate.warningInavtivityVid,
+        (Routing.navigatorKey.currentContext ?? context),
+        (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.warningInavtivityVid,
         maxLines: 2,
         color: kHyppeLightBackground,
         textColor: kHyppeTextLightPrimary,
         textButtonColor: kHyppePrimary,
         iconSvg: 'close.svg',
-        textButton: context.read<TranslateNotifierV2>().translate.stringContinue ?? '',
+        textButton: (Routing.navigatorKey.currentContext ?? context).read<TranslateNotifierV2>().translate.stringContinue ?? '',
         onClose: () {
-          context.read<MainNotifier>().isInactiveState = false;
+          (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().isInactiveState = false;
           notifier.vidData?[_curIdx].fAliplayer?.play();
           print("===========dari close popup");
           _initializeTimer();
-          context.read<PreviewVidNotifier>().canPlayOpenApps = true;
+          (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps = true;
         },
       );
     }
@@ -387,7 +388,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                 //   vidNotifier.vidData?[index].fAliplayer?.stop();
                                 // }
                                 final vidData = vidNotifier.vidData?[index];
-                                return itemVid(vidData ?? ContentData(), vidNotifier, index, homeNotifier);
+                                return itemVid(context, vidData ?? ContentData(), vidNotifier, index, homeNotifier);
                               },
                             ),
                           ),
@@ -409,12 +410,13 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     );
   }
 
-  Widget itemVid(ContentData vidData, PreviewVidNotifier notifier, int index, HomeNotifier homeNotifier) {
+  Widget itemVid(BuildContext context, ContentData vidData, PreviewVidNotifier notifier, int index, HomeNotifier homeNotifier) {
     var map = {
       DataSourceRelated.vidKey: vidData.apsaraId,
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
     };
 
+    final isAds = vidData.inBetweenAds != null;
     return WidgetSize(
       onChange: (Size size) {
         if (mounted) {
@@ -423,7 +425,21 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
           });
         }
       },
-      child: Column(
+      child: isAds ? context.getAdsInBetween(vidData.inBetweenAds, (info){
+        if(info.visibleFraction >= 0.9){
+          if (notifier.vidData?[_curIdx].fAliplayer != null) {
+            notifier.vidData?[_curIdx].fAliplayer?.pause();
+          } else {
+            dataAli[_curIdx]?.pause();
+          }
+          final ads = context.read<VideoNotifier>();
+          ads.adsAliplayer?.pause();
+          dataSelected = notifier.vidData?[index];
+        }
+
+      }, (){
+        notifier.setInBetweenAds(index, null);
+      }) :Column(
         children: [
           // Text("total ${vidData.height}"),
           VisibilityDetector(
@@ -435,11 +451,20 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                 print(_curIdx);
               }
               if (info.visibleFraction >= 0.8) {
+                adsGlobalAliPlayer?.pause();
                 _curIdx = index;
                 _curPostId = vidData.postID ?? index.toString();
 
                 final indexList = notifier.vidData?.indexWhere((element) => element.postID == _curPostId);
                 final latIndexList = notifier.vidData?.indexWhere((element) => element.postID == _lastCurPostId);
+
+                final totalWithAds = notifier.vidData?.where((element) => element.inBetweenAds != null).length;
+
+                final adsIndex = index + 1 + (totalWithAds ?? 0);
+                if(adsIndex%5 == 0){
+                  final adsData = await context.getInBetweenAds();
+                  notifier.setInBetweenAds(index, adsData);
+                }
 
                 if (_lastCurPostId != _curPostId) {
                   Future.delayed(const Duration(milliseconds: 400), () {
@@ -693,6 +718,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                 return VidPlayerPage(
                                   vidData: notifier.vidData,
                                   orientation: Orientation.portrait,
+                                  betweenAds: (ads){
+                                    if(ads != null){
+                                      notifier.setInBetweenAds(index, ads);
+                                    }
+                                  },
                                   playMode: (vidData.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                                   dataSourceMap: map,
                                   data: vidData,

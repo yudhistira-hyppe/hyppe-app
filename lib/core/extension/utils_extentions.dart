@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -7,11 +8,19 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../initial/hyppe/translate_v2.dart';
 import '../../ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import '../../ui/inner/home/widget/ads_in_between.dart';
+import '../../ui/inner/home/widget/ads_video_in_between.dart';
+import '../bloc/ads_video/bloc.dart';
+import '../bloc/ads_video/state.dart';
+import '../bloc/posts_v2/bloc.dart';
+import '../bloc/posts_v2/state.dart';
 import '../constants/shared_preference_keys.dart';
 import '../constants/themes/hyppe_colors.dart';
+import '../models/collection/advertising/ads_video_data.dart';
 import '../models/collection/localization_v2/localization_model.dart';
 import '../services/shared_preference.dart';
 import '../services/system.dart';
@@ -74,6 +83,51 @@ extension ContextScreen on BuildContext {
     }
   }
 
+  Future<AdsData?> getInBetweenAds() async {
+    AdsData? data;
+    try {
+      final notifier = AdsDataBloc();
+      await notifier.adsVideoBlocV2(this, AdsType.between);
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        // print('data : ${fetch.data.toString()}');
+        data = fetch.data?.data;
+      }
+    } catch (e) {
+      'Failed to fetch ads data $e'.logger();
+    }
+    return data;
+  }
+
+  Future<String> getAuth(BuildContext context, {String videoId = ''}) async {
+    String result = '';
+    try {
+      final notifier = PostsBloc();
+      await notifier.getAuthApsara(context, apsaraId: videoId);
+      final fetch = notifier.postsFetch;
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        result = jsonMap['PlayAuth'] ?? '';
+      }
+      return result;
+    } catch (e) {
+      return '';
+      // 'Failed to fetch ads data $e'.logger();
+    }
+  }
+
+  Widget getAdsInBetween(AdsData? adsData, Function(VisibilityInfo)? onVisible, Function() onComplete){
+    if(adsData != null){
+      if(adsData.mediaType?.toLowerCase() == 'video'){
+        return AdsVideoInBetween( onVisibility: onVisible, ratio: 16/9, data: adsData, afterReport: onComplete,);
+      }else{
+        return AdsInBetween(data: adsData, afterReport: onComplete,);
+      }
+    }
+    return const SizedBox.shrink();
+  }
+
   String getCurrentDate() {
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
@@ -107,6 +161,14 @@ extension StringDefine on String {
       return this[0].toUpperCase();
     }
     return '';
+  }
+
+  bool withHttp(){
+    return substring(0, 4) == 'http';
+  }
+
+  bool isSVG(){
+    return toLowerCase().contains('.svg');
   }
 
   String get capitalizeFirstofEach =>
@@ -217,6 +279,17 @@ extension StringDefine on String {
       return int.parse(this);
     }catch(e){
       return 0;
+    }
+  }
+
+  int getAdsTime(double seconds){
+    if(toLowerCase() == 'first'){
+      return 2;
+    }else if(toLowerCase() == 'mid'){
+      print('adsSkip seconds: ${seconds/2}');
+      return seconds~/2;
+    }else{
+      return (seconds - 2).toInt();
     }
   }
 }

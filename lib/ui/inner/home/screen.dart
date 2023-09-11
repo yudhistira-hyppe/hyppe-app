@@ -144,8 +144,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     offset = 0;
 
     Future.delayed(Duration.zero, () {
+      _tabController.index = 0;
       final notifier = context.read<HomeNotifier>();
       notifier.setSessionID();
+      notifier.tabIndex = 0;
       _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
       final notifierMain = context.read<MainNotifier>();

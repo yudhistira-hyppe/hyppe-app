@@ -563,25 +563,41 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                     : Expanded(
                         child: Row(
                           children: [
-                            CustomBaseCacheImage(
-                              imageUrl: data.avatar?.fullLinkURL,
-                              memCacheWidth: 200,
-                              memCacheHeight: 200,
-                              imageBuilder: (_, imageProvider) {
-                                return Container(
-                                  width: 36,
-                                  height: 36,
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: imageProvider,
-                                    ),
-                                  ),
-                                );
+                            GestureDetector(
+                              onTap:(){
+                                Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
                               },
-                              errorWidget: (_, __, ___) {
-                                return Container(
+                              child: CustomBaseCacheImage(
+                                imageUrl: data.avatar?.fullLinkURL,
+                                memCacheWidth: 200,
+                                memCacheHeight: 200,
+                                imageBuilder: (_, imageProvider) {
+                                  return Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: imageProvider,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                errorWidget: (_, __, ___) {
+                                  return Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(18)),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                emptyWidget: Container(
                                   width: 36,
                                   height: 36,
                                   decoration: const BoxDecoration(
@@ -590,17 +606,6 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                                       fit: BoxFit.cover,
                                       image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                     ),
-                                  ),
-                                );
-                              },
-                              emptyWidget: Container(
-                                width: 36,
-                                height: 36,
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(18)),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                   ),
                                 ),
                               ),
@@ -1171,25 +1176,41 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                     : Expanded(
                         child: Row(
                           children: [
-                            CustomBaseCacheImage(
-                              imageUrl: data.avatar?.fullLinkURL,
-                              memCacheWidth: 200,
-                              memCacheHeight: 200,
-                              imageBuilder: (_, imageProvider) {
-                                return Container(
-                                  width: 36,
-                                  height: 36,
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: imageProvider,
-                                    ),
-                                  ),
-                                );
+                            GestureDetector(
+                              onTap:(){
+                                Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
                               },
-                              errorWidget: (_, __, ___) {
-                                return Container(
+                              child: CustomBaseCacheImage(
+                                imageUrl: data.avatar?.fullLinkURL,
+                                memCacheWidth: 200,
+                                memCacheHeight: 200,
+                                imageBuilder: (_, imageProvider) {
+                                  return Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: imageProvider,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                errorWidget: (_, __, ___) {
+                                  return Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(18)),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                emptyWidget: Container(
                                   width: 36,
                                   height: 36,
                                   decoration: const BoxDecoration(
@@ -1198,17 +1219,6 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                                       fit: BoxFit.cover,
                                       image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                     ),
-                                  ),
-                                );
-                              },
-                              emptyWidget: Container(
-                                width: 36,
-                                height: 36,
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(18)),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                   ),
                                 ),
                               ),

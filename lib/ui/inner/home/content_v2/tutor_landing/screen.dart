@@ -48,7 +48,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
   // final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   // final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
   bool appbarSeen = true;
-  late TabController _tabController;
+  late TabController _tabController2;
   double offset = 0.0;
   List filterList = [
     {"id": '1', 'name': "Pic"},
@@ -62,61 +62,9 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
   LocalizationModelV2? _language;
 
   @override
-  void didChangeDependencies() {
-    // CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
-    super.didChangeDependencies();
-  }
-
-  @override
-  void didPop() {
-    isHomeScreen = false;
-    'didPop isOnHomeScreen $isHomeScreen'.logger();
-    super.didPop();
-  }
-
-  @override
-  void didPopNext() {
-    Future.delayed(const Duration(milliseconds: 500), () async {
-      final fixContext = Routing.navigatorKey.currentContext;
-      isHomeScreen = true;
-      'didPopNext isOnHomeScreen $isHomeScreen'.logger();
-      (fixContext ?? context).read<ReportNotifier>().inPosition = contentPosition.home;
-      if (isHomeScreen) {
-        print("isOnHomeScreen hit ads");
-        var homneNotifier = (fixContext ?? context).read<HomeNotifier>();
-        await homneNotifier.getAdsApsara((fixContext ?? context), true);
-      }
-    });
-    "+++++++++++++ didPopNext".logger();
-    // System().disposeBlock();
-
-    super.didPopNext();
-  }
-
-  @override
-  void didPushNext() {
-    isHomeScreen = widget.canShowAds;
-    'didPushNext isOnHomeScreen $isHomeScreen'.logger();
-    super.didPushNext();
-  }
-
-  @override
   void dispose() {
-    CustomRouteObserver.routeObserver.unsubscribe(this);
     super.dispose();
-  }
-
-  @override
-  void deactivate() {
-    isHomeScreen = false;
-    // globalScroller = null;
-    'deactivate isOnHomeScreen $isHomeScreen'.logger();
-    super.deactivate();
-  }
-
-  @override
-  void didPush() {
-    'didPush isOnHomeScreen $isHomeScreen'.logger();
+    _tabController2.dispose();
   }
 
   void show() {
@@ -126,9 +74,9 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeScreen');
-    isHomeScreen = widget.canShowAds;
+
     'initState isOnHomeScreen $isHomeScreen'.logger();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController2 = TabController(length: 3, vsync: this);
 
     offset = 0;
     WidgetsBinding.instance.addPostFrameCallback((_) => show());
@@ -137,69 +85,6 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
       final notifier = context.read<HomeNotifier>();
       notifier.setSessionID();
       _language = context.read<TranslateNotifierV2>().translate;
-      final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
-      final notifierMain = context.read<MainNotifier>();
-
-      if (notifier.preventReloadAfterUploadPost) {
-        notifier.preventReloadAfterUploadPost = false;
-      } else {
-        var pic = context.read<PreviewPicNotifier>();
-        var diary = context.read<PreviewDiaryNotifier>();
-        var vid = context.read<PreviewVidNotifier>();
-        if (pic.pic == null && diary.diaryData == null && vid.vidData == null) {
-          notifier.initNewHome(context, mounted, isreload: false, isNew: true);
-        }
-      }
-      if (notifierFollow.listFollow.isEmpty) {
-        notifierFollow.listFollow = [
-          {'name': "${_language?.follow}", 'code': 'TOFOLLOW'},
-          {'name': "${_language?.following}", 'code': 'FOLLOWING'},
-        ];
-      }
-
-      notifierMain.globalKey.currentState?.innerController.addListener(() {
-        try {
-          setState(() {
-            offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-            // print(offset);
-          });
-          if ((notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0) >= (notifierMain.globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
-              !(notifierMain.globalKey.currentState?.innerController.position.outOfRange ?? true)) {
-            notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);
-          }
-        } catch (e) {
-          e.logger();
-        }
-      });
-      Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.addListener(() {
-        // print(context.read<MainNotifier>().scrollController.offset);
-        try {
-          if (mounted) {
-            if ((Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
-              setState(() {
-                appbarSeen = false;
-              });
-            } else {
-              setState(() {
-                appbarSeen = true;
-              });
-            }
-          } else {
-            if ((Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
-              appbarSeen = false;
-            } else {
-              appbarSeen = true;
-            }
-          }
-        } catch (e) {
-          e.logger();
-        }
-      });
-      // });
-      context.read<ReportNotifier>().inPosition = contentPosition.home;
-      _initLicense();
-      // FlutterAliPlayerFactory.loadRtsLibrary();
-      // _loadEncrypted();
     });
 
     context.read<PreUploadContentNotifier>().onGetInterest(context);
@@ -209,25 +94,6 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
     }
     super.initState();
     '++++++++++++++++ iniststate'.logger();
-  }
-
-  _initLicense() {
-    if (Platform.isIOS) {
-      FlutterAliPlayerFactory.initLicenseServiceForIOS();
-    } else {
-      // 不需要
-    }
-  }
-
-  _loadEncrypted() async {
-    if (Platform.isAndroid) {
-      var bytes = await rootBundle.load("assets/encryptedApp.dat");
-      // getExternalStorageDirectories
-      FlutterAliPlayerFactory.initService(bytes.buffer.asUint8List());
-    } else if (Platform.isIOS) {
-      var bytes = await rootBundle.load("assets/encryptedApp_ios.dat");
-      FlutterAliPlayerFactory.initService(bytes.buffer.asUint8List());
-    }
   }
 
   bool isZoom = false;
@@ -267,7 +133,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                       return notification.depth == 2;
                     }
                     return notification.depth == 0;
-                    // if (_tabController.index != 0) {}
+                    // if (_tabController2.index != 0) {}
                     // return notification.depth == 0;
                   }
                 },
@@ -312,7 +178,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                                     color: kHyppeLightButtonText,
                                   ),
                                   child: TabBar(
-                                    controller: _tabController,
+                                    controller: _tabController2,
                                     indicator: BoxDecoration(
                                       borderRadius: BorderRadius.circular(
                                         25.0,
@@ -337,7 +203,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                                             stepTitle = "1/6";
                                             break;
                                           case 1:
-                                            if (_tabController.index == 1) {
+                                            if (_tabController2.index == 1) {
                                               titleCase = 'Diary! 🎥';
                                               descCase = _language?.tutorLanding2 ?? '';
                                               stepTitle = "2/6";
@@ -389,15 +255,15 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                                                         ShowCaseWidget.of(context).next();
                                                         switch (index) {
                                                           case 0:
-                                                            _tabController.index = 1;
+                                                            _tabController2.index = 1;
                                                             break;
                                                           case 1:
-                                                            if (_tabController.index == 1) {
-                                                              _tabController.index = 2;
+                                                            if (_tabController2.index == 1) {
+                                                              _tabController2.index = 2;
                                                             } else {}
                                                             break;
                                                           case 2:
-                                                            // _tabController.index = 0;
+                                                            // _tabController2.index = 0;
                                                             break;
                                                         }
                                                       },
@@ -429,7 +295,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                       ];
                     },
                     body: TabBarView(
-                      controller: _tabController,
+                      controller: _tabController2,
                       physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
                       children: [
                         // Pict
@@ -498,19 +364,15 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
       homeClick = true;
       (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
     }
-    _tabController.index = homneNotifier.tabIndex;
-    _tabController.animation?.addListener(() {
-      homneNotifier.tabIndex = _tabController.index;
+    _tabController2.index = homneNotifier.tabIndex;
+    _tabController2.animation?.addListener(() {
+      homneNotifier.tabIndex = _tabController2.index;
       print("masuk tab slide");
       if (homneNotifier.lastCurIndex != homneNotifier.tabIndex) {
         homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
       }
       homneNotifier.lastCurIndex = homneNotifier.tabIndex;
     });
-    if (isHomeScreen) {
-      print("isOnHomeScreen hit ads");
-      homneNotifier.getAdsApsara(context, true);
-    }
     // System().popUpChallange(context);
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -9,6 +11,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -41,10 +44,10 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
   @override
   void initState() {
     super.initState();
-    final newUser = SharedPreference().readStorage(SpKeys.newUser);
-    if (newUser == "TRUE") {
-      WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keybutton]));
-    }
+    final newUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
+    // if (newUser == "TRUE") {
+    WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keybutton]));
+    // }
   }
 
   @override
@@ -108,11 +111,36 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                           style: TextStyle(color: kHyppeBurem, fontSize: 10),
                         ),
                         GestureDetector(
-                            onTap: () {
+                            onTap: () async {
+                              Routing().moveBack();
                               SharedPreference().writeStorage(SpKeys.newUser, "FALSE");
                               ShowCaseWidget.of(context).next();
+                              unawaited(
+                                Navigator.of(context, rootNavigator: true).push(
+                                  PageRouteBuilder(
+                                    pageBuilder: (_, __, ___) => WillPopScope(
+                                      onWillPop: () async => false,
+                                      child: Scaffold(
+                                        backgroundColor: Colors.transparent,
+                                        body: const Center(
+                                          child: CircularProgressIndicator.adaptive(),
+                                        ),
+                                      ),
+                                    ),
+                                    transitionDuration: Duration.zero,
+                                    barrierDismissible: false,
+                                    barrierColor: Colors.black45,
+                                    opaque: false,
+                                  ),
+                                ),
+                              );
+                              await Future.delayed(const Duration(seconds: 1));
+                              // context.read<HomeNotifier>().tabIndex = 0;
+
                               Routing().moveBack();
-                              Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+                              Routing().moveReplacement(Routes.lobby);
+
+                              // Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
                             },
                             child: Text(
                               tn.understand ?? '',

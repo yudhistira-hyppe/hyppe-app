@@ -34,7 +34,7 @@ class _PicTopItemState extends State<PicTopItem> {
   @override
   void initState() {
     super.initState();
-    final newUser = SharedPreference().readStorage(SpKeys.newUser);
+    final newUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
     mn = Provider.of<MainNotifier>(context, listen: false);
     lang = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
@@ -54,11 +54,17 @@ class _PicTopItemState extends State<PicTopItem> {
         GlobalKey key = widget.globalKey ?? GlobalKey();
         if ((widget.data?.saleAmount ?? 0) > 0 && mn?.tutorialData[indexKeySell].status == false) {
           if (key == widget.data?.keyGlobal) {
+            if (widget.data?.fAliplayer != null) {
+              widget.data?.fAliplayer?.pause();
+            }
             ShowCaseWidget.of(context).startShowCase([widget.data?.keyGlobal ?? GlobalKey()]);
           }
         }
         if (((widget.data?.certified ?? false) && (widget.data?.saleAmount ?? 0) == 0) && mn?.tutorialData[indexKeyProtection].status == false) {
           if (key == widget.data?.keyGlobal) {
+            if (widget.data?.fAliplayer != null) {
+              widget.data?.fAliplayer?.pause();
+            }
             ShowCaseWidget.of(context).startShowCase([widget.data?.keyGlobal ?? GlobalKey()]);
           }
         }
@@ -93,6 +99,9 @@ class _PicTopItemState extends State<PicTopItem> {
             },
             closeWidget: GestureDetector(
               onTap: () {
+                if (widget.data?.fAliplayer != null) {
+                  widget.data?.fAliplayer?.pause();
+                }
                 context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeySell].key ?? '');
                 mn?.tutorialData[indexKeySell].status = true;
                 ShowCaseWidget.of(context).dismiss();

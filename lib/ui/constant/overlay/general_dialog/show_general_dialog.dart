@@ -33,6 +33,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/models/collection/advertising/ads_video_data.dart';
+import 'general_dialog_content/ads_popup_video_dialog.dart';
 
 class ShowGeneralDialog {
   ShowGeneralDialog._private();
@@ -330,7 +331,8 @@ class ShowGeneralDialog {
     }
   }
 
-  static Future adsPopUpImage(BuildContext context) async {
+  static Future adsPopUpImage(BuildContext context, AdsData data) async {
+    SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, context.getCurrentDate());
     try {
       await showGeneralDialog(
         //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
@@ -338,7 +340,27 @@ class ShowGeneralDialog {
         barrierLabel: 'Barrier',
         barrierDismissible: false,
         transitionDuration: const Duration(milliseconds: 500),
-        pageBuilder: (context, animation, secondAnimation) => const AdsPopupImageDialog(),
+        pageBuilder: (context, animation, secondAnimation) => AdsPopupImageDialog(data: data,),
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+          return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
+        },
+      );
+    } catch (e) {
+      print('Error Pop Ads: $e');
+    }
+  }
+
+  static Future adsPopUpVideo(BuildContext context, AdsData data, String auth) async {
+    SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, context.getCurrentDate());
+    try {
+      await showGeneralDialog(
+        //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+        context: Routing.navigatorKey.currentState?.overlay?.context ?? context,
+        barrierLabel: 'Barrier',
+        barrierDismissible: false,
+        transitionDuration: const Duration(milliseconds: 500),
+        pageBuilder: (context, animation, secondAnimation) => AdsPopupVideoDialog(data: data, auth: auth,),
         transitionBuilder: (context, animation, secondaryAnimation, child) {
           animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
           return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);

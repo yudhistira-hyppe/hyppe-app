@@ -14,12 +14,12 @@ import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
-import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import '../../../../../app.dart';
 import '../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
+import '../../../../../core/models/collection/advertising/ads_video_data.dart';
 import '../../notifier_v2.dart';
 
 class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
@@ -43,6 +43,11 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
 
   set pic(List<ContentData>? val) {
     _pic = val;
+    notifyListeners();
+  }
+
+  setIsViewed(int index){
+    pic?[index].isViewed = true;
     notifyListeners();
   }
 
@@ -150,6 +155,17 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
       // }
     } catch (e) {
       'load pic list: ERROR: $e'.logger();
+    }
+  }
+
+  void setAdsData(int index, AdsData? adsData){
+    if(pic?[index + 1].inBetweenAds == null){
+      if(adsData != null){
+        pic?.insert(index + 1, ContentData(inBetweenAds: adsData));
+      }else{
+        pic?.removeAt(index);
+      }
+      notifyListeners();
     }
   }
 

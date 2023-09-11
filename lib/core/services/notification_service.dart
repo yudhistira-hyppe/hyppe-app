@@ -8,13 +8,16 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../ui/inner/message_v2/notifier.dart';
 import '../../ui/inner/notification/notifier.dart';
 import '../../ux/path.dart';
 import '../../ux/routing.dart';
 import '../arguments/discuss_argument.dart';
+import '../arguments/main_argument.dart';
 import '../bloc/message_v2/bloc.dart';
 import '../models/collection/message_v2/message_data_v2.dart';
 
@@ -136,7 +139,30 @@ class NotificationService {
           final index1 = result.indexWhere((element) => element.disqusLogs[0].sender == sender);
           "array yg di dapat $index1".logger();
           notifier.onClickUser(materialAppKey.currentContext!, result[index1]);
-        } else {
+        } else if(map['url'] != null){
+          final data = NotificationBody.fromJson(map);
+          if(data.url?.isNotEmpty ?? false){
+            Routing().moveAndRemoveUntil(
+                Routes.lobby,
+                Routes.root,
+                argument: MainArgument(canShowAds: false, page: 3));
+          }
+          // try {
+          //   final uri = Uri.parse(data.url ?? '');
+          //   if (await canLaunchUrl(uri)) {
+          //     await launchUrl(
+          //       uri,
+          //       mode: LaunchMode.externalApplication,
+          //     );
+          //   } else {
+          //     throw "Could not launch $uri";
+          //   }
+          //   // can't launch url, there is some error
+          // } catch (e) {
+          //   // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+          //   System().goToWebScreen(data.url ?? '', isPop: true);
+          // }
+        }else {
           throw 'Not recognize the type of the object of the notification ';
         }
       }
@@ -243,8 +269,9 @@ class NotificationBody {
   String? message;
   String? title;
   String? index;
+  String? url;
 
-  NotificationBody({this.postId, this.postType, this.message, this.index});
+  NotificationBody({this.postId, this.postType, this.message, this.index, this.url});
 
   NotificationBody.fromJson(Map<String, dynamic> json) {
     postId = json['postID'];
@@ -252,6 +279,7 @@ class NotificationBody {
     message = json['body'];
     title = json['title'];
     index = json['index'];
+    url = json['url'];
   }
 
   Map<String, dynamic> toJson() {
@@ -260,6 +288,7 @@ class NotificationBody {
     result['postType'] = postType;
     result['message'] = message;
     result['index'] = index;
+    result['url'] = url;
     return result;
   }
 }

@@ -34,6 +34,8 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../app.dart';
+import '../../../../../constant/widget/ads_player_page.dart';
+import 'fullscreen/notifier.dart';
 
 class VidPlayerPage extends StatefulWidget {
   final bool? fromFullScreen;
@@ -48,7 +50,9 @@ class VidPlayerPage extends StatefulWidget {
   final Function(FlutterAliplayer)? getPlayer;
   final Function(FlutterAliplayer)? getAdsPlayer;
   final Function(ContentData)? onPlay;
+  final Function(AdsData?)? onShowAds;
   final Orientation orientation;
+  final Function(AdsData?) betweenAds;
   final List<ContentData>? vidData;
   final int? index;
   final Function()? loadMoreFunction;
@@ -58,7 +62,6 @@ class VidPlayerPage extends StatefulWidget {
   final bool? isAutoPlay;
   final Function()? autoScroll; //netral player
   final bool enableWakelock;
-  final bool withThumbnail;
 
   // FlutterAliplayer? fAliplayer;
   // FlutterAliplayer? fAliplayerAds;
@@ -76,7 +79,9 @@ class VidPlayerPage extends StatefulWidget {
     this.onPlay,
     this.getPlayer,
     this.getAdsPlayer,
+    this.onShowAds,
     required this.orientation,
+    required this.betweenAds,
     this.vidData,
     this.fromFullScreen,
     this.index,
@@ -87,7 +92,6 @@ class VidPlayerPage extends StatefulWidget {
     this.isAutoPlay = false,
     this.autoScroll,
     this.enableWakelock = true,
-    this.withThumbnail = true,
 
     // this.fAliplayer,
     // this.fAliplayerAds
@@ -174,12 +178,13 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   StreamSubscription? _networkSubscriptiion;
 
   // GlobalKey<TrackFragmentState> trackFragmentKey = GlobalKey();
-  AdsVideo? adsData;
+  AdsData? adsData;
   var secondsSkip = 0;
   var skipAdsCurent = 0;
   bool isActiveAds = false;
   bool isCompleteAds = false;
   AliPlayerView? aliPlayerView;
+  AdsPlayerPage? adsPlayerPage;
   AdsVideo? _newClipData;
   int newIndex = 0;
 
@@ -198,8 +203,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     // }
     //cek ikaln
     // adsData = context.read<VidDetailNotifier>().adsData;
-    print("ini iklan ${adsData?.data?.videoId}");
-    print("ini iklan ${adsData?.data?.apsaraAuth}");
     if (widget.inLanding) {
       getAdsVideo(false);
     }
@@ -344,7 +347,21 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             // Wakelock.enable();
             try {
               if (widget.isAutoPlay ?? false) {
-                System().increaseViewCount2(context, widget.data ?? ContentData());
+
+                System().increaseViewCount2(context, widget.data ?? ContentData()).whenComplete(() async{
+
+
+                  // final count = context.getAdsCount();
+                  // if(count == 5){
+                  //   final adsData = await context.getInBetweenAds();
+                  //   widget.betweenAds(adsData);
+                  // }
+                  // if(!(widget.data?.isViewed ?? true)){
+                  //   context.incrementAdsCount();
+                  // }
+                  // (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().setIsViewed(widget.index ?? 0);
+
+                });
               }
               setState(() {
                 _showTipsWidget = false;
@@ -445,9 +462,25 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         _inSeek = false;
       });
       fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
+        final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
         if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
           if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
             _currentPosition = extraValue ?? 0;
+            final detik = (_currentPosition / 1000).round();
+            if(notifier.adsTime == detik){
+              if(notifier.tempAdsData != null){
+                print('pause here 2');
+                fAliplayer?.pause();
+                setState(() {
+                  adsData = notifier.tempAdsData;
+                });
+                if(widget.onShowAds != null){
+                  widget.onShowAds!(adsData);
+                }
+              }
+
+
+            }
           }
           if (!_inSeek) {
             try {
@@ -510,25 +543,23 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         }
       });
 
-      if (widget.withThumbnail) {
-        fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {
-          _thumbnailSuccess = true;
-        }, preparedFail: (playerId) {
-          _thumbnailSuccess = false;
-        });
+      fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {
+        _thumbnailSuccess = true;
+      }, preparedFail: (playerId) {
+        _thumbnailSuccess = false;
+      });
 
-        fAliplayer?.setOnThumbnailGetListener(
-            onThumbnailGetSuccess: (bitmap, range, playerId) {
-              // _thumbnailBitmap = bitmap;
-              var provider = MemoryImage(bitmap);
-              precacheImage(provider, context).then((_) {
-                setState(() {
-                  _imageProvider = provider;
-                });
+      fAliplayer?.setOnThumbnailGetListener(
+          onThumbnailGetSuccess: (bitmap, range, playerId) {
+            // _thumbnailBitmap = bitmap;
+            var provider = MemoryImage(bitmap);
+            precacheImage(provider, context).then((_) {
+              setState(() {
+                _imageProvider = provider;
               });
-            },
-            onThumbnailGetFail: (playerId) {});
-      }
+            });
+          },
+          onThumbnailGetFail: (playerId) {});
 
       fAliplayer?.setOnSubtitleHide((trackIndex, subtitleID, playerId) {
         if (mounted) {
@@ -638,6 +669,12 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               isloading = false;
             });
           });
+
+          if (widget.inLanding) {
+            final ref =(Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+            ref.hasShowedAds = false;
+            ref.getAdsVideo(Routing.navigatorKey.currentContext ?? context, _videoDuration);
+          }
           // fAliplayer?.play();
           print('=2=2=2=2=2=2=2prepare done');
         }
@@ -712,7 +749,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     }
   }
 
-  void playVideo() async {
+  void playVideo(VideoNotifier notifier) async {
     if (mounted) {
       globalAliPlayer = widget.data?.fAliplayer;
       print("ini play");
@@ -735,6 +772,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       });
       fAliplayer?.play();
       await fAliplayer?.prepare().whenComplete(() {}).onError((error, stackTrace) => print('Error Loading video: $error'));
+
       // Future.delayed(const Duration(seconds: 1), () {
       //   if (isPlay) {
       //     fAliplayer?.play();
@@ -1001,53 +1039,84 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         });
       });
     }
-
-    return AnimatedSwitcher(
-      duration: const Duration(),
-      transitionBuilder: (child, animation) => FadeTransition(child: child, opacity: animation),
-      child: isloading
-          ? Stack(
-              key: ValueKey<bool>(isloading),
-              children: [
-                widget.withThumbnail
-                    ? Container(
-                        height: widget.height,
-                        width: widget.width,
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(widget.fromFullScreen ?? false ? 0 : 16),
-                        ),
-                        child: VideoThumbnail(
-                          videoData: widget.data,
-                          onDetail: false,
-                          fn: () {},
-                          withMargin: true,
-                        ),
-                      )
-                    : Container(
-                        height: widget.height,
-                        width: widget.width,
-                        color: Colors.black,
-                        alignment: Alignment.center,
-                        child: const CircularProgressIndicator(
-                          backgroundColor: Colors.white,
-                          strokeWidth: 3.0,
-                        ),
-                      ),
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator(
-                      color: kHyppePrimary,
-                    ),
-                  ),
-                )
-              ],
+    return Consumer<VideoNotifier>(builder: (context, notifier, _){
+      if (isloading) {
+        return Stack(
+          key: ValueKey<bool>(isloading),
+          children: [
+            Container(
+              height: widget.height,
+              width: widget.width,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(widget.fromFullScreen ?? false ? 0 : 16),
+              ),
+              child: VideoThumbnail(
+                videoData: widget.data,
+                onDetail: false,
+                fn: () {},
+                withMargin: true,
+              ),
+            ),
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(
+                  color: kHyppePrimary,
+                ),
+              ),
             )
-          : Builder(
+          ],
+        );
+      }else{
+        // print("onViewPlayerCreated ${onViewPlayerCreated}");
+        aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
+        // AliPlayerView aliPlayerAdsView = AliPlayerView(onCreated: onViewPlayerAdsCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
+        adsPlayerPage = AdsPlayerPage(dataSourceMap: {
+          DataSourceRelated.vidKey: adsData?.videoId,
+          DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
+        },
+            width: widget.width, height: widget.height,
+          thumbnail: (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}'
+          ,data: adsData, functionFullTriger: (){
+
+          },
+          getPlayer: (player){
+
+          },
+          onStop: (){
+            setState(() {
+              adsData = null;
+            });
+            if(widget.onShowAds != null){
+              widget.onShowAds!(adsData);
+            }
+          },
+          onFullscreen: (){
+            onFullscreen(notifier);
+          },
+          onClose: (){
+            setState(() {
+              isPlay = true;
+
+              adsData = null;
+              if(widget.onShowAds != null){
+                widget.onShowAds!(adsData);
+              }
+
+            });
+            notifier.hasShowedAds = true;
+            notifier.tempAdsData = null;
+            fAliplayer?.play();
+          },
+          orientation: Orientation.portrait,
+        );
+        return AnimatedSwitcher(
+          duration: const Duration(),
+          transitionBuilder: (child, animation) => FadeTransition(child: child, opacity: animation),
+          child: Builder(
               key: ValueKey<bool>(isloading),
               builder: (context) {
-                aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
                 return GestureDetector(
                   onTap: () {
                     onTapCtrl = true;
@@ -1077,10 +1146,10 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                         widget.data!.isLoading
                             ? Container(color: Colors.black, width: widget.width, height: widget.height)
                             : ClipRRect(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(widget.fromFullScreen ?? false ? 0 : 16),
-                                ),
-                                child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(widget.fromFullScreen ?? false ? 0 : 16),
+                            ),
+                            child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
 
                       // Text("${adsData == null}"),
                       // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
@@ -1090,42 +1159,31 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                           width: widget.width,
                           height: widget.height,
                           // padding: EdgeInsets.only(bottom: 25.0),
-                          child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation)),
+                          child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation, notifier)),
                         ),
                       if (!isPlay)
-                        widget.withThumbnail
-                            ? SizedBox(
-                                height: widget.height,
-                                width: widget.width,
-                                child: VideoThumbnail(
-                                  videoData: widget.data,
-                                  onDetail: false,
-                                  fn: () {},
-                                  withMargin: true,
-                                ),
-                              )
-                            : Container(
-                                height: widget.height,
-                                width: widget.width,
-                                color: Colors.black,
-                                alignment: Alignment.center,
-                                child: const CircularProgressIndicator(
-                                  backgroundColor: Colors.white,
-                                  strokeWidth: 3.0,
-                                ),
-                              ),
+                        SizedBox(
+                          height: widget.height,
+                          width: widget.width,
+                          child: VideoThumbnail(
+                            videoData: widget.data,
+                            onDetail: false,
+                            fn: () {},
+                            withMargin: true,
+                          ),
+                        ),
                       (widget.data?.reportedStatus == "BLURRED")
                           ? Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: VideoThumbnailReport(
-                                  videoData: widget.data,
-                                  function: () {
-                                    changeStatusBlur();
-                                  },
-                                ),
-                              ),
-                            )
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: VideoThumbnailReport(
+                            videoData: widget.data,
+                            function: () {
+                              changeStatusBlur();
+                            },
+                          ),
+                        ),
+                      )
                           : Container(),
                       // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
                       // if (isPlay && adsData != null) skipAds(),
@@ -1152,6 +1210,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                 isPlay = true;
                                 _showLoading = true;
                               });
+                              notifier.hasShowedAds = false;
                               fAliplayer?.play();
                               await fAliplayer?.prepare().whenComplete(() {}).onError((error, stackTrace) => print('Error Loading video: $error'));
                               Future.delayed(const Duration(seconds: 1), () {
@@ -1164,7 +1223,14 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                 }
                               });
 
-                              System().increaseViewCount2(context, widget.data ?? ContentData());
+                              System().increaseViewCount2(context, widget.data ?? ContentData()).whenComplete(() async{
+                                // final count = context.getAdsCount();
+                                // if(count == 5){
+                                //   final adsData = await context.getInBetweenAds();
+                                //   widget.betweenAds(adsData);
+                                // }
+                                // context.incrementAdsCount();
+                              });
                               // if (adsData != null && widget.inLanding) {
                               //   fAliplayerAds?.prepare().whenComplete(() {
                               //     setState(() {
@@ -1231,11 +1297,21 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                             ),
                           ),
                         ),
+                      if(adsData != null && isPlay)
+                        Positioned.fill(child: ClipRRect(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(widget.fromFullScreen ?? false ? 0 : 16),
+                            ),
+                            child: Container(color: Colors.black, width: widget.width, height: widget.height, child: adsPlayerPage!)))
                     ],
                   ),
                 );
               }),
-    );
+        );
+      }
+    });
+
+
   }
 
   void onViewPlayerCreated(viewId) async {
@@ -1304,23 +1380,15 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                     ),
                   ),
                   skipAdsCurent == 0
-                      ? Icon(
+                      ? const Icon(
                           Icons.skip_next,
                           color: Colors.white,
                         )
                       : Container(),
-                  widget.withThumbnail
-                      ? Container(
+                  Container(
                           child: Image.network(
                           (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
-                        ))
-                      : Container(
-                          color: Colors.black,
-                          child: const CircularProgressIndicator(
-                            backgroundColor: Colors.white,
-                            strokeWidth: 3.0,
-                          ),
-                        )
+                        )),
                 ],
               ),
             ),
@@ -1618,7 +1686,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     }
   }
 
-  _buildContentWidget(BuildContext context, Orientation orientation) {
+  _buildContentWidget(BuildContext context, Orientation orientation, VideoNotifier notifier) {
     // print('ORIENTATION: CHANGING ORIENTATION');
     return SafeArea(
       child: _currentPosition <= 0
@@ -1726,7 +1794,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                             if (widget.orientation == Orientation.portrait) {
                               "=============== pause 3".logger();
                               fAliplayer?.pause();
-                              SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+                              await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
                               if ((widget.data?.metadata?.height ?? 0) < (widget.data?.metadata?.width ?? 0)) {
                                 print('Landscape VidPlayerPage');
                                 SystemChrome.setPreferredOrientations([
@@ -1740,12 +1808,25 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                   builder: (_) => VideoFullscreenPage(
                                         enableWakelock: widget.enableWakelock,
                                         aliPlayerView: aliPlayerView!,
+                                        thumbnail: (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
                                         fAliplayer: fAliplayer,
                                         data: widget.data ?? ContentData(),
                                         onClose: () {
+                                          setState(() {
+                                            isPlay = true;
+
+                                            adsData = null;
+                                            if(widget.onShowAds != null){
+                                              widget.onShowAds!(adsData);
+                                            }
+
+                                          });
+                                          notifier.hasShowedAds = true;
+                                          notifier.tempAdsData = null;
+                                          notifier.isShowingAds = false;
                                           // Routing().moveBack();
                                         },
-                                        slider: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation),
+                                        slider: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation, notifier),
                                         videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
                                         vidData: widget.vidData,
                                         index: widget.index,
@@ -1757,20 +1838,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                         isAutoPlay: widget.isAutoPlay,
                                       ),
                                   settings: const RouteSettings()));
-                              // VideoIndicator value = await showDialog(
-                              //     context: context,
-                              //     builder: (context) {
-                              //       return VideoFullscreenPage(
-                              //         aliPlayerView: aliPlayerView!,
-                              //         fAliplayer: fAliplayer,
-                              //         data: widget.data ?? ContentData(),
-                              //         onClose: () {
-                              //           // Routing().moveBack();
-                              //         },
-                              //         slider: _buildContentWidget(context, widget.orientation),
-                              //         videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentAdsPositionText, isMute: isMute),
-                              //       );
-                              //     });
                               if (mounted) {
                                 setState(() {
                                   _videoDuration = value.videoDuration ?? 0;
@@ -1905,6 +1972,178 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               ],
             ),
     );
+  }
+
+  Future onFullscreen(VideoNotifier notifier) async{
+    int changeValue;
+    changeValue = _currentPosition;
+    if (changeValue > _videoDuration) {
+      changeValue = _videoDuration;
+    }
+    print('change Value : $changeValue');
+    if (widget.orientation == Orientation.portrait) {
+      print('pause here 1');
+      fAliplayer?.pause();
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+      if ((widget.data?.metadata?.height ?? 0) < (widget.data?.metadata?.width ?? 0)) {
+        print('Landscape VidPlayerPage');
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]);
+      } else {
+        print('Portrait VidPlayerPage');
+      }
+      setState(() {
+        notifier.isFullScreen = true;
+      });
+      notifier.isShowingAds = adsData != null;
+      VideoIndicator value = await Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+          builder: (_) => VideoFullscreenPage(
+            aliPlayerView: aliPlayerView!,
+            thumbnail: (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}',
+            // adsPlayer: adsPlayerPage!,
+            fAliplayer: fAliplayer,
+            data: widget.data ?? ContentData(),
+            onClose: () {
+              setState(() {
+                isPlay = true;
+
+                adsData = null;
+                if(widget.onShowAds != null){
+                  widget.onShowAds!(adsData);
+                }
+
+              });
+              notifier.hasShowedAds = true;
+              notifier.tempAdsData = null;
+              notifier.isShowingAds = false;
+              // Routing().moveBack();
+            },
+            slider: _buildContentWidget(context, widget.orientation, notifier),
+            videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changeValue, positionText: _currentAdsPositionText, isMute: isMute),
+          ),
+          settings: const RouteSettings()));
+      notifier.isShowingAds = adsData != null;
+      if (mounted) {
+        setState(() {
+
+          _videoDuration = value.videoDuration ?? 0;
+          _currentPosition = value.seekValue ?? 0;
+          _currentPositionText = value.positionText ?? 0;
+          _showTipsWidget = value.showTipsWidget ?? false;
+          isMute = value.isMute ?? false;
+          isPlay = !_showTipsWidget;
+        });
+      } else {
+        _videoDuration = value.videoDuration ?? 0;
+        _currentPosition = value.seekValue ?? 0;
+        _currentPositionText = value.positionText ?? 0;
+        _showTipsWidget = value.showTipsWidget ?? false;
+        isMute = value.isMute ?? false;
+        isPlay = !_showTipsWidget;
+      }
+      notifier.isFullScreen = false;
+
+      fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
+        if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
+          if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
+            _currentPosition = extraValue ?? 0;
+            final detik = (_currentPosition / 1000).round();
+            if(notifier.adsTime == detik){
+              if(notifier.tempAdsData != null){
+                print('pause here 2');
+                fAliplayer?.pause();
+                setState(() {
+                  adsData = notifier.tempAdsData;
+                });
+                if(widget.onShowAds != null){
+                  widget.onShowAds!(adsData);
+                }
+              }
+
+
+            }
+          }
+          if (!_inSeek) {
+            try {
+              setState(() {
+                _currentPositionText = extraValue ?? 0;
+              });
+            } catch (e) {
+              print(e);
+            }
+          }
+        } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
+          _bufferPosition = extraValue ?? 0;
+          if (mounted) {
+            setState(() {});
+          }
+        } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
+          // Fluttertoast.showToast(msg: "AutoPlay");
+        } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
+          // Fluttertoast.showToast(msg: "Cache Success");
+        } else if (infoCode == FlutterAvpdef.CACHEERROR) {
+          // Fluttertoast.showToast(msg: "Cache Error $extraMsg");
+        } else if (infoCode == FlutterAvpdef.LOOPINGSTART) {
+          // Fluttertoast.showToast(msg: "Looping Start");
+        } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
+          // Fluttertoast.showToast(msg: "change to soft ware decoder");
+          // mOptionsFragment.switchHardwareDecoder();
+        }
+      });
+      fAliplayer?.setOnCompletion((playerId) {
+        _showTipsWidget = true;
+        _showLoading = false;
+        _tipsContent = "Play Again";
+        isPause = true;
+        setState(() {
+          _currentPosition = _videoDuration;
+        });
+      });
+
+      fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
+        if (mounted) {
+          try {
+            setState(() {
+              _loadingPercent = 0;
+              _showLoading = true;
+            });
+          } catch (e) {
+            print('error setOnLoadingStatusListener: $e');
+          }
+        }
+      }, loadingProgress: (percent, netSpeed, playerId) {
+        if (percent == 100) {
+          _showLoading = false;
+        }
+        try {
+          if (mounted) {
+            setState(() {
+              _loadingPercent = percent;
+            });
+          } else {
+            _loadingPercent = percent;
+          }
+        } catch (e) {
+          print('error loadingProgress: $e');
+        }
+      }, loadingEnd: (playerId) {
+        try {
+          if (mounted) {
+            setState(() {
+              _showLoading = false;
+            });
+          } else {
+            _showLoading = false;
+          }
+        } catch (e) {
+          print('error loadingEnd: $e');
+        }
+      });
+    } else {
+      Navigator.pop(context, changeValue);
+    }
   }
 
   void adsComleteOrSkip() {
