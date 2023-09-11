@@ -37,7 +37,7 @@ class _ComponentState extends State<Component> {
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'Component');
     SizeConfig().init(context);
-    final isAnnouncement = widget.data?.actionButtons?.isNotEmpty ?? false;
+    final isAnnouncement = widget.data?.actionButtons != null && widget.data?.eventType == 'GENERAL';
     return InkWell(
       onTap: () async {
         if (widget.data?.eventType != 'CONTENTMOD') {

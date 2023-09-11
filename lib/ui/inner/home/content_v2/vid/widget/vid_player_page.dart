@@ -1102,8 +1102,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               adsData = null;
               if(widget.onShowAds != null){
                 widget.onShowAds!(adsData);
-              }
 
+              }
+              isloading = false;
             });
             notifier.hasShowedAds = true;
             notifier.tempAdsData = null;

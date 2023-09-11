@@ -38,6 +38,7 @@ bool isStopVideo = false;
 bool isShowingDialog = false;
 bool connectInternet = true;
 int golbalToOther = 0;
+int page = -1;
 bool globalInternetConnection = true;
 bool globalAfterReport = false;
 bool homeClick = false;

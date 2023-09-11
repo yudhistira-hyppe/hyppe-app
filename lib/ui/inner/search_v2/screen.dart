@@ -24,6 +24,7 @@ import 'package:hyppe/ui/inner/search_v2/widget/event_banner.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
+import '../../../app.dart';
 import '../../../core/constants/asset_path.dart';
 import '../../../core/constants/shared_preference_keys.dart';
 import '../../../core/constants/themes/hyppe_colors.dart';
@@ -89,6 +90,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   void afterFirstLayout(BuildContext context) {
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
     notifier.onSearchLandingPage(context);
+    page = -1;
   }
 
   @override

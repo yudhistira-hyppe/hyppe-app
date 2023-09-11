@@ -243,7 +243,7 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
                                         if(widget.data.adsDescription != null)
                                           CustomTextWidget(
                                             maxLines: 10,
-                                            textAlign: TextAlign.justify,
+                                            textAlign: TextAlign.left,
                                             textToDisplay: widget.data.adsDescription ?? '',
                                             textStyle: context.getTextTheme().bodyText1,),
                                         sixteenPx,

@@ -120,7 +120,7 @@ extension ContextScreen on BuildContext {
   Widget getAdsInBetween(AdsData? adsData, Function(VisibilityInfo)? onVisible, Function() onComplete){
     if(adsData != null){
       if(adsData.mediaType?.toLowerCase() == 'video'){
-        return AdsVideoInBetween( onVisibility: onVisible, ratio: 16/9, data: adsData, afterReport: onComplete,);
+        return AdsVideoInBetween( onVisibility: onVisible, data: adsData, afterReport: onComplete,);
       }else{
         return AdsInBetween(data: adsData, afterReport: onComplete,);
       }

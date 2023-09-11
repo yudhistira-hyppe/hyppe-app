@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -11,6 +12,8 @@ import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/services/fcm_service.dart';
+
 class NotificationScreen extends StatefulWidget {
   @override
   _NotificationScreenState createState() => _NotificationScreenState();
@@ -20,6 +23,7 @@ class _NotificationScreenState extends State<NotificationScreen> with AfterFirst
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'NotificationScreen');
+    FcmService().setHaveNotification(false);
     super.initState();
   }
 
@@ -28,6 +32,7 @@ class _NotificationScreenState extends State<NotificationScreen> with AfterFirst
     final notifier = Provider.of<NotificationNotifier>(context, listen: false);
     notifier.onInitial();
     notifier.getNotifications(context, reload: true);
+    page = -1;
   }
 
   @override

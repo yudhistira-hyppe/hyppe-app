@@ -36,9 +36,8 @@ class AdsVideoInBetween extends StatefulWidget {
   final Function(VisibilityInfo)? onVisibility;
   final FlutterAliplayer? player;
   final AdsData data;
-  final double ratio;
   final Function() afterReport;
-  const AdsVideoInBetween({Key? key, this.onVisibility, this.player, required this.ratio, required this.data, required this.afterReport}) : super(key: key);
+  const AdsVideoInBetween({Key? key, this.onVisibility, this.player, required this.data, required this.afterReport}) : super(key: key);
 
   @override
   State<AdsVideoInBetween> createState() => _AdsVideoInBetweenState();
@@ -70,7 +69,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(widget.data.height.toString()),
+            // Text(widget.data.height.toString()),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
               decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),

@@ -114,8 +114,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
   //网络状态监听
   StreamSubscription? _networkSubscriptiion;
 
-  // GlobalKey<TrackFragmentState> trackFragmentKey = GlobalKey();
-  AnimationController? _animationController;
 
   var loadLaunch = false;
 
@@ -141,15 +139,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       fAliplayer?.setConfig(configMap);
 
       print("Hahahaha $_videoDuration");
-
-      _animationController = AnimationController(
-        /// [AnimationController]s can be created with `vsync: this` because of
-        /// [TickerProviderStateMixin].
-        vsync: this,
-        // duration: Duration(milliseconds: _videoDuration),
-      )..addListener(() {
-        setState(() {});
-      });
       // if (widget.data?.apsaraId != '') {
       // } else {
       //   _playMode = ModeTypeAliPLayer.url;
@@ -192,9 +181,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
-        _animationController?.duration = Duration(milliseconds: _videoDuration);
-
-        _animationController?.forward();
         setState(() {
           isPrepare = true;
           _showLoading = false;
@@ -203,7 +189,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       isPlay = true;
     });
     fAliplayer?.setOnRenderingStart((playerId) {
-      _animationController?.forward();
 
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
     });
@@ -219,13 +204,11 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
               _showLoading = false;
               isPause = false;
             });
-            _animationController?.forward();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusPaused:
             isPause = true;
             setState(() {});
             Wakelock.disable();
-            _animationController?.stop();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             Wakelock.disable();
@@ -249,7 +232,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
 
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-      _animationController?.stop();
       setState(() {
         _loadingPercent = 0;
         _showLoading = true;
@@ -271,7 +253,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       }
       setState(() {});
     }, loadingEnd: (playerId) {
-      _animationController?.forward();
       try {
         if (mounted) {
           setState(() {
@@ -426,7 +407,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
   void dispose() {
     Wakelock.disable();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-    _animationController?.dispose();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
     }
@@ -771,7 +751,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
 
   void start() async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
-    _animationController?.reset();
     fAliplayer?.stop();
     isPlay = false;
 

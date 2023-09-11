@@ -321,9 +321,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         } else {
           totItemHeightParam += notifier.pic?[i].height ?? 0.0;
         }
-
         totItemHeight += notifier.pic?[i].height ?? 0.0;
       }
+      print("==== _curIdx ${_curIdx}");
+      print("==== totItemHeight ${totItemHeight}");
 
       var sizeMax = (SizeConfig.screenHeight ?? 0) + (SizeConfig.screenHeight ?? 0) * 0.633;
       if (offset >= totItemHeightParam && (notifier.pic?[_curIdx + 1].height ?? 0) <= sizeMax) {
@@ -759,16 +760,28 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         picData?.height = size.height;
       },
       child: isAds
-          ? context.getAdsInBetween(notifier.pic?[index].inBetweenAds, (info) {
-              if (info.visibleFraction >= 0.9) {
-                fAliplayer?.destroy();
-                fAliplayer?.stop();
-                fAliplayer?.clearScreen();
-                dataSelected = picData;
-              }
-            }, () {
-              notifier.setAdsData(index, null);
-            })
+          ? Column(
+              children: [
+                VisibilityDetector(
+                  key: Key(index.toString()),
+                  onVisibilityChanged: (info) async {
+                    if (info.visibleFraction >= 0.6) {
+                      _curIdx = index;
+                    }
+                  },
+                  child: context.getAdsInBetween(notifier.pic?[index].inBetweenAds, (info) {
+                    if (info.visibleFraction >= 0.9) {
+                      fAliplayer?.destroy();
+                      fAliplayer?.stop();
+                      fAliplayer?.clearScreen();
+                      dataSelected = picData;
+                    }
+                  }, () {
+                    notifier.setAdsData(index, null);
+                  }),
+                ),
+              ],
+            )
           : Column(
               children: [
                 Container(
@@ -785,7 +798,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
                       // Text("total ${notifier.picTemp?.length}"),
                       // Text("itemHeight $itemHeight"),
-                      Text("height ${picData?.height}"),
+                      // Text("height ${picData?.height}"),
                       // Text("$_lastCurIndex"),
                       // Text("$_curIdx"),
                       // GestureDetector(

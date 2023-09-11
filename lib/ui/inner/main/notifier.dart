@@ -34,6 +34,8 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock/wakelock.dart';
 
+import '../../../app.dart';
+
 class MainNotifier with ChangeNotifier {
   GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
   // GlobalKey<NestedScrollViewState> get globalKey => _globalKey;
@@ -170,7 +172,7 @@ class MainNotifier with ChangeNotifier {
     String isNewUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
     List pages = [];
     if (isNewUser == "TRUE") {
-      pages.add(TutorLandingScreen(keyButton: keyPostButton, canShowAds: canShowAds));
+      pages.add(TutorLandingScreen(keyButton: keyPostButton, canShowAds: false));
     } else {
       pages.add(HomeScreen(keyButton: keyPostButton, canShowAds: canShowAds));
     }
@@ -178,32 +180,32 @@ class MainNotifier with ChangeNotifier {
     pages.add(NotificationScreen());
     pages.add(const SelfProfileScreen());
     // List pages = [
-    //   TutorLandingScreen(keyButton: keyPostButton, canShowAds: canShowAds),
+    //   HomeScreen(
+    //     canShowAds: canShowAds,
+    //   ),
     //   SearchScreen(),
     //   NotificationScreen(),
-    //   SelfProfileScreen(),
+    //   const SelfProfileScreen()
     // ];
-
-    late Widget screen;
-
+    if (page != -1) {
+      _pageIndex = page;
+    }
+    print('my index $pageIndex $page ');
     switch (pageIndex) {
       case 0:
-        return screen = pages[0];
+        return pages[0];
       case 1:
-        return screen = pages[1];
+        return pages[1];
       case 3:
-        {
-          setNotification();
-          screen = pages[2];
-        }
-        break;
+        return pages[2];
       case 4:
-        return screen = pages[3];
+        return pages[3];
+      default:
+        return pages[0];
     }
-    return screen;
   }
 
-  int _pageIndex = 0;
+  int _pageIndex = 3;
   int get pageIndex => _pageIndex;
   set pageIndex(int val) {
     if (val != _pageIndex) {
@@ -215,8 +217,6 @@ class MainNotifier with ChangeNotifier {
   setPageIndex(int index) {
     _pageIndex = index;
   }
-
-  void setNotification() => FcmService().setHaveNotification(false);
 
   Future onShowPostContent(BuildContext context) async {
     // System().actionReqiredIdCard(context,
