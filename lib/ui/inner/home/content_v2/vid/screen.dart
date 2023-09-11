@@ -727,11 +727,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                       return VidPlayerPage(
                                         vidData: notifier.vidData,
                                         orientation: Orientation.portrait,
-                                        betweenAds: (ads) {
-                                          if (ads != null) {
-                                            notifier.setInBetweenAds(index, ads);
-                                          }
-                                        },
                                         playMode: (vidData.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                                         dataSourceMap: map,
                                         data: vidData,

@@ -159,12 +159,13 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void setAdsData(int index, AdsData? adsData){
-    if(pic?[index + 1].inBetweenAds == null){
-      if(adsData != null){
+    if(adsData != null){
+      if(pic?[index + 1].inBetweenAds == null){
         pic?.insert(index + 1, ContentData(inBetweenAds: adsData));
-      }else{
-        pic?.removeAt(index);
+        notifyListeners();
       }
+    }else{
+      pic?.removeAt(index);
       notifyListeners();
     }
   }

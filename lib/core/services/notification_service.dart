@@ -141,12 +141,11 @@ class NotificationService {
           notifier.onClickUser(materialAppKey.currentContext!, result[index1]);
         } else if(map['url'] != null){
           page = 3;
-          // if(data.url?.isNotEmpty ?? false){
-          //   Routing().moveAndRemoveUntil(
-          //       Routes.lobby,
-          //       Routes.lobby,
-          //       argument: MainArgument(canShowAds: false, page: 3));
-          // }
+          Routing().moveAndRemoveUntil(
+              Routes.lobby,
+              Routes.lobby,
+              argument: MainArgument(canShowAds: false, page: 3));
+
         }else {
           throw 'Not recognize the type of the object of the notification ';
         }
@@ -203,7 +202,6 @@ class NotificationService {
 
     try {
       if (data != null) {
-        data.isBackground = isBackground;
         print("masuk 1");
         if (message.notification != null) {
           await flutterLocalNotificationsPlugin.show(
@@ -259,9 +257,8 @@ class NotificationBody {
   String? title;
   String? index;
   String? url;
-  bool? isBackground;
 
-  NotificationBody({this.postId, this.postType, this.message, this.index, this.url, this.isBackground});
+  NotificationBody({this.postId, this.postType, this.message, this.index, this.url});
 
   NotificationBody.fromJson(Map<String, dynamic> json) {
     postId = json['postID'];
@@ -270,7 +267,6 @@ class NotificationBody {
     title = json['title'];
     index = json['index'];
     url = json['url'];
-    isBackground = json['isBackground'];
   }
 
   Map<String, dynamic> toJson() {
@@ -280,7 +276,6 @@ class NotificationBody {
     result['message'] = message;
     result['index'] = index;
     result['url'] = url;
-    result['isBackground'] = isBackground;
     return result;
   }
 }

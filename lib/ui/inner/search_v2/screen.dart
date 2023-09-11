@@ -1,14 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/arguments/hashtag_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -21,18 +21,13 @@ import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/banners_layout.dart';
-import 'package:hyppe/ui/inner/search_v2/widget/event_banner.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import '../../../app.dart';
-import '../../../core/constants/asset_path.dart';
 import '../../../core/constants/shared_preference_keys.dart';
-import '../../../core/constants/themes/hyppe_colors.dart';
 import '../../../core/services/shared_preference.dart';
-import '../../../ux/path.dart';
 import '../../../ux/routing.dart';
-import '../../constant/widget/custom_icon_widget.dart';
 import '../../constant/widget/custom_spacer.dart';
 import '../home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import 'interest/detail_screen.dart';
@@ -154,36 +149,8 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.getPost));
-    // Set the status bar color to transparent
-    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
-
-    // Set the status bar text color to light (white) icons, if needed
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
     return Consumer<SearchNotifier>(
       builder: (context, notifier, child){
-        // if(notifier.layout == SearchLayout.first){
-        //   return Scaffold(
-        //     key: _scaffoldKey,
-        //     body: Stack(
-        //       children: [BannersLayout(layout: Padding(
-        //         padding: const EdgeInsets.symmetric(horizontal: 16),
-        //         child: CustomSearchBar(
-        //           hintText: notifier.language.whatAreYouFindOut,
-        //           contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
-        //           focusNode: notifier.focusNode1,
-        //           controller: notifier.searchController1,
-        //           onTap: () {
-        //             if (notifier.layout == SearchLayout.searchMore) {
-        //               notifier.isFromComplete = true;
-        //             }
-        //             notifier.layout = SearchLayout.search;
-        //           },
-        //         ),
-        //       ),),
-        //       ],
-        //     ),
-        //   );
-        // }
 
         return WillPopScope(
           onWillPop: () async {
@@ -221,7 +188,68 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     );
   }
 
-  Widget _firstLayout(SearchNotifier notifier) {
+  Widget _searchLayout(SearchLayout state, SearchNotifier notifier) {
+    switch (state) {
+      case SearchLayout.first:
+        return FirstLayout(notifier: notifier);
+      case SearchLayout.search:
+        return const SearchMoreScreen();
+      case SearchLayout.searchMore:
+        return const SearchMoreCompleteScreenV2();
+      case SearchLayout.mainHashtagDetail:
+        if (notifier.selectedHashtag != null) {
+          return DetailHashtagScreen(
+            argument: HashtagArgument(isTitle: true, hashtag: notifier.selectedHashtag!),
+          );
+        } else {
+          return FirstLayout(notifier: notifier);
+        }
+      case SearchLayout.hashtagDetail:
+        if (notifier.selectedHashtag != null) {
+          return DetailHashtagScreen(argument: HashtagArgument(isTitle: false, hashtag: notifier.selectedHashtag!));
+        } else {
+          return FirstLayout(notifier: notifier);
+        }
+      case SearchLayout.interestDetail:
+        if (notifier.selectedInterest != null) {
+          return InterestDetailScreen(data: notifier.selectedInterest!);
+        } else {
+          return FirstLayout(notifier: notifier);
+        }
+    }
+  }
+}
+
+class FirstLayout extends StatefulWidget {
+  final SearchNotifier notifier;
+  const FirstLayout({Key? key, required this.notifier}) : super(key: key);
+
+  @override
+  State<FirstLayout> createState() => _FirstLayoutState();
+}
+
+class _FirstLayoutState extends State<FirstLayout> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    bool theme = SharedPreference().readStorage(SpKeys.themeData) ?? false;
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarIconBrightness: !theme ? Brightness.light : Brightness.dark,
+      statusBarColor: Colors.transparent,
+    ));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    System().systemUIOverlayTheme();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final notifier = widget.notifier;
     return Scaffold(
       key: _scaffoldKey,
       body: ListView(
@@ -277,35 +305,5 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
       ),
     );
   }
-
-  Widget _searchLayout(SearchLayout state, SearchNotifier notifier) {
-    switch (state) {
-      case SearchLayout.first:
-        return _firstLayout(notifier);
-      case SearchLayout.search:
-        return const SearchMoreScreen();
-      case SearchLayout.searchMore:
-        return const SearchMoreCompleteScreenV2();
-      case SearchLayout.mainHashtagDetail:
-        if (notifier.selectedHashtag != null) {
-          return DetailHashtagScreen(
-            argument: HashtagArgument(isTitle: true, hashtag: notifier.selectedHashtag!),
-          );
-        } else {
-          return _firstLayout(notifier);
-        }
-      case SearchLayout.hashtagDetail:
-        if (notifier.selectedHashtag != null) {
-          return DetailHashtagScreen(argument: HashtagArgument(isTitle: false, hashtag: notifier.selectedHashtag!));
-        } else {
-          return _firstLayout(notifier);
-        }
-      case SearchLayout.interestDetail:
-        if (notifier.selectedInterest != null) {
-          return InterestDetailScreen(data: notifier.selectedInterest!);
-        } else {
-          return _firstLayout(notifier);
-        }
-    }
-  }
 }
+

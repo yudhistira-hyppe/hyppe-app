@@ -23,7 +23,6 @@ class MessageDataV2 {
   String? lastestMessage;
   String? username;
   String? type;
-  bool? isBackground;
 
   MessageDataV2({
     this.createdAt,
@@ -42,7 +41,6 @@ class MessageDataV2 {
     this.lastestMessage,
     this.avatar,
     this.type,
-    this.isBackground = false,
   });
 
   MessageDataV2.fromJson(Map<String, dynamic> json) {
@@ -70,7 +68,6 @@ class MessageDataV2 {
       fcmMessage = lastestMessage;
     }
     type = json['type'];
-    isBackground = json['isBackground'];
   }
 
   Map<String, dynamic> toJson() {
@@ -95,7 +92,6 @@ class MessageDataV2 {
     if (senderOrReceiverInfo != null) {
       data['senderOrReceiverInfo'] = senderOrReceiverInfo?.toJson();
     }
-    data['isBackground'] = isBackground;
     return data;
   }
 }

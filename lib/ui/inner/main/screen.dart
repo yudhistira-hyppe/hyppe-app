@@ -61,11 +61,9 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
         final canShowAds = widget.args?.canShowAds ?? true;
         return Scaffold(
           backgroundColor: _themes.backgroundColor,
-          body: SafeArea(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 250),
-              child: notifier.mainScreen(context, canShowAds, keyPostButton),
-            ),
+          body: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 250),
+            child: notifier.mainScreen(context, canShowAds, keyPostButton),
           ),
           floatingActionButton: Visibility(
             visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
