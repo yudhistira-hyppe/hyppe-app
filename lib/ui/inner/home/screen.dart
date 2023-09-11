@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/gestures.dart';
@@ -10,6 +11,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
@@ -37,6 +39,7 @@ import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/screen.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:wakelock/wakelock.dart';
 import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
@@ -45,7 +48,8 @@ import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool canShowAds;
-  const HomeScreen({Key? key, required this.canShowAds}) : super(key: key);
+  final GlobalKey keyButton;
+  const HomeScreen({Key? key, required this.keyButton, required this.canShowAds}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -62,6 +66,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     {"id": '2', 'name': "Diary"},
     {"id": '3', 'name': "Vid"},
   ];
+
+  GlobalKey keyButton = GlobalKey();
+  GlobalKey keyButton1 = GlobalKey();
+  GlobalKey keyButton2 = GlobalKey();
+  LocalizationModelV2? _language;
 
   @override
   void didChangeDependencies() {
@@ -121,6 +130,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     'didPush isOnHomeScreen $isHomeScreen'.logger();
   }
 
+  void show() {
+    ShowCaseWidget.of(context).startShowCase([keyButton, keyButton1, keyButton2, keyButton1, widget.keyButton]);
+  }
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeScreen');
@@ -129,10 +142,13 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     _tabController = TabController(length: 3, vsync: this);
 
     offset = 0;
+
     Future.delayed(Duration.zero, () {
+      _tabController.index = 0;
       final notifier = context.read<HomeNotifier>();
       notifier.setSessionID();
-      final _language = context.read<TranslateNotifierV2>().translate;
+      notifier.tabIndex = 0;
+      _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
       final notifierMain = context.read<MainNotifier>();
 
@@ -148,8 +164,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       }
       if (notifierFollow.listFollow.isEmpty) {
         notifierFollow.listFollow = [
-          {'name': "${_language.follow}", 'code': 'TOFOLLOW'},
-          {'name': "${_language.following}", 'code': 'FOLLOWING'},
+          {'name': "${_language?.follow}", 'code': 'TOFOLLOW'},
+          {'name': "${_language?.following}", 'code': 'FOLLOWING'},
         ];
       }
 
@@ -249,139 +265,141 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
             preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
             child: HomeAppBar(name: selfnotifier.user.profile?.fullName, offset: offset),
           ),
-          body: DefaultTabController(
-            length: 3,
-            child: RefreshIndicator(
-              color: kHyppePrimary,
-              notificationPredicate: (notification) {
-                if (notifier.isLoadingPict || notifier.isLoadingDiary || notifier.isLoadingVid) {
-                  return false;
-                } else {
-                  // with NestedScrollView local(depth == 2) OverscrollNotification are not sent
-                  if (notification is OverscrollNotification || Platform.isIOS) {
-                    return notification.depth == 2;
+          body: Builder(
+            builder: (context) => DefaultTabController(
+              length: 3,
+              child: RefreshIndicator(
+                color: kHyppePrimary,
+                notificationPredicate: (notification) {
+                  if (notifier.isLoadingPict || notifier.isLoadingDiary || notifier.isLoadingVid) {
+                    return false;
+                  } else {
+                    // with NestedScrollView local(depth == 2) OverscrollNotification are not sent
+                    if (notification is OverscrollNotification || Platform.isIOS) {
+                      return notification.depth == 2;
+                    }
+                    return notification.depth == 0;
+                    // if (_tabController.index != 0) {}
+                    // return notification.depth == 0;
                   }
-                  return notification.depth == 0;
-                  // if (_tabController.index != 0) {}
-                  // return notification.depth == 0;
-                }
-              },
-              onRefresh: () async {
-                print(isZoom);
-                if (!isZoom) {
-                  Future.delayed(Duration(milliseconds: 400), () async {
-                    imageCache.clear();
-                    imageCache.clearLiveImages();
-                    await notifier.initNewHome(context, mounted, isreload: true);
-                  });
-                }
-              },
-              child: AbsorbPointer(
-                absorbing: isZoom,
-                child: NestedScrollView(
-                  key: context.read<MainNotifier>().globalKey,
-                  controller: context.read<MainNotifier>().scrollController,
-                  // physics: const NeverScrollableScrollPhysics(),
-                  // dragStartBehavior: DragStartBehavior.start,
-                  headerSliverBuilder: (context, bool innerBoxIsScrolled) {
-                    return [
-                      SliverOverlapAbsorber(
-                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                        sliver: SliverList(
-                          delegate: SliverChildListDelegate([
-                            const ProcessUploadComponent(),
-                            sixPx,
-                            const HyppePreviewStories(),
-                            sixPx,
-                            // GestureDetector(
-                            //     onTap: () {
-                            //       _showMessage("hahaha");
-                            //     },
-                            //     child: Text("hahahahaha")),
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              color: kHyppeLightSurface,
-                              child: Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(24),
-                                  color: kHyppeLightButtonText,
-                                ),
-                                child: TabBar(
-                                  controller: _tabController,
-                                  indicator: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                      25.0,
-                                    ),
-                                    color: kHyppePrimary,
+                },
+                onRefresh: () async {
+                  print(isZoom);
+                  if (!isZoom) {
+                    Future.delayed(Duration(milliseconds: 400), () async {
+                      imageCache.clear();
+                      imageCache.clearLiveImages();
+                      await notifier.initNewHome(context, mounted, isreload: true);
+                    });
+                  }
+                },
+                child: AbsorbPointer(
+                  absorbing: isZoom,
+                  child: NestedScrollView(
+                    key: context.read<MainNotifier>().globalKey,
+                    controller: context.read<MainNotifier>().scrollController,
+                    // physics: const NeverScrollableScrollPhysics(),
+                    // dragStartBehavior: DragStartBehavior.start,
+                    headerSliverBuilder: (context, bool innerBoxIsScrolled) {
+                      return [
+                        SliverOverlapAbsorber(
+                          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                          sliver: SliverList(
+                            delegate: SliverChildListDelegate([
+                              const ProcessUploadComponent(),
+
+                              sixPx,
+                              const HyppePreviewStories(),
+                              sixPx,
+                              // GestureDetector(
+                              //     onTap: () {
+                              //       _showMessage("hahaha");
+                              //     },
+                              //     child: Text("hahahahaha")),
+                              Container(
+                                padding: const EdgeInsets.all(16),
+                                color: kHyppeLightSurface,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(24),
+                                    color: kHyppeLightButtonText,
                                   ),
-                                  labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                                  labelColor: kHyppeLightButtonText,
-                                  unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                                  labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                  // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                                  unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                  tabs: [
-                                    ...List.generate(
-                                      filterList.length,
-                                      (index) => Padding(
-                                        padding: EdgeInsets.all(9),
-                                        child: Text(
-                                          filterList[index]['name'],
-                                          style: TextStyle(fontFamily: 'Lato', fontSize: 14),
-                                        ),
+                                  child: TabBar(
+                                    controller: _tabController,
+                                    indicator: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        25.0,
                                       ),
+                                      color: kHyppePrimary,
                                     ),
-                                  ],
+                                    labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                                    labelColor: kHyppeLightButtonText,
+                                    unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                                    labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                    // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                                    unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                    tabs: [
+                                      ...List.generate(filterList.length, (index) {
+                                        return Padding(
+                                          padding: EdgeInsets.all(9),
+                                          child: Text(
+                                            filterList[index]['name'],
+                                            style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                          ),
+                                        );
+                                      }),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ]),
+                            ]),
+                          ),
                         ),
-                      ),
 
-                      // FilterLanding(),
-                      // HyppePreviewVid(),
-                      // HyppePreviewDiary(),
-                    ];
-                  },
-                  body: TabBarView(
-                    controller: _tabController,
-                    physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
-                    children: [
-                      // Pict
-                      Container(
-                        height: 40,
-                        padding: const EdgeInsets.only(left: 6.0, right: 6),
-                        color: kHyppeLightSurface,
-                        child: HyppePreviewPic(
-                          onScaleStart: () {
-                            zoom(true);
-                          },
-                          onScaleStop: () {
-                            zoom(false);
-                          },
-                          appbarSeen: appbarSeen,
-                          scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
-                          // offset: offset,
+                        // FilterLanding(),
+                        // HyppePreviewVid(),
+                        // HyppePreviewDiary(),
+                      ];
+                    },
+                    body: TabBarView(
+                      controller: _tabController,
+                      physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
+                      children: [
+                        // Pict
+                        Container(
+                          height: 40,
+                          padding: const EdgeInsets.only(left: 6.0, right: 6),
+                          color: kHyppeLightSurface,
+                          child: HyppePreviewPic(
+                            onScaleStart: () {
+                              zoom(true);
+                            },
+                            onScaleStop: () {
+                              zoom(false);
+                            },
+                            appbarSeen: appbarSeen,
+                            scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                            // offset: offset,
+                          ),
                         ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 6.0, right: 6),
-                        color: kHyppeLightSurface,
-                        child: LandingDiaryPage(
-                          scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                        Container(
+                          padding: const EdgeInsets.only(left: 6.0, right: 6),
+                          color: kHyppeLightSurface,
+                          child: LandingDiaryPage(
+                            scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                          ),
                         ),
-                      ),
-                      // second tab bar viiew widget
-                      Container(
-                        padding: const EdgeInsets.only(left: 16.0, right: 16),
-                        color: kHyppeLightSurface,
-                        child: HyppePreviewVid(
-                          scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                        // second tab bar viiew widget
+                        Container(
+                          padding: const EdgeInsets.only(left: 16.0, right: 16),
+                          color: kHyppeLightSurface,
+                          child: HyppePreviewVid(
+                            scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -434,5 +452,31 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       homneNotifier.getAdsApsara(context, true);
     }
     // System().popUpChallange(context);
+  }
+}
+
+class ShowCaseView extends StatefulWidget {
+  final GlobalKey globalKey;
+  final Widget child;
+  const ShowCaseView({super.key, required this.globalKey, required this.child});
+
+  @override
+  State<ShowCaseView> createState() => _ShowCaseViewState();
+}
+
+class _ShowCaseViewState extends State<ShowCaseView> {
+  @override
+  Widget build(BuildContext context) {
+    return Showcase(
+      key: widget.globalKey,
+      // container: Column(
+      //   children: [],
+      // ),
+      blurValue: 0,
+      // height: 10,
+      // width: 10,
+      description: "sdsdsd",
+      child: widget.child,
+    );
   }
 }

@@ -37,20 +37,13 @@ class AdsVideoInBetween extends StatefulWidget {
   final FlutterAliplayer? player;
   final AdsData data;
   final Function() afterReport;
-  const AdsVideoInBetween({
-    Key? key,
-    this.onVisibility,
-    this.player,
-    required this.data,
-    required this.afterReport
-  }) : super(key: key);
+  const AdsVideoInBetween({Key? key, this.onVisibility, this.player, required this.data, required this.afterReport}) : super(key: key);
 
   @override
   State<AdsVideoInBetween> createState() => _AdsVideoInBetweenState();
 }
 
-class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
-    with WidgetsBindingObserver {
+class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindingObserver {
   // FlutterAliplayer? fAliplayer;
 
   bool loadLaunch = false;
@@ -68,7 +61,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
   @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
-    final ratio = (widget.data.height != null && widget.data.width != null) ? widget.data.width!/widget.data.height! : 16/9;
+    final ratio = (widget.data.height != null && widget.data.width != null) ? widget.data.width! / widget.data.height! : 16 / 9;
     return Consumer<VideoNotifier>(builder: (context, notifier, _) {
       return Container(
         margin: const EdgeInsets.only(bottom: 20),
@@ -76,16 +69,16 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Text(widget.data.height.toString()),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
               child: Column(
                 children: [
                   Row(
                     children: [
                       GestureDetector(
-                        onTap:(){
+                        onTap: () {
                           Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
                         },
                         child: CustomBaseCacheImage(
@@ -97,8 +90,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                               width: 36,
                               height: 36,
                               decoration: BoxDecoration(
-                                borderRadius:
-                                const BorderRadius.all(Radius.circular(18)),
+                                borderRadius: const BorderRadius.all(Radius.circular(18)),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: imageProvider,
@@ -111,12 +103,10 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                               width: 36,
                               height: 36,
                               decoration: const BoxDecoration(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(18)),
+                                borderRadius: BorderRadius.all(Radius.circular(18)),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: AssetImage(
-                                      '${AssetPath.pngPath}content-error.png'),
+                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                 ),
                               ),
                             );
@@ -128,8 +118,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                               borderRadius: BorderRadius.all(Radius.circular(18)),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: AssetImage(
-                                    '${AssetPath.pngPath}content-error.png'),
+                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
                               ),
                             ),
                           ),
@@ -142,17 +131,15 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                           children: [
                             CustomTextWidget(
                               textToDisplay: widget.data.username ?? '',
-                              textStyle:
-                              context.getTextTheme().caption?.copyWith(
-                                fontWeight: FontWeight.w700,
-                              ),
+                              textStyle: context.getTextTheme().caption?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
                             ),
                             CustomTextWidget(
                               textToDisplay: language.sponsored ?? 'Sponsored',
-                              textStyle:
-                              context.getTextTheme().caption?.copyWith(
-                                fontWeight: FontWeight.w400,
-                              ),
+                              textStyle: context.getTextTheme().caption?.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                  ),
                             )
                           ],
                         ),
@@ -160,18 +147,11 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                       twelvePx,
                       GestureDetector(
                         onTap: () {
-                          ShowBottomSheet().onReportContent(
-                            context,
-                            adsData: widget.data,
-                            type: adsPopUp,
-                            postData: null,
-                            onUpdate: () {
-                              setState(() {
-                                widget.data.isReport = true;
-                              });
-                            },
-                              onCompleted: widget.afterReport
-                          );
+                          ShowBottomSheet().onReportContent(context, adsData: widget.data, type: adsPopUp, postData: null, onUpdate: () {
+                            setState(() {
+                              widget.data.isReport = true;
+                            });
+                          }, onCompleted: widget.afterReport);
                         },
                         child: const CustomIconWidget(
                           defaultColor: false,
@@ -198,24 +178,20 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                         },
                         child: Container(
                           color: Colors.white,
-                          margin:
-                          const EdgeInsets.only(top: 20, left: 18, right: 18),
+                          margin: const EdgeInsets.only(top: 20, left: 18, right: 18),
                           child: AspectRatio(
                             aspectRatio: ratio,
                             child: notifier.currentPostID == widget.data.adsId
                                 ? InBetweenScreen(
-                              adsData: widget.data,
-                              player: widget.player,
-                              ratio: ratio,
-                            )
+                                    adsData: widget.data,
+                                    player: widget.player,
+                                    ratio: ratio,
+                                  )
                                 : Container(
-                              decoration: const BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(16.0))),
-                              alignment: Alignment.center,
-                              child: const CustomLoading(),
-                            ),
+                                    decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                                    alignment: Alignment.center,
+                                    child: const CustomLoading(),
+                                  ),
                           ),
                         ),
                       ),
@@ -262,61 +238,38 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                           }
                         },
                         child: Builder(builder: (context) {
-                          final learnMore =
-                          (widget.data.ctaButton ?? 'Learn More');
+                          final learnMore = (widget.data.ctaButton ?? 'Learn More');
                           return Container(
                             alignment: Alignment.center,
-                            padding:
-                            const EdgeInsets.only(top: 10, bottom: 10),
-                            decoration: const BoxDecoration(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(5)),
-                                color: KHyppeButtonAds),
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
                             child: loadLaunch
-                                ? const SizedBox(
-                                width: 40,
-                                height: 20,
-                                child: CustomLoading())
+                                ? const SizedBox(width: 40, height: 20, child: CustomLoading())
                                 : Text(
-                              learnMore,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
+                                    learnMore,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
                           );
                         }),
                       ),
                       twelvePx,
                       if (widget.data.adsDescription != null)
                         Builder(builder: (context) {
-                          final notifier =
-                          context.read<TranslateNotifierV2>();
+                          final notifier = context.read<TranslateNotifierV2>();
                           return CustomDescContent(
                               desc: widget.data.adsDescription ?? '',
                               trimLines: 2,
                               textAlign: TextAlign.justify,
                               seeLess: ' ${notifier.translate.seeLess}',
-                              seeMore:
-                              ' ${notifier.translate.seeMoreContent}',
+                              seeMore: ' ${notifier.translate.seeMoreContent}',
                               textOverflow: TextOverflow.visible,
-                              normStyle:
-                              Theme.of(context).textTheme.bodyText2,
-                              hrefStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary),
-                              expandStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary));
+                              normStyle: Theme.of(context).textTheme.bodyText2,
+                              hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary));
                         })
                     ],
                   )
@@ -334,16 +287,13 @@ class InBetweenScreen extends StatefulWidget {
   final AdsData adsData;
   final FlutterAliplayer? player;
   final double ratio;
-  const InBetweenScreen(
-      {Key? key, required this.adsData, this.player, required this.ratio})
-      : super(key: key);
+  const InBetweenScreen({Key? key, required this.adsData, this.player, required this.ratio}) : super(key: key);
 
   @override
   State<InBetweenScreen> createState() => _InBetweenScreenState();
 }
 
-class _InBetweenScreenState extends State<InBetweenScreen>
-    with WidgetsBindingObserver {
+class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingObserver {
   FlutterAliplayer? fAliplayer;
   bool isPrepare = false;
   bool isPlay = false;
@@ -380,8 +330,7 @@ class _InBetweenScreenState extends State<InBetweenScreen>
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       // final ref = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
-      fAliplayer =
-          FlutterAliPlayerFactory.createAliPlayer(playerId: widget.adsData.adsId);
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.adsData.adsId);
       WidgetsBinding.instance.addObserver(this);
       fAliplayer?.pause();
       fAliplayer?.setAutoPlay(true);
@@ -395,8 +344,7 @@ class _InBetweenScreenState extends State<InBetweenScreen>
 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer
-          ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
       _initListener();
     });
 
@@ -409,9 +357,7 @@ class _InBetweenScreenState extends State<InBetweenScreen>
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer
-          ?.getPlayerName()
-          .then((value) => print("getPlayerName==${value}"));
+      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         setState(() {
           isPrepare = true;
@@ -550,8 +496,7 @@ class _InBetweenScreenState extends State<InBetweenScreen>
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
     });
-    fAliplayer?.setOnThumbnailPreparedListener(
-        preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
+    fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
 
     fAliplayer?.setOnThumbnailGetListener(
         onThumbnailGetSuccess: (bitmap, range, playerId) {
@@ -654,49 +599,48 @@ class _InBetweenScreenState extends State<InBetweenScreen>
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        !_showLoading ? ClipRRect(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-          child: AliPlayerView(
-            onCreated: onViewPlayerCreated,
-            x: 0,
-            y: 0,
-            height: MediaQuery.of(context).size.width * widget.ratio,
-            width: MediaQuery.of(context).size.width,
-            aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
-          ),
-        ):
-          Positioned.fill(
-            child: Align(
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    backgroundColor: Colors.white,
-                    strokeWidth: 3.0,
+        !_showLoading
+            ? ClipRRect(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                child: AliPlayerView(
+                  onCreated: onViewPlayerCreated,
+                  x: 0,
+                  y: 0,
+                  height: MediaQuery.of(context).size.width * widget.ratio,
+                  width: MediaQuery.of(context).size.width,
+                  aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
+                ),
+              )
+            : Positioned.fill(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(
+                        backgroundColor: Colors.white,
+                        strokeWidth: 3.0,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Text(
+                        "$_loadingPercent%",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Text(
-                    "$_loadingPercent%",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
         Positioned(
           top: 12,
           right: 12,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 2),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Colors.black.withOpacity(0.5)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.black.withOpacity(0.5)),
             child: Text(
               System.getTimeformatByMs(_currentPositionText),
               style: const TextStyle(color: Colors.white, fontSize: 11),
@@ -716,9 +660,7 @@ class _InBetweenScreenState extends State<InBetweenScreen>
             child: Padding(
               padding: const EdgeInsets.only(right: 2.0),
               child: CustomIconWidget(
-                iconData: isMute
-                    ? '${AssetPath.vectorPath}sound-off.svg'
-                    : '${AssetPath.vectorPath}sound-on.svg',
+                iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
                 defaultColor: false,
                 height: 24,
               ),

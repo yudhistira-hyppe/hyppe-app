@@ -92,6 +92,7 @@ dependencies:
   flutter_cupertino_datetime_picker: ^3.0.0
   flutter_statusbarcolor_ns: ^0.5.0
 
+
   dynamic_widget: # Dynamic widget builder
     git:
       url: https://github.com/dengyin2000/dynamic_widget.git
@@ -102,6 +103,9 @@ dependencies:
 
   story_view: # Story viewer
     path: packages/story_view
+
+  showcaseview: # Story viewer
+    path: packages/showcaseview
 
   # deepar_flutter: ^0.0.5
   deepar_flutter: # Flutter DeepAR

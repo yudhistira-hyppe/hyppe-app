@@ -11,6 +11,7 @@ import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
 import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
@@ -21,6 +22,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/home/screen.dart';
 import 'package:hyppe/ui/inner/notification/screen.dart';
@@ -58,6 +60,15 @@ class MainNotifier with ChangeNotifier {
 
   ScrollController _scrollController = ScrollController();
   ScrollController get scrollController => _scrollController;
+
+  List<Tutorial> _tutorialData = [];
+  List<Tutorial> get tutorialData => _tutorialData;
+
+  set tutorialData(List<Tutorial> val) {
+    _tutorialData = val;
+    notifyListeners();
+  }
+
   set scrollController(val) {
     _scrollController = val;
     notifyListeners();
@@ -157,16 +168,26 @@ class MainNotifier with ChangeNotifier {
     }
   }
 
-  Widget mainScreen(BuildContext context, bool canShowAds) {
-    List pages = [
-      HomeScreen(
-        canShowAds: canShowAds,
-      ),
-      SearchScreen(),
-      NotificationScreen(),
-      const SelfProfileScreen()
-    ];
-    if(page != -1){
+  Widget mainScreen(BuildContext context, bool canShowAds, GlobalKey keyPostButton) {
+    String isNewUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
+    List pages = [];
+    if (isNewUser == "TRUE") {
+      pages.add(TutorLandingScreen(keyButton: keyPostButton, canShowAds: false));
+    } else {
+      pages.add(HomeScreen(keyButton: keyPostButton, canShowAds: canShowAds));
+    }
+    pages.add(SearchScreen());
+    pages.add(NotificationScreen());
+    pages.add(const SelfProfileScreen());
+    // List pages = [
+    //   HomeScreen(
+    //     canShowAds: canShowAds,
+    //   ),
+    //   SearchScreen(),
+    //   NotificationScreen(),
+    //   const SelfProfileScreen()
+    // ];
+    if (page != -1) {
       _pageIndex = page;
     }
     print('my index $pageIndex $page ');
