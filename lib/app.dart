@@ -42,6 +42,7 @@ int page = -1;
 bool globalInternetConnection = true;
 bool globalAfterReport = false;
 bool homeClick = false;
+bool globalTultipShow = false;
 
 void disposeGlobalAudio() async {
   try {

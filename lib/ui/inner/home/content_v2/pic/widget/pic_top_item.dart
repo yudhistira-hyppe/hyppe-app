@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -18,7 +19,9 @@ class PicTopItem extends StatefulWidget {
   final GlobalKey? globalKey;
   final ContentData? data;
   final bool? isShow;
-  const PicTopItem({Key? key, this.data, this.globalKey, this.isShow}) : super(key: key);
+  final FlutterAliplayer? fAliplayer;
+
+  const PicTopItem({Key? key, this.data, this.globalKey, this.isShow, this.fAliplayer}) : super(key: key);
 
   @override
   State<PicTopItem> createState() => _PicTopItemState();
@@ -96,15 +99,18 @@ class _PicTopItemState extends State<PicTopItem> {
               context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeySell].key ?? '');
               mn?.tutorialData[indexKeySell].status = true;
               ShowCaseWidget.of(context).dismiss();
+              if (widget.fAliplayer != null) {
+                widget.fAliplayer?.play();
+              }
             },
             closeWidget: GestureDetector(
               onTap: () {
-                if (widget.data?.fAliplayer != null) {
-                  widget.data?.fAliplayer?.pause();
-                }
                 context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeySell].key ?? '');
                 mn?.tutorialData[indexKeySell].status = true;
                 ShowCaseWidget.of(context).dismiss();
+                if (widget.fAliplayer != null) {
+                  widget.fAliplayer?.play();
+                }
               },
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -117,6 +123,9 @@ class _PicTopItemState extends State<PicTopItem> {
             ),
             child: GestureDetector(
               onTap: () {
+                if (widget.fAliplayer != null) {
+                  widget.fAliplayer?.pause();
+                }
                 show();
               },
               child: const CustomIconWidget(
@@ -142,12 +151,18 @@ class _PicTopItemState extends State<PicTopItem> {
               context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeyProtection].key ?? '');
               mn?.tutorialData[indexKeyProtection].status = true;
               ShowCaseWidget.of(context).dismiss();
+              if (widget.fAliplayer != null) {
+                widget.fAliplayer?.play();
+              }
             },
             closeWidget: GestureDetector(
               onTap: () {
                 context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeyProtection].key ?? '');
                 mn?.tutorialData[indexKeyProtection].status = true;
                 ShowCaseWidget.of(context).dismiss();
+                if (widget.fAliplayer != null) {
+                  widget.fAliplayer?.play();
+                }
               },
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -160,6 +175,9 @@ class _PicTopItemState extends State<PicTopItem> {
             ),
             child: GestureDetector(
               onTap: () {
+                if (widget.fAliplayer != null) {
+                  widget.fAliplayer?.pause();
+                }
                 show();
               },
               child: const CustomIconWidget(
