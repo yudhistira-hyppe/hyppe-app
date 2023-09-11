@@ -41,11 +41,12 @@ class OnUploadContentBottomSheet extends StatefulWidget {
 
 class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet> {
   GlobalKey keybutton = GlobalKey();
+  String newUser = '';
 
   @override
   void initState() {
     super.initState();
-    final newUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
+    newUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
     if (newUser == "TRUE") {
       WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keybutton]));
     }
@@ -102,6 +103,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                   descriptionPadding: EdgeInsets.all(6),
                   textColor: Colors.white,
                   targetShapeBorder: const CircleBorder(),
+                  disableDefaultTargetGestures: true,
                   descWidget: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -161,17 +163,19 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                                 ListTile(
                                   visualDensity: VisualDensity.adaptivePlatformDensity,
                                   onTap: () async {
-                                    // notifier.thumbnailLocalMedia();
-                                    context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
-                                    notifier.featureType = FeatureType.story;
-                                    notifier.selectedDuration = 15;
-                                    final tempIsHome = isHomeScreen;
-                                    if (tempIsHome) {
-                                      isHomeScreen = false;
-                                    }
-                                    await Routing().moveAndPop(Routes.makeContent);
-                                    if (tempIsHome) {
-                                      isHomeScreen = true;
+                                    if (newUser == "FALSE") {
+                                      // notifier.thumbnailLocalMedia();
+                                      context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
+                                      notifier.featureType = FeatureType.story;
+                                      notifier.selectedDuration = 15;
+                                      final tempIsHome = isHomeScreen;
+                                      if (tempIsHome) {
+                                        isHomeScreen = false;
+                                      }
+                                      await Routing().moveAndPop(Routes.makeContent);
+                                      if (tempIsHome) {
+                                        isHomeScreen = true;
+                                      }
                                     }
                                   },
                                   dense: true,
@@ -206,18 +210,20 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                                 ListTile(
                                   visualDensity: VisualDensity.adaptivePlatformDensity,
                                   onTap: () {
-                                    context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
-                                    // notifier.thumbnailLocalMedia();
-                                    notifier.featureType = FeatureType.vid;
-                                    notifier.isVideo = true;
-                                    notifier.selectedDuration = 15;
-                                    final tempIsHome = isHomeScreen;
-                                    if (tempIsHome) {
-                                      isHomeScreen = false;
-                                    }
-                                    Routing().moveAndPop(Routes.makeContent);
-                                    if (tempIsHome) {
-                                      isHomeScreen = true;
+                                    if (newUser == "FALSE") {
+                                      context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
+                                      // notifier.thumbnailLocalMedia();
+                                      notifier.featureType = FeatureType.vid;
+                                      notifier.isVideo = true;
+                                      notifier.selectedDuration = 15;
+                                      final tempIsHome = isHomeScreen;
+                                      if (tempIsHome) {
+                                        isHomeScreen = false;
+                                      }
+                                      Routing().moveAndPop(Routes.makeContent);
+                                      if (tempIsHome) {
+                                        isHomeScreen = true;
+                                      }
                                     }
                                   },
                                   dense: true,
@@ -252,18 +258,20 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                                 ListTile(
                                   visualDensity: VisualDensity.adaptivePlatformDensity,
                                   onTap: () {
-                                    context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
-                                    // notifier.thumbnailLocalMedia();
-                                    notifier.featureType = FeatureType.diary;
-                                    notifier.isVideo = true;
-                                    notifier.selectedDuration = 15;
-                                    final tempIsHome = isHomeScreen;
-                                    if (tempIsHome) {
-                                      isHomeScreen = false;
-                                    }
-                                    Routing().moveAndPop(Routes.makeContent);
-                                    if (tempIsHome) {
-                                      isHomeScreen = true;
+                                    if (newUser == "FALSE") {
+                                      context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
+                                      // notifier.thumbnailLocalMedia();
+                                      notifier.featureType = FeatureType.diary;
+                                      notifier.isVideo = true;
+                                      notifier.selectedDuration = 15;
+                                      final tempIsHome = isHomeScreen;
+                                      if (tempIsHome) {
+                                        isHomeScreen = false;
+                                      }
+                                      Routing().moveAndPop(Routes.makeContent);
+                                      if (tempIsHome) {
+                                        isHomeScreen = true;
+                                      }
                                     }
                                   },
                                   dense: true,
@@ -296,25 +304,27 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                           ? ListTile(
                               visualDensity: VisualDensity.adaptivePlatformDensity,
                               onTap: () {
-                                context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
-                                // notifier.thumbnailLocalMedia();
-                                notifier.featureType = FeatureType.pic;
-                                notifier.isVideo = false;
-                                notifier.selectedDuration = 15;
-                                final tempIsHome = isHomeScreen;
-                                if (tempIsHome) {
-                                  isHomeScreen = false;
+                                if (newUser == "FALSE") {
+                                  context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
+                                  // notifier.thumbnailLocalMedia();
+                                  notifier.featureType = FeatureType.pic;
+                                  notifier.isVideo = false;
+                                  notifier.selectedDuration = 15;
+                                  final tempIsHome = isHomeScreen;
+                                  if (tempIsHome) {
+                                    isHomeScreen = false;
+                                  }
+                                  Routing().moveAndPop(Routes.makeContent);
+                                  if (tempIsHome) {
+                                    isHomeScreen = true;
+                                  }
+                                  // Future.delayed(const Duration(seconds: 1), (){
+                                  //   Routing().moveAndPop(Routes.makeContent);
+                                  //   if(tempIsHome){
+                                  //     isHomeScreen = true;
+                                  //   }
+                                  // });
                                 }
-                                Routing().moveAndPop(Routes.makeContent);
-                                if (tempIsHome) {
-                                  isHomeScreen = true;
-                                }
-                                // Future.delayed(const Duration(seconds: 1), (){
-                                //   Routing().moveAndPop(Routes.makeContent);
-                                //   if(tempIsHome){
-                                //     isHomeScreen = true;
-                                //   }
-                                // });
                               },
                               dense: true,
                               minLeadingWidth: 20,

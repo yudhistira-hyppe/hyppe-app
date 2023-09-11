@@ -141,12 +141,11 @@ class NotificationService {
           notifier.onClickUser(materialAppKey.currentContext!, result[index1]);
         } else if(map['url'] != null){
           page = 3;
-          // if(data.url?.isNotEmpty ?? false){
-          //   Routing().moveAndRemoveUntil(
-          //       Routes.lobby,
-          //       Routes.lobby,
-          //       argument: MainArgument(canShowAds: false, page: 3));
-          // }
+          Routing().moveAndRemoveUntil(
+              Routes.lobby,
+              Routes.lobby,
+              argument: MainArgument(canShowAds: false, page: 3));
+
         }else {
           throw 'Not recognize the type of the object of the notification ';
         }
@@ -216,6 +215,7 @@ class NotificationService {
       } else {
         print("masuk 2");
         final Map<String, dynamic> jsonNotif = message.data;
+        jsonNotif['isBackground'] = isBackground;
         final value = NotificationBody.fromJson(jsonNotif);
         // var body;
         // Platform.isIOS ? body = json.decode(message.notification?.body ?? '') : '';
@@ -224,13 +224,15 @@ class NotificationService {
           value.title ?? message.notification?.title,
           message.data['body'],
           platformChannelSpecifics,
-          payload: Platform.isIOS ? json.encode(message.data) : json.encode(message.data),
+          payload: Platform.isIOS ? json.encode(jsonNotif) : json.encode(jsonNotif),
         );
       }
     } catch (e) {
       print("===error $e");
       if (message.notification != null) {
         print("======= test notif ${message.data}");
+        final Map<String, dynamic> jsonNotif = message.data;
+        jsonNotif['isBackground'] = isBackground;
         // final Map<String, dynamic> map = json.decode(message.notification?.body ?? '{}');
         var body;
         // Platform.isIOS ? body = json.decode(message.notification?.body ?? '') : '';
@@ -240,7 +242,7 @@ class NotificationService {
           message.notification?.body,
           // message.notification?.body,
           platformChannelSpecifics,
-          payload: Platform.isIOS ? json.encode(message.data) : json.encode(message.data),
+          payload: Platform.isIOS ? json.encode(jsonNotif) : json.encode(jsonNotif),
         );
       }
       e.logger();

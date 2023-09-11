@@ -415,19 +415,24 @@ class _ShowcaseState extends State<Showcase> {
   @override
   Widget build(BuildContext context) {
     if (_enableShowcase) {
-      return AnchoredOverlay(
-        overlayBuilder: (context, rectBound, offset) {
-          final size = MediaQuery.of(context).size;
-          position = GetPosition(
-            key: widget.key,
-            padding: widget.targetPadding,
-            screenWidth: size.width,
-            screenHeight: size.height,
-          );
-          return buildOverlayOnTarget(offset, rectBound.size, rectBound, size);
+      return WillPopScope(
+        onWillPop: () async {
+          return false;
         },
-        showOverlay: true,
-        child: widget.child,
+        child: AnchoredOverlay(
+          overlayBuilder: (context, rectBound, offset) {
+            final size = MediaQuery.of(context).size;
+            position = GetPosition(
+              key: widget.key,
+              padding: widget.targetPadding,
+              screenWidth: size.width,
+              screenHeight: size.height,
+            );
+            return buildOverlayOnTarget(offset, rectBound.size, rectBound, size);
+          },
+          showOverlay: true,
+          child: widget.child,
+        ),
       );
     }
     return widget.child;

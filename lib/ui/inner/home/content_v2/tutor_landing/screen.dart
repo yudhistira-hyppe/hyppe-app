@@ -255,12 +255,16 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                                                         ShowCaseWidget.of(context).next();
                                                         switch (index) {
                                                           case 0:
-                                                            _tabController2.index = 1;
+                                                            setState(() {
+                                                              _tabController2.index = 1;
+                                                            });
                                                             break;
                                                           case 1:
-                                                            if (_tabController2.index == 1) {
-                                                              _tabController2.index = 2;
-                                                            } else {}
+                                                            setState(() {
+                                                              if (_tabController2.index == 1) {
+                                                                _tabController2.index = 2;
+                                                              } else {}
+                                                            });
                                                             break;
                                                           case 2:
                                                             // _tabController2.index = 0;

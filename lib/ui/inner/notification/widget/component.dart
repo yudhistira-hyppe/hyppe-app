@@ -123,7 +123,7 @@ class _ComponentState extends State<Component> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextWidget(
-                        textToDisplay: isAnnouncement ? (widget.data?.title ?? '') : widget.data?.senderOrReceiverInfo?.username ?? '',
+                        textToDisplay: isAnnouncement ? (System().bodyMultiLang(bodyEn: widget.data?.titleEN ?? widget.data?.title, bodyId: widget.data?.title) ?? '') : widget.data?.senderOrReceiverInfo?.username ?? '',
                         textAlign: TextAlign.start,
                         textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
                       ),

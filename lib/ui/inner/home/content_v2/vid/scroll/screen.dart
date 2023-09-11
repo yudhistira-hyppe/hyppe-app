@@ -524,9 +524,6 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       return VidPlayerPage(
                         enableWakelock: false,
                         orientation: Orientation.portrait,
-                        betweenAds: (ads){
-
-                        },
                         playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                         dataSourceMap: map,
                         data: vidData?[index] ?? ContentData(),

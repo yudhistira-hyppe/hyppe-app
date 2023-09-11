@@ -454,11 +454,6 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                         // vidData: notifier.vidData,
                                         fromFullScreen: true,
                                         orientation: Orientation.portrait,
-                                        betweenAds: (ads){
-                                          if(ads != null){
-                                            context.read<PreviewVidNotifier>().setInBetweenAds(index, ads);
-                                          }
-                                        },
                                         playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                                         dataSourceMap: map,
                                         data: vidData?[index],

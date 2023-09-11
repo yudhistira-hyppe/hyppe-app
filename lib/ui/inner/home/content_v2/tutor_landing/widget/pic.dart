@@ -117,6 +117,14 @@ class _PicTutorState extends State<PicTutor> with WidgetsBindingObserver, Ticker
       'like': '500',
       'comments': '200'
     },
+    {
+      'user': 'matasaya',
+      'avatar': "${AssetPath.pngPath}tutorstory3.png",
+      'image': "${AssetPath.pngPath}tutorpic1.png",
+      'desc': "Jalan-jalan ke luar negeri pake uang yang udah ditabung dari 10 tahun lalu. Healing ",
+      'like': '500',
+      'comments': '200'
+    },
   ];
 
   @override
@@ -346,7 +354,7 @@ class _PicTutorState extends State<PicTutor> with WidgetsBindingObserver, Ticker
                     ),
                     twelvePx,
                     Text(
-                      "Like",
+                      "100 Like",
                       style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                     ),
                   ],
@@ -373,7 +381,7 @@ class _PicTutorState extends State<PicTutor> with WidgetsBindingObserver, Ticker
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: Text(
-                    "${lang?.seeAll} ${picData['avatar']} ${lang?.comment}",
+                    "${lang?.seeAll}  ${lang?.comment}",
                     style: const TextStyle(fontSize: 12, color: kHyppeBurem),
                   ),
                 ),

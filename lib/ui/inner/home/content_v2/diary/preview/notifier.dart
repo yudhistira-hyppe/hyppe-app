@@ -92,14 +92,15 @@ class PreviewDiaryNotifier with ChangeNotifier {
   }
 
   void setAdsData(int index, AdsData? adsData) {
-    if (diaryData?[index + 1].inBetweenAds == null) {
-      if (adsData != null) {
-        // diaryData?.insert(index + 1, ContentData(inBetweenAds: adsData));
-      } else {
-        // diaryData?.removeAt(index);
-      }
-      notifyListeners();
-    }
+    // if (adsData != null) {
+    //   if (diaryData?[index + 1].inBetweenAds == null) {
+    //     diaryData?.insert(index + 1, ContentData(inBetweenAds: adsData));
+    //     notifyListeners();
+    //   }
+    // } else {
+    //   diaryData?.removeAt(index);
+    //   notifyListeners();
+    // }
   }
 
   double scaleDiary(BuildContext context) {

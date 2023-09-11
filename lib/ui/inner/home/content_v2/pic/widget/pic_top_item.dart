@@ -91,17 +91,17 @@ class _PicTopItemState extends State<PicTopItem> {
             targetPadding: const EdgeInsets.all(0),
             tooltipPosition: TooltipPosition.top,
             description: lang?.localeDatetime == 'id' ? mn?.tutorialData[indexKeySell].textID ?? '' : mn?.tutorialData[indexKeySell].textEn ?? '',
-            descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+            descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
             descriptionPadding: EdgeInsets.all(6),
             textColor: Colors.white,
             targetShapeBorder: const CircleBorder(),
             positionYplus: 25,
             onToolTipClick: () {
-              closeTooltip();
+              closeTooltip(indexKeySell);
             },
             closeWidget: GestureDetector(
               onTap: () {
-                closeTooltip();
+                closeTooltip(indexKeySell);
               },
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -140,11 +140,11 @@ class _PicTopItemState extends State<PicTopItem> {
             textColor: Colors.white,
             positionYplus: 25,
             onToolTipClick: () {
-              closeTooltip();
+              closeTooltip(indexKeyProtection);
             },
             closeWidget: GestureDetector(
               onTap: () {
-                closeTooltip();
+                closeTooltip(indexKeyProtection);
               },
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -174,10 +174,10 @@ class _PicTopItemState extends State<PicTopItem> {
     );
   }
 
-  void closeTooltip() {
+  void closeTooltip(int index) {
     globalTultipShow = false;
-    context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeyProtection].key ?? '');
-    mn?.tutorialData[indexKeyProtection].status = true;
+    context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[index].key ?? '');
+    mn?.tutorialData[index].status = true;
     ShowCaseWidget.of(context).dismiss();
     if (widget.fAliplayer != null) {
       widget.fAliplayer?.play();

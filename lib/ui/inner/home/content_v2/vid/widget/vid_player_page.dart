@@ -52,7 +52,6 @@ class VidPlayerPage extends StatefulWidget {
   final Function(ContentData)? onPlay;
   final Function(AdsData?)? onShowAds;
   final Orientation orientation;
-  final Function(AdsData?) betweenAds;
   final List<ContentData>? vidData;
   final int? index;
   final Function()? loadMoreFunction;
@@ -81,7 +80,6 @@ class VidPlayerPage extends StatefulWidget {
     this.getAdsPlayer,
     this.onShowAds,
     required this.orientation,
-    required this.betweenAds,
     this.vidData,
     this.fromFullScreen,
     this.index,

@@ -118,6 +118,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                   // tooltipBackgroundColor: Theme.of(context).primaryColor,
                   textColor: Colors.white,
                   targetShapeBorder: const CircleBorder(),
+                  disableDefaultTargetGestures: true,
                   descWidget: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -130,7 +131,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                         GestureDetector(
                             onTap: () {
                               ShowCaseWidget.of(context).next();
-                              tapMenu(2, notifier, consumerContext);
+                              notifier.onShowPostContent(consumerContext);
                             },
                             child: Text(
                               tn.translate.next ?? '',
@@ -304,6 +305,10 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
   }
 
   void tapMenu(int index, MainNotifier notifier, consumerContext) async {
+    String newUser = SharedPreference().readStorage(SpKeys.newUser);
+    if (newUser == "TRUE") {
+      return;
+    }
     if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
     if (index != 2) {
       setState(() {

@@ -122,12 +122,15 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void setInBetweenAds(int index, AdsData? adsData) {
-    if (adsData != null) {
-      // vidData?.insert(index + 1, ContentData(inBetweenAds: adsData));
-    } else {
-      // vidData?.removeAt(index);
-    }
-    notifyListeners();
+    // if (adsData != null) {
+    //   if (vidData?[index + 1].inBetweenAds == null) {
+    //     vidData?.insert(index + 1, ContentData(inBetweenAds: adsData));
+    //     notifyListeners();
+    //   }
+    // } else {
+    //   vidData?.removeAt(index);
+    //   notifyListeners();
+    // }
   }
   // setInBetweenAds(int index, AdsData? adsData){
   //   vidData?[index].inBetweenAds = adsData;

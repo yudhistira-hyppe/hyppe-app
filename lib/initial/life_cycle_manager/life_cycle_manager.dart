@@ -143,6 +143,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         }
       }
       if (state == AppLifecycleState.resumed) {
+        isAppOn = true;
         "App Resumed".logger();
         notifier.resumeAudioPreview();
         if (globalAudioPlayer != null) {
@@ -207,6 +208,10 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     if (state == AppLifecycleState.paused) {
       // Show custom alert message or perform action
       print('capture capture');
+    }
+
+    if (state == AppLifecycleState.detached){
+      isAppOn = false;
     }
   }
 
