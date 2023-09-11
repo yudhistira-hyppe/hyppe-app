@@ -343,62 +343,9 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
     print("afterrrrrrr============");
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
     var homneNotifier = context.read<HomeNotifier>();
-    if (homneNotifier.preventReloadAfterUploadPost) {
-      if (homneNotifier.uploadedPostType == FeatureType.pic) {
-        homneNotifier.tabIndex = 0;
-      } else if (homneNotifier.uploadedPostType == FeatureType.diary) {
-        var diary = context.read<PreviewDiaryNotifier>();
-        homneNotifier.tabIndex = 1;
-        if (diary.diaryData == null) {
-          // diary.initialDiary(context, reload: true);
-        }
-      } else if (homneNotifier.uploadedPostType == FeatureType.vid) {
-        var vid = context.read<PreviewVidNotifier>();
-        homneNotifier.tabIndex = 2;
-        if (vid.vidData == null) {
-          // await notifier.initNewHome(context, mounted, isreload: true);
-          // vid.initialVid(context, reload: true);
-        }
-      }
-      homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
-      homeClick = true;
-      (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
-    }
+
     _tabController2.index = homneNotifier.tabIndex;
-    _tabController2.animation?.addListener(() {
-      homneNotifier.tabIndex = _tabController2.index;
-      print("masuk tab slide");
-      if (homneNotifier.lastCurIndex != homneNotifier.tabIndex) {
-        homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
-      }
-      homneNotifier.lastCurIndex = homneNotifier.tabIndex;
-    });
+    _tabController2.animation?.addListener(() {});
     // System().popUpChallange(context);
-  }
-}
-
-class ShowCaseView extends StatefulWidget {
-  final GlobalKey globalKey;
-  final Widget child;
-  const ShowCaseView({super.key, required this.globalKey, required this.child});
-
-  @override
-  State<ShowCaseView> createState() => _ShowCaseViewState();
-}
-
-class _ShowCaseViewState extends State<ShowCaseView> {
-  @override
-  Widget build(BuildContext context) {
-    return Showcase(
-      key: widget.globalKey,
-      // container: Column(
-      //   children: [],
-      // ),
-      blurValue: 0,
-      // height: 10,
-      // width: 10,
-      description: "sdsdsd",
-      child: widget.child,
-    );
   }
 }

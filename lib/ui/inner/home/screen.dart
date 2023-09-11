@@ -67,9 +67,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     {"id": '3', 'name': "Vid"},
   ];
 
-  GlobalKey keyButton = GlobalKey();
-  GlobalKey keyButton1 = GlobalKey();
-  GlobalKey keyButton2 = GlobalKey();
   LocalizationModelV2? _language;
 
   @override
@@ -128,10 +125,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   @override
   void didPush() {
     'didPush isOnHomeScreen $isHomeScreen'.logger();
-  }
-
-  void show() {
-    ShowCaseWidget.of(context).startShowCase([keyButton, keyButton1, keyButton2, keyButton1, widget.keyButton]);
   }
 
   @override
@@ -452,31 +445,5 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       homneNotifier.getAdsApsara(context, true);
     }
     // System().popUpChallange(context);
-  }
-}
-
-class ShowCaseView extends StatefulWidget {
-  final GlobalKey globalKey;
-  final Widget child;
-  const ShowCaseView({super.key, required this.globalKey, required this.child});
-
-  @override
-  State<ShowCaseView> createState() => _ShowCaseViewState();
-}
-
-class _ShowCaseViewState extends State<ShowCaseView> {
-  @override
-  Widget build(BuildContext context) {
-    return Showcase(
-      key: widget.globalKey,
-      // container: Column(
-      //   children: [],
-      // ),
-      blurValue: 0,
-      // height: 10,
-      // width: 10,
-      description: "sdsdsd",
-      child: widget.child,
-    );
   }
 }

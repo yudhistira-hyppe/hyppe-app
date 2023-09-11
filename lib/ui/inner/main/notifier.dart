@@ -64,6 +64,14 @@ class MainNotifier with ChangeNotifier {
   List<Tutorial> _tutorialData = [];
   List<Tutorial> get tutorialData => _tutorialData;
 
+  bool _isloading = false;
+  bool get isloading => _isloading;
+
+  set isloading(bool val) {
+    _isloading = val;
+    notifyListeners();
+  }
+
   set tutorialData(List<Tutorial> val) {
     _tutorialData = val;
     notifyListeners();

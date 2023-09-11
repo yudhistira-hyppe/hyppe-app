@@ -187,6 +187,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
             if (mounted) {
               setState(() {});
             }
+            if (globalTultipShow) {
+              fAliplayer?.pause();
+            }
           } catch (e) {
             e.logger();
           }

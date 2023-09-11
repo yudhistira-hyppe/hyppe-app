@@ -46,7 +46,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  setIsViewed(int index){
+  setIsViewed(int index) {
     pic?[index].isViewed = true;
     notifyListeners();
   }
@@ -158,12 +158,12 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void setAdsData(int index, AdsData? adsData){
-    if(pic?[index + 1].inBetweenAds == null){
-      if(adsData != null){
-        pic?.insert(index + 1, ContentData(inBetweenAds: adsData));
-      }else{
-        pic?.removeAt(index);
+  void setAdsData(int index, AdsData? adsData) {
+    if (pic?[index + 1].inBetweenAds == null) {
+      if (adsData != null) {
+        // pic?.insert(index + 1, ContentData(inBetweenAds: adsData));
+      } else {
+        // pic?.removeAt(index);
       }
       notifyListeners();
     }

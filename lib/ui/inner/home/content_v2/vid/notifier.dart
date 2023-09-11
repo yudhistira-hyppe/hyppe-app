@@ -53,7 +53,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  setIsViewed(int index){
+  setIsViewed(int index) {
     vidData?[index].isViewed = true;
     notifyListeners();
   }
@@ -121,11 +121,11 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  void setInBetweenAds(int index, AdsData? adsData){
-    if(adsData != null){
-      vidData?.insert(index + 1, ContentData(inBetweenAds: adsData));
-    }else{
-      vidData?.removeAt(index);
+  void setInBetweenAds(int index, AdsData? adsData) {
+    if (adsData != null) {
+      // vidData?.insert(index + 1, ContentData(inBetweenAds: adsData));
+    } else {
+      // vidData?.removeAt(index);
     }
     notifyListeners();
   }
@@ -134,7 +134,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   //   notifyListeners();
   // }
 
-  setAdsData(int index, AdsData? adsData){
+  setAdsData(int index, AdsData? adsData) {
     vidData?[index].adsData = adsData;
     notifyListeners();
   }

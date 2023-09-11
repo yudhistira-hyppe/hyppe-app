@@ -43,7 +43,7 @@ class PreviewDiaryNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  setIsViewed(int index){
+  setIsViewed(int index) {
     diaryData?[index].isViewed = true;
     notifyListeners();
   }
@@ -91,12 +91,12 @@ class PreviewDiaryNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void setAdsData(int index, AdsData? adsData){
-    if(diaryData?[index + 1].inBetweenAds == null){
-      if(adsData != null){
-        diaryData?.insert(index + 1, ContentData(inBetweenAds: adsData));
-      }else{
-        diaryData?.removeAt(index);
+  void setAdsData(int index, AdsData? adsData) {
+    if (diaryData?[index + 1].inBetweenAds == null) {
+      if (adsData != null) {
+        // diaryData?.insert(index + 1, ContentData(inBetweenAds: adsData));
+      } else {
+        // diaryData?.removeAt(index);
       }
       notifyListeners();
     }

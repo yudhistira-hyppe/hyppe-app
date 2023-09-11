@@ -12,6 +12,7 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -45,9 +46,9 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
   void initState() {
     super.initState();
     final newUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
-    // if (newUser == "TRUE") {
-    WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keybutton]));
-    // }
+    if (newUser == "TRUE") {
+      WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keybutton]));
+    }
   }
 
   @override
@@ -114,7 +115,9 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                             onTap: () async {
                               Routing().moveBack();
                               SharedPreference().writeStorage(SpKeys.newUser, "FALSE");
-                              ShowCaseWidget.of(context).next();
+                              // ShowCaseWidget.of(context).next();
+                              context.read<MainNotifier>().isloading = true;
+
                               unawaited(
                                 Navigator.of(context, rootNavigator: true).push(
                                   PageRouteBuilder(
@@ -138,7 +141,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                               // context.read<HomeNotifier>().tabIndex = 0;
 
                               Routing().moveBack();
-                              Routing().moveReplacement(Routes.lobby);
+                              // Routing().moveReplacement(Routes.lobby);
 
                               // Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
                             },
