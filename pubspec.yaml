@@ -90,6 +90,7 @@ dependencies:
   measured_size: ^1.0.0
   flutter_cache_manager: ^3.3.0
   flutter_cupertino_datetime_picker: ^3.0.0
+  flutter_statusbarcolor_ns: ^0.5.0
 
   dynamic_widget: # Dynamic widget builder
     git:

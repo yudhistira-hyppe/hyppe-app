@@ -46,7 +46,7 @@ class CustomSearchBar extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(color: Theme.of(context).colorScheme.background,
-          boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+          boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.5), blurRadius: 2)],
           borderRadius: const BorderRadius.all(Radius.circular(4))),
       child: TextField(
         readOnly: readOnly,

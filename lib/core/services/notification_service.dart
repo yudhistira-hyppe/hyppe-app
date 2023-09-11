@@ -203,6 +203,7 @@ class NotificationService {
 
     try {
       if (data != null) {
+        data.isBackground = isBackground;
         print("masuk 1");
         if (message.notification != null) {
           await flutterLocalNotificationsPlugin.show(
@@ -216,6 +217,7 @@ class NotificationService {
       } else {
         print("masuk 2");
         final Map<String, dynamic> jsonNotif = message.data;
+        jsonNotif['isBackground'] = isBackground;
         final value = NotificationBody.fromJson(jsonNotif);
         // var body;
         // Platform.isIOS ? body = json.decode(message.notification?.body ?? '') : '';
@@ -224,13 +226,15 @@ class NotificationService {
           value.title ?? message.notification?.title,
           message.data['body'],
           platformChannelSpecifics,
-          payload: Platform.isIOS ? json.encode(message.data) : json.encode(message.data),
+          payload: Platform.isIOS ? json.encode(jsonNotif) : json.encode(jsonNotif),
         );
       }
     } catch (e) {
       print("===error $e");
       if (message.notification != null) {
         print("======= test notif ${message.data}");
+        final Map<String, dynamic> jsonNotif = message.data;
+        jsonNotif['isBackground'] = isBackground;
         // final Map<String, dynamic> map = json.decode(message.notification?.body ?? '{}');
         var body;
         // Platform.isIOS ? body = json.decode(message.notification?.body ?? '') : '';
@@ -240,7 +244,7 @@ class NotificationService {
           message.notification?.body,
           // message.notification?.body,
           platformChannelSpecifics,
-          payload: Platform.isIOS ? json.encode(message.data) : json.encode(message.data),
+          payload: Platform.isIOS ? json.encode(jsonNotif) : json.encode(jsonNotif),
         );
       }
       e.logger();
@@ -255,8 +259,9 @@ class NotificationBody {
   String? title;
   String? index;
   String? url;
+  bool? isBackground;
 
-  NotificationBody({this.postId, this.postType, this.message, this.index, this.url});
+  NotificationBody({this.postId, this.postType, this.message, this.index, this.url, this.isBackground});
 
   NotificationBody.fromJson(Map<String, dynamic> json) {
     postId = json['postID'];
@@ -265,6 +270,7 @@ class NotificationBody {
     title = json['title'];
     index = json['index'];
     url = json['url'];
+    isBackground = json['isBackground'];
   }
 
   Map<String, dynamic> toJson() {
@@ -274,6 +280,7 @@ class NotificationBody {
     result['message'] = message;
     result['index'] = index;
     result['url'] = url;
+    result['isBackground'] = isBackground;
     return result;
   }
 }
