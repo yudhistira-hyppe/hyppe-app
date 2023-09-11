@@ -31,6 +31,8 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:measured_size/measured_size.dart';
 
+import '../../../../../../app.dart';
+
 class SelfProfileScreen extends StatefulWidget {
   final GeneralArgument? arguments;
   const SelfProfileScreen({super.key, this.arguments});
@@ -66,6 +68,7 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
     final notifier = context.read<SelfProfileNotifier>();
     System().disposeBlock();
     notifier.initialSelfProfile(context);
+    page = -1;
   }
 
   @override

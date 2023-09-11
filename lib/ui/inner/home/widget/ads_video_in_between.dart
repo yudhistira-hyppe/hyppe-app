@@ -36,13 +36,11 @@ class AdsVideoInBetween extends StatefulWidget {
   final Function(VisibilityInfo)? onVisibility;
   final FlutterAliplayer? player;
   final AdsData data;
-  final double ratio;
   final Function() afterReport;
   const AdsVideoInBetween({
     Key? key,
     this.onVisibility,
     this.player,
-    required this.ratio,
     required this.data,
     required this.afterReport
   }) : super(key: key);

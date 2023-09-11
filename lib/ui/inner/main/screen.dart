@@ -40,11 +40,12 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'MainScreen');
     _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
-    _mainNotifier.setPageIndex(widget.args?.page ?? 0);
+
     ScrollController(initialScrollOffset: 50.0);
 
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     super.initState();
+    _mainNotifier.setPageIndex(widget.args?.page ?? 0);
   }
 
   @override
@@ -97,7 +98,6 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                       iconData: notifier.pageIndex == 0 ? '${AssetPath.vectorPath}home-active.svg' : '${AssetPath.vectorPath}home.svg',
                     ),
                     onPressed: () async {
-                      print(notifier.pageIndex);
                       // if (notifier.pageIndex == 0) {
 
                       // } else {
@@ -168,7 +168,6 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                   child: IconButton(
                     icon: const SizedBox(width: 32, child: Profile()),
                     onPressed: () {
-                      print(notifier.pageIndex);
                       tapMenu(4, notifier, consumerContext);
                     },
                   ),
@@ -251,7 +250,6 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
       setState(() {
         'pageIndex now: $index'.logger();
         notifier.pageIndex = index;
-        print("ini index ${notifier.pageIndex}");
       });
     } else {
       await notifier.onShowPostContent(consumerContext);

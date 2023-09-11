@@ -140,27 +140,12 @@ class NotificationService {
           "array yg di dapat $index1".logger();
           notifier.onClickUser(materialAppKey.currentContext!, result[index1]);
         } else if(map['url'] != null){
-          final data = NotificationBody.fromJson(map);
-          if(data.url?.isNotEmpty ?? false){
-            Routing().moveAndRemoveUntil(
-                Routes.lobby,
-                Routes.root,
-                argument: MainArgument(canShowAds: false, page: 3));
-          }
-          // try {
-          //   final uri = Uri.parse(data.url ?? '');
-          //   if (await canLaunchUrl(uri)) {
-          //     await launchUrl(
-          //       uri,
-          //       mode: LaunchMode.externalApplication,
-          //     );
-          //   } else {
-          //     throw "Could not launch $uri";
-          //   }
-          //   // can't launch url, there is some error
-          // } catch (e) {
-          //   // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-          //   System().goToWebScreen(data.url ?? '', isPop: true);
+          page = 3;
+          // if(data.url?.isNotEmpty ?? false){
+          //   Routing().moveAndRemoveUntil(
+          //       Routes.lobby,
+          //       Routes.lobby,
+          //       argument: MainArgument(canShowAds: false, page: 3));
           // }
         }else {
           throw 'Not recognize the type of the object of the notification ';
@@ -203,7 +188,7 @@ class NotificationService {
 
   // show notification
 
-  Future showNotification(RemoteMessage message, {MessageDataV2? data, String? idNotif}) async {
+  Future showNotification(RemoteMessage message, {MessageDataV2? data, String? idNotif, isBackground = false}) async {
     print("===''''-- ${message.hashCode}");
     if (idNotif != null) {
       try {

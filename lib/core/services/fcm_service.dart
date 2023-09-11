@@ -41,7 +41,7 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
   //     notificationCategory: NotificationCategory.user,
   //     timestamp: message.sentTime?.millisecondsSinceEpoch.toString() ?? null,
   //     message: '${message.notification?.title ?? ''} ${message.notification?.body ?? ''}');
-  _notificationService.showNotification(message, idNotif: message.notification?.android?.tag);
+  _notificationService.showNotification(message, idNotif: message.notification?.android?.tag, isBackground: true);
 }
 
 // listenable value

@@ -102,36 +102,16 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
   void landscape() async {
     widget.fAliplayer?.pause();
-    if ((widget.data.metadata?.height ?? 0) < (widget.data.metadata?.width ?? 0)) {
-      // await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-      // await SystemChrome.setPreferredOrientations([
-      //   DeviceOrientation.landscapeLeft,
-      //   DeviceOrientation.landscapeRight,
-      // ]);
-      Future.delayed(const Duration(seconds: 1), () {
-        final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
-        final isShowing = notifier.isShowingAds;
-        if(!isShowing){
-          widget.fAliplayer?.play();
-
-        }
-        setState(() {
-          isloading = false;
-        });
-      });
-    } else {
-      await Future.delayed(const Duration(seconds: 1));
-      widget.fAliplayer?.play();
+    Future.delayed(const Duration(seconds: 1), () {
       final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
       final isShowing = notifier.isShowingAds;
       if(!isShowing){
         widget.fAliplayer?.play();
-
       }
       setState(() {
         isloading = false;
       });
-    }
+    });
   }
 
   @override
@@ -403,6 +383,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       DataSourceRelated.vidKey: widget.data.apsaraId,
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
     };
+    print('view ads: ${widget.isAutoPlay ?? false}');
     return Consumer<VideoNotifier>(
       builder: (context, notifier, _) {
         return WillPopScope(
@@ -457,7 +438,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                               //   width: MediaQuery.of(context).size.width,
                               //   child: Center(child: Text("data ${index}")),
                               // );
-                              print('view ads: 2');
+                              print('view ads: 1');
 
                               return isloadingRotate
                                   ? Container(
