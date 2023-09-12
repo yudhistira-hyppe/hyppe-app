@@ -35,6 +35,7 @@ class _ReferralState extends State<Referral> {
   int indexKeyShare = 0;
   int indexCode = 0;
   ScrollController controller = ScrollController();
+  var myContext;
 
   @override
   void initState() {
@@ -49,7 +50,7 @@ class _ReferralState extends State<Referral> {
     indexCode = mn?.tutorialData.indexWhere((element) => element.key == 'codeRefferal') ?? 0;
 
     if (mn?.tutorialData[indexKeyShare].status == false || mn?.tutorialData[indexCode].status == false) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keyShare, keyCode]));
+      WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(myContext).startShowCase([keyShare, keyCode]));
     }
   }
 
@@ -57,89 +58,103 @@ class _ReferralState extends State<Referral> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Consumer<ReferralNotifier>(
-      builder: (_, notifier, __) => Scaffold(
-        appBar: AppBar(
-          leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
-          leading: CustomIconButtonWidget(
-            defaultColor: true,
-            iconData: "${AssetPath.vectorPath}back-arrow.svg",
-            onPressed: () => Routing().moveBack(),
-          ),
-          titleSpacing: 0,
-          title: CustomTextWidget(
-            textToDisplay: notifier.language.referralID ?? '',
-            textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
-          ),
-          centerTitle: false,
-        ),
-        body: CustomScrollView(
-          controller: controller,
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: notifier.loading
-                  ? const ShimmerReferral()
-                  : Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ShareBlock(
-                            globalKey: keyShare,
-                            indexTutor: indexKeyShare,
-                            positionTooltip: TooltipPosition.top,
-                            positionYplus: 25,
-                          ),
-                          const Spacer(),
-                          const QRBlock(),
-                          const Spacer(),
-                          notifier.modelReferral?.parent == null
-                              ? textInputReff(notifier.language)
-                              : notifier.modelReferral?.parent == null || notifier.modelReferral?.parent == ""
+      builder: (_, notifier, __) => ShowCaseWidget(
+        onStart: (index, key) {
+          print('onStart: $index, $key');
+        },
+        onComplete: (index, key) {
+          print('onComplete: $index, $key');
+        },
+        blurValue: 0,
+        disableBarrierInteraction: true,
+        disableMovingAnimation: true,
+        builder: Builder(builder: (context) {
+          myContext = context;
+          return Scaffold(
+            appBar: AppBar(
+              leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+              leading: CustomIconButtonWidget(
+                defaultColor: true,
+                iconData: "${AssetPath.vectorPath}back-arrow.svg",
+                onPressed: () => Routing().moveBack(),
+              ),
+              titleSpacing: 0,
+              title: CustomTextWidget(
+                textToDisplay: notifier.language.referralID ?? '',
+                textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+              ),
+              centerTitle: false,
+            ),
+            body: CustomScrollView(
+              controller: controller,
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: notifier.loading
+                      ? const ShimmerReferral()
+                      : Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ShareBlock(
+                                globalKey: keyShare,
+                                indexTutor: indexKeyShare,
+                                positionTooltip: TooltipPosition.top,
+                                positionYplus: 25,
+                              ),
+                              const Spacer(),
+                              const QRBlock(),
+                              const Spacer(),
+                              notifier.modelReferral?.parent == null
                                   ? textInputReff(notifier.language)
-                                  : Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text('Diundang oleh: ', style: Theme.of(context).textTheme.subtitle1),
-                                        Container(
-                                          padding: const EdgeInsets.all(5),
-                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: kHyppeLightSurface),
-                                          child: Text(
-                                            '${notifier.modelReferral?.parent}',
-                                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.primary),
-                                          ),
-                                        ),
-                                      ],
-                                    )
+                                  : notifier.modelReferral?.parent == null || notifier.modelReferral?.parent == ""
+                                      ? textInputReff(notifier.language)
+                                      : Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text('Diundang oleh: ', style: Theme.of(context).textTheme.subtitle1),
+                                            Container(
+                                              padding: const EdgeInsets.all(5),
+                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: kHyppeLightSurface),
+                                              child: Text(
+                                                '${notifier.modelReferral?.parent}',
+                                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.primary),
+                                              ),
+                                            ),
+                                          ],
+                                        )
 
-                          // CustomElevatedButton(
-                          //   width: 375.0 * SizeConfig.scaleDiagonal,
-                          //   height: 44.0 * SizeConfig.scaleDiagonal,
-                          //   function: () => null,
-                          //   child: CustomTextWidget(
-                          //     textToDisplay: notifier.language.downloadQRCode,
-                          //     textStyle: Theme.of(context)
-                          //         .textTheme
-                          //         .button
-                          //         ?.copyWith(color: kHyppeLightButtonText),
-                          //   ),
-                          //   buttonStyle: ButtonStyle(
-                          //     foregroundColor: MaterialStateProperty.all(
-                          //         Theme.of(context).colorScheme.primary),
-                          //     shadowColor: MaterialStateProperty.all(
-                          //         Theme.of(context).colorScheme.primary),
-                          //     overlayColor: MaterialStateProperty.all(
-                          //         Theme.of(context).colorScheme.primary),
-                          //     backgroundColor: MaterialStateProperty.all(
-                          //         Theme.of(context).colorScheme.primary),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ),
-            )
-          ],
-        ),
+                              // CustomElevatedButton(
+                              //   width: 375.0 * SizeConfig.scaleDiagonal,
+                              //   height: 44.0 * SizeConfig.scaleDiagonal,
+                              //   function: () => null,
+                              //   child: CustomTextWidget(
+                              //     textToDisplay: notifier.language.downloadQRCode,
+                              //     textStyle: Theme.of(context)
+                              //         .textTheme
+                              //         .button
+                              //         ?.copyWith(color: kHyppeLightButtonText),
+                              //   ),
+                              //   buttonStyle: ButtonStyle(
+                              //     foregroundColor: MaterialStateProperty.all(
+                              //         Theme.of(context).colorScheme.primary),
+                              //     shadowColor: MaterialStateProperty.all(
+                              //         Theme.of(context).colorScheme.primary),
+                              //     overlayColor: MaterialStateProperty.all(
+                              //         Theme.of(context).colorScheme.primary),
+                              //     backgroundColor: MaterialStateProperty.all(
+                              //         Theme.of(context).colorScheme.primary),
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                        ),
+                )
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
@@ -162,13 +177,13 @@ class _ReferralState extends State<Referral> {
         onToolTipClick: () {
           context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexCode].key ?? '');
           mn?.tutorialData[indexCode].status = true;
-          ShowCaseWidget.of(context).next();
+          ShowCaseWidget.of(myContext).next();
         },
         closeWidget: GestureDetector(
           onTap: () {
             context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexCode].key ?? '');
             mn?.tutorialData[indexCode].status = true;
-            ShowCaseWidget.of(context).next();
+            ShowCaseWidget.of(myContext).next();
           },
           child: const Padding(
             padding: EdgeInsets.all(8.0),

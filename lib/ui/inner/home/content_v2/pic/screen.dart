@@ -953,6 +953,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 System().increaseViewCount2(context, picData ?? ContentData(), check: false);
                                 if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
                                   if (mounted) {
+                                    print("========== isShowShowcase ==========");
                                     setState(() {
                                       isShowShowcase = true;
                                       // keyOwnership = picData?.keyGlobal;
@@ -1433,7 +1434,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             child: PicTopItem(
               data: data,
               isShow: isShowShowcase,
-              globalKey: keyOwnership,
+              globalKey: data.keyGlobal,
             ),
           ),
           if (data.tagPeople?.isNotEmpty ?? false)

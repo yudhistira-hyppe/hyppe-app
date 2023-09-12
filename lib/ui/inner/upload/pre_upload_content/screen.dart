@@ -25,6 +25,7 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_auto_complete_user_tag.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_category.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/validate_type.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
 import '../preview_content/notifier.dart';
@@ -64,18 +65,31 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     super.initState();
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
-    indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'interest') ?? 0;
-    indexKeyOwn = mn?.tutorialData.indexWhere((element) => element.key == 'ownership') ?? 0;
-    indexKeyBoost = mn?.tutorialData.indexWhere((element) => element.key == 'boost') ?? 0;
-    if (mn?.tutorialData[indexKey].status == false) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keyKategori, keyOwnerShip]));
-    }
-    if (widget.arguments.onEdit && widget.arguments.contentData?.reportedStatus != "OWNED" && widget.arguments.contentData?.reportedStatus2 != "BLURRED" && statusKyc == VERIFIED) {
-      if (mn?.tutorialData[indexKeyBoost].status == false) {
-        WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keyBoost]));
+    if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
+      indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'interest') ?? 0;
+      indexKeyOwn = mn?.tutorialData.indexWhere((element) => element.key == 'ownership') ?? 0;
+      indexKeyBoost = mn?.tutorialData.indexWhere((element) => element.key == 'boost') ?? 0;
+
+      if (mn?.tutorialData[indexKey].status == false) {
+        WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(myContext).startShowCase([keyKategori, keyOwnerShip]));
+      }
+      if (widget.arguments.onEdit && widget.arguments.contentData?.reportedStatus != "OWNED" && widget.arguments.contentData?.reportedStatus2 != "BLURRED" && statusKyc == VERIFIED) {
+        if (mn?.tutorialData[indexKeyBoost].status == false) {
+          Future.delayed(const Duration(seconds: 1), () {
+            controller.animateTo(1000, duration: const Duration(milliseconds: 500), curve: Curves.ease).whenComplete(
+                  () => ShowCaseWidget.of(myContext).startShowCase([keyBoost]),
+                );
+          });
+        }
       }
     }
   }
+
+  void show() {
+    ShowCaseWidget.of(myContext).startShowCase([keyBoost]);
+  }
+
+  var myContext;
 
   @override
   Widget build(BuildContext context) {
@@ -83,27 +97,30 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     SizeConfig().init(context);
     final textTheme = Theme.of(context).textTheme;
     bool keyboardIsOpen = MediaQuery.of(context).viewInsets.bottom != 0;
+    Routing.navigatorKey.currentContext;
 
-    return Consumer2<PreUploadContentNotifier, PreviewContentNotifier>(
-      builder: (context, notifier, prev, child) => GestureDetector(
-        onTap: () => notifier.checkKeyboardFocus(context),
-        child: WillPopScope(
-          onWillPop: () {
-            notifier.onWillPop(context);
-            return Future.value(true);
-          },
-          child: ShowCaseWidget(
-            onStart: (index, key) {
-              print('onStart: $index, $key');
-            },
-            onComplete: (index, key) {
-              print('onComplete: $index, $key');
-            },
-            blurValue: 0,
-            disableBarrierInteraction: true,
-            disableMovingAnimation: true,
-            builder: Builder(builder: (context) {
-              return Scaffold(
+    return ShowCaseWidget(
+      onStart: (index, key) {
+        print('onStart: $index, $key');
+      },
+      onComplete: (index, key) {
+        print('onComplete: $index, $key');
+      },
+      blurValue: 0,
+      disableBarrierInteraction: true,
+      disableMovingAnimation: true,
+      builder: Builder(builder: (context) {
+        myContext = context;
+
+        return Consumer2<PreUploadContentNotifier, PreviewContentNotifier>(
+          builder: (_, notifier, prev, __) => GestureDetector(
+            onTap: () => notifier.checkKeyboardFocus(context),
+            child: WillPopScope(
+              onWillPop: () {
+                notifier.onWillPop(context);
+                return Future.value(true);
+              },
+              child: Scaffold(
                 resizeToAvoidBottomInset: true,
                 appBar: AppBar(
                   elevation: 0,
@@ -136,6 +153,13 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                             // loadingCompress(notifier.progressCompress),
                             // Text("${notifier.progressCompress}"),
                             // Text("${notifier.videoSize / 1000000} mb"),
+                            // GestureDetector(
+                            //     onTap: () {
+                            //       show();
+                            //     },
+                            //     child: Text("${mn?.tutorialData[indexKeyBoost].status}")),
+                            // Text("${mn?.tutorialData[indexKeyBoost].textID}"),
+                            // Text("${mn?.tutorialData[indexKeyBoost].textEn}"),
                             captionWidget(textTheme, notifier),
                             sixteenPx,
                             _buildDivider(context),
@@ -270,11 +294,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         ),
                 ),
                 floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-              );
-            }),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -467,12 +491,22 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       descriptionPadding: EdgeInsets.all(6),
       textColor: Colors.white,
       positionYplus: 50,
+      onTargetClick: () {},
+      disposeOnTap: false,
+      onToolTipClick: () {
+        context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKey].key ?? '');
+        controller.animateTo(10000, duration: Duration(milliseconds: 500), curve: Curves.ease).then((value) {
+          ShowCaseWidget.of(myContext).next();
+        });
+        mn?.tutorialData[indexKey].status = true;
+      },
       closeWidget: GestureDetector(
         onTap: () async {
           context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKey].key ?? '');
           await controller.animateTo(10000, duration: Duration(milliseconds: 500), curve: Curves.ease).then((value) {
-            ShowCaseWidget.of(context).next();
+            ShowCaseWidget.of(myContext).next();
           });
+          mn?.tutorialData[indexKey].status = true;
         },
         child: const Padding(
           padding: EdgeInsets.all(8.0),
@@ -791,19 +825,28 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             targetPadding: const EdgeInsets.all(0),
             tooltipPosition: TooltipPosition.top,
             // description: notifier.language.registeryourcontentownership,
-            description: notifier.language.localeDatetime == 'id' ? mn?.tutorialData[indexKeyOwn].textID : mn?.tutorialData[indexKeyOwn].textEn,
+            description: notifier.language.localeDatetime == 'id' ? mn?.tutorialData[indexKeyBoost].textID : mn?.tutorialData[indexKeyBoost].textEn,
             descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
             descriptionPadding: EdgeInsets.all(6),
             textColor: Colors.white,
             positionYplus: 25,
+            onTargetClick: () {},
+            disposeOnTap: false,
+            onToolTipClick: () {
+              context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeyBoost].key ?? '');
+              mn?.tutorialData[indexKeyBoost].status = true;
+              ShowCaseWidget.of(myContext).next();
+              controller.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+            },
             closeWidget: GestureDetector(
               onTap: () {
-                context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeyOwn].key ?? '');
-                ShowCaseWidget.of(context).next();
-                controller.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+                context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeyBoost].key ?? '');
+                mn?.tutorialData[indexKeyBoost].status = true;
+                ShowCaseWidget.of(myContext).next();
+                controller.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
               },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}close.svg',
                   defaultColor: false,
@@ -855,18 +898,27 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             tooltipPosition: TooltipPosition.top,
             // description: notifier.language.registeryourcontentownership,
             description: notifier.language.localeDatetime == 'id' ? mn?.tutorialData[indexKeyOwn].textID : mn?.tutorialData[indexKeyOwn].textEn,
-            descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
-            descriptionPadding: EdgeInsets.all(6),
+            descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
+            descriptionPadding: const EdgeInsets.all(6),
             textColor: Colors.white,
             positionYplus: 25,
+            onTargetClick: () {},
+            disposeOnTap: false,
+            onToolTipClick: () {
+              context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeyOwn].key ?? '');
+              mn?.tutorialData[indexKeyOwn].status = true;
+              ShowCaseWidget.of(myContext).next();
+              controller.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+            },
             closeWidget: GestureDetector(
               onTap: () {
                 context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeyOwn].key ?? '');
-                ShowCaseWidget.of(context).next();
-                controller.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+                mn?.tutorialData[indexKeyOwn].status = true;
+                ShowCaseWidget.of(myContext).next();
+                controller.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
               },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: CustomIconWidget(
                   iconData: '${AssetPath.vectorPath}close.svg',
                   defaultColor: false,

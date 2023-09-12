@@ -306,10 +306,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                               GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      _tabController.index = 2;
+                                      changeTab(FeatureType.diary);
                                     });
-
-                                    // notifier.tabIndex = 2;
                                   },
                                   child: Text("hahahahaha")),
                               Container(
@@ -414,44 +412,49 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
     var homneNotifier = context.read<HomeNotifier>();
     if (homneNotifier.preventReloadAfterUploadPost) {
-      if (homneNotifier.uploadedPostType == FeatureType.pic) {
-        // homneNotifier.tabIndex = 0;
-        _tabController.index = 0;
-      } else if (homneNotifier.uploadedPostType == FeatureType.diary) {
-        var diary = context.read<PreviewDiaryNotifier>();
-        // homneNotifier.tabIndex = 1;
-        _tabController.index = 1;
-        if (diary.diaryData == null) {
-          // diary.initialDiary(context, reload: true);
-        }
-      } else if (homneNotifier.uploadedPostType == FeatureType.vid) {
-        var vid = context.read<PreviewVidNotifier>();
-        // homneNotifier.tabIndex = 2;
-        _tabController.index = 2;
+      print("afterrrrrrr preventReloadAfterUploadPost ============");
+      print("afterrrrrrr preventReloadAfterUploadPost ${homneNotifier.uploadedPostType}============");
 
-        if (vid.vidData == null) {
-          // await notifier.initNewHome(context, mounted, isreload: true);
-          // vid.initialVid(context, reload: true);
-        }
-      }
-
+      changeTab(homneNotifier.uploadedPostType);
       homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
       homeClick = true;
       (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
     }
-    _tabController.index = homneNotifier.tabIndex;
-    _tabController.animation?.addListener(() {
-      homneNotifier.tabIndex = _tabController.index;
-      print("masuk tab slide");
-      if (homneNotifier.lastCurIndex != homneNotifier.tabIndex) {
-        homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
-      }
-      homneNotifier.lastCurIndex = homneNotifier.tabIndex;
-    });
-    if (isHomeScreen) {
-      print("isOnHomeScreen hit ads");
-      homneNotifier.getAdsApsara(context, true);
-    }
+    // _tabController.index = homneNotifier.tabIndex;
+    // _tabController.animation?.addListener(() {
+    //   homneNotifier.tabIndex = _tabController.index;
+    //   print("masuk tab slide");
+    //   if (homneNotifier.lastCurIndex != homneNotifier.tabIndex) {
+    //     homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
+    //   }
+    //   homneNotifier.lastCurIndex = homneNotifier.tabIndex;
+    // });
+    // if (isHomeScreen) {
+    //   print("isOnHomeScreen hit ads");
+    //   homneNotifier.getAdsApsara(context, true);
+    // }
     // System().popUpChallange(context);
+  }
+
+  void changeTab(postType) {
+    var homneNotifier = context.read<HomeNotifier>();
+    if (postType == FeatureType.pic) {
+      homneNotifier.tabIndex = 0;
+      _tabController.index = 0;
+    } else if (homneNotifier.uploadedPostType == FeatureType.diary) {
+      setState(() {
+        homneNotifier.tabIndex = 1;
+        _tabController.index = 1;
+      });
+    } else if (postType == FeatureType.vid) {
+      var vid = context.read<PreviewVidNotifier>();
+      homneNotifier.tabIndex = 2;
+      _tabController.index = 2;
+
+      if (vid.vidData == null) {
+        // await notifier.initNewHome(context, mounted, isreload: true);
+        // vid.initialVid(context, reload: true);
+      }
+    }
   }
 }

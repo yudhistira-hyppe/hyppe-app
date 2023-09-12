@@ -32,6 +32,7 @@ class _SettingScreenState extends State<SettingScreen> {
   MainNotifier? mn;
   int indexKey = 0;
   int indexreferral = 0;
+  var myContext;
 
   @override
   void initState() {
@@ -42,7 +43,7 @@ class _SettingScreenState extends State<SettingScreen> {
       indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'transaction') ?? 0;
       indexreferral = mn?.tutorialData.indexWhere((element) => element.key == 'idRefferal') ?? 0;
       if (mn?.tutorialData[indexKey].status == false || mn?.tutorialData[indexreferral].status == false) {
-        WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keyTransaction, keyReferral]));
+        WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(myContext).startShowCase([keyTransaction, keyReferral]));
       }
     }
   }
@@ -63,6 +64,7 @@ class _SettingScreenState extends State<SettingScreen> {
         disableBarrierInteraction: true,
         disableMovingAnimation: true,
         builder: Builder(builder: (context) {
+          myContext = context;
           return Scaffold(
             appBar: AppBar(
               leading: const BackButton(),
