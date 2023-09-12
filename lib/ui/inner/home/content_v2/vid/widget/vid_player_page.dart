@@ -47,7 +47,7 @@ class VidPlayerPage extends StatefulWidget {
   final bool inLanding;
   final bool fromDeeplink;
   final Function functionFullTriger;
-  final Function(FlutterAliplayer)? getPlayer;
+  final Function(FlutterAliplayer, String id)? getPlayer;
   final Function(FlutterAliplayer)? getAdsPlayer;
   final Function(ContentData)? onPlay;
   final Function(AdsData?)? onShowAds;
@@ -230,7 +230,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         if (getPlayers != null) {
           print('Vid Player1: getPlayer ${fAliplayer}');
           if (fAliplayer != null) {
-            getPlayers(fAliplayer!);
+            getPlayers(fAliplayer!, widget.data?.postID ?? '');
           }
         }
 
@@ -1318,7 +1318,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     final getPlayers = widget.getPlayer;
     if (getPlayers != null) {
       if (fAliplayer != null) {
-        getPlayers(fAliplayer!);
+        getPlayers(fAliplayer!, widget.data?.postID ?? '');
       }
     }
     switch (widget.data?.apsara) {

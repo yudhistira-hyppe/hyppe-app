@@ -129,6 +129,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
     lang = context.read<TranslateNotifierV2>().translate;
     mn = Provider.of<MainNotifier>(context, listen: false);
+    notifier.initAdsCounter();
     // notifier.scrollController.addListener(() => notifier.scrollListener(context));
     email = SharedPreference().readStorage(SpKeys.email);
     // statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
@@ -760,28 +761,65 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         picData?.height = size.height;
       },
       child: isAds
-          ? Column(
-              children: [
-                VisibilityDetector(
-                  key: Key(index.toString()),
-                  onVisibilityChanged: (info) async {
-                    if (info.visibleFraction >= 0.6) {
-                      _curIdx = index;
+          ? VisibilityDetector(
+            key: Key(index.toString()),
+            onVisibilityChanged: (info) async {
+              if (info.visibleFraction >= 0.8) {
+                _curIdx = index;
+                _curPostId = picData?.inBetweenAds?.adsId ?? index.toString();
+                if (_lastCurIndex > _curIdx) {
+                  // fAliplayer?.destroy();
+                  double position = 0.0;
+                  for (var i = 0; i < _curIdx; i++) {
+                    position += notifier.pic?[i].height ?? 0.0;
+                    // position = position - (notifier.pic?[_curIdx].height);
+                  }
+                  // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
+                }
+
+                // if (_lastCurIndex != _curIdx) {
+                if (_lastCurPostId != _curPostId) {
+                  if (mounted) {
+                    setState(() {
+                      isShowShowcase = false;
+                    });
+                  }
+                  final indexList = notifier.pic?.indexWhere((element) => element.inBetweenAds?.adsId == _curPostId);
+
+                  if (indexList == (notifier.pic?.length ?? 0) - 1) {
+                    context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
+                  }
+                  fAliplayer?.stop();
+
+                  Future.delayed(const Duration(milliseconds: 500), () {
+                    System().increaseViewCount2(context, picData ?? ContentData(), check: false);
+                    if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
+                      if (mounted) {
+                        setState(() {
+                          isShowShowcase = true;
+                          keyOwnership = picData?.keyGlobal;
+                        });
+                      }
+                      // ShowCaseWidget.of(context).startShowCase([picData?.keyGlobal ?? GlobalKey()]);
                     }
-                  },
-                  child: context.getAdsInBetween(notifier.pic?[index].inBetweenAds, (info) {
-                    if (info.visibleFraction >= 0.9) {
-                      fAliplayer?.destroy();
-                      fAliplayer?.stop();
-                      fAliplayer?.clearScreen();
-                      dataSelected = picData;
-                    }
-                  }, () {
-                    notifier.setAdsData(index, null);
-                  }),
-                ),
-              ],
-            )
+                  });
+                  setState(() {
+                    Future.delayed(Duration(milliseconds: 400), () {
+                      itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
+                    });
+                  });
+                }
+                _lastCurIndex = _curIdx;
+                _lastCurPostId = _curPostId;
+              }
+            },
+            child: context.getAdsInBetween(notifier.pic?[index].inBetweenAds, (info) {
+
+            }, () {
+              notifier.setAdsData(index, null);
+            },(player, id){
+            }),
+          )
           : Column(
               children: [
                 Container(
@@ -984,20 +1022,16 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               //     notifier.getTemp(indexList, latIndexList, indexList);
                               //   }
                               // });
-                            }else{
-                              final totalWithAds = notifier.pic?.where((element) => element.inBetweenAds != null).length;
-                              final adsIndex = index + 1 + (totalWithAds ?? 0);
-                              if (adsIndex % 5 == 0) {
-                                context.getInBetweenAds().then((value){
-                                  if((index + 1 + (totalWithAds ?? 0)) % 5 == 0 ){
-                                    if (value != null) {
-                                      notifier.setAdsData(index, value);
-                                    }
-                                  }
-                                });
-
-                              }
                             }
+
+                            if((notifier.pic?.length ?? 0) > notifier.nextAdsShowed){
+                              context.getInBetweenAds().then((value){
+                                if (value != null) {
+                                  notifier.setAdsData(index, value);
+                                }
+                              });
+                            }
+
                             _lastCurIndex = _curIdx;
                             _lastCurPostId = _curPostId;
                           }

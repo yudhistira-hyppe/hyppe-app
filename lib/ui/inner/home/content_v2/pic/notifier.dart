@@ -158,17 +158,34 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
+  int _nextAdsShowed = 6;
+  int get nextAdsShowed => _nextAdsShowed;
+  set nextAdsShowed(int state){
+    _nextAdsShowed = state;
+    notifyListeners();
+  }
+
+  initAdsCounter(){
+    _nextAdsShowed = 6;
+  }
+
   void setAdsData(int index, AdsData? adsData){
+    final withAds = pic?.where((element) => element.inBetweenAds != null).length ?? 0;
+    final adsSize = pic?.length ?? 0;
     if(adsData != null){
-      if(pic?[index + 1].inBetweenAds == null){
-        pic?.insert(index + 1, ContentData(inBetweenAds: adsData));
-        notifyListeners();
+      if(adsSize > nextAdsShowed){
+        if(pic?[nextAdsShowed].inBetweenAds == null){
+          pic?.insert(nextAdsShowed, ContentData(inBetweenAds: adsData));
+          _nextAdsShowed = _nextAdsShowed + 6 + withAds;
+          notifyListeners();
+        }
       }
     }else{
       pic?.removeAt(index);
       notifyListeners();
     }
   }
+
 
   void scrollListener(BuildContext context) {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !contentsQuery.loading && hasNext) {

@@ -372,7 +372,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                     }
                     // _lastCurIndex = _curIdx;
                   },
-                  getPlayer: (main) {
+                  getPlayer: (main, id) {
                     print('Vid Player1: screen ${main}');
                     // notifier.setAliPlayer(index, main);
                     setState(() {

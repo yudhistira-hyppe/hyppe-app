@@ -469,7 +469,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                         },
                                         isPlaying: !isPause,
                                         onPlay: (exec) {},
-                                        getPlayer: (main) {},
+                                        getPlayer: (main, id) {},
                                         getAdsPlayer: (ads) {
                                           // notifier.vidData?[index].fAliplayerAds = ads;
                                         },

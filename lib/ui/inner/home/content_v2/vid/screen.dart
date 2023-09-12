@@ -81,7 +81,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   String _lastCurPostId = '';
   double lastOffset = 0;
 
-  Map<int, FlutterAliplayer> dataAli = {};
+  Map<String, FlutterAliplayer> dataAli = {};
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController = ScrollOffsetController();
 
@@ -96,6 +96,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     final notifier = Provider.of<PreviewVidNotifier>(context, listen: false);
     // notifier.initialVid(context, reload: true);
     notifier.pageController.addListener(() => notifier.scrollListener(context));
+    notifier.initAdsCounter();
     lang = context.read<TranslateNotifierV2>().translate;
     lastOffset = -10;
     WidgetsBinding.instance.addObserver(this);
@@ -429,23 +430,47 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
           ? VisibilityDetector(
               key: Key(vidData.postID ?? index.toString()),
               onVisibilityChanged: (info) async {
-                if (info.visibleFraction >= 1) {
+                if (info.visibleFraction >= 0.8) {
                   _curIdx = index;
-                }
-              },
-              child: context.getAdsInBetween(vidData.inBetweenAds, (info) {
-                if (info.visibleFraction >= 0.9) {
-                  if (notifier.vidData?[_curIdx].fAliplayer != null) {
-                    notifier.vidData?[_curIdx].fAliplayer?.pause();
-                  } else {
-                    dataAli[_curIdx]?.pause();
-                  }
+                  _curPostId = vidData.inBetweenAds?.adsId ?? index.toString();
+
                   final ads = context.read<VideoNotifier>();
                   ads.adsAliplayer?.pause();
                   dataSelected = notifier.vidData?[index];
+                  if (_lastCurPostId != _curPostId){
+                    if (notifier.vidData?[_curIdx].fAliplayer != null) {
+                      notifier.vidData?[_curIdx].fAliplayer?.pause();
+                    } else {
+                      dataAli[notifier.vidData?[_curIdx].postID]?.pause();
+                    }
+                  }
+                  try {
+                    Future.delayed(const Duration(milliseconds: 400), () {
+                      if (mounted) {
+                        setState(() {
+                          postIdVisibility = notifier.vidData?[_curIdx].inBetweenAds?.adsId ?? '';
+                          postIdVisibilityTemp = notifier.vidData?[_curIdx].inBetweenAds?.adsId ?? '';
+                        });
+                      } else {
+                        postIdVisibility = notifier.vidData?[_curIdx].inBetweenAds?.adsId ?? '';
+                        postIdVisibilityTemp = notifier.vidData?[_curIdx].inBetweenAds?.adsId ?? '';
+                      }
+                    });
+                  } catch (e) {
+                    print("hahahha $e");
+                  }
+                  _lastCurIndex = _curIdx;
+                  _lastCurPostId = _curPostId;
                 }
+              },
+              child: context.getAdsInBetween(vidData.inBetweenAds, (info) {
+
               }, () {
                 notifier.setInBetweenAds(index, null);
+              }, (player, id){
+                setState(() {
+                  dataAli[id] = player;
+                });
               }),
             )
           : Column(
@@ -453,13 +478,18 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                 // Text("total ${vidData.height}"),
                 VisibilityDetector(
                   key: Key(vidData.postID ?? index.toString()),
-                  onVisibilityChanged: (info) async {
+                  onVisibilityChanged: (info) {
                     if (info.visibleFraction >= 1) {
                       print(index);
                       _curIdx = index;
                       print(_curIdx);
                     }
                     if (info.visibleFraction >= 0.8) {
+                      if((notifier.vidData?.length ?? 0) > notifier.nextAdsShowed){
+                        context.getInBetweenAds().then((value){
+                          notifier.setInBetweenAds(index, value);
+                        });
+                      }
                       adsGlobalAliPlayer?.pause();
                       _curIdx = index;
                       _curPostId = vidData.postID ?? index.toString();
@@ -467,13 +497,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                       final indexList = notifier.vidData?.indexWhere((element) => element.postID == _curPostId);
                       final latIndexList = notifier.vidData?.indexWhere((element) => element.postID == _lastCurPostId);
 
-                      final totalWithAds = notifier.vidData?.where((element) => element.inBetweenAds != null).length;
 
-                      final adsIndex = index + 1 + (totalWithAds ?? 0);
-                      if (adsIndex % 5 == 0) {
-                        final adsData = await context.getInBetweenAds();
-                        notifier.setInBetweenAds(index, adsData);
-                      }
 
                       if (_lastCurPostId != _curPostId) {
                         Future.delayed(const Duration(milliseconds: 400), () {
@@ -484,7 +508,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                 // notifier.vidData?[_curIdx].fAliplayer?.pause();
                               } else {
                                 "=============== pause 10".logger();
-                                dataAli[_curIdx]?.pause();
+                                dataAli[notifier.vidData?[_curIdx].postID]?.pause();
                               }
 
                               // Wakelock.disable();
@@ -765,11 +789,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                           try {
                                             if (_curIdx != -1) {
                                               if (_curIdx != index) {
-                                                print('Vid Landing Page: stop $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                                                print('Vid Landing Page: stop $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[notifier.vidData?[_curIdx].postID]}');
                                                 if (notifier.vidData?[_curIdx].fAliplayer != null) {
                                                   notifier.vidData?[_curIdx].fAliplayer?.stop();
                                                 } else {
-                                                  final player = dataAli[_curIdx];
+                                                  final player = dataAli[notifier.vidData?[_curIdx].postID];
                                                   if (player != null) {
                                                     // notifier.vidData?[_curIdx].fAliplayer = player;
                                                     player.stop();
@@ -787,11 +811,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                           }
                                           _lastCurIndex = _curIdx;
                                         },
-                                        getPlayer: (main) {
+                                        getPlayer: (main, id) {
                                           print('Vid Player1: screen ${main}');
                                           notifier.setAliPlayer(index, main);
                                           setState(() {
-                                            dataAli[index] = main;
+                                            dataAli[id] = main;
                                           });
                                           print('Vid Player1: after $index ${globalAliPlayer} : ${vidData.fAliplayer}');
                                         },

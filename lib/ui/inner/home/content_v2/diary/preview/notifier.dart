@@ -91,11 +91,27 @@ class PreviewDiaryNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  int _nextAdsShowed = 6;
+  int get nextAdsShowed => _nextAdsShowed;
+  set nextAdsShowed(int state){
+    _nextAdsShowed = state;
+    notifyListeners();
+  }
+
+  initAdsCounter(){
+    _nextAdsShowed = 6;
+  }
+
   void setAdsData(int index, AdsData? adsData){
+    final withAds = diaryData?.where((element) => element.inBetweenAds != null).length ?? 0;
+    final adsSize = diaryData?.length ?? 0;
     if(adsData != null){
-      if(diaryData?[index + 1].inBetweenAds == null){
-        diaryData?.insert(index + 1, ContentData(inBetweenAds: adsData));
-        notifyListeners();
+      if(adsSize > nextAdsShowed){
+        if(diaryData?[nextAdsShowed].inBetweenAds == null){
+          diaryData?.insert(nextAdsShowed, ContentData(inBetweenAds: adsData));
+          _nextAdsShowed = _nextAdsShowed + 6 + withAds;
+          notifyListeners();
+        }
       }
     }else{
       diaryData?.removeAt(index);

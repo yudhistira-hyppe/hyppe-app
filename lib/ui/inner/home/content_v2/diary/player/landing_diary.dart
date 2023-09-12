@@ -103,6 +103,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     "++++++++++++++ initState".logger();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'LandingDiaryPage');
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+
+    notifier.initAdsCounter();
     lang = context.read<TranslateNotifierV2>().translate;
     notifier.scrollController.addListener(() => notifier.scrollListener(context));
     email = SharedPreference().readStorage(SpKeys.email);
@@ -789,21 +791,54 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         children: [
           isAds
               ? VisibilityDetector(
-                  key: Key(data?.postID ?? index.toString()),
+                  key: Key(data?.inBetweenAds?.adsId ?? index.toString()),
                   onVisibilityChanged: (info) {
-                    if (info.visibleFraction >= 0.6) {
+                    if (info.visibleFraction >= 0.8) {
+                      adsGlobalAliPlayer?.pause();
+                      context.read<VideoNotifier>().currentPostID = data?.inBetweenAds?.adsId ?? '';
                       _curIdx = index;
+
+                      _curPostId = data?.inBetweenAds?.adsId ?? index.toString();
+                      // if (_lastCurIndex != _curIdx) {
+                      final indexList = notifier.diaryData?.indexWhere((element) => element.inBetweenAds?.adsId == _curPostId);
+                      final latIndexList = notifier.diaryData?.indexWhere((element) => element.inBetweenAds?.adsId == _lastCurPostId);
+                      if (_lastCurPostId != _curPostId) {
+                        fAliplayer?.destroy();
+                        fAliplayer?.stop();
+                        fAliplayer?.clearScreen();
+                        // Wakelock.disable();
+                        initAlipayer();
+
+                        if (mounted) {
+                          setState(() {
+                            Future.delayed(Duration(milliseconds: 400), () {
+                              itemHeight = notifier.diaryData?[indexList ?? 0].height ?? 0;
+                            });
+                          });
+                        }
+
+                        if (indexList == (notifier.diaryData?.length ?? 0) - 1) {
+                          Future.delayed(const Duration(milliseconds: 1000), () async {
+                            await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+                              // notifier.getTemp(indexList, latIndexList, indexList);
+                            });
+                          });
+                        } else {
+                          Future.delayed(const Duration(milliseconds: 2000), () {
+                            // notifier.getTemp(indexList, latIndexList, indexList);
+                          });
+                        }
+                      }
+
+
+                      _lastCurIndex = _curIdx;
+                      _lastCurPostId = _curPostId;
                     }
                   },
                   child: context.getAdsInBetween(notifier.diaryData?[index].inBetweenAds, (info) {
-                    if (info.visibleFraction >= 0.9) {
-                      fAliplayer?.destroy();
-                      fAliplayer?.stop();
-                      fAliplayer?.clearScreen();
-                      dataSelected = data;
-                    }
                   }, () {
                     notifier.setAdsData(index, null);
+                  }, (player, id){
                   }),
                 )
               : Column(
@@ -912,7 +947,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           VisibilityDetector(
                             // key: Key(index.toString()),
                             key: Key(data?.postID ?? index.toString()),
-                            onVisibilityChanged: (info) async {
+                            onVisibilityChanged: (info) {
                               // if (info.visibleFraction == 1.0) {
                               //   Wakelock.enable();
                               // }
@@ -941,13 +976,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                   }
                                   final totalWithAds = notifier.diaryData?.where((element) => element.inBetweenAds != null).length;
 
-                                  final adsIndex = index + 1 + (totalWithAds ?? 0);
-                                  if (adsIndex % 5 == 0) {
-                                    final adsData = await context.getInBetweenAds();
-                                    if (adsData != null) {
-                                      notifier.setAdsData(index, adsData);
-                                    }
-                                  }
+
                                   Future.delayed(const Duration(milliseconds: 700), () {
                                     start(Routing.navigatorKey.currentContext ?? context, data ?? ContentData());
                                     System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, data ?? ContentData(), check: false);
@@ -970,6 +999,16 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     });
                                   }
                                 }
+
+                                if((notifier.diaryData?.length ?? 0) > notifier.nextAdsShowed){
+                                  context.getInBetweenAds().then((value){
+                                    if (value != null) {
+                                      notifier.setAdsData(index, value);
+                                    }
+                                  });
+                                }
+
+
                                 _lastCurIndex = _curIdx;
                                 _lastCurPostId = _curPostId;
                               }

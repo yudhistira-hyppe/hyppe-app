@@ -569,7 +569,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           }
                           // _lastCurIndex = _curIdx;
                         },
-                        getPlayer: (main) {
+                        getPlayer: (main, id) {
                           print('Vid Player1: screen ${main}');
                           // notifier.setAliPlayer(index, main);
                           setState(() {
