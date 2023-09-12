@@ -599,42 +599,42 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        !_showLoading
-            ? ClipRRect(
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                child: AliPlayerView(
-                  onCreated: onViewPlayerCreated,
-                  x: 0,
-                  y: 0,
-                  height: MediaQuery.of(context).size.width * widget.ratio,
-                  width: MediaQuery.of(context).size.width,
-                  aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
-                ),
-              )
-            : Positioned.fill(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(
-                        backgroundColor: Colors.white,
-                        strokeWidth: 3.0,
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Text(
-                        "$_loadingPercent%",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
+        ClipRRect(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+          child: AliPlayerView(
+            onCreated: onViewPlayerCreated,
+            x: 0,
+            y: 0,
+            height: MediaQuery.of(context).size.width * widget.ratio,
+            width: MediaQuery.of(context).size.width,
+            aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
+          ),
+        ),
+        if(_showLoading)
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    backgroundColor: Colors.white,
+                    strokeWidth: 3.0,
                   ),
-                ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Text(
+                    "$_loadingPercent%",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
               ),
+            ),
+          ),
         Positioned(
           top: 12,
           right: 12,

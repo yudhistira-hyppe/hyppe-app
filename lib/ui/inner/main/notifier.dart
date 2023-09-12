@@ -182,7 +182,7 @@ class MainNotifier with ChangeNotifier {
     if (isNewUser == "TRUE") {
       pages.add(TutorLandingScreen(keyButton: keyPostButton, canShowAds: false));
     } else {
-      pages.add(HomeScreen(keyButton: keyPostButton, canShowAds: canShowAds));
+      pages.add(HomeScreen(canShowAds: canShowAds));
     }
     pages.add(SearchScreen());
     pages.add(NotificationScreen());

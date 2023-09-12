@@ -92,173 +92,186 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             notifier.onWillPop(context);
             return Future.value(true);
           },
-          child: Scaffold(
-            resizeToAvoidBottomInset: true,
-            appBar: AppBar(
-              elevation: 0,
-              centerTitle: false,
-              leading: CustomIconButtonWidget(
-                onPressed: () => notifier.onWillPop(context),
-                defaultColor: false,
-                iconData: "${AssetPath.vectorPath}back-arrow.svg",
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-              title: CustomTextWidget(
-                textToDisplay: widget.arguments.onEdit ? "${notifier.language.edit} ${notifier.language.post}" : notifier.language.newPost ?? '',
-                textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              backgroundColor: Colors.transparent,
-            ),
-            body: SingleChildScrollView(
-              controller: controller,
-              child: Container(
-                // width: SizeConfig.screenWidth,
-                // height: SizeConfig.screenHeight,
+          child: ShowCaseWidget(
+            onStart: (index, key) {
+              print('onStart: $index, $key');
+            },
+            onComplete: (index, key) {
+              print('onComplete: $index, $key');
+            },
+            blurValue: 0,
+            disableBarrierInteraction: true,
+            disableMovingAnimation: true,
+            builder: Builder(builder: (context) {
+              return Scaffold(
+                resizeToAvoidBottomInset: true,
+                appBar: AppBar(
+                  elevation: 0,
+                  centerTitle: false,
+                  leading: CustomIconButtonWidget(
+                    onPressed: () => notifier.onWillPop(context),
+                    defaultColor: false,
+                    iconData: "${AssetPath.vectorPath}back-arrow.svg",
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                  title: CustomTextWidget(
+                    textToDisplay: widget.arguments.onEdit ? "${notifier.language.edit} ${notifier.language.post}" : notifier.language.newPost ?? '',
+                    textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  backgroundColor: Colors.transparent,
+                ),
+                body: SingleChildScrollView(
+                  controller: controller,
+                  child: Container(
+                    // width: SizeConfig.screenWidth,
+                    // height: SizeConfig.screenHeight,
 
-                padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-                child: Stack(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                    child: Stack(
                       children: [
-                        // Text('${widget.arguments.content}'),
-                        // loadingCompress(notifier.progressCompress),
-                        // Text("${notifier.progressCompress}"),
-                        // Text("${notifier.videoSize / 1000000} mb"),
-                        captionWidget(textTheme, notifier),
-                        sixteenPx,
-                        _buildDivider(context),
-                        twentyFourPx,
-                        categoryWidget(textTheme, notifier),
-                        _buildDivider(context),
-                        eightPx,
-                        tagPeopleWidget(textTheme, notifier),
-                        _buildDivider(context),
-                        musicTitle(context, notifier),
-                        tagLocationWidget(textTheme, notifier),
-                        _buildDivider(context),
-                        eightPx,
-                        privacyWidget(textTheme, notifier),
-                        _buildDivider(context),
-                        eightPx,
-                        notifier.featureType != FeatureType.story ? ownershipSellingWidget(textTheme, notifier) : const SizedBox(),
-                        notifier.certified ? detailTotalPrice(notifier) : Container(),
-                        SizedBox(height: 20 * SizeConfig.scaleDiagonal),
-                        widget.arguments.onEdit &&
-                                widget.arguments.contentData?.reportedStatus != "OWNED" &&
-                                widget.arguments.contentData?.reportedStatus2 != "BLURRED" &&
-                                statusKyc == VERIFIED &&
-                                notifier.featureType != FeatureType.story
-                            ? boostWidget(textTheme, notifier)
-                            : Container(),
-                        notifier.boostContent != null ? detailBoostContent(notifier) : Container(),
-                        twentyFourPx,
-                        twentyFourPx,
-                        twentyFourPx,
-                        twentyFourPx,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Text('${widget.arguments.content}'),
+                            // loadingCompress(notifier.progressCompress),
+                            // Text("${notifier.progressCompress}"),
+                            // Text("${notifier.videoSize / 1000000} mb"),
+                            captionWidget(textTheme, notifier),
+                            sixteenPx,
+                            _buildDivider(context),
+                            twentyFourPx,
+                            categoryWidget(textTheme, notifier),
+                            _buildDivider(context),
+                            eightPx,
+                            tagPeopleWidget(textTheme, notifier),
+                            _buildDivider(context),
+                            musicTitle(context, notifier),
+                            tagLocationWidget(textTheme, notifier),
+                            _buildDivider(context),
+                            eightPx,
+                            privacyWidget(textTheme, notifier),
+                            _buildDivider(context),
+                            eightPx,
+                            notifier.featureType != FeatureType.story ? ownershipSellingWidget(textTheme, notifier) : const SizedBox(),
+                            notifier.certified ? detailTotalPrice(notifier) : Container(),
+                            SizedBox(height: 20 * SizeConfig.scaleDiagonal),
+                            widget.arguments.onEdit &&
+                                    widget.arguments.contentData?.reportedStatus != "OWNED" &&
+                                    widget.arguments.contentData?.reportedStatus2 != "BLURRED" &&
+                                    statusKyc == VERIFIED &&
+                                    notifier.featureType != FeatureType.story
+                                ? boostWidget(textTheme, notifier)
+                                : Container(),
+                            notifier.boostContent != null ? detailBoostContent(notifier) : Container(),
+                            twentyFourPx,
+                            twentyFourPx,
+                            twentyFourPx,
+                            twentyFourPx,
+                          ],
+                        ),
+                        const AutoCompleteUserTag(),
                       ],
                     ),
-                    const AutoCompleteUserTag(),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            backgroundColor: Theme.of(context).backgroundColor,
-            bottomSheet: Visibility(
-              visible: !keyboardIsOpen,
-              child: notifier.boostContent != null
-                  ? Container(
-                      color: Theme.of(context).colorScheme.background,
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                backgroundColor: Theme.of(context).backgroundColor,
+                bottomSheet: Visibility(
+                  visible: !keyboardIsOpen,
+                  child: notifier.boostContent != null
+                      ? Container(
+                          color: Theme.of(context).colorScheme.background,
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(notifier.language.total ?? ''),
-                              Text(
-                                System().currencyFormat(amount: notifier.boostContent?.priceTotal ?? 0),
-                                style: Theme.of(context).primaryTextTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
-                              )
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(notifier.language.total ?? ''),
+                                  Text(
+                                    System().currencyFormat(amount: notifier.boostContent?.priceTotal ?? 0),
+                                    style: Theme.of(context).primaryTextTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                              twentyFourPx,
+                              CustomElevatedButton(
+                                function: () {
+                                  print('asdasd');
+                                  notifier.paymentMethod(context);
+                                },
+                                width: 375.0 * SizeConfig.scaleDiagonal,
+                                height: 44.0 * SizeConfig.scaleDiagonal,
+                                buttonStyle: ButtonStyle(
+                                  foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                ),
+                                child: CustomTextWidget(
+                                  textToDisplay: notifier.language.choosePaymentMethods ?? 'Choose Payment Method',
+                                  textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                                ),
+                              ),
                             ],
                           ),
-                          twentyFourPx,
-                          CustomElevatedButton(
-                            function: () {
-                              print('asdasd');
-                              notifier.paymentMethod(context);
-                            },
-                            width: 375.0 * SizeConfig.scaleDiagonal,
-                            height: 44.0 * SizeConfig.scaleDiagonal,
-                            buttonStyle: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                              shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                              overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                            ),
-                            child: CustomTextWidget(
-                              textToDisplay: notifier.language.choosePaymentMethods ?? 'Choose Payment Method',
-                              textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                            ),
+                        )
+                      : Material(
+                          color: Theme.of(context).colorScheme.background,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                            child: CustomElevatedButton(
+                                width: SizeConfig.screenWidth,
+                                height: 44.0 * SizeConfig.scaleDiagonal,
+                                function: () {
+                                  if (!notifier.updateContent && !prev.isLoadVideo) {
+                                    if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
+                                      notifier.onClickPost(
+                                        context,
+                                        mounted,
+                                        onEdit: widget.arguments.onEdit,
+                                        data: widget.arguments.contentData,
+                                        content: widget.arguments.content,
+                                      );
+                                    } else {
+                                      !notifier.certified
+                                          ? notifier.onShowStatement(context, onCancel: () {
+                                              notifier.onClickPost(
+                                                context,
+                                                mounted,
+                                                onEdit: widget.arguments.onEdit,
+                                                data: widget.arguments.contentData,
+                                                content: widget.arguments.content,
+                                              );
+                                            })
+                                          : notifier.onClickPost(
+                                              context,
+                                              mounted,
+                                              onEdit: widget.arguments.onEdit,
+                                              data: widget.arguments.contentData,
+                                              content: widget.arguments.content,
+                                            );
+                                    }
+                                  }
+                                },
+                                buttonStyle: ButtonStyle(
+                                  foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                ),
+                                child: ((widget.arguments.onEdit && notifier.updateContent) || prev.isLoadVideo)
+                                    ? const CustomLoading()
+                                    : CustomTextWidget(
+                                        textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
+                                        textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                                      )),
                           ),
-                        ],
-                      ),
-                    )
-                  : Material(
-                      color: Theme.of(context).colorScheme.background,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-                        child: CustomElevatedButton(
-                            width: SizeConfig.screenWidth,
-                            height: 44.0 * SizeConfig.scaleDiagonal,
-                            function: () {
-                              if (!notifier.updateContent && !prev.isLoadVideo) {
-                                if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
-                                  notifier.onClickPost(
-                                    context,
-                                    mounted,
-                                    onEdit: widget.arguments.onEdit,
-                                    data: widget.arguments.contentData,
-                                    content: widget.arguments.content,
-                                  );
-                                } else {
-                                  !notifier.certified
-                                      ? notifier.onShowStatement(context, onCancel: () {
-                                          notifier.onClickPost(
-                                            context,
-                                            mounted,
-                                            onEdit: widget.arguments.onEdit,
-                                            data: widget.arguments.contentData,
-                                            content: widget.arguments.content,
-                                          );
-                                        })
-                                      : notifier.onClickPost(
-                                          context,
-                                          mounted,
-                                          onEdit: widget.arguments.onEdit,
-                                          data: widget.arguments.contentData,
-                                          content: widget.arguments.content,
-                                        );
-                                }
-                              }
-                            },
-                            buttonStyle: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                              shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                              overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                            ),
-                            child: ((widget.arguments.onEdit && notifier.updateContent) || prev.isLoadVideo)
-                                ? const CustomLoading()
-                                : CustomTextWidget(
-                                    textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
-                                    textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                                  )),
-                      ),
-                    ),
-            ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+                        ),
+                ),
+                floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+              );
+            }),
           ),
         ),
       ),

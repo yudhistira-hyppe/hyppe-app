@@ -150,7 +150,6 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                 child: AbsorbPointer(
                   absorbing: isZoom,
                   child: NestedScrollView(
-                    key: context.read<MainNotifier>().globalKey,
                     controller: context.read<MainNotifier>().scrollController,
                     // physics: const NeverScrollableScrollPhysics(),
                     // dragStartBehavior: DragStartBehavior.start,

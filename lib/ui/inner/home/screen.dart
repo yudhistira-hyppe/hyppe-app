@@ -48,8 +48,8 @@ import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool canShowAds;
-  final GlobalKey keyButton;
-  const HomeScreen({Key? key, required this.keyButton, required this.canShowAds}) : super(key: key);
+
+  const HomeScreen({Key? key, required this.canShowAds}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -300,15 +300,18 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                           sliver: SliverList(
                             delegate: SliverChildListDelegate([
                               const ProcessUploadComponent(),
-
                               sixPx,
                               const HyppePreviewStories(),
                               sixPx,
-                              // GestureDetector(
-                              //     onTap: () {
-                              //       _showMessage("hahaha");
-                              //     },
-                              //     child: Text("hahahahaha")),
+                              GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _tabController.index = 2;
+                                    });
+
+                                    // notifier.tabIndex = 2;
+                                  },
+                                  child: Text("hahahahaha")),
                               Container(
                                 padding: const EdgeInsets.all(16),
                                 color: kHyppeLightSurface,
@@ -412,21 +415,26 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     var homneNotifier = context.read<HomeNotifier>();
     if (homneNotifier.preventReloadAfterUploadPost) {
       if (homneNotifier.uploadedPostType == FeatureType.pic) {
-        homneNotifier.tabIndex = 0;
+        // homneNotifier.tabIndex = 0;
+        _tabController.index = 0;
       } else if (homneNotifier.uploadedPostType == FeatureType.diary) {
         var diary = context.read<PreviewDiaryNotifier>();
-        homneNotifier.tabIndex = 1;
+        // homneNotifier.tabIndex = 1;
+        _tabController.index = 1;
         if (diary.diaryData == null) {
           // diary.initialDiary(context, reload: true);
         }
       } else if (homneNotifier.uploadedPostType == FeatureType.vid) {
         var vid = context.read<PreviewVidNotifier>();
-        homneNotifier.tabIndex = 2;
+        // homneNotifier.tabIndex = 2;
+        _tabController.index = 2;
+
         if (vid.vidData == null) {
           // await notifier.initNewHome(context, mounted, isreload: true);
           // vid.initialVid(context, reload: true);
         }
       }
+
       homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
       homeClick = true;
       (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);

@@ -55,6 +55,7 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:story_view/story_view.dart';
 import 'bottom_sheet_content/on_show_success_ownership_content.dart';
 import 'bottom_sheet_content/on_sign_out.dart';
@@ -118,11 +119,24 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnUploadContentBottomSheet(
-              isDiary: isDiary,
-              isPict: isPict,
-              isStory: isStory,
-              isVid: isVid,
+            child: ShowCaseWidget(
+              onStart: (index, key) {
+                print('onStart: $index, $key');
+              },
+              onComplete: (index, key) {
+                print('onComplete: $index, $key');
+              },
+              blurValue: 0,
+              disableBarrierInteraction: true,
+              disableMovingAnimation: true,
+              builder: Builder(builder: (context) {
+                return OnUploadContentBottomSheet(
+                  isDiary: isDiary,
+                  isPict: isPict,
+                  isStory: isStory,
+                  isVid: isVid,
+                );
+              }),
             ),
           ),
         );
@@ -765,7 +779,7 @@ class ShowBottomSheet {
               adsData: adsData,
               inDetail: inDetail,
               keyInt: key,
-              onCompleted: onCompleted ?? (){},
+              onCompleted: onCompleted ?? () {},
             ),
           ),
         );

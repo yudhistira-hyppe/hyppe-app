@@ -207,7 +207,7 @@ class ContentData {
   String? valueCache;
 
   List<Tutorial>? tutorial;
-  GlobalKey? keyGlobal;
+  // GlobalKey? keyGlobal;
 
   ContentData({
     this.metadata,
@@ -276,7 +276,7 @@ class ContentData {
     this.imageHeightTemp2,
     this.valueCache,
     this.tutorial,
-    this.keyGlobal,
+    // this.keyGlobal,
     this.inBetweenAds,
   });
 
@@ -390,7 +390,7 @@ class ContentData {
         tutorial!.add(Tutorial.fromJson(v));
       });
     }
-    keyGlobal = GlobalKey();
+    // keyGlobal = GlobalKey();
   }
 
   Map<String, dynamic> toJson() {

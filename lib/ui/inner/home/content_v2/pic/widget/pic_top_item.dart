@@ -46,35 +46,35 @@ class _PicTopItemState extends State<PicTopItem> {
   }
 
   void show() {
-    ShowCaseWidget.of(context).startShowCase([widget.data?.keyGlobal ?? GlobalKey()]);
+    // ShowCaseWidget.of(context).startShowCase([widget.data?.keyGlobal ?? GlobalKey()]);
   }
 
   @override
-  void didUpdateWidget(covariant PicTopItem oldWidget) {
-    super.didUpdateWidget(oldWidget);
+  // void didUpdateWidget(covariant PicTopItem oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
 
-    if (widget.isShow == true) {
-      Future.delayed(const Duration(milliseconds: 200), () {
-        GlobalKey key = widget.globalKey ?? GlobalKey();
-        if ((widget.data?.saleAmount ?? 0) > 0 && mn?.tutorialData[indexKeySell].status == false) {
-          if (key == widget.data?.keyGlobal) {
-            if (widget.data?.fAliplayer != null) {
-              widget.data?.fAliplayer?.pause();
-            }
-            ShowCaseWidget.of(context).startShowCase([widget.data?.keyGlobal ?? GlobalKey()]);
-          }
-        }
-        if (((widget.data?.certified ?? false) && (widget.data?.saleAmount ?? 0) == 0) && mn?.tutorialData[indexKeyProtection].status == false) {
-          if (key == widget.data?.keyGlobal) {
-            if (widget.data?.fAliplayer != null) {
-              widget.data?.fAliplayer?.pause();
-            }
-            ShowCaseWidget.of(context).startShowCase([widget.data?.keyGlobal ?? GlobalKey()]);
-          }
-        }
-      });
-    }
-  }
+  //   if (widget.isShow == true) {
+  //     Future.delayed(const Duration(milliseconds: 200), () {
+  //       GlobalKey key = widget.globalKey ?? GlobalKey();
+  //       if ((widget.data?.saleAmount ?? 0) > 0 && mn?.tutorialData[indexKeySell].status == false) {
+  //         if (key == widget.data?.keyGlobal) {
+  //           if (widget.data?.fAliplayer != null) {
+  //             widget.data?.fAliplayer?.pause();
+  //           }
+  //           ShowCaseWidget.of(context).startShowCase([widget.data?.keyGlobal ?? GlobalKey()]);
+  //         }
+  //       }
+  //       if (((widget.data?.certified ?? false) && (widget.data?.saleAmount ?? 0) == 0) && mn?.tutorialData[indexKeyProtection].status == false) {
+  //         if (key == widget.data?.keyGlobal) {
+  //           if (widget.data?.fAliplayer != null) {
+  //             widget.data?.fAliplayer?.pause();
+  //           }
+  //           ShowCaseWidget.of(context).startShowCase([widget.data?.keyGlobal ?? GlobalKey()]);
+  //         }
+  //       }
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +85,7 @@ class _PicTopItemState extends State<PicTopItem> {
       children: [
         if ((widget.data?.saleAmount ?? 0) > 0)
           Showcase(
-            key: widget.data?.keyGlobal ?? GlobalKey(),
+            key: GlobalKey(),
             tooltipBackgroundColor: kHyppeTextLightPrimary,
             overlayOpacity: 0,
             targetPadding: const EdgeInsets.all(0),
@@ -129,7 +129,7 @@ class _PicTopItemState extends State<PicTopItem> {
           ),
         if ((widget.data?.certified ?? false) && (widget.data?.saleAmount ?? 0) == 0)
           Showcase(
-            key: widget.data?.keyGlobal ?? GlobalKey(),
+            key: GlobalKey(),
             tooltipBackgroundColor: kHyppeTextLightPrimary,
             overlayOpacity: 0,
             targetPadding: const EdgeInsets.all(0),

@@ -140,12 +140,15 @@ class NotificationService {
           "array yg di dapat $index1".logger();
           notifier.onClickUser(materialAppKey.currentContext!, result[index1]);
         } else if(map['url'] != null){
-          page = 3;
-          Routing().moveAndRemoveUntil(
-              Routes.lobby,
-              Routes.lobby,
-              argument: MainArgument(canShowAds: false, page: 3));
+          if(isFromSplash){
+            page = 3;
+          }else{
+            Routing().moveAndRemoveUntil(
+                Routes.lobby,
+                Routes.lobby,
+                argument: MainArgument(canShowAds: false, page: 3));
 
+          }
         }else {
           throw 'Not recognize the type of the object of the notification ';
         }

@@ -52,26 +52,7 @@ class _HyppeState extends State<Hyppe> {
               scaffoldMessengerKey: Routing.scaffoldMessengerKey,
               builder: (context, child) => MediaQuery(
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: ShowCaseWidget(
-                  onStart: (index, key) {
-                    print('onStart: $index, $key');
-                  },
-                  onComplete: (index, key) {
-                    print('onComplete: $index, $key');
-                    // if (index == 4) {
-                    //   SystemChrome.setSystemUIOverlayStyle(
-                    //     SystemUiOverlayStyle.light.copyWith(
-                    //       statusBarIconBrightness: Brightness.dark,
-                    //       statusBarColor: Colors.white,
-                    //     ),
-                    //   );
-                    // }
-                  },
-                  blurValue: 0,
-                  disableBarrierInteraction: true,
-                  disableMovingAnimation: true,
-                  builder: Builder(builder: (context) => child ?? Container()),
-                ),
+                child: child ?? Container(),
               ),
             );
           },

@@ -910,7 +910,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                       VisibilityDetector(
                         key: Key(index.toString()),
                         // key: Key(picData?.postID ?? index.toString()),
-                        onVisibilityChanged: (info) async {
+                        onVisibilityChanged: (info) {
                           if (info.visibleFraction == 1) {
                             adsGlobalAliPlayer?.pause();
                           }
@@ -948,22 +948,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               } else {
                                 fAliplayer?.stop();
                               }
-                              final totalWithAds = notifier.pic?.where((element) => element.inBetweenAds != null).length;
 
-                              final adsIndex = index + 1 + (totalWithAds ?? 0);
-                              if (adsIndex % 5 == 0) {
-                                final adsData = await context.getInBetweenAds();
-                                if (adsData != null) {
-                                  notifier.setAdsData(index, adsData);
-                                }
-                              }
                               Future.delayed(const Duration(milliseconds: 500), () {
                                 System().increaseViewCount2(context, picData ?? ContentData(), check: false);
                                 if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
                                   if (mounted) {
                                     setState(() {
                                       isShowShowcase = true;
-                                      keyOwnership = picData?.keyGlobal;
+                                      // keyOwnership = picData?.keyGlobal;
                                     });
                                   }
                                   // ShowCaseWidget.of(context).startShowCase([picData?.keyGlobal ?? GlobalKey()]);
@@ -989,6 +981,18 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               //     notifier.getTemp(indexList, latIndexList, indexList);
                               //   }
                               // });
+                            } else {
+                              final totalWithAds = notifier.pic?.where((element) => element.inBetweenAds != null).length;
+                              final adsIndex = index + 1 + (totalWithAds ?? 0);
+                              if (adsIndex % 5 == 0) {
+                                context.getInBetweenAds().then((value) {
+                                  if ((index + 1 + (totalWithAds ?? 0)) % 5 == 0) {
+                                    if (value != null) {
+                                      notifier.setAdsData(index, value);
+                                    }
+                                  }
+                                });
+                              }
                             }
                             _lastCurIndex = _curIdx;
                             _lastCurPostId = _curPostId;

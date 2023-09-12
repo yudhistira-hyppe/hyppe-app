@@ -38,11 +38,12 @@ class _SettingScreenState extends State<SettingScreen> {
     super.initState();
     mn = Provider.of<MainNotifier>(context, listen: false);
     super.initState();
-    indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'transaction') ?? 0;
-    indexreferral = mn?.tutorialData.indexWhere((element) => element.key == 'idRefferal') ?? 0;
-
-    if (mn?.tutorialData[indexKey].status == false || mn?.tutorialData[indexreferral].status == false) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keyTransaction, keyReferral]));
+    if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
+      indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'transaction') ?? 0;
+      indexreferral = mn?.tutorialData.indexWhere((element) => element.key == 'idRefferal') ?? 0;
+      if (mn?.tutorialData[indexKey].status == false || mn?.tutorialData[indexreferral].status == false) {
+        WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keyTransaction, keyReferral]));
+      }
     }
   }
 
@@ -51,157 +52,170 @@ class _SettingScreenState extends State<SettingScreen> {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SettingScreen');
     final theme = Theme.of(context);
     return Consumer<TranslateNotifierV2>(
-      builder: (context, notifier, child) => Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(),
-          title: CustomTextWidget(
-            textStyle: theme.textTheme.subtitle1,
-            textToDisplay: '${notifier.translate.settings}',
-          ),
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.only(top: 24),
-          scrollDirection: Axis.vertical,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SettingTile(
-                icon: 'transaction-icon.svg',
-                onTap: () => context.read<SettingNotifier>().validateUser(context, notifier),
-                caption: '${notifier.translate.transaction}',
-                keyGLobal: keyTransaction,
-                descriptionCas: notifier.translate.localeDatetime == 'id' ? mn?.tutorialData[indexKey].textID : mn?.tutorialData[indexKey].textEn,
-                positionTooltip: TooltipPosition.bottom,
-                positionYplus: -10,
-                indexTutor: indexKey,
+      builder: (context, notifier, child) => ShowCaseWidget(
+        onStart: (index, key) {
+          print('onStart: $index, $key');
+        },
+        onComplete: (index, key) {
+          print('onComplete: $index, $key');
+        },
+        blurValue: 0,
+        disableBarrierInteraction: true,
+        disableMovingAnimation: true,
+        builder: Builder(builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              leading: const BackButton(),
+              title: CustomTextWidget(
+                textStyle: theme.textTheme.subtitle1,
+                textToDisplay: '${notifier.translate.settings}',
               ),
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: MyBalance(),
-              ),
-              Divider(
-                thickness: 1,
-                color: theme.colorScheme.surface,
-              ),
-              sixteenPx,
-              SettingComponent(
-                headerCaption: '${notifier.translate.account}',
-                tiles: [
+            ),
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.only(top: 24),
+              scrollDirection: Axis.vertical,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   SettingTile(
-                    icon: 'preferensi-account-icon.svg',
-                    onTap: () => Routing().move(Routes.accountPreferences),
-                    caption: '${notifier.translate.accountPreference}',
+                    icon: 'transaction-icon.svg',
+                    onTap: () => context.read<SettingNotifier>().validateUser(context, notifier),
+                    caption: '${notifier.translate.transaction}',
+                    keyGLobal: keyTransaction,
+                    descriptionCas: notifier.translate.localeDatetime == 'id' ? mn?.tutorialData[indexKey].textID : mn?.tutorialData[indexKey].textEn,
+                    positionTooltip: TooltipPosition.bottom,
+                    positionYplus: -10,
+                    indexTutor: indexKey,
                   ),
-                  SettingTile(
-                    icon: 'lock.svg',
-                    onTap: () => Routing().move(Routes.homePageSignInSecurity),
-                    caption: '${notifier.translate.signInAndSecurity}',
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: MyBalance(),
                   ),
-                  SettingTile(
-                    onTap: () => Routing().move(Routes.userInterest,
-                        argument: UserInterestScreenArgument(
-                          fromSetting: true,
-                          userInterested: Provider.of<SelfProfileNotifier>(context, listen: false).user.profile?.interest ?? [],
-                        )),
-                    caption: '${notifier.translate.interest}',
-                    icon: 'heart-icon.svg',
+                  Divider(
+                    thickness: 1,
+                    color: theme.colorScheme.surface,
                   ),
-                  // SettingTile(
-                  //   caption: '${notifier.translate.theme}',
-                  //   icon: 'theme-icon.svg',
-                  //   onTap: () => Routing().move(Routes.themeScreen),
-                  // ),
-                  SettingTile(
-                    onTap: () => ShowGeneralDialog.newAccountLanguageDropDown(context),
-                    icon: 'language-icon.svg',
-                    caption: '${notifier.translate.language}',
+                  sixteenPx,
+                  SettingComponent(
+                    headerCaption: '${notifier.translate.account}',
+                    tiles: [
+                      SettingTile(
+                        icon: 'preferensi-account-icon.svg',
+                        onTap: () => Routing().move(Routes.accountPreferences),
+                        caption: '${notifier.translate.accountPreference}',
+                      ),
+                      SettingTile(
+                        icon: 'lock.svg',
+                        onTap: () => Routing().move(Routes.homePageSignInSecurity),
+                        caption: '${notifier.translate.signInAndSecurity}',
+                      ),
+                      SettingTile(
+                        onTap: () => Routing().move(Routes.userInterest,
+                            argument: UserInterestScreenArgument(
+                              fromSetting: true,
+                              userInterested: Provider.of<SelfProfileNotifier>(context, listen: false).user.profile?.interest ?? [],
+                            )),
+                        caption: '${notifier.translate.interest}',
+                        icon: 'heart-icon.svg',
+                      ),
+                      // SettingTile(
+                      //   caption: '${notifier.translate.theme}',
+                      //   icon: 'theme-icon.svg',
+                      //   onTap: () => Routing().move(Routes.themeScreen),
+                      // ),
+                      SettingTile(
+                        onTap: () => ShowGeneralDialog.newAccountLanguageDropDown(context),
+                        icon: 'language-icon.svg',
+                        caption: '${notifier.translate.language}',
+                      ),
+                      SettingTile(
+                        onTap: () => Routing().move(Routes.referralScreen),
+                        icon: 'person-plus.svg',
+                        caption: '${notifier.translate.referralID}',
+                        keyGLobal: keyReferral,
+                        descriptionCas: notifier.translate.localeDatetime == 'id' ? mn?.tutorialData[indexreferral].textID : mn?.tutorialData[indexreferral].textEn,
+                        positionTooltip: TooltipPosition.top,
+                        positionYplus: 25,
+                        indexTutor: indexreferral,
+                      ),
+                      // SettingTile(
+                      //   onTap: () => Routing().move(Routes.contentPreferences),
+                      //   icon: 'person-plus.svg',
+                      //   caption: '${notifier.translate.referralID}',
+                      // ),
+                    ],
                   ),
-                  SettingTile(
-                    onTap: () => Routing().move(Routes.referralScreen),
-                    icon: 'person-plus.svg',
-                    caption: '${notifier.translate.referralID}',
-                    keyGLobal: keyReferral,
-                    descriptionCas: notifier.translate.localeDatetime == 'id' ? mn?.tutorialData[indexreferral].textID : mn?.tutorialData[indexreferral].textEn,
-                    positionTooltip: TooltipPosition.top,
-                    positionYplus: 25,
-                    indexTutor: indexreferral,
+                  sixteenPx,
+                  Divider(
+                    thickness: 1,
+                    color: theme.colorScheme.surface,
                   ),
-                  // SettingTile(
-                  //   onTap: () => Routing().move(Routes.contentPreferences),
-                  //   icon: 'person-plus.svg',
-                  //   caption: '${notifier.translate.referralID}',
-                  // ),
+                  sixteenPx,
+                  SettingComponent(
+                    headerCaption: '${notifier.translate.support}',
+                    tiles: [
+                      SettingTile(
+                        caption: System().capitalizeFirstLetter(notifier.translate.help ?? ""),
+                        icon: 'help-icon.svg',
+                        onTap: () => Routing().move(Routes.help),
+                      ),
+                      SettingTile(
+                        caption: System().capitalizeFirstLetter(notifier.translate.privacyPolicy ?? ""),
+                        icon: 'privacy-police-icon.svg',
+                        onTap: () => Routing().move(Routes.userAgreement),
+                      ),
+                      // SettingTile(
+                      //   icon: 'terms-icon.svg',
+                      //   caption: 'User Agreement',
+                      //   onTap: () => Routing().move(userAgreement),
+                      // ),
+                      // SettingTile(
+                      //   onTap: () {},
+                      //   caption: 'Language',
+                      //   icon: 'language-icon.svg',
+                      // ),
+                    ],
+                  ),
+                  sixteenPx,
+                  Divider(
+                    thickness: 1,
+                    color: theme.colorScheme.surface,
+                  ),
+                  sixteenPx,
+                  SettingComponent(
+                    headerCaption: '${notifier.translate.about}',
+                    tiles: [
+                      SettingTile(
+                        icon: 'info-icon.svg',
+                        caption: System().capitalizeFirstLetter(notifier.translate.version ?? ""),
+                        trailing: Selector<SettingNotifier, String>(
+                          builder: (_, value, __) {
+                            return CustomTextWidget(
+                              textToDisplay: value,
+                              textStyle: theme.textTheme.bodyText1,
+                            );
+                          },
+                          selector: (p0, p1) => p1.appPackage ?? '',
+                        ),
+                      ),
+                      SettingTile(
+                        onTap: () => ShowBottomSheet.onShowSignOut(
+                          context,
+                          onSignOut: () {
+                            context.read<SettingNotifier>().logOut(context);
+                          },
+                        ),
+                        icon: 'logout-icon.svg',
+                        caption: '${notifier.translate.logOut}',
+                      ),
+                    ],
+                  ),
                 ],
               ),
-              sixteenPx,
-              Divider(
-                thickness: 1,
-                color: theme.colorScheme.surface,
-              ),
-              sixteenPx,
-              SettingComponent(
-                headerCaption: '${notifier.translate.support}',
-                tiles: [
-                  SettingTile(
-                    caption: System().capitalizeFirstLetter(notifier.translate.help ?? ""),
-                    icon: 'help-icon.svg',
-                    onTap: () => Routing().move(Routes.help),
-                  ),
-                  SettingTile(
-                    caption: System().capitalizeFirstLetter(notifier.translate.privacyPolicy ?? ""),
-                    icon: 'privacy-police-icon.svg',
-                    onTap: () => Routing().move(Routes.userAgreement),
-                  ),
-                  // SettingTile(
-                  //   icon: 'terms-icon.svg',
-                  //   caption: 'User Agreement',
-                  //   onTap: () => Routing().move(userAgreement),
-                  // ),
-                  // SettingTile(
-                  //   onTap: () {},
-                  //   caption: 'Language',
-                  //   icon: 'language-icon.svg',
-                  // ),
-                ],
-              ),
-              sixteenPx,
-              Divider(
-                thickness: 1,
-                color: theme.colorScheme.surface,
-              ),
-              sixteenPx,
-              SettingComponent(
-                headerCaption: '${notifier.translate.about}',
-                tiles: [
-                  SettingTile(
-                    icon: 'info-icon.svg',
-                    caption: System().capitalizeFirstLetter(notifier.translate.version ?? ""),
-                    trailing: Selector<SettingNotifier, String>(
-                      builder: (_, value, __) {
-                        return CustomTextWidget(
-                          textToDisplay: value,
-                          textStyle: theme.textTheme.bodyText1,
-                        );
-                      },
-                      selector: (p0, p1) => p1.appPackage ?? '',
-                    ),
-                  ),
-                  SettingTile(
-                    onTap: () => ShowBottomSheet.onShowSignOut(
-                      context,
-                      onSignOut: () {
-                        context.read<SettingNotifier>().logOut(context);
-                      },
-                    ),
-                    icon: 'logout-icon.svg',
-                    caption: '${notifier.translate.logOut}',
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        }),
       ),
     );
   }
