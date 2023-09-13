@@ -497,6 +497,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                 },
                                 child: Stack(
                                   children: [
+                                    if(!notifier.isShowingAds && notifier.hasShowedAds)
                                     Container(
                                       width: context.getWidth(),
                                       height: SizeConfig.screenHeight,
@@ -665,8 +666,20 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                       if(_currentPosition > 0){
                         await widget.fAliplayer?.seekTo(_currentPosition - 1, FlutterAvpdef.ACCURATE);
                       }
-                      widget.fAliplayer?.play();
                       widget.onClose();
+                      setState(() {
+                        isloading = true;
+                      });
+                      Future.delayed(const Duration(seconds: 1), (){
+                        setState(() {
+                          isloading = false;
+                          isPause = false;
+                          _showTipsWidget = false;
+                        });
+                        widget.fAliplayer?.play();
+
+                      });
+
                     }
                   },
                   child: Row(

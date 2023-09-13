@@ -758,6 +758,8 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                           notifier.adsAliplayer?.stop();
                           notifier.adsCurrentPosition = 0;
                           notifier.adsCurrentPositionText = 0;
+                          notifier.hasShowedAds = true;
+                          notifier.tempAdsData = null;
                           widget.onClose();
                         });
                       }

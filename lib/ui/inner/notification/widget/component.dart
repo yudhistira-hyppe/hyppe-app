@@ -100,6 +100,8 @@ class _ComponentState extends State<Component> {
             // profile picture
 
             isAnnouncement ? CustomIconWidget(
+              width: 50 * SizeConfig.scaleDiagonal,
+              height: 50 * SizeConfig.scaleDiagonal,
               iconData: "${AssetPath.vectorPath}ic_rounded_hyppe.svg",
               defaultColor: false,) : StoryColorValidator(
               featureType: FeatureType.other,
@@ -119,42 +121,45 @@ class _ComponentState extends State<Component> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // title and subtitle
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomTextWidget(
-                        textToDisplay: isAnnouncement ? (System().bodyMultiLang(bodyEn: widget.data?.titleEN ?? widget.data?.title, bodyId: widget.data?.title) ?? '') : widget.data?.senderOrReceiverInfo?.username ?? '',
-                        textAlign: TextAlign.start,
-                        textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      fourPx,
-                      SizedBox(
-                        width: (SizeConfig.screenWidth ?? 0) / 1.8,
-                        // data?.content != null
-                        //     ? (SizeConfig.screenWidth ?? 0) / 1.8
-                        //     : data?.body != null
-                        //         ? (data?.body?.length ?? 0) < 34
-                        //             ? null
-                        //             : (SizeConfig.screenWidth ?? 0) / 1.5
-                        //         : null,
-                        child: CustomTextWidget(
-                          //textToDisplay: data?.body ?? '',
-                          textToDisplay: System().bodyMultiLang(bodyEn: widget.data?.body ?? widget.data?.bodyId, bodyId: widget.data?.bodyId) ?? '',
-                          textStyle: Theme.of(context).textTheme.caption,
-                          maxLines: 4,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomTextWidget(
+                          textToDisplay: isAnnouncement ? (System().bodyMultiLang(bodyEn: widget.data?.titleEN ?? widget.data?.title, bodyId: widget.data?.title) ?? '') : widget.data?.senderOrReceiverInfo?.username ?? '',
                           textAlign: TextAlign.start,
+                          textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
+                          textOverflow: TextOverflow.fade,
                         ),
-                      ),
-                      sixPx,
-                      CustomTextWidget(
-                        textToDisplay: widget.data?.createdAt != null
-                            ? System().readTimestamp(DateFormat("yyyy-MM-dd hh:mm:ss").parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true)
-                            : '',
-                        textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
-                      ),
-                    ],
+                        fourPx,
+                        SizedBox(
+                          width: (SizeConfig.screenWidth ?? 0) / 1.8,
+                          // data?.content != null
+                          //     ? (SizeConfig.screenWidth ?? 0) / 1.8
+                          //     : data?.body != null
+                          //         ? (data?.body?.length ?? 0) < 34
+                          //             ? null
+                          //             : (SizeConfig.screenWidth ?? 0) / 1.5
+                          //         : null,
+                          child: CustomTextWidget(
+                            //textToDisplay: data?.body ?? '',
+                            textToDisplay: System().bodyMultiLang(bodyEn: widget.data?.body ?? widget.data?.bodyId, bodyId: widget.data?.bodyId) ?? '',
+                            textStyle: Theme.of(context).textTheme.caption,
+                            maxLines: 4,
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                        sixPx,
+                        CustomTextWidget(
+                          textToDisplay: widget.data?.createdAt != null
+                              ? System().readTimestamp(DateFormat("yyyy-MM-dd hh:mm:ss").parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true)
+                              : '',
+                          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
+                        ),
+                      ],
+                    ),
                   ),
-                  isLoading ? const CircularProgressIndicator() : widget.rightWidget
+                  isAnnouncement ? const SizedBox.shrink() : (isLoading ? const CircularProgressIndicator() : widget.rightWidget)
                 ],
               ),
             )

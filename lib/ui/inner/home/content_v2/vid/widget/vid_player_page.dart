@@ -1094,6 +1094,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             onFullscreen(notifier);
           },
           onClose: (){
+          if(mounted){
             setState(() {
               isPlay = true;
 
@@ -1104,9 +1105,27 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               }
               isloading = false;
             });
-            notifier.hasShowedAds = true;
-            notifier.tempAdsData = null;
-            fAliplayer?.play();
+          }else{
+            isPlay = true;
+
+            adsData = null;
+            if(widget.onShowAds != null){
+              widget.onShowAds!(adsData);
+
+            }
+            isloading = false;
+          }
+
+          if(!notifier.isFullScreen){
+            Future.delayed(const Duration(milliseconds: 500), (){
+
+              fAliplayer?.play();
+              setState(() {
+                isPause = false;
+                _showTipsWidget = false;
+              });
+            });
+          }
           },
           orientation: Orientation.portrait,
         );
@@ -2005,15 +2024,12 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             fAliplayer: fAliplayer,
             data: widget.data ?? ContentData(),
             onClose: () {
-              setState(() {
-                isPlay = true;
+              isPlay = true;
 
-                adsData = null;
-                if(widget.onShowAds != null){
-                  widget.onShowAds!(adsData);
-                }
-
-              });
+              adsData = null;
+              if(widget.onShowAds != null){
+                widget.onShowAds!(adsData);
+              }
               notifier.hasShowedAds = true;
               notifier.tempAdsData = null;
               notifier.isShowingAds = false;
