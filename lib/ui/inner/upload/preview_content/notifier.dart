@@ -679,6 +679,8 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
+
+
   Future restartVideoPlayer(String outputPath, BuildContext context, {bool isInit = true}) async {
     final path = _fileContent?[_indexView] ?? '';
     print('URL now : $path');
