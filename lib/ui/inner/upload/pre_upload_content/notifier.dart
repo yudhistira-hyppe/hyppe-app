@@ -32,7 +32,6 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_c
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
@@ -593,47 +592,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> encodeVideo(BuildContext context) async {
-    try {
-      _isLoadVideo = true;
-      notifyListeners();
-      String outputPath = await System().getSystemPath(params: 'postVideo');
-      outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
-      String command = '-i "${_fileContent?[0]}" -c:v x264 -c:a aac -strict -2 $outputPath';
-      print('encode video: $command');
-      await FFmpegKit.executeAsync(
-        command,
-            (session) async {
-          final codeSession = await session.getReturnCode();
-          if (ReturnCode.isSuccess(codeSession)) {
-            print('ReturnCode = Success');
-            _fileContent?[0] = outputPath;
-            notifyListeners();
-          } else if (ReturnCode.isCancel(codeSession)) {
-            print('ReturnCode = Cancel');
-            _isLoadVideo = false;
-            notifyListeners();
-            throw 'Merge video is canceled';
-            // Cancel
-          } else {
-            print('ReturnCode = Error');
-            _isLoadVideo = false;
-            notifyListeners();
-            throw 'Merge video is Error';
-            // Error
-          }
-        },
-            (log) {
-          _isLoadVideo = false;
-          notifyListeners();
-          print('FFmpegKit ${log.getMessage()}');
-        },
-      );
-    } catch (e) {
-      'videoMerger Error : $e'.logger();
-      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
-    }
-  }
+
 
   Future _createPostContentV2(BuildContext context, bool mounted) async {
     final BuildContext context = Routing.navigatorKey.currentContext!;
@@ -699,9 +658,6 @@ class PreUploadContentNotifier with ChangeNotifier {
         await compressVideo();
       }
       if (!mounted) return false;
-      if (featureType == FeatureType.diary){
-        await encodeVideo(context);
-      }
 
       notifier.postContentsBlocV2(
         context,
@@ -907,22 +863,18 @@ class PreUploadContentNotifier with ChangeNotifier {
   void checkForCompress() async {
     if (isEdit == false && (featureType == FeatureType.diary || featureType == FeatureType.vid)) {
       await getVideoSize();
-      Duration? _duration;
-      int? _size;
-      await System().getVideoMetadata(File(fileContent?[0] ?? '').path).then((value) {
-        _size = value?.filesize ?? 0;
-        print('sebelum di bagi $_size');
-        var inMB = _size! / 1024 / 1024;
-        _size = inMB.toInt();
-        _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
-
-        // _duration.inSeconds
-      });
-
-      print("size video ini $_size");
-      print(_duration?.inSeconds);
-      var normalSize = _duration!.inSeconds * 0.91;
-      if (_size! >= normalSize) {
+      Duration? duration;
+      int? size;
+      final value = await System().getVideoMetadata(File(fileContent?[0] ?? '').path);
+      size = value?.filesize ?? 0;
+      print('sebelum di bagi $size');
+      var inMB = size / 1024 / 1024;
+      size = inMB.toInt();
+      duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
+      print("size video ini $size");
+      print(duration.inSeconds);
+      var normalSize = duration.inSeconds * 0.91;
+      if (size >= normalSize) {
         _isCompress = true;
       } else {
         _isCompress = false;
