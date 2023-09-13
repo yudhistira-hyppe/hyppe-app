@@ -328,13 +328,16 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       print("==== totItemHeight ${totItemHeight}");
 
       var sizeMax = (SizeConfig.screenHeight ?? 0) + (SizeConfig.screenHeight ?? 0) * 0.633;
-      if (offset >= totItemHeightParam && (notifier.pic?[_curIdx + 1].height ?? 0) <= sizeMax) {
-        var position = totItemHeight;
-        // if (notifier.pic?[_curIdx + 1].height >= sizeMax) {
-        //   position += notifier.pic?[_curIdx + 1].height;
-        // }
-        if (mounted) widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
-      } else {}
+      if((notifier.pic?.lenght ?? 0) > (_curIdx + 1)){
+        if (offset >= totItemHeightParam && notifier.pic?[_curIdx + 1].height <= sizeMax) {
+          var position = totItemHeight;
+          // if (notifier.pic?[_curIdx + 1].height >= sizeMax) {
+          //   position += notifier.pic?[_curIdx + 1].height;
+          // }
+          if (mounted) widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        } else {}
+      }
+
     } else {
       if (!homeClick) {
         for (var i = 0; i < _curIdx; i++) {

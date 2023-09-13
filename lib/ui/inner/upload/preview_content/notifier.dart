@@ -629,6 +629,48 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> encodeVideo(BuildContext context) async {
+    try {
+      _isLoadVideo = true;
+      notifyListeners();
+      String outputPath = await System().getSystemPath(params: 'postVideo');
+      outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
+      String command = '-i "${_fileContent?[0]}" -c:a aac -strict -2 $outputPath';
+      print('encode video: $command');
+      await FFmpegKit.executeAsync(
+        command,
+            (session) async {
+          final codeSession = await session.getReturnCode();
+          if (ReturnCode.isSuccess(codeSession)) {
+            print('ReturnCode = Success');
+            _fileContent?[0] = outputPath;
+            notifyListeners();
+          } else if (ReturnCode.isCancel(codeSession)) {
+            print('ReturnCode = Cancel');
+            _isLoadVideo = false;
+            notifyListeners();
+            throw 'Merge video is canceled';
+            // Cancel
+          } else {
+            print('ReturnCode = Error');
+            _isLoadVideo = false;
+            notifyListeners();
+            throw 'Merge video is Error';
+            // Error
+          }
+        },
+            (log) {
+          _isLoadVideo = false;
+          notifyListeners();
+          print('FFmpegKit ${log.getMessage()}');
+        },
+      );
+    } catch (e) {
+      'videoMerger Error : $e'.logger();
+      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
+    }
+  }
+
   Future<void> videoMerger(BuildContext context, String urlAudio, {isInit = false}) async {
     try {
       if (urlAudio.isNotEmpty) {
@@ -678,6 +720,8 @@ class PreviewContentNotifier with ChangeNotifier {
       notifyListeners();
     }
   }
+
+
 
   Future restartVideoPlayer(String outputPath, BuildContext context, {bool isInit = true}) async {
     final path = _fileContent?[_indexView] ?? '';
@@ -1127,7 +1171,6 @@ class PreviewContentNotifier with ChangeNotifier {
     notifier.musicSelected = _fixSelectedMusic;
     _fixSelectedMusic = null;
     notifier.checkForCompress();
-
     Routing().move(Routes.preUploadContent, argument: UpdateContentsArgument(onEdit: false)).whenComplete(() => isForcePaused = false);
   }
 

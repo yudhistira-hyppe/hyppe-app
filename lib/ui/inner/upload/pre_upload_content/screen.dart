@@ -389,8 +389,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
               function: () {
                 final text = notifier.captionController.text;
                 final selection = notifier.captionController.selection;
+                var newText = text;
+                if(newText.isNotEmpty){
+                  newText = text.replaceRange(selection.start, selection.end, ' #');
+                }
 
-                final newText = text.replaceRange(selection.start, selection.end, ' #');
                 notifier.captionController.value = TextEditingValue(
                   text: newText,
                   selection: TextSelection.collapsed(offset: selection.baseOffset + 2),
