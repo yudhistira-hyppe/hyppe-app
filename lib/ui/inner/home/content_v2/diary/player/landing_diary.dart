@@ -55,6 +55,7 @@ import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -97,6 +98,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   String statusKyc = '';
   double itemHeight = 0;
   double lastOffset = -10;
+  MainNotifier? mn;
+  int indexKeySell = 0;
+  int indexKeyProtection = 0;
 
   @override
   void initState() {
@@ -108,12 +112,16 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     email = SharedPreference().readStorage(SpKeys.email);
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     lastOffset = -10;
+    mn = Provider.of<MainNotifier>(context, listen: false);
 
     // stopwatch = new Stopwatch()..start();
 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       WidgetsBinding.instance.addObserver(this);
+      indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
+      indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
+
       initAlipayer();
 
       //scroll
@@ -951,6 +959,25 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                       notifier.setAdsData(index, adsData);
                                     }
                                   }
+
+                                  Future.delayed(const Duration(milliseconds: 100), () {
+                                    if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
+                                      indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
+                                      indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
+
+                                      if (mn?.tutorialData[indexKeySell].status == false) {
+                                        globalTultipShow = true;
+                                        fAliplayer?.pause();
+                                        ShowCaseWidget.of(context).startShowCase([data?.keyGlobalSell ?? GlobalKey()]);
+                                      }
+                                      if (mn?.tutorialData[indexKeyProtection].status == false) {
+                                        globalTultipShow = true;
+                                        fAliplayer?.pause();
+                                        ShowCaseWidget.of(context).startShowCase([data?.keyGlobalOwn ?? GlobalKey()]);
+                                      }
+                                    }
+                                  });
+
                                   Future.delayed(const Duration(milliseconds: 700), () {
                                     start(Routing.navigatorKey.currentContext ?? context, data ?? ContentData());
                                     System().increaseViewCount2(Routing.navigatorKey.currentContext ?? context, data ?? ContentData(), check: false);
@@ -1401,7 +1428,14 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: PicTopItem(data: data, fAliplayer: fAliplayer),
+            child: PicTopItem(
+                data: data,
+                globalKey: (data.saleAmount ?? 0) > 0
+                    ? data.keyGlobalSell
+                    : ((data.certified ?? false) && (data.saleAmount ?? 0) == 0)
+                        ? data.keyGlobalOwn
+                        : GlobalKey(),
+                fAliplayer: fAliplayer),
           ),
           if (data.tagPeople?.isNotEmpty ?? false)
             Positioned(

@@ -171,6 +171,9 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
                                     // } else {
                                     tapMenu(0, notifier, consumerContext);
                                     if (notifier.scrollController.hasClients) {
+                                      if (globalTultipShow) {
+                                        return;
+                                      }
                                       homeClick = true;
                                       notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
                                       // Routing.navigatorKey.currentState?.overlay?.context
@@ -319,7 +322,7 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
 
   void tapMenu(int index, MainNotifier notifier, consumerContext) async {
     String newUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
-    if (newUser == "TRUE") {
+    if (newUser == "TRUE" || globalTultipShow) {
       return;
     }
     if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);

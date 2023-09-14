@@ -184,12 +184,12 @@ class SelfProfileNotifier with ChangeNotifier {
     }
   }
 
-  updateProfilePost(FeatureType type, ContentData data){
-    if(type == FeatureType.pic){
+  updateProfilePost(FeatureType type, ContentData data) {
+    if (type == FeatureType.pic) {
       user.pics?.insert(0, data);
-    }else if(type == FeatureType.diary){
+    } else if (type == FeatureType.diary) {
       user.diaries?.insert(0, data);
-    }else if(type == FeatureType.vid){
+    } else if (type == FeatureType.vid) {
       user.vids?.insert(0, data);
     }
     notifyListeners();

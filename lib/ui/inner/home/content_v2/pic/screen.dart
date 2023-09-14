@@ -64,8 +64,8 @@ import '../../../../constant/entities/report/notifier.dart';
 
 class HyppePreviewPic extends StatefulWidget {
   final ScrollController? scrollController;
-  final VoidCallback? onScaleStart;
-  final VoidCallback? onScaleStop;
+  final Function? onScaleStart;
+  final Function? onScaleStop;
   final bool? appbarSeen;
 
   const HyppePreviewPic({
@@ -122,6 +122,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   GlobalKey? keyOwnership;
   MainNotifier? mn;
   bool isShowShowcase = false;
+  int indexKeySell = 0;
+  int indexKeyProtection = 0;
+  int itemIndex = 0;
 
   @override
   void initState() {
@@ -309,53 +312,104 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   Future toPosition(double offset, PreviewPicNotifier notifier, MainNotifier notifierMain) async {
     double totItemHeight = 0;
     double totItemHeightParam = 0;
-    print("offset $offset");
-    print("lastOffset $lastOffset");
+    // print("======== ${offset}---====");
+    if (offset < 10) {
+      itemIndex = 0;
+    }
 
     // if (offset >= lastOffset) {
     if (!scroolUp) {
       homeClick = false;
-      for (var i = 0; i <= _curIdx; i++) {
-        if (i == _curIdx) {
+      for (var i = 0; i <= itemIndex; i++) {
+        if (i == itemIndex) {
           totItemHeightParam += (notifier.pic?[i].height ?? 0.0) * 30 / 100;
         } else {
           totItemHeightParam += notifier.pic?[i].height ?? 0.0;
         }
         totItemHeight += notifier.pic?[i].height ?? 0.0;
       }
-      print("==== _curIdx ${_curIdx}");
-      print("==== totItemHeight ${totItemHeight}");
 
       var sizeMax = (SizeConfig.screenHeight ?? 0) + (SizeConfig.screenHeight ?? 0) * 0.633;
-      if (offset >= totItemHeightParam && (notifier.pic?[_curIdx + 1].height ?? 0) <= sizeMax) {
+      if (offset >= totItemHeightParam && (notifier.pic?[itemIndex + 1].height ?? 0) <= sizeMax) {
         var position = totItemHeight;
         // if (notifier.pic?[_curIdx + 1].height >= sizeMax) {
         //   position += notifier.pic?[_curIdx + 1].height;
         // }
-        if (mounted) widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        if (mounted) {
+          widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
+          itemIndex++;
+        }
       } else {}
+      // for (var i = 0; i <= _curIdx; i++) {
+      //   if (i == _curIdx) {
+      //     totItemHeightParam += (notifier.pic?[i].height ?? 0.0) * 30 / 100;
+      //   } else {
+      //     totItemHeightParam += notifier.pic?[i].height ?? 0.0;
+      //   }
+      //   totItemHeight += notifier.pic?[i].height ?? 0.0;
+      // }
+
+      // var sizeMax = (SizeConfig.screenHeight ?? 0) + (SizeConfig.screenHeight ?? 0) * 0.633;
+      // if (offset >= totItemHeightParam && (notifier.pic?[_curIdx + 1].height ?? 0) <= sizeMax) {
+      //   var position = totItemHeight;
+      //   // if (notifier.pic?[_curIdx + 1].height >= sizeMax) {
+      //   //   position += notifier.pic?[_curIdx + 1].height;
+      //   // }
+      //   if (mounted) {
+      //     widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
+      //     itemIndex++;
+      //   }
+      // } else {}
     } else {
       if (!homeClick) {
-        for (var i = 0; i < _curIdx; i++) {
-          if (i == _curIdx - 1) {
+        // print("==== _curIdx ${_curIdx}");
+
+        for (var i = 0; i < itemIndex; i++) {
+          if (i == itemIndex - 1) {
             totItemHeightParam += (notifier.pic?[i].height ?? 0.0) * 75 / 100;
-          } else if (i == _curIdx) {
+          } else if (i == itemIndex) {
           } else {
             totItemHeightParam += notifier.pic?[i].height ?? 0.0;
           }
           totItemHeight += notifier.pic?[i].height ?? 0.0;
         }
-        if (_curIdx > 0) {
-          totItemHeight -= notifier.pic?[_curIdx - 1].height ?? 0.0;
+        if (itemIndex > 0) {
+          totItemHeight -= notifier.pic?[itemIndex - 1].height ?? 0.0;
         }
+        // print("==== totItemHeight ${totItemHeight}");
         var sizeMax = (SizeConfig.screenHeight ?? 0) + (SizeConfig.screenHeight ?? 0) * 0.633;
         if (offset <= totItemHeightParam && offset > 0) {
-          if (_curIdx > 0 && (notifier.pic?[_curIdx - 1].height ?? 0) >= sizeMax) {
+          if (itemIndex > 0 && (notifier.pic?[itemIndex - 1].height ?? 0) >= sizeMax) {
             return;
           }
           var position = totItemHeight;
-          if (mounted) widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
+          if (mounted) {
+            widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
+            itemIndex--;
+          }
         }
+
+        // for (var i = 0; i < _curIdx; i++) {
+        //   if (i == _curIdx - 1) {
+        //     totItemHeightParam += (notifier.pic?[i].height ?? 0.0) * 75 / 100;
+        //   } else if (i == _curIdx) {
+        //   } else {
+        //     totItemHeightParam += notifier.pic?[i].height ?? 0.0;
+        //   }
+        //   totItemHeight += notifier.pic?[i].height ?? 0.0;
+        // }
+        // if (_curIdx > 0) {
+        //   totItemHeight -= notifier.pic?[_curIdx - 1].height ?? 0.0;
+        // }
+        // print("==== totItemHeight ${totItemHeight}");
+        // var sizeMax = (SizeConfig.screenHeight ?? 0) + (SizeConfig.screenHeight ?? 0) * 0.633;
+        // if (offset <= totItemHeightParam && offset > 0) {
+        //   if (_curIdx > 0 && (notifier.pic?[_curIdx - 1].height ?? 0) >= sizeMax) {
+        //     return;
+        //   }
+        //   var position = totItemHeight;
+        //   if (mounted) widget.scrollController?.animateTo(position, duration: Duration(milliseconds: 200), curve: Curves.ease);
+        // }
       }
     }
 
@@ -751,6 +805,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
   ValueNotifier<int> _networklHasErrorNotifier = ValueNotifier(0);
 
   final Map cacheDesc = {};
+  List tempHeight = [];
 
   Widget itemPict(BuildContext context, PreviewPicNotifier notifier, int index, HomeNotifier homeNotifier) {
     var picData = notifier.pic?[index];
@@ -796,11 +851,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                     children: [
                       // SelectableText(((picData?.isApsara ?? false) ? (picData?.mediaThumbEndPoint ?? "") : "${picData?.fullThumbPath}") + "&key=${cacheDesc[index]}"),
 
-                      // Text("total ${notifier.picTemp?.length}"),
+                      // Text("mn?.status own ${mn?.tutorialData[indexKeyProtection].status}"),
+                      // Text("mn?.status sell ${mn?.tutorialData[indexKeySell].status}"),
+                      // Text("global ${picData?.keyGlobalOwn}"),
+                      // Text("global ${picData?.keyGlobalSell}"),
                       // Text("itemHeight $itemHeight"),
-                      // Text("height ${picData?.height}"),
+                      // Text("height ${picData?.imageHeightTemp}"),
                       // Text("$_lastCurIndex"),
-                      // Text("$_curIdx"),
+                      // Text("$index"),
+                      // Text("${picData?.height}"),
                       // GestureDetector(
                       //   onScaleStart: (details) {
                       //     widget.functionZoomTriger();
@@ -914,7 +973,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           if (info.visibleFraction == 1) {
                             adsGlobalAliPlayer?.pause();
                           }
-                          if (info.visibleFraction >= 0.6) {
+                          if (info.visibleFraction == 1 || info.visibleFraction >= 0.6) {
                             _curIdx = index;
                             _curPostId = picData?.postID ?? index.toString();
                             if (_lastCurIndex > _curIdx) {
@@ -949,18 +1008,22 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 fAliplayer?.stop();
                               }
 
+                              Future.delayed(const Duration(milliseconds: 100), () {
+                                if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
+                                  indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
+                                  indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
+
+                                  if (mn?.tutorialData[indexKeySell].status == false) {
+                                    ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalSell ?? GlobalKey()]);
+                                  }
+                                  if (mn?.tutorialData[indexKeyProtection].status == false) {
+                                    ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalOwn ?? GlobalKey()]);
+                                  }
+                                }
+                              });
+
                               Future.delayed(const Duration(milliseconds: 500), () {
                                 System().increaseViewCount2(context, picData ?? ContentData(), check: false);
-                                if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
-                                  if (mounted) {
-                                    print("========== isShowShowcase ==========");
-                                    setState(() {
-                                      isShowShowcase = true;
-                                      // keyOwnership = picData?.keyGlobal;
-                                    });
-                                  }
-                                  // ShowCaseWidget.of(context).startShowCase([picData?.keyGlobal ?? GlobalKey()]);
-                                }
                               });
 
                               if (picData?.certified ?? false) {
@@ -1000,6 +1063,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                           }
                         },
                         child: Container(
+                          height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
                           margin: const EdgeInsets.only(bottom: 20),
                           width: SizeConfig.screenWidth,
                           child: Container(
@@ -1087,6 +1151,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                       child: ZoomableImage(
                                         enable: homeNotifier.connectionError ? false : true,
                                         onScaleStart: () {
+                                          print("================masuk zoom============");
                                           widget.onScaleStart?.call();
                                         }, // optional
                                         onScaleStop: () {
@@ -1095,32 +1160,26 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         child: ValueListenableBuilder(
                                             valueListenable: _networklHasErrorNotifier,
                                             builder: (BuildContext context, int count, _) {
-                                              return ImageSize(
-                                                onChange: (Size size) {
-                                                  Future.delayed(const Duration(milliseconds: 300), () {
-                                                    try {
-                                                      if (mounted) {
-                                                        setState(() {
-                                                          picData?.imageHeightTemp = size.height;
-                                                        });
-                                                      } else {
-                                                        picData?.imageHeightTemp = size.height;
-                                                      }
-                                                    } catch (e) {
-                                                      e.logger();
-                                                    }
-                                                  });
-                                                },
-                                                child: CustomBaseCacheImage(
-                                                  // cacheKey: "${picData?.postID}-${cacheDesc[index]}",
-                                                  memCacheWidth: 100,
-                                                  memCacheHeight: 100,
-                                                  widthPlaceHolder: 80,
-                                                  heightPlaceHolder: 80,
-                                                  imageUrl: "${(picData?.isApsara ?? false) ? (picData?.mediaThumbEndPoint ?? "") : "${picData?.fullThumbPath}"}&key=${picData?.valueCache}",
-                                                  imageBuilder: (context, imageProvider) {
-                                                    return ClipRRect(
-                                                      borderRadius: BorderRadius.circular(20), // Image border
+                                              return CustomBaseCacheImage(
+                                                // cacheKey: "${picData?.postID}-${cacheDesc[index]}",
+                                                memCacheWidth: 100,
+                                                memCacheHeight: 100,
+                                                widthPlaceHolder: 80,
+                                                heightPlaceHolder: 80,
+                                                imageUrl: (picData?.isApsara ?? false)
+                                                    ? ("${picData?.mediaThumbEndPoint}?key=${picData?.valueCache}")
+                                                    : ("${picData?.fullThumbPath}&key=${picData?.valueCache}"),
+                                                imageBuilder: (context, imageProvider) {
+                                                  return ClipRRect(
+                                                    borderRadius: BorderRadius.circular(20), // Image border
+                                                    child: ImageSize(
+                                                      onChange: (Size size) {
+                                                        if ((picData?.imageHeightTemp ?? 0) == 0) {
+                                                          setState(() {
+                                                            picData?.imageHeightTemp = size.height;
+                                                          });
+                                                        }
+                                                      },
                                                       child: picData?.reportedStatus == 'BLURRED'
                                                           ? ImageFiltered(
                                                               imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
@@ -1128,23 +1187,45 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                                 image: imageProvider,
                                                                 fit: BoxFit.fitHeight,
                                                                 width: SizeConfig.screenWidth,
-                                                                height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
+                                                                // height: picData?.imageHeightTemp == 0 ? null : picData?.imageHeightTemp,
                                                               ),
                                                             )
                                                           : Image(
                                                               image: imageProvider,
                                                               fit: BoxFit.fitHeight,
                                                               width: SizeConfig.screenWidth,
-                                                              height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
+                                                              // height: picData?.imageHeightTemp == 0 || (picData?.imageHeightTemp ?? 0) <= 100 ? null : picData?.imageHeightTemp,
                                                             ),
-                                                    );
+                                                    ),
+                                                  );
+                                                },
+                                                emptyWidget: GestureDetector(
+                                                  onTap: () {
+                                                    _networklHasErrorNotifier.value++;
+                                                    Random random = new Random();
+                                                    int randomNumber = random.nextInt(100); // from 0 upto 99 included
+
+                                                    picData?.valueCache = randomNumber.toString();
+                                                    setState(() {});
+                                                    // reloadImage(index);
                                                   },
-                                                  emptyWidget: GestureDetector(
+                                                  child: Container(
+                                                      decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                                      width: SizeConfig.screenWidth,
+                                                      height: 250,
+                                                      padding: EdgeInsets.all(20),
+                                                      alignment: Alignment.center,
+                                                      child: CustomTextWidget(
+                                                        textToDisplay: lang?.couldntLoadImage ?? 'Error',
+                                                        maxLines: 3,
+                                                      )),
+                                                ),
+                                                errorWidget: (context, url, error) {
+                                                  return GestureDetector(
                                                     onTap: () {
-                                                      _networklHasErrorNotifier.value++;
                                                       Random random = new Random();
                                                       int randomNumber = random.nextInt(100); // from 0 upto 99 included
-
+                                                      _networklHasErrorNotifier.value++;
                                                       picData?.valueCache = randomNumber.toString();
                                                       setState(() {});
                                                       // reloadImage(index);
@@ -1153,36 +1234,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                         decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
                                                         width: SizeConfig.screenWidth,
                                                         height: 250,
-                                                        padding: EdgeInsets.all(20),
+                                                        padding: const EdgeInsets.all(20),
                                                         alignment: Alignment.center,
                                                         child: CustomTextWidget(
                                                           textToDisplay: lang?.couldntLoadImage ?? 'Error',
                                                           maxLines: 3,
                                                         )),
-                                                  ),
-                                                  errorWidget: (context, url, error) {
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        Random random = new Random();
-                                                        int randomNumber = random.nextInt(100); // from 0 upto 99 included
-                                                        _networklHasErrorNotifier.value++;
-                                                        picData?.valueCache = randomNumber.toString();
-                                                        setState(() {});
-                                                        // reloadImage(index);
-                                                      },
-                                                      child: Container(
-                                                          decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                                          width: SizeConfig.screenWidth,
-                                                          height: 250,
-                                                          padding: const EdgeInsets.all(20),
-                                                          alignment: Alignment.center,
-                                                          child: CustomTextWidget(
-                                                            textToDisplay: lang?.couldntLoadImage ?? 'Error',
-                                                            maxLines: 3,
-                                                          )),
-                                                    );
-                                                  },
-                                                ),
+                                                  );
+                                                },
                                               );
                                             }),
                                       ),
@@ -1434,7 +1493,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             child: PicTopItem(
               data: data,
               isShow: isShowShowcase,
-              globalKey: data.keyGlobal,
+              globalKey: (data.saleAmount ?? 0) > 0
+                  ? data.keyGlobalSell
+                  : ((data.certified ?? false) && (data.saleAmount ?? 0) == 0)
+                      ? data.keyGlobalOwn
+                      : GlobalKey(),
+              postId: _curPostId,
             ),
           ),
           if (data.tagPeople?.isNotEmpty ?? false)

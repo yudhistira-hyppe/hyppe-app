@@ -867,9 +867,9 @@ class HomeNotifier with ChangeNotifier {
     final id = ads.videoId;
     print('ke iklan yah $id');
     print('ke iklan yah ${ads.adsType}');
-    if(ads.mediaType?.toLowerCase() == 'image'){
+    if (ads.mediaType?.toLowerCase() == 'image') {
       await System().adsPopUpV2(context, ads, '');
-    }else if (id != null && ads.adsType != null) {
+    } else if (id != null && ads.adsType != null) {
       try {
         final notifier = PostsBloc();
 
@@ -1165,6 +1165,7 @@ class HomeNotifier with ChangeNotifier {
       case 'vid':
         if (vid.vidData != null) {
           vid.vidData = [contentData] + [...(vid.vidData ?? [] as List<ContentData>)];
+          vid.vidData?[0].isContentLoading = true;
         } else {
           await vid.initialVid(Routing.navigatorKey.currentContext ?? context, list: allContents);
         }

@@ -21,8 +21,9 @@ class PicTopItem extends StatefulWidget {
   final ContentData? data;
   final bool? isShow;
   final FlutterAliplayer? fAliplayer;
+  final String? postId;
 
-  const PicTopItem({Key? key, this.data, this.globalKey, this.isShow, this.fAliplayer}) : super(key: key);
+  const PicTopItem({Key? key, this.data, this.globalKey, this.isShow, this.fAliplayer, this.postId}) : super(key: key);
 
   @override
   State<PicTopItem> createState() => _PicTopItemState();
@@ -46,36 +47,34 @@ class _PicTopItemState extends State<PicTopItem> {
   }
 
   void show() {
-    ShowCaseWidget.of(context).startShowCase([widget.data?.keyGlobal ?? GlobalKey()]);
+    ShowCaseWidget.of(context).startShowCase([widget.globalKey ?? GlobalKey()]);
   }
 
   @override
   void didUpdateWidget(covariant PicTopItem oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    print("=============shioww  ${widget.isShow} ");
-
-    if (widget.isShow == true) {
-      Future.delayed(const Duration(milliseconds: 200), () {
-        GlobalKey key = widget.globalKey ?? GlobalKey();
-        if ((widget.data?.saleAmount ?? 0) > 0 && mn?.tutorialData[indexKeySell].status == false) {
-          if (key == widget.data?.keyGlobal) {
-            if (widget.data?.fAliplayer != null) {
-              widget.data?.fAliplayer?.pause();
-            }
-            ShowCaseWidget.of(context).startShowCase([widget.data?.keyGlobal ?? GlobalKey()]);
-          }
-        }
-        if (((widget.data?.certified ?? false) && (widget.data?.saleAmount ?? 0) == 0) && mn?.tutorialData[indexKeyProtection].status == false) {
-          if (key == widget.data?.keyGlobal) {
-            if (widget.data?.fAliplayer != null) {
-              widget.data?.fAliplayer?.pause();
-            }
-            ShowCaseWidget.of(context).startShowCase([widget.data?.keyGlobal ?? GlobalKey()]);
-          }
-        }
-      });
-    }
+    // if (widget.isShow == true && widget.postId == widget.data?.postID) {
+    //   Future.delayed(const Duration(milliseconds: 200), () {
+    //     GlobalKey key = widget.globalKey ?? GlobalKey();
+    //     if ((widget.data?.saleAmount ?? 0) > 0) {
+    //       if (key == widget.data?.keyGlobal) {
+    //         if (widget.data?.fAliplayer != null) {
+    //           widget.data?.fAliplayer?.pause();
+    //         }
+    //         // ShowCaseWidget.of(context).startShowCase([widget.globalKey ?? GlobalKey()]);
+    //       }
+    //     }
+    //     if (((widget.data?.certified ?? false) && (widget.data?.saleAmount ?? 0) == 0) && mn?.tutorialData[indexKeyProtection].status == false) {
+    //       if (key == widget.data?.keyGlobal) {
+    //         if (widget.data?.fAliplayer != null) {
+    //           widget.data?.fAliplayer?.pause();
+    //         }
+    //         // ShowCaseWidget.of(context).startShowCase([widget.globalKey ?? GlobalKey()]);
+    //       }
+    //     }
+    //   });
+    // }
   }
 
   @override
@@ -87,7 +86,7 @@ class _PicTopItemState extends State<PicTopItem> {
       children: [
         if ((widget.data?.saleAmount ?? 0) > 0)
           Showcase(
-            key: widget.data?.keyGlobal ?? GlobalKey(),
+            key: widget.globalKey ?? GlobalKey(),
             tooltipBackgroundColor: kHyppeTextLightPrimary,
             overlayOpacity: 0,
             targetPadding: const EdgeInsets.all(0),
@@ -116,11 +115,13 @@ class _PicTopItemState extends State<PicTopItem> {
             ),
             child: GestureDetector(
               onTap: () {
-                if (widget.fAliplayer != null) {
-                  widget.fAliplayer?.pause();
+                if (widget.globalKey != null) {
+                  if (widget.fAliplayer != null) {
+                    widget.fAliplayer?.pause();
+                  }
+                  globalTultipShow = true;
+                  show();
                 }
-                globalTultipShow = true;
-                show();
               },
               child: const CustomIconWidget(
                 iconData: '${AssetPath.vectorPath}sale.svg',
@@ -131,7 +132,7 @@ class _PicTopItemState extends State<PicTopItem> {
           ),
         if ((widget.data?.certified ?? false) && (widget.data?.saleAmount ?? 0) == 0)
           Showcase(
-            key: widget.data?.keyGlobal ?? GlobalKey(),
+            key: widget.globalKey ?? GlobalKey(),
             tooltipBackgroundColor: kHyppeTextLightPrimary,
             overlayOpacity: 0,
             targetPadding: const EdgeInsets.all(0),
@@ -159,11 +160,13 @@ class _PicTopItemState extends State<PicTopItem> {
             ),
             child: GestureDetector(
               onTap: () {
-                if (widget.fAliplayer != null) {
-                  widget.fAliplayer?.pause();
+                if (widget.globalKey != null) {
+                  if (widget.fAliplayer != null) {
+                    widget.fAliplayer?.pause();
+                  }
+                  globalTultipShow = true;
+                  show();
                 }
-                globalTultipShow = true;
-                show();
               },
               child: const CustomIconWidget(
                 iconData: '${AssetPath.vectorPath}ownership.svg',

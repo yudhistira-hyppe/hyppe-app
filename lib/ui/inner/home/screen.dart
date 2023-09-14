@@ -59,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   // final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   // final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
   bool appbarSeen = true;
+  bool afterUploading = false;
   late TabController _tabController;
   double offset = 0.0;
   List filterList = [
@@ -137,10 +138,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     offset = 0;
 
     Future.delayed(Duration.zero, () {
-      _tabController.index = 0;
+      // _tabController.index = 0;
       final notifier = context.read<HomeNotifier>();
       notifier.setSessionID();
-      notifier.tabIndex = 0;
+      // notifier.tabIndex = 0;
       _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
       final notifierMain = context.read<MainNotifier>();
@@ -238,6 +239,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   bool isZoom = false;
 
   void zoom(val) {
+    print("==========iz zoomm = ${val}");
     setState(() {
       isZoom = val;
     });
@@ -287,6 +289,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                   }
                 },
                 child: AbsorbPointer(
+                  // absorbing: true,
                   absorbing: isZoom,
                   child: NestedScrollView(
                     key: context.read<MainNotifier>().globalKey,
@@ -303,13 +306,13 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                               sixPx,
                               const HyppePreviewStories(),
                               sixPx,
-                              GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      changeTab(FeatureType.diary);
-                                    });
-                                  },
-                                  child: Text("hahahahaha")),
+                              // GestureDetector(
+                              //     onTap: () {
+                              //       setState(() {
+                              //         changeTab(FeatureType.diary);
+                              //       });
+                              //     },
+                              //     child: Text("hahahahaha")),
                               Container(
                                 padding: const EdgeInsets.all(16),
                                 color: kHyppeLightSurface,
@@ -368,9 +371,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                           child: HyppePreviewPic(
                             onScaleStart: () {
                               zoom(true);
+                              globalTultipShow = true;
                             },
                             onScaleStop: () {
                               zoom(false);
+                              globalTultipShow = false;
                             },
                             appbarSeen: appbarSeen,
                             scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
@@ -390,6 +395,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                           color: kHyppeLightSurface,
                           child: HyppePreviewVid(
                             scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                            afterUploading: afterUploading,
                           ),
                         ),
                       ],
@@ -404,8 +410,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     );
   }
 
-  final events = [];
-
   @override
   void afterFirstLayout(BuildContext context) async {
     print("afterrrrrrr============");
@@ -414,42 +418,50 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     if (homneNotifier.preventReloadAfterUploadPost) {
       print("afterrrrrrr preventReloadAfterUploadPost ============");
       print("afterrrrrrr preventReloadAfterUploadPost ${homneNotifier.uploadedPostType}============");
-
+      afterUploading = true;
       changeTab(homneNotifier.uploadedPostType);
       homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
       homeClick = true;
       (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+      Future.delayed(Duration(milliseconds: 500), () {
+        afterUploading = false;
+      });
     }
-    // _tabController.index = homneNotifier.tabIndex;
-    // _tabController.animation?.addListener(() {
-    //   homneNotifier.tabIndex = _tabController.index;
-    //   print("masuk tab slide");
-    //   if (homneNotifier.lastCurIndex != homneNotifier.tabIndex) {
-    //     homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
-    //   }
-    //   homneNotifier.lastCurIndex = homneNotifier.tabIndex;
-    // });
-    // if (isHomeScreen) {
-    //   print("isOnHomeScreen hit ads");
-    //   homneNotifier.getAdsApsara(context, true);
-    // }
+
+    print("====home not ${homneNotifier.tabIndex}");
+
+    setState(() {
+      _tabController.index = homneNotifier.tabIndex;
+    });
+    print("====_tabController.index ${_tabController.index}");
+
+    _tabController.animation?.addListener(() {
+      homneNotifier.tabIndex = _tabController.index;
+      print("masuk tab slide");
+      if (homneNotifier.lastCurIndex != homneNotifier.tabIndex) {
+        homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
+      }
+      homneNotifier.lastCurIndex = homneNotifier.tabIndex;
+    });
+    if (isHomeScreen) {
+      print("isOnHomeScreen hit ads");
+      homneNotifier.getAdsApsara(context, true);
+    }
     // System().popUpChallange(context);
   }
 
   void changeTab(postType) {
+    print("#######################################################################################");
     var homneNotifier = context.read<HomeNotifier>();
     if (postType == FeatureType.pic) {
       homneNotifier.tabIndex = 0;
-      _tabController.index = 0;
     } else if (homneNotifier.uploadedPostType == FeatureType.diary) {
       setState(() {
         homneNotifier.tabIndex = 1;
-        _tabController.index = 1;
       });
     } else if (postType == FeatureType.vid) {
       var vid = context.read<PreviewVidNotifier>();
       homneNotifier.tabIndex = 2;
-      _tabController.index = 2;
 
       if (vid.vidData == null) {
         // await notifier.initNewHome(context, mounted, isreload: true);

@@ -38,7 +38,7 @@ class ApiAction {
         responseHeader: true,
       ));
       // _dio.interceptors.add(CurlLoggerDioInte?rceptor(printOnSuccess: true));
-      // _dio.interceptors.add(HttpFormatter());
+      _dio.interceptors.add(HttpFormatter());
     }
   }
 

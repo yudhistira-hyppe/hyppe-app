@@ -207,7 +207,9 @@ class ContentData {
   String? valueCache;
 
   List<Tutorial>? tutorial;
-  GlobalKey? keyGlobal;
+  GlobalKey? keyGlobalOwn;
+  GlobalKey? keyGlobalSell;
+  bool? isContentLoading;
 
   ContentData({
     this.metadata,
@@ -276,8 +278,10 @@ class ContentData {
     this.imageHeightTemp2,
     this.valueCache,
     this.tutorial,
-    this.keyGlobal,
+    this.keyGlobalOwn,
+    this.keyGlobalSell,
     this.inBetweenAds,
+    this.isContentLoading,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -390,7 +394,9 @@ class ContentData {
         tutorial!.add(Tutorial.fromJson(v));
       });
     }
-    keyGlobal = GlobalKey();
+    keyGlobalOwn = GlobalKey();
+    keyGlobalSell = GlobalKey();
+    isContentLoading = false;
   }
 
   Map<String, dynamic> toJson() {
