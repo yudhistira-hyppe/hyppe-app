@@ -67,7 +67,7 @@ dependencies:
 #  hive: ^2.2.3
 #  hive_flutter: ^1.1.0
   marquee: ^2.2.3
-  ffmpeg_kit_flutter: ^5.1.0
+  ffmpeg_kit_flutter: ^6.0.2
   audioplayers: ^2.0.0
   image_cropper: ^4.0.1
   move_to_background: ^1.0.2

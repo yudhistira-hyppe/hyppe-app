@@ -359,15 +359,19 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
           region: DataSourceRelated.defaultRegion,
           playAuth: auth,
         );
-        setState(() {
-          isloading = false;
-        });
+        if(mounted){
+          setState(() {
+            isloading = false;
+          });
+        }
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
-      setState(() {
-        isloading = false;
-      });
+      if(mounted){
+        setState(() {
+          isloading = false;
+        });
+      }
       // 'Failed to fetch ads data $e'.logger();
     }
   }

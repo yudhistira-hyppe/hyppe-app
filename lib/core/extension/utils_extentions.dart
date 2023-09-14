@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -143,10 +144,10 @@ extension ContextScreen on BuildContext {
     }
   }
 
-  Widget getAdsInBetween(AdsData? adsData, Function(VisibilityInfo)? onVisible, Function() onComplete){
+  Widget getAdsInBetween(AdsData? adsData, Function(VisibilityInfo)? onVisible, Function() onComplete, Function(FlutterAliplayer, String) getPlayer){
     if(adsData != null){
       if(adsData.mediaType?.toLowerCase() == 'video'){
-        return AdsVideoInBetween( onVisibility: onVisible, data: adsData, afterReport: onComplete,);
+        return AdsVideoInBetween( onVisibility: onVisible, data: adsData, afterReport: onComplete,getPlayer: getPlayer,);
       }else{
         return AdsInBetween(data: adsData, afterReport: onComplete,);
       }
@@ -190,7 +191,12 @@ extension StringDefine on String {
   }
 
   bool withHttp(){
-    return substring(0, 4) == 'http';
+    if(length > 5){
+      return substring(0, 4) == 'http';
+    }else{
+      return false;
+    }
+
   }
 
   bool isSVG(){

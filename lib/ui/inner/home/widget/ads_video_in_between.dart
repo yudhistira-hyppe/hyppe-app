@@ -15,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../core/arguments/other_profile_argument.dart';
+import '../../../../core/bloc/ads_video/bloc.dart';
 import '../../../../core/bloc/posts_v2/bloc.dart';
 import '../../../../core/bloc/posts_v2/state.dart';
 import '../../../../core/config/ali_config.dart';
@@ -37,7 +38,8 @@ class AdsVideoInBetween extends StatefulWidget {
   final FlutterAliplayer? player;
   final AdsData data;
   final Function() afterReport;
-  const AdsVideoInBetween({Key? key, this.onVisibility, this.player, required this.data, required this.afterReport}) : super(key: key);
+  final Function(FlutterAliplayer, String) getPlayer;
+  const AdsVideoInBetween({Key? key, this.onVisibility, this.player, required this.data, required this.afterReport, required this.getPlayer}) : super(key: key);
 
   @override
   State<AdsVideoInBetween> createState() => _AdsVideoInBetweenState();
@@ -48,20 +50,23 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
 
   bool loadLaunch = false;
 
+  double ratio = 16 / 9;
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'AdsVideoBetween');
 
+    ratio = (widget.data.height != null && widget.data.width != null) ? widget.data.width! / widget.data.height! : 16 / 9;
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
 
     globalAdsInContent?.pause();
   }
 
+
   @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
-    final ratio = (widget.data.height != null && widget.data.width != null) ? widget.data.width! / widget.data.height! : 16 / 9;
     return Consumer<VideoNotifier>(builder: (context, notifier, _) {
       return Container(
         margin: const EdgeInsets.only(bottom: 20),
@@ -171,6 +176,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                           if (widget.onVisibility != null) {
                             widget.onVisibility!(info);
                           }
+
                           if (info.visibleFraction >= 0.9) {
                             notifier.currentPostID = widget.data.adsId ?? '';
                             adsGlobalAliPlayer?.play();
@@ -186,7 +192,12 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                     adsData: widget.data,
                                     player: widget.player,
                                     ratio: ratio,
-                                  )
+                              onRatioChanged: (fix){
+                                      setState(() {
+                                        ratio = fix;
+                                      },);
+                              },
+                                  getPlayer: widget.getPlayer,)
                                 : Container(
                                     decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
                                     alignment: Alignment.center,
@@ -287,7 +298,9 @@ class InBetweenScreen extends StatefulWidget {
   final AdsData adsData;
   final FlutterAliplayer? player;
   final double ratio;
-  const InBetweenScreen({Key? key, required this.adsData, this.player, required this.ratio}) : super(key: key);
+  final Function(double) onRatioChanged;
+  final Function(FlutterAliplayer, String) getPlayer;
+  const InBetweenScreen({Key? key, required this.adsData, this.player, required this.ratio, required this.onRatioChanged, required this.getPlayer}) : super(key: key);
 
   @override
   State<InBetweenScreen> createState() => _InBetweenScreenState();
@@ -345,6 +358,9 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      if (fAliplayer != null) {
+        widget.getPlayer(fAliplayer!, widget.adsData.adsId ?? '');
+      }
       _initListener();
     });
 
@@ -539,22 +555,34 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
     //       "eyJTZWN1cml0eVRva2VuIjoiQ0FJU2lBTjFxNkZ0NUIyeWZTaklyNURISnUvWnJvZFIrb1d2VlY2SmdHa0RPdFZjaDZMRG96ejJJSDFLZlhadEJPQWN0ZlF3bFdwVDdQNGJsckl1RjhJWkdoR2ZONU10dE1RUHJGL3dKb0hidk5ldTBic0hoWnY5bGNNTHJaaWpqcUhvZU96Y1lJNzMwWjdQQWdtMlEwWVJySkwrY1RLOUphYk1VL21nZ29KbWFkSTZSeFN4YVNFOGF2NWRPZ3BscnIwSVZ4elBNdnIvSFJQMnVtN1pIV3R1dEEwZTgzMTQ1ZmFRejlHaTZ4YlRpM2I5ek9FVXFPYVhKNFMvUGZGb05ZWnlTZjZvd093VUVxL2R5M3hvN3hGYjFhRjRpODRpL0N2YzdQMlFDRU5BK3dtbFB2dTJpOE5vSUYxV2E3UVdJWXRncmZQeGsrWjEySmJOa0lpbDVCdFJFZHR3ZUNuRldLR216c3krYjRIUEROc2ljcXZoTUhuZ3k4MkdNb0tQMHprcGVuVUdMZ2hIQ2JGRFF6MVNjVUZ3RjIyRmQvVDlvQTJRTWwvK0YvbS92ZnRvZ2NvbC9UTEI1c0dYSWxXRGViS2QzQnNETjRVMEIwRlNiRU5JaERPOEwvOWNLRndUSWdrOFhlN01WL2xhYUJGUHRLWFdtaUgrV3lOcDAzVkxoZnI2YXVOcGJnUHIxVVFwTlJxQUFaT3kybE5GdndoVlFObjZmbmhsWFpsWVA0V3paN24wTnVCbjlILzdWZHJMOGR5dHhEdCtZWEtKNWI4SVh2c0lGdGw1cmFCQkF3ZC9kakhYTjJqZkZNVFJTekc0T3pMS1dKWXVzTXQycXcwMSt4SmNHeE9iMGtKZjRTcnFpQ1RLWVR6UHhwakg0eDhvQTV6Z0cvZjVIQ3lFV3pISmdDYjhEeW9EM3NwRUh4RGciLCJBdXRoSW5mbyI6IntcIkNJXCI6XCJmOUc0eExxaHg2Tkk3YThaY1Q2N3hObmYrNlhsM05abmJXR1VjRmxTelljS0VKVTN1aVRjQ29Hd3BrcitqL2phVVRXclB2L2xxdCs3MEkrQTJkb3prd0IvKzc5ZlFyT2dLUzN4VmtFWUt6TT1cIixcIkNhbGxlclwiOlwiV2NKTEpvUWJHOXR5UmM2ZXg3LzNpQXlEcS9ya3NvSldhcXJvTnlhTWs0Yz1cIixcIkV4cGlyZVRpbWVcIjpcIjIwMjMtMDMtMTZUMDk6NDE6MzdaXCIsXCJNZWRpYUlkXCI6XCJjMWIyNGQzMGIyYzY3MWVkYmZjYjU0MjI4MGU5MDEwMlwiLFwiUGxheURvbWFpblwiOlwidm9kLmh5cHBlLmNsb3VkXCIsXCJTaWduYXR1cmVcIjpcIk9pbHhxelNyaVVhOGlRZFhaVEVZZEJpbUhJUT1cIn0iLCJWaWRlb01ldGEiOnsiU3RhdHVzIjoiTm9ybWFsIiwiVmlkZW9JZCI6ImMxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyIiwiVGl0bGUiOiIyODg4MTdkYi1jNzdjLWM0ZTQtNjdmYi0zYjk1MTlmNTc0ZWIiLCJDb3ZlclVSTCI6Imh0dHBzOi8vdm9kLmh5cHBlLmNsb3VkL2MxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyL3NuYXBzaG90cy9jYzM0MjVkNzJiYjM0YTE3OWU5NmMzZTA3NTViZjJjNi0wMDAwNC5qcGciLCJEdXJhdGlvbiI6NTkuMDQ5fSwiQWNjZXNzS2V5SWQiOiJTVFMuTlNybVVtQ1hwTUdEV3g4ZGlWNlpwaGdoQSIsIlBsYXlEb21haW4iOiJ2b2QuaHlwcGUuY2xvdWQiLCJBY2Nlc3NLZXlTZWNyZXQiOiIzU1NRUkdkOThGMU04TkZ0b00xa2NlU01IZlRLNkJvZm93VXlnS1Y5aEpQdyIsIlJlZ2lvbiI6ImFwLXNvdXRoZWFzdC01IiwiQ3VzdG9tZXJJZCI6NTQ1NDc1MzIwNTI4MDU0OX0=",
     // );
     await getAuth(data.videoId ?? '476cf7a01e7371ee9612442380ea0102');
-
-    setState(() {
+    if(mounted){
+      setState(() {
+        isPause = false;
+        // _isFirstRenderShow = false;
+      });
+    }else{
       isPause = false;
-      // _isFirstRenderShow = false;
-    });
-    fAliplayer?.prepare();
+    }
+
+    await fAliplayer?.prepare();
+
 
     // fAliplayer?.play();
   }
 
   Future getAuth(String apsaraId) async {
-    setState(() {
-      isloading = true;
-      _showLoading = true;
-    });
+
+
     try {
+      if(mounted){
+        setState(() {
+          isloading = true;
+          _showLoading = true;
+        });
+      }else{
+        isloading = true;
+        _showLoading = true;
+      }
       final notifier = PostsBloc();
       await notifier.getAuthApsara(context, apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
@@ -568,21 +596,37 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
           playAuth: auth,
           definitionList: [DataSourceRelated.definitionList],
         );
-        setState(() {
+        if(mounted){
+          setState(() {
+            isloading = false;
+            _showLoading = false;
+          });
+        }else{
           isloading = false;
-        });
+          _showLoading = false;
+        }
+
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
-      setState(() {
+      if(mounted){
+        setState(() {
+          isloading = false;
+          _showLoading = false;
+        });
+      }else{
         isloading = false;
         _showLoading = false;
-      });
+      }
+
       // 'Failed to fetch ads data $e'.logger();
     }
   }
 
   void onViewPlayerCreated(viewId) async {
+    if (fAliplayer != null) {
+      widget.getPlayer(fAliplayer!, widget.adsData.adsId ?? '');
+    }
     fAliplayer?.setPlayerView(viewId);
   }
 

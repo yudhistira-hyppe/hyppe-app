@@ -121,11 +121,27 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  int _nextAdsShowed = 6;
+  int get nextAdsShowed => _nextAdsShowed;
+  set nextAdsShowed(int state) {
+    _nextAdsShowed = state;
+    notifyListeners();
+  }
+
+  initAdsCounter() {
+    _nextAdsShowed = 6;
+  }
+
   void setInBetweenAds(int index, AdsData? adsData) {
+    // final withAds = vidData?.where((element) => element.inBetweenAds != null).length ?? 0;
+    // final adsSize = vidData?.length ?? 0;
     // if (adsData != null) {
-    //   if (vidData?[index + 1].inBetweenAds == null) {
-    //     vidData?.insert(index + 1, ContentData(inBetweenAds: adsData));
-    //     notifyListeners();
+    //   if (adsSize > nextAdsShowed) {
+    //     if (vidData?[nextAdsShowed].inBetweenAds == null) {
+    //       vidData?.insert(nextAdsShowed, ContentData(inBetweenAds: adsData));
+    //       _nextAdsShowed = _nextAdsShowed + 6 + withAds;
+    //       notifyListeners();
+    //     }
     //   }
     // } else {
     //   vidData?.removeAt(index);

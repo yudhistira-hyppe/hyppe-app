@@ -12,20 +12,14 @@ import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -40,7 +34,6 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/screen.dart';
 import 'package:showcaseview/showcaseview.dart';
-import 'package:wakelock/wakelock.dart';
 import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
 import 'package:move_to_background/move_to_background.dart';
@@ -177,11 +170,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           e.logger();
         }
       });
-      Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.addListener(() {
+      Routing.navigatorKey.currentContext?.read<MainNotifier>().scrollController.addListener(() {
         // print(context.read<MainNotifier>().scrollController.offset);
         try {
           if (mounted) {
-            if ((Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
+            if ((Routing.navigatorKey.currentContext?.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
               setState(() {
                 appbarSeen = false;
               });
@@ -191,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
               });
             }
           } else {
-            if ((Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
+            if ((Routing.navigatorKey.currentContext?.read<MainNotifier>().scrollController.offset ?? 0) >= 160) {
               appbarSeen = false;
             } else {
               appbarSeen = true;
