@@ -763,67 +763,70 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       onChange: (Size size) {
         picData?.height = size.height;
       },
-      child: isAds
-          ? VisibilityDetector(
-            key: Key(index.toString()),
-            onVisibilityChanged: (info) async {
-              if (info.visibleFraction >= 0.8) {
-                _curIdx = index;
-                _curPostId = picData?.inBetweenAds?.adsId ?? index.toString();
-                if (_lastCurIndex > _curIdx) {
-                  // fAliplayer?.destroy();
-                  double position = 0.0;
-                  for (var i = 0; i < _curIdx; i++) {
-                    position += notifier.pic?[i].height ?? 0.0;
-                    // position = position - (notifier.pic?[_curIdx].height);
-                  }
-                  // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
-                }
-
-                // if (_lastCurIndex != _curIdx) {
-                if (_lastCurPostId != _curPostId) {
-                  if (mounted) {
-                    setState(() {
-                      isShowShowcase = false;
-                    });
-                  }
-                  final indexList = notifier.pic?.indexWhere((element) => element.inBetweenAds?.adsId == _curPostId);
-
-                  if (indexList == (notifier.pic?.length ?? 0) - 1) {
-                    context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
-                  }
-                  fAliplayer?.stop();
-
-                  Future.delayed(const Duration(milliseconds: 500), () {
-                    System().increaseViewCount2(context, picData ?? ContentData(), check: false);
-                    if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
-                      if (mounted) {
-                        setState(() {
-                          isShowShowcase = true;
-                          keyOwnership = picData?.keyGlobal;
-                        });
-                      }
-                      // ShowCaseWidget.of(context).startShowCase([picData?.keyGlobal ?? GlobalKey()]);
-                    }
-                  });
-                  setState(() {
-                    Future.delayed(Duration(milliseconds: 400), () {
-                      itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
-                    });
-                  });
-                }
-                _lastCurIndex = _curIdx;
-                _lastCurPostId = _curPostId;
-              }
-            },
-            child: context.getAdsInBetween(notifier.pic?[index].inBetweenAds, (info) {
-
-            }, () {
-              notifier.setAdsData(index, null);
-            },(player, id){
-            }),
-          )
-          : Column(
+      child:
+      ///ADS IN BETWEEN === Hariyanto Lukman ===
+      // isAds
+      //     ? VisibilityDetector(
+      //       key: Key(index.toString()),
+      //       onVisibilityChanged: (info) async {
+      //         if (info.visibleFraction >= 0.8) {
+      //           _curIdx = index;
+      //           _curPostId = picData?.inBetweenAds?.adsId ?? index.toString();
+      //           if (_lastCurIndex > _curIdx) {
+      //             // fAliplayer?.destroy();
+      //             double position = 0.0;
+      //             for (var i = 0; i < _curIdx; i++) {
+      //               position += notifier.pic?[i].height ?? 0.0;
+      //               // position = position - (notifier.pic?[_curIdx].height);
+      //             }
+      //             // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
+      //           }
+      //
+      //           // if (_lastCurIndex != _curIdx) {
+      //           if (_lastCurPostId != _curPostId) {
+      //             if (mounted) {
+      //               setState(() {
+      //                 isShowShowcase = false;
+      //               });
+      //             }
+      //             final indexList = notifier.pic?.indexWhere((element) => element.inBetweenAds?.adsId == _curPostId);
+      //
+      //             if (indexList == (notifier.pic?.length ?? 0) - 1) {
+      //               context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
+      //             }
+      //             fAliplayer?.stop();
+      //
+      //             Future.delayed(const Duration(milliseconds: 500), () {
+      //               System().increaseViewCount2(context, picData ?? ContentData(), check: false);
+      //               if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
+      //                 if (mounted) {
+      //                   setState(() {
+      //                     isShowShowcase = true;
+      //                     keyOwnership = picData?.keyGlobal;
+      //                   });
+      //                 }
+      //                 // ShowCaseWidget.of(context).startShowCase([picData?.keyGlobal ?? GlobalKey()]);
+      //               }
+      //             });
+      //             setState(() {
+      //               Future.delayed(Duration(milliseconds: 400), () {
+      //                 itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
+      //               });
+      //             });
+      //           }
+      //           _lastCurIndex = _curIdx;
+      //           _lastCurPostId = _curPostId;
+      //         }
+      //       },
+      //       child: context.getAdsInBetween(notifier.pic?[index].inBetweenAds, (info) {
+      //
+      //       }, () {
+      //         notifier.setAdsData(index, null);
+      //       },(player, id){
+      //       }),
+      //     )
+      //     :
+      Column(
               children: [
                 Container(
                   decoration: BoxDecoration(
@@ -1029,13 +1032,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               // });
                             }
 
-                            if((notifier.pic?.length ?? 0) > notifier.nextAdsShowed){
-                              context.getInBetweenAds().then((value){
-                                if (value != null) {
-                                  notifier.setAdsData(index, value);
-                                }
-                              });
-                            }
+                            ///ADS IN BETWEEN === Hariyanto Lukman ===
+                            // if((notifier.pic?.length ?? 0) > notifier.nextAdsShowed){
+                            //   context.getInBetweenAds().then((value){
+                            //     if (value != null) {
+                            //       notifier.setAdsData(index, value);
+                            //     }
+                            //   });
+                            // }
 
                             _lastCurIndex = _curIdx;
                             _lastCurPostId = _curPostId;

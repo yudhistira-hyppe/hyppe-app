@@ -426,54 +426,57 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
           });
         }
       },
-      child: isAds
-          ? VisibilityDetector(
-              key: Key(vidData.postID ?? index.toString()),
-              onVisibilityChanged: (info) async {
-                if (info.visibleFraction >= 0.8) {
-                  _curIdx = index;
-                  _curPostId = vidData.inBetweenAds?.adsId ?? index.toString();
-
-                  final ads = context.read<VideoNotifier>();
-                  ads.adsAliplayer?.pause();
-                  dataSelected = notifier.vidData?[index];
-                  if (_lastCurPostId != _curPostId){
-                    if (notifier.vidData?[_curIdx].fAliplayer != null) {
-                      notifier.vidData?[_curIdx].fAliplayer?.pause();
-                    } else {
-                      dataAli[notifier.vidData?[_curIdx].postID]?.pause();
-                    }
-                  }
-                  try {
-                    Future.delayed(const Duration(milliseconds: 400), () {
-                      if (mounted) {
-                        setState(() {
-                          postIdVisibility = notifier.vidData?[_curIdx].inBetweenAds?.adsId ?? '';
-                          postIdVisibilityTemp = notifier.vidData?[_curIdx].inBetweenAds?.adsId ?? '';
-                        });
-                      } else {
-                        postIdVisibility = notifier.vidData?[_curIdx].inBetweenAds?.adsId ?? '';
-                        postIdVisibilityTemp = notifier.vidData?[_curIdx].inBetweenAds?.adsId ?? '';
-                      }
-                    });
-                  } catch (e) {
-                    print("hahahha $e");
-                  }
-                  _lastCurIndex = _curIdx;
-                  _lastCurPostId = _curPostId;
-                }
-              },
-              child: context.getAdsInBetween(vidData.inBetweenAds, (info) {
-
-              }, () {
-                notifier.setInBetweenAds(index, null);
-              }, (player, id){
-                setState(() {
-                  dataAli[id] = player;
-                });
-              }),
-            )
-          : Column(
+      child:
+      ///ADS IN BETWEEN === Hariyanto Lukman ===
+      // isAds
+      //     ? VisibilityDetector(
+      //         key: Key(vidData.postID ?? index.toString()),
+      //         onVisibilityChanged: (info) async {
+      //           if (info.visibleFraction >= 0.8) {
+      //             _curIdx = index;
+      //             _curPostId = vidData.inBetweenAds?.adsId ?? index.toString();
+      //
+      //             final ads = context.read<VideoNotifier>();
+      //             ads.adsAliplayer?.pause();
+      //             dataSelected = notifier.vidData?[index];
+      //             if (_lastCurPostId != _curPostId){
+      //               if (notifier.vidData?[_curIdx].fAliplayer != null) {
+      //                 notifier.vidData?[_curIdx].fAliplayer?.pause();
+      //               } else {
+      //                 dataAli[notifier.vidData?[_curIdx].postID]?.pause();
+      //               }
+      //             }
+      //             try {
+      //               Future.delayed(const Duration(milliseconds: 400), () {
+      //                 if (mounted) {
+      //                   setState(() {
+      //                     postIdVisibility = notifier.vidData?[_curIdx].inBetweenAds?.adsId ?? '';
+      //                     postIdVisibilityTemp = notifier.vidData?[_curIdx].inBetweenAds?.adsId ?? '';
+      //                   });
+      //                 } else {
+      //                   postIdVisibility = notifier.vidData?[_curIdx].inBetweenAds?.adsId ?? '';
+      //                   postIdVisibilityTemp = notifier.vidData?[_curIdx].inBetweenAds?.adsId ?? '';
+      //                 }
+      //               });
+      //             } catch (e) {
+      //               print("hahahha $e");
+      //             }
+      //             _lastCurIndex = _curIdx;
+      //             _lastCurPostId = _curPostId;
+      //           }
+      //         },
+      //         child: context.getAdsInBetween(vidData.inBetweenAds, (info) {
+      //
+      //         }, () {
+      //           notifier.setInBetweenAds(index, null);
+      //         }, (player, id){
+      //           setState(() {
+      //             dataAli[id] = player;
+      //           });
+      //         }),
+      //       )
+      //     :
+      Column(
               children: [
                 // Text("total ${vidData.height}"),
                 VisibilityDetector(
@@ -485,11 +488,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                       print(_curIdx);
                     }
                     if (info.visibleFraction >= 0.8) {
-                      if((notifier.vidData?.length ?? 0) > notifier.nextAdsShowed){
-                        context.getInBetweenAds().then((value){
-                          notifier.setInBetweenAds(index, value);
-                        });
-                      }
+                      ///ADS IN BETWEEN === Hariyanto Lukman ===
+                      // if((notifier.vidData?.length ?? 0) > notifier.nextAdsShowed){
+                      //   context.getInBetweenAds().then((value){
+                      //     notifier.setInBetweenAds(index, value);
+                      //   });
+                      // }
                       if(!isShowingDialog){
                         adsGlobalAliPlayer?.pause();
                       }

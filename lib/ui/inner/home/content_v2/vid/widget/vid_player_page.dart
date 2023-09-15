@@ -668,11 +668,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             });
           });
 
-          if (widget.inLanding) {
-            final ref =(Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
-            ref.hasShowedAds = false;
-            ref.getAdsVideo(Routing.navigatorKey.currentContext ?? context, _videoDuration);
-          }
+          // if (widget.inLanding) {
+          //   final ref =(Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+          //   ref.hasShowedAds = false;
+          //   ref.getAdsVideo(Routing.navigatorKey.currentContext ?? context, _videoDuration);
+          // }
           // fAliplayer?.play();
           print('=2=2=2=2=2=2=2prepare done');
         }

@@ -44,7 +44,6 @@ bool globalAfterReport = false;
 bool homeClick = false;
 bool globalTultipShow = false;
 
-bool isAppOn = true;
 
 void disposeGlobalAudio() async {
   try {
