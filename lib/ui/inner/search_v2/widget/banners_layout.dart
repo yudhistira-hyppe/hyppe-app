@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,15 +5,10 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../core/constants/asset_path.dart';
-import '../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../core/services/system.dart';
-import '../../../constant/widget/custom_base_cache_image.dart';
-import '../../../constant/widget/custom_text_widget.dart';
 
 class BannersLayout extends StatefulWidget {
   final Widget layout;
@@ -102,11 +95,11 @@ class _BannersLayoutState extends State<BannersLayout>
                                 // height: 300
                                 enlargeCenterPage: true,
                                 enableInfiniteScroll: true,
-                                // autoPlay: true,
+                                autoPlay: true,
                                 viewportFraction: 1.0,
                                 aspectRatio: 375 / 211,
                                 // aspectRatio: 343 / 103,
-                                // autoPlayInterval: const Duration(seconds: 3),
+                                autoPlayInterval: const Duration(seconds: 5),
                                 onPageChanged: (index, reason) {
                                   setState(() {
                                     currIndex = index;

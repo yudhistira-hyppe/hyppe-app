@@ -179,7 +179,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  setData(ContentData? value){
+  setData(ContentData? value) {
     _data = value;
   }
 
@@ -189,7 +189,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
       // final String myEmail = SharedPreference().readStorage(SpKeys.email);
       final res = await getDetailPost(context, postID, visibility);
-      if(res != null){
+      if (res != null) {
         data = res;
       }
       // if (data != null) {
@@ -208,7 +208,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<ContentData?> getDetailPost(BuildContext context, String postID, String visibility) async {
-    try{
+    try {
       // loadPic = true;
       final notifier = PostsBloc();
       await notifier.getContentsBlocV2(context, postID: postID, pageRows: 1, pageNumber: 1, type: FeatureType.diary, visibility: visibility);
@@ -224,13 +224,11 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       } else {
         return null;
       }
-
-    }catch(e){
+    } catch (e) {
       e.logger();
-    }finally{
+    } finally {
       // loadPic = false;
     }
-
   }
 
   Future<String?> getAdsVideo(BuildContext context, bool isContent) async {
@@ -276,7 +274,8 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       if (_routeArgument?.postID != null && _routeArgument?.backPage == false) {
         'ada postid'.logger();
         System().disposeBlock();
-        Routing().moveAndPop(Routes.lobby);
+        // Routing().moveAndPop(Routes.lobby);
+        Routing().moveBack();
       } else {
         'tanpa postid'.logger();
         System().disposeBlock();

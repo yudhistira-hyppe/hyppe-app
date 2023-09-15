@@ -139,7 +139,7 @@ class DynamicLinkService {
 
               break;
             case Routes.diaryDetail:
-              '_handleDeepLink diaryDetail'.logger();
+              '_handleDeepLink diaryDetail $isFromSplash'.logger();
               if (isFromSplash) {
                 isFromSplash = false;
                 Future.delayed(const Duration(seconds: 10), () async {
@@ -151,7 +151,9 @@ class DynamicLinkService {
                   );
                 });
               } else {
-                _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+                if (!isHomeScreen) {
+                  // _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false, page: 0));
+                }
                 Future.delayed(const Duration(milliseconds: 500), () {
                   _routing.move(
                     path,

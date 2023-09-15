@@ -143,7 +143,6 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         }
       }
       if (state == AppLifecycleState.resumed) {
-        isAppOn = true;
         "App Resumed".logger();
         notifier.resumeAudioPreview();
         if (globalAudioPlayer != null) {
@@ -211,7 +210,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     }
 
     if (state == AppLifecycleState.detached){
-      isAppOn = false;
+      // isAppOn = false;
     }
   }
 
@@ -244,9 +243,10 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
   Future getAdsApsara() async {
     final ads = await getPopUpAds();
     final id = ads.videoId;
-    if(ads.mediaType?.toLowerCase() == 'image'){
-      await System().adsPopUpV2(context, ads, '');
-    }else if (id != null && ads.adsType != null) {
+    // if(ads.mediaType?.toLowerCase() == 'image'){
+    //   // await System().adsPopUpV2(context, ads, '');
+    // }else
+      if (id != null && ads.adsType != null) {
       try {
         final notifier = PostsBloc();
         await notifier.getAuthApsara(context, apsaraId: ads.videoId ?? '');
@@ -261,7 +261,8 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
           print("---------- $isShowAds");
           if (!isShowAds) {
-            System().adsPopUpV2(context, ads, auth);
+            System().adsPopUp(context, ads, auth, isInAppAds: true);
+            // System().adsPopUpV2(context, ads, auth);
           }
 
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];

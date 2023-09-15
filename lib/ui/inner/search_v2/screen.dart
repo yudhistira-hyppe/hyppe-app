@@ -276,6 +276,7 @@ class _FirstLayoutState extends State<FirstLayout> {
                       contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
                       focusNode: notifier.focusNode1,
                       controller: notifier.searchController1,
+                      withShadow: true,
                       onTap: () {
                         if (notifier.layout == SearchLayout.searchMore) {
                           notifier.isFromComplete = true;

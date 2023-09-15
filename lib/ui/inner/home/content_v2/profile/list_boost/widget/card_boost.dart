@@ -89,7 +89,7 @@ class CardBoost extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: CustomCacheImage(
-                      imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? '') : "${data?.fullThumbPath}",
+                      imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? '') : data?.fullThumbPath ?? '',
                       imageBuilder: (_, imageProvider) {
                         return Container(
                           height: 52,

@@ -393,6 +393,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       case AppLifecycleState.paused:
         if (!_mEnablePlayBack) {
           fAliplayer?.pause();
+          print('pop up ads pause');
         }
         if (_networkSubscriptiion != null) {
           _networkSubscriptiion?.cancel();

@@ -43,9 +43,9 @@ class _ComponentState extends State<Component> {
         if (widget.data?.eventType != 'CONTENTMOD') {
           if(isAnnouncement){
             final url = widget.data?.actionButtons;
-            if(url != null){
+            if(url?.trim().isNotEmpty ?? false){
               var fixUrl = url;
-              if(!fixUrl.withHttp()){
+              if(!fixUrl!.withHttp()){
                 fixUrl = 'https://$fixUrl';
               }
               final allow = Uri.parse(fixUrl).isAbsolute;

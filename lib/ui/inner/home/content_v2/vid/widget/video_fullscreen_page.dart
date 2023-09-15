@@ -677,9 +677,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           _showTipsWidget = false;
                         });
                         widget.fAliplayer?.play();
-
                       });
-
                     }
                   },
                   child: Row(

@@ -445,7 +445,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   }
 
   void changeTab(postType) {
-    print("#######################################################################################");
+    // print("#######################################################################################");
     var homneNotifier = context.read<HomeNotifier>();
     if (postType == FeatureType.pic) {
       homneNotifier.tabIndex = 0;

@@ -1269,7 +1269,7 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                                   widthPlaceHolder: 80,
                                   heightPlaceHolder: 80,
                                   placeHolderWidget: Container(),
-                                  imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : "${data?.fullThumbPath}",
+                                  imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : data?.fullThumbPath ?? '',
                                   imageBuilder: (context, imageProvider) => data?.reportedStatus == 'BLURRED'
                                       ? ClipRRect(
                                           borderRadius: BorderRadius.circular(20), // Image border

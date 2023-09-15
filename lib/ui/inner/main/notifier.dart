@@ -36,8 +36,14 @@ import 'package:wakelock/wakelock.dart';
 
 import '../../../app.dart';
 
+class RIKeys {
+  static final riKey1 = const Key('__RIKEY1__');
+  static final riKey2 = const Key('__RIKEY2__');
+  static final riKey3 = const Key('__RIKEY3__');
+}
+
 class MainNotifier with ChangeNotifier {
-  GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
+  GlobalKey<NestedScrollViewState> globalKey = GlobalKey(debugLabel: 'sdsdsd');
   // GlobalKey<NestedScrollViewState> get globalKey => _globalKey;
   // set globalKey(val) {
   //   _globalKey = val;
