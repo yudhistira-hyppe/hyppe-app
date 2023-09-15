@@ -794,7 +794,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                   key: Key(data?.inBetweenAds?.adsId ?? index.toString()),
                   onVisibilityChanged: (info) {
                     if (info.visibleFraction >= 0.8) {
-                      adsGlobalAliPlayer?.pause();
+                      if(!isShowingDialog){
+                        adsGlobalAliPlayer?.pause();
+                      }
                       context.read<VideoNotifier>().currentPostID = data?.inBetweenAds?.adsId ?? '';
                       _curIdx = index;
 
@@ -952,7 +954,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                               //   Wakelock.enable();
                               // }
                               if (info.visibleFraction >= 0.6) {
-                                adsGlobalAliPlayer?.pause();
+                                if(!isShowingDialog){
+                                  adsGlobalAliPlayer?.pause();
+                                }
                                 context.read<VideoNotifier>().currentPostID = data?.postID ?? '';
                                 _curIdx = index;
 
@@ -1093,7 +1097,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                             widthPlaceHolder: 80,
                                             heightPlaceHolder: 80,
                                             placeHolderWidget: Container(),
-                                            imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : "${data?.fullThumbPath}",
+                                            imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : data?.fullThumbPath ?? '',
                                             imageBuilder: (context, imageProvider) => data?.reportedStatus == 'BLURRED'
                                                 ? ClipRRect(
                                                     borderRadius: BorderRadius.circular(20), // Image border

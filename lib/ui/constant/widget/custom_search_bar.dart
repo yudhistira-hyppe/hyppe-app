@@ -21,6 +21,7 @@ class CustomSearchBar extends StatelessWidget {
   final EdgeInsetsGeometry? contentPadding;
   final bool readOnly;
   final bool autoFocus;
+  final bool withShadow;
 
   const CustomSearchBar({
     Key? key,
@@ -39,6 +40,7 @@ class CustomSearchBar extends StatelessWidget {
     this.textAlign = TextAlign.start,
     this.readOnly = false,
     this.autoFocus = false,
+    this.withShadow = false
   }) : super(key: key);
 
   @override
@@ -46,7 +48,7 @@ class CustomSearchBar extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(color: Theme.of(context).colorScheme.background,
-          boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.5), blurRadius: 7)],
+          boxShadow: withShadow ? const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.5), blurRadius: 7)] : null,
           borderRadius: const BorderRadius.all(Radius.circular(4))),
       child: TextField(
         readOnly: readOnly,

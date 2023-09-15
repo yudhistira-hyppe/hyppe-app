@@ -490,7 +490,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                           notifier.setInBetweenAds(index, value);
                         });
                       }
-                      adsGlobalAliPlayer?.pause();
+                      if(!isShowingDialog){
+                        adsGlobalAliPlayer?.pause();
+                      }
                       _curIdx = index;
                       _curPostId = vidData.postID ?? index.toString();
 

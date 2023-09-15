@@ -141,7 +141,7 @@ class PicCenterItem extends StatelessWidget {
                 memCacheHeight: 100,
                 widthPlaceHolder: 80,
                 heightPlaceHolder: 80,
-                imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : "${data?.fullThumbPath}",
+                imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : data?.fullThumbPath ?? '',
                 imageBuilder: (context, imageProvider) => Stack(
                   children: [
                     ClipRRect(

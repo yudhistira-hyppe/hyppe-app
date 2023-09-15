@@ -953,7 +953,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                         // key: Key(picData?.postID ?? index.toString()),
                         onVisibilityChanged: (info) {
                           if (info.visibleFraction == 1) {
-                            adsGlobalAliPlayer?.pause();
+                            if(!isShowingDialog){
+                              adsGlobalAliPlayer?.pause();
+                            }
                           }
                           if (info.visibleFraction >= 0.6) {
                             _curIdx = index;
