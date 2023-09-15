@@ -34,7 +34,7 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
         if (lenght != null) {
           if (lenght % 12 == 0) {
             notifier.getDataSearch(context,
-                typeSearch: SearchLoadData.hashtag, reload: false);
+                typeSearch: SearchLoadData.hashtag, reload: false, forceLoad: true);
           }
         }
       }
@@ -114,7 +114,7 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
                               ],
                             ),
                           ),
-                        )
+                        ),
               // ListView.builder(
               //             controller: _scrollController,
               //             itemCount: notifier.searchHashtag?.length ?? 0,

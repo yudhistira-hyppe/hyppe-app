@@ -141,8 +141,8 @@ class Routes {
 
   //======================== chalange ============
   static const String chalenge = '/chalenge';
-  static const String chalengeAcievment = '/chalenge-achievment';
   static const String chalengeDetail = '/chalenge-detail';
   static const String chalengeCollectionBadge = '/chalenge-collection-badge';
   static const String chalengeAchievement = '/chalenge-achievement';
+  static const String shimmerSlider = '/shimmer-slider';
 }

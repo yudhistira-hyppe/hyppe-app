@@ -44,6 +44,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:wakelock/wakelock.dart';
 
 import '../../../core/bloc/posts_v2/bloc.dart';
 import '../search_v2/notifier.dart';
@@ -59,6 +60,27 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _preventReloadAfterUploadPost = false;
+  bool get preventReloadAfterUploadPost => _preventReloadAfterUploadPost;
+  set preventReloadAfterUploadPost(val) {
+    _preventReloadAfterUploadPost = val;
+    notifyListeners();
+  }
+
+  bool _isShowInactiveWarning = false;
+  bool get isShowInactiveWarning => _isShowInactiveWarning;
+  set isShowInactiveWarning(val) {
+    _isShowInactiveWarning = val;
+    notifyListeners();
+  }
+
+  FeatureType _uploadedPostType = FeatureType.pic; // set default to pic because pic is at 0 index
+  FeatureType get uploadedPostType => _uploadedPostType;
+  set uploadedPostType(val) {
+    _uploadedPostType = val;
+    notifyListeners();
+  }
+
   bool _isLoadingVid = false;
   bool _isLoadingDiary = false;
   bool _isLoadingPict = false;
@@ -66,7 +88,7 @@ class HomeNotifier with ChangeNotifier {
   int skipPic = 0;
   int skipDiary = 0;
   int skipvid = 0;
-  int limit = 15;
+  int limit = 2;
 
   bool get isLoadingVid => _isLoadingVid;
   bool get isLoadingDiary => _isLoadingDiary;
@@ -212,14 +234,14 @@ class HomeNotifier with ChangeNotifier {
     rp.inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
     connectionError = !isConnected;
-
+    if (isLoadingLoadmore) return;
     if (isConnected) {
       if (!mounted) return;
-      final profile = Provider.of<MainNotifier>(context, listen: false);
-      final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
-      final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
-      final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
-      final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
+      final profile = Provider.of<MainNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+      final vid = Provider.of<PreviewVidNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+      final diary = Provider.of<PreviewDiaryNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+      final pic = Provider.of<PreviewPicNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+      final stories = Provider.of<PreviewStoriesNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
 
       print("data pic ${(pic.pic?.isNotEmpty ?? [].isNotEmpty) && (diary.diaryData?.isNotEmpty ?? [].isNotEmpty)}");
       if ((!isreload && !isgetMore) && ((pic.pic?.isNotEmpty ?? [].isNotEmpty) && (diary.diaryData?.isNotEmpty ?? [].isNotEmpty) && (vid.vidData?.isNotEmpty ?? [].isNotEmpty))) {
@@ -271,24 +293,23 @@ class HomeNotifier with ChangeNotifier {
           data['skip'] = skipvid;
           break;
       }
-      if (stories.peopleStoriesData == null) {
-        stories.initialStories(context);
+      if (!isgetMore && stories.peopleStoriesData == null) {
+        stories.initialStories(Routing.navigatorKey.currentContext ?? context);
       }
       // if (isreload) {
       //   await stories.initialStories(context);
       // }
 
-      final allContents = await reload(context, data);
+      final allContents = await reload(Routing.navigatorKey.currentContext ?? context, data);
 
       if (profileImage == '') {
         try {
-          await profile.initMain(context, onUpdateProfile: true);
+          await profile.initMain(Routing.navigatorKey.currentContext ?? context, onUpdateProfile: true);
         } catch (e) {
           'profile.initMain error $e'.logger();
         }
       }
 
-      isLoadingLoadmore = false;
       _isLoadingPict = false;
       _isLoadingDiary = false;
       _isLoadingVid = false;
@@ -296,26 +317,36 @@ class HomeNotifier with ChangeNotifier {
       switch (index) {
         case 0:
           if (!mounted) return;
-          await pic.initialPic(context, reload: isreload || isNew, list: allContents).then((value) async {
-            if (diary.diaryData == null) {
-              await initNewHome(context, mounted, forceIndex: 1);
-              // diary.initialDiary(context, reload: isreload || isNew, list: allContents);
+          if (!isreload && isNew && pic.pic != null) return;
+          await pic.initialPic(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents).then((value) async {
+            if (pic.pic != null && isNew) {
+              limit = pic.pic?.first.limitLandingpage ?? 2;
+              if (context.read<MainNotifier>().tutorialData.isEmpty) {
+                context.read<MainNotifier>().tutorialData = pic.pic?.first.tutorial ?? [];
+              }
             }
-            if (vid.vidData == null) {
-              // vid.initialVid(context, reload: isreload || isNew, list: allContents);
-              await initNewHome(context, mounted, forceIndex: 2);
-            }
+            // if (diary.diaryData == null) {
+            //   await initNewHome(context, mounted, forceIndex: 1);
+            //   // diary.initialDiary(context, reload: isreload || isNew, list: allContents);
+            // }
+            // if (vid.vidData == null) {
+            //   // vid.initialVid(context, reload: isreload || isNew, list: allContents);
+            //   await initNewHome(context, mounted, forceIndex: 2);
+            // }
           });
           break;
         case 1:
           if (!mounted) return;
-          await diary.initialDiary(context, reload: isreload || isNew, list: allContents);
+          if (!isreload && isNew && diary.diaryData != null) return;
+          await diary.initialDiary(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
           break;
         case 2:
           if (!mounted) return;
-          await vid.initialVid(context, reload: isreload || isNew, list: allContents);
+          if (!isreload && isNew && vid.vidData != null) return;
+          await vid.initialVid(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
           break;
       }
+      isLoadingLoadmore = false;
     }
   }
 
@@ -712,7 +743,7 @@ class HomeNotifier with ChangeNotifier {
     pic.pic?.removeWhere((element) => element.postID == postID);
     stories.peopleStoriesData?.removeWhere((element) => element.postID == postID);
 
-    if(key != null){
+    if (key != null) {
       final search = context.read<SearchNotifier>();
       search.removeInterestItem(key, postID);
     }
@@ -864,6 +895,56 @@ class HomeNotifier with ChangeNotifier {
       }
     }
   }
+
+  // Future getAdsApsara(BuildContext context, isInAppAds) async {
+  //   print('ke iklan yah');
+  //   final ads = await getPopUpAds(context);
+  //   final id = ads.videoId;
+  //   print('ke iklan yah $id');
+  //   print('ke iklan yah ${ads.adsType}');
+  //   if (id != null && ads.adsType != null) {
+  //     try {
+  //       final notifier = PostsBloc();
+  //
+  //       // await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
+  //       await notifier.getAuthApsara(context, apsaraId: ads.videoId ?? '');
+  //       final fetch = notifier.postsFetch;
+  //
+  //       if (fetch.postsState == PostsState.videoApsaraSuccess) {
+  //         Map jsonMap = json.decode(fetch.data.toString());
+  //         print('jsonMap video Apsara : $jsonMap');
+  //         final auth = jsonMap['PlayAuth'];
+  //         // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
+  //         print('get Ads Video');
+  //         final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+  //         // if (!isShowAds) {
+  //         System().adsPopUp(context, ads, auth, isInAppAds: isInAppAds);
+  //         // }
+  //
+  //         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+  //       }
+  //     } catch (e) {
+  //       'Failed to fetch ads data ${e}'.logger();
+  //     }
+  //   }
+  // }
+
+  // Future<AdsData> getPopUpAds(BuildContext context) async {
+  //   var data = AdsData();
+  //   try {
+  //     final notifier = AdsDataBloc();
+  //     await notifier.appAdsBloc(context);
+  //     final fetch = notifier.adsDataFetch;
+  //     print('video ads');
+  //     if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+  //       print('data iklan : ${fetch.data.toString()}');
+  //       data = fetch.data?.data;
+  //     }
+  //   } catch (e) {
+  //     'Failed to fetch ads data $e'.logger();
+  //   }
+  //   return data;
+  // }
 
   Future<AdsData> getPopUpAds(BuildContext context) async {
     var data = AdsData();
@@ -1019,5 +1100,106 @@ class HomeNotifier with ChangeNotifier {
 
       notifyListeners();
     }
+  }
+
+  void onUploadedSelfUserContent({
+    required BuildContext context,
+    required ContentData contentData,
+  }) async {
+    print("======-----sukses setelah upload------=========");
+    final pic = (Routing.navigatorKey.currentContext ?? context).read<PreviewPicNotifier>();
+    final diary = (Routing.navigatorKey.currentContext ?? context).read<PreviewDiaryNotifier>();
+    final vid = (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>();
+    final stories = (Routing.navigatorKey.currentContext ?? context).read<PreviewStoriesNotifier>();
+    var email = SharedPreference().readStorage(SpKeys.email);
+    Map data = {"email": email, "limit": limit};
+
+    switch (contentData.postType) {
+      case "pict":
+        // if (isreload) {
+        //   skipPic = 0;
+        //   _isLoadingPict = true;
+        //   notifyListeners();
+        // }
+        data['type'] = 'pict';
+        data['skip'] = skipPic;
+        break;
+      case "diary":
+        // if (isreload) {
+        //   skipDiary = 0;
+        //   _isLoadingDiary = true;
+        //   notifyListeners();
+        // }
+        data['type'] = 'diary';
+        data['skip'] = skipDiary;
+        break;
+      case "vid":
+        // if (isreload) {
+        //   skipvid = 0;
+        //   _isLoadingVid = true;
+        //   notifyListeners();
+        // }
+        data['type'] = 'vid';
+        data['skip'] = skipvid;
+        break;
+    }
+
+    final allContents = await reload(Routing.navigatorKey.currentContext ?? context, data);
+    print("======-----sukses setelah upload------=========");
+    print(allContents);
+    switch (contentData.postType) {
+      case 'pict':
+        if (pic.pic != null) {
+          pic.pic = [contentData] + [...(pic.pic ?? [] as List<ContentData>)];
+        } else {
+          await pic.initialPic(Routing.navigatorKey.currentContext ?? context, list: allContents);
+        }
+        break;
+      case 'diary':
+        if (diary.diaryData != null) {
+          diary.diaryData = [contentData] + [...(diary.diaryData ?? [] as List<ContentData>)];
+        } else {
+          await diary.initialDiary(Routing.navigatorKey.currentContext ?? context, list: allContents);
+        }
+        break;
+      case 'vid':
+        if (vid.vidData != null) {
+          vid.vidData = [contentData] + [...(vid.vidData ?? [] as List<ContentData>)];
+        } else {
+          await vid.initialVid(Routing.navigatorKey.currentContext ?? context, list: allContents);
+        }
+        break;
+      case 'story':
+        // String email = await SharedPreference().readStorage(SpKeys.email);
+        // email.loggerV2();
+        // stories.myStoryGroup[email] = [contentData] + [...(stories.myStoryGroup[email] ?? [] as List<ContentData>)];
+        stories.initialMyStoryGroup(Routing.navigatorKey.currentContext ?? context);
+        break;
+      default:
+    }
+  }
+
+  Timer? _inactivityTimer;
+  Timer? get inactivityTimer => _inactivityTimer;
+  set inactivityTimer(Timer? state) {
+    _inactivityTimer = state;
+    notifyListeners();
+  }
+
+  removeWakelock() async {
+    "=================== remove wakelock".logger();
+    _inactivityTimer?.cancel();
+    _inactivityTimer = null;
+    Wakelock.disable();
+  }
+
+  void initWakelockTimer({required Function() onShowInactivityWarning}) async {
+    // adding delay to prevent if there's another that not disposed yet
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      "=================== init wakelock".logger();
+      Wakelock.enable();
+      if (_inactivityTimer != null) _inactivityTimer?.cancel();
+      _inactivityTimer = Timer(const Duration(seconds: 300), () => onShowInactivityWarning());
+    });
   }
 }

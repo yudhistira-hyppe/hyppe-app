@@ -3,7 +3,9 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
@@ -11,10 +13,13 @@ import 'package:hyppe/ui/inner/home/content_v2/referral/widget/qr_block.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/widget/share_block.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/widget/shimmer_referral.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/widget/shimmer_all_transaction_history.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class Referral extends StatefulWidget {
   const Referral({Key? key}) : super(key: key);
@@ -24,6 +29,13 @@ class Referral extends StatefulWidget {
 }
 
 class _ReferralState extends State<Referral> {
+  GlobalKey keyShare = GlobalKey();
+  GlobalKey keyCode = GlobalKey();
+  MainNotifier? mn;
+  int indexKeyShare = 0;
+  int indexCode = 0;
+  ScrollController controller = ScrollController();
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'Referral');
@@ -31,6 +43,14 @@ class _ReferralState extends State<Referral> {
     Future.delayed(Duration.zero, () => notifier.onInitial(context));
 
     super.initState();
+    mn = Provider.of<MainNotifier>(context, listen: false);
+    super.initState();
+    indexKeyShare = mn?.tutorialData.indexWhere((element) => element.key == 'shareRefferal') ?? 0;
+    indexCode = mn?.tutorialData.indexWhere((element) => element.key == 'codeRefferal') ?? 0;
+
+    if (mn?.tutorialData[indexKeyShare].status == false || mn?.tutorialData[indexCode].status == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keyShare, keyCode]));
+    }
   }
 
   @override
@@ -53,6 +73,7 @@ class _ReferralState extends State<Referral> {
           centerTitle: false,
         ),
         body: CustomScrollView(
+          controller: controller,
           slivers: [
             SliverFillRemaining(
               hasScrollBody: false,
@@ -63,24 +84,19 @@ class _ReferralState extends State<Referral> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const ShareBlock(),
+                          ShareBlock(
+                            globalKey: keyShare,
+                            indexTutor: indexKeyShare,
+                            positionTooltip: TooltipPosition.top,
+                            positionYplus: 25,
+                          ),
                           const Spacer(),
                           const QRBlock(),
                           const Spacer(),
                           notifier.modelReferral?.parent == null
-                              ? GestureDetector(
-                                  onTap: () {
-                                    Routing().move(Routes.insertReferral);
-                                  },
-                                  child: const Text('Masukkan Referral', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppePrimary)),
-                                )
+                              ? textInputReff(notifier.language)
                               : notifier.modelReferral?.parent == null || notifier.modelReferral?.parent == ""
-                                  ? GestureDetector(
-                                      onTap: () {
-                                        Routing().move(Routes.insertReferral);
-                                      },
-                                      child: const Text('Masukkan Referral', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppePrimary)),
-                                    )
+                                  ? textInputReff(notifier.language)
                                   : Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
@@ -123,6 +139,54 @@ class _ReferralState extends State<Referral> {
                     ),
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget textInputReff(LocalizationModelV2 lang) {
+    return SizedBox(
+      height: 30,
+      child: Showcase(
+        key: keyCode,
+        tooltipBackgroundColor: kHyppeTextLightPrimary,
+        overlayOpacity: 0,
+        targetPadding: const EdgeInsets.all(0),
+        tooltipPosition: TooltipPosition.top,
+        description: lang.localeDatetime == 'id' ? mn?.tutorialData[indexCode].textID ?? '' : mn?.tutorialData[indexCode].textEn ?? '',
+        descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+        descriptionPadding: EdgeInsets.all(6),
+        textColor: Colors.white,
+        targetShapeBorder: const CircleBorder(),
+        positionYplus: 20,
+        onToolTipClick: () {
+          context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexCode].key ?? '');
+          mn?.tutorialData[indexCode].status = true;
+          ShowCaseWidget.of(context).next();
+        },
+        closeWidget: GestureDetector(
+          onTap: () {
+            context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexCode].key ?? '');
+            mn?.tutorialData[indexCode].status = true;
+            ShowCaseWidget.of(context).next();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: CustomIconWidget(
+              iconData: '${AssetPath.vectorPath}close.svg',
+              defaultColor: false,
+              height: 16,
+            ),
+          ),
+        ),
+        child: GestureDetector(
+          onTap: () {
+            Routing().move(Routes.insertReferral);
+          },
+          child: const Text(
+            'Masukkan Referral',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppePrimary),
+          ),
         ),
       ),
     );

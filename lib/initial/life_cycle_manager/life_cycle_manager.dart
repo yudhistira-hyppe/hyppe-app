@@ -20,12 +20,14 @@ import 'package:hyppe/core/services/dynamic_link_service.dart';
 
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/bloc/ads_video/bloc.dart';
 import '../../core/bloc/ads_video/state.dart';
 import '../../core/bloc/posts_v2/bloc.dart';
 import '../../core/bloc/posts_v2/state.dart';
+import '../../core/constants/enum.dart';
 import '../../core/models/collection/advertising/ads_video_data.dart';
 import '../../ui/inner/upload/preview_content/notifier.dart';
 import '../../ui/outer/opening_logo/screen.dart';
@@ -57,6 +59,23 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     }
   }
 
+  Future<AdsData> getPopUpAds() async {
+    var data = AdsData();
+    try {
+      final notifier = AdsDataBloc();
+      await notifier.adsVideoBlocV2(context, AdsType.popup);
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        // print('data : ${fetch.data.toString()}');
+        data = fetch.data?.data;
+      }
+    } catch (e) {
+      'Failed to fetch ads data $e'.logger();
+    }
+    return data;
+  }
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'LifeCycleManager');
@@ -86,7 +105,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
     print("Status Lifecycle: $state");
     try {
-      final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+      final notifier = Routing.navigatorKey.currentContext!.read<PreviewContentNotifier>();
       if (state == AppLifecycleState.inactive) {
         if (notifier.listMusics.isNotEmpty || notifier.listExpMusics.isNotEmpty) {
           notifier.forceResetPlayer(true);
@@ -109,6 +128,13 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           adsGlobalAliPlayer?.pause();
         }
 
+        if(adsGlobalAliPlayer != null){
+          adsGlobalAliPlayer?.pause();
+        }
+        if(globalAdsInContent != null){
+          globalAdsInContent?.pause();
+        }
+
         "App Inactive".logger();
         final _userToken = SharedPreference().readStorage(SpKeys.userToken);
         if (_userToken != null) {
@@ -120,6 +146,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         }
       }
       if (state == AppLifecycleState.resumed) {
+        isAppOn = true;
         "App Resumed".logger();
         notifier.resumeAudioPreview();
         if (globalAudioPlayer != null) {
@@ -128,6 +155,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         }
         if (adsGlobalAliPlayer != null){
           adsGlobalAliPlayer?.play();
+        }
+        if (globalAdsInContent != null){
+          globalAdsInContent?.play();
         }
 
         final _userToken = SharedPreference().readStorage(SpKeys.userToken);
@@ -182,6 +212,10 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       // Show custom alert message or perform action
       print('capture capture');
     }
+
+    if (state == AppLifecycleState.detached){
+      isAppOn = false;
+    }
   }
 
   Future getDevice() async {
@@ -193,22 +227,22 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     SharedPreference().writeStorage(SpKeys.brand, nameDevice);
   }
 
-  Future<AdsData> getPopUpAds() async {
-    var data = AdsData();
-    try {
-      final notifier = AdsDataBloc();
-      await notifier.adsVideoBlocV2(context, AdsType.popup);
-      final fetch = notifier.adsDataFetch;
-
-      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-        // print('data : ${fetch.data.toString()}');
-        data = fetch.data?.data;
-      }
-    } catch (e) {
-      'Failed to fetch ads data $e'.logger();
-    }
-    return data;
-  }
+  // Future<AdsData> getPopUpAds() async {
+  //   var data = AdsData();
+  //   try {
+  //     final notifier = AdsDataBloc();
+  //     await notifier.appAdsBloc(context);
+  //     final fetch = notifier.adsDataFetch;
+  //
+  //     if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+  //       // print('data : ${fetch.data.toString()}');
+  //       data = fetch.data?.data;
+  //     }
+  //   } catch (e) {
+  //     'Failed to fetch ads data $e'.logger();
+  //   }
+  //   return data;
+  // }
 
   Future getAdsApsara() async {
     final ads = await getPopUpAds();
@@ -240,6 +274,53 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       }
     }
   }
+
+  // Future getAdsApsara() async {
+  //   final ads = await getPopUpAds();
+  //   final id = ads.videoId;
+  //   if (id != null && ads.adsType != null) {
+  //     try {
+  //       // final notifier = PostsBloc();
+  //       // await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
+  //
+  //       // final fetch = notifier.postsFetch;
+  //
+  //       // if (fetch.postsState == PostsState.videoApsaraSuccess) {
+  //       //   Map jsonMap = json.decode(fetch.data.toString());
+  //       //   print('jsonMap video Apsara : $jsonMap');
+  //       //   final adsUrl = jsonMap['PlayUrl'];
+  //       //   // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
+  //       //   print('get Ads Video');
+  //       //   final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+  //       //   if (!isShowAds) {
+  //       //     System().adsPopUp(context, ads, adsUrl);
+  //       //   }
+  //
+  //       //   // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+  //       // }
+  //       final notifier = PostsBloc();
+  //       await notifier.getAuthApsara(context, apsaraId: ads.videoId ?? '');
+  //
+  //       final fetch = notifier.postsFetch;
+  //       if (fetch.postsState == PostsState.videoApsaraSuccess) {
+  //         Map jsonMap = json.decode(fetch.data.toString());
+  //         print('jsonMap video Apsara : $jsonMap');
+  //         final auth = jsonMap['PlayAuth'];
+  //         // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
+  //         print('get Ads Video');
+  //         final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+  //         print("---------- $isShowAds");
+  //         if (!isShowAds) {
+  //           System().adsPopUp(context, ads, auth, isInAppAds: true);
+  //         }
+  //
+  //         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+  //       }
+  //     } catch (e) {
+  //       'Failed to fetch ads data ${e}'.logger();
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(_) {

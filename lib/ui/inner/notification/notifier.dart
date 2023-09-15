@@ -21,6 +21,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/notification/content/all.dart';
 import 'package:hyppe/ui/inner/notification/content/like.dart';
 import 'package:hyppe/ui/inner/notification/content/general.dart';
@@ -30,6 +31,7 @@ import 'package:hyppe/ui/inner/notification/content/mention.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:provider/provider.dart';
 
 import '../../../app.dart';
 import '../../../core/arguments/other_profile_argument.dart';
@@ -87,6 +89,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     Future<List<NotificationModel>> _resFuture;
     notificationsQuery = notificationsQuery..eventType = eventTypes;
     try {
+      context.read<MainNotifier>().receivedReaction = false;
       if (reload) {
         print('reload contentsQuery : 22');
         notificationsQuery.eventType = eventType(_pageIndex);
@@ -262,10 +265,9 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
             } else {
               await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(profile: result, senderEmail: result.email));
             }
-            if(isPlay){
+            if (isPlay) {
               globalAliPlayer?.play();
             }
-
           } else {
             throw "Couldn't find the user ";
           }

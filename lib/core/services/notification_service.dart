@@ -2,18 +2,22 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../ui/inner/message_v2/notifier.dart';
 import '../../ui/inner/notification/notifier.dart';
 import '../../ux/path.dart';
 import '../../ux/routing.dart';
 import '../arguments/discuss_argument.dart';
+import '../arguments/main_argument.dart';
 import '../bloc/message_v2/bloc.dart';
 import '../models/collection/message_v2/message_data_v2.dart';
 
@@ -80,46 +84,78 @@ class NotificationService {
 
   // initialization service
   Future initializeLocalNotification() async {
-    Future.delayed(Duration(seconds: 10), () {});
     // await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
 
+    // get payload from push notification when app in background/foreground state
     await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: (String? payload) async {
-      print('notification payload: $payload');
-      try {
-        final Map<String, dynamic> map = json.decode(payload ?? '{}');
-        if (payload != null) {
-          if (map['postID'] != null) {
-            final data = NotificationBody.fromJson(map);
-            if (data.postType == 'TRANSACTION') {
-              Routing().move(Routes.transaction);
-            } else if (data.postType == 'FOLLOWER' || data.postType == 'FOLLOWING') {
-              materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(materialAppKey.currentContext!, data.postId);
-            } else {
-              materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, data.postType, data.postId);
-            }
-          } else if (map['postType'] != null) {
-            final data = NotificationBody.fromJson(map);
-            if (data.postType == 'TRANSACTION') {
-              Routing().move(Routes.transaction);
-            } else {
-              throw 'Not recognize the type of the object of the notification ';
-            }
-          } else if (map['createdAt'] != null) {
-            final data = MessageDataV2.fromJson(map);
-            final notifier = MessageNotifier();
-            final sender = data.disqusLogs[0].sender;
-            var result = await getChatRoomByDisqusID(materialAppKey.currentContext!, data.disqusID ?? '');
-            final index1 = result.indexWhere((element) => element.disqusLogs[0].sender == sender);
-            print("array yg di dapat ${index1}");
-            notifier.onClickUser(materialAppKey.currentContext!, result[index1]);
+      navigateWithPayload(payload);
+    });
+
+    // get payload from push notification when app in terminated state
+    await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails().then((value) {
+      // need delay to work properly
+      Future.delayed(const Duration(milliseconds: 300), () {
+        navigateWithPayload(value?.payload);
+      });
+    });
+  }
+
+  navigateWithPayload(String? payload) async {
+    'notification payload: $payload'.logger();
+    try {
+      final Map<String, dynamic> map = json.decode(payload ?? '{}');
+      if (payload != null) {
+        if (map['postID'] != null) {
+          final data = NotificationBody.fromJson(map);
+          if (data.postType == 'TRANSACTION') {
+            Routing().move(Routes.transaction);
+          } else if (data.postType == 'CHALLANGE') {
+            Routing().move(
+              Routes.chalengeDetail,
+              argument: GeneralArgument(
+                id: data.postId,
+                index: int.parse(data.index ?? '0'),
+                title: data.title,
+                body: data.message,
+              ),
+            );
+          } else if (data.postType == 'FOLLOWER' || data.postType == 'FOLLOWING') {
+            materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(materialAppKey.currentContext!, data.postId);
+          } else {
+            materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, data.postType, data.postId);
+          }
+        } else if (map['postType'] != null) {
+          final data = NotificationBody.fromJson(map);
+          if (data.postType == 'TRANSACTION') {
+            Routing().move(Routes.transaction);
           } else {
             throw 'Not recognize the type of the object of the notification ';
           }
+        } else if (map['createdAt'] != null) {
+          final data = MessageDataV2.fromJson(map);
+          final notifier = MessageNotifier();
+          final sender = data.disqusLogs[0].sender;
+          var result = await getChatRoomByDisqusID(materialAppKey.currentContext!, data.disqusID ?? '');
+          final index1 = result.indexWhere((element) => element.disqusLogs[0].sender == sender);
+          "array yg di dapat $index1".logger();
+          notifier.onClickUser(materialAppKey.currentContext!, result[index1]);
+        } else if(map['url'] != null){
+          if(isFromSplash){
+            page = 3;
+          }else{
+            Routing().moveAndRemoveUntil(
+                Routes.lobby,
+                Routes.lobby,
+                argument: MainArgument(canShowAds: false, page: 3));
+
+          }
+        }else {
+          throw 'Not recognize the type of the object of the notification ';
         }
-      } catch (e) {
-        e.logger();
       }
-    });
+    } catch (e) {
+      e.logger();
+    }
   }
 
   Future<List<MessageDataV2>> getChatRoomByDisqusID(BuildContext context, String disqusID) async {
@@ -154,7 +190,7 @@ class NotificationService {
 
   // show notification
 
-  Future showNotification(RemoteMessage message, {MessageDataV2? data, String? idNotif}) async {
+  Future showNotification(RemoteMessage message, {MessageDataV2? data, String? idNotif, isBackground = false}) async {
     print("===''''-- ${message.hashCode}");
     if (idNotif != null) {
       try {
@@ -182,6 +218,7 @@ class NotificationService {
       } else {
         print("masuk 2");
         final Map<String, dynamic> jsonNotif = message.data;
+        jsonNotif['isBackground'] = isBackground;
         final value = NotificationBody.fromJson(jsonNotif);
         // var body;
         // Platform.isIOS ? body = json.decode(message.notification?.body ?? '') : '';
@@ -190,13 +227,15 @@ class NotificationService {
           value.title ?? message.notification?.title,
           message.data['body'],
           platformChannelSpecifics,
-          payload: Platform.isIOS ? json.encode(message.data) : json.encode(message.data),
+          payload: Platform.isIOS ? json.encode(jsonNotif) : json.encode(jsonNotif),
         );
       }
     } catch (e) {
       print("===error $e");
       if (message.notification != null) {
         print("======= test notif ${message.data}");
+        final Map<String, dynamic> jsonNotif = message.data;
+        jsonNotif['isBackground'] = isBackground;
         // final Map<String, dynamic> map = json.decode(message.notification?.body ?? '{}');
         var body;
         // Platform.isIOS ? body = json.decode(message.notification?.body ?? '') : '';
@@ -206,7 +245,7 @@ class NotificationService {
           message.notification?.body,
           // message.notification?.body,
           platformChannelSpecifics,
-          payload: Platform.isIOS ? json.encode(message.data) : json.encode(message.data),
+          payload: Platform.isIOS ? json.encode(jsonNotif) : json.encode(jsonNotif),
         );
       }
       e.logger();
@@ -219,14 +258,18 @@ class NotificationBody {
   String? postType;
   String? message;
   String? title;
+  String? index;
+  String? url;
 
-  NotificationBody({this.postId, this.postType, this.message});
+  NotificationBody({this.postId, this.postType, this.message, this.index, this.url});
 
   NotificationBody.fromJson(Map<String, dynamic> json) {
     postId = json['postID'];
     postType = json['postType'];
     message = json['body'];
     title = json['title'];
+    index = json['index'];
+    url = json['url'];
   }
 
   Map<String, dynamic> toJson() {
@@ -234,6 +277,8 @@ class NotificationBody {
     result['postID'] = postId;
     result['postType'] = postType;
     result['message'] = message;
+    result['index'] = index;
+    result['url'] = url;
     return result;
   }
 }

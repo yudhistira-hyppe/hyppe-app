@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -18,11 +19,14 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_auto_complete_user_tag.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_category.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/validate_type.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 import '../preview_content/notifier.dart';
 
 class PreUploadContentScreen extends StatefulWidget {
@@ -39,6 +43,14 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   bool autoComplete = false;
   String search = '';
   String statusKyc = '';
+  GlobalKey keyKategori = GlobalKey();
+  GlobalKey keyOwnerShip = GlobalKey();
+  GlobalKey keyBoost = GlobalKey();
+  ScrollController controller = ScrollController();
+  MainNotifier? mn;
+  int indexKey = 0;
+  int indexKeyOwn = 0;
+  int indexKeyBoost = 0;
 
   @override
   void dispose() {
@@ -48,9 +60,21 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   @override
   void initState() {
     // final _notifier = context.read<PreUploadContentNotifier>();
-    // Provider.of<PreUploadContentNotifier>(context, listen: false);
+    mn = Provider.of<MainNotifier>(context, listen: false);
     super.initState();
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+    // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
+    indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'interest') ?? 0;
+    indexKeyOwn = mn?.tutorialData.indexWhere((element) => element.key == 'ownership') ?? 0;
+    indexKeyBoost = mn?.tutorialData.indexWhere((element) => element.key == 'boost') ?? 0;
+    if (mn?.tutorialData[indexKey].status == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keyKategori, keyOwnerShip]));
+    }
+    if (widget.arguments.onEdit && widget.arguments.contentData?.reportedStatus != "OWNED" && widget.arguments.contentData?.reportedStatus2 != "BLURRED" && statusKyc == VERIFIED) {
+      if (mn?.tutorialData[indexKeyBoost].status == false) {
+        WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keyBoost]));
+      }
+    }
   }
 
   @override
@@ -86,6 +110,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
               backgroundColor: Colors.transparent,
             ),
             body: SingleChildScrollView(
+              controller: controller,
               child: Container(
                 // width: SizeConfig.screenWidth,
                 // height: SizeConfig.screenHeight,
@@ -364,8 +389,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
               function: () {
                 final text = notifier.captionController.text;
                 final selection = notifier.captionController.selection;
+                var newText = text;
+                if(newText.isNotEmpty){
+                  newText = text.replaceRange(selection.start, selection.end, ' #');
+                }
 
-                final newText = text.replaceRange(selection.start, selection.end, ' #');
                 notifier.captionController.value = TextEditingValue(
                   text: newText,
                   selection: TextSelection.collapsed(offset: selection.baseOffset + 2),
@@ -418,56 +446,84 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   }
 
   Widget categoryWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            CustomTextWidget(
-              textToDisplay: notifier.language.categories ?? '',
-              textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
-            ),
-            Container(
-              width: 10,
-              height: 10,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.red),
-            )
-          ],
+    return Showcase(
+      key: keyKategori,
+      tooltipBackgroundColor: kHyppeTextLightPrimary,
+      overlayOpacity: 0,
+      targetPadding: const EdgeInsets.all(0),
+      tooltipPosition: TooltipPosition.top,
+      description: notifier.language.localeDatetime == 'id' ? mn?.tutorialData[indexKey].textID : mn?.tutorialData[indexKey].textEn,
+      descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+      descriptionPadding: EdgeInsets.all(6),
+      textColor: Colors.white,
+      positionYplus: 50,
+      closeWidget: GestureDetector(
+        onTap: () async {
+          context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKey].key ?? '');
+          await controller.animateTo(10000, duration: Duration(milliseconds: 500), curve: Curves.ease).then((value) {
+            ShowCaseWidget.of(context).next();
+          });
+        },
+        child: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: CustomIconWidget(
+            iconData: '${AssetPath.vectorPath}close.svg',
+            defaultColor: false,
+            height: 16,
+          ),
         ),
-        eightPx,
-        Wrap(
-          children: [
-            ...List.generate(
-              notifier.interest.length,
-              (index) => Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: CustomTextButton(
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    notifier.insertInterest(context, index);
-                  },
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    splashFactory: NoSplash.splashFactory,
-                  ),
-                  child: PickitemTitle(
-                    title: notifier.interest[index].interestName ?? '',
-                    select: notifier.pickedInterest(notifier.interest[index].id) ? true : false,
-                    button: true,
-                    function: () {
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              CustomTextWidget(
+                textToDisplay: notifier.language.categories ?? '',
+                textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
+              ),
+              Container(
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.red),
+              )
+            ],
+          ),
+          eightPx,
+          Wrap(
+            children: [
+              ...List.generate(
+                notifier.interest.length,
+                (index) => Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: CustomTextButton(
+                    onPressed: () {
                       FocusScope.of(context).unfocus();
                       notifier.insertInterest(context, index);
                     },
-                    textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: notifier.pickedInterest(notifier.interest[index].id) ? kHyppeLightSurface : Theme.of(context).colorScheme.onBackground,
-                        ),
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      splashFactory: NoSplash.splashFactory,
+                    ),
+                    child: PickitemTitle(
+                      title: notifier.interest[index].interestName ?? '',
+                      select: notifier.pickedInterest(notifier.interest[index].id) ? true : false,
+                      button: true,
+                      function: () {
+                        FocusScope.of(context).unfocus();
+                        notifier.insertInterest(context, index);
+                      },
+                      textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: notifier.pickedInterest(notifier.interest[index].id) ? kHyppeLightSurface : Theme.of(context).colorScheme.onBackground,
+                          ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -718,13 +774,41 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CustomTextWidget(
-            textToDisplay: (notifier.editData?.boosted.isNotEmpty ?? [].isNotEmpty)
-                ? notifier.language.yes ?? ''
-                : notifier.boostContent != null
-                    ? System().capitalizeFirstLetter(notifier.boostContent?.typeBoost ?? '')
-                    : notifier.language.no ?? 'no',
-            textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
+          Showcase(
+            key: keyBoost,
+            tooltipBackgroundColor: kHyppeTextLightPrimary,
+            overlayOpacity: 0,
+            targetPadding: const EdgeInsets.all(0),
+            tooltipPosition: TooltipPosition.top,
+            // description: notifier.language.registeryourcontentownership,
+            description: notifier.language.localeDatetime == 'id' ? mn?.tutorialData[indexKeyOwn].textID : mn?.tutorialData[indexKeyOwn].textEn,
+            descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+            descriptionPadding: EdgeInsets.all(6),
+            textColor: Colors.white,
+            positionYplus: 25,
+            closeWidget: GestureDetector(
+              onTap: () {
+                context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeyOwn].key ?? '');
+                ShowCaseWidget.of(context).next();
+                controller.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CustomIconWidget(
+                  iconData: '${AssetPath.vectorPath}close.svg',
+                  defaultColor: false,
+                  height: 16,
+                ),
+              ),
+            ),
+            child: CustomTextWidget(
+              textToDisplay: (notifier.editData?.boosted.isNotEmpty ?? [].isNotEmpty)
+                  ? notifier.language.yes ?? ''
+                  : notifier.boostContent != null
+                      ? System().capitalizeFirstLetter(notifier.boostContent?.typeBoost ?? '')
+                      : notifier.language.no ?? 'no',
+              textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
+            ),
           ),
           twentyPx,
           const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
@@ -753,9 +837,37 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CustomTextWidget(
-            textToDisplay: notifier.certified ? notifier.language.yes ?? 'yes' : notifier.language.no ?? 'no',
-            textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
+          Showcase(
+            key: keyOwnerShip,
+            tooltipBackgroundColor: kHyppeTextLightPrimary,
+            overlayOpacity: 0,
+            targetPadding: const EdgeInsets.all(0),
+            tooltipPosition: TooltipPosition.top,
+            // description: notifier.language.registeryourcontentownership,
+            description: notifier.language.localeDatetime == 'id' ? mn?.tutorialData[indexKeyOwn].textID : mn?.tutorialData[indexKeyOwn].textEn,
+            descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+            descriptionPadding: EdgeInsets.all(6),
+            textColor: Colors.white,
+            positionYplus: 25,
+            closeWidget: GestureDetector(
+              onTap: () {
+                context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeyOwn].key ?? '');
+                ShowCaseWidget.of(context).next();
+                controller.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CustomIconWidget(
+                  iconData: '${AssetPath.vectorPath}close.svg',
+                  defaultColor: false,
+                  height: 16,
+                ),
+              ),
+            ),
+            child: CustomTextWidget(
+              textToDisplay: notifier.certified ? notifier.language.yes ?? 'yes' : notifier.language.no ?? 'no',
+              textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
+            ),
           ),
           twentyPx,
           const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
@@ -795,7 +907,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     sixteenPx,
                     detailText(notifier.language.includeTotalLikes, notifier.includeTotalLikes ? ya : tidak),
                     sixteenPx,
-                    detailText(notifier.language.sellingPrice, 'Rp ${notifier.priceController.text}'),
+                    detailText(notifier.language.sellingPrice, System().currencyFormat(amount: (notifier.priceController.text.replaceAll('.', '')).convertInteger())),
                   ],
                 )
               : Container()

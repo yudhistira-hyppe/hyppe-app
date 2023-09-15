@@ -101,9 +101,12 @@ class _SearchContentsTabState extends State<SearchContentsTab> with RouteAware{
             child: SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text,),
           ) : MeasuredSize(
             onChange: (value){
-              setState(() {
-                heightTab = value.height;
-              });
+              if(mounted){
+                setState(() {
+                  heightTab = value.height;
+                });
+              }
+
             },
             child: Column(
               children: [

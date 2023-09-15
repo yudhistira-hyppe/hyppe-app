@@ -15,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../core/arguments/other_profile_argument.dart';
+import '../../../../core/bloc/ads_video/bloc.dart';
 import '../../../../core/bloc/posts_v2/bloc.dart';
 import '../../../../core/bloc/posts_v2/state.dart';
 import '../../../../core/config/ali_config.dart';
@@ -35,42 +36,37 @@ import '../../../constant/widget/custom_text_widget.dart';
 class AdsVideoInBetween extends StatefulWidget {
   final Function(VisibilityInfo)? onVisibility;
   final FlutterAliplayer? player;
-  final String postID;
   final AdsData data;
-  final double ratio;
-  const AdsVideoInBetween({
-    Key? key,
-    this.onVisibility,
-    this.player,
-    required this.postID,
-    required this.ratio,
-    required this.data,
-  }) : super(key: key);
+  final Function() afterReport;
+  final Function(FlutterAliplayer, String) getPlayer;
+  const AdsVideoInBetween({Key? key, this.onVisibility, this.player, required this.data, required this.afterReport, required this.getPlayer}) : super(key: key);
 
   @override
   State<AdsVideoInBetween> createState() => _AdsVideoInBetweenState();
 }
 
-class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
-    with WidgetsBindingObserver {
+class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindingObserver {
   // FlutterAliplayer? fAliplayer;
 
   bool loadLaunch = false;
+
+  double ratio = 16 / 9;
 
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'AdsVideoBetween');
 
+    ratio = (widget.data.height != null && widget.data.width != null) ? widget.data.width! / widget.data.height! : 16 / 9;
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
 
-    super.initState();
+    globalAdsInContent?.pause();
   }
+
 
   @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
-    final ratio = (widget.data.height != null && widget.data.width != null) ? widget.data.width!/widget.data.height! : 16/9;
     return Consumer<VideoNotifier>(builder: (context, notifier, _) {
       return Container(
         margin: const EdgeInsets.only(bottom: 20),
@@ -78,56 +74,57 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Text(widget.data.height.toString()),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
               child: Column(
                 children: [
                   Row(
                     children: [
-                      CustomBaseCacheImage(
-                        imageUrl: widget.data.avatar?.fullLinkURL,
-                        memCacheWidth: 200,
-                        memCacheHeight: 200,
-                        imageBuilder: (_, imageProvider) {
-                          return Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(18)),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: imageProvider,
-                              ),
-                            ),
-                          );
+                      GestureDetector(
+                        onTap: () {
+                          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
                         },
-                        errorWidget: (_, __, ___) {
-                          return Container(
+                        child: CustomBaseCacheImage(
+                          imageUrl: widget.data.avatar?.fullLinkURL,
+                          memCacheWidth: 200,
+                          memCacheHeight: 200,
+                          imageBuilder: (_, imageProvider) {
+                            return Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: imageProvider,
+                                ),
+                              ),
+                            );
+                          },
+                          errorWidget: (_, __, ___) {
+                            return Container(
+                              width: 36,
+                              height: 36,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                ),
+                              ),
+                            );
+                          },
+                          emptyWidget: Container(
                             width: 36,
                             height: 36,
                             decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(18)),
+                              borderRadius: BorderRadius.all(Radius.circular(18)),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: AssetImage(
-                                    '${AssetPath.pngPath}content-error.png'),
+                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
                               ),
-                            ),
-                          );
-                        },
-                        emptyWidget: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                  '${AssetPath.pngPath}content-error.png'),
                             ),
                           ),
                         ),
@@ -138,18 +135,16 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomTextWidget(
-                              textToDisplay: widget.data.fullName ?? '',
-                              textStyle:
-                                  context.getTextTheme().bodyText1?.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                              textToDisplay: widget.data.username ?? '',
+                              textStyle: context.getTextTheme().caption?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
                             ),
                             CustomTextWidget(
                               textToDisplay: language.sponsored ?? 'Sponsored',
-                              textStyle:
-                                  context.getTextTheme().bodyText2?.copyWith(
-                                        fontWeight: FontWeight.w400,
-                                      ),
+                              textStyle: context.getTextTheme().caption?.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                  ),
                             )
                           ],
                         ),
@@ -157,17 +152,11 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                       twelvePx,
                       GestureDetector(
                         onTap: () {
-                          ShowBottomSheet().onReportContent(
-                            context,
-                            adsData: widget.data,
-                            type: adsPopUp,
-                            postData: null,
-                            onUpdate: () {
-                              setState(() {
-                                widget.data.isReport = true;
-                              });
-                            },
-                          );
+                          ShowBottomSheet().onReportContent(context, adsData: widget.data, type: adsPopUp, postData: null, onUpdate: () {
+                            setState(() {
+                              widget.data.isReport = true;
+                            });
+                          }, onCompleted: widget.afterReport);
                         },
                         child: const CustomIconWidget(
                           defaultColor: false,
@@ -177,148 +166,123 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
                       ),
                     ],
                   ),
-                  Container(
-                    padding:
-                        const EdgeInsets.only(top: 20, left: 18, right: 18),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        VisibilityDetector(
-                          key: Key(widget.data.videoId ?? 'ads'),
-                          onVisibilityChanged: (info) {
-                            if (info.visibleFraction >= 0.6) {
-                              // _curIdx = index;
-                              if (notifier.currentPostID != widget.postID) {
-                                notifier.betweenPlayer?.pause();
-                              }
-                              notifier.currentPostID = widget.postID;
-                              if (widget.onVisibility != null) {
-                                widget.onVisibility!(info);
-                              }
-                            }
-                          },
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      VisibilityDetector(
+                        key: Key(widget.data.videoId ?? 'ads'),
+                        onVisibilityChanged: (info) {
+                          if (widget.onVisibility != null) {
+                            widget.onVisibility!(info);
+                          }
+
+                          if (info.visibleFraction >= 0.9) {
+                            notifier.currentPostID = widget.data.adsId ?? '';
+                            adsGlobalAliPlayer?.play();
+                          }
+                        },
+                        child: Container(
+                          color: Colors.white,
+                          margin: const EdgeInsets.only(top: 20, left: 18, right: 18),
                           child: AspectRatio(
                             aspectRatio: ratio,
-                            child: notifier.currentPostID == widget.postID
+                            child: notifier.currentPostID == widget.data.adsId
                                 ? InBetweenScreen(
-                                    postID: widget.postID,
                                     adsData: widget.data,
                                     player: widget.player,
                                     ratio: ratio,
-                                  )
+                              onRatioChanged: (fix){
+                                      setState(() {
+                                        ratio = fix;
+                                      },);
+                              },
+                                  getPlayer: widget.getPlayer,)
                                 : Container(
-                                    decoration: const BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(16.0))),
+                                    decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
                                     alignment: Alignment.center,
                                     child: const CustomLoading(),
                                   ),
                           ),
                         ),
-                        twelvePx,
-                        InkWell(
-                          onTap: () async {
-                            final data = widget.data;
-                            if (data.adsUrlLink?.isEmail() ?? false) {
-                              final email = data.adsUrlLink!.replaceAll('email:', '');
+                      ),
+                      twelvePx,
+                      InkWell(
+                        onTap: () async {
+                          final data = widget.data;
+                          if (data.adsUrlLink?.isEmail() ?? false) {
+                            final email = data.adsUrlLink!.replaceAll('email:', '');
+                            setState(() {
+                              loadLaunch = true;
+                            });
+                            System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+                              Navigator.pop(context);
+                              Future.delayed(const Duration(milliseconds: 800), () {
+                                Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                              });
+                            });
+                          } else {
+                            try {
+                              final uri = Uri.parse(data.adsUrlLink ?? '');
+                              print('bottomAdsLayout ${data.adsUrlLink}');
+                              if (await canLaunchUrl(uri)) {
+                                setState(() {
+                                  loadLaunch = true;
+                                });
+                                System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
+                                  await launchUrl(
+                                    uri,
+                                    mode: LaunchMode.externalApplication,
+                                  );
+                                });
+                              } else {
+                                throw "Could not launch $uri";
+                              }
+                            } catch (e) {
                               setState(() {
                                 loadLaunch = true;
                               });
                               System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                                Navigator.pop(context);
-                                Future.delayed(const Duration(milliseconds: 800), () {
-                                  Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                                });
+                                System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                               });
-                            } else {
-                              try {
-                                final uri = Uri.parse(data.adsUrlLink ?? '');
-                                print('bottomAdsLayout ${data.adsUrlLink}');
-                                if (await canLaunchUrl(uri)) {
-                                  setState(() {
-                                    loadLaunch = true;
-                                  });
-                                  System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
-                                    Navigator.pop(context);
-                                    await launchUrl(
-                                      uri,
-                                      mode: LaunchMode.externalApplication,
-                                    );
-                                  });
-                                } else {
-                                  throw "Could not launch $uri";
-                                }
-                              } catch (e) {
-                                setState(() {
-                                  loadLaunch = true;
-                                });
-                                System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                                  System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                });
-                              }
                             }
-                          },
-                          child: Builder(builder: (context) {
-                            final learnMore =
-                                (widget.data.ctaButton ?? 'Learn More');
-                            return Container(
-                              alignment: Alignment.center,
-                              padding:
-                                  const EdgeInsets.only(top: 10, bottom: 10),
-                              decoration: const BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
-                                  color: KHyppeButtonAds),
-                              child: loadLaunch
-                                  ? const SizedBox(
-                                      width: 40,
-                                      height: 20,
-                                      child: CustomLoading())
-                                  : Text(
-                                      learnMore,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                          }
+                        },
+                        child: Builder(builder: (context) {
+                          final learnMore = (widget.data.ctaButton ?? 'Learn More');
+                          return Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
+                            child: loadLaunch
+                                ? const SizedBox(width: 40, height: 20, child: CustomLoading())
+                                : Text(
+                                    learnMore,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
                                     ),
-                            );
-                          }),
-                        ),
-                        twelvePx,
-                        if (widget.data.adsDescription != null)
-                          Builder(builder: (context) {
-                            final notifier =
-                                context.read<TranslateNotifierV2>();
-                            return CustomDescContent(
-                                desc: widget.data.adsDescription ?? '',
-                                trimLines: 2,
-                                textAlign: TextAlign.justify,
-                                seeLess: ' ${notifier.translate.seeLess}',
-                                seeMore:
-                                    ' ${notifier.translate.seeMoreContent}',
-                                textOverflow: TextOverflow.visible,
-                                normStyle:
-                                    Theme.of(context).textTheme.bodyText2,
-                                hrefStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
-                                expandStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary));
-                          })
-                      ],
-                    ),
+                                  ),
+                          );
+                        }),
+                      ),
+                      twelvePx,
+                      if (widget.data.adsDescription != null)
+                        Builder(builder: (context) {
+                          final notifier = context.read<TranslateNotifierV2>();
+                          return CustomDescContent(
+                              desc: widget.data.adsDescription ?? '',
+                              trimLines: 2,
+                              textAlign: TextAlign.justify,
+                              seeLess: ' ${notifier.translate.seeLess}',
+                              seeMore: ' ${notifier.translate.seeMoreContent}',
+                              textOverflow: TextOverflow.visible,
+                              normStyle: Theme.of(context).textTheme.bodyText2,
+                              hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                              expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary));
+                        })
+                    ],
                   )
                 ],
               ),
@@ -331,20 +295,18 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween>
 }
 
 class InBetweenScreen extends StatefulWidget {
-  final String postID;
   final AdsData adsData;
   final FlutterAliplayer? player;
   final double ratio;
-  const InBetweenScreen(
-      {Key? key, required this.postID, required this.adsData, this.player, required this.ratio})
-      : super(key: key);
+  final Function(double) onRatioChanged;
+  final Function(FlutterAliplayer, String) getPlayer;
+  const InBetweenScreen({Key? key, required this.adsData, this.player, required this.ratio, required this.onRatioChanged, required this.getPlayer}) : super(key: key);
 
   @override
   State<InBetweenScreen> createState() => _InBetweenScreenState();
 }
 
-class _InBetweenScreenState extends State<InBetweenScreen>
-    with WidgetsBindingObserver {
+class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingObserver {
   FlutterAliplayer? fAliplayer;
   bool isPrepare = false;
   bool isPlay = false;
@@ -381,8 +343,7 @@ class _InBetweenScreenState extends State<InBetweenScreen>
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       // final ref = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
-      fAliplayer =
-          FlutterAliPlayerFactory.createAliPlayer(playerId: widget.postID);
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.adsData.adsId);
       WidgetsBinding.instance.addObserver(this);
       fAliplayer?.pause();
       fAliplayer?.setAutoPlay(true);
@@ -396,8 +357,10 @@ class _InBetweenScreenState extends State<InBetweenScreen>
 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer
-          ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      if (fAliplayer != null) {
+        widget.getPlayer(fAliplayer!, widget.adsData.adsId ?? '');
+      }
       _initListener();
     });
 
@@ -410,9 +373,7 @@ class _InBetweenScreenState extends State<InBetweenScreen>
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer
-          ?.getPlayerName()
-          .then((value) => print("getPlayerName==${value}"));
+      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         setState(() {
           isPrepare = true;
@@ -551,8 +512,7 @@ class _InBetweenScreenState extends State<InBetweenScreen>
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
     });
-    fAliplayer?.setOnThumbnailPreparedListener(
-        preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
+    fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {}, preparedFail: (playerId) {});
 
     fAliplayer?.setOnThumbnailGetListener(
         onThumbnailGetSuccess: (bitmap, range, playerId) {
@@ -595,23 +555,34 @@ class _InBetweenScreenState extends State<InBetweenScreen>
     //       "eyJTZWN1cml0eVRva2VuIjoiQ0FJU2lBTjFxNkZ0NUIyeWZTaklyNURISnUvWnJvZFIrb1d2VlY2SmdHa0RPdFZjaDZMRG96ejJJSDFLZlhadEJPQWN0ZlF3bFdwVDdQNGJsckl1RjhJWkdoR2ZONU10dE1RUHJGL3dKb0hidk5ldTBic0hoWnY5bGNNTHJaaWpqcUhvZU96Y1lJNzMwWjdQQWdtMlEwWVJySkwrY1RLOUphYk1VL21nZ29KbWFkSTZSeFN4YVNFOGF2NWRPZ3BscnIwSVZ4elBNdnIvSFJQMnVtN1pIV3R1dEEwZTgzMTQ1ZmFRejlHaTZ4YlRpM2I5ek9FVXFPYVhKNFMvUGZGb05ZWnlTZjZvd093VUVxL2R5M3hvN3hGYjFhRjRpODRpL0N2YzdQMlFDRU5BK3dtbFB2dTJpOE5vSUYxV2E3UVdJWXRncmZQeGsrWjEySmJOa0lpbDVCdFJFZHR3ZUNuRldLR216c3krYjRIUEROc2ljcXZoTUhuZ3k4MkdNb0tQMHprcGVuVUdMZ2hIQ2JGRFF6MVNjVUZ3RjIyRmQvVDlvQTJRTWwvK0YvbS92ZnRvZ2NvbC9UTEI1c0dYSWxXRGViS2QzQnNETjRVMEIwRlNiRU5JaERPOEwvOWNLRndUSWdrOFhlN01WL2xhYUJGUHRLWFdtaUgrV3lOcDAzVkxoZnI2YXVOcGJnUHIxVVFwTlJxQUFaT3kybE5GdndoVlFObjZmbmhsWFpsWVA0V3paN24wTnVCbjlILzdWZHJMOGR5dHhEdCtZWEtKNWI4SVh2c0lGdGw1cmFCQkF3ZC9kakhYTjJqZkZNVFJTekc0T3pMS1dKWXVzTXQycXcwMSt4SmNHeE9iMGtKZjRTcnFpQ1RLWVR6UHhwakg0eDhvQTV6Z0cvZjVIQ3lFV3pISmdDYjhEeW9EM3NwRUh4RGciLCJBdXRoSW5mbyI6IntcIkNJXCI6XCJmOUc0eExxaHg2Tkk3YThaY1Q2N3hObmYrNlhsM05abmJXR1VjRmxTelljS0VKVTN1aVRjQ29Hd3BrcitqL2phVVRXclB2L2xxdCs3MEkrQTJkb3prd0IvKzc5ZlFyT2dLUzN4VmtFWUt6TT1cIixcIkNhbGxlclwiOlwiV2NKTEpvUWJHOXR5UmM2ZXg3LzNpQXlEcS9ya3NvSldhcXJvTnlhTWs0Yz1cIixcIkV4cGlyZVRpbWVcIjpcIjIwMjMtMDMtMTZUMDk6NDE6MzdaXCIsXCJNZWRpYUlkXCI6XCJjMWIyNGQzMGIyYzY3MWVkYmZjYjU0MjI4MGU5MDEwMlwiLFwiUGxheURvbWFpblwiOlwidm9kLmh5cHBlLmNsb3VkXCIsXCJTaWduYXR1cmVcIjpcIk9pbHhxelNyaVVhOGlRZFhaVEVZZEJpbUhJUT1cIn0iLCJWaWRlb01ldGEiOnsiU3RhdHVzIjoiTm9ybWFsIiwiVmlkZW9JZCI6ImMxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyIiwiVGl0bGUiOiIyODg4MTdkYi1jNzdjLWM0ZTQtNjdmYi0zYjk1MTlmNTc0ZWIiLCJDb3ZlclVSTCI6Imh0dHBzOi8vdm9kLmh5cHBlLmNsb3VkL2MxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyL3NuYXBzaG90cy9jYzM0MjVkNzJiYjM0YTE3OWU5NmMzZTA3NTViZjJjNi0wMDAwNC5qcGciLCJEdXJhdGlvbiI6NTkuMDQ5fSwiQWNjZXNzS2V5SWQiOiJTVFMuTlNybVVtQ1hwTUdEV3g4ZGlWNlpwaGdoQSIsIlBsYXlEb21haW4iOiJ2b2QuaHlwcGUuY2xvdWQiLCJBY2Nlc3NLZXlTZWNyZXQiOiIzU1NRUkdkOThGMU04TkZ0b00xa2NlU01IZlRLNkJvZm93VXlnS1Y5aEpQdyIsIlJlZ2lvbiI6ImFwLXNvdXRoZWFzdC01IiwiQ3VzdG9tZXJJZCI6NTQ1NDc1MzIwNTI4MDU0OX0=",
     // );
     await getAuth(data.videoId ?? '476cf7a01e7371ee9612442380ea0102');
-
-    setState(() {
+    if(mounted){
+      setState(() {
+        isPause = false;
+        // _isFirstRenderShow = false;
+      });
+    }else{
       isPause = false;
-      // _isFirstRenderShow = false;
-    });
+    }
 
-    fAliplayer?.prepare();
+    await fAliplayer?.prepare();
+
 
     // fAliplayer?.play();
   }
 
   Future getAuth(String apsaraId) async {
-    setState(() {
-      isloading = true;
-      _showLoading = true;
-    });
+
+
     try {
+      if(mounted){
+        setState(() {
+          isloading = true;
+          _showLoading = true;
+        });
+      }else{
+        isloading = true;
+        _showLoading = true;
+      }
       final notifier = PostsBloc();
       await notifier.getAuthApsara(context, apsaraId: apsaraId, check: false);
       final fetch = notifier.postsFetch;
@@ -625,21 +596,37 @@ class _InBetweenScreenState extends State<InBetweenScreen>
           playAuth: auth,
           definitionList: [DataSourceRelated.definitionList],
         );
-        setState(() {
+        if(mounted){
+          setState(() {
+            isloading = false;
+            _showLoading = false;
+          });
+        }else{
           isloading = false;
-        });
+          _showLoading = false;
+        }
+
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
-      setState(() {
+      if(mounted){
+        setState(() {
+          isloading = false;
+          _showLoading = false;
+        });
+      }else{
         isloading = false;
         _showLoading = false;
-      });
+      }
+
       // 'Failed to fetch ads data $e'.logger();
     }
   }
 
   void onViewPlayerCreated(viewId) async {
+    if (fAliplayer != null) {
+      widget.getPlayer(fAliplayer!, widget.adsData.adsId ?? '');
+    }
     fAliplayer?.setPlayerView(viewId);
   }
 
@@ -656,20 +643,19 @@ class _InBetweenScreenState extends State<InBetweenScreen>
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned.fill(
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-            child: AliPlayerView(
-              onCreated: onViewPlayerCreated,
-              x: 0,
-              y: 0,
-              height: context.getWidth() * widget.ratio,
-              width: context.getWidth(),
-              aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
-            ),
+        ClipRRect(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+          child: AliPlayerView(
+            onCreated: onViewPlayerCreated,
+            x: 0,
+            y: 0,
+            height: MediaQuery.of(context).size.width * widget.ratio,
+            width: MediaQuery.of(context).size.width,
+            aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
           ),
         ),
-        if (_showLoading)
+        if(_showLoading)
           Positioned.fill(
             child: Align(
               alignment: Alignment.center,
@@ -697,9 +683,8 @@ class _InBetweenScreenState extends State<InBetweenScreen>
           top: 12,
           right: 12,
           child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Colors.black.withOpacity(0.5)),
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.black.withOpacity(0.5)),
             child: Text(
               System.getTimeformatByMs(_currentPositionText),
               style: const TextStyle(color: Colors.white, fontSize: 11),
@@ -719,9 +704,7 @@ class _InBetweenScreenState extends State<InBetweenScreen>
             child: Padding(
               padding: const EdgeInsets.only(right: 2.0),
               child: CustomIconWidget(
-                iconData: isMute
-                    ? '${AssetPath.vectorPath}sound-off.svg'
-                    : '${AssetPath.vectorPath}sound-on.svg',
+                iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
                 defaultColor: false,
                 height: 24,
               ),

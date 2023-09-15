@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/arguments/main_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/arguments/referral_argument.dart';
@@ -221,6 +222,19 @@ class DynamicLinkService {
                 _routing.move(
                   path,
                   argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
+                );
+              });
+              break;
+
+            case Routes.chalengeDetail:
+              '_handleDeepLink otherProfile'.logger();
+              _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+              Future.delayed(const Duration(milliseconds: 500), () {
+                _routing.move(
+                  path,
+                  argument: GeneralArgument()
+                    ..id = deepLink.queryParameters['postID']
+                    ..index = 1,
                 );
               });
               break;

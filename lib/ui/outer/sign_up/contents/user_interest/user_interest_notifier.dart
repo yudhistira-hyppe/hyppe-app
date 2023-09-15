@@ -99,6 +99,11 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   bool onBackPress(bool fromSetting) {
+    if(fromSetting){
+      return true;
+    }else{
+      return false;
+    }
     fromSetting ? _routing.moveBack() : _routing.moveAndPop(Routes.login);
     return true;
   }

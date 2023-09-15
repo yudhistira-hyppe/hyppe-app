@@ -17,6 +17,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/core/transitions/line_indicator_transation.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/link_copied_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
@@ -145,6 +146,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     print("======================ke initstate");
 
     super.initState();
+
     context.read<StoriesPlaylistNotifier>().setLoadReaction(false);
     _pageController = PageController(initialPage: widget.argument.peopleIndex);
     _pageController.addListener(() {
@@ -163,20 +165,24 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         }
       }
     });
+
     animationController = AnimationController(vsync: this, duration: const Duration(seconds: 7));
     emojiController = AnimationController(vsync: this, duration: const Duration(seconds: 7));
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _animationController = AnimationController(
         vsync: this,
       )
-        ..addListener(() {
-          setState(() {});
-        })
+        // ..addListener(() { setState(() {});})
         ..addStatusListener(
           (AnimationStatus status) {
             if (status == AnimationStatus.completed) {
               if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
                 storyComplete(notifier);
+              }
+            }
+            if (status == AnimationStatus.forward) {
+              if (mounted) {
+                setState(() {});
               }
             }
           },
@@ -201,7 +207,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       _playMode = ModeTypeAliPLayer.auth;
       isPlay = false;
       isPrepare = false;
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
 
       //Turn on mix mode
       if (Platform.isIOS) {
@@ -224,6 +232,12 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
       _initListener();
     });
+  }
+
+  @override
+  void didChangeMetrics() {
+    // TODO: implement didChangeMetrics
+    super.didChangeMetrics();
   }
 
   Future getAuth(String apsaraId) async {
@@ -273,12 +287,12 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         } else {
           _animationController?.duration = Duration(milliseconds: _videoDuration);
         }
-
         setState(() {
           isPrepare = true;
         });
       });
-      System().increaseViewCount(context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()).whenComplete(() {
+      final fixContext = Routing.navigatorKey.currentContext;
+      System().increaseViewCount(fixContext ?? context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()).whenComplete(() {
         _showAds(Routing.navigatorKey.currentContext ?? context);
       });
       isPlay = true;
@@ -306,37 +320,45 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
           isPause = true;
           setState(() {});
           Wakelock.disable();
+          "================ disable wakelock 12".logger();
           _animationController?.stop();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
           Wakelock.disable();
+          "================ disable wakelock 11".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
           Wakelock.disable();
+          "================ disable wakelock 10".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusError:
           Wakelock.disable();
+          "================ disable wakelock 13".logger();
           break;
         default:
       }
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
       _animationController?.stop();
-      setState(() {
-        _loadingPercent = 0;
-        _showLoading = true;
-      });
+      _loadingPercent = 0;
+      _showLoading = true;
+      if (mounted) {
+        setState(() {});
+      }
     }, loadingProgress: (percent, netSpeed, playerId) {
       _loadingPercent = percent;
       if (percent == 100) {
         _showLoading = false;
       }
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     }, loadingEnd: (playerId) {
       // _animationController?.forward();
-      setState(() {
-        _showLoading = false;
-      });
+      _showLoading = false;
+      if (mounted) {
+        setState(() {});
+      }
     });
     fAliplayer?.setOnSeekComplete((playerId) {
       _inSeek = false;
@@ -378,9 +400,10 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       isPause = true;
       _animationController?.reset();
       storyComplete(notifier);
-      setState(() {
-        _currentPosition = _videoDuration;
-      });
+      _currentPosition = _videoDuration;
+      if (mounted) {
+        setState(() {});
+      }
     });
 
     fAliplayer?.setOnSnapShot((path, playerId) {
@@ -391,7 +414,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       _showTipsWidget = true;
       _showLoading = false;
       _tipsContent = "$errorCode \n $errorMsg";
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
@@ -433,17 +458,20 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       } else {
         _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
         _curChildIdx = 0;
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       }
     } else {
-      setState(() {
-        if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
-          _animationController?.duration = const Duration(milliseconds: 8000);
-        }
-        shown.add(_groupUserStories![_curIdx].story?[_curChildIdx].postID);
-        print(shown);
-        _curChildIdx++;
-      });
+      if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
+        _animationController?.duration = const Duration(milliseconds: 8000);
+      }
+      shown.add(_groupUserStories![_curIdx].story?[_curChildIdx].postID);
+      print(shown);
+      _curChildIdx++;
+      if (mounted) {
+        setState(() {});
+      }
       start();
     }
   }
@@ -455,14 +483,18 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       print("story kurang ${shown.length}");
       shown.removeAt(shown.length - 1);
       print("story setelah kurang ${shown.length}");
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
       start();
     } else {
       if (_curIdx > 0) {
         shown = [];
         _pageController.previousPage(duration: const Duration(milliseconds: 900), curve: Curves.ease);
         _curChildIdx = 0;
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       }
     }
   }
@@ -499,6 +531,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   void dispose() {
     globalAliPlayer = null;
     Wakelock.disable();
+    "================ disable wakelock 9".logger();
     _animationController?.dispose();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
@@ -585,6 +618,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         value.setIsKeyboardActive(false);
       }
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: PageView.builder(
           controller: _pageController,
           scrollDirection: Axis.horizontal,
@@ -592,7 +626,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
           onPageChanged: (index) async {
             shown = [];
             _curIdx = index;
-            setState(() {});
+            if (mounted) {
+              setState(() {});
+            }
             if (_lastCurIndex != _curIdx) {
               // notifier.isPreventedEmoji = true;
               _curChildIdx = 0;
@@ -601,6 +637,16 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             _lastCurIndex = _curIdx;
           },
           itemBuilder: (context, index) {
+            final player = AliPlayerView(
+              onCreated: (id) {
+                final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
+                onViewPlayerCreated(id, isImage);
+              },
+              x: 0,
+              y: _playerY,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+            );
             return Stack(
               children: [
                 // Text("${_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null || _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType != 'image'}"),
@@ -613,6 +659,10 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                 //         height: MediaQuery.of(context).size.height,
                 //       )
                 //     : Container(),
+                Positioned.fill(
+                    child: Container(
+                  color: Colors.black,
+                )),
                 Builder(builder: (context) {
                   return !isOnPageTurning
                       ? AliPlayerView(
@@ -626,15 +676,28 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                           height: MediaQuery.of(context).size.height,
                         )
                       : Container(
-                          color: Colors.transparent,
+                          color: Colors.black,
                           alignment: Alignment.center,
                           child: const CircularProgressIndicator(),
                         );
+                  // ? (value.onChangingVid
+                  //     ? Container(
+                  //         color: Colors.black,
+                  //         alignment: Alignment.center,
+                  //         child: const CircularProgressIndicator(),
+                  //       )
+                  //     : player)
+                  // : Container(
+                  //     color: Colors.black,
+                  //     alignment: Alignment.center,
+                  //     child: const CircularProgressIndicator(),
+                  //   );
                 }),
 
-                SizedBox(
+                Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
+                  color: Colors.transparent,
                   // padding: EdgeInsets.only(bottom: 25.0),
                   child: _buildFillStory(value, index),
                 ),
@@ -656,20 +719,46 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             padding: const EdgeInsets.only(left: 10.0, right: 10),
             child: Row(
               children: (_groupUserStories?[index].story ?? []).map((it) {
+                print('seconds: ${_animationController?.value}');
                 return Expanded(
                   child: Container(
                     padding: EdgeInsets.only(top: 5, right: _groupUserStories![index].story!.last == it ? 0 : 4),
                     height: 9,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(40.0),
-                      child: LinearProgressIndicator(
-                        value: it.postID == _groupUserStories![index].story?[_curChildIdx].postID ? _animationController?.value : (shown.contains(it.postID) ? 1 : 0),
-                        backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
-                        valueColor: const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
-                      ),
+                      child: it.postID == _groupUserStories![index].story?[_curChildIdx].postID
+                          ? LineIndicatorTransition(
+                              value: Tween<double>(begin: 0, end: 1.0).animate(CurvedAnimation(parent: _animationController ?? animationController, curve: Curves.easeIn)),
+                              color: const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
+                              backgroundColor: kHyppeLightButtonText.withOpacity(0.4))
+                          : LinearProgressIndicator(
+                              value: (shown.contains(it.postID) ? 1 : 0),
+                              backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
+                              valueColor: const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
+                            ),
                     ),
                   ),
                 );
+                // return Expanded(
+                //   child: Container(
+                //     padding: EdgeInsets.only(top: 5, right: _groupUserStories![index].story!.last == it ? 0 : 4),
+                //     height: 9,
+                //     child: ClipRRect(
+                //       borderRadius: BorderRadius.circular(40.0),
+                //       child: TweenAnimationBuilder<double>(
+                //         duration: const Duration(milliseconds: 250),
+                //         tween: Tween<double>(begin: 0, end: 1.0).animate(CurvedAnimation(parent: animationController, curve: Curves.easeIn)),
+                //         builder: (context, value, _) {
+                //           return LinearProgressIndicator(
+                //             value: it.postID == _groupUserStories![index].story?[_curChildIdx].postID ? value : (shown.contains(it.postID) ? 1 : 0),
+                //             backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
+                //             valueColor: const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
+                //           );
+                //         }
+                //       ),
+                //     ),
+                //   ),
+                // );
               }).toList(),
             ),
           ),
@@ -741,6 +830,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                     animationController: emojiController,
                     currentIndex: _curChildIdx,
                     pause: pause,
+                    play: play,
                     // play: play,
                   ),
                 ),
@@ -877,8 +967,13 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   void start() async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
     _animationController?.reset();
-    System().increaseViewCount(context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()).whenComplete(() {
+    final fixContext = Routing.navigatorKey.currentContext;
+    final storyRef = (Routing.navigatorKey.currentContext ?? context).read<PreviewStoriesNotifier>();
+    (Routing.navigatorKey.currentContext ?? context).read<StoriesPlaylistNotifier>().textEditingController.clear();
+    emojiController.reset();
+    System().increaseViewCount(fixContext ?? context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()).whenComplete(() {
       _showAds(Routing.navigatorKey.currentContext ?? context);
+      storyRef.setViewed(_curIdx, _curChildIdx);
     });
     fAliplayer?.stop();
     isPlay = false;
@@ -888,10 +983,39 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'video') {
       await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].apsaraId ?? '');
       print("startsttt==========");
-      setState(() {
-        _isPause = false;
-        _isFirstRenderShow = false;
-      });
+      _isPause = false;
+      _isFirstRenderShow = false;
+      if (mounted) {
+        setState(() {});
+      }
+      // var configMap = {
+      //   'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+      //   'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+      //   'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+      //   'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+      //   'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+      //   'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+      //   'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
+      //   'mLocalCacheDir': GlobalSettings.mDirController,
+      //   'mClearFrameWhenStop': true
+      // };
+      // // Configure the application.
+      // fAliplayer?.setConfig(configMap);
+      // var map = {
+      //   "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
+
+      //   /// The maximum space that can be occupied by the cache directory.
+      //   "mMaxDurationS": GlobalSettings.mMaxDurationSController,
+
+      //   /// The maximum cache duration of a single file.
+      //   "mDir": GlobalSettings.mDirController,
+
+      //   /// The cache directory.
+      //   "mEnable": GlobalSettings.mEnableCacheConfig
+
+      //   /// Specify whether to enable the cache feature.
+      // };
+      // fAliplayer?.setCacheConfig(map);
       fAliplayer?.prepare();
     } else {
       print("animasi start");
@@ -905,13 +1029,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         _animationController?.forward();
       }
     }
-  }
-
-  void _onPlayerHide() {
-    Future.delayed(const Duration(seconds: 4), () {
-      onTapCtrl = false;
-      setState(() {});
-    });
   }
 
   ///Loading

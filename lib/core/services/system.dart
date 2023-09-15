@@ -28,6 +28,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
@@ -293,6 +294,8 @@ class System {
       value = DateFormat('HH:mm').format(DateTime.parse(dateParams));
     } else if (displayOption == 7) {
       value = DateFormat('d MMMM yyyy', lang).format(DateTime.parse(dateParams));
+    } else if (displayOption == 8) {
+      value = DateFormat('MMMM yyyy', lang).format(DateTime.parse(dateParams));
     }
     return value;
   }
@@ -905,6 +908,8 @@ class System {
         return 'ADS CLICK';
       case NotificationCategory.adsView:
         return 'ADS VIEW';
+      case NotificationCategory.challange:
+        return 'CHALLANGE';
     }
   }
 
@@ -928,6 +933,8 @@ class System {
         return NotificationCategory.adsClick;
       case 'ADS VIEW':
         return NotificationCategory.adsView;
+      case 'CHALLANGE':
+        return NotificationCategory.challange;
       default:
         return NotificationCategory.all;
     }
@@ -1044,7 +1051,8 @@ class System {
   }
 
   Future<Uri> createdReferralLink(BuildContext context) async {
-    final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
+    // final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
+    final notifier = context.read<SelfProfileNotifier>();
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: Env.data.deeplinkBaseUrl,
       link: Uri.parse('${Env.data.deeplinkBaseUrl}${Routes.otherProfile}?referral=1&sender_email=${notifier.user.profile?.email}'),
@@ -1387,7 +1395,7 @@ class System {
     if(!isShowingDialog){
       isShowingDialog = true;
       if (lastTimeAds == '') {
-        if(data.mediaType == 'video'){
+        if(data.mediaType?.toLowerCase() == 'video'){
           await ShowGeneralDialog.adsPopUpVideo(context, data, auth);
         }else{
           await ShowGeneralDialog.adsPopUpImage(context, data);
@@ -1400,7 +1408,7 @@ class System {
         print(jumlahMenit);
         if (jumlahMenit >= 14) {
           // if (lastTimeAds.canShowAds()) {
-          if(data.mediaType == 'video'){
+          if(data.mediaType?.toLowerCase() == 'video'){
             await ShowGeneralDialog.adsPopUpVideo(context, data, auth);
           }else{
             await ShowGeneralDialog.adsPopUpImage(context, data);
@@ -1441,6 +1449,34 @@ class System {
       }
     } catch (e) {
       'Failed hit view ads $e'.logger();
+    }
+  }
+
+  Future popUpChallange(BuildContext context) async {
+    String lastTime = SharedPreference().readStorage(SpKeys.datetimeLastShowChallange) ?? '';
+    var challange = context.read<ChallangeNotifier>();
+
+    if (lastTime == '') {
+      await challange.getBannerLanding(context, ispopUp: true);
+      SharedPreference().writeStorage(SpKeys.datetimeLastShowChallange, DateTime.now().toString());
+      return ShowGeneralDialog.showBannerPop(context);
+    } else {
+      var temp = DateTime.now();
+      // var temp = DateTime.parse("2023-07-29 08:02:10");
+      var startDate = DateTime.parse(lastTime);
+      var d1 = DateTime.utc(temp.year, temp.month, temp.day, temp.hour, temp.minute, temp.second);
+      var startDay = DateTime.utc(startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute, startDate.second);
+
+      final difference = startDay.difference(d1);
+      print("===============222222 ---- ${difference.inDays}");
+      print("===============222222 ---- ${difference.inHours}");
+      print("===============222222 ---- ${difference.inMinutes}");
+      // if (difference.inHours >= 24) {
+      if (difference.inMinutes <= -0) {
+        await challange.getBannerLanding(context, ispopUp: true);
+        SharedPreference().writeStorage(SpKeys.datetimeLastShowChallange, DateTime.now().toString());
+        return ShowGeneralDialog.showBannerPop(context);
+      }
     }
   }
 

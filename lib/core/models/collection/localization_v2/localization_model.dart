@@ -469,6 +469,9 @@ class LocalizationModelV2 {
   String? likeK;
   String? pinTopText1;
   String? pinTopText2;
+  String? otpRegisterText1;
+  String? otpRegisterText2;
+  String? otpRegisterText3;
   String? yourEmailHasBeenVerified;
   String? hiYouHaveNewContentPleasePullDownToRefresh;
   String? sorryUnexpectedError;
@@ -526,7 +529,12 @@ class LocalizationModelV2 {
   String? noResultsFoundTryAnother;
   String? afterthatThisTagWillBePermanentlyRemoved;
   String? caption;
+  String? contentProcessing;
+  String? contentUploading;
+  String? contentWaiting;
   String? contentUploaded;
+  String? warningInavtivityVid;
+  String? warningInavtivityDiary;
   String? reportThisAccount;
   String? signInWithGoogleAccount;
   String? signInWithApple;
@@ -593,6 +601,7 @@ class LocalizationModelV2 {
   String? selectBank;
   String? bankName;
   String? noBankAccount;
+  String? messageBankNotMatched;
   String? accountOwnerName;
   String? keepThisAccount;
   String? youWillAdd;
@@ -720,6 +729,7 @@ class LocalizationModelV2 {
   String? yourTransactionisBeingProcessedNow;
   String? backtoTransaction;
   String? successfullyAdded;
+  String? contentNotAvailable;
   String? spam;
   String? nudityOrSexualActivity;
   String? hateSpeechOrSymbols;
@@ -787,6 +797,7 @@ class LocalizationModelV2 {
   String? by;
   String? night;
   String? boostedPostList;
+  String? stringContinue;
   String? reach;
   String? viewDetails;
   String? scheduled;
@@ -875,6 +886,8 @@ class LocalizationModelV2 {
   String? seeLess;
   String? pleaseSelectOneortheMaxFileis;
   String? pleaseVerifyYourEmailFrst;
+  String? emailHasRegistered;
+  String? emailVerification;
   String? fileMayBeInErrorChooseAnotherFile;
   String? blockThisAccount;
   String? confirmPasswordCorrect;
@@ -884,6 +897,7 @@ class LocalizationModelV2 {
   String? messageInvalidEmail;
   String? titleEmailIsGmail;
   String? messageEmailIsGmail;
+  String? messageSuccessVerification;
   String? pleaseEnterRegisteredEmail;
   String? contentPreferences;
   String? customization;
@@ -917,6 +931,57 @@ class LocalizationModelV2 {
   String? otherCompetitions;
   String? challengePage;
   String? goingOn;
+  String? selectChallengePeriod;
+  String? referralCodeLinkCopiedSuccessfully;
+  String? theresNoLeaderboardAvailable;
+  String? getFirstPlaceByFollowingThisExciting;
+  String? letsJoinTheCompetition;
+  String? getFirstPlaceByEnteringThisExcitingCompetition;
+  String? joinTheChallengeNow;
+  String? viewChallenge;
+  String? joinOtherInterestingChallenges;
+  String? startIn;
+  String? hariLagi;
+  String? endsIn;
+  String? nonParticipant;
+  String? yourAchievements;
+  String? seeMyBadgeCollection;
+  String? youHaveNotAchievedAnythingYet;
+  String? joinTheChallengeAndGetOther;
+  String? followMostHyppeAccountsToWinTheCompetition;
+  String? exploreAndFollowtheHyppeAccountsHere;
+  String? uploadasmuchcontentaspossibletowinthechallenge;
+  String? uploadInterestingContentHere;
+  String? joinandinviteyourfriendstoHyppenow;
+  String? viewQRCode;
+  String? comeonLikeandwatchasmuchinterestingcontentaspossibletowinthechallenge;
+  String? exploreInterestingContentHere;
+  String? watchinterestingcontenthere;
+  String? likeHyppecontenthere;
+  String? joinanduploadyourbestideastoHyppenow;
+  String? postNow;
+  String? takeonthechallengeanduploadyourbestideashere;
+  String? postYourHyppePicNow;
+  String? postYourHyppeVidNow;
+  String? postYourHyppeDiaryNow;
+  String? tutorLanding1;
+  String? tutorLanding2;
+  String? tutorLanding3;
+  String? tutorLanding4;
+  String? tutorLanding5;
+  String? tutorLanding6;
+  String? comeoncreatecontentnow;
+  String? registeryourcontentownership;
+  String? selectContentcategory;
+  String? understand;
+  String? myListOfAchievements;
+  String? achievementsPage;
+  String? participant;
+  String? challengePeriod;
+  String? mainChallenge;
+  String? copiedLinks;
+  String? apply;
+  String? selectDate;
   String? end;
 
   LocalizationModelV2({
@@ -1390,6 +1455,9 @@ class LocalizationModelV2 {
     this.likeK,
     this.pinTopText1,
     this.pinTopText2,
+    this.otpRegisterText1,
+    this.otpRegisterText2,
+    this.otpRegisterText3,
     this.yourEmailHasBeenVerified,
     this.hiYouHaveNewContentPleasePullDownToRefresh,
     this.sorryUnexpectedError,
@@ -1447,7 +1515,12 @@ class LocalizationModelV2 {
     this.noResultsFoundTryAnother,
     this.afterthatThisTagWillBePermanentlyRemoved,
     this.caption,
+    this.contentProcessing,
+    this.contentUploading,
+    this.contentWaiting,
     this.contentUploaded,
+    this.warningInavtivityVid,
+    this.warningInavtivityDiary,
     this.reportThisAccount,
     this.signInWithGoogleAccount,
     this.signInWithApple,
@@ -1514,6 +1587,7 @@ class LocalizationModelV2 {
     this.selectBank,
     this.bankName,
     this.noBankAccount,
+    this.messageBankNotMatched,
     this.accountOwnerName,
     this.keepThisAccount,
     this.youWillAdd,
@@ -1641,6 +1715,7 @@ class LocalizationModelV2 {
     this.yourTransactionisBeingProcessedNow,
     this.backtoTransaction,
     this.successfullyAdded,
+    this.contentNotAvailable,
     this.spam,
     this.nudityOrSexualActivity,
     this.hateSpeechOrSymbols,
@@ -1708,6 +1783,7 @@ class LocalizationModelV2 {
     this.by,
     this.night,
     this.boostedPostList,
+    this.stringContinue,
     this.reach,
     this.viewDetails,
     this.scheduled,
@@ -1796,6 +1872,8 @@ class LocalizationModelV2 {
     this.seeLess,
     this.pleaseSelectOneortheMaxFileis,
     this.pleaseVerifyYourEmailFrst,
+    this.emailVerification,
+    this.emailHasRegistered,
     this.fileMayBeInErrorChooseAnotherFile,
     this.blockThisAccount,
     this.confirmPasswordCorrect,
@@ -1805,6 +1883,7 @@ class LocalizationModelV2 {
     this.messageInvalidEmail,
     this.titleEmailIsGmail,
     this.messageEmailIsGmail,
+    this.messageSuccessVerification,
     this.pleaseEnterRegisteredEmail,
     this.contentPreferences,
     this.customization,
@@ -1838,6 +1917,57 @@ class LocalizationModelV2 {
     this.otherCompetitions,
     this.challengePage,
     this.goingOn,
+    this.selectChallengePeriod,
+    this.referralCodeLinkCopiedSuccessfully,
+    this.theresNoLeaderboardAvailable,
+    this.getFirstPlaceByFollowingThisExciting,
+    this.letsJoinTheCompetition,
+    this.getFirstPlaceByEnteringThisExcitingCompetition,
+    this.joinTheChallengeNow,
+    this.viewChallenge,
+    this.joinOtherInterestingChallenges,
+    this.startIn,
+    this.hariLagi,
+    this.endsIn,
+    this.nonParticipant,
+    this.yourAchievements,
+    this.seeMyBadgeCollection,
+    this.youHaveNotAchievedAnythingYet,
+    this.joinTheChallengeAndGetOther,
+    this.followMostHyppeAccountsToWinTheCompetition,
+    this.exploreAndFollowtheHyppeAccountsHere,
+    this.uploadasmuchcontentaspossibletowinthechallenge,
+    this.uploadInterestingContentHere,
+    this.joinandinviteyourfriendstoHyppenow,
+    this.viewQRCode,
+    this.comeonLikeandwatchasmuchinterestingcontentaspossibletowinthechallenge,
+    this.exploreInterestingContentHere,
+    this.watchinterestingcontenthere,
+    this.likeHyppecontenthere,
+    this.joinanduploadyourbestideastoHyppenow,
+    this.postNow,
+    this.takeonthechallengeanduploadyourbestideashere,
+    this.postYourHyppePicNow,
+    this.postYourHyppeVidNow,
+    this.postYourHyppeDiaryNow,
+    this.tutorLanding1,
+    this.tutorLanding2,
+    this.tutorLanding3,
+    this.tutorLanding4,
+    this.tutorLanding5,
+    this.tutorLanding6,
+    this.comeoncreatecontentnow,
+    this.registeryourcontentownership,
+    this.selectContentcategory,
+    this.understand,
+    this.myListOfAchievements,
+    this.achievementsPage,
+    this.participant,
+    this.challengePeriod,
+    this.mainChallenge,
+    this.copiedLinks,
+    this.apply,
+    this.selectDate,
     this.end,
   });
 
@@ -2313,6 +2443,9 @@ class LocalizationModelV2 {
     likeK = json['likeK'];
     pinTopText1 = json['pinTopText1'];
     pinTopText2 = json['pinTopText2'];
+    otpRegisterText1 = json['otpRegisterText1'];
+    otpRegisterText2 = json['otpRegisterText2'];
+    otpRegisterText3 = json['otpRegisterText3'];
     yourEmailHasBeenVerified = json['yourEmailHasBeenVerified'];
     hiYouHaveNewContentPleasePullDownToRefresh = json['hiYouHaveNewContentPleasePullDownToRefresh'];
     sorryUnexpectedError = json['sorryUnexpectedError'];
@@ -2372,7 +2505,12 @@ class LocalizationModelV2 {
     noResultsFoundTryAnother = json['noResultsFoundTryAnother'];
     afterthatThisTagWillBePermanentlyRemoved = json['afterthatThisTagWillBePermanentlyRemoved'];
     caption = json['caption'];
+    contentProcessing = json['contentProcessing'];
+    contentUploading = json['contentUploading'];
+    contentWaiting = json['contentWaiting'];
     contentUploaded = json['contentUploaded'];
+    warningInavtivityVid = json['warningInavtivityVid'];
+    warningInavtivityDiary = json['warningInavtivityDiary'];
     reportThisAccount = json['reportThisAccount'];
     signInWithGoogleAccount = json['signInWithGoogleAccount'];
     signInWithApple = json['signInWithApple'];
@@ -2452,6 +2590,7 @@ class LocalizationModelV2 {
     selectBank = json['selectBank'];
     bankName = json['bankName'];
     noBankAccount = json['noBankAccount'];
+    messageBankNotMatched = json['messageBankNotMatched'];
     accountOwnerName = json['accountOwnerName'];
     keepThisAccount = json['keepThisAccount'];
     youWillAdd = json['youWillAdd'];
@@ -2580,6 +2719,7 @@ class LocalizationModelV2 {
     yourTransactionisBeingProcessedNow = json["yourTransactionisBeingProcessedNow"];
     backtoTransaction = json["backtoTransaction"];
     successfullyAdded = json["successfullyAdded"];
+    contentNotAvailable = json["contentNotAvailable"];
     spam = json["spam"];
     nudityOrSexualActivity = json["nudityOrSexualActivity"];
     hateSpeechOrSymbols = json["hateSpeechOrSymbols"];
@@ -2653,6 +2793,7 @@ class LocalizationModelV2 {
     by = json["by"];
     night = json["night"];
     boostedPostList = json["boostedPostList"];
+    stringContinue = json["stringContinue"];
     reach = json["reach"];
     viewDetails = json["viewDetails"];
     scheduled = json["scheduled"];
@@ -2736,6 +2877,8 @@ class LocalizationModelV2 {
     seeLess = json['seeLess'];
     pleaseSelectOneortheMaxFileis = json['pleaseSelectOneortheMaxFileis'];
     pleaseVerifyYourEmailFrst = json['pleaseVerifyYourEmailFrst'];
+    emailVerification = json['emailVerification'];
+    emailHasRegistered = json['emailHasRegistered'];
     fileMayBeInErrorChooseAnotherFile = json['fileMayBeInErrorChooseAnotherFile'];
     blockThisAccount = json['blockThisAccount'];
     confirmPasswordCorrect = json['confirmPasswordCorrect'];
@@ -2745,6 +2888,7 @@ class LocalizationModelV2 {
     messageInvalidEmail = json['messageInvalidEmail'];
     titleEmailIsGmail = json['titleEmailIsGmail'];
     messageEmailIsGmail = json['messageEmailIsGmail'];
+    messageSuccessVerification = json['messageSuccessVerification'];
     pleaseEnterRegisteredEmail = json['pleaseEnterRegisteredEmail'];
     contentPreferences = json['contentPreferences'];
     customization = json['customization'];
@@ -2777,7 +2921,58 @@ class LocalizationModelV2 {
     comeOnJoinTheInterestingCompetition = json['comeOnJoinTheInterestingCompetition'];
     otherCompetitions = json['otherCompetitions'];
     challengePage = json['challengePage'];
-    goingOn = json['goingOn'];
     end = json['end'];
+    goingOn = json['goingOn'];
+    selectChallengePeriod = json['selectChallengePeriod'];
+    mainChallenge = json['mainChallenge'];
+    copiedLinks = json['copiedLinks'];
+    apply = json['apply'];
+    selectDate = json['selectDate'];
+    referralCodeLinkCopiedSuccessfully = json['referralCodeLinkCopiedSuccessfully'];
+    theresNoLeaderboardAvailable = json['theresNoLeaderboardAvailable'];
+    getFirstPlaceByFollowingThisExciting = json['getFirstPlaceByFollowingThisExciting'];
+    letsJoinTheCompetition = json['letsJoinTheCompetition'];
+    getFirstPlaceByEnteringThisExcitingCompetition = json['getFirstPlaceByEnteringThisExcitingCompetition'];
+    joinTheChallengeNow = json['joinTheChallengeNow'];
+    viewChallenge = json['viewChallenge'];
+    joinOtherInterestingChallenges = json['joinOtherInterestingChallenges'];
+    startIn = json['startIn'];
+    hariLagi = json['hariLagi'];
+    endsIn = json['endsIn'];
+    nonParticipant = json['nonParticipant'];
+    yourAchievements = json['yourAchievements'];
+    seeMyBadgeCollection = json['seeMyBadgeCollection'];
+    myListOfAchievements = json['myListOfAchievements'];
+    achievementsPage = json['achievementsPage'];
+    participant = json['participant'];
+    challengePeriod = json['challengePeriod'];
+    youHaveNotAchievedAnythingYet = json['youHaveNotAchievedAnythingYet'];
+    joinTheChallengeAndGetOther = json['joinTheChallengeAndGetOther'];
+    followMostHyppeAccountsToWinTheCompetition = json['followMostHyppeAccountsToWinTheCompetition'];
+    exploreAndFollowtheHyppeAccountsHere = json['exploreAndFollowtheHyppeAccountsHere'];
+    uploadasmuchcontentaspossibletowinthechallenge = json['uploadasmuchcontentaspossibletowinthechallenge'];
+    uploadInterestingContentHere = json['uploadInterestingContentHere'];
+    joinandinviteyourfriendstoHyppenow = json['joinandinviteyourfriendstoHyppenow'];
+    viewQRCode = json['viewQRCode'];
+    comeonLikeandwatchasmuchinterestingcontentaspossibletowinthechallenge = json['comeonLikeandwatchasmuchinterestingcontentaspossibletowinthechallenge'];
+    exploreInterestingContentHere = json['exploreInterestingContentHere'];
+    watchinterestingcontenthere = json['watchinterestingcontenthere'];
+    likeHyppecontenthere = json['likeHyppecontenthere'];
+    joinanduploadyourbestideastoHyppenow = json['joinanduploadyourbestideastoHyppenow'];
+    postNow = json['postNow'];
+    takeonthechallengeanduploadyourbestideashere = json['takeonthechallengeanduploadyourbestideashere'];
+    postYourHyppePicNow = json['postYourHyppePicNow'];
+    postYourHyppeVidNow = json['postYourHyppeVidNow'];
+    postYourHyppeDiaryNow = json['postYourHyppeDiaryNow'];
+    tutorLanding1 = json['tutorLanding1'];
+    tutorLanding2 = json['tutorLanding2'];
+    tutorLanding3 = json['tutorLanding3'];
+    tutorLanding4 = json['tutorLanding4'];
+    tutorLanding5 = json['tutorLanding5'];
+    tutorLanding6 = json['tutorLanding6'];
+    comeoncreatecontentnow = json['comeoncreatecontentnow'];
+    registeryourcontentownership = json['registeryourcontentownership'];
+    selectContentcategory = json['selectContentcategory'];
+    understand = json['understand'];
   }
 }

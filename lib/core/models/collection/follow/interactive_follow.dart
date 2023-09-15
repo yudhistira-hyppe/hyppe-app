@@ -157,7 +157,7 @@ class Avatar {
 }
 
 class SenderOrReceiverInfo {
-  String? fullname;
+  String? fullName;
   String? username;
   String? email;
   Avatar? avatar;
@@ -166,14 +166,14 @@ class SenderOrReceiverInfo {
   SenderOrReceiverInfo({
     this.email,
     this.avatar,
-    this.fullname,
+    this.fullName,
     this.username,
     this.urluserBadge,
   });
 
   SenderOrReceiverInfo.fromJson(Map<String, dynamic> json) {
     email = json['email'];
-    fullname = json['fullname'];
+    fullName = json['fullName'];
     username = json['username'];
     avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
     urluserBadge =
@@ -185,7 +185,7 @@ class SenderOrReceiverInfo {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['email'] = email;
-    data['fullname'] = fullname;
+    data['fullName'] = fullName;
     data['username'] = username;
     if (avatar != null) {
       data['avatar'] = avatar?.toJson();

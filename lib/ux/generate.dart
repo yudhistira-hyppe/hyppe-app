@@ -32,6 +32,7 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/achievement/screen.dart'
 import 'package:hyppe/ui/inner/home/content_v2/chalange/collection/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_slider.dart';
 import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/diary_player.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
@@ -152,10 +153,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case Routes.lobby:
         return MaterialPageRoute(builder: (_) => MainScreen(args: settings.arguments as MainArgument?));
-
       case Routes.selfProfile:
         return MaterialPageRoute(builder: (_) => SelfProfileScreen(arguments: settings.arguments as GeneralArgument));
-
       case Routes.otherProfile:
         return MaterialPageRoute(builder: (_) => OtherProfileScreen(arguments: settings.arguments as OtherProfileArgument));
 
@@ -415,6 +414,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const CollectionBadgeScreen());
       case Routes.chalengeAchievement:
         return MaterialPageRoute(builder: (_) => const AchievementScreen());
+      case Routes.shimmerSlider:
+        return MaterialPageRoute(builder: (_) => ShimmerSlider(arguments: settings.arguments as SlidedPicDetailScreenArgument));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

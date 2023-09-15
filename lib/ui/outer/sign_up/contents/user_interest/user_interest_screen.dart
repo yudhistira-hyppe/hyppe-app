@@ -34,7 +34,7 @@ class _UserInterestScreenState extends State<UserInterestScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return WillPopScope(
-      onWillPop: () async => context.read<UserInterestNotifier>().onBackPress(widget.arguments.fromSetting),
+      onWillPop: () async => widget.arguments.fromSetting,
       child: KeyboardDisposal(
         child: Scaffold(
           body: SingleChildScrollView(
@@ -44,6 +44,7 @@ class _UserInterestScreenState extends State<UserInterestScreen> {
                   width: SizeConfig.screenWidth,
                   child: InterestContent(fromSetting: widget.arguments.fromSetting, userInterested: widget.arguments.userInterested),
                 ),
+                if(widget.arguments.fromSetting)
                 Padding(
                   padding: const EdgeInsets.only(top: 50, left: 16),
                   child: GestureDetector(

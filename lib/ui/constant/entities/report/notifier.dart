@@ -174,8 +174,8 @@ class ReportNotifier with ChangeNotifier {
     _loadingOption = false;
   }
 
-  Future reportPost(BuildContext context, {bool inDetail = true}) async {
-    _isLoading = true;
+  Future reportPost(BuildContext context, {bool inDetail = true, Function()? onComplete}) async {
+    isLoading = true;
     final data = {
       "postID": contentData != null ? contentData?.postID ?? '' : adsData?.adsId ?? '',
       "type": contentData != null ? "content" : "ads",
@@ -205,20 +205,21 @@ class ReportNotifier with ChangeNotifier {
             );
       }
 
-      _isLoading = false;
+      isLoading = false;
       Routing().moveBack();
-      if (inDetail) {
-        Routing().moveBack();
+      // if (inDetail) {
+      //   Routing().moveBack();
+      // }
+      if(onComplete != null){
+        onComplete();
       }
       final language = context.read<TranslateNotifierV2>().translate;
       ShowBottomSheet()
           .onShowColouredSheet(context, language.reportReceived ?? '', subCaption: language.yourReportWillbeHandledImmediately, color: kHyppeTextSuccess, milisecond: 1000, dismissible: false);
     } else {
-      _isLoading = false;
+      isLoading = false;
       ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: kHyppeRed, milisecond: 500);
     }
-
-    notifyListeners();
   }
 
   void seeContent(BuildContext context, ContentData data, String typeContent) {

@@ -11,9 +11,8 @@ import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
-import 'package:hyppe/core/services/check_version.dart';
-import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/services/notification_service.dart';
@@ -23,10 +22,9 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
-import 'package:hyppe/ui/inner/home/screen%20copy.dart';
 import 'package:hyppe/ui/inner/home/screen.dart';
-import 'package:hyppe/ui/inner/message_v2/screen.dart';
 import 'package:hyppe/ui/inner/notification/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/search_v2/screen.dart';
@@ -34,8 +32,18 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:wakelock/wakelock.dart';
+
+import '../../../app.dart';
 
 class MainNotifier with ChangeNotifier {
+  GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
+  // GlobalKey<NestedScrollViewState> get globalKey => _globalKey;
+  // set globalKey(val) {
+  //   _globalKey = val;
+  //   notifyListeners();
+  // }
+
   final _eventService = EventService();
   SocketService get socketService => _socketService;
 
@@ -50,7 +58,21 @@ class MainNotifier with ChangeNotifier {
   Timer? countdownTimer;
   Duration myDuration = const Duration(minutes: 1);
 
-  final ScrollController scrollController = ScrollController();
+  ScrollController _scrollController = ScrollController();
+  ScrollController get scrollController => _scrollController;
+
+  List<Tutorial> _tutorialData = [];
+  List<Tutorial> get tutorialData => _tutorialData;
+
+  set tutorialData(List<Tutorial> val) {
+    _tutorialData = val;
+    notifyListeners();
+  }
+
+  set scrollController(val) {
+    _scrollController = val;
+    notifyListeners();
+  }
 
   set openValidationIDCamera(bool val) {
     _openValidationIDCamera = val;
@@ -146,35 +168,44 @@ class MainNotifier with ChangeNotifier {
     }
   }
 
-  Widget mainScreen(BuildContext context, bool canShowAds) {
-    List pages = [
-      HomeScreen(
-        canShowAds: canShowAds,
-      ),
-      SearchScreen(),
-      NotificationScreen(),
-      SelfProfileScreen()
-    ];
-    late Widget screen;
-
+  Widget mainScreen(BuildContext context, bool canShowAds, GlobalKey keyPostButton) {
+    String isNewUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
+    List pages = [];
+    if (isNewUser == "TRUE") {
+      pages.add(TutorLandingScreen(keyButton: keyPostButton, canShowAds: false));
+    } else {
+      pages.add(HomeScreen(keyButton: keyPostButton, canShowAds: canShowAds));
+    }
+    pages.add(SearchScreen());
+    pages.add(NotificationScreen());
+    pages.add(const SelfProfileScreen());
+    // List pages = [
+    //   HomeScreen(
+    //     canShowAds: canShowAds,
+    //   ),
+    //   SearchScreen(),
+    //   NotificationScreen(),
+    //   const SelfProfileScreen()
+    // ];
+    if (page != -1) {
+      _pageIndex = page;
+    }
+    print('my index $pageIndex $page ');
     switch (pageIndex) {
       case 0:
-        return screen = pages[0];
+        return pages[0];
       case 1:
-        return screen = pages[1];
+        return pages[1];
       case 3:
-        {
-          setNotification();
-          screen = pages[2];
-        }
-        break;
+        return pages[2];
       case 4:
-        return screen = pages[3];
+        return pages[3];
+      default:
+        return pages[0];
     }
-    return screen;
   }
 
-  int _pageIndex = 0;
+  int _pageIndex = 3;
   int get pageIndex => _pageIndex;
   set pageIndex(int val) {
     if (val != _pageIndex) {
@@ -183,7 +214,9 @@ class MainNotifier with ChangeNotifier {
     }
   }
 
-  void setNotification() => FcmService().setHaveNotification(false);
+  setPageIndex(int index) {
+    _pageIndex = index;
+  }
 
   Future onShowPostContent(BuildContext context) async {
     // System().actionReqiredIdCard(context,
@@ -360,5 +393,12 @@ class MainNotifier with ChangeNotifier {
     } else {
       myDuration = Duration(seconds: seconds);
     }
+  }
+
+  bool _isInactiveState = false;
+  bool get isInactiveState => _isInactiveState;
+  set isInactiveState(bool state) {
+    _isInactiveState = state;
+    notifyListeners();
   }
 }

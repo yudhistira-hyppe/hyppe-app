@@ -94,6 +94,14 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
     });
   }
 
+  initStateNewPass(){
+    _password = "";
+    Future.delayed(Duration.zero, () {
+      passwordConfirmController.clear();
+      passwordController.clear();
+    });
+  }
+
   Future onClickForgotPassword(BuildContext context) async {
     if (isLoading) {
       return;

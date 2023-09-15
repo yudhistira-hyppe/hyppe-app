@@ -41,7 +41,7 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
   //     notificationCategory: NotificationCategory.user,
   //     timestamp: message.sentTime?.millisecondsSinceEpoch.toString() ?? null,
   //     message: '${message.notification?.title ?? ''} ${message.notification?.body ?? ''}');
-  _notificationService.showNotification(message, idNotif: message.notification?.android?.tag);
+  _notificationService.showNotification(message, idNotif: message.notification?.android?.tag, isBackground: true);
 }
 
 // listenable value
@@ -100,7 +100,7 @@ class FcmService {
       FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
         RemoteNotification? notification = message.notification;
         """ 
-            Foreground incoming message data => ${message.data},
+            Foreground incoming message data 1 => ${message.data},
             Foreground incoming message category => ${message.category},
             Foreground incoming message category => ${message.category},
             Foreground incoming message messageId => ${message.messageId},
@@ -121,7 +121,8 @@ class FcmService {
         //     message: '${message.notification?.title ?? ''} ${message.notification?.body ?? ''}');
         // isHaveNotification.value = true;
 
-        _notifyApp(message, () => _eventService.notifyForegroundMessage(message));
+        // _notifyApp(message, () => _eventService.notifyForegroundMessage(message));
+        setHaveNotification(true);
         _notificationService.showNotification(message);
         // if (notification != null) {
         //

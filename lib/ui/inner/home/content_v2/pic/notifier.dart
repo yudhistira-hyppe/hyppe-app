@@ -14,12 +14,13 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/inner/search_v2/notifier.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import '../../../../../app.dart';
 import '../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
+import '../../../../../core/models/collection/advertising/ads_video_data.dart';
 import '../../notifier_v2.dart';
 
 class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
@@ -46,6 +47,18 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  setIsViewed(int index){
+    pic?[index].isViewed = true;
+    notifyListeners();
+  }
+
+  List<ContentData>? _picTemp = [];
+  List<ContentData>? get picTemp => _picTemp;
+  set picTemp(List<ContentData>? val) {
+    _picTemp = val;
+    notifyListeners();
+  }
+
   int get itemCount => _pic == null ? 2 : (pic?.length ?? 0);
 
   bool get hasNext => contentsQuery.hasNext;
@@ -54,6 +67,12 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     List<ContentData> res = [];
     'initialPic page : ${contentsQuery.page}'.logger();
     try {
+      // var index = pic?.indexWhere((element) => element.postID == picTemp?.last.postID) ?? 0;
+      // print(pic?.length ?? 0);
+      // print(index);
+      // print(picTemp?.last.postID);
+      // print(picTemp?.last.description);
+
       if (list != null) {
         if (reload) {
           contentsQuery.hasNext = true;
@@ -75,16 +94,37 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
       'ini pict initial 3'.logger();
       if (reload) {
         pic = res;
+        // if ((pic?.length ?? 0) >= 2) {
+        //   picTemp = [];
+        //   for (var i = 0; i < 2; i++) {
+        //     picTemp?.add(pic![i]);
+        //   }
+        // }
 
         if (scrollController.hasClients) {
-          scrollController.animateTo(
-            scrollController.initialScrollOffset,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeIn,
-          );
+          homeClick = true;
+          // notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+          (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+          // scrollController.animateTo(
+          //   scrollController.initialScrollOffset,
+          //   duration: const Duration(milliseconds: 300),
+          //   curve: Curves.easeIn,
+          // );
         }
       } else {
         pic = [...(pic ?? [] as List<ContentData>)] + res;
+        // if ((pic?.length ?? 0) >= 2) {
+        //   // picTemp?.removeAt(0);
+        //   // var index = picTemp?.indexWhere((element) => element.postID == picTemp?.last.postID);
+        //   // print("------== index ${index}");
+        //   // // picTemp?.add(pic![picTemp?.length ?? 0 + 1]);
+
+        //   // var total = picTemp?.length ?? 0;
+        //   // if ((pic?.length ?? 0) > (total ?? 0)) {
+        //   //   picTemp?.add(pic![total + 1]);
+        //   // }
+        //   notifyListeners();
+        // }
       }
       // final _searchData = context.read<SearchNotifier>();
       // print('ini pict initial');
@@ -119,16 +159,61 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void setAdsData(int index, AdsData adsData){
-    pic?[index].inBetweenAds = adsData;
+  int _nextAdsShowed = 6;
+  int get nextAdsShowed => _nextAdsShowed;
+  set nextAdsShowed(int state){
+    _nextAdsShowed = state;
     notifyListeners();
   }
+
+  initAdsCounter(){
+    _nextAdsShowed = 6;
+  }
+
+  void setAdsData(int index, AdsData? adsData){
+    final withAds = pic?.where((element) => element.inBetweenAds != null).length ?? 0;
+    final adsSize = pic?.length ?? 0;
+    if(adsData != null){
+      if(adsSize > nextAdsShowed){
+        if(pic?[nextAdsShowed].inBetweenAds == null){
+          pic?.insert(nextAdsShowed, ContentData(inBetweenAds: adsData));
+          _nextAdsShowed = _nextAdsShowed + 6 + withAds;
+          notifyListeners();
+        }
+      }
+    }else{
+      pic?.removeAt(index);
+      notifyListeners();
+    }
+  }
+
 
   void scrollListener(BuildContext context) {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !contentsQuery.loading && hasNext) {
       'initialPic : 2'.logger();
       initialPic(context);
     }
+  }
+
+  void getTemp(index, lastIndex, indexArray) {
+    if (index != 0) {
+      if (lastIndex < index && (pic?.length ?? 0) > (picTemp?.length ?? 0)) {
+        picTemp?.add(pic![indexArray + 1]);
+        var total = picTemp?.length;
+        if (total == 4) {
+          // picTemp?.removeAt(0);
+        }
+        final ids = picTemp?.map((e) => e.postID).toSet();
+        picTemp?.retainWhere((x) => ids!.remove(x.postID));
+      } else {
+        // picTemp?.insert(0, pic![indexArray - 1]);
+        // var total = picTemp?.length;
+        // if (total == 4) {
+        //   picTemp?.removeLast();
+        // }
+      }
+    }
+    notifyListeners();
   }
 
   void navigateToHyppePicDetail(BuildContext context, ContentData? data) async {
@@ -201,10 +286,10 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void reportContent(BuildContext context, ContentData data, {FlutterAliplayer? fAliplayer, String? key}) {
+  void reportContent(BuildContext context, ContentData data, {FlutterAliplayer? fAliplayer, String? key, required Function() onCompleted}) {
     if (fAliplayer != null) {
       fAliplayer.pause();
     }
-    ShowBottomSheet().onReportContent(context, postData: data, type: hyppePic, inDetail: false, fAliplayer: fAliplayer, key: key);
+    ShowBottomSheet().onReportContent(context, postData: data, type: hyppePic, inDetail: false, fAliplayer: fAliplayer, onCompleted: onCompleted, key: key);
   }
 }

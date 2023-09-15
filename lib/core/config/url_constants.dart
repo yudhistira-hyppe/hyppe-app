@@ -27,20 +27,21 @@ class UrlConstants {
   /// Production Base url
   static const String productionBaseApi = "https://p1.hyppe.cloud";
   static const String productionUploadBaseApi = "https://p1.hyppe.cloud";
+  // static const String productionBaseApi = "https://p1-5003.hyppe.cloud";
+  // static const String productionUploadBaseApi = "https://p1-5003.hyppe.cloud";
+
   // static const String productionBaseApi = "https://prod.hyppe.app"; //lama
   // static const String productionUploadBaseApi = "https://upload.hyppe.app"; //lama
   // static const String productionBaseApi = "https://s1.hyppe.cloud";
   // static const String productionUploadBaseApi = "https://s1.hyppe.cloud";
 
   /// Staging v2 Base url
-  // static const String stagingBaseApi = "https://prod.hyppe.app";
   static const String stagingBaseApi = "https://s1.hyppe.cloud";
-  // static const String stagingBaseApi = "https://staging.hyppe.app";
-  // static const String stagingBaseApi = "http://192.168.0.135:5002";
-  // static const String stagingUploadBaseApi = "https://stagingupload.hyppe.app";
   static const String stagingUploadBaseApi = "https://s1.hyppe.cloud";
-
-  // static const String stagingBaseApi = "http://192.168.43.179/erp/";
+  // static const String stagingBaseApi = "https://p1-5003.hyppe.cloud";
+  // static const String stagingUploadBaseApi = "https://p1-5003.hyppe.cloud";
+  // static const String stagingBaseApi = "https://p1-5003.hyppe.cloud";
+  // static const String stagingUploadBaseApi = "https://p1-5003.hyppe.cloud";
 
   /// Prod Deeplink Base url
   static const String prodDeeplinkUrl = "https://share.hyppe.app";
@@ -256,6 +257,7 @@ class UrlConstants {
 
   /// get => Get My Contents.
   static const String getMyUserPosts = "$postRouteV2/getuserposts/my";
+  // static const String getMyUserPostsV2 = "$postRouteV2/getuserposts/my/v2";
 
   /// get => Get My Contents.
   static const String getOtherUserPosts = "$postRouteV2/getuserposts/byprofile";
@@ -409,15 +411,13 @@ class UrlConstants {
   static const String getPopUpAds = "$adsRouteV2/get/632a806ad2770000fd007a62";
 
   /// post => View Ads User
-  static const String viewAds = "$adsRoute/viewads";
-  static const String viewAdsV2 = "$adsRouteV2/viewads";
+  static const String viewAds = "$adsRouteV2/viewads";
 
   ///setting
   static const String settingApps = "$utilsRoute/getSetting";
 
   /// post => Click Learn More Ads
-  static const String clickAds = "$adsRoute/clickads";
-  static const String clickAdsV2 = "$adsRouteV2/clicked";
+  static const String clickAds = "$adsRouteV2/clickads";
 
   /// get => categorytickets
   static const String categoryTickets = "/api/categorytickets/all";
@@ -457,8 +457,20 @@ class UrlConstants {
   // Get Chalange
   static const String getBannerChalange = "$challange/listing/bannerlandingpage";
   static const String getLeaderBoard = "$challange/listleaderboard";
+  static const String getLeaderBoardSession = "$challange/listleaderboard2";
   static const String getOtherChallange = "$challange/allchallenge";
   static const String joinChallange = "$challange/join";
   static const String listAchievement = "$challange/listbadgebyuser";
   static const String collectionBadge = "$challange/listbadgeuserdetail";
+  static const String selectBadge = "$challange/badgechoice";
+
+  // Get Effect
+  static const String getEffects = "/api/assets/filter/list";
+  static const String downloadEffect = "/api/assets/filter/file";
+
+  //Tutor
+  static const String tutorPost = "$userRoute/tutor/update";
+
+  //Banner
+  static const String getBanners = "/api/banner/listing";
 }

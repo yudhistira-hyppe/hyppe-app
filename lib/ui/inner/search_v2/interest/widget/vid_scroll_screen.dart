@@ -36,7 +36,6 @@ import '../../../../constant/widget/custom_newdesc_content_widget.dart';
 import '../../../../constant/widget/custom_shimmer.dart';
 import '../../../../constant/widget/custom_spacer.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
-import '../../../../constant/widget/no_result_found.dart';
 import '../../../../constant/widget/profile_landingpage.dart';
 import '../../../home/content_v2/diary/playlist/widget/content_violation.dart';
 import '../../../home/content_v2/pic/notifier.dart';
@@ -271,7 +270,13 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                 onTap: () {
                   if (vidData[index].email != email) {
                     // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>().reportContent(context, vidData[index] , fAliplayer: vidData[index].fAliplayer, key: widget.interestKey);
+                    context.read<PreviewPicNotifier>()
+                        .reportContent(
+                        context,
+                        vidData[index] ,
+                        fAliplayer: vidData[index].fAliplayer,
+                        onCompleted: (){},
+                        key: widget.interestKey);
                   } else {
                     if (_curIdx != -1) {
                       print('Vid Landing Page: pause $_curIdx');
@@ -379,7 +384,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                     }
                     // _lastCurIndex = _curIdx;
                   },
-                  getPlayer: (main) {
+                  getPlayer: (main, id) {
                     print('Vid Player1: screen ${main}');
                     // notifier.setAliPlayer(index, main);
                     setState(() {

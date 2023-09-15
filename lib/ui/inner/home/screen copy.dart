@@ -161,7 +161,7 @@ class _HomeScreenOldState extends State<HomeScreenOld> with RouteAware, AfterFir
                     FilterLanding(),
                     HyppePreviewVid(),
                     HyppePreviewDiary(),
-                    // HyppePreviewPic(),
+                    HyppePreviewPic(),
                   ],
                 ),
                 // CustomPopUpNotification()

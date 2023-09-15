@@ -10,6 +10,7 @@ class NotificationModel {
   String? actionButtons;
   String? eventType;
   String? title;
+  String? titleEN;
   String? body;
   String? bodyId;
   // List<Content> content = [];
@@ -32,6 +33,7 @@ class NotificationModel {
     this.actionButtons,
     this.eventType,
     this.title,
+    this.titleEN,
     this.body,
     this.bodyId,
     // this.content = const [],
@@ -54,6 +56,7 @@ class NotificationModel {
     flowIsDone = json['flowIsDone'];
     actionButtons = json['actionButtons'];
     eventType = json['eventType'];
+    titleEN = json['titleEN'];
     title = json['title'];
     body = json['body'];
     bodyId = json['bodyId'];
@@ -89,6 +92,7 @@ class NotificationModel {
     data['actionButtons'] = actionButtons;
     data['eventType'] = eventType;
     data['title'] = title;
+    data['titleEN'] = titleEN;
     data['body'] = body;
     data['bodyId'] = bodyId;
     data['content'] = content?.toJson();

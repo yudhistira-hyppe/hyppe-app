@@ -114,7 +114,7 @@ class PicCenterItem extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   if (data?.email != SharedPreference().readStorage(SpKeys.email)) {
-                    context.read<PreviewPicNotifier>().reportContent(context, data!);
+                    context.read<PreviewPicNotifier>().reportContent(context, data!, onCompleted: (){});
                   } else {
                     ShowBottomSheet().onShowOptionContent(
                       context,
@@ -141,7 +141,7 @@ class PicCenterItem extends StatelessWidget {
                 memCacheHeight: 100,
                 widthPlaceHolder: 80,
                 heightPlaceHolder: 80,
-                imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : "${data?.fullThumbPath}",
+                imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : data?.fullThumbPath ?? '',
                 imageBuilder: (context, imageProvider) => Stack(
                   children: [
                     ClipRRect(

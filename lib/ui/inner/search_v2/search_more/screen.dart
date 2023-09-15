@@ -105,11 +105,13 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                                         if (notifier.searchController.text == e) {
                                           lastInputValue = e;
 
-                                          notifier.getDataSearch(context, typeSearch: isHashtag ? SearchLoadData.hashtag : SearchLoadData.user);
+                                          notifier.getDataSearch(context, typeSearch: isHashtag ? SearchLoadData.hashtag : SearchLoadData.user, forceLoad: true);
                                         } else {
                                           notifier.onUpdate();
                                         }
                                       });
+                                    }else{
+                                      notifier.getHistories();
                                     }
                                   }),
                             ),
@@ -125,7 +127,7 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                                   children: [
                                     ...[
                                       Container(
-                                        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 18),
+                                        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 18),
                                         child: CustomTextWidget(
                                             textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
                                             textAlign: TextAlign.start,
@@ -144,12 +146,6 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                                                 child: Row(
                                                   mainAxisSize: MainAxisSize.max,
                                                   children: [
-                                                    const CustomIconWidget(
-                                                      iconData: '${AssetPath.vectorPath}ic_history.svg',
-                                                      height: 24,
-                                                      width: 24,
-                                                    ),
-                                                    tenPx,
                                                     Expanded(
                                                       child: CustomTextWidget(
                                                           textToDisplay: values[index].keyword ?? '',

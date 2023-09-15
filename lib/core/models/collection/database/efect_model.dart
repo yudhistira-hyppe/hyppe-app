@@ -8,16 +8,16 @@ class EfectFields {
   static const String preview = 'preview';
 }
 
-class EffectModel {
-  final String? effectId;
-  final String? dirName;
-  final String? fileName;
-  final String? preview;
+// class EffectModel {
+//   final String? effectId;
+//   final String? dirName;
+//   final String? fileName;
+//   final String? preview;
 
-  const EffectModel({
-    this.effectId,
-    this.fileName,
-    this.preview,
-    this.dirName,
-  });
-}
+//   const EffectModel({
+//     this.effectId,
+//     this.fileName,
+//     this.preview,
+//     this.dirName,
+//   });
+// }

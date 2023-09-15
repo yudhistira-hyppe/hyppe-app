@@ -5,14 +5,12 @@ import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/interest/widget/tab_layout.dart';
 import 'package:hyppe/ux/routing.dart';
-import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/asset_path.dart';
 import '../../../../core/models/collection/search/search_content.dart';
 import '../../../../core/services/route_observer_service.dart';
 import '../../../constant/widget/icon_button_widget.dart';
-import '../../home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import '../notifier.dart';
 
 class InterestDetailScreen extends StatefulWidget {
@@ -127,40 +125,42 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
               ],
             ),
           ),
-          body: Column(
-            children: [
-              TabBar(
-                controller: _tabController,
-                isScrollable: true,
-                indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+          body: SafeArea(
+            child: Column(
+              children: [
+                TabBar(
+                  controller: _tabController,
+                  isScrollable: true,
+                  indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
 
-                tabs: (notifier.listInterest ?? []).map((e) {
-                  return Container(
-                    padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 13),
-                    child: Center(
-                      child: Text(
-                          context.isIndo() ? (e.interestNameId ?? '') : (e.interestName ?? ''),
-                        style: const TextStyle(fontSize: 14),
+                  tabs: (notifier.listInterest ?? []).map((e) {
+                    return Container(
+                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 13),
+                      child: Center(
+                        child: Text(
+                            context.isIndo() ? (e.interestNameId ?? '') : (e.interestName ?? ''),
+                          style: const TextStyle(fontSize: 14),
+                        ),
                       ),
-                    ),
-                  );
-                }).toList().sublist(0, (notifier.listInterest ?? []).length > 6 ? 6 : (notifier.listInterest ?? []).length),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  child: TabBarView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: _tabController,
-                    children: (notifier.listInterest ?? []).map((e) {
-
-                      return InterestTabLayout(interest: e);
-
-                    }).toList().sublist(0, (notifier.listInterest ?? []).length > 6 ? 6 : (notifier.listInterest ?? []).length),
-                  ),
+                    );
+                  }).toList().sublist(0, (notifier.listInterest ?? []).length > 6 ? 6 : (notifier.listInterest ?? []).length),
                 ),
-              )
-            ],
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 0.0),
+                    child: TabBarView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: _tabController,
+                      children: (notifier.listInterest ?? []).map((e) {
+
+                        return InterestTabLayout(interest: e);
+
+                      }).toList().sublist(0, (notifier.listInterest ?? []).length > 6 ? 6 : (notifier.listInterest ?? []).length),
+                    ),
+                  ),
+                )
+              ],
+            ),
           )
       );
     });

@@ -428,7 +428,30 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                 onTap: () {
                   if (vidData?[index].email != email) {
                     // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>().reportContent(context, vidData?[index] ?? ContentData(), fAliplayer: vidData?[index].fAliplayer);
+                    context.read<PreviewPicNotifier>()
+                        .reportContent(
+                        context,
+                        vidData?[index] ?? ContentData(),
+                        fAliplayer: vidData?[index].fAliplayer, onCompleted: ()async{
+                      bool connect = await System().checkConnections();
+                      if (connect) {
+                        setState(() {
+                          isloading = true;
+                        });
+                        await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                        setState(() {
+                          vidData = notifier.vidData;
+                        });
+                      } else {
+                        if (mounted) {
+                          ShowGeneralDialog.showToastAlert(
+                            context,
+                            lang?.internetConnectionLost ?? ' Error',
+                                () async {},
+                          );
+                        }
+                      }
+                    });
                   } else {
                     if (_curIdx != -1) {
                       print('Vid Landing Page: pause $_curIdx');
@@ -499,6 +522,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                     margin: const EdgeInsets.only(bottom: 20),
                     child: Builder(builder: (context) {
                       return VidPlayerPage(
+                        enableWakelock: false,
                         orientation: Orientation.portrait,
                         playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                         dataSourceMap: map,
@@ -518,6 +542,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         width: MediaQuery.of(context).size.width,
                         inLanding: false,
                         fromDeeplink: false,
+                        isAutoPlay: false,
                         functionFullTriger: (value) {
                           print('===========hahhahahahaa===========');
                           // fullscreen();
@@ -555,7 +580,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           }
                           // _lastCurIndex = _curIdx;
                         },
-                        getPlayer: (main) {
+                        getPlayer: (main, id) {
                           print('Vid Player1: screen ${main}');
                           // notifier.setAliPlayer(index, main);
                           setState(() {
@@ -567,6 +592,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         getAdsPlayer: (ads) {
                           // vidData?[index].fAliplayerAds = ads;
                         },
+                        loadMoreFunction: () {},
                         // fAliplayer: vidData?[index].fAliplayer,
                         // fAliplayerAds: vidData?[index].fAliplayerAds,
                       );
@@ -1184,13 +1210,12 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                           )),
                       data.email == SharedPreference().readStorage(SpKeys.email)
                           ? GestureDetector(
-                              onTap: ()async{
-                                System().checkConnections().then((value){
-                                  if(value){
+                              onTap: () async {
+                                System().checkConnections().then((value) {
+                                  if (value) {
                                     Routing().move(Routes.appeal, argument: data);
                                   }
                                 });
-
                               },
                               child: Container(
                                   padding: const EdgeInsets.all(8),

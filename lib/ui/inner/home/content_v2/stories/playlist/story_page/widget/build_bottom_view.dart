@@ -21,6 +21,7 @@ class BuildBottomView extends StatefulWidget {
   final int? currentStory;
   final int currentIndex;
   final Function? pause;
+  final Function? play;
 
   BuildBottomView({
     Key? key,
@@ -30,6 +31,7 @@ class BuildBottomView extends StatefulWidget {
     required this.currentStory,
     required this.currentIndex,
     this.pause,
+    this.play,
   });
 
   @override
@@ -115,92 +117,90 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                                   )
                         : const SizedBox.shrink(),
                   ),
-                  Builder(
-                    builder: (context) {
-                      final lang = context.read<TranslateNotifierV2>().translate;
-                      return Container(
-                        alignment: Alignment.center,
-                        width: SizeConfig.screenWidth,
-                        height: SizeWidget().calculateSize(65, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              width: SizeWidget().calculateSize(!notifier.isKeyboardActive ? 274 : 290, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
-                              margin: const EdgeInsets.only(left: 10),
-                              child: GestureDetector(
-                                onTap: () {
-                                  widget.pause!();
-                                },
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: TextFormField(
-                                    maxLines: null,
-                                    validator: (String? input) {
-                                      if (input?.isEmpty ?? true) {
-                                        return "Please enter message";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    controller: notifier.textEditingController,
-                                    keyboardAppearance: Brightness.dark,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      hintText: "${lang.replyTo} ${widget.data?.username}...",
-                                      fillColor: Theme.of(context).colorScheme.background,
-                                      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(25.0),
-                                        borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(25.0),
-                                        borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(25.0),
-                                        borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
-                                      ),
+                  Builder(builder: (context) {
+                    final lang = context.read<TranslateNotifierV2>().translate;
+                    return Container(
+                      alignment: Alignment.center,
+                      width: SizeConfig.screenWidth,
+                      height: SizeWidget().calculateSize(65, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            width: SizeWidget().calculateSize(!notifier.isKeyboardActive ? 274 : 290, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
+                            margin: const EdgeInsets.only(left: 10),
+                            child: GestureDetector(
+                              onTap: () {
+                                widget.pause!();
+                              },
+                              child: Material(
+                                color: Colors.transparent,
+                                child: TextFormField(
+                                  maxLines: null,
+                                  validator: (String? input) {
+                                    if (input?.isEmpty ?? true) {
+                                      return "Please enter message";
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  controller: notifier.textEditingController,
+                                  keyboardAppearance: Brightness.dark,
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    hintText: "${lang.replyTo} ${widget.data?.username}...",
+                                    fillColor: Theme.of(context).colorScheme.background,
+                                    contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                      borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
                                     ),
-                                    onTap: () {
-                                      print("sentuh dong");
-                                      widget.pause!();
-                                      widget.pause!();
-                                      widget.animationController!.reset();
-                                      widget.animationController!.stop();
-
-                                      notifier.forceStop = true;
-                                    },
-                                    onChanged: (value) => notifier.onChangeHandler(context, value),
-                                    onFieldSubmitted: (value) => notifier.textEditingController.text = value,
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                      borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                      borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
+                                    ),
                                   ),
+                                  onTap: () {
+                                    print("sentuh dong");
+                                    widget.pause!();
+                                    widget.animationController!.reset();
+                                    widget.animationController!.stop();
+
+                                    notifier.forceStop = true;
+                                  },
+                                  onChanged: (value) => notifier.onChangeHandler(context, value),
+                                  onFieldSubmitted: (value) => notifier.textEditingController.text = value,
                                 ),
                               ),
                             ),
-                            Expanded(
-                              child: AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 200),
-                                transitionBuilder: (child, animation) {
-                                  return FadeTransition(opacity: animation, child: child);
-                                },
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: BuildButton(
-                                    storyController: widget.storyController,
-                                    animationController: widget.animationController,
-                                    data: widget.data,
-                                    pause: widget.pause,
-                                  ),
+                          ),
+                          Expanded(
+                            child: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 200),
+                              transitionBuilder: (child, animation) {
+                                return FadeTransition(opacity: animation, child: child);
+                              },
+                              child: Material(
+                                color: Colors.transparent,
+                                child: BuildButton(
+                                  storyController: widget.storyController,
+                                  animationController: widget.animationController,
+                                  data: widget.data,
+                                  pause: widget.pause,
+                                  play: widget.play,
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                      );
-                    }
-                  ),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  }),
                 ],
               ),
             ),

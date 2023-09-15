@@ -37,9 +37,12 @@ class _GridHashtagPicState extends State<GridHashtagPic> {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'GridHashtagPic');
     return MeasuredSize(
       onChange: (value){
-        setState(() {
-          heightItem = value.height;
-        });
+        if(mounted){
+          setState(() {
+            heightItem = value.height;
+          });
+        }
+
       },
       child: Selector<SearchNotifier, Tuple3<SearchContentModel?, int, bool>>(
           selector: (_, select) =>Tuple3(select.detailHashTag, select.detailHashTag?.pict?.length ?? 0, select.loadTagDetail),

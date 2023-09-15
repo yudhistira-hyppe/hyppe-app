@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -53,18 +55,23 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   }
 
   @override
-  void onUploadSendProgress(double count, double total) {
+  void onUploadSendProgress(double count, double total, bool isCompressing) {
     print("================onUploadSendProgress");
-    _uploadNotifier.message = "${_language.translate.processUpload}";
     if (!_uploadNotifier.isUploading) {
       _uploadNotifier.isUploading = true;
+    }
+    if (isCompressing) {
+      _uploadNotifier.message = "${_language.translate.contentProcessing}..";
+    } else {
+      _uploadNotifier.message = "${_language.translate.contentUploading}";
     }
     _uploadNotifier.progress = count / total;
   }
 
   @override
   void onUploadFinishingUp() {
-    _uploadNotifier.message = "${_language.translate.finishingUp}...";
+    print("================onUploadFinishingUp");
+    _uploadNotifier.message = "${_language.translate.contentWaiting}";
   }
 
   @override
@@ -81,9 +88,19 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
       'Upload Success with certified checked $isCheckedOwnership'.logger();
 
       if (isCheckedOwnership) {
-        ShowBottomSheet.onShowSuccessPostContentOwnership(context);
+        ShowBottomSheet.onShowSuccessPostContentOwnership(Routing.navigatorKey.currentContext ?? context);
       } else {
-        ShowBottomSheet().onShowColouredSheet(context, _uploadNotifier.message, color: kHyppeTextSuccess, maxLines: 2);
+        ShowBottomSheet().onShowColouredSheet(
+          Routing.navigatorKey.currentContext ?? context,
+          _uploadNotifier.message,
+          color: kHyppeTextSuccess,
+          maxLines: 2,
+          onClose: () {
+            homeClick = true;
+            // notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+            (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+          },
+        );
       }
     }
   }
@@ -93,7 +110,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
     _uploadNotifier.isUploading = false;
     'Upload Failed with message ${message.message}'.logger();
     _uploadNotifier.message = '${_language.translate.contentCreatedFailedWithMessage} ${message.message}';
-    ShowBottomSheet().onShowColouredSheet(context, _uploadNotifier.message, color: kHyppeDanger, maxLines: 2, iconSvg: 'close.svg');
+    ShowBottomSheet().onShowColouredSheet(Routing.navigatorKey.currentContext ?? context, _uploadNotifier.message, color: kHyppeDanger, maxLines: 2, iconSvg: 'close.svg');
     // _showSnackBar(color: kHyppeDanger, message: _uploadNotifier.message, icon: 'close.svg');
     _uploadNotifier.reset();
   }

@@ -86,6 +86,8 @@ class PostsBloc {
     }
 
     if (myContent) {
+      formData.fields.add(MapEntry('email', email));
+      // url = UrlConstants.getMyUserPostsV2;
       url = UrlConstants.getMyUserPosts;
     }
 
@@ -478,10 +480,7 @@ class PostsBloc {
     );
   }
 
-  Future getAuthApsara(
-    BuildContext context, {
-    required String apsaraId, bool check = true
-  }) async {
+  Future getAuthApsara(BuildContext context, {required String apsaraId, bool check = true}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
 
     setPostsFetch(PostsFetch(PostsState.loading));
@@ -509,10 +508,7 @@ class PostsBloc {
     );
   }
 
-  Future getOldVideo(
-    BuildContext context, {
-    required String apsaraId, bool check = true
-  }) async {
+  Future getOldVideo(BuildContext context, {required String apsaraId, bool check = true}) async {
     setPostsFetch(PostsFetch(PostsState.loading));
     var url = UrlConstants.oldVideo + apsaraId;
 
@@ -530,6 +526,29 @@ class PostsBloc {
       },
       withAlertMessage: false,
       withCheckConnection: check,
+      host: url,
+      methodType: MethodType.get,
+    );
+  }
+
+  Future getSTS(BuildContext context) async {
+    setPostsFetch(PostsFetch(PostsState.loading));
+    var url = "https://alivc-demo.aliyuncs.com/player/getVideoSts";
+
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setPostsFetch(PostsFetch(PostsState.videoApsaraError));
+        } else {
+          setPostsFetch(PostsFetch(PostsState.videoApsaraSuccess, data: onResult));
+        }
+      },
+      (errorData) {
+        setPostsFetch(PostsFetch(PostsState.videoApsaraError));
+      },
+      withAlertMessage: false,
+      withCheckConnection: false,
       host: url,
       methodType: MethodType.get,
     );

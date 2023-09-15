@@ -9,6 +9,7 @@ import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
+import 'package:hyppe/ui/inner/search_v2/shimmer/search_shimmer.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -358,15 +359,19 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
           region: DataSourceRelated.defaultRegion,
           playAuth: auth,
         );
-        setState(() {
-          isloading = false;
-        });
+        if(mounted){
+          setState(() {
+            isloading = false;
+          });
+        }
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
-      setState(() {
-        isloading = false;
-      });
+      if(mounted){
+        setState(() {
+          isloading = false;
+        });
+      }
       // 'Failed to fetch ads data $e'.logger();
     }
   }
@@ -511,7 +516,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           diaryData?.isEmpty ?? true
-              ? const Expanded(child: AllSearchShimmer())
+              ? const Expanded(child: SearchShimmer())
               : NotificationListener<OverscrollIndicatorNotification>(
                 onNotification: (overscroll) {
                   overscroll.disallowIndicator();
@@ -629,7 +634,16 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                 onTap: () {
                   if (diaryData[index].email != email) {
                     // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>().reportContent(context, diaryData[index], fAliplayer: fAliplayer, key: widget.interestKey);
+                    context.read<PreviewPicNotifier>()
+                        .reportContent(
+                        context,
+                        diaryData[index],
+                        fAliplayer: fAliplayer,
+                        key: widget.interestKey,
+                        onCompleted: (){
+
+                        }
+                    );
                   } else {
                     fAliplayer?.setMuted(true);
                     fAliplayer?.pause();

@@ -134,6 +134,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      vidConfig();
       itemScrollController.jumpTo(index: widget.arguments!.page!);
       _initListener();
     });
@@ -353,11 +354,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
     // fAliplayer?.play();
   }
 
-  void vidPrepare(ContentData data) {
-    setState(() {
-      isPause = false;
-      // _isFirstRenderShow = false;
-    });
+  void vidConfig() {
     var configMap = {
       'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
       'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
@@ -386,6 +383,14 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       /// Specify whether to enable the cache feature.
     };
     fAliplayer?.setCacheConfig(map);
+  }
+
+  void vidPrepare(ContentData data) {
+    setState(() {
+      isPause = false;
+      // _isFirstRenderShow = false;
+    });
+
     if (data.reportedStatus != 'BLURRED') {
       fAliplayer?.prepare().then((value) {
         print("===========setelah prepare");
@@ -404,7 +409,6 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
-
         setState(() {
           auth = jsonMap['PlayAuth'];
           fAliplayer?.setVidAuth(
@@ -518,9 +522,11 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
       // FlutterAliplayer.setAudioSessionTypeForIOS(AliPlayerAudioSesstionType.none);
     }
     fAliplayer?.stop();
-    if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
-      fAliplayer?.destroy();
-    }
+    // if (context.read<PreviewVidNotifier>().canPlayOpenApps) {
+    //   fAliplayer?.destroy();
+    // }
+    fAliplayer?.destroy();
+    print("========--------dispose----=========");
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
@@ -781,7 +787,26 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                 onTap: () {
                   if (diaryData?[index].email != email) {
                     // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>().reportContent(context, diaryData?[index] ?? ContentData(), fAliplayer: fAliplayer);
+                    context.read<PreviewPicNotifier>().reportContent(context, diaryData?[index] ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
+                      bool connect = await System().checkConnections();
+                      if (connect) {
+                        setState(() {
+                          isloading = true;
+                        });
+                        await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                        setState(() {
+                          diaryData = notifier.diaryData;
+                        });
+                      } else {
+                        if (mounted) {
+                          ShowGeneralDialog.showToastAlert(
+                            context,
+                            lang?.internetConnectionLost ?? ' Error',
+                            () async {},
+                          );
+                        }
+                      }
+                    });
                   } else {
                     fAliplayer?.setMuted(true);
                     fAliplayer?.pause();
@@ -1323,13 +1348,12 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                           )),
                       data.email == SharedPreference().readStorage(SpKeys.email)
                           ? GestureDetector(
-                              onTap: ()async{
-                                System().checkConnections().then((value){
-                                  if(value){
+                              onTap: () async {
+                                System().checkConnections().then((value) {
+                                  if (value) {
                                     Routing().move(Routes.appeal, argument: data);
                                   }
                                 });
-
                               },
                               child: Container(
                                   padding: const EdgeInsets.all(8),

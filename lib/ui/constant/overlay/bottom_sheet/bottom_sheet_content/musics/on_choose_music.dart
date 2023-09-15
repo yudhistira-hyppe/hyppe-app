@@ -64,7 +64,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
             margin: const EdgeInsets.only(left: 16, right: 16),
             child: CustomSearchBar(
               hintText: notifier.language.searchMusic,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
               focusNode: notifier.focusNode,
               controller: notifier.searchController,
               onChanged: (value){

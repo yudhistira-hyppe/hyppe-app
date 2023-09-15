@@ -12,6 +12,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -31,6 +32,7 @@ class OnShowOptionContent extends StatefulWidget {
   final bool isShare;
   final bool visibility;
   final FlutterAliplayer? fAliplayer;
+  final Function? onUpdate;
 
   const OnShowOptionContent({
     Key? key,
@@ -40,6 +42,7 @@ class OnShowOptionContent extends StatefulWidget {
     this.isShare = true,
     this.visibility = true,
     this.fAliplayer,
+    this.onUpdate,
   }) : super(key: key);
 
   @override
@@ -65,7 +68,8 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
           postID: widget.contentData.postID ?? '',
           content: widget.captionTitle,
         );
-    _showMessage('${_language.translate.yourContentHadSuccessfullyDeleted}');
+    ShowBottomSheet().onShowColouredSheet(context, _language.translate.yourContentHadSuccessfullyDeleted ?? '', color: kHyppeTextSuccess, maxLines: 2);
+    // _showMessage('${_language.translate.yourContentHadSuccessfullyDeleted}');
   }
 
   void _handleLink(BuildContext context, {required bool copiedToClipboard, required String description, required ContentData data}) async {
@@ -251,6 +255,9 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                     if (value) _handleDelete(context);
                   });
                   widget.fAliplayer?.stop();
+                  if(widget.onUpdate != null){
+                    widget.onUpdate!();
+                  }
                 });
               },
             ),

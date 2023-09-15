@@ -28,9 +28,13 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/
 // import 'package:hyppe/ui/inner/home/content/diary/playlist/notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/win_challange.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/models/collection/advertising/ads_video_data.dart';
+import 'general_dialog_content/ads_popup_video_dialog.dart';
 
 class ShowGeneralDialog {
   ShowGeneralDialog._private();
@@ -441,7 +445,7 @@ class ShowGeneralDialog {
             content: BannerPop(uploadProses: uploadProses ?? false),
             contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
             backgroundColor: Colors.transparent,
-            insetPadding: EdgeInsets.symmetric(horizontal: SizeConfig.screenWidth! * 0.08),
+            insetPadding: EdgeInsets.symmetric(horizontal: SizeConfig.screenWidth! * 0.02),
           )),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         animation = CurvedAnimation(curve: Curves.ease, parent: animation);
@@ -453,7 +457,7 @@ class ShowGeneralDialog {
     );
   }
 
-  static Future joinChallange(BuildContext context, {bool? uploadProses}) async {
+  static Future joinChallange(BuildContext context, bool mounted, String id, {bool? uploadProses}) async {
     await showGeneralDialog(
       //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
@@ -475,10 +479,47 @@ class ShowGeneralDialog {
           child: child,
         );
       },
+    ).whenComplete(() {
+      context.read<ChallangeNotifier>().initLeaderboardDetail(Routing.navigatorKey.currentState!.overlay!.context, mounted, id);
+    });
+  }
+
+  static Future winChallange(BuildContext context, String title, String body, {bool? uploadProses}) async {
+    await showGeneralDialog(
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+      context: Routing.navigatorKey.currentState!.overlay!.context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: true,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) => WillPopScope(
+          onWillPop: () async => true,
+          child: AlertDialog(
+            content: WinChallangePop(
+              body: body,
+              title: title,
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            backgroundColor: Colors.transparent,
+            insetPadding: EdgeInsets.symmetric(horizontal: SizeConfig.screenWidth! * 0.08),
+          )),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.ease, parent: animation);
+        return SlideTransition(
+          position: Tween(begin: const Offset(0, 1), end: const Offset(0, 0)).animate(animation),
+          child: child,
+        );
+      },
     );
   }
 
-  static Future showToastAlert(BuildContext context, String message, Future<dynamic> Function() onDismiss) async {
+  static Future showToastAlert(
+    BuildContext context,
+    String message,
+    Future<dynamic> Function() onDismiss, {
+    String? title,
+    Color? bgColor,
+    bool? withIcon,
+  }) async {
     await showGeneralDialog(
       //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: context,
@@ -492,6 +533,9 @@ class ShowGeneralDialog {
           content: ToastAlert(
             message: message,
             onTap: onDismiss,
+            title: title,
+            bgColor: bgColor,
+            withIcon: withIcon ?? false,
           ),
           contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
           backgroundColor: Colors.transparent,

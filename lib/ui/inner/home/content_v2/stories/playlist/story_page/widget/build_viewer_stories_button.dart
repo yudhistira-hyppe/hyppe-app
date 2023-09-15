@@ -52,7 +52,10 @@ class ViewerStoriesButton extends StatelessWidget {
             height: 30,
             function: () {
               // storyController.pause();
-              pause;
+              if(pause != null){
+                pause!();
+              }
+
               Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID, 'VIEW', 'Viewer', data?.email, storyController: storyController);
               // context.read<StoriesPlaylistNotifier>().forceStop = true;
               // ShowBottomSheet.onShowViewers(context, storyID: data?.story[currentStory].storyID);

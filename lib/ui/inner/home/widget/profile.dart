@@ -25,7 +25,7 @@ class Profile extends StatelessWidget {
       height: 36,
       following: true,
       imageUrl: System().showUserPicture(notifier.profileImage) ?? '',
-      badge: notifier.profileBadge,
+      // badge: notifier.profileBadge,
     );
 
     // return notifier.item1 != null

@@ -14,6 +14,7 @@ import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -135,10 +136,10 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     // stopwatch = new Stopwatch()..start();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'DiaryPlayerPage');
     super.initState();
+    _pageController = PageController(initialPage: widget.argument.index.toInt());
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _curIdx = widget.argument.index.toInt();
       _lastCurIndex = widget.argument.index.toInt();
-      _pageController = PageController(initialPage: widget.argument.index.toInt());
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
       initDiary();
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: "${Random().nextInt(60).toDouble()}");
@@ -308,16 +309,20 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
           isPause = true;
           setState(() {});
           Wakelock.disable();
+"================ disable wakelock 53".logger();
           _animationController?.stop();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
           Wakelock.disable();
+"================ disable wakelock 85".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
           Wakelock.disable();
+"================ disable wakelock 96".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusError:
           Wakelock.disable();
+"================ disable wakelock 00".logger();
           break;
         default:
       }
@@ -468,6 +473,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   void dispose() {
     globalAliPlayer = null;
     Wakelock.disable();
+"================ disable wakelock 63".logger();
     _animationController?.dispose();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);

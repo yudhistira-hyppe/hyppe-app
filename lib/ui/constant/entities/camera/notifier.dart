@@ -1,9 +1,17 @@
 import 'dart:io';
 import 'package:deepar_flutter/deepar_flutter.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/bloc/effect/bloc.dart';
+import 'package:hyppe/core/bloc/effect/state.dart';
+import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/models/collection/database/efect_model.dart';
+import 'package:hyppe/core/models/collection/effect/effect_model.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:camera/camera.dart';
@@ -12,9 +20,11 @@ import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart' as path;
 
 class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   static final _system = System();
+  Dio dio = Dio();
   DeepArController? deepArController = DeepArController();
   String? _iOSVersion;
   CameraController? cameraController;
@@ -43,6 +53,27 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   set showEffected(bool val) {
     _showEffected = val;
+    notifyListeners();
+  }
+
+  List<EffectModel> _effects = [];
+  List<EffectModel> get effects => _effects;
+  set effects(val){
+    _effects = val;
+    notifyListeners();
+  }
+
+  EffectModel? _selectedEffect;
+  EffectModel? get selectedEffect => _selectedEffect;
+  set selectedEffect(val){
+    _selectedEffect = val;
+    notifyListeners();
+  }
+
+  bool _isDownloadingEffect = false;
+  bool get isDownloadingEffect => _isDownloadingEffect;
+  set isDownloadingEffect(bool state){
+    _isDownloadingEffect = state;
     notifyListeners();
   }
 
@@ -76,6 +107,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
         isInitializedIos = true;
         print(deepArController!.isInitialized);
         print(isInitialized);
+        initEffect(context);
       });
       if (backCamera) {
         deepArController?.flipCamera();
@@ -103,6 +135,78 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
     print('notifyListeners()');
     notifyListeners();
+  }
+
+  Future<void> initEffect(BuildContext context) async {
+    try {
+      final notifier = EffectBloc();
+      await notifier.getEffects(context);
+      final fetch = notifier.effectFetch;
+      if (fetch.state == EffectState.getEffectSuccess) {
+        List<EffectModel>? res = (fetch.data as List<dynamic>?)?.map((e) => EffectModel.fromJson(e as Map<String, dynamic>)).toList();
+        effects = res;
+      }
+      notifyListeners();
+    } catch (e) {
+      'get effect: ERROR: $e'.logger();
+    }
+  }
+
+  Future<void> setDeepAREffect(BuildContext context, EffectModel effectModel) async {
+    Directory directory = await path.getApplicationDocumentsDirectory();
+    var filePath = '${directory.path}${Platform.pathSeparator}${effectModel.fileAssetName}';
+
+    if (await File(filePath).exists()) {
+      deepArController?.switchEffect(filePath);
+    } else {
+      try {
+        if (context.mounted) {
+          final notifier = EffectBloc();
+          isDownloadingEffect = true;
+          notifyListeners();
+          File saveFile = File(filePath);
+          await notifier.downloadEffect(
+            context: context,
+            effectID: effectModel.postID,
+            savePath: saveFile.path,
+            whenComplete:  () {
+              deepArController?.switchEffect(filePath);
+              isDownloadingEffect = false;
+              notifyListeners();
+            },
+          );  
+        }
+      } catch (err) {
+        err.logger();
+        isDownloadingEffect = false;
+        notifyListeners();
+      }
+    }
+
+    // final email = SharedPreference().readStorage(SpKeys.email);
+    // final token = SharedPreference().readStorage(SpKeys.userToken);
+    // if (await File(filePath).exists()) {
+    //   deepArController?.switchEffect(filePath);
+    // } else {
+    //   isDownloadingEffect = true;
+    //   notifyListeners();
+    //   File saveFile = File(filePath);
+    //   try {
+    //       var url = '${Env.data.baseUrl}/api/assets/filter/file/${effectModel.postID}?x-auth-user=$email&x-auth-token=$token';
+    //       await dio.download(url, saveFile.path, onReceiveProgress: (received, total) {
+    //       int progress = (((received / total) * 100).toInt());
+    //         progress.logger();
+    //       }).whenComplete(() {
+    //         deepArController?.switchEffect(filePath);
+    //         isDownloadingEffect = false;
+    //         notifyListeners();
+    //       });
+    //   } catch (err) {
+    //     err.logger();
+    //     isDownloadingEffect = false;
+    //     notifyListeners();
+    //   }
+    // }
   }
 
   Future<void> onStoryPhotoVideo(bool isPhoto) async {

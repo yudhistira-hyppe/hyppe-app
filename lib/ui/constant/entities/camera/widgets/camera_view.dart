@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:deepar_flutter/deepar_flutter.dart';
+import 'package:hyppe/core/config/env.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
-import 'dart:convert';
 import 'package:provider/provider.dart';
 
 class CameraView extends StatefulWidget {
@@ -20,7 +24,6 @@ class _CameraViewState extends State<CameraView> {
   bool _isFilter = false;
 
   List _effectsList = [];
-  List _effectsList2 = [];
   final List<String> _maskList = [];
   final List<String> _filterList = [];
   int _effectIndex = 0;
@@ -28,7 +31,7 @@ class _CameraViewState extends State<CameraView> {
   int _filterIndex = 0;
   int effected = -1;
 
-  final String _assetEffectsPath = 'assets/effect/';
+  // final String _assetEffectsPath = 'assets/effect/';
 
   @override
   void initState() {
@@ -45,33 +48,6 @@ class _CameraViewState extends State<CameraView> {
     //     .then((value) => setState(() {}));
     final notifier = context.read<CameraNotifier>();
     notifier.deepArController ??= DeepArController();
-    _effectsList2 = [
-      {"path": "BabyChewbacca", "efect": "baby_chewbacca.deepar", "preview": "preview.png"},
-      {"path": "BigGlasses", "efect": "big_glasses.deepar", "preview": "preview.png"},
-      {"path": "Chief", "efect": "chief.deepar", "preview": "preview.png"},
-      {"path": "CrossedEyes", "efect": "crossed_eyes.deepar", "preview": "preview.png"},
-      {"path": "Jokester", "efect": "jokerster.deepar", "preview": "preview.png"},
-      {"path": "LizardSkin", "efect": "lizard_skin.deepar", "preview": "preview.png"},
-      {"path": "NeonWires", "efect": "neon_wires.deepar", "preview": "preview.png"},
-      {"path": "Peter", "efect": "peter.deepar", "preview": "preview.png"},
-      {"path": "PopFace", "efect": "pop_face.deepar", "preview": "preview.png"},
-      {"path": "Samurai", "efect": "samurai.deepar", "preview": "preview.png"},
-      {"path": "BurningEffect", "efect": "burning_effect.deepar", "preview": "preview.png"},
-      {"path": "DevilNeonHorns", "efect": "Neon_Devil_Horns.deepar", "preview": "preview.png"},
-      {"path": "ElephantTrunk", "efect": "Elephant_Trunk.deepar", "preview": "preview.png"},
-      {"path": "EmotionMeter", "efect": "Emotion_Meter.deepar", "preview": "preview.png"},
-      {"path": "EmotionsExaggerator", "efect": "Emotions_Exaggerator.deepar", "preview": "preview.png"},
-      {"path": "FireEffect", "efect": "Fire_Effect.deepar", "preview": "preview.png"},
-      {"path": "FlowerFace", "efect": "flower_face.deepar", "preview": "preview.png"},
-      {"path": "Hope", "efect": "Hope.deepar", "preview": "preview.png"},
-      {"path": "Humanoid", "efect": "Humanoid.deepar", "preview": "preview.png"},
-      {"path": "MakeupLookw_Slipt", "efect": "Split_View_Look.deepar", "preview": "preview.jpg"},
-      {"path": "PingPongMinigame", "efect": "Ping_Pong.deepar", "preview": "preview.png"},
-      {"path": "Snail", "efect": "Snail.deepar", "preview": "preview.png"},
-      {"path": "Stallone", "efect": "Stallone.deepar", "preview": "preview.png"},
-      {"path": "VendettaMask", "efect": "Vendetta_Mask.deepar", "preview": "preview.png"},
-      {"path": "VikingHelmetPBR", "efect": "viking_helmet.deepar", "preview": "preview.png"},
-    ];
     super.initState();
   }
 
@@ -124,9 +100,12 @@ class _CameraViewState extends State<CameraView> {
   }
 
   Positioned listEfect(DeepArController _controller) {
-    print('listEfect');
+    final notifier = context.watch<CameraNotifier>();
+    var token = SharedPreference().readStorage(SpKeys.userToken);
+    var email = SharedPreference().readStorage(SpKeys.email);
+
     return Positioned(
-        top: 40,
+        top: Platform.isIOS ? 80 : 40,
         left: 0,
         right: 0,
         child: SizedBox(
@@ -136,21 +115,23 @@ class _CameraViewState extends State<CameraView> {
           child: ListView.builder(
               shrinkWrap: true,
               // physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: _effectsList2.length,
+              itemCount: notifier.effects.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
+                var _effect = notifier.effects[index];
                 return Align(
                   alignment: Alignment.center,
                   child: GestureDetector(
                     onTap: () {
-                      effected = index;
-                      _controller.switchFaceMask(_assetEffectsPath + _effectsList2[index]['path'] + "/" + _effectsList2[index]['efect']);
-                      setState(() {});
+                      if (!notifier.isDownloadingEffect) {
+                        setState(() => effected = index);
+                        notifier.setDeepAREffect(context, _effect);
+                      }
                     },
                     child: Container(
                         width: effected == index ? 60 : 40,
                         height: effected == index ? 60 : 40,
-                        margin: EdgeInsets.all(5),
+                        margin: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
                             color: Colors.red,
@@ -158,9 +139,11 @@ class _CameraViewState extends State<CameraView> {
                               alignment: Alignment.center,
                               matchTextDirection: true,
                               fit: BoxFit.cover,
-                              // image: AssetImage("assets/effect/BurningEffect/preview.png"),
-                              image: AssetImage("$_assetEffectsPath${_effectsList2[index]['path']}/${_effectsList2[index]['preview']}"),
-                            ))),
+                              image: NetworkImage('${Env.data.baseUrl}/api/assets/filter/image/thumb/${_effect.postID}?x-auth-user=$email&x-auth-token=$token'),
+                          ),
+                        ),
+                        child: (effected == index && notifier.isDownloadingEffect) ? const CustomLoading() : Container(),
+                      ),
                   ),
                 );
               }),
@@ -309,15 +292,6 @@ class _CameraViewState extends State<CameraView> {
         ),
       ),
     );
-  }
-
-  /// Get all deepar effects from assets
-  ///
-  Future<List<String>> _getEffectsFromAssets(BuildContext context) async {
-    final manifestContent = await DefaultAssetBundle.of(context).loadString('AssetManifest.json');
-    final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-    final filePaths = manifestMap.keys.where((path) => path.startsWith(_assetEffectsPath)).toList();
-    return filePaths;
   }
 
   /// Get next effect

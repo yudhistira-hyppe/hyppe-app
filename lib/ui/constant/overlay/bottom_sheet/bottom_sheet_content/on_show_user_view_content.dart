@@ -8,9 +8,13 @@ import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../../initial/hyppe/translate_v2.dart';
 
 class OnShowUserViewContentBottomSheet extends StatefulWidget {
   final String postId;
@@ -38,9 +42,7 @@ class _OnShowUserViewContentBottomSheetState extends State<OnShowUserViewContent
   void initState() {
     super.initState();
     var likeNotifier = Provider.of<LikeNotifier>(context, listen: false);
-    likeNotifier.skip = 0;
-    likeNotifier.listLikeView = [];
-    likeNotifier.getLikeView(context, widget.postId, widget.eventType, 20);
+    likeNotifier.initViews(widget.postId, widget.eventType);
     _scrollController.addListener(() => likeNotifier.scrollListLikeView(context, _scrollController, widget.postId, widget.eventType, 20));
   }
 
@@ -70,8 +72,7 @@ class _OnShowUserViewContentBottomSheetState extends State<OnShowUserViewContent
                 ],
               ),
               notifier.isLoading
-                  ? const Center(child: CustomLoading())
-                  : Expanded(
+                  ? const Center(child: CustomLoading()) : Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
                         controller: _scrollController,

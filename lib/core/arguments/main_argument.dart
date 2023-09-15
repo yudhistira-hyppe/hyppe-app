@@ -1,5 +1,5 @@
 class MainArgument{
   bool canShowAds;
-
-  MainArgument({required this.canShowAds});
+  int page;
+  MainArgument({required this.canShowAds, this.page = 0});
 }

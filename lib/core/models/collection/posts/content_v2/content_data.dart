@@ -1,5 +1,7 @@
+import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -197,68 +199,86 @@ class ContentData {
   AdsData? inBetweenAds;
   AdsData? adsData;
   UserBadgeModel? urluserBadge;
+  bool? isPlay;
+  double? height;
+  int? limitLandingpage;
+  double? imageHeightTemp;
+  double? imageHeightTemp2;
+  String? valueCache;
 
-  ContentData(
-      {this.metadata,
-      this.mediaBasePath,
-      this.postType,
-      this.mediaUri,
-      this.isLiked,
-      this.description,
-      this.active,
-      this.privacy,
-      this.mediaType,
-      this.mediaThumbEndPoint,
-      this.postID,
-      this.isIdVerified,
-      this.title,
-      this.isViewed,
-      this.tags = const [],
-      this.allowComments,
-      this.certified,
-      this.createdAt,
-      this.insight,
-      this.mediaThumbUri,
-      this.mediaEndpoint,
-      this.email,
-      this.updatedAt,
-      this.username,
-      this.fullThumbPath,
-      this.fullContentPath,
-      this.avatar,
-      this.location,
-      this.visibility,
-      this.cats,
-      this.tagPeople,
-      this.likes,
-      this.saleAmount,
-      this.saleView,
-      this.saleLike,
-      this.isApsara,
-      this.apsaraId,
-      this.apsaraThumbId,
-      this.isReport,
-      this.boosted = const [],
-      this.boostCount,
-      this.isBoost,
-      this.boostJangkauan,
-      this.statusBoost,
-      this.reportedStatus,
-      this.reportedStatus2,
-      this.music,
-      this.reportedUserCount,
-      this.media,
-      this.apsara,
-      this.isShared,
-      this.following,
-      this.comment,
-      this.isDiaryPlay,
-      this.comments,
-      this.isNewFollowing,
-      this.isLoading = false,
-      this.fullContent,
-      this.urluserBadge,
-    });
+  List<Tutorial>? tutorial;
+  GlobalKey? keyGlobal;
+
+  ContentData({
+    this.metadata,
+    this.mediaBasePath,
+    this.postType,
+    this.mediaUri,
+    this.isLiked,
+    this.description,
+    this.active,
+    this.privacy,
+    this.mediaType,
+    this.mediaThumbEndPoint,
+    this.postID,
+    this.isIdVerified,
+    this.title,
+    this.isViewed,
+    this.tags = const [],
+    this.allowComments,
+    this.certified,
+    this.createdAt,
+    this.insight,
+    this.mediaThumbUri,
+    this.mediaEndpoint,
+    this.email,
+    this.updatedAt,
+    this.username,
+    this.fullThumbPath,
+    this.fullContentPath,
+    this.avatar,
+    this.location,
+    this.visibility,
+    this.cats,
+    this.tagPeople,
+    this.likes,
+    this.saleAmount,
+    this.saleView,
+    this.saleLike,
+    this.isApsara,
+    this.apsaraId,
+    this.apsaraThumbId,
+    this.isReport,
+    this.boosted = const [],
+    this.boostCount,
+    this.isBoost,
+    this.boostJangkauan,
+    this.statusBoost,
+    this.reportedStatus,
+    this.reportedStatus2,
+    this.music,
+    this.reportedUserCount,
+    this.media,
+    this.apsara,
+    this.isShared,
+    this.following,
+    this.comment,
+    this.isDiaryPlay,
+    this.comments,
+    this.isNewFollowing,
+    this.isLoading = false,
+    this.fullContent,
+    this.urluserBadge,
+    this.isPlay = false,
+    this.height = 0.0,
+    this.limitLandingpage,
+    this.imageHeightTemp,
+    this.imageHeightTemp2,
+    this.valueCache,
+    this.tutorial,
+    this.keyGlobal,
+    this.inBetweenAds,
+  });
 
   ContentData.fromJson(Map<String, dynamic> json) {
     metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
@@ -318,7 +338,7 @@ class ContentData {
 
     apsaraId = json['apsaraId'] ?? '';
     apsaraThumbId = json['apsaraThumbId'];
-    music = json['music'] != null ? Music.fromJson(json['music']) : null;
+    music = json['music'] != null && json['music'].isNotEmpty ? Music.fromJson(json['music']) : null;
     isReport = json['isReport'] ?? false;
     if (json['boosted'] != null) {
       boosted = [];
@@ -351,6 +371,8 @@ class ContentData {
     isDiaryPlay = false;
     comments = json['comments'] ?? 0;
     isNewFollowing = following ?? false ? false : true;
+    isPlay = false;
+    height = 0.0;
     if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
       if (json['urluserBadge'] is List) {
         urluserBadge = UserBadgeModel.fromJson(json['urluserBadge'].first);
@@ -358,6 +380,17 @@ class ContentData {
         urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
       }
     }
+    limitLandingpage = json['limitLandingpage'] ?? 0;
+    imageHeightTemp = json['imageHeightTemp'] ?? 0;
+    valueCache = rundom();
+
+    if (json['tutorial'] != null) {
+      tutorial = <Tutorial>[];
+      json['tutorial'].forEach((v) {
+        tutorial!.add(Tutorial.fromJson(v));
+      });
+    }
+    keyGlobal = GlobalKey();
   }
 
   Map<String, dynamic> toJson() {
@@ -421,6 +454,12 @@ class ContentData {
       data['urluserBadge'] = urluserBadge?.toJson();
     }
     return data;
+  }
+
+  String? rundom() {
+    Random random = Random();
+    int randomNumber = random.nextInt(100); // from 0 upto 99 included
+    return randomNumber.toString();
   }
 
   String? concatThumbUri() {
@@ -581,10 +620,7 @@ class TagPeople {
     username = json["username"];
     status = json["status"];
     avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
-    urluserBadge =
-        json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty
-            ? UserBadgeModel.fromJson(json['urluserBadge'])
-            : null;
+    urluserBadge = json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty ? UserBadgeModel.fromJson(json['urluserBadge']) : null;
   }
 
   Map<String, dynamic> toJson() => {
@@ -734,6 +770,31 @@ class UserComment {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
     data['username'] = username;
+    return data;
+  }
+}
+
+class Tutorial {
+  String? key;
+  bool? status;
+  String? textID;
+  String? textEn;
+
+  Tutorial({this.key, this.status, this.textID, this.textEn});
+
+  Tutorial.fromJson(Map<String, dynamic> json) {
+    key = json['key'];
+    status = json['status'];
+    textID = json['textID'];
+    textEn = json['textEn'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['key'] = key;
+    data['status'] = status;
+    data['textID'] = textID;
+    data['textEn'] = textEn;
     return data;
   }
 }

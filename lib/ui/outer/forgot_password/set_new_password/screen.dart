@@ -32,6 +32,8 @@ class _SetNewPasswordState extends State<SetNewPassword> {
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'SetNewPassword');
+    final notifier = Provider.of<ForgotPasswordNotifier>(context, listen: false);
+    notifier.initStateNewPass();
     super.initState();
   }
 

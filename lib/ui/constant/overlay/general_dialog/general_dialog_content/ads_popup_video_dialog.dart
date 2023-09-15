@@ -74,6 +74,8 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
   //loading进度
   int _loadingPercent = 0;
 
+  bool loadingBack = false;
+
   //视频时长
   int _videoDuration = 1;
 
@@ -112,8 +114,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
   //网络状态监听
   StreamSubscription? _networkSubscriptiion;
 
-  // GlobalKey<TrackFragmentState> trackFragmentKey = GlobalKey();
-  AnimationController? _animationController;
 
   var loadLaunch = false;
 
@@ -121,7 +121,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
 
   @override
   void initState() {
-    // TODO: implement initState
     _showLoading = true;
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -140,15 +139,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       fAliplayer?.setConfig(configMap);
 
       print("Hahahaha $_videoDuration");
-
-      _animationController = AnimationController(
-        /// [AnimationController]s can be created with `vsync: this` because of
-        /// [TickerProviderStateMixin].
-        vsync: this,
-        // duration: Duration(milliseconds: _videoDuration),
-      )..addListener(() {
-        setState(() {});
-      });
       // if (widget.data?.apsaraId != '') {
       // } else {
       //   _playMode = ModeTypeAliPLayer.url;
@@ -191,9 +181,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
-        _animationController?.duration = Duration(milliseconds: _videoDuration);
-
-        _animationController?.forward();
         setState(() {
           isPrepare = true;
           _showLoading = false;
@@ -202,7 +189,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       isPlay = true;
     });
     fAliplayer?.setOnRenderingStart((playerId) {
-      _animationController?.forward();
 
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
     });
@@ -218,13 +204,11 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
               _showLoading = false;
               isPause = false;
             });
-            _animationController?.forward();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusPaused:
             isPause = true;
             setState(() {});
             Wakelock.disable();
-            _animationController?.stop();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             Wakelock.disable();
@@ -248,7 +232,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
 
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-      _animationController?.stop();
       setState(() {
         _loadingPercent = 0;
         _showLoading = true;
@@ -270,7 +253,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       }
       setState(() {});
     }, loadingEnd: (playerId) {
-      _animationController?.forward();
       try {
         if (mounted) {
           setState(() {
@@ -411,6 +393,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       case AppLifecycleState.paused:
         if (!_mEnablePlayBack) {
           fAliplayer?.pause();
+          print('pop up ads pause');
         }
         if (_networkSubscriptiion != null) {
           _networkSubscriptiion?.cancel();
@@ -425,7 +408,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
   void dispose() {
     Wakelock.disable();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-    _animationController?.dispose();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
     }
@@ -461,46 +443,58 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
   Widget build(BuildContext context) {
     final ratio = (widget.data.height != null && widget.data.width != null) ? widget.data.width!/widget.data.height! : 16/9;
     return Builder(
-      builder: (context) {
-        final language = context.read<TranslateNotifierV2>().translate;
-        return SafeArea(
-          child: Material(
-            color: Colors.transparent,
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 23),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  CustomBaseCacheImage(
-                                    imageUrl: widget.data.avatar?.fullLinkURL,
-                                    memCacheWidth: 200,
-                                    memCacheHeight: 200,
-                                    imageBuilder: (_, imageProvider) {
-                                      return Container(
-                                        width: 36,
-                                        height: 36,
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: imageProvider,
+        builder: (context) {
+          final language = context.read<TranslateNotifierV2>().translate;
+          return SafeArea(
+            child: Material(
+              color: Colors.transparent,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 23),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    CustomBaseCacheImage(
+                                      imageUrl: widget.data.avatar?.fullLinkURL,
+                                      memCacheWidth: 200,
+                                      memCacheHeight: 200,
+                                      imageBuilder: (_, imageProvider) {
+                                        return Container(
+                                          width: 36,
+                                          height: 36,
+                                          decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: imageProvider,
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                    errorWidget: (_, __, ___) {
-                                      return Container(
+                                        );
+                                      },
+                                      errorWidget: (_, __, ___) {
+                                        return Container(
+                                          width: 36,
+                                          height: 36,
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(Radius.circular(18)),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      emptyWidget: Container(
                                         width: 36,
                                         height: 36,
                                         decoration: const BoxDecoration(
@@ -510,85 +504,78 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                             image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                           ),
                                         ),
-                                      );
-                                    },
-                                    emptyWidget: Container(
-                                      width: 36,
-                                      height: 36,
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(Radius.circular(18)),
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                      ),
+                                    ),
+                                    twelvePx,
+                                    Expanded(child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        CustomTextWidget(textToDisplay: widget.data.username ?? '', textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, ),),
+                                        CustomTextWidget(textToDisplay: language.sponsored ?? 'Bersponsor', textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, ),)
+                                      ],
+                                    ),),
+                                    twelvePx,
+                                    GestureDetector(
+                                      onTap: () {
+                                        ShowBottomSheet().onReportContent(
+                                          context,
+                                          adsData: widget.data,
+                                          type: adsPopUp,
+                                          postData: null,
+                                          onUpdate: () {
+                                            setState(() {
+                                              widget.data.isReport = true;
+                                            });
+                                          },
+                                        );
+                                      },
+                                      child: const CustomIconWidget(
+                                        defaultColor: false,
+                                        iconData: '${AssetPath.vectorPath}more.svg',
+                                        color: kHyppeTextLightPrimary,
+                                      ),
+                                    ),
+                                    tenPx,
+                                    loadingBack ? const SizedBox( height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2,)) : secondsSkip > 0 ? Container(
+                                      height: 30,
+                                      width: 30,
+                                      alignment: Alignment.center,
+                                      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Colors.grey),
+                                      child: Text(
+                                        '$secondsSkip',
+                                        style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                                      ),
+                                    ) : InkWell(
+                                      onTap: () async {
+                                        setState(() {
+                                          loadingBack = true;
+                                        });
+                                        await System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
+                                        setState(() {
+                                          loadingBack = false;
+                                        });
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.only(left: 8.0),
+                                        child: CustomIconWidget(
+                                          defaultColor: false,
+                                          iconData: "${AssetPath.vectorPath}close_ads.svg",
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  twelvePx,
-                                  Expanded(child: Column(
+                                  ],
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.only(top: 20, left: 18, right: 18),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      CustomTextWidget(textToDisplay: widget.data.username ?? '', textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700, ),),
-                                      CustomTextWidget(textToDisplay: language.sponsored ?? 'Bersponsor', textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, ),)
-                                    ],
-                                  ),),
-                                  twelvePx,
-                                  GestureDetector(
-                                    onTap: () {
-                                      ShowBottomSheet().onReportContent(
-                                        context,
-                                        adsData: widget.data,
-                                        type: adsPopUp,
-                                        postData: null,
-                                        onUpdate: () {
-                                          setState(() {
-                                            widget.data.isReport = true;
-                                          });
-                                        },
-                                      );
-                                    },
-                                    child: const CustomIconWidget(
-                                      defaultColor: false,
-                                      iconData: '${AssetPath.vectorPath}more.svg',
-                                      color: kHyppeTextLightPrimary,
-                                    ),
-                                  ),
-                                  tenPx,
-                                  secondsSkip > 0 ? Container(
-                                    height: 30,
-                                    width: 30,
-                                    alignment: Alignment.center,
-                                    decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Colors.grey),
-                                    child: Text(
-                                      '$secondsSkip',
-                                      style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                                    ),
-                                  ) : InkWell(
-                                    onTap: (){
-                                      System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.only(left: 8.0),
-                                      child: CustomIconWidget(
-                                        defaultColor: false,
-                                        iconData: "${AssetPath.vectorPath}close_ads.svg",
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                padding: const EdgeInsets.only(top: 20, left: 18, right: 18),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    AspectRatio(
-                                      aspectRatio: ratio,
-                                      child: Stack(
-                                        children: [
-                                          Positioned.fill(
-                                            child: ClipRRect(
+                                      AspectRatio(
+                                        aspectRatio: ratio,
+                                        child: Stack(
+                                          children: [
+                                            ClipRRect(
                                               borderRadius:
                                               const BorderRadius.all(Radius.circular(16.0)),
                                               child: AliPlayerView(
@@ -600,173 +587,171 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                                 width: MediaQuery.of(context).size.width,
                                               ),
                                             ),
-                                          ),
-                                          if (_showLoading)
-                                            Positioned.fill(
-                                              child: Align(
-                                                alignment: Alignment.center,
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.max,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    const CircularProgressIndicator(
-                                                      backgroundColor: Colors.white,
-                                                      strokeWidth: 3.0,
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10.0,
-                                                    ),
-                                                    Text(
-                                                      "$_loadingPercent%",
-                                                      style: const TextStyle(color: Colors.white),
-                                                    ),
-                                                  ],
+                                            if (_showLoading)
+                                              Positioned.fill(
+                                                child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      const CircularProgressIndicator(
+                                                        backgroundColor: Colors.white,
+                                                        strokeWidth: 3.0,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10.0,
+                                                      ),
+                                                      Text(
+                                                        "$_loadingPercent%",
+                                                        style: const TextStyle(color: Colors.white),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            Positioned(
+                                              top: 12,
+                                              right: 12,
+                                              child: Container(
+                                                padding: const EdgeInsets.all(2),
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(5),
+                                                    color: Colors.black.withOpacity(0.5)),
+                                                child: Text(
+                                                  System.getTimeformatByMs(_currentPositionText),
+                                                  style: const TextStyle(color: Colors.white, fontSize: 11),
                                                 ),
                                               ),
                                             ),
-                                          Positioned(
-                                            top: 12,
-                                            right: 12,
-                                            child: Container(
-                                              padding: const EdgeInsets.all(2),
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(5),
-                                                  color: Colors.black.withOpacity(0.5)),
-                                              child: Text(
-                                                System.getTimeformatByMs(_currentPositionText),
-                                                style: const TextStyle(color: Colors.white, fontSize: 11),
-                                              ),
-                                            ),
-                                          ),
-                                          Positioned(
+                                            Positioned(
                                               bottom: 12,
                                               right: 12,
                                               child: GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                isMute = !isMute;
-                                              });
-                                              fAliplayer?.setMuted(isMute);
-                                            },
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(right: 2.0),
-                                              child: CustomIconWidget(
-                                                iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
-                                                defaultColor: false,
-                                                height: 24,
-                                              ),
-                                            ),
-                                          ),),
-                                        ],
+                                                onTap: () {
+                                                  setState(() {
+                                                    isMute = !isMute;
+                                                  });
+                                                  fAliplayer?.setMuted(isMute);
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(right: 2.0),
+                                                  child: CustomIconWidget(
+                                                    iconData: isMute ? '${AssetPath.vectorPath}sound-off.svg' : '${AssetPath.vectorPath}sound-on.svg',
+                                                    defaultColor: false,
+                                                    height: 24,
+                                                  ),
+                                                ),
+                                              ),),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    // Image.asset('${AssetPath.pngPath}avatar_ads_exp.png', width: double.infinity, fit: BoxFit.cover,),
-                                    // Container(
-                                    //   width: double.infinity,
-                                    //   decoration: BoxDecoration(
-                                    //     image: const DecorationImage(
-                                    //       image: AssetImage('${AssetPath.pngPath}avatar_ads_exp.png'),
-                                    //       fit: BoxFit.fitWidth,
-                                    //     ),
-                                    //     borderRadius: BorderRadius.circular(12.0),
-                                    //   ),
-                                    // ),
-                                    sixteenPx,
-                                    if(widget.data.adsDescription != null)
-                                    CustomTextWidget(
-                                      maxLines: 10,
-                                      textAlign: TextAlign.justify,
-                                      textToDisplay: widget.data.adsDescription ?? '',
-                                      textStyle: context.getTextTheme().bodyText1,),
-                                    sixteenPx,
-                                    InkWell(
-                                      onTap: () async {
-                                        final data = widget.data;
-                                        if (secondsSkip < 1) {
-                                          if (data.adsUrlLink?.isEmail() ?? false) {
-                                            final email = data.adsUrlLink!.replaceAll('email:', '');
-                                            setState(() {
-                                              loadLaunch = true;
-                                            });
-
-                                            print('second close ads: $secondsVideo');
-                                            System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
-                                              Navigator.pop(context);
-                                              Future.delayed(const Duration(milliseconds: 800), () {
-                                                Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                      // Image.asset('${AssetPath.pngPath}avatar_ads_exp.png', width: double.infinity, fit: BoxFit.cover,),
+                                      // Container(
+                                      //   width: double.infinity,
+                                      //   decoration: BoxDecoration(
+                                      //     image: const DecorationImage(
+                                      //       image: AssetImage('${AssetPath.pngPath}avatar_ads_exp.png'),
+                                      //       fit: BoxFit.fitWidth,
+                                      //     ),
+                                      //     borderRadius: BorderRadius.circular(12.0),
+                                      //   ),
+                                      // ),
+                                      sixteenPx,
+                                      if(widget.data.adsDescription != null)
+                                        CustomTextWidget(
+                                          maxLines: 10,
+                                          textAlign: TextAlign.justify,
+                                          textToDisplay: widget.data.adsDescription ?? '',
+                                          textStyle: context.getTextTheme().bodyText1,),
+                                      sixteenPx,
+                                      InkWell(
+                                        onTap: () async {
+                                          final data = widget.data;
+                                          if (secondsSkip < 1) {
+                                            if (data.adsUrlLink?.isEmail() ?? false) {
+                                              final email = data.adsUrlLink!.replaceAll('email:', '');
+                                              setState(() {
+                                                loadLaunch = true;
                                               });
-                                            });
-                                          } else {
-                                            try {
-                                              final uri = Uri.parse(data.adsUrlLink ?? '');
-                                              print('bottomAdsLayout ${data.adsUrlLink}');
-                                              if (await canLaunchUrl(uri)) {
+
+                                              print('second close ads: $secondsVideo');
+                                              System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
+                                                Navigator.pop(context);
+                                                Future.delayed(const Duration(milliseconds: 800), () {
+                                                  Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                                });
+                                              });
+                                            } else {
+                                              try {
+                                                final uri = Uri.parse(data.adsUrlLink ?? '');
+                                                print('bottomAdsLayout ${data.adsUrlLink}');
+                                                if (await canLaunchUrl(uri)) {
+                                                  setState(() {
+                                                    loadLaunch = true;
+                                                  });
+                                                  print('second close ads: $secondsVideo');
+                                                  System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
+                                                    Navigator.pop(context);
+                                                    await launchUrl(
+                                                      uri,
+                                                      mode: LaunchMode.externalApplication,
+                                                    );
+                                                  });
+                                                } else {
+                                                  throw "Could not launch $uri";
+                                                }
+                                              } catch (e) {
                                                 setState(() {
                                                   loadLaunch = true;
                                                 });
                                                 print('second close ads: $secondsVideo');
-                                                System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
-                                                  Navigator.pop(context);
-                                                  await launchUrl(
-                                                    uri,
-                                                    mode: LaunchMode.externalApplication,
-                                                  );
+                                                System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
+                                                  System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                                                 });
-                                              } else {
-                                                throw "Could not launch $uri";
                                               }
-                                            } catch (e) {
-                                              setState(() {
-                                                loadLaunch = true;
-                                              });
-                                              print('second close ads: $secondsVideo');
-                                              System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
-                                                System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                              });
                                             }
                                           }
-                                        }
-                                      },
-                                      child: Builder(builder: (context) {
-                                        final learnMore = widget.data.ctaButton ?? 'Learn More';
-                                        return Container(
-                                          alignment: Alignment.center,
-                                          padding: const EdgeInsets.only(top: 10, bottom: 10),
-                                          decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: secondsSkip < 1 ? KHyppeButtonAds : context.getColorScheme().secondary),
-                                          child: loadLaunch ? const SizedBox(width: 40, height: 20, child: CustomLoading()) : Text(
-                                            learnMore,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
+                                        },
+                                        child: Builder(builder: (context) {
+                                          final learnMore = widget.data.ctaButton ?? 'Learn More';
+                                          return Container(
+                                            alignment: Alignment.center,
+                                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                                            decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: secondsSkip < 1 ? KHyppeButtonAds : context.getColorScheme().secondary),
+                                            child: loadLaunch ? const SizedBox(width: 40, height: 20, child: CustomLoading()) : Text(
+                                              learnMore,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      }),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
+                                          );
+                                        }),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
 
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      }
+          );
+        }
     );
   }
 
   void start() async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
-    _animationController?.reset();
     fAliplayer?.stop();
     isPlay = false;
 

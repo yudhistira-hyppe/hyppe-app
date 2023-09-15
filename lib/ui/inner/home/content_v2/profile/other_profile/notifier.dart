@@ -84,13 +84,16 @@ class OtherProfileNotifier with ChangeNotifier {
   bool _isCheckLoading = false;
   bool get isCheckLoading => _isCheckLoading;
 
-  int get vidCount => vidContentsQuery.hasNext ? (user.vids?.length ?? 0) + 2 : (user.vids?.length ?? 0);
+  // int get vidCount => vidContentsQuery.hasNext ? (user.vids?.length ?? 0) + 2 : (user.vids?.length ?? 0);
+  int get vidCount => vidContentsQuery.hasNext ? (manyUser.last.vids?.length ?? 0) + 2 : (manyUser.last.vids?.length ?? 0);
   bool get vidHasNext => vidContentsQuery.hasNext;
 
-  int get diaryCount => diaryContentsQuery.hasNext ? (user.diaries?.length ?? 0) + 2 : (user.diaries?.length ?? 0);
+  // int get diaryCount => diaryContentsQuery.hasNext ? (user.diaries?.length ?? 0) + 2 : (user.diaries?.length ?? 0);
+  int get diaryCount => diaryContentsQuery.hasNext ? (manyUser.last.diaries?.length ?? 0) + 2 : (manyUser.last.diaries?.length ?? 0);
   bool get diaryHasNext => diaryContentsQuery.hasNext;
 
-  int get picCount => picContentsQuery.hasNext ? (user.pics?.length ?? 0) + 2 : (user.pics?.length ?? 0);
+  // int get picCount => picContentsQuery.hasNext ? (user.pics?.length ?? 0) + 2 : (user.pics?.length ?? 0);
+  int get picCount => picContentsQuery.hasNext ? (manyUser.last.pics?.length ?? 0) + 2 : (manyUser.last.pics?.length ?? 0);
   bool get picHasNext => picContentsQuery.hasNext;
 
   int _heightBox = 0;
@@ -214,10 +217,13 @@ class OtherProfileNotifier with ChangeNotifier {
       switch (pageIndex) {
         case 0:
           {
+            print("===== hahaha ${picContentsQuery.loading} ");
+            print("===== hahaha ${picHasNext} ");
             if (!picContentsQuery.loading && picHasNext) {
               List<ContentData> _res = await picContentsQuery.loadNext(context, otherContent: true);
               if (_res.isNotEmpty) {
                 user.pics = [...(user.pics ?? []), ..._res];
+                manyUser.last.pics = [...(manyUser.last.pics ?? []), ..._res];
               } else {
                 print("Post Pic Dah Mentok");
               }
@@ -231,6 +237,7 @@ class OtherProfileNotifier with ChangeNotifier {
               List<ContentData> _res = await diaryContentsQuery.loadNext(context, otherContent: true);
               if (_res.isNotEmpty) {
                 user.diaries = [...(user.diaries ?? []), ..._res];
+                manyUser.last.diaries = [...(manyUser.last.diaries ?? []), ..._res];
               } else {
                 print("Post Diary Dah Mentok");
               }
@@ -244,6 +251,7 @@ class OtherProfileNotifier with ChangeNotifier {
               List<ContentData> _res = await vidContentsQuery.loadNext(context, otherContent: true);
               if (_res.isNotEmpty) {
                 user.vids = [...(user.vids ?? []), ..._res];
+                manyUser.last.vids = [...(manyUser.last.vids ?? []), ..._res];
               } else {
                 print("Post Vid Dah Mentok");
               }
@@ -298,12 +306,22 @@ class OtherProfileNotifier with ChangeNotifier {
 
     if (isConnect) {
       if (argument?.profile != null) {
-        user.profile = argument?.profile;
+        manyUser.forEach((element) {
+          print(element.profile?.username);
+        });
+
         if (!refresh) {
-          manyUser.add(user);
+          UserInfoModel user2 = UserInfoModel();
+          user2.profile = argument?.profile;
+          user2.pics = [];
+          // user.profile = argument?.profile;
+          manyUser.add(user2);
           golbalToOther = manyUser.length;
         }
         print("========== many user $manyUser");
+        manyUser.forEach((element) {
+          print(element.profile?.username);
+        });
         notifyListeners();
       } else {
         final usersNotifier = UserBloc();
@@ -311,12 +329,21 @@ class OtherProfileNotifier with ChangeNotifier {
         final usersFetch = usersNotifier.userFetch;
 
         if (usersFetch.userState == UserState.getUserProfilesSuccess) {
-          user.profile = usersFetch.data;
+          // user.profile = usersFetch.data;
+
           if (!refresh) {
-            manyUser.add(user);
+            UserInfoModel user2 = UserInfoModel();
+            user2.profile = usersFetch.data;
+            user2.pics = [];
+            // user.profile = argument?.profile;
+            manyUser.add(user2);
+            // manyUser.add(user);
             golbalToOther = manyUser.length;
           }
-          print("========== many user $manyUser");
+          print("========== many user 2 ${manyUser.length}");
+          manyUser.forEach((element) {
+            print(element.profile?.username);
+          });
           notifyListeners();
         }
       }
@@ -327,9 +354,9 @@ class OtherProfileNotifier with ChangeNotifier {
     }
     // user.vids ??= await vidContentsQuery.reload(context, otherContent: true);
     // user.pics = await picContentsQuery.reload(context, otherContent: true);
-    user.pics = null;
-    user.vids = null;
-    user.diaries = null;
+    // user.pics = null;
+    // user.vids = null;
+    // user.diaries = null;
 
     await getDataPerPgage(context);
 
@@ -353,55 +380,77 @@ class OtherProfileNotifier with ChangeNotifier {
     switch (pageIndex) {
       case 0:
         {
-          if (user.pics == null) {
-            isLoading = true;
-            notifyListeners();
-            if (email != null) {
-              picContentsQuery.searchText = email;
-            }
-            user.pics = await picContentsQuery.reload(context, otherContent: true);
-            manyUser.last.pics = user.pics;
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              isLoading = false;
-            });
-            notifyListeners();
+          // if (user.pics == null) {
+          isLoading = true;
+          notifyListeners();
+          if (email != null) {
+            picContentsQuery.searchText = email;
           }
+
+          UserInfoModel user2 = UserInfoModel();
+          user2.pics = await picContentsQuery.reload(context, otherContent: true);
+          // user.pics = await picContentsQuery.reload(context, otherContent: true);
+          manyUser.last.pics = user2.pics;
+          Future.delayed(const Duration(milliseconds: 1000), () {
+            isLoading = false;
+          });
+          notifyListeners();
+          // }
         }
         break;
       case 1:
         {
-          if (user.diaries == null) {
-            isLoading = true;
-            notifyListeners();
-            if (email != null) {
-              diaryContentsQuery.searchText = email;
-            }
-            user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
-            manyUser.last.diaries = user.diaries;
-
-            context.read<ScrollDiaryNotifier>().diaryData = user.diaries;
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              isLoading = false;
-            });
-            notifyListeners();
+          // if (user.diaries == null) {
+          isLoading = true;
+          notifyListeners();
+          if (email != null) {
+            diaryContentsQuery.searchText = email;
           }
+          print("diary 222222222222222222222");
+          print("${manyUser.length}");
+          print("${manyUser.last.diaries}");
+          manyUser.last.diaries = [];
+          UserInfoModel user2 = UserInfoModel();
+          user2.diaries = await diaryContentsQuery.reload(context, otherContent: true);
+          // user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
+          manyUser.last.diaries = user2.diaries;
+          notifyListeners();
+
+          print("======diary========");
+          print(manyUser.last.diaries);
+          print(user2.diaries);
+          print(manyUser.length);
+          manyUser.forEach((element) {
+            print(element.diaries);
+          });
+
+          // context.read<ScrollDiaryNotifier>().diaryData = manyUser.last.diaries;
+          Future.delayed(const Duration(milliseconds: 1000), () {
+            isLoading = false;
+          });
+          notifyListeners();
+          // }
         }
         break;
       case 2:
         {
-          if (user.vids == null) {
-            isLoading = true;
-            notifyListeners();
-            if (email != null) {
-              vidContentsQuery.searchText = email;
-            }
-            user.vids = await vidContentsQuery.reload(context, otherContent: true);
-            context.read<ScrollVidNotifier>().vidData = user.vids;
-            Future.delayed(const Duration(milliseconds: 2000), () {
-              isLoading = false;
-            });
-            notifyListeners();
+          // if (user.vids == null) {
+          isLoading = true;
+          notifyListeners();
+          if (email != null) {
+            vidContentsQuery.searchText = email;
           }
+          UserInfoModel user2 = UserInfoModel();
+          user2.vids = await vidContentsQuery.reload(context, otherContent: true);
+          // user.vids = await vidContentsQuery.reload(context, otherContent: true);
+          manyUser.last.vids = user2.vids;
+
+          context.read<ScrollVidNotifier>().vidData = manyUser.last.vids;
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            isLoading = false;
+          });
+          notifyListeners();
+          // }
         }
 
         break;
@@ -459,10 +508,12 @@ class OtherProfileNotifier with ChangeNotifier {
 
   navigateToSeeAllScreen(BuildContext context, int index, {contentPosition? inPosition, Widget? title, List<ContentData>? data, scrollController, double? heightProfile}) async {
     context.read<ReportNotifier>().inPosition = contentPosition.otherprofile;
-    // final connect = await _system.checkConnections();
+    final connect = await _system.checkConnections();
+
     // if (connect) {
     var result;
     if (pageIndex == 0) {
+      (Routing.navigatorKey.currentContext ?? context).read<ScrollPicNotifier>().connectionError = !connect;
       _routing.move(Routes.scrollPic,
           argument: SlidedPicDetailScreenArgument(
             page: index,
@@ -479,6 +530,7 @@ class OtherProfileNotifier with ChangeNotifier {
       // scrollAuto(result);
     }
     if (pageIndex == 1) {
+      (Routing.navigatorKey.currentContext ?? context).read<ScrollDiaryNotifier>().connectionError = !connect;
       _routing.move(Routes.scrollDiary,
           argument: SlidedDiaryDetailScreenArgument(
             page: index,
@@ -495,6 +547,7 @@ class OtherProfileNotifier with ChangeNotifier {
       // scrollAuto(result);
     }
     if (pageIndex == 2) {
+      (Routing.navigatorKey.currentContext ?? context).read<ScrollVidNotifier>().connectionError = !connect;
       _routing.move(Routes.scrollVid,
           argument: SlidedVidDetailScreenArgument(
             page: index,
@@ -548,17 +601,19 @@ class OtherProfileNotifier with ChangeNotifier {
     // }
   }
 
-  void onExit() {
+  void onExit(context) async {
     print("==========Exit==================");
     Future.delayed(const Duration(milliseconds: 500), () {
-      manyUser.removeLast();
+      if (manyUser.isNotEmpty) {
+        manyUser.removeLast();
+      }
     });
     print("==========Exit 2==================");
     if (golbalToOther == 1) {
       golbalToOther = 0;
     }
-
-    routing.moveBack();
+    // routing.moveBack();
+    Navigator.pop(context);
     userEmail = null;
   }
 

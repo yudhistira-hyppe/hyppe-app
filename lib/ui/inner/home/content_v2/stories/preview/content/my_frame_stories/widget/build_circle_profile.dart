@@ -48,7 +48,7 @@ class BuildCircleProfile extends StatelessWidget {
                 cacheKey: imageUrlKey,
                 following: true,
                 imageUrl: imageUrl,
-                badge: badge,
+                // badge: badge,
                 headers: headers,
                 width: SizeWidget.circleDiameterOutside,
                 height: SizeWidget.circleDiameterOutside,

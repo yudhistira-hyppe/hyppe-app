@@ -115,7 +115,7 @@ class CardChalange extends StatelessWidget {
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
                             ),
                             child: Text(
-                              "${data?.statusFormalChallenge}",
+                              data?.statusFormalChallenge == 'Berlangsung' ? "${tn.translate.goingOn}" : "${tn.translate.comingSoon}",
                               style: TextStyle(
                                 color: data?.statusFormalChallenge == 'Berlangsung' ? const Color(0xFFB74D00) : kHyppeGreen,
                                 fontSize: 10,
@@ -133,7 +133,7 @@ class CardChalange extends StatelessWidget {
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
                             ),
                             child: Text(
-                              "${data?.statusJoined}",
+                              data?.statusJoined == 'Bukan Partisipan' ? "${tn.translate.nonParticipant}" : "${tn.translate.participant}",
                               style: TextStyle(
                                 color: data?.statusJoined == 'Bukan Partisipan' ? Color(0xFF9B9B9B) : kHyppePrimary,
                                 fontSize: 10,
@@ -167,7 +167,7 @@ class CardChalange extends StatelessWidget {
                             SizedBox(
                               width: 234.38,
                               child: Text(
-                                '${System().dateFormatter(data?.startChallenge ?? "2023-01-01", 7, lang: tn.translate.localeDatetime ?? '')} s/d ${System().dateFormatter(data?.endChallenge ?? "2023-01-01", 7, lang: tn.translate.localeDatetime ?? '')} ',
+                                '${System().dateFormatter(data?.startChallenge ?? "2023-01-01", 8, lang: tn.translate.localeDatetime ?? '')} s/d ${System().dateFormatter(data?.endChallenge ?? "2023-01-01", 7, lang: tn.translate.localeDatetime ?? '')} ',
                                 style: const TextStyle(
                                   color: Color(0xFF9B9B9B),
                                   fontSize: 10,

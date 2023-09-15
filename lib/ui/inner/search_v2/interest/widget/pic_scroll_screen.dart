@@ -9,6 +9,7 @@ import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
+import 'package:hyppe/ui/inner/search_v2/shimmer/search_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -42,7 +43,6 @@ import '../../../../constant/widget/custom_newdesc_content_widget.dart';
 import '../../../../constant/widget/custom_shimmer.dart';
 import '../../../../constant/widget/custom_spacer.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
-import '../../../../constant/widget/no_result_found.dart';
 import '../../../../constant/widget/profile_landingpage.dart';
 import '../../../home/content_v2/diary/playlist/widget/content_violation.dart';
 import '../../../home/content_v2/pic/notifier.dart';
@@ -51,7 +51,6 @@ import '../../../home/content_v2/pic/widget/pic_top_item.dart';
 import '../../../home/content_v2/vid/notifier.dart';
 import '../../../home/content_v2/vid/playlist/comments_detail/screen.dart';
 import '../../../home/notifier_v2.dart';
-import '../../search_more_complete/widget/all_search_shimmer.dart';
 
 class PicScrollScreen extends StatefulWidget {
   final String interestKey;
@@ -462,7 +461,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
         break;
       case AppLifecycleState.resumed:
         print("========= resumed");
-        if (context.read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
+        if ((Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().canPlayOpenApps && !SharedPreference().readStorage(SpKeys.isShowPopAds)) {
           fAliplayer?.play();
         }
         break;
@@ -490,7 +489,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             pics?.isEmpty ?? true
-                ?  const Flexible(child: AllSearchShimmer())
+                ?  const Flexible(child: SearchShimmer())
                 : Column(
                 children: List.generate(pics?.length ?? 0, (index){
                   if (pics == null) {
@@ -595,7 +594,13 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                 onTap: () {
                   // fAliplayer?.pause();
                   if (pics[index].email != email) {
-                    context.read<PreviewPicNotifier>().reportContent(context, pics[index] , fAliplayer: fAliplayer, key: widget.interestKey);
+                    context.read<PreviewPicNotifier>()
+                        .reportContent(
+                        context,
+                        pics[index] ,
+                        fAliplayer: fAliplayer,
+                        onCompleted: (){},
+                        key: widget.interestKey);
                   } else {
                     fAliplayer?.setMuted(true);
                     fAliplayer?.pause();

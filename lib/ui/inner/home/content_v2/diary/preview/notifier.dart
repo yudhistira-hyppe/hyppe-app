@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
 import 'package:hyppe/core/bloc/ads_video/state.dart';
 
@@ -42,6 +43,18 @@ class PreviewDiaryNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  setIsViewed(int index){
+    diaryData?[index].isViewed = true;
+    notifyListeners();
+  }
+
+  List<ContentData>? _diaryDataTemp;
+  List<ContentData>? get diaryDataTemp => _diaryDataTemp;
+  set diaryDataTemp(List<ContentData>? val) {
+    _diaryDataTemp = val;
+    notifyListeners();
+  }
+
   void onUpdate() => notifyListeners();
 
   int get itemCount => _diaryData == null ? 3 : (_diaryData?.length ?? 0);
@@ -78,9 +91,32 @@ class PreviewDiaryNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void setAdsData(int index, AdsData adsData){
-    diaryData?[index].inBetweenAds = adsData;
+  int _nextAdsShowed = 6;
+  int get nextAdsShowed => _nextAdsShowed;
+  set nextAdsShowed(int state){
+    _nextAdsShowed = state;
     notifyListeners();
+  }
+
+  initAdsCounter(){
+    _nextAdsShowed = 6;
+  }
+
+  void setAdsData(int index, AdsData? adsData){
+    final withAds = diaryData?.where((element) => element.inBetweenAds != null).length ?? 0;
+    final adsSize = diaryData?.length ?? 0;
+    if(adsData != null){
+      if(adsSize > nextAdsShowed){
+        if(diaryData?[nextAdsShowed].inBetweenAds == null){
+          diaryData?.insert(nextAdsShowed, ContentData(inBetweenAds: adsData));
+          _nextAdsShowed = _nextAdsShowed + 6 + withAds;
+          notifyListeners();
+        }
+      }
+    }else{
+      diaryData?.removeAt(index);
+      notifyListeners();
+    }
   }
 
   double scaleDiary(BuildContext context) {
@@ -120,8 +156,16 @@ class PreviewDiaryNotifier with ChangeNotifier {
 
       if (reload) {
         diaryData = res;
+        // if ((diaryData?.length ?? 0) >= 2) {
+        //   diaryDataTemp = [];
+        //   for (var i = 0; i < 2; i++) {
+        //     diaryDataTemp?.add(diaryData![i]);
+        //   }
+        // }
 
         if (scrollController.hasClients) {
+          homeClick = true;
+
           scrollController.animateTo(
             scrollController.initialScrollOffset,
             duration: const Duration(milliseconds: 300),
@@ -212,5 +256,24 @@ class PreviewDiaryNotifier with ChangeNotifier {
     } catch (e) {
       'Failed to fetch ads data $e'.logger();
     }
+  }
+
+  void getTemp(index, lastIndex, indexArray) {
+    if (index != 0) {
+      if (lastIndex < index && (diaryData?.length ?? 0) > (diaryDataTemp?.length ?? 0)) {
+        diaryDataTemp?.add(diaryData![indexArray + 1]);
+        var total = diaryDataTemp?.length;
+        if (total == 4) {
+          // picTemp?.removeAt(0);
+        }
+      } else {
+        // picTemp?.insert(0, pic![indexArray - 1]);
+        // var total = picTemp?.length;
+        // if (total == 4) {
+        //   picTemp?.removeLast();
+        // }
+      }
+    }
+    notifyListeners();
   }
 }

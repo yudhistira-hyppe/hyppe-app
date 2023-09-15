@@ -48,7 +48,7 @@ class ScrollDiaryNotifier with ChangeNotifier {
         final op = context.read<OtherProfileNotifier>();
         op.pageIndex = 1;
         await op.onScrollListener(context, scrollController, isLoad: true);
-        diaryData = op.user.diaries;
+        diaryData = op.manyUser.last.diaries;
         isLoadingLoadmore = false;
       }
 
@@ -97,7 +97,7 @@ class ScrollDiaryNotifier with ChangeNotifier {
         final op = context.read<OtherProfileNotifier>();
         op.pageIndex = 1;
         await op.initialOtherProfile(context);
-        diaryData = op.user.diaries;
+        diaryData = op.manyUser.last.diaries;
         isLoadingLoadmore = false;
         notifyListeners();
       }

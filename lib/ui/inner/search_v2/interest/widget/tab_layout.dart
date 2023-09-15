@@ -7,6 +7,7 @@ import 'package:hyppe/ui/inner/search_v2/interest/widget/diary_scroll_screen.dar
 import 'package:hyppe/ui/inner/search_v2/interest/widget/pic_scroll_screen.dart';
 import 'package:hyppe/ui/inner/search_v2/interest/widget/vid_scroll_screen.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
+import 'package:hyppe/ui/inner/search_v2/shimmer/search_shimmer.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +16,6 @@ import '../../../../../core/constants/enum.dart';
 import '../../../../../core/services/system.dart';
 import '../../../../constant/widget/custom_loading.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
-import '../../../home/content_v2/profile/widget/both_profile_content_shimmer.dart';
-import '../../search_more_complete/widget/all_search_shimmer.dart';
 import '../../widget/search_no_result_image.dart';
 
 class InterestTabLayout extends StatefulWidget {
@@ -50,23 +49,20 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
         final notifier = fixContext.read<SearchNotifier>();
         final key = widget.interest.id ?? '';
         notifier.getDetailInterest(fixContext, key, reload: false, hyppe: currentType);
-        switch(currentType){
+        switch (currentType) {
           case HyppeType.HyppePic:
             if (!notifier.intHasNextPic) {
               notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interest.id ?? '', reload: false, hyppe: HyppeType.HyppeVid);
-
             }
             break;
           case HyppeType.HyppeDiary:
             if (!notifier.intHasNextDiary) {
               notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interest.id ?? '', reload: false, hyppe: HyppeType.HyppeVid);
-
             }
             break;
           case HyppeType.HyppeVid:
             if (!notifier.intHasNextVid) {
               notifier.getDetailInterest(Routing.navigatorKey.currentContext ?? context, widget.interest.id ?? '', reload: false, hyppe: HyppeType.HyppeVid);
-
             }
             break;
         }
@@ -87,139 +83,140 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
       final data = notifier.interestContents[widget.interest.id];
       print('size pic (${widget.interest.id}): ${data?.pict?.length}');
       return Container(
-                  color: context.getColorScheme().surface,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: AbsorbPointer(
-                          absorbing: notifier.isZoom,
-                          child: RefreshIndicator(
-                            strokeWidth: 2.0,
-                            color: context.getColorScheme().primary,
-                            onRefresh: () => notifier.getDetailInterest(context, widget.interest.id ?? ''),
-                            child: SingleChildScrollView(
-                              controller: scrollController,
-                              scrollDirection: Axis.vertical,
-                              physics: notifier.isZoom && currentType == HyppeType.HyppePic ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
-                              child: Column(
-                                children: [
-                                  MeasuredSize(
-                                    onChange: (value){
-                                      setState(() {
-                                        heightTab = value.height;
-                                      });
-                                    },
-                                    child: Container(
-                                      margin: const EdgeInsets.only(left: 16, right: 12, top: 10, bottom: 0),
-                                      padding: const EdgeInsets.all(3),
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: context.getColorScheme().background),
-                                      child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: listTab.map((e) {
-                                            final isActive = e == currentType;
-                                            return Flexible(
-                                              child: Material(
-                                                  color: Colors.transparent,
-                                                  child: Ink(
-                                                    height: 36,
-                                                    decoration: BoxDecoration(
-                                                      color: isActive ? context.getColorScheme().primary : context.getColorScheme().background,
-                                                      borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                                    ),
-                                                    child: InkWell(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          currentType = e;
-                                                          scrollController..animateTo(0, duration: Duration(milliseconds: 70), curve: Curves.fastOutSlowIn);
-                                                        });
-                                                      },
-                                                      borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                                      splashColor: context.getColorScheme().primary,
-                                                      child: Container(
-                                                        alignment: Alignment.center,
-                                                        height: 36,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                                        decoration: const BoxDecoration(
-                                                          borderRadius: BorderRadius.all(Radius.circular(18)),
-                                                        ),
-                                                        child: CustomTextWidget(
-                                                          textToDisplay: System().getTitleHyppe(e),
-                                                          textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )),
-                                            );
-                                          }).toList()),
-                                    ),
-                                  ),
-                                  getLayout(data, notifier),
-                                ],
-                              ),
-                            ),
+        color: context.getColorScheme().surface,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: AbsorbPointer(
+                absorbing: notifier.isZoom,
+                child: RefreshIndicator(
+                  strokeWidth: 2.0,
+                  color: context.getColorScheme().primary,
+                  onRefresh: () => notifier.getDetailInterest(context, widget.interest.id ?? ''),
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    scrollDirection: Axis.vertical,
+                    physics: notifier.isZoom && currentType == HyppeType.HyppePic ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        MeasuredSize(
+                          onChange: (value) {
+                            setState(() {
+                              heightTab = value.height;
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 16, right: 12, top: 10, bottom: 0),
+                            padding: const EdgeInsets.all(3),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: context.getColorScheme().background),
+                            child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: listTab.map((e) {
+                                  final isActive = e == currentType;
+                                  return Flexible(
+                                    child: Material(
+                                        color: Colors.transparent,
+                                        child: Ink(
+                                          height: 36,
+                                          decoration: BoxDecoration(
+                                            color: isActive ? context.getColorScheme().primary : context.getColorScheme().background,
+                                            borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                          ),
+                                          child: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                currentType = e;
+                                                scrollController..animateTo(0, duration: Duration(milliseconds: 70), curve: Curves.fastOutSlowIn);
+                                              });
+                                            },
+                                            borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                            splashColor: context.getColorScheme().primary,
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              height: 36,
+                                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                                              decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                                              ),
+                                              child: CustomTextWidget(
+                                                textToDisplay: System().getTitleHyppe(e),
+                                                textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
+                                              ),
+                                            ),
+                                          ),
+                                        )),
+                                  );
+                                }).toList()),
                           ),
                         ),
-                      ),
-                      loadingWidget(notifier)
-                    ],
+                        getLayout(data, notifier),
+                      ],
+                    ),
                   ),
-                );
+                ),
+              ),
+            ),
+            loadingWidget(notifier)
+          ],
+        ),
+      );
     });
   }
 
-  Widget loadingWidget(SearchNotifier notifier){
+  Widget loadingWidget(SearchNotifier notifier) {
     final type = currentType;
-
 
     switch (type) {
       case HyppeType.HyppeVid:
         return notifier.intHasNextVid
             ? const SizedBox(
-          height: 50,
-          child: Center(child: CustomLoading()),
-        )
+                height: 50,
+                child: Center(child: CustomLoading()),
+              )
             : Container();
       case HyppeType.HyppeDiary:
         return notifier.intHasNextDiary
             ? const SizedBox(
-          height: 50,
-          child: Center(child: CustomLoading()),
-        )
+                height: 50,
+                child: Center(child: CustomLoading()),
+              )
             : Container();
       case HyppeType.HyppePic:
         return notifier.intHasNextPic
             ? const SizedBox(
-          height: 50,
-          child: Center(child: CustomLoading()),
-        )
+                height: 50,
+                child: Center(child: CustomLoading()),
+              )
             : Container();
     }
   }
 
-  Widget getLayout(SearchContentModel? data, SearchNotifier notifier){
+  Widget getLayout(SearchContentModel? data, SearchNotifier notifier) {
     final type = currentType;
     if (data != null) {
       switch (type) {
         case HyppeType.HyppeVid:
-          if(notifier.loadIntDetailVid){
-            return const AllSearchShimmer();
+          if (notifier.loadIntDetailVid) {
+            return const SearchShimmer();
           }
-          return data.vid.isNotNullAndEmpty() ? VidScrollScreen(interestKey: widget.interest.id ?? ''): SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+          return data.vid.isNotNullAndEmpty() ? VidScrollScreen(interestKey: widget.interest.id ?? '') : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
         case HyppeType.HyppeDiary:
-          if(notifier.loadIntDetailDiary){
-            return const AllSearchShimmer();
+          if (notifier.loadIntDetailDiary) {
+            return const SearchShimmer();
           }
-          return data.diary.isNotNullAndEmpty() ? DiaryScrollScreen(interestKey: widget.interest.id ?? ''): SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+          return data.diary.isNotNullAndEmpty()
+              ? DiaryScrollScreen(interestKey: widget.interest.id ?? '')
+              : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
         case HyppeType.HyppePic:
-          if(notifier.loadIntDetailPic){
-            return const AllSearchShimmer();
+          if (notifier.loadIntDetailPic) {
+            return const SearchShimmer();
           }
-          return data.pict.isNotNullAndEmpty() ? PicScrollScreen(interestKey: widget.interest.id ?? ''): SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+          return data.pict.isNotNullAndEmpty() ? PicScrollScreen(interestKey: widget.interest.id ?? '') : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
       }
     } else {
-      return const AllSearchShimmer();
+      return const SearchShimmer();
       return SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
     }
   }

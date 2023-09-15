@@ -8,10 +8,13 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
+import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_end.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_ongoing.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_list.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
@@ -30,6 +33,7 @@ class ChalangeScreen extends StatefulWidget {
 
 class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
   final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
+  final CarouselController _controller = CarouselController();
 
   final List<String> imgList = [
     'https://images.unsplash.com/photo-1603486002664-a7319421e133?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1842&q=80',
@@ -40,8 +44,11 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
   late TabController _tabController;
   double offset = 0.0;
   List nameTab = [];
-  int _current = 0;
-  final CarouselController _controller = CarouselController();
+  int _currentSlidder = 0;
+  int _currentTab = 0;
+  int _lastCurrentTab = 0;
+  String chllangeid = "";
+  String lastchallangeid = "";
   bool hideTab = false;
 
   LocalizationModelV2? lang;
@@ -61,7 +68,27 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
 
       var cn = context.read<ChallangeNotifier>();
       cn.initLeaderboard(context);
+
+      _tabController.animation?.addListener(() {
+        _tabController.animation?.addListener(() {
+          _currentTab = _tabController.index;
+          if (_lastCurrentTab != _currentTab) {
+            if (_currentTab == 1) {
+              print("masuk tab slide ${_tabController.index}");
+              print("masuk tab slide");
+              cn.getLeaderBoard(
+                context,
+                chllangeid,
+                oldLeaderboard: true,
+              );
+            }
+            // homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
+          }
+          _lastCurrentTab = _currentTab;
+        });
+      });
     });
+    print("build==============");
 
     super.initState();
   }
@@ -70,6 +97,8 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
   void afterFirstLayout(BuildContext context) {}
 
   void toHideTab(ChallangeNotifier cn) {
+    print("!!!@@@@ hide ${((cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1) || cn.leaderBoardData?.session == 1)}");
+    print("${cn.leaderBoardData?.session}");
     if ((cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1) || cn.leaderBoardData?.session == 1) {
       hideTab = true;
     } else {
@@ -78,10 +107,28 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
   }
 
   @override
+  void didChangeDependencies() {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didPopNext() {
+    print("======121212");
+    print(_currentSlidder);
+    _controller.jumpToPage(_currentSlidder);
+    super.didPopNext();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var cn = context.watch<ChallangeNotifier>();
     isFromSplash = false;
     toHideTab(cn);
+    if (chllangeid == '') {
+      chllangeid = cn.bannerLeaderboardData[0].sId ?? '';
+    }
+
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
@@ -129,7 +176,9 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
             }
             return notification.depth == 0;
           },
-          onRefresh: () async {},
+          onRefresh: () async {
+            await cn.initLeaderboard(context);
+          },
           child: cn.isLoadingLeaderboard || cn.leaderBoardData?.sId == null
               ? const ShimmerListLeaderboard()
               : ScrollConfiguration(
@@ -147,59 +196,109 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                             delegate: SliverChildListDelegate([
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
-                                child: Text("Challenge Utama",
+                                child: Text(lang?.mainChallenge ?? '',
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w700,
                                     )),
                               ),
                               Container(
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                                 child: CarouselSlider(
+                                  carouselController: _controller,
                                   options: CarouselOptions(
-                                      // height: 300
                                       enlargeCenterPage: true,
                                       enableInfiniteScroll: false,
-                                      // viewportFraction: 1.0,
-                                      aspectRatio: 343 / 103,
-                                      // height: 100,
-                                      autoPlayInterval: const Duration(seconds: 3),
-                                      onPageChanged: (index, reason) {
+                                      viewportFraction: 0.8,
+                                      // aspectRatio: 343 / 103,
+                                      // height: 176,
+                                      height: SizeConfig.screenWidth! * 0.29,
+                                      onPageChanged: (index, reason) async {
                                         setState(() {
-                                          print("=======change");
-                                          _current = index;
+                                          _currentSlidder = index;
                                           _tabController.index = 0;
-                                          cn.getLeaderBoard(context, cn.bannerSearchData[index].sId ?? '');
+                                          chllangeid = cn.bannerLeaderboardData[index].sId ?? '';
+                                          Future.delayed(Duration(milliseconds: 500), () {
+                                            lastchallangeid = cn.bannerLeaderboardData[index].sId ?? '';
+                                            if (lastchallangeid == chllangeid) {
+                                              cn.getLeaderBoard(context, cn.bannerLeaderboardData[index].sId ?? '');
+                                            }
+                                          });
                                         });
                                       }),
-                                  items: cn.bannerSearchData
+                                  items: cn.bannerLeaderboardData
                                       .map((item) => ClipRRect(
                                             borderRadius: BorderRadius.circular(10),
                                             child: Center(
+                                              //     child: CustomBaseCacheImage(
+                                              //   memCacheWidth: 100,
+                                              //   memCacheHeight: 100,
+                                              //   widthPlaceHolder: 80,
+                                              //   heightPlaceHolder: 80,
+                                              //   imageUrl: item.bannerLandingpage ?? '',
+                                              //   imageBuilder: (context, imageProvider) => ClipRRect(
+                                              //     borderRadius: BorderRadius.circular(20), // Image border
+                                              //     child: Image(
+                                              //       image: imageProvider,
+                                              //       fit: BoxFit.fitHeight,
+                                              //       width: SizeConfig.screenWidth,
+                                              //     ),
+                                              //   ),
+                                              //   errorWidget: (context, url, error) {
+                                              //     return Container(
+                                              //       // const EdgeInsets.symmetric(horizontal: 4.5),
+                                              //       // height: 500,
+                                              //       decoration: BoxDecoration(
+                                              //         image: const DecorationImage(
+                                              //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                              //           fit: BoxFit.cover,
+                                              //         ),
+                                              //         borderRadius: BorderRadius.circular(8.0),
+                                              //       ),
+                                              //     );
+                                              //   },
+                                              //   emptyWidget: Container(
+                                              //     // const EdgeInsets.symmetric(horizontal: 4.5),
+                                              //     // height: 500,
+                                              //     decoration: BoxDecoration(
+                                              //       image: const DecorationImage(
+                                              //         image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                              //         fit: BoxFit.cover,
+                                              //       ),
+                                              //       borderRadius: BorderRadius.circular(8.0),
+                                              //     ),
+                                              //   ),
+                                              // )
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(20), // Image border
                                                 child: Image.network(
-                                              item.bannerLandingpage ?? '',
-                                              width: SizeConfig.screenWidth,
-                                              fit: BoxFit.cover,
-                                              loadingBuilder: (context, child, loadingProgress) {
-                                                if (loadingProgress == null) return child;
-                                                return Center(
-                                                  child: Container(
-                                                    height: SizeConfig.screenHeight,
-                                                    width: SizeConfig.screenWidth,
-                                                    color: Colors.black,
-                                                    child: UnconstrainedBox(
+                                                  item.bannerLandingpage ?? '',
+                                                  width: SizeConfig.screenWidth,
+                                                  fit: BoxFit.cover,
+                                                  loadingBuilder: (context, child, loadingProgress) {
+                                                    if (loadingProgress == null) return child;
+                                                    return Center(
                                                       child: Container(
-                                                        height: 50,
-                                                        width: 50,
-                                                        child: const CircularProgressIndicator(
-                                                            // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                            ),
+                                                        height: SizeConfig.screenHeight,
+                                                        width: SizeConfig.screenWidth,
+                                                        color: Colors.black,
+                                                        child: UnconstrainedBox(
+                                                          child: Container(
+                                                            height: 50,
+                                                            width: 50,
+                                                            child: CircularProgressIndicator(
+                                                                // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                                ),
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            )),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ),
                                           ))
                                       .toList(),
                                 ),
@@ -257,16 +356,9 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                     body: TabBarView(
                       controller: _tabController,
                       physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        const ListOnGoing(),
-                        // Container(
-                        //   height: 40,
-                        //   padding: const EdgeInsets.only(left: 6.0, right: 6),
-                        // ),
-                        Container(
-                          height: 40,
-                          padding: const EdgeInsets.only(left: 6.0, right: 6),
-                        ),
+                      children: const [
+                        ListOnGoing(),
+                        ListEnd(),
                       ],
                     ),
                   ),

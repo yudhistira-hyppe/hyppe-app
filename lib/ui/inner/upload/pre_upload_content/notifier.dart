@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -582,6 +584,16 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
+
+  bool _isLoadVideo = false;
+  bool get isLoadVideo => _isLoadVideo;
+  set isLoadVideo(bool state){
+    _isLoadVideo = state;
+    notifyListeners();
+  }
+
+
+
   Future _createPostContentV2(BuildContext context, bool mounted) async {
     final BuildContext context = Routing.navigatorKey.currentContext!;
     final orientation = context.read<CameraNotifier>().orientation;
@@ -624,7 +636,11 @@ class PreUploadContentNotifier with ChangeNotifier {
       final height = size.height;
 
       print('featureType : $featureType');
-      if (_boostContent == null) clearUpAndBackToHome(context);
+      if (_boostContent == null) {
+        context.read<HomeNotifier>().preventReloadAfterUploadPost = true;
+        context.read<HomeNotifier>().uploadedPostType = featureType ?? FeatureType.pic;
+        clearUpAndBackToHome(context);
+      }
       // await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: 100));
       if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
         ShowBottomSheet().onShowColouredSheet(
@@ -669,23 +685,33 @@ class PreUploadContentNotifier with ChangeNotifier {
         },
         onSendProgress: (received, total) async {
           if (_isCompress) {
-            var progress = 50 + ((received / 2) / 1000000);
-            if (progress < 80) {
-              _progressCompress = progress;
-            } else {
-              progress + 2;
-            }
-            print("ini loading upload $_progressCompress}");
-            var total2 = 100.0;
+            // old progress counting
+            // var progress = 50 + ((received / 2) / 1000000);
+            // if (progress < 80) {
+            //   _progressCompress = progress;
+            // } else {
+            //   progress + 2;
+            // }
+            // var total2 = 100.0;
             // var total2 = (total / 2) / 100000;
             // var total2 = 50 + ((total / 2) / 100000);
-            await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: total2));
+
+            // new progress counting
+            var uploadProgress = ((received / total) * 100) * 0.45; // when compress is done, uploading bar should be in 95% (50% compress + 45% upload)
+            _progressCompress = 50 + uploadProgress;
+            await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: 100));
           } else {
-            if (received < total - total * 5 / 100) {
-              progress = received.toDouble();
-            }
-            print('progress $progress');
+            // old progress counting
+            // if (received < total - total * 5 / 100) {
+            //   progress = received.toDouble();
+            // }
+
+            // new progress counting
+            progress = received * 0.95; // when compress is done, uploading bar should be in 95%
             await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: progress, total: total.toDouble()));
+          }
+          if (received == total) {
+            eventService.notifyUploadFinishingUp(true);
           }
         },
       ).then((value) {
@@ -695,14 +721,22 @@ class PreUploadContentNotifier with ChangeNotifier {
         eventService.notifyUploadSuccess(_uploadSuccess);
         // final decode = json.decode(_uploadSuccess.toString());
         // _postIdPanding = decode['data']['postID'];
+
+        if (value is dio.Response) {
+          dio.Response res = value;
+          "return data ${jsonEncode(res.data['data'])}".loggerV2();
+          ContentData uploadedData = ContentData.fromJson(res.data['data']);
+          (Routing.navigatorKey.currentContext ?? context).read<SelfProfileNotifier>().updateProfilePost(featureType ?? FeatureType.pic, uploadedData);
+          (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().onUploadedSelfUserContent(context: context, contentData: uploadedData);
+        }
         if (_boostContent != null) _boostContentBuy(context);
         context.read<PreviewVidNotifier>().canPlayOpenApps = true;
       });
     } catch (e) {
       print('Error create post : $e');
       eventService.notifyUploadFailed(
-        DioError(
-          requestOptions: RequestOptions(
+        dio.DioError(
+          requestOptions: dio.RequestOptions(
             path: UrlConstants.createuserposts,
           ),
           error: e,
@@ -829,22 +863,18 @@ class PreUploadContentNotifier with ChangeNotifier {
   void checkForCompress() async {
     if (isEdit == false && (featureType == FeatureType.diary || featureType == FeatureType.vid)) {
       await getVideoSize();
-      Duration? _duration;
-      int? _size;
-      await System().getVideoMetadata(File(fileContent?[0] ?? '').path).then((value) {
-        _size = value?.filesize ?? 0;
-        print('sebelum di bagi $_size');
-        var inMB = _size! / 1024 / 1024;
-        _size = inMB.toInt();
-        _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
-
-        // _duration.inSeconds
-      });
-
-      print("size video ini $_size");
-      print(_duration?.inSeconds);
-      var normalSize = _duration!.inSeconds * 0.91;
-      if (_size! >= normalSize) {
+      Duration? duration;
+      int? size;
+      final value = await System().getVideoMetadata(File(fileContent?[0] ?? '').path);
+      size = value?.filesize ?? 0;
+      print('sebelum di bagi $size');
+      var inMB = size / 1024 / 1024;
+      size = inMB.toInt();
+      duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
+      print("size video ini $size");
+      print(duration.inSeconds);
+      var normalSize = duration.inSeconds * 0.91;
+      if (size >= normalSize) {
         _isCompress = true;
       } else {
         _isCompress = false;
@@ -859,9 +889,9 @@ class PreUploadContentNotifier with ChangeNotifier {
       final LightCompressor _lightCompressor = LightCompressor();
       _desFile = await _destinationFile;
       _lightCompressor.onProgressUpdated.listen((val) {
-        _progressCompress = val / 2;
-        print("compress : $_progressCompress");
-        eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: 100));
+        _progressCompress = val * 0.5; // when compress is done, uploading bar should be in 50%
+        "+++++++++++++++compress : $_progressCompress".logger();
+        eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: 100, isCompressing: true));
         notifyListeners();
       });
 
@@ -962,9 +992,10 @@ class PreUploadContentNotifier with ChangeNotifier {
         });
       }
     } else {
+      final fixContext = Routing.navigatorKey.currentContext;
       if (!mounted) return;
       ShowBottomSheet().onShowColouredSheet(
-        context,
+        fixContext ?? context,
         _validateDescription() ? language.categoryCanOnlyWithMin1Characters ?? '' : language.descriptionCanOnlyWithMin5Characters ?? '',
         color: Theme.of(context).colorScheme.error,
         maxLines: 2,

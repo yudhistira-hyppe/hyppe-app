@@ -87,8 +87,8 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                 onPressed: () async {
                   notifier.pageIndex = 1;
                   await notifier.getDataPerPgage(context, email: widget.email);
-                  final OtherProfileScreenState? state = context.findAncestorStateOfType<OtherProfileScreenState>();
-                  state?.userData?.diaries = notifier.user.diaries;
+                  // final OtherProfileScreenState? state = context.findAncestorStateOfType<OtherProfileScreenState>();
+                  // state?.userData?.diaries = notifier.user.diaries;
                 },
               ),
               SizedBox(
@@ -104,7 +104,7 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                 child: Row(
                   children: [
                     CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}pause.svg",
+                      iconData: "${AssetPath.vectorPath}vid.svg",
                       width: 20 * SizeConfig.scaleDiagonal,
                       height: 20 * SizeConfig.scaleDiagonal,
                       defaultColor: false,
@@ -123,8 +123,8 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                 onPressed: () async {
                   notifier.pageIndex = 2;
                   await notifier.getDataPerPgage(context, email: widget.email);
-                  final OtherProfileScreenState? state = context.findAncestorStateOfType<OtherProfileScreenState>();
-                  state?.userData?.vids = notifier.user.vids;
+                  // final OtherProfileScreenState? state = context.findAncestorStateOfType<OtherProfileScreenState>();
+                  // state?.userData?.vids = notifier.user.vids;
                 },
               ),
               SizedBox(

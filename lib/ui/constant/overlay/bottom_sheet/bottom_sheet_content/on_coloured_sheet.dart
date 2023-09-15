@@ -14,11 +14,14 @@ import 'package:flutter/material.dart';
 class OnColouredSheet extends StatefulWidget {
   final int? maxLines;
   final String? iconSvg;
-  final String caption;
+  final String? caption;
   final double? sizeIcon;
   final String? subCaption;
   final bool fromSnackBar;
   final Color? iconColor;
+  final Color? textColor;
+  final Color? textButtonColor;
+  final String? textButton;
   final Function? function;
   final Function()? functionSubCaption;
   final String? subCaptionButton;
@@ -36,6 +39,9 @@ class OnColouredSheet extends StatefulWidget {
       this.maxLines,
       this.fromSnackBar = false,
       this.iconColor,
+      this.textColor = kHyppeLightButtonText,
+      this.textButtonColor = kHyppeLightButtonText,
+      this.textButton,
       this.function,
       this.textOverflow,
       this.functionSubCaption,
@@ -85,8 +91,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
 
   @override
   void dispose() {
-    // close = true;
-
+    close = true;
     super.dispose();
   }
 
@@ -119,13 +124,13 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                       ),
                       eightPx,
                       SizedBox(
-                        width: MediaQuery.of(context).size.width - (16 + 8 + 14 + 60),
+                        width: MediaQuery.of(context).size.width - (16 + 8 + 14 + ((widget.textButton?.length ?? 0) <= 2 ? 60 : 90)),
                         child: CustomTextWidget(
                           maxLines: widget.maxLines,
                           textOverflow: widget.textOverflow,
-                          textToDisplay: widget.caption,
+                          textToDisplay: widget.caption ?? '',
                           textAlign: TextAlign.left,
-                          textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
+                          textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: widget.textColor),
                         ),
                       )
                     ],
@@ -141,13 +146,13 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                                   child: Text.rich(
                                     TextSpan(
                                       text: "${widget.subCaption} ",
-                                      style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                                      style: Theme.of(context).textTheme.bodyText2!.copyWith(color: widget.textColor),
                                       children: [
                                         widget.subCaptionButton != null
                                             ? TextSpan(
                                                 text: '${widget.subCaptionButton}',
                                                 style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                                                      color: kHyppeLightButtonText,
+                                                      color: widget.textColor,
                                                       decoration: TextDecoration.underline,
                                                     ),
                                               )
@@ -171,8 +176,9 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
               ),
               widget.subCaption != null
                   ? const SizedBox.shrink()
-                  : SizedBox(
-                      width: 50,
+                  : Container(
+                      padding:  EdgeInsets.only(right: (widget.textButton?.length ?? 0) <= 2 ? 0 : 10),
+                      width: (widget.textButton?.length ?? 0) <= 2 ? 50 : null,
                       height: 50,
                       child: CustomTextButton(
                         onPressed: () => _conditionalFunction(),
@@ -182,12 +188,12 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                             if (value) {
                               return const SizedBox(height: 40, width: 40, child: CustomLoading());
                             }
-
+                  
                             return CustomTextWidget(
                               maxLines: 1,
-                              textToDisplay: 'Ok',
+                              textToDisplay: widget.textButton ?? 'Ok',
                               textAlign: TextAlign.right,
-                              textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
+                              textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: widget.textButtonColor),
                             );
                           },
                         ),
@@ -217,12 +223,13 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if(widget.caption != null)
               CustomTextWidget(
                 maxLines: widget.maxLines,
                 textOverflow: widget.textOverflow,
-                textToDisplay: widget.caption,
+                textToDisplay: widget.caption!,
                 textAlign: TextAlign.left,
-                textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText, fontSize: 10, fontWeight: FontWeight.w700),
+                textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: widget.textColor, fontSize: 10, fontWeight: FontWeight.w700),
               ),
               if (widget.subCaption != null)
                 CustomTextWidget(
@@ -230,7 +237,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                   textOverflow: widget.textOverflow,
                   textToDisplay: widget.subCaption!,
                   textAlign: TextAlign.left,
-                  textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText, fontSize: 12, fontWeight: FontWeight.w400),
+                  textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: widget.textColor, fontSize: 12, fontWeight: FontWeight.w400),
                 )
             ],
           ),

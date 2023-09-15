@@ -126,6 +126,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   Future initialStories(BuildContext context /*, {List<ContentData>? list}*/) async {
     // initialMyStories(context);
+    "story initialStories".loggerV2();
     initialMyStoryGroup(context);
     print('initialStories');
     // initialPeopleStories(context, reload: true, list: list);
@@ -352,6 +353,13 @@ class PreviewStoriesNotifier with ChangeNotifier {
     } else {
       uploadStories(context);
     }
+  }
+
+  setViewed(int index, int indexItem){
+    if(storiesGroups?.isNotEmpty ?? false){
+      storiesGroups?[index].story?[indexItem].isViewed = true;
+    }
+    notifyListeners();
   }
 
   void navigateToPeopleStoryGroup(BuildContext context, int index) {

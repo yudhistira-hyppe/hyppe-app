@@ -38,7 +38,7 @@ class DiscussArgument {
       'receiverParty': receiverParty,
       'pageRow': pageRow,
       'pageNumber': pageNumber,
-      'postId': postID,
+      'postID': postID,
       'txtMessages': txtMessages,
       'reactionUri': reactionUri,
       'isQuery': isQuery,
