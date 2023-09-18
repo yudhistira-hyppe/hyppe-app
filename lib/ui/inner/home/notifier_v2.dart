@@ -956,7 +956,7 @@ class HomeNotifier with ChangeNotifier {
     var data = AdsData();
     try {
       final notifier = AdsDataBloc();
-      await notifier.adsVideoBlocV2(context, AdsType.popup);
+      await notifier.appAdsBloc(context);
       final fetch = notifier.adsDataFetch;
       print('video ads');
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {

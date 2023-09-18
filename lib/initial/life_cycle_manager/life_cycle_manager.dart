@@ -62,7 +62,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     var data = AdsData();
     try {
       final notifier = AdsDataBloc();
-      await notifier.adsVideoBlocV2(context, AdsType.popup);
+      await notifier.appAdsBloc(context);
       final fetch = notifier.adsDataFetch;
 
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
