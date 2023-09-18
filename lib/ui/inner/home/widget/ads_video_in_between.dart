@@ -137,14 +137,14 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                             CustomTextWidget(
                               textToDisplay: widget.data.username ?? '',
                               textStyle: context.getTextTheme().caption?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                             CustomTextWidget(
                               textToDisplay: language.sponsored ?? 'Sponsored',
                               textStyle: context.getTextTheme().caption?.copyWith(
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                                fontWeight: FontWeight.w400,
+                              ),
                             )
                           ],
                         ),
@@ -189,20 +189,20 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                             aspectRatio: ratio,
                             child: notifier.currentPostID == widget.data.adsId
                                 ? InBetweenScreen(
-                                    adsData: widget.data,
-                                    player: widget.player,
-                                    ratio: ratio,
+                              adsData: widget.data,
+                              player: widget.player,
+                              ratio: ratio,
                               onRatioChanged: (fix){
-                                      setState(() {
-                                        ratio = fix;
-                                      },);
+                                setState(() {
+                                  ratio = fix;
+                                },);
                               },
-                                  getPlayer: widget.getPlayer,)
+                              getPlayer: widget.getPlayer,)
                                 : Container(
-                                    decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                                    alignment: Alignment.center,
-                                    child: const CustomLoading(),
-                                  ),
+                              decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                              alignment: Alignment.center,
+                              child: const CustomLoading(),
+                            ),
                           ),
                         ),
                       ),
@@ -257,13 +257,13 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                             child: loadLaunch
                                 ? const SizedBox(width: 40, height: 20, child: CustomLoading())
                                 : Text(
-                                    learnMore,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                              learnMore,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                           );
                         }),
                       ),

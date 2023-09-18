@@ -145,16 +145,16 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                     GestureDetector(
                       onTap: (){
                         ShowBottomSheet().onReportContent(
-                          context,
-                          adsData: widget.data,
-                          type: adsPopUp,
-                          postData: null,
-                          onUpdate: () {
-                            setState(() {
-                              widget.data.isReport = true;
-                            });
-                          },
-                          onCompleted: widget.afterReport
+                            context,
+                            adsData: widget.data,
+                            type: adsPopUp,
+                            postData: null,
+                            onUpdate: () {
+                              setState(() {
+                                widget.data.isReport = true;
+                              });
+                            },
+                            onCompleted: widget.afterReport
                         );
                       },
                       child: const CustomIconWidget(
@@ -218,7 +218,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               loadLaunch = true;
                             });
                             System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                             Future.delayed(const Duration(milliseconds: 800), () {
+                              Future.delayed(const Duration(milliseconds: 800), () {
                                 Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                               });
                             });
@@ -269,21 +269,21 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                       ),
                       twelvePx,
                       if(widget.data.adsDescription != null)
-                      Builder(
-                        builder: (context) {
-                          final notifier = context.read<TranslateNotifierV2>();
-                          return CustomDescContent(
-                              desc: widget.data.adsDescription!,
-                              trimLines: 2,
-                              textAlign: TextAlign.justify,
-                              seeLess: ' ${notifier.translate.seeLess}',
-                              seeMore: ' ${notifier.translate.seeMoreContent}',
-                              textOverflow: TextOverflow.visible,
-                              normStyle: Theme.of(context).textTheme.bodyText2,
-                              hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                              expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary));
-                        }
-                      )
+                        Builder(
+                            builder: (context) {
+                              final notifier = context.read<TranslateNotifierV2>();
+                              return CustomDescContent(
+                                  desc: widget.data.adsDescription!,
+                                  trimLines: 2,
+                                  textAlign: TextAlign.justify,
+                                  seeLess: ' ${notifier.translate.seeLess}',
+                                  seeMore: ' ${notifier.translate.seeMoreContent}',
+                                  textOverflow: TextOverflow.visible,
+                                  normStyle: Theme.of(context).textTheme.bodyText2,
+                                  hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                  expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary));
+                            }
+                        )
                     ],
                   ),
                 )

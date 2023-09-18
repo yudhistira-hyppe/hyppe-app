@@ -84,6 +84,6 @@ class _QRBlockState extends State<QRBlock> {
                   ),
                 ),
               ],
-            ));
+            ),);
   }
 }

@@ -58,7 +58,6 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
   bool isPause = false;
   bool isloading = false;
   int _curIdx = -1;
-  int _cardIndex = 0;
 
   bool toComment = false;
 
@@ -337,23 +336,12 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
               child: Builder(builder: (context) {
                 return VidPlayerPage(
                   orientation: Orientation.portrait,
-                  timeVid: (time){
-
-                  },
-                  onShowAds: (ads){
-                    // setState(() {
-                    //   vidData[index].inBetweenAds = ads;
-                    // });
-                  },
-                  betweenAds: (ads){
-
-                  },
                   playMode: (vidData[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                   dataSourceMap: map,
                   data: vidData[index] ,
                   height: MediaQuery.of(context).size.width * 9.0 / 16.0,
                   width: MediaQuery.of(context).size.width,
-                  inLanding: false,
+                  inLanding: true,
                   fromDeeplink: false,
                   functionFullTriger: (value) {
                   },
@@ -463,7 +451,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
                     padding: const EdgeInsets.only(left: 13),
                     child: Text(
                       "${vidData[index].boostJangkauan ?? '0'} ${notifier.language.reach}",
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
                     ),
                   )
                 ],
@@ -639,7 +627,7 @@ class _VidScrollScreenState extends State<VidScrollScreen> with WidgetsBindingOb
           )
               : Container(),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            padding: EdgeInsets.symmetric(vertical: 4.0),
             child: Text(
               "${System().readTimestamp(
                 DateTime.parse(System().dateTimeRemoveT(vidData[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,

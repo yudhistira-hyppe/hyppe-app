@@ -98,7 +98,7 @@ class AdsDataBloc {
         setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
       }
     }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
-        host: isClick ? UrlConstants.clickAdsV2 : UrlConstants.viewAdsV2,
+        host: isClick ? UrlConstants.clickAds : UrlConstants.viewAds,
         withAlertMessage: false,
         data: request.toJson(),
         methodType: MethodType.post,

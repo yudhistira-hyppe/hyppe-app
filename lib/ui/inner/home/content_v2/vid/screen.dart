@@ -41,13 +41,10 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wakelock/wakelock.dart';
 import '../../../../../app.dart';
 import '../../../../../core/config/ali_config.dart';
-import '../../../../../core/models/collection/advertising/ads_video_data.dart';
-import '../../../../../core/models/collection/advertising/view_ads_request.dart';
 import '../../../../../core/services/route_observer_service.dart';
 import '../../../../../ux/path.dart';
 import '../../../../../ux/routing.dart';
@@ -345,68 +342,68 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
             children: [
               (vidNotifier.vidData != null)
                   ? (vidNotifier.vidData?.isEmpty ?? true)
-                      ? const NoResultFound()
-                      : Expanded(
-                          child: NotificationListener<OverscrollIndicatorNotification>(
-                            onNotification: (overscroll) {
-                              print(overscroll);
-                              overscroll.disallowIndicator();
-                              return true;
-                            },
-                            child: ListView.builder(
-                              // child: ScrollablePositionedList.builder(
-                              // controller: vidNotifier.pageController,
-                              // onPageChanged: (index) async {
-                              //   print('HyppePreviewVid index : $index');
-                              //   if (index == (vidNotifier.itemCount - 1)) {
-                              //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
-                              //     if (values.isNotEmpty) {
-                              //       vidNotifier.vidData = [...(vidNotifier.vidData ?? [] as List<ContentData>)] + values;
-                              //     }
-                              //   }
-                              //   // context.read<PreviewVidNotifier>().nextVideo = false;
-                              //   // context.read<PreviewVidNotifier>().initializeVideo = false;
-                              // },
-                              physics: NeverScrollableScrollPhysics(),
-                              // itemScrollController: itemScrollController,
-                              // itemPositionsListener: itemPositionsListener,
-                              // scrollOffsetController: scrollOffsetController,
-                              shrinkWrap: true,
-                              // itemCount: vidNotifier.itemCount,
-                              itemCount: vidNotifier.vidData?.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                if (vidNotifier.vidData == null || homeNotifier.isLoadingVid) {
-                                  "=============== pause 8".logger();
-                                  vidNotifier.vidData?[index].fAliplayer?.pause();
-                                  _lastCurIndex = -1;
-                                  return CustomShimmer(
-                                    margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
-                                    height: context.getHeight() / 8,
-                                    width: double.infinity,
-                                  );
-                                } else if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
-                                  return const CustomLoading(size: 5);
-                                }
-                                // if (_curIdx == 0 && vidNotifier.vidData?[0].reportedStatus == 'BLURRED') {
-                                //   isPlay = false;
-                                //   vidNotifier.vidData?[index].fAliplayer?.stop();
-                                // }
-                                final vidData = vidNotifier.vidData?[index];
-                                return itemVid(context, vidData ?? ContentData(), vidNotifier, index, homeNotifier);
-                              },
-                            ),
-                          ),
-                        )
-                  : ListView.builder(
-                      itemCount: 5,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
+                  ? const NoResultFound()
+                  : Expanded(
+                child: NotificationListener<OverscrollIndicatorNotification>(
+                  onNotification: (overscroll) {
+                    print(overscroll);
+                    overscroll.disallowIndicator();
+                    return true;
+                  },
+                  child: ListView.builder(
+                    // child: ScrollablePositionedList.builder(
+                    // controller: vidNotifier.pageController,
+                    // onPageChanged: (index) async {
+                    //   print('HyppePreviewVid index : $index');
+                    //   if (index == (vidNotifier.itemCount - 1)) {
+                    //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
+                    //     if (values.isNotEmpty) {
+                    //       vidNotifier.vidData = [...(vidNotifier.vidData ?? [] as List<ContentData>)] + values;
+                    //     }
+                    //   }
+                    //   // context.read<PreviewVidNotifier>().nextVideo = false;
+                    //   // context.read<PreviewVidNotifier>().initializeVideo = false;
+                    // },
+                    physics: NeverScrollableScrollPhysics(),
+                    // itemScrollController: itemScrollController,
+                    // itemPositionsListener: itemPositionsListener,
+                    // scrollOffsetController: scrollOffsetController,
+                    shrinkWrap: true,
+                    // itemCount: vidNotifier.itemCount,
+                    itemCount: vidNotifier.vidData?.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      if (vidNotifier.vidData == null || homeNotifier.isLoadingVid) {
+                        "=============== pause 8".logger();
+                        vidNotifier.vidData?[index].fAliplayer?.pause();
+                        _lastCurIndex = -1;
                         return CustomShimmer(
-                          margin: const EdgeInsets.only(bottom: 30, right: 16, left: 16),
+                          margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
                           height: context.getHeight() / 8,
                           width: double.infinity,
                         );
-                      }),
+                      } else if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
+                        return const CustomLoading(size: 5);
+                      }
+                      // if (_curIdx == 0 && vidNotifier.vidData?[0].reportedStatus == 'BLURRED') {
+                      //   isPlay = false;
+                      //   vidNotifier.vidData?[index].fAliplayer?.stop();
+                      // }
+                      final vidData = vidNotifier.vidData?[index];
+                      return itemVid(context, vidData ?? ContentData(), vidNotifier, index, homeNotifier);
+                    },
+                  ),
+                ),
+              )
+                  : ListView.builder(
+                  itemCount: 5,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return CustomShimmer(
+                      margin: const EdgeInsets.only(bottom: 30, right: 16, left: 16),
+                      height: context.getHeight() / 8,
+                      width: double.infinity,
+                    );
+                  }),
             ],
           ),
         ),
@@ -429,7 +426,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
           });
         }
       },
-      child: isAds
+      child:
+      ///ADS IN BETWEEN === Hariyanto Lukman ===
+      isAds
           ? VisibilityDetector(
               key: Key(vidData.postID ?? index.toString()),
               onVisibilityChanged: (info) async {
@@ -476,602 +475,604 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                 });
               }),
             )
-          : Column(
-              children: [
-                // Text("total ${vidData.height}"),
-                VisibilityDetector(
-                  key: Key(vidData.postID ?? index.toString()),
-                  onVisibilityChanged: (info) {
-                    if (info.visibleFraction >= 1) {
-                      print(index);
-                      _curIdx = index;
-                      print(_curIdx);
+          :
+      Column(
+        children: [
+          // Text("total ${vidData.height}"),
+          VisibilityDetector(
+            key: Key(vidData.postID ?? index.toString()),
+            onVisibilityChanged: (info) {
+              if (info.visibleFraction >= 1) {
+                print(index);
+                _curIdx = index;
+                print(_curIdx);
+              }
+              if (info.visibleFraction >= 0.8) {
+                ///ADS IN BETWEEN === Hariyanto Lukman ===
+                if((notifier.vidData?.length ?? 0) > notifier.nextAdsShowed){
+                  context.getInBetweenAds().then((value){
+                    notifier.setInBetweenAds(index, value);
+                  });
+                }
+                if(!isShowingDialog){
+                  adsGlobalAliPlayer?.pause();
+                }
+                _curIdx = index;
+                _curPostId = vidData.postID ?? index.toString();
+
+                final indexList = notifier.vidData?.indexWhere((element) => element.postID == _curPostId);
+                final latIndexList = notifier.vidData?.indexWhere((element) => element.postID == _lastCurPostId);
+
+
+
+                if (_lastCurPostId != _curPostId) {
+                  Future.delayed(const Duration(milliseconds: 400), () {
+                    try {
+                      if (_curIdx != -1) {
+                        if (notifier.vidData?[_curIdx].fAliplayer != null) {
+                          "=============== pause 9".logger();
+                          // notifier.vidData?[_curIdx].fAliplayer?.pause();
+                        } else {
+                          "=============== pause 10".logger();
+                          dataAli[notifier.vidData?[_curIdx].postID]?.pause();
+                        }
+
+                        // Wakelock.disable();
+                        // notifier.vidData?[_curIdx].fAliplayerAds?.pause();
+                        // setState(() {
+                        //   _curIdx = -1;
+                        // });
+                      }
+                    } catch (e) {
+                      e.logger();
                     }
-                    if (info.visibleFraction >= 0.8) {
-                      if((notifier.vidData?.length ?? 0) > notifier.nextAdsShowed){
-                        context.getInBetweenAds().then((value){
-                          notifier.setInBetweenAds(index, value);
+                    // System().increaseViewCount2(context, vidData);
+                  });
+                  if (vidData.certified ?? false) {
+                    System().block(context);
+                  } else {
+                    System().disposeBlock();
+                  }
+
+                  try {
+                    Future.delayed(const Duration(milliseconds: 400), () {
+                      if (mounted) {
+                        setState(() {
+                          postIdVisibility = notifier.vidData?[_curIdx].postID ?? '';
+                          postIdVisibilityTemp = notifier.vidData?[_curIdx].postID ?? '';
                         });
+                      } else {
+                        postIdVisibility = notifier.vidData?[_curIdx].postID ?? '';
+                        postIdVisibilityTemp = notifier.vidData?[_curIdx].postID ?? '';
                       }
-                      if(!isShowingDialog){
-                        adsGlobalAliPlayer?.pause();
+
+                      // VidPlayerPageState().playVideo();
+
+                      // notifier.vidData?[_curIdx].fAliplayer?.prepare().then(
+                      //       (value) => notifier.vidData?[_curIdx].fAliplayer?.play().then((value) {
+                      //         notifier.vidData?[_curIdx].isPlay = true;
+                      //       }),
+                      //     );
+
+                      // vidPlayerState.currentState!.playTest(notifier.vidData?[_curIdx].postID ?? '');
+
+                      // setState(() {
+
+                      // });
+                    });
+                    // if (_lastCurIndex > -1) {
+                    //   if (notifier.vidData?[_lastCurIndex].fAliplayer != null) {
+                    //     // notifier.vidData?[_lastCurIndex].isPlay = false;
+                    //     notifier.vidData?[_lastCurIndex].fAliplayer?.stop();
+                    //   }
+                    // }
+                  } catch (e) {
+                    print("hahahha $e");
+                  }
+                  if (indexList == (notifier.vidData?.length ?? 0) - 1) {
+                    Future.delayed(const Duration(milliseconds: 2000), () async {
+                      await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+                        notifier.getTemp(indexList, latIndexList, indexList);
+                      });
+                    });
+                  } else {
+                    Future.delayed(const Duration(milliseconds: 2000), () {
+                      notifier.getTemp(indexList, latIndexList, indexList);
+                    });
+                  }
+                }
+
+                // if (_curIdx != index) {
+                //   print('Vid Landing Page: stop pause $_curIdx ${notifier.vidData?[_lastCurIndex].fAliplayer} ${dataAli[_curIdx]}');
+                //   if (notifier.vidData?[_lastCurIndex].fAliplayer != null) {
+                //     notifier.vidData?[_lastCurIndex].fAliplayer?.stop();
+                //   } else {
+                //     final player = dataAli[_lastCurIndex];
+                //     if (player != null) {
+                //       // notifier.vidData?[_curIdx].fAliplayer = player;
+                //       player.stop();
+                //     }
+                //   }
+                //   // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
+                // }
+                _lastCurIndex = _curIdx;
+                _lastCurPostId = _curPostId;
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
+              ),
+              padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+              margin: const EdgeInsets.only(bottom: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ProfileLandingPage(
+                          show: true,
+                          // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
+                          onFollow: () {},
+                          following: true,
+                          haveStory: false,
+                          textColor: kHyppeTextLightPrimary,
+                          username: vidData.username,
+                          featureType: FeatureType.other,
+                          // isCelebrity: vidnotifier.diaryData?[index].privacy?.isCelebrity,
+                          isCelebrity: false,
+                          imageUrl: '${System().showUserPicture(vidData.avatar?.mediaEndpoint)}',
+                          onTapOnProfileImage: () => System().navigateToProfile(context, vidData.email ?? ''),
+                          createdAt: '2022-02-02',
+                          musicName: vidData.music?.musicTitle ?? '',
+                          location: vidData.location ?? '',
+                          isIdVerified: vidData.privacy?.isIdVerified,
+                          badge: vidData.urluserBadge,
+                        ),
+                      ),
+                      if (vidData.email != email && (vidData.isNewFollowing ?? false))
+                        Consumer<PreviewPicNotifier>(
+                          builder: (context, picNot, child) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                if (vidData.insight?.isloadingFollow != true) {
+                                  picNot.followUser(context, vidData, isUnFollow: vidData.following, isloading: vidData.insight!.isloadingFollow ?? false);
+                                }
+                              },
+                              child: vidData.insight?.isloadingFollow ?? false
+                                  ? Container(
+                                height: 40,
+                                width: 30,
+                                child: const Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: CustomLoading(),
+                                ),
+                              )
+                                  : Text(
+                                (vidData.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                              ),
+                            ),
+                          ),
+                        ),
+                      GestureDetector(
+                        onTap: () {
+                          if (vidData.email != email) {
+                            // FlutterAliplayer? fAliplayer
+                            context.read<PreviewPicNotifier>().reportContent(context, vidData, fAliplayer: vidData.fAliplayer, onCompleted: () async {
+                              imageCache.clear();
+                              imageCache.clearLiveImages();
+                              await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                            });
+                          } else {
+                            if (_curIdx != -1) {
+                              "=============== pause 11".logger();
+                              notifier.vidData?[_curIdx].fAliplayer?.pause();
+                            }
+
+                            ShowBottomSheet().onShowOptionContent(
+                              context,
+                              contentData: vidData,
+                              captionTitle: hyppeVid,
+                              onDetail: false,
+                              isShare: vidData.isShared,
+                              onUpdate: () {
+                                (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
+                              },
+                              fAliplayer: vidData.fAliplayer,
+                            );
+                          }
+                        },
+                        child: const Icon(
+                          Icons.more_vert,
+                          color: kHyppeTextLightPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Text("${postIdVisibility}"),
+                  tenPx,
+                  globalInternetConnection
+                      ? postIdVisibility != vidData.postID
+                      ? GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        postIdVisibility = vidData.postID ?? '';
+                      });
+                      var vidNotifier = context.read<PreviewVidNotifier>();
+                      double position = 0.0;
+                      for (var i = 0; i < index; i++) {
+                        position += vidNotifier.vidData?[i].height ?? 0.0;
                       }
-                      _curIdx = index;
-                      _curPostId = vidData.postID ?? index.toString();
-
-                      final indexList = notifier.vidData?.indexWhere((element) => element.postID == _curPostId);
-                      final latIndexList = notifier.vidData?.indexWhere((element) => element.postID == _lastCurPostId);
-
-
-
-                      if (_lastCurPostId != _curPostId) {
-                        Future.delayed(const Duration(milliseconds: 400), () {
+                      context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
+                        position,
+                        duration: const Duration(milliseconds: 700),
+                        curve: Curves.easeOut,
+                      );
+                    },
+                    child: Stack(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                          width: MediaQuery.of(context).size.width,
+                          child: VideoThumbnail(
+                            videoData: vidData,
+                            onDetail: false,
+                            fn: () {},
+                            withMargin: true,
+                          ),
+                        ),
+                        // postIdVisibility == ''
+                        //     ? Center(
+                        //         child: Align(
+                        //         alignment: Alignment.center,
+                        //         child: SizedBox(
+                        //           height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                        //           width: MediaQuery.of(context).size.width,
+                        //           child: const CustomIconWidget(
+                        //             defaultColor: false,
+                        //             width: 40,
+                        //             iconData: '${AssetPath.vectorPath}pause2.svg',
+                        //             // color: kHyppeLightButtonText,
+                        //           ),
+                        //         ),
+                        //       ))
+                        //     : Container(),
+                      ],
+                    ),
+                  )
+                      : Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: Builder(builder: (context) {
+                      return VidPlayerPage(
+                        vidData: notifier.vidData,
+                        orientation: Orientation.portrait,
+                        playMode: (vidData.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                        dataSourceMap: map,
+                        data: vidData,
+                        height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                        width: MediaQuery.of(context).size.width,
+                        inLanding: true,
+                        fromDeeplink: false,
+                        isPlaying: vidData.isPlay,
+                        isAutoPlay: true,
+                        clearPostId: () {
+                          postIdVisibility = '';
+                        },
+                        autoScroll: () {
+                          scrollAuto();
+                        },
+                        functionFullTriger: () {
+                          print('===========hahhahahahaa=========== selesai');
+                          double position = 0.0;
+                          for (var i = 0; i <= _curIdx; i++) {
+                            position += notifier.vidData?[i].height ?? 0.0;
+                          }
+                          context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
+                            position,
+                            duration: const Duration(milliseconds: 700),
+                            curve: Curves.easeOut,
+                          );
+                          // fullscreen();
+                          // notifier.vidData?[_curIdx].fAliplayer?.pause();
+                          // showDialog(context: context, builder: (context){
+                          //     return VideoFullscreenPage(data: notifier.vidData?[_curIdx] ?? ContentData(), onClose: (){
+                          //       // Routing().moveBack();
+                          //     }, seekValue: value ?? 0);
+                          //   });
+                        },
+                        onPlay: (exec) {
                           try {
                             if (_curIdx != -1) {
-                              if (notifier.vidData?[_curIdx].fAliplayer != null) {
-                                "=============== pause 9".logger();
-                                // notifier.vidData?[_curIdx].fAliplayer?.pause();
-                              } else {
-                                "=============== pause 10".logger();
-                                dataAli[notifier.vidData?[_curIdx].postID]?.pause();
+                              if (_curIdx != index) {
+                                print('Vid Landing Page: stop $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[notifier.vidData?[_curIdx].postID]}');
+                                if (notifier.vidData?[_curIdx].fAliplayer != null) {
+                                  notifier.vidData?[_curIdx].fAliplayer?.stop();
+                                } else {
+                                  final player = dataAli[notifier.vidData?[_curIdx].postID];
+                                  if (player != null) {
+                                    // notifier.vidData?[_curIdx].fAliplayer = player;
+                                    player.stop();
+                                  }
+                                }
+                                // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
                               }
-
-                              // Wakelock.disable();
-                              // notifier.vidData?[_curIdx].fAliplayerAds?.pause();
-                              // setState(() {
-                              //   _curIdx = -1;
-                              // });
                             }
                           } catch (e) {
                             e.logger();
-                          }
-                          // System().increaseViewCount2(context, vidData);
-                        });
-                        if (vidData.certified ?? false) {
-                          System().block(context);
-                        } else {
-                          System().disposeBlock();
-                        }
-
-                        try {
-                          Future.delayed(const Duration(milliseconds: 400), () {
-                            if (mounted) {
-                              setState(() {
-                                postIdVisibility = notifier.vidData?[_curIdx].postID ?? '';
-                                postIdVisibilityTemp = notifier.vidData?[_curIdx].postID ?? '';
-                              });
-                            } else {
-                              postIdVisibility = notifier.vidData?[_curIdx].postID ?? '';
-                              postIdVisibilityTemp = notifier.vidData?[_curIdx].postID ?? '';
-                            }
-
-                            // VidPlayerPageState().playVideo();
-
-                            // notifier.vidData?[_curIdx].fAliplayer?.prepare().then(
-                            //       (value) => notifier.vidData?[_curIdx].fAliplayer?.play().then((value) {
-                            //         notifier.vidData?[_curIdx].isPlay = true;
-                            //       }),
-                            //     );
-
-                            // vidPlayerState.currentState!.playTest(notifier.vidData?[_curIdx].postID ?? '');
-
-                            // setState(() {
-
-                            // });
-                          });
-                          // if (_lastCurIndex > -1) {
-                          //   if (notifier.vidData?[_lastCurIndex].fAliplayer != null) {
-                          //     // notifier.vidData?[_lastCurIndex].isPlay = false;
-                          //     notifier.vidData?[_lastCurIndex].fAliplayer?.stop();
-                          //   }
-                          // }
-                        } catch (e) {
-                          print("hahahha $e");
-                        }
-                        if (indexList == (notifier.vidData?.length ?? 0) - 1) {
-                          Future.delayed(const Duration(milliseconds: 2000), () async {
-                            await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
-                              notifier.getTemp(indexList, latIndexList, indexList);
+                          } finally {
+                            setState(() {
+                              _curIdx = index;
                             });
+                          }
+                          _lastCurIndex = _curIdx;
+                        },
+                        getPlayer: (main, id) {
+                          print('Vid Player1: screen ${main}');
+                          notifier.setAliPlayer(index, main);
+                          setState(() {
+                            dataAli[id] = main;
                           });
-                        } else {
-                          Future.delayed(const Duration(milliseconds: 2000), () {
-                            notifier.getTemp(indexList, latIndexList, indexList);
-                          });
-                        }
-                      }
-
-                      // if (_curIdx != index) {
-                      //   print('Vid Landing Page: stop pause $_curIdx ${notifier.vidData?[_lastCurIndex].fAliplayer} ${dataAli[_curIdx]}');
-                      //   if (notifier.vidData?[_lastCurIndex].fAliplayer != null) {
-                      //     notifier.vidData?[_lastCurIndex].fAliplayer?.stop();
-                      //   } else {
-                      //     final player = dataAli[_lastCurIndex];
-                      //     if (player != null) {
-                      //       // notifier.vidData?[_curIdx].fAliplayer = player;
-                      //       player.stop();
-                      //     }
-                      //   }
-                      //   // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
-                      // }
-                      _lastCurIndex = _curIdx;
-                      _lastCurPostId = _curPostId;
-                    }
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Colors.white,
-                    ),
-                    padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+                          print('Vid Player1: after $index ${globalAliPlayer} : ${vidData.fAliplayer}');
+                        },
+                        getAdsPlayer: (ads) {
+                          // notifier.vidData?[index].fAliplayerAds = ads;
+                        },
+                        index: index,
+                        loadMoreFunction: () {
+                          print("vid screen widget");
+                          notifier.initialVid(context);
+                        },
+                        // fAliplayer: notifier.vidData?[index].fAliplayer,
+                        // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
+                      );
+                    }),
+                  )
+                      : GestureDetector(
+                    onTap: () async {
+                      globalInternetConnection = await System().checkConnections();
+                      // _networklHasErrorNotifier.value++;
+                      // reloadImage(index);
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                        width: SizeConfig.screenWidth,
+                        height: 250,
+                        margin: EdgeInsets.only(bottom: 16),
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.all(32.0),
+                          child: CustomTextWidget(
+                            textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                            maxLines: 4,
+                          ),
+                        )),
+                  ),
+                  SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                      (vidData.boosted.isEmpty) &&
+                      (vidData.reportedStatus != 'OWNED' && vidData.reportedStatus != 'BLURRED' && vidData.reportedStatus2 != 'BLURRED') &&
+                      vidData.email == email
+                      ? Container(
+                    width: double.infinity,
                     margin: const EdgeInsets.only(bottom: 16),
-                    child: Column(
+                    child: ButtonBoost(
+                      onDetail: false,
+                      marginBool: true,
+                      contentData: vidData,
+                      startState: () {
+                        SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                      },
+                      afterState: () {
+                        SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                      },
+                    ),
+                  )
+                      : Container(),
+                  if (vidData.email == email && (vidData.boostCount ?? 0) >= 0 && (vidData.boosted.isNotEmpty))
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      margin: EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        color: kHyppeGreyLight,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const CustomIconWidget(
+                            iconData: "${AssetPath.vectorPath}reach.svg",
+                            defaultColor: false,
+                            height: 24,
+                            color: kHyppeTextLightPrimary,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 13),
+                            child: Text(
+                              "${vidData.boostJangkauan ?? '0'} ${lang?.reach}",
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  Consumer<LikeNotifier>(
+                    builder: (context, likeNotifier, child) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Expanded(
-                              child: ProfileLandingPage(
-                                show: true,
-                                // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
-                                onFollow: () {},
-                                following: true,
-                                haveStory: false,
-                                textColor: kHyppeTextLightPrimary,
-                                username: vidData.username,
-                                featureType: FeatureType.other,
-                                // isCelebrity: vidnotifier.diaryData?[index].privacy?.isCelebrity,
-                                isCelebrity: false,
-                                imageUrl: '${System().showUserPicture(vidData.avatar?.mediaEndpoint)}',
-                                onTapOnProfileImage: () => System().navigateToProfile(context, vidData.email ?? ''),
-                                createdAt: '2022-02-02',
-                                musicName: vidData.music?.musicTitle ?? '',
-                                location: vidData.location ?? '',
-                                isIdVerified: vidData.privacy?.isIdVerified,
-                                badge: vidData.urluserBadge,
-                              ),
-                            ),
-                            if (vidData.email != email && (vidData.isNewFollowing ?? false))
-                              Consumer<PreviewPicNotifier>(
-                                builder: (context, picNot, child) => Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      if (vidData.insight?.isloadingFollow != true) {
-                                        picNot.followUser(context, vidData, isUnFollow: vidData.following, isloading: vidData.insight!.isloadingFollow ?? false);
-                                      }
-                                    },
-                                    child: vidData.insight?.isloadingFollow ?? false
-                                        ? Container(
-                                            height: 40,
-                                            width: 30,
-                                            child: const Align(
-                                              alignment: Alignment.bottomRight,
-                                              child: CustomLoading(),
-                                            ),
-                                          )
-                                        : Text(
-                                            (vidData.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                            style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                                          ),
-                                  ),
-                                ),
-                              ),
-                            GestureDetector(
-                              onTap: () {
-                                if (vidData.email != email) {
-                                  // FlutterAliplayer? fAliplayer
-                                  context.read<PreviewPicNotifier>().reportContent(context, vidData, fAliplayer: vidData.fAliplayer, onCompleted: () async {
-                                    imageCache.clear();
-                                    imageCache.clearLiveImages();
-                                    await (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                  });
-                                } else {
-                                  if (_curIdx != -1) {
-                                    "=============== pause 11".logger();
-                                    notifier.vidData?[_curIdx].fAliplayer?.pause();
-                                  }
-
-                                  ShowBottomSheet().onShowOptionContent(
-                                    context,
-                                    contentData: vidData,
-                                    captionTitle: hyppeVid,
-                                    onDetail: false,
-                                    isShare: vidData.isShared,
-                                    onUpdate: () {
-                                      (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initNewHome(context, mounted, isreload: true, forceIndex: 2);
-                                    },
-                                    fAliplayer: vidData.fAliplayer,
-                                  );
-                                }
-                              },
-                              child: const Icon(
-                                Icons.more_vert,
-                                color: kHyppeTextLightPrimary,
-                              ),
-                            ),
-                          ],
-                        ),
-                        // Text("${postIdVisibility}"),
-                        tenPx,
-                        globalInternetConnection
-                            ? postIdVisibility != vidData.postID
-                                ? GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        postIdVisibility = vidData.postID ?? '';
-                                      });
-                                      var vidNotifier = context.read<PreviewVidNotifier>();
-                                      double position = 0.0;
-                                      for (var i = 0; i < index; i++) {
-                                        position += vidNotifier.vidData?[i].height ?? 0.0;
-                                      }
-                                      context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
-                                            position,
-                                            duration: const Duration(milliseconds: 700),
-                                            curve: Curves.easeOut,
-                                          );
-                                    },
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          margin: const EdgeInsets.only(bottom: 20),
-                                          decoration: BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius: BorderRadius.circular(16),
-                                          ),
-                                          height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                                          width: MediaQuery.of(context).size.width,
-                                          child: VideoThumbnail(
-                                            videoData: vidData,
-                                            onDetail: false,
-                                            fn: () {},
-                                            withMargin: true,
-                                          ),
-                                        ),
-                                        // postIdVisibility == ''
-                                        //     ? Center(
-                                        //         child: Align(
-                                        //         alignment: Alignment.center,
-                                        //         child: SizedBox(
-                                        //           height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                                        //           width: MediaQuery.of(context).size.width,
-                                        //           child: const CustomIconWidget(
-                                        //             defaultColor: false,
-                                        //             width: 40,
-                                        //             iconData: '${AssetPath.vectorPath}pause2.svg',
-                                        //             // color: kHyppeLightButtonText,
-                                        //           ),
-                                        //         ),
-                                        //       ))
-                                        //     : Container(),
-                                      ],
-                                    ),
-                                  )
-                                : Container(
-                                    margin: const EdgeInsets.only(bottom: 20),
-                                    child: Builder(builder: (context) {
-                                      return VidPlayerPage(
-                                        vidData: notifier.vidData,
-                                        orientation: Orientation.portrait,
-                                        playMode: (vidData.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                                        dataSourceMap: map,
-                                        data: vidData,
-                                        height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                                        width: MediaQuery.of(context).size.width,
-                                        inLanding: true,
-                                        fromDeeplink: false,
-                                        isPlaying: vidData.isPlay,
-                                        isAutoPlay: true,
-                                        clearPostId: () {
-                                          postIdVisibility = '';
-                                        },
-                                        autoScroll: () {
-                                          scrollAuto();
-                                        },
-                                        functionFullTriger: () {
-                                          print('===========hahhahahahaa=========== selesai');
-                                          double position = 0.0;
-                                          for (var i = 0; i <= _curIdx; i++) {
-                                            position += notifier.vidData?[i].height ?? 0.0;
-                                          }
-                                          context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
-                                                position,
-                                                duration: const Duration(milliseconds: 700),
-                                                curve: Curves.easeOut,
-                                              );
-                                          // fullscreen();
-                                          // notifier.vidData?[_curIdx].fAliplayer?.pause();
-                                          // showDialog(context: context, builder: (context){
-                                          //     return VideoFullscreenPage(data: notifier.vidData?[_curIdx] ?? ContentData(), onClose: (){
-                                          //       // Routing().moveBack();
-                                          //     }, seekValue: value ?? 0);
-                                          //   });
-                                        },
-                                        onPlay: (exec) {
-                                          try {
-                                            if (_curIdx != -1) {
-                                              if (_curIdx != index) {
-                                                print('Vid Landing Page: stop $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[notifier.vidData?[_curIdx].postID]}');
-                                                if (notifier.vidData?[_curIdx].fAliplayer != null) {
-                                                  notifier.vidData?[_curIdx].fAliplayer?.stop();
-                                                } else {
-                                                  final player = dataAli[notifier.vidData?[_curIdx].postID];
-                                                  if (player != null) {
-                                                    // notifier.vidData?[_curIdx].fAliplayer = player;
-                                                    player.stop();
-                                                  }
-                                                }
-                                                // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
-                                              }
-                                            }
-                                          } catch (e) {
-                                            e.logger();
-                                          } finally {
-                                            setState(() {
-                                              _curIdx = index;
-                                            });
-                                          }
-                                          _lastCurIndex = _curIdx;
-                                        },
-                                        getPlayer: (main, id) {
-                                          print('Vid Player1: screen ${main}');
-                                          notifier.setAliPlayer(index, main);
-                                          setState(() {
-                                            dataAli[id] = main;
-                                          });
-                                          print('Vid Player1: after $index ${globalAliPlayer} : ${vidData.fAliplayer}');
-                                        },
-                                        getAdsPlayer: (ads) {
-                                          // notifier.vidData?[index].fAliplayerAds = ads;
-                                        },
-                                        index: index,
-                                        loadMoreFunction: () {
-                                          print("vid screen widget");
-                                          notifier.initialVid(context);
-                                        },
-                                        // fAliplayer: notifier.vidData?[index].fAliplayer,
-                                        // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
-                                      );
-                                    }),
-                                  )
-                            : GestureDetector(
-                                onTap: () async {
-                                  globalInternetConnection = await System().checkConnections();
-                                  // _networklHasErrorNotifier.value++;
-                                  // reloadImage(index);
-                                },
-                                child: Container(
-                                    decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                    width: SizeConfig.screenWidth,
-                                    height: 250,
-                                    margin: EdgeInsets.only(bottom: 16),
-                                    alignment: Alignment.center,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(32.0),
-                                      child: CustomTextWidget(
-                                        textToDisplay: lang?.couldntLoadVideo ?? 'Error',
-                                        maxLines: 4,
-                                      ),
-                                    )),
-                              ),
-                        SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                                (vidData.boosted.isEmpty) &&
-                                (vidData.reportedStatus != 'OWNED' && vidData.reportedStatus != 'BLURRED' && vidData.reportedStatus2 != 'BLURRED') &&
-                                vidData.email == email
-                            ? Container(
-                                width: double.infinity,
-                                margin: const EdgeInsets.only(bottom: 16),
-                                child: ButtonBoost(
-                                  onDetail: false,
-                                  marginBool: true,
-                                  contentData: vidData,
-                                  startState: () {
-                                    SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                                  },
-                                  afterState: () {
-                                    SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-                                  },
-                                ),
-                              )
-                            : Container(),
-                        if (vidData.email == email && (vidData.boostCount ?? 0) >= 0 && (vidData.boosted.isNotEmpty))
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            margin: EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                              color: kHyppeGreyLight,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const CustomIconWidget(
-                                  iconData: "${AssetPath.vectorPath}reach.svg",
-                                  defaultColor: false,
-                                  height: 24,
-                                  color: kHyppeTextLightPrimary,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 13),
-                                  child: Text(
-                                    "${vidData.boostJangkauan ?? '0'} ${lang?.reach}",
-                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                            Consumer<LikeNotifier>(
+                              builder: (context, likeNotifier, child) => Align(
+                                alignment: Alignment.bottomRight,
+                                child: vidData.insight?.isloading ?? false
+                                    ? const SizedBox(
+                                  height: 28,
+                                  width: 28,
+                                  child: CircularProgressIndicator(
+                                    color: kHyppePrimary,
+                                    strokeWidth: 2,
                                   ),
                                 )
-                              ],
-                            ),
-                          ),
-                        Consumer<LikeNotifier>(
-                          builder: (context, likeNotifier, child) => Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Consumer<LikeNotifier>(
-                                    builder: (context, likeNotifier, child) => Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: vidData.insight?.isloading ?? false
-                                          ? const SizedBox(
-                                              height: 28,
-                                              width: 28,
-                                              child: CircularProgressIndicator(
-                                                color: kHyppePrimary,
-                                                strokeWidth: 2,
-                                              ),
-                                            )
-                                          : InkWell(
-                                              child: CustomIconWidget(
-                                                defaultColor: false,
-                                                color: (vidData.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                                iconData: '${AssetPath.vectorPath}${(vidData.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                                height: 28,
-                                              ),
-                                              onTap: () {
-                                                if (vidData != null) {
-                                                  likeNotifier.likePost(context, vidData);
-                                                }
-                                              },
-                                            ),
-                                    ),
+                                    : InkWell(
+                                  child: CustomIconWidget(
+                                    defaultColor: false,
+                                    color: (vidData.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                                    iconData: '${AssetPath.vectorPath}${(vidData.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                    height: 28,
                                   ),
-                                  if (vidData.allowComments ?? false)
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 21.0),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));
-                                        },
-                                        child: const CustomIconWidget(
-                                          defaultColor: false,
-                                          color: kHyppeTextLightPrimary,
-                                          iconData: '${AssetPath.vectorPath}comment2.svg',
-                                          height: 24,
-                                        ),
-                                      ),
-                                    ),
-                                  if ((vidData.isShared ?? false))
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 21.0),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          context.read<VidDetailNotifier>().createdDynamicLink(context, data: vidData);
-                                        },
-                                        child: CustomIconWidget(
-                                          defaultColor: false,
-                                          color: kHyppeTextLightPrimary,
-                                          iconData: '${AssetPath.vectorPath}share2.svg',
-                                          height: 24,
-                                        ),
-                                      ),
-                                    ),
-                                  if ((vidData.saleAmount ?? 0) > 0 && email != vidData.email)
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: () async {
-                                          "=============== pause 4".logger();
-                                          vidData.fAliplayer?.pause();
-                                          await ShowBottomSheet.onBuyContent(context, data: vidData, fAliplayer: vidData.fAliplayer);
-                                          // fAliplayer?.play();
-                                        },
-                                        child: const Align(
-                                          alignment: Alignment.centerRight,
-                                          child: CustomIconWidget(
-                                            defaultColor: false,
-                                            color: kHyppeTextLightPrimary,
-                                            iconData: '${AssetPath.vectorPath}cart.svg',
-                                            height: 24,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              twelvePx,
-                              Text(
-                                "${vidData.insight?.likes}  ${lang?.like}",
-                                style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
-                              ),
-                            ],
-                          ),
-                        ),
-                        twelvePx,
-                        CustomNewDescContent(
-                          // desc: "${data?.description}",
-                          username: vidData.username ?? '',
-                          desc: "${vidData.description}",
-                          trimLines: 3,
-                          textAlign: TextAlign.start,
-                          seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                          seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                          normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                          hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                          expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: Text(
-                              "${lang?.seeAll} ${vidData.comments} ${lang?.comment}",
-                              style: const TextStyle(fontSize: 12, color: kHyppeBurem),
-                            ),
-                          ),
-                        ),
-                        (vidData.comment?.length ?? 0) > 0
-                            ? Padding(
-                                padding: const EdgeInsets.only(top: 0.0),
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: (vidData.comment?.length ?? 0) >= 2 ? 2 : 1,
-                                  itemBuilder: (context, indexComment) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(bottom: 6.0),
-                                      child: CustomNewDescContent(
-                                        // desc: "${vidData?.description}",
-                                        username: vidData.comment?[indexComment].userComment?.username ?? '',
-                                        desc: vidData.comment?[indexComment].txtMessages ?? '',
-                                        trimLines: 3,
-                                        textAlign: TextAlign.start,
-                                        seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                                        seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                                        normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                                        hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                                        expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                                      ),
-                                    );
+                                  onTap: () {
+                                    if (vidData != null) {
+                                      likeNotifier.likePost(context, vidData);
+                                    }
                                   },
                                 ),
-                              )
-                            : Container(),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 4.0),
-                          child: Text(
-                            "${System().readTimestamp(
-                              DateTime.parse(System().dateTimeRemoveT(vidData.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                              context,
-                              fullCaption: true,
-                            )}",
-                            style: TextStyle(fontSize: 12, color: kHyppeBurem),
-                          ),
+                              ),
+                            ),
+                            if (vidData.allowComments ?? false)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 21.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));
+                                  },
+                                  child: const CustomIconWidget(
+                                    defaultColor: false,
+                                    color: kHyppeTextLightPrimary,
+                                    iconData: '${AssetPath.vectorPath}comment2.svg',
+                                    height: 24,
+                                  ),
+                                ),
+                              ),
+                            if ((vidData.isShared ?? false))
+                              Padding(
+                                padding: EdgeInsets.only(left: 21.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    context.read<VidDetailNotifier>().createdDynamicLink(context, data: vidData);
+                                  },
+                                  child: CustomIconWidget(
+                                    defaultColor: false,
+                                    color: kHyppeTextLightPrimary,
+                                    iconData: '${AssetPath.vectorPath}share2.svg',
+                                    height: 24,
+                                  ),
+                                ),
+                              ),
+                            if ((vidData.saleAmount ?? 0) > 0 && email != vidData.email)
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    "=============== pause 4".logger();
+                                    vidData.fAliplayer?.pause();
+                                    await ShowBottomSheet.onBuyContent(context, data: vidData, fAliplayer: vidData.fAliplayer);
+                                    // fAliplayer?.play();
+                                  },
+                                  child: const Align(
+                                    alignment: Alignment.centerRight,
+                                    child: CustomIconWidget(
+                                      defaultColor: false,
+                                      color: kHyppeTextLightPrimary,
+                                      iconData: '${AssetPath.vectorPath}cart.svg',
+                                      height: 24,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        twelvePx,
+                        Text(
+                          "${vidData.insight?.likes}  ${lang?.like}",
+                          style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
                         ),
                       ],
                     ),
                   ),
-                ),
-                homeNotifier.isLoadingLoadmore && notifier.vidData?[index] == notifier.vidData?.last
-                    ? const Padding(
-                        padding: EdgeInsets.only(bottom: 32),
-                        child: Center(child: CustomLoading()),
-                      )
-                    : Container(),
-              ],
+                  twelvePx,
+                  CustomNewDescContent(
+                    // desc: "${data?.description}",
+                    username: vidData.username ?? '',
+                    desc: "${vidData.description}",
+                    trimLines: 3,
+                    textAlign: TextAlign.start,
+                    seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                    seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                    normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                    hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                    expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Text(
+                        "${lang?.seeAll} ${vidData.comments} ${lang?.comment}",
+                        style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                      ),
+                    ),
+                  ),
+                  (vidData.comment?.length ?? 0) > 0
+                      ? Padding(
+                    padding: const EdgeInsets.only(top: 0.0),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: (vidData.comment?.length ?? 0) >= 2 ? 2 : 1,
+                      itemBuilder: (context, indexComment) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 6.0),
+                          child: CustomNewDescContent(
+                            // desc: "${vidData?.description}",
+                            username: vidData.comment?[indexComment].userComment?.username ?? '',
+                            desc: vidData.comment?[indexComment].txtMessages ?? '',
+                            trimLines: 3,
+                            textAlign: TextAlign.start,
+                            seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                            seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                            normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                            expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                      : Container(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4.0),
+                    child: Text(
+                      "${System().readTimestamp(
+                        DateTime.parse(System().dateTimeRemoveT(vidData.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                        context,
+                        fullCaption: true,
+                      )}",
+                      style: TextStyle(fontSize: 12, color: kHyppeBurem),
+                    ),
+                  ),
+                ],
+              ),
             ),
+          ),
+          homeNotifier.isLoadingLoadmore && notifier.vidData?[index] == notifier.vidData?.last
+              ? const Padding(
+            padding: EdgeInsets.only(bottom: 32),
+            child: Center(child: CustomLoading()),
+          )
+              : Container(),
+        ],
+      ),
     );
   }
 
@@ -1116,422 +1117,199 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         // Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data, width: width)),
         (data?.reportedStatus == "BLURRED")
             ? Positioned.fill(
-                child: VideoThumbnailReport(
-                  videoData: data,
-                  seeContent: false,
-                ),
-              ),
-              if(vidData.adsData != null)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  decoration: const BoxDecoration(color: kHyppeLightSurface),
-                  child: Row(
-                    children: [
-                      CustomBaseCacheImage(
-                        imageUrl: vidData.adsData?.avatar?.fullLinkURL,
-                        memCacheWidth: 200,
-                        memCacheHeight: 200,
-                        imageBuilder: (_, imageProvider) {
-                          return Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(Radius.circular(18)),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: imageProvider,
-                              ),
-                            ),
-                          );
-                        },
-                        errorWidget: (_, __, ___) {
-                          return Container(
-                            width: 36,
-                            height: 36,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(18)),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                              ),
-                            ),
-                          );
-                        },
-                        emptyWidget: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                            ),
-                          ),
-                        ),
-                      ),
-                      tenPx,
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CustomTextWidget(
-                              textToDisplay: vidData.adsData?.fullName ?? '',
-                              textStyle: context
-                                  .getTextTheme()
-                                  .caption
-                                  ?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),
-                            ),
-                            fourPx,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                CustomTextWidget(textToDisplay: 'Ad ·', textStyle: context
-                                    .getTextTheme()
-                                    .caption
-                                    ?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),),
-                                Expanded(child: CustomTextWidget(textAlign: TextAlign.start,textToDisplay: ' ${vidData.adsData?.adsUrlLink}', textStyle: context.getTextTheme().caption, maxLines: 1, textOverflow: TextOverflow.ellipsis,)),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Material(
-                        color: Colors.transparent,
-                        child: Ink(
-                          width: 120,
-                          decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(5)),
-                              color: KHyppeButtonAds),
-                          child: InkWell(
-                            splashColor: context.getColorScheme().secondary,
-                            onTap: () async {
-                              final data = vidData.adsData;
-                              final secondsVideo = vidData.adsData?.duration?.round() ?? 10;
-                              if(data != null){
-                                if (data.adsUrlLink?.isEmail() ?? false) {
-                                  final email = data.adsUrlLink!.replaceAll('email:', '');
-                                  setState(() {
-                                    loadLaunch = true;
-                                  });
-                                  print('second close ads: $secondsVideo');
-                                  adsView(data, secondsVideo, isClick: true).whenComplete(() {
-                                    Navigator.pop(context);
-                                    Future.delayed(const Duration(milliseconds: 800), () {
-                                      Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                                    });
-                                  });
-                                } else {
-                                  try {
-                                    final uri = Uri.parse(data.adsUrlLink ?? '');
-                                    print('bottomAdsLayout ${data.adsUrlLink}');
-                                    if (await canLaunchUrl(uri)) {
-                                      setState(() {
-                                        loadLaunch = true;
-                                      });
-                                      print('second close ads: $secondsVideo');
-                                      adsView(data, secondsVideo, isClick: true).whenComplete(() async {
-                                        Navigator.pop(context);
-                                        await launchUrl(
-                                          uri,
-                                          mode: LaunchMode.externalApplication,
-                                        );
-                                      });
-                                    } else {
-                                      throw "Could not launch $uri";
-                                    }
-                                    // can't launch url, there is some error
-                                  } catch (e) {
-                                    setState(() {
-                                      loadLaunch = true;
-                                    });
-                                    print('second close ads: $secondsVideo');
-                                    // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                    adsView(data, secondsVideo, isClick: true).whenComplete(() {
-                                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                    });
-                                  }
-                                }
-                              }
-
-                            },
-                            child: Builder(
-                              builder: (context) {
-                                return Container(
-                                  padding: const EdgeInsets.all(10),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    vidData.adsData?.ctaButton ?? 'Learn More',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              twelvePx,
-              SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                  (vidData.boosted.isEmpty) &&
-                  (vidData.reportedStatus != 'OWNED' && vidData.reportedStatus != 'BLURRED' && vidData.reportedStatus2 != 'BLURRED') &&
-                  vidData.email == email
-                  ? Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(bottom: 16),
-                child: ButtonBoost(
-                  onDetail: false,
-                  marginBool: true,
-                  contentData: vidData,
-                  startState: () {
-                    SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                  },
-                  afterState: () {
-                    SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-                  },
-                ),
-              )
-                  : Container(),
-              if (vidData.email == email && (vidData.boostCount ?? 0) >= 0 && (vidData.boosted.isNotEmpty))
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  margin: EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: kHyppeGreyLight,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const CustomIconWidget(
-                        iconData: "${AssetPath.vectorPath}reach.svg",
-                        defaultColor: false,
-                        height: 24,
-                        color: kHyppeTextLightPrimary,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 13),
-                        child: Text(
-                          "${vidData.boostJangkauan ?? '0'} ${lang?.reach}",
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              Consumer<LikeNotifier>(
-                builder: (context, likeNotifier, child) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Consumer<LikeNotifier>(
-                          builder: (context, likeNotifier, child) => Align(
-                            alignment: Alignment.bottomRight,
-                            child: vidData.insight?.isloading ?? false
-                                ? const SizedBox(
-                              height: 28,
-                              width: 28,
-                              child: CircularProgressIndicator(
-                                color: kHyppePrimary,
-                                strokeWidth: 2,
-                              ),
-                            )
-                                : InkWell(
-                              child: CustomIconWidget(
-                                defaultColor: false,
-                                color: (vidData.insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                iconData: '${AssetPath.vectorPath}${(vidData.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                height: 28,
-                              ),
-                              onTap: () {
-                                if (vidData != null) {
-                                  likeNotifier.likePost(context, vidData);
-                                }
-                              },
-                            ),
-                          ),
-                        ),
-                        if (vidData.allowComments ?? false)
-                          Padding(
-                            padding: const EdgeInsets.only(left: 21.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));
-                              },
-                              child: const CustomIconWidget(
-                                defaultColor: false,
-                                color: kHyppeTextLightPrimary,
-                                iconData: '${AssetPath.vectorPath}comment2.svg',
-                                height: 24,
-                              ),
-                            ),
-                          ),
-                        if ((vidData.isShared ?? false))
-                          Padding(
-                            padding: EdgeInsets.only(left: 21.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                context.read<VidDetailNotifier>().createdDynamicLink(context, data: vidData);
-                              },
-                              child: CustomIconWidget(
-                                defaultColor: false,
-                                color: kHyppeTextLightPrimary,
-                                iconData: '${AssetPath.vectorPath}share2.svg',
-                                height: 24,
-                              ),
-                            ),
-                          ),
-                        if ((vidData.saleAmount ?? 0) > 0 && email != vidData.email)
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () async {
-                                vidData.fAliplayer?.pause();
-                                await ShowBottomSheet.onBuyContent(context, data: vidData, fAliplayer: vidData.fAliplayer);
-                                // fAliplayer?.play();
-                              },
-                              child: const Align(
-                                alignment: Alignment.centerRight,
-                                child: CustomIconWidget(
-                                  defaultColor: false,
-                                  color: kHyppeTextLightPrimary,
-                                  iconData: '${AssetPath.vectorPath}cart.svg',
-                                  height: 24,
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                    twelvePx,
-                    Text(
-                      "${vidData.insight?.likes}  ${lang?.like}",
-                      style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
-                    ),
-                  ],
-                ),
-              ),
-              twelvePx,
-              CustomNewDescContent(
-                // desc: "${data?.description}",
-                username: vidData.username ?? '',
-                desc: "${vidData.description}",
-                trimLines: 3,
-                textAlign: TextAlign.start,
-                seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Routing().move(Routes.commentsDetail, argument: CommentsArgument(postID: vidData.postID ?? '', fromFront: true, data: vidData));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Text(
-                    "${lang?.seeAll} ${vidData.comments} ${lang?.comment}",
-                    style: const TextStyle(fontSize: 12, color: kHyppeBurem),
-                  ),
-                ),
-              ),
-              (vidData.comment?.length ?? 0) > 0
-                  ? Padding(
-                padding: const EdgeInsets.only(top: 0.0),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: (vidData.comment?.length ?? 0) >= 2 ? 2 : 1,
-                  itemBuilder: (context, indexComment) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 6.0),
-                      child: CustomNewDescContent(
-                        // desc: "${vidData?.description}",
-                        username: vidData.comment?[indexComment].userComment?.username ?? '',
-                        desc: vidData.comment?[indexComment].txtMessages ?? '',
-                        trimLines: 3,
-                        textAlign: TextAlign.start,
-                        seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                        seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                        normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                        hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                        expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                      ),
-                    );
-                  },
-                ),
-              )
-                  : Container(),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0),
-                child: Text(
-                  "${System().readTimestamp(
-                    DateTime.parse(System().dateTimeRemoveT(vidData.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                    context,
-                    fullCaption: true,
-                  )}",
-                  style: TextStyle(fontSize: 12, color: kHyppeBurem),
-                ),
-              ),
-            ],
+          child: VideoThumbnailReport(
+            videoData: data,
+            seeContent: false,
           ),
-        ),
-        context.getAdsInBetween(vidData.inBetweenAds, vidData.postID ?? '', (info){
-          if (notifier.vidData?[_curIdx].fAliplayer != null) {
-            notifier.vidData?[_curIdx].fAliplayer?.pause();
-          } else {
-            dataAli[_curIdx]?.pause();
-          }
-          ads.adsAliplayer?.pause();
-        })
+        )
+            : Container(),
+        // data?.reportedStatus == 'BLURRED'
+        //     ? ClipRect(
+        //         child: BackdropFilter(
+        //           filter: ImageFilter.blur(
+        //             sigmaX: 30.0,
+        //             sigmaY: 30.0,
+        //           ),
+        //           child: Container(
+        //             alignment: Alignment.center,
+        //             width: SizeConfig.screenWidth,
+        //             height: 200.0,
+        //             child: Column(
+        //               mainAxisAlignment: MainAxisAlignment.center,
+        //               children: const [
+        //                 CustomIconWidget(
+        //                   iconData: "${AssetPath.vectorPath}eye-off.svg",
+        //                   defaultColor: false,
+        //                   height: 50,
+        //                   color: Colors.white,
+        //                 ),
+        //               ],
+        //             ),
+        //           ),
+        //         ),
+        //       )
+        //     : Container(),
       ],
     );
   }
 
-  var loadingAction = false;
+  Widget blurContentWidget(BuildContext context, ContentData data) {
+    final transnot = Provider.of<TranslateNotifierV2>(context, listen: false);
+    return data.reportedStatus == 'BLURRED'
+        ? Positioned.fill(
+      child: Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Spacer(),
+                const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}eye-off.svg",
+                  defaultColor: false,
+                  height: 30,
+                ),
+                Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                Text("HyppeVid ${transnot.translate.contentContainsSensitiveMaterial}",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                    )),
+                // data.email == SharedPreference().readStorage(SpKeys.email)
+                //     ? GestureDetector(
+                //         onTap: () => Routing().move(Routes.appeal, argument: data),
+                //         child: Container(
+                //             padding: const EdgeInsets.all(8),
+                //             margin: const EdgeInsets.all(18),
+                //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                //       )
+                //     : const SizedBox(),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    data.reportedStatus = '';
+                    // start(data);
+                    // context.read<ReportNotifier>().seeContent(context, data, hyppeVid);
+                    data.fAliplayer?.prepare();
+                    data.fAliplayer?.play();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 8),
+                    margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                    width: SizeConfig.screenWidth,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: Colors.white,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      "${transnot.translate.see} HyppeVid",
+                      style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )),
+    )
+        : Container();
+  }
 
-  var loadLaunch = false;
+// void finish(ContentData data) async {
+//
+//   data.fAliplayer?.stop();
+//   setState(() {
+//     dataSelected?.isDiaryPlay = false;
+//     isPlay = false;
+//   });
+//   dataSelected = data;
+// }
+//
+// void start(ContentData data) async{
+//   finish(data);
+//   _lastCurIndex = _curIdx;
+//
+//   if (data.reportedStatus != 'BLURRED') {
+//     if (data.isApsara ?? false) {
+//       _playMode = ModeTypeAliPLayer.auth;
+//       await getAuth(data);
+//     } else {
+//       _playMode = ModeTypeAliPLayer.url;
+//       await getOldVideoUrl(data);
+//     }
+//   }
+//
+//   setState(() {
+//     isPause = false;
+//   });
+//   if (data.reportedStatus == 'BLURRED') {
+//   } else {
+//     data.fAliplayer?.prepare();
+//   }
+// }
 
-  Future adsView(AdsData data, int time, {bool isClick = false}) async {
-    try {
-      setState(() {
-        loadingAction = true;
-      });
+// Future getOldVideoUrl(ContentData data) async {
+//   setState(() {
+//     isloading = true;
+//   });
+//   try {
+//     final notifier = PostsBloc();
+//     await notifier.getOldVideo(context, apsaraId: data.postID ?? '');
+//     final fetch = notifier.postsFetch;
+//     if (fetch.postsState == PostsState.videoApsaraSuccess) {
+//       Map jsonMap = json.decode(fetch.data.toString());
 
-      final notifier = AdsDataBloc();
-      final request = ViewAdsRequest(
-        watchingTime: time,
-        adsId: data.adsId,
-        useradsId: data.useradsId,
-      );
-      await notifier.viewAdsBloc(context, request, isClick: isClick);
+//       data.fAliplayer?.setUrl(jsonMap['data']['url']);
+//       setState(() {
+//         isloading = false;
+//       });
+//       // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+//     }
+//   } catch (e) {
+//     setState(() {
+//       isloading = false;
+//     });
+//     // 'Failed to fetch ads data $e'.logger();
+//   }
+// }
 
-  //       data.fAliplayer?.setVidAuth(
-  //         vid: data.apsaraId,
-  //         region: DataSourceRelated.defaultRegion,
-  //         playAuth: auth,
-  //       );
-  //       setState(() {
-  //         isloading = false;
-  //       });
-  //       // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
-  //     }
-  //   } catch (e) {
-  //     setState(() {
-  //       isloading = false;
-  //     });
-  //     // 'Failed to fetch ads data $e'.logger();
-  //   }
-  // }
+// Future getAuth(ContentData data) async {
+//   setState(() {
+//     isloading = true;
+//   });
+//   data.isLoading = true;
+//   try {
+//     final notifier = PostsBloc();
+//     await notifier.getAuthApsara(context, apsaraId: data.apsaraId ?? '');
+//     final fetch = notifier.postsFetch;
+//     if (fetch.postsState == PostsState.videoApsaraSuccess) {
+//       Map jsonMap = json.decode(fetch.data.toString());
+//       auth = jsonMap['PlayAuth'];
+
+//       data.fAliplayer?.setVidAuth(
+//         vid: data.apsaraId,
+//         region: DataSourceRelated.defaultRegion,
+//         playAuth: auth,
+//       );
+//       setState(() {
+//         isloading = false;
+//       });
+//       // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+//     }
+//   } catch (e) {
+//     setState(() {
+//       isloading = false;
+//     });
+//     // 'Failed to fetch ads data $e'.logger();
+//   }
+// }
 }
 
 class WidgetSize extends StatefulWidget {
