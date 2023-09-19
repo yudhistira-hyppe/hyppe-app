@@ -874,9 +874,9 @@ class HomeNotifier with ChangeNotifier {
     final id = ads.videoId;
     print('ke iklan yah $id');
     print('ke iklan yah ${ads.adsType}');
-    if(ads.mediaType?.toLowerCase() == 'image'){
+    if (ads.mediaType?.toLowerCase() == 'image') {
       await System().adsPopUpV2(context, ads, '');
-    }else if (id != null && ads.adsType != null) {
+    } else if (id != null && ads.adsType != null) {
       try {
         final notifier = PostsBloc();
 
@@ -901,6 +901,10 @@ class HomeNotifier with ChangeNotifier {
         'Failed to fetch ads data ${e}'.logger();
       }
     }
+    //get banner Challange
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (isInAppAds) System().popUpChallange(context);
+    });
   }
 
   /// Old Pop Ads

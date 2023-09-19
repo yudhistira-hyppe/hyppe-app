@@ -438,13 +438,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     });
     if (isHomeScreen) {
       print("isOnHomeScreen hit ads");
-      homneNotifier.getAdsApsara(context, true);
+      homneNotifier.getAdsApsara(context, true).then((value) {
+        print(value);
+      });
     }
-    // System().popUpChallange(context);
+    //
   }
 
   void changeTab(postType) {
-    print("#######################################################################################");
     var homneNotifier = context.read<HomeNotifier>();
     if (postType == FeatureType.pic) {
       homneNotifier.tabIndex = 0;
