@@ -829,7 +829,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               picData?.height = size.height;
             },
             child:
-                // /ADS IN BETWEEN === Hariyanto Lukman ===
+                /// ADS IN BETWEEN === Hariyanto Lukman ===
                 isAds
                     ? VisibilityDetector(
                         key: Key(index.toString()),
