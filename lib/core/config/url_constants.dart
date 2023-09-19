@@ -411,13 +411,13 @@ class UrlConstants {
   static const String getPopUpAds = "$adsRouteV2/get/632a806ad2770000fd007a62";
 
   /// post => View Ads User
-  static const String viewAds = "$adsRoutev2/viewads";
+  static const String viewAds = "$adsRouteV2/viewads";
 
   //setting
   static const String settingApps = "$utilsRoute/getSetting";
 
   /// post => Click Learn More Ads
-  static const String clickAds = "$adsRoutev2/clickads";
+  static const String clickAds = "$adsRouteV2/clickads";
 
   /// get => categorytickets
   static const String categoryTickets = "/api/categorytickets/all";

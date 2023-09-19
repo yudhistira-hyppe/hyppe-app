@@ -160,9 +160,9 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                   ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: notifier.bannerData.asMap().entries.map((entry) {
+              children: notifier.bannerSearchData.asMap().entries.map((entry) {
                 return GestureDetector(
-                  onTap: () => _controller.animateToPage(entry.key),
+                  // onTap: () => _controller.animateToPage(entry.key),
                   child: Container(
                     width: _current == entry.key ? 12 : 6.0,
                     height: 6.0,
@@ -171,7 +171,8 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                   ),
                 );
               }).toList(),
-            )
+            ),
+            sixteenPx,
           ],
         ),
       ),

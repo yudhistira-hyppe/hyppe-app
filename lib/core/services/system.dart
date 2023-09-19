@@ -1392,15 +1392,14 @@ class System {
   Future adsPopUpV2(BuildContext context, AdsData data, String auth) async {
     String lastTimeAds = SharedPreference().readStorage(SpKeys.datetimeLastShowAds) ?? '';
     print("tanggall ======== $lastTimeAds");
-    if(!isShowingDialog){
+    if (!isShowingDialog) {
       isShowingDialog = true;
       if (lastTimeAds == '') {
-        if(data.mediaType?.toLowerCase() == 'video'){
+        if (data.mediaType?.toLowerCase() == 'video') {
           await ShowGeneralDialog.adsPopUpVideo(context, data, auth);
-        }else{
+        } else {
           await ShowGeneralDialog.adsPopUpImage(context, data);
         }
-
       } else {
         DateTime now = DateTime.now();
         DateTime menitCache = DateTime.parse(lastTimeAds);
@@ -1408,22 +1407,19 @@ class System {
         print(jumlahMenit);
         if (jumlahMenit >= 14) {
           // if (lastTimeAds.canShowAds()) {
-          if(data.mediaType?.toLowerCase() == 'video'){
+          if (data.mediaType?.toLowerCase() == 'video') {
             await ShowGeneralDialog.adsPopUpVideo(context, data, auth);
-          }else{
+          } else {
             await ShowGeneralDialog.adsPopUpImage(context, data);
           }
-
         }
       }
       isShowingDialog = false;
     }
-
   }
 
-  Future adsView( AdsData data, int time, {bool isClick = false}) async {
+  Future adsView(AdsData data, int time, {bool isClick = false}) async {
     try {
-
       // final notifier = AdsDataBloc();
       // final request = ViewAdsRequest(
       //   watchingTime: time,
@@ -1472,7 +1468,7 @@ class System {
       print("===============222222 ---- ${difference.inHours}");
       print("===============222222 ---- ${difference.inMinutes}");
       // if (difference.inHours >= 24) {
-      if (difference.inMinutes <= -0) {
+      if (difference.inSeconds <= -10) {
         await challange.getBannerLanding(context, ispopUp: true);
         SharedPreference().writeStorage(SpKeys.datetimeLastShowChallange, DateTime.now().toString());
         return ShowGeneralDialog.showBannerPop(context);
