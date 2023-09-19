@@ -12,7 +12,6 @@ import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
@@ -439,15 +438,13 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     });
     if (isHomeScreen) {
       print("isOnHomeScreen hit ads");
-      homneNotifier.getAdsApsara(context, true).then((value) {
-        print("---======= addd log ini  ${value}");
-      });
+      homneNotifier.getAdsApsara(context, true);
     }
     // System().popUpChallange(context);
   }
 
   void changeTab(postType) {
-    // print("#######################################################################################");
+    print("#######################################################################################");
     var homneNotifier = context.read<HomeNotifier>();
     if (postType == FeatureType.pic) {
       homneNotifier.tabIndex = 0;

@@ -134,7 +134,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
     // if (offset > lastOffset) {
     if (!scroolUp) {
-      homeClick = false;
       for (var i = 0; i <= itemIndex; i++) {
         if (i == itemIndex) {
           totItemHeightParam += (notifier.vidData?[i].height ?? 0.0) * 30 / 100;
@@ -144,12 +143,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         totItemHeight += notifier.vidData?[i].height ?? 0.0;
       }
 
-      print("hahahahaha");
-      print(itemIndex);
-      print((notifier.vidData?.length ?? 0) - 2);
-      print(totItemHeight);
-
-      if (offset >= totItemHeightParam) {
+      if (offset >= totItemHeightParam && !homeClick) {
         var position = totItemHeight;
         if (itemIndex != ((notifier.vidData?.length ?? 0) - 2)) {
           if (mounted) {
@@ -159,10 +153,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         }
       }
     } else {
-      print("hihihihih");
-      print("---======== down");
       if (!homeClick) {
-        print(itemIndex);
         for (var i = 0; i < itemIndex; i++) {
           if (i == itemIndex - 1) {
             totItemHeightParam += (notifier.vidData?[i].height ?? 0.0) * 75 / 100;
@@ -175,7 +166,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         if (itemIndex > 0) {
           totItemHeight -= notifier.vidData?[itemIndex - 1].height ?? 0.0;
         }
-        print(totItemHeight);
         if (offset <= totItemHeightParam && offset > 0) {
           var position = totItemHeight;
           if (itemIndex != ((notifier.vidData?.length ?? 0) - 1)) {
@@ -381,6 +371,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                   //down
                                   setState(() {
                                     scroolUp = false;
+                                    homeClick = false;
                                   });
 
                                   print("-===========reverse==========");

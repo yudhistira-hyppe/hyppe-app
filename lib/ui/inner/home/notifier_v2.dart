@@ -956,7 +956,7 @@ class HomeNotifier with ChangeNotifier {
     var data = AdsData();
     try {
       final notifier = AdsDataBloc();
-      await notifier.adsVideoBlocV2(context, AdsType.popup);
+      await notifier.appAdsBloc(context);
       final fetch = notifier.adsDataFetch;
       print('video ads');
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
@@ -1157,6 +1157,7 @@ class HomeNotifier with ChangeNotifier {
       case 'pict':
         if (pic.pic != null) {
           pic.pic = [contentData] + [...(pic.pic ?? [] as List<ContentData>)];
+          pic.pic?[0].isContentLoading = true;
         } else {
           await pic.initialPic(Routing.navigatorKey.currentContext ?? context, list: allContents);
         }
