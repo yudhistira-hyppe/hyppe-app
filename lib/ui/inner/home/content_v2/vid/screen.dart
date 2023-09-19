@@ -479,8 +479,20 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                         key: Key(vidData.postID ?? index.toString()),
                         onVisibilityChanged: (info) async {
                           if (info.visibleFraction >= 0.8) {
+                            if ((notifier.vidData?.length ?? 0) > notifier.nextAdsShowed) {
+                              context.getInBetweenAds().then((value) {
+                                notifier.setInBetweenAds(index, value);
+                              });
+                            }
+                            if (!isShowingDialog) {
+                              adsGlobalAliPlayer?.pause();
+                            }
                             _curIdx = index;
-                            _curPostId = vidData.inBetweenAds?.adsId ?? index.toString();
+                            // _curPostId = vidData.inBetweenAds?.adsId ?? index.toString();
+                            _curPostId = vidData.postID ?? index.toString();
+
+                            final indexList = notifier.vidData?.indexWhere((element) => element.postID == _curPostId);
+                            final latIndexList = notifier.vidData?.indexWhere((element) => element.postID == _lastCurPostId);
 
                             final ads = context.read<VideoNotifier>();
                             ads.adsAliplayer?.pause();
@@ -506,6 +518,17 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               });
                             } catch (e) {
                               print("hahahha $e");
+                            }
+                            if (indexList == (notifier.vidData?.length ?? 0) - 1) {
+                              Future.delayed(const Duration(milliseconds: 2000), () async {
+                                await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
+                                  notifier.getTemp(indexList, latIndexList, indexList);
+                                });
+                              });
+                            } else {
+                              Future.delayed(const Duration(milliseconds: 2000), () {
+                                notifier.getTemp(indexList, latIndexList, indexList);
+                              });
                             }
                             _lastCurIndex = _curIdx;
                             _lastCurPostId = _curPostId;
@@ -1266,94 +1289,94 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         : Container();
   }
 
-  // void finish(ContentData data) async {
-  //
-  //   data.fAliplayer?.stop();
-  //   setState(() {
-  //     dataSelected?.isDiaryPlay = false;
-  //     isPlay = false;
-  //   });
-  //   dataSelected = data;
-  // }
-  //
-  // void start(ContentData data) async{
-  //   finish(data);
-  //   _lastCurIndex = _curIdx;
-  //
-  //   if (data.reportedStatus != 'BLURRED') {
-  //     if (data.isApsara ?? false) {
-  //       _playMode = ModeTypeAliPLayer.auth;
-  //       await getAuth(data);
-  //     } else {
-  //       _playMode = ModeTypeAliPLayer.url;
-  //       await getOldVideoUrl(data);
-  //     }
-  //   }
-  //
-  //   setState(() {
-  //     isPause = false;
-  //   });
-  //   if (data.reportedStatus == 'BLURRED') {
-  //   } else {
-  //     data.fAliplayer?.prepare();
-  //   }
-  // }
+// void finish(ContentData data) async {
+//
+//   data.fAliplayer?.stop();
+//   setState(() {
+//     dataSelected?.isDiaryPlay = false;
+//     isPlay = false;
+//   });
+//   dataSelected = data;
+// }
+//
+// void start(ContentData data) async{
+//   finish(data);
+//   _lastCurIndex = _curIdx;
+//
+//   if (data.reportedStatus != 'BLURRED') {
+//     if (data.isApsara ?? false) {
+//       _playMode = ModeTypeAliPLayer.auth;
+//       await getAuth(data);
+//     } else {
+//       _playMode = ModeTypeAliPLayer.url;
+//       await getOldVideoUrl(data);
+//     }
+//   }
+//
+//   setState(() {
+//     isPause = false;
+//   });
+//   if (data.reportedStatus == 'BLURRED') {
+//   } else {
+//     data.fAliplayer?.prepare();
+//   }
+// }
 
-  // Future getOldVideoUrl(ContentData data) async {
-  //   setState(() {
-  //     isloading = true;
-  //   });
-  //   try {
-  //     final notifier = PostsBloc();
-  //     await notifier.getOldVideo(context, apsaraId: data.postID ?? '');
-  //     final fetch = notifier.postsFetch;
-  //     if (fetch.postsState == PostsState.videoApsaraSuccess) {
-  //       Map jsonMap = json.decode(fetch.data.toString());
+// Future getOldVideoUrl(ContentData data) async {
+//   setState(() {
+//     isloading = true;
+//   });
+//   try {
+//     final notifier = PostsBloc();
+//     await notifier.getOldVideo(context, apsaraId: data.postID ?? '');
+//     final fetch = notifier.postsFetch;
+//     if (fetch.postsState == PostsState.videoApsaraSuccess) {
+//       Map jsonMap = json.decode(fetch.data.toString());
 
-  //       data.fAliplayer?.setUrl(jsonMap['data']['url']);
-  //       setState(() {
-  //         isloading = false;
-  //       });
-  //       // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
-  //     }
-  //   } catch (e) {
-  //     setState(() {
-  //       isloading = false;
-  //     });
-  //     // 'Failed to fetch ads data $e'.logger();
-  //   }
-  // }
+//       data.fAliplayer?.setUrl(jsonMap['data']['url']);
+//       setState(() {
+//         isloading = false;
+//       });
+//       // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+//     }
+//   } catch (e) {
+//     setState(() {
+//       isloading = false;
+//     });
+//     // 'Failed to fetch ads data $e'.logger();
+//   }
+// }
 
-  // Future getAuth(ContentData data) async {
-  //   setState(() {
-  //     isloading = true;
-  //   });
-  //   data.isLoading = true;
-  //   try {
-  //     final notifier = PostsBloc();
-  //     await notifier.getAuthApsara(context, apsaraId: data.apsaraId ?? '');
-  //     final fetch = notifier.postsFetch;
-  //     if (fetch.postsState == PostsState.videoApsaraSuccess) {
-  //       Map jsonMap = json.decode(fetch.data.toString());
-  //       auth = jsonMap['PlayAuth'];
+// Future getAuth(ContentData data) async {
+//   setState(() {
+//     isloading = true;
+//   });
+//   data.isLoading = true;
+//   try {
+//     final notifier = PostsBloc();
+//     await notifier.getAuthApsara(context, apsaraId: data.apsaraId ?? '');
+//     final fetch = notifier.postsFetch;
+//     if (fetch.postsState == PostsState.videoApsaraSuccess) {
+//       Map jsonMap = json.decode(fetch.data.toString());
+//       auth = jsonMap['PlayAuth'];
 
-  //       data.fAliplayer?.setVidAuth(
-  //         vid: data.apsaraId,
-  //         region: DataSourceRelated.defaultRegion,
-  //         playAuth: auth,
-  //       );
-  //       setState(() {
-  //         isloading = false;
-  //       });
-  //       // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
-  //     }
-  //   } catch (e) {
-  //     setState(() {
-  //       isloading = false;
-  //     });
-  //     // 'Failed to fetch ads data $e'.logger();
-  //   }
-  // }
+//       data.fAliplayer?.setVidAuth(
+//         vid: data.apsaraId,
+//         region: DataSourceRelated.defaultRegion,
+//         playAuth: auth,
+//       );
+//       setState(() {
+//         isloading = false;
+//       });
+//       // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+//     }
+//   } catch (e) {
+//     setState(() {
+//       isloading = false;
+//     });
+//     // 'Failed to fetch ads data $e'.logger();
+//   }
+// }
 }
 
 class WidgetSize extends StatefulWidget {

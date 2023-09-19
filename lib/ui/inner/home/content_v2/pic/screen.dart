@@ -698,7 +698,6 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   //down
                                   setState(() {
                                     scroolUp = false;
-                                    homeClick = false;
                                   });
 
                                   print("-===========reverse==========");
@@ -782,6 +781,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                     ),
                                   );
                                 }
+
                                 // return Container(
                                 //   width: SizeConfig.screenWidth,
                                 //   height: heightItem[index].toDouble(),

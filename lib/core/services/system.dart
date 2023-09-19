@@ -1366,14 +1366,10 @@ class System {
     return intl.NumberFormat.currency(locale: 'id', symbol: '', decimalDigits: 0).format(amount);
   }
 
-  Future adsPopUp(BuildContext context, AdsData data, String auth, {bool isSponsored = false, bool isPopUp = true, bool isInAppAds = false}) async {
+  Future adsPopUp(BuildContext context, AdsData data, String auth, {bool isSponsored = false, bool isInAppAds = false}) async {
     print("========== $isInAppAds)");
     if (!isInAppAds) {
-      if (isPopUp) {
-        return ShowGeneralDialog.adsPopUp(context, data, auth, isSponsored: isSponsored);
-      } else {
-        return Routing().move(Routes.showAds, argument: AdsArgument(data: data, adsUrl: auth, isSponsored: isSponsored));
-      }
+      return ShowGeneralDialog.adsPopUp(context, data, auth, isSponsored: isSponsored);
     } else {
       String lastTimeAds = SharedPreference().readStorage(SpKeys.datetimeLastShowAds) ?? '';
       print("tanggall ======== $lastTimeAds");
@@ -1428,29 +1424,29 @@ class System {
   Future adsView( AdsData data, int time, {bool isClick = false}) async {
     try {
 
-      final notifier = AdsDataBloc();
-      final request = ViewAdsRequest(
-        watchingTime: time,
-        adsId: data.adsId,
-        useradsId: data.useradsId,
-      );
-      await notifier.viewAdsBloc(Routing.navigatorKey.currentContext!, request, isClick: isClick);
-
-      final fetch = notifier.adsDataFetch;
-
-      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-        print("ini hasil ${fetch.data['rewards']}");
-        if (fetch.data['rewards'] == true) {
-          ShowGeneralDialog.adsRewardPop(Routing.navigatorKey.currentContext!).whenComplete(() => null);
-          Timer(const Duration(milliseconds: 800), () {
-            Routing().moveBack();
-            // Routing().moveBack();
-            // Timer(const Duration(milliseconds: 800), () {
-            //   Routing().moveBack();
-            // });
-          });
-        }
-      }
+      // final notifier = AdsDataBloc();
+      // final request = ViewAdsRequest(
+      //   watchingTime: time,
+      //   adsId: data.adsId,
+      //   useradsId: data.useradsId,
+      // );
+      // await notifier.viewAdsBloc(Routing.navigatorKey.currentContext!, request, isClick: isClick);
+      //
+      // final fetch = notifier.adsDataFetch;
+      //
+      // if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+      //   print("ini hasil ${fetch.data['rewards']}");
+      //   if (fetch.data['rewards'] == true) {
+      //     ShowGeneralDialog.adsRewardPop(Routing.navigatorKey.currentContext!).whenComplete(() => null);
+      //     Timer(const Duration(milliseconds: 800), () {
+      //       Routing().moveBack();
+      //       // Routing().moveBack();
+      //       // Timer(const Duration(milliseconds: 800), () {
+      //       //   Routing().moveBack();
+      //       // });
+      //     });
+      //   }
+      // }
     } catch (e) {
       'Failed hit view ads $e'.logger();
     }

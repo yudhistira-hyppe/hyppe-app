@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/device/state.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import 'package:hyppe/core/bloc/device/bloc.dart';
@@ -122,7 +123,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           }else{
             globalAliPlayer?.pause();
           }
-
+        }
+        if(adsGlobalAliPlayer != null){
+          adsGlobalAliPlayer?.pause();
         }
 
         if(adsGlobalAliPlayer != null){

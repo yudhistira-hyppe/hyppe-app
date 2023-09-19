@@ -7,6 +7,8 @@ import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/ui/inner/home/widget/ads_in_between.dart';
+import 'package:hyppe/ui/inner/home/widget/ads_video_in_between.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -170,8 +172,8 @@ extension ContextScreen on BuildContext {
       maxLines: 3,
       borderRadius: 8,
       color: kHyppeTextLightPrimary,
-      padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
-      margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
+      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 25),
     );
   }
 

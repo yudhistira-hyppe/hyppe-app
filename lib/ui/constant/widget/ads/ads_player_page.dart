@@ -34,7 +34,7 @@ import '../../../../../../../app.dart';
 import '../../../../core/constants/shared_preference_keys.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../core/services/shared_preference.dart';
-import 'custom_cache_image.dart';
+import '../custom_cache_image.dart';
 
 class AdsPlayerPage extends StatefulWidget {
   final Map<String, dynamic> dataSourceMap;
