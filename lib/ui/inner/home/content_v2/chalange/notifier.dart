@@ -117,13 +117,13 @@ class ChallangeNotifier with ChangeNotifier {
 
   List<BannerData>? _banners = null;
   List<BannerData>? get banners => _banners;
-  set banners(List<BannerData>? values){
+  set banners(List<BannerData>? values) {
     _banners = values;
     notifyListeners();
   }
 
-  Future getBanners(BuildContext context) async{
-    try{
+  Future getBanners(BuildContext context) async {
+    try {
       checkInet(context);
       isLoading = true;
       final bannerNotifier = ChallangeBloc();
@@ -134,9 +134,9 @@ class ChallangeNotifier with ChangeNotifier {
         List<BannerData>? res = (fetch.data as List<dynamic>?)?.map((e) => BannerData.fromJson(e as Map<String, dynamic>)).toList();
         banners = res;
       }
-    }catch(e){
+    } catch (e) {
       e.logger();
-    }finally{
+    } finally {
       isLoading = false;
     }
   }
@@ -493,6 +493,7 @@ class ChallangeNotifier with ChangeNotifier {
       badgeProfile: badgeData?.badgeData?[0].badgeProfile,
       badgeOther: badgeData?.badgeData?[0].badgeOther,
     );
+    notifyListeners();
   }
 
   Future postSelectBadge(BuildContext context, bool mounted, String idUserBadge) async {

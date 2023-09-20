@@ -983,5 +983,12 @@
   "comeoncreatecontentnow": "Yuk, buat konten sekarang!",
   "understand": "Mengerti",
   "registeryourcontentownership": "Daftarkan kepemilikan kontenmu 🎉 Dengan ini kamu bisa menjual karya-karya terbaikmu! Dengan mendaftarkan kepemilikan Anda, Anda bisa menjual konten digital terbaik Anda!",
-  "selectContentcategory": "Pilih kategori Konten Pilih kategori Konten, menambah kategori akan memperluas jangkauan konten mu!"
+  "selectContentcategory": "Pilih kategori Konten Pilih kategori Konten, menambah kategori akan memperluas jangkauan konten mu!",
+  "activeBadgeChallenge": "Badge Challenge Aktif",
+  "yourBadgeCollections": "Koleksi Badgemu",
+  "myBadgeCollections": "Koleksi Badge Saya",
+  "badgeCollection": "Koleksi Badge",
+  "applyBadge": "Terapkan Badge",
+  "youDontHaveaBadge": "Kamu Belum Memiliki Badge",
+  "winachallengetoreceiveabadge": "Menangkan sebuah challenge untuk mendapatkan badge!"
 }

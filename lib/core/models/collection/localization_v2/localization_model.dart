@@ -973,6 +973,13 @@ class LocalizationModelV2 {
   String? comeoncreatecontentnow;
   String? registeryourcontentownership;
   String? selectContentcategory;
+  String? activeBadgeChallenge;
+  String? yourBadgeCollections;
+  String? myBadgeCollections;
+  String? applyBadge;
+  String? youDontHaveaBadge;
+  String? winachallengetoreceiveabadge;
+  String? badgeCollection;
   String? understand;
   String? myListOfAchievements;
   String? achievementsPage;
@@ -1959,6 +1966,13 @@ class LocalizationModelV2 {
     this.comeoncreatecontentnow,
     this.registeryourcontentownership,
     this.selectContentcategory,
+    this.activeBadgeChallenge,
+    this.yourBadgeCollections,
+    this.myBadgeCollections,
+    this.applyBadge,
+    this.youDontHaveaBadge,
+    this.winachallengetoreceiveabadge,
+    this.badgeCollection,
     this.understand,
     this.myListOfAchievements,
     this.achievementsPage,
@@ -2973,6 +2987,13 @@ class LocalizationModelV2 {
     comeoncreatecontentnow = json['comeoncreatecontentnow'];
     registeryourcontentownership = json['registeryourcontentownership'];
     selectContentcategory = json['selectContentcategory'];
+    activeBadgeChallenge = json['activeBadgeChallenge'];
+    yourBadgeCollections = json['yourBadgeCollections'];
+    myBadgeCollections = json['myBadgeCollections'];
+    applyBadge = json['applyBadge'];
+    youDontHaveaBadge = json['youDontHaveaBadge'];
+    winachallengetoreceiveabadge = json['winachallengetoreceiveabadge'];
+    badgeCollection = json['badgeCollection'];
     understand = json['understand'];
   }
 }

@@ -65,9 +65,9 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
             Routing().moveBack();
           },
         ),
-        title: const Text(
-          'Koleksi Badge Saya',
-          style: TextStyle(
+        title: Text(
+          lang?.myBadgeCollections ?? '',
+          style: const TextStyle(
             fontSize: 16,
             fontFamily: 'Lato',
             fontWeight: FontWeight.w700,
@@ -99,7 +99,7 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
                             ),
                             sixteenPx,
                             Text(
-                              'Koleksi Badgemu',
+                              lang?.yourBadgeCollections ?? '',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
@@ -113,56 +113,62 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
                       ))
                     ],
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Badge Challenge Aktif',
-                          style: TextStyle(
-                            color: Color(0xFF3E3E3E),
-                            fontSize: 14,
-                            fontFamily: 'Lato',
-                            fontWeight: FontWeight.w700,
-                          ),
+                  (cn.collectionBadgeData?[0].badgeAktif?.length == 1) && (cn.collectionBadgeData?[0].badgeNonAktif?.isEmpty ?? [].isEmpty)
+                      ? empty()
+                      : Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    lang?.activeBadgeChallenge ?? '',
+                                    style: const TextStyle(
+                                      color: Color(0xFF3E3E3E),
+                                      fontSize: 14,
+                                      fontFamily: 'Lato',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  twentyFourPx,
+                                  BadgeWidget(
+                                    badgeData: cn.collectionBadgeData?[0].badgeAktif,
+                                    avatar: hn.profileImage,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 24,
+                              color: kHyppeLightSurface,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    lang?.badgeCollection ?? '',
+                                    style: const TextStyle(
+                                      color: Color(0xFF3E3E3E),
+                                      fontSize: 14,
+                                      fontFamily: 'Lato',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  twentyFourPx,
+                                  BadgeWidget(badgeData: cn.collectionBadgeData?[0].badgeNonAktif),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        twentyFourPx,
-                        BadgeWidget(
-                          badgeData: cn.collectionBadgeData?[0].badgeAktif,
-                          avatar: hn.profileImage,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 24,
-                    color: kHyppeLightSurface,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Koleksi Badge',
-                          style: TextStyle(
-                            color: Color(0xFF3E3E3E),
-                            fontSize: 14,
-                            fontFamily: 'Lato',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        twentyFourPx,
-                        // BadgeWidget(badgeData: cn.collectionBadgeData?[0].badgeNonAktif),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),
       bottomNavigationBar: cn.badgeUser?.idUserBadge == cn.iduserbadge
-          ? SizedBox(
+          ? const SizedBox(
               height: 0,
             )
           : cn.badgeUser?.badgeProfile != null
@@ -173,7 +179,7 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
                     padding: const EdgeInsets.all(16.0),
                     child: ButtonChallangeWidget(
                       isloading: isLoadingButton,
-                      text: "Terapkan Badge",
+                      text: lang?.applyBadge ?? '',
                       bgColor: kHyppePrimary,
                       function: () async {
                         if (!isLoadingButton) {
@@ -193,6 +199,43 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
               : SizedBox(
                   height: 0,
                 ),
+    );
+  }
+
+  Widget empty() {
+    return Container(
+      padding: const EdgeInsets.all(20.0),
+      height: SizeConfig.screenWidth! * 1.1,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text("${lang?.youDontHaveaBadge}",
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              )),
+          twelvePx,
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20),
+            child: Text(
+              "${lang?.winachallengetoreceiveabadge}",
+              style: const TextStyle(color: kHyppeBurem),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          twentyFourPx,
+          ButtonChallangeWidget(
+            bgColor: kHyppePrimary,
+            text: "${lang?.joinTheChallengeNow}",
+            function: () {
+              Routing().moveBack();
+              Routing().moveBack();
+            },
+          ),
+        ],
+      ),
     );
   }
 }
