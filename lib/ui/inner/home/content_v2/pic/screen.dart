@@ -1106,13 +1106,17 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                       }
 
                                       ///ADS IN BETWEEN === Hariyanto Lukman ===
-                                      // if((notifier.pic?.length ?? 0) > notifier.nextAdsShowed){
-                                      //   context.getInBetweenAds().then((value){
-                                      //     if (value != null) {
-                                      //       notifier.setAdsData(index, value);
-                                      //     }
-                                      //   });
-                                      // }
+                                      if(!notifier.loadAds){
+                                        if((notifier.pic?.length ?? 0) > notifier.nextAdsShowed){
+                                          notifier.loadAds = true;
+                                          context.getInBetweenAds().then((value){
+                                            if (value != null) {
+                                              notifier.setAdsData(index, value);
+                                            }
+                                          });
+                                        }
+                                      }
+
 
                                       _lastCurIndex = _curIdx;
                                       _lastCurPostId = _curPostId;

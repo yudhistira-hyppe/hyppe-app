@@ -479,11 +479,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                         key: Key(vidData.postID ?? index.toString()),
                         onVisibilityChanged: (info) async {
                           if (info.visibleFraction >= 0.8) {
-                            if ((notifier.vidData?.length ?? 0) > notifier.nextAdsShowed) {
-                              context.getInBetweenAds().then((value) {
-                                notifier.setInBetweenAds(index, value);
-                              });
-                            }
                             if (!isShowingDialog) {
                               adsGlobalAliPlayer?.pause();
                             }
@@ -555,11 +550,15 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                 print(_curIdx);
                               }
                               if (info.visibleFraction >= 0.8) {
-                                if ((notifier.vidData?.length ?? 0) > notifier.nextAdsShowed) {
-                                  context.getInBetweenAds().then((value) {
-                                    notifier.setInBetweenAds(index, value);
-                                  });
+                                if(!notifier.loadAds){
+                                  if ((notifier.vidData?.length ?? 0) > notifier.nextAdsShowed) {
+                                    notifier.loadAds = true;
+                                    context.getInBetweenAds().then((value) {
+                                      notifier.setInBetweenAds(index, value);
+                                    });
+                                  }
                                 }
+
                                 adsGlobalAliPlayer?.pause();
                                 _curIdx = index;
                                 _curPostId = vidData.postID ?? index.toString();
