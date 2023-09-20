@@ -1112,6 +1112,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                           context.getInBetweenAds().then((value){
                                             if (value != null) {
                                               notifier.setAdsData(index, value);
+                                            }else{
+                                              notifier.loadAds = false;
                                             }
                                           });
                                         }
