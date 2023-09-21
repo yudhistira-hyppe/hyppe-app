@@ -319,7 +319,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     }
 
     // if (offset >= lastOffset) {
+    // print("============== to position");
     if (!scroolUp) {
+      // print("============== $scroolUp");
       for (var i = 0; i <= itemIndex; i++) {
         if (i == itemIndex) {
           totItemHeightParam += (notifier.pic?[i].height ?? 0.0) * 30 / 100;
@@ -342,8 +344,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               itemIndex++;
             }
           }
-        } else {}
-      }
+        }
+      } else {}
+      // }
       // for (var i = 0; i <= _curIdx; i++) {
       //   if (i == _curIdx) {
       //     totItemHeightParam += (notifier.pic?[i].height ?? 0.0) * 30 / 100;
@@ -693,21 +696,22 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             onNotification: (notification) {
                               final ScrollDirection direction = notification.direction;
                               setState(() {
-                                print("-===========scrollll==========");
+                                // print("-===========scrollll==========");
                                 if (direction == ScrollDirection.reverse) {
                                   //down
                                   setState(() {
                                     scroolUp = false;
                                     homeClick = false;
                                   });
-
-                                  print("-===========reverse==========");
+                                  // print("-===========reverse ${homeClick}==========");
+                                  // print("-===========reverse==========");
                                 } else if (direction == ScrollDirection.forward) {
                                   //up
                                   setState(() {
+                                    homeClick = false;
                                     scroolUp = true;
                                   });
-                                  print("-===========forward==========");
+                                  // print("-===========forward==========");
                                 }
                               });
                               return true;
@@ -1105,17 +1109,19 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         //     notifier.getTemp(indexList, latIndexList, indexList);
                                         //   }
                                         // });
-                                      }
 
-                                      ///ADS IN BETWEEN === Hariyanto Lukman ===
-                                      if (!notifier.loadAds) {
-                                        if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
-                                          notifier.loadAds = true;
-                                          context.getInBetweenAds().then((value) {
-                                            if (value != null) {
-                                              notifier.setAdsData(index, value);
-                                            }
-                                          });
+                                        ///ADS IN BETWEEN === Hariyanto Lukman ===
+                                        if (!notifier.loadAds) {
+                                          if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
+                                            notifier.loadAds = true;
+                                            context.getInBetweenAds().then((value) {
+                                              if (value != null) {
+                                                notifier.setAdsData(index, value);
+                                              } else {
+                                                notifier.loadAds = false;
+                                              }
+                                            });
+                                          }
                                         }
                                       }
 

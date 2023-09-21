@@ -374,6 +374,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                     homeClick = false;
                                   });
 
+                                  print("-===========reverse ${homeClick}==========");
                                   print("-===========reverse==========");
                                 } else if (direction == ScrollDirection.forward) {
                                   //up
@@ -554,7 +555,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                   if ((notifier.vidData?.length ?? 0) > notifier.nextAdsShowed) {
                                     notifier.loadAds = true;
                                     context.getInBetweenAds().then((value) {
-                                      notifier.setInBetweenAds(index, value);
+                                      if (value != null) {
+                                        notifier.setInBetweenAds(index, value);
+                                      } else {
+                                        notifier.loadAds = false;
+                                      }
                                     });
                                   }
                                 }

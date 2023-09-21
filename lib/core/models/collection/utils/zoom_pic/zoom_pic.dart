@@ -209,7 +209,7 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
   }
 
   void _handleOnScaleStart(ScaleStartDetails details) {
-    print("==========new posisi");
+    // print("==========new posisi");
     setState(() {
       _previousScale = 1;
       _normalizedOffset = (details.focalPoint - _offset!) / _scale!;
@@ -233,7 +233,7 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
     final position = renderBox.localToGlobal(Offset.zero);
     newPositionY = position.dy;
 
-    print("==========new posisi ${position.dy}");
+    // print("==========new posisi ${position.dy}");
 
     _transformMatrix = Matrix4.translation(
       vector.Vector3(position.dx, position.dy, 0),
@@ -263,8 +263,8 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
       // Ensure that image location under the focal point stays in the same place despite scaling.
       // _offset = _clampOffset(details.focalPoint - _normalizedOffset! * _scale!);
     });
-    print("========scale $_scale");
-    print("========scale $_previousScale");
+    // print("========scale $_scale");
+    // print("========scale $_previousScale");
     if (_scale! > _previousScale!) {
       widget.onScaleStart?.call();
       show();

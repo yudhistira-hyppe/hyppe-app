@@ -282,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                   // absorbing: true,
                   absorbing: isZoom,
                   child: NestedScrollView(
-                    // key: context.read<MainNotifier>().globalKey,
+                    key: context.read<MainNotifier>().globalKey,
                     controller: context.read<MainNotifier>().scrollController,
                     // physics: const NeverScrollableScrollPhysics(),
                     // dragStartBehavior: DragStartBehavior.start,

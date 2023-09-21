@@ -1028,6 +1028,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           context.getInBetweenAds().then((value) {
                                             if (value != null) {
                                               notifier.setAdsData(index, value);
+                                            }else{
+                                              notifier.loadAds = false;
                                             }
                                           });
                                         }
