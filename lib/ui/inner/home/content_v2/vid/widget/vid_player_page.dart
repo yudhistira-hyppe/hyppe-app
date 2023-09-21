@@ -668,13 +668,24 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           });
 
           fAliplayer?.prepare().then((value) {
-            setState(() {
+            try{
+              if(mounted){
+                setState(() {
+                  isloading = false;
+                });
+              }else{
+                isloading = false;
+              }
+            }catch(e){
               isloading = false;
-            });
-          });
+            }
 
-          if (widget.inLanding && !(widget.data?.isViewed ?? true)) {
-            final ref =(Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+          });
+          final isViewed = widget.data?.isViewed ?? true;
+          print('isViewed Setting: ${widget.index} | ${widget.data?.isViewed} | $isViewed');
+          final ref =(Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+          ref.setMapAdsContent(widget.data?.postID ?? '', null);
+          if (widget.inLanding && !isViewed) {
             ref.hasShowedAds = false;
             ref.getAdsVideo(Routing.navigatorKey.currentContext ?? context, _videoDuration).whenComplete((){
               if(widget.index != null){
@@ -1813,6 +1824,10 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                       if (widget.orientation == Orientation.portrait) {
                         "=============== pause 3".logger();
                         fAliplayer?.pause();
+                        setState(() {
+
+                          isloading = true;
+                        });
                         await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
                         if ((widget.data?.metadata?.height ?? 0) < (widget.data?.metadata?.width ?? 0)) {
                           print('Landscape VidPlayerPage');
@@ -1925,6 +1940,15 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                       } else {
                         Navigator.pop(context, changevalue);
                       }
+                      if(mounted){
+                        setState(() {
+
+                          isloading = false;
+                        });
+                      }else{
+                        isloading = false;
+                      }
+
                       // isPotraitFull = !isPotraitFull;
                       // print('ORIENTATION: TRIGGER $orientation');
                       // //pause
