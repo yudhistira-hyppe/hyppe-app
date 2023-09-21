@@ -166,7 +166,7 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
                                         ),
                                       ),
                                       tenPx,
-                                      secondsSkip > 0 ? Container(
+                                      loadingBack ? const SizedBox( height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2,)) : secondsSkip > 0 ? Container(
                                         height: 30,
                                         width: 30,
                                         alignment: Alignment.center,
@@ -176,11 +176,11 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
                                           style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                                         ),
                                       ) : InkWell(
-                                        onTap: (){
+                                        onTap: () async {
                                           setState(() {
                                             loadingBack = true;
                                           });
-                                          System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
+                                          await System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
                                           setState(() {
                                             loadingBack = false;
                                           });

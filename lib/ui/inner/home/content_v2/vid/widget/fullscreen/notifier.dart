@@ -10,6 +10,12 @@ import '../../../../../../../core/models/collection/advertising/ads_video_data.d
 
 class VideoNotifier with ChangeNotifier{
 
+  Map<String, AdsData?> mapInContentAds = {};
+  setMapAdsContent(String id, AdsData? value){
+    mapInContentAds[id] = value;
+    notifyListeners();
+  }
+
   bool _isShowingAds = false;
   bool get isShowingAds => _isShowingAds;
   set isShowingAds(bool state){

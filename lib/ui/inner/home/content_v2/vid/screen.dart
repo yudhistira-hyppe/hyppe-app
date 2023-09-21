@@ -42,15 +42,25 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wakelock/wakelock.dart';
 import '../../../../../app.dart';
+import '../../../../../core/arguments/other_profile_argument.dart';
+import '../../../../../core/bloc/ads_video/bloc.dart';
+import '../../../../../core/bloc/ads_video/state.dart';
 import '../../../../../core/config/ali_config.dart';
+import '../../../../../core/models/collection/advertising/ads_video_data.dart';
+import '../../../../../core/models/collection/advertising/view_ads_request.dart';
 import '../../../../../core/services/route_observer_service.dart';
 import '../../../../../ux/path.dart';
 import '../../../../../ux/routing.dart';
 import '../../../../constant/entities/like/notifier.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+
+import '../../../../constant/overlay/general_dialog/show_general_dialog.dart';
+import '../../../../constant/widget/custom_background_layer.dart';
+import '../../../../constant/widget/custom_base_cache_image.dart';
 
 class HyppePreviewVid extends StatefulWidget {
   final ScrollController? scrollController;
@@ -448,6 +458,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   }
 
   Widget itemVid(BuildContext context, ContentData vidData, PreviewVidNotifier notifier, int index, HomeNotifier homeNotifier) {
+    final videoNot = context.read<VideoNotifier>();
     var map = {
       DataSourceRelated.vidKey: vidData.apsaraId,
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
@@ -498,6 +509,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                               } else {
                                 dataAli[notifier.vidData?[_curIdx].postID]?.pause();
                               }
+                              videoNot.setMapAdsContent(notifier.vidData?[_curIdx].postID ?? '', null);
                             }
                             try {
                               Future.delayed(const Duration(milliseconds: 400), () {
@@ -581,8 +593,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                         } else {
                                           "=============== pause 10".logger();
                                           dataAli[notifier.vidData?[_curIdx].postID]?.pause();
-                                        }
 
+                                        }
+                                        videoNot.setMapAdsContent(notifier.vidData?[_curIdx].postID ?? '', null);
                                         // Wakelock.disable();
                                         // notifier.vidData?[_curIdx].fAliplayerAds?.pause();
                                         // setState(() {
@@ -760,11 +773,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                         ),
                                       ),
                                     ],
-                                  ),
-                                  // Text("${postIdVisibility}"),
+                                  ),   // Text("${postIdVisibility}"),
                                   tenPx,
                                   globalInternetConnection
-                                      ? postIdVisibility != vidData.postID
+                                      ? vidData.reportedStatus == 'BLURRED' ? blurContentWidget(context, vidData) : postIdVisibility != vidData.postID
                                           ? GestureDetector(
                                               onTap: () {
                                                 setState(() {
@@ -820,9 +832,13 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                           : Container(
                                               margin: const EdgeInsets.only(bottom: 20),
                                               child: Builder(builder: (context) {
+
                                                 return VidPlayerPage(
                                                   vidData: notifier.vidData,
                                                   orientation: Orientation.portrait,
+                                                  onShowAds: (ads){
+                                                    notifier.setAdsData(index, ads);
+                                                  },
                                                   // betweenAds: (ads) {
                                                   //   if (ads != null) {
                                                   //     notifier.setInBetweenAds(index, ads);
@@ -929,6 +945,179 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                 ),
                                               )),
                                         ),
+                                  if(vidData.adsData != null)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                      decoration: const BoxDecoration(color: kHyppeLightSurface),
+                                      child: Row(
+                                        children: [
+                                          CustomBaseCacheImage(
+                                            imageUrl: vidData.adsData?.avatar?.fullLinkURL,
+                                            memCacheWidth: 200,
+                                            memCacheHeight: 200,
+                                            imageBuilder: (_, imageProvider) {
+                                              return Container(
+                                                width: 36,
+                                                height: 36,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: imageProvider,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            errorWidget: (_, __, ___) {
+                                              return Container(
+                                                width: 36,
+                                                height: 36,
+                                                decoration: const BoxDecoration(
+                                                  borderRadius: BorderRadius.all(Radius.circular(18)),
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            emptyWidget: Container(
+                                              width: 36,
+                                              height: 36,
+                                              decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                                                image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          tenPx,
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                CustomTextWidget(
+                                                  textToDisplay: vidData.adsData?.fullName ?? '',
+                                                  textStyle: context
+                                                      .getTextTheme()
+                                                      .caption
+                                                      ?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),
+                                                ),
+                                                fourPx,
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    CustomTextWidget(textToDisplay: 'Ad ·', textStyle: context
+                                                        .getTextTheme()
+                                                        .caption
+                                                        ?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),),
+                                                    Expanded(child: CustomTextWidget(textAlign: TextAlign.start,textToDisplay: ' ${vidData.adsData?.adsUrlLink}', textStyle: context.getTextTheme().caption, maxLines: 1, textOverflow: TextOverflow.ellipsis,)),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Material(
+                                            color: Colors.transparent,
+                                            child: Ink(
+                                              width: 120,
+                                              decoration: const BoxDecoration(
+                                                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                                                  color: KHyppeButtonAds),
+                                              child: InkWell(
+                                                splashColor: context.getColorScheme().secondary,
+                                                onTap: () async {
+                                                  final data = vidData.adsData;
+                                                  final secondsVideo = vidData.adsData?.duration?.round() ?? 10;
+                                                  if(!loadLaunch){
+                                                    if(data != null){
+                                                      if (data.adsUrlLink?.isEmail() ?? false) {
+                                                        final email = data.adsUrlLink!.replaceAll('email:', '');
+                                                        setState(() {
+                                                          loadLaunch = true;
+                                                        });
+                                                        print('second close ads: $secondsVideo');
+                                                        adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                                          Navigator.pop(context);
+                                                          Future.delayed(const Duration(milliseconds: 800), () {
+                                                            Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                                          });
+                                                          setState(() {
+                                                            loadLaunch = false;
+                                                          });
+                                                        });
+                                                      } else {
+                                                        try {
+                                                          final uri = Uri.parse(data.adsUrlLink ?? '');
+                                                          print('bottomAdsLayout ${data.adsUrlLink}');
+                                                          if (await canLaunchUrl(uri)) {
+                                                            setState(() {
+                                                              loadLaunch = true;
+                                                            });
+                                                            print('second close ads: $secondsVideo');
+                                                            adsView(data, secondsVideo, isClick: true).whenComplete(() async {
+                                                              Navigator.pop(context);
+                                                              await launchUrl(
+                                                                uri,
+                                                                mode: LaunchMode.externalApplication,
+                                                              );
+                                                            });
+                                                          } else {
+                                                            throw "Could not launch $uri";
+                                                          }
+                                                          // can't launch url, there is some error
+                                                        } catch (e) {
+                                                          setState(() {
+                                                            loadLaunch = true;
+                                                          });
+                                                          print('second close ads: $secondsVideo');
+                                                          // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                                          adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                                            System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                                          });
+                                                        }finally{
+                                                          setState(() {
+                                                            loadLaunch = false;
+                                                          });
+                                                        }
+                                                      }
+                                                    }else{
+                                                      setState(() {
+                                                        loadLaunch = false;
+                                                      });
+                                                    }
+                                                  }
+
+
+                                                },
+                                                child: Builder(
+                                                  builder: (context) {
+                                                    return Container(
+                                                      padding: const EdgeInsets.all(10),
+                                                      alignment: Alignment.center,
+                                                      child: Text(
+                                                        vidData.adsData?.ctaButton ?? 'Learn More',
+                                                        overflow: TextOverflow.ellipsis,
+                                                        maxLines: 1,
+                                                        style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  twelvePx,
                                   SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
                                           (vidData.boosted.isEmpty) &&
                                           (vidData.reportedStatus != 'OWNED' && vidData.reportedStatus != 'BLURRED' && vidData.reportedStatus2 != 'BLURRED') &&
@@ -952,7 +1141,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                   if (vidData.email == email && (vidData.boostCount ?? 0) >= 0 && (vidData.boosted.isNotEmpty))
                                     Container(
                                       padding: const EdgeInsets.all(10),
-                                      margin: EdgeInsets.only(bottom: 10),
+                                      margin: const EdgeInsets.only(bottom: 10),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(6),
                                         color: kHyppeGreyLight,
@@ -970,7 +1159,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                             padding: const EdgeInsets.only(left: 13),
                                             child: Text(
                                               "${vidData.boostJangkauan ?? '0'} ${lang?.reach}",
-                                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
                                             ),
                                           )
                                         ],
@@ -1224,73 +1413,212 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     );
   }
 
-  Widget blurContentWidget(BuildContext context, ContentData data) {
+  Widget blurContentWidget(BuildContext context, ContentData data){
     final transnot = Provider.of<TranslateNotifierV2>(context, listen: false);
-    return data.reportedStatus == 'BLURRED'
-        ? Positioned.fill(
-            child: Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Spacer(),
-                      const CustomIconWidget(
-                        iconData: "${AssetPath.vectorPath}eye-off.svg",
-                        defaultColor: false,
-                        height: 30,
-                      ),
-                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                      Text("HyppeVid ${transnot.translate.contentContainsSensitiveMaterial}",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                          )),
-                      // data.email == SharedPreference().readStorage(SpKeys.email)
-                      //     ? GestureDetector(
-                      //         onTap: () => Routing().move(Routes.appeal, argument: data),
-                      //         child: Container(
-                      //             padding: const EdgeInsets.all(8),
-                      //             margin: const EdgeInsets.all(18),
-                      //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                      //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                      //       )
-                      //     : const SizedBox(),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          data.reportedStatus = '';
-                          // start(data);
-                          // context.read<ReportNotifier>().seeContent(context, data, hyppeVid);
-                          data.fAliplayer?.prepare();
-                          data.fAliplayer?.play();
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 8),
-                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
-                          width: SizeConfig.screenWidth,
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              top: BorderSide(
-                                color: Colors.white,
-                                width: 1,
-                              ),
-                            ),
-                          ),
-                          child: Text(
-                            "${transnot.translate.see} HyppeVid",
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: AspectRatio(
+        aspectRatio: 19/10,
+        child: Stack(
+          children: [
+            Center(
+              child: ClipRRect(
+                // borderRadius: BorderRadius.circular(8.0),
+                child: CustomBackgroundLayer(
+                  sigmaX: 10,
+                  sigmaY: 10,
+                  thumbnail: (data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : '${data.fullThumbPath}',
+                ),
+              ),
+            ),
+            Positioned.fill(
+              child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        twelvePx,
+                        const CustomIconWidget(
+                          iconData: "${AssetPath.vectorPath}eye-off.svg",
+                          defaultColor: false,
+                          height: 24,
+                          color: Colors.white,
+                        ),
+                        fourPx,
+                        Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
+                        fourPx,
+                        Text("${transnot.translate.contentContainsSensitiveMaterial}",
                             textAlign: TextAlign.center,
-                          ),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            )),
+                        data.email == SharedPreference().readStorage(SpKeys.email)
+                            ? GestureDetector(
+                          onTap: ()async{
+                            System().checkConnections().then((value){
+                              if(value){
+                                Routing().move(Routes.appeal, argument: data);
+                              }
+                            });
+
+                          },
+                          child: Container(
+                              padding: const EdgeInsets.all(8),
+                              margin: const EdgeInsets.only(top: 6),
+                              decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                              child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                        )
+                            : const SizedBox(),
+                        thirtyTwoPx,
+                      ],
+                    ),
+                  )),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      data.reportedStatus = '';
+                    });
+
+                    // start(data);
+                    // context.read<ReportNotifier>().seeContent(context, data, hyppeVid);
+                    data.fAliplayer?.prepare();
+                    data.fAliplayer?.play();
+                    // context.read<ReportNotifier>().seeContent(context, videoData!, hyppeVid);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 8, bottom: 8),
+                    margin: const EdgeInsets.all(8),
+                    width: SizeConfig.screenWidth,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: Colors.white,
+                          width: 1,
                         ),
                       ),
-                    ],
+                    ),
+                    child: Text(
+                      "${transnot.translate.see} Vid",
+                      style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                )),
-          )
-        : Container();
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Spacer(),
+          const CustomIconWidget(
+            iconData: "${AssetPath.vectorPath}eye-off.svg",
+            defaultColor: false,
+            height: 30,
+          ),
+          Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+          Text("HyppeVid ${transnot.translate.contentContainsSensitiveMaterial}",
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+              )),
+          // data.email == SharedPreference().readStorage(SpKeys.email)
+          //     ? GestureDetector(
+          //         onTap: () => Routing().move(Routes.appeal, argument: data),
+          //         child: Container(
+          //             padding: const EdgeInsets.all(8),
+          //             margin: const EdgeInsets.all(18),
+          //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+          //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+          //       )
+          //     : const SizedBox(),
+          const Spacer(),
+          GestureDetector(
+            onTap: () {
+              data.reportedStatus = '';
+              // start(data);
+              // context.read<ReportNotifier>().seeContent(context, data, hyppeVid);
+              data.fAliplayer?.prepare();
+              data.fAliplayer?.play();
+            },
+            child: Container(
+              padding: const EdgeInsets.only(top: 8),
+              margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+              width: SizeConfig.screenWidth,
+              decoration: const BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Colors.white,
+                    width: 1,
+                  ),
+                ),
+              ),
+              child: Text(
+                "${transnot.translate.see} HyppeVid",
+                style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  var loadingAction = false;
+
+  var loadLaunch = false;
+
+  Future adsView(AdsData data, int time, {bool isClick = false}) async {
+    try {
+      setState(() {
+        loadingAction = true;
+      });
+
+      final notifier = AdsDataBloc();
+      final request = ViewAdsRequest(
+        watchingTime: time,
+        adsId: data.adsId,
+        useradsId: data.useradsId,
+      );
+      await notifier.viewAdsBloc(context, request, isClick: isClick);
+
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        print("ini hasil ${fetch.data['rewards']}");
+        if (fetch.data['rewards'] == true) {
+          print("ini hasil ${mounted}");
+          if (mounted) {
+            ShowGeneralDialog.adsRewardPop(context).whenComplete(() => null);
+            Timer(const Duration(milliseconds: 800), () {
+              Routing().moveBack();
+              // Routing().moveBack();
+              // Timer(const Duration(milliseconds: 800), () {
+              //   Routing().moveBack();
+              // });
+            });
+          }
+        }
+      }
+    } catch (e) {
+      'Failed hit view ads $e'.logger();
+      setState(() {
+        loadingAction = false;
+      });
+    }
   }
 
 // void finish(ContentData data) async {

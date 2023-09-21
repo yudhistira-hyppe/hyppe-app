@@ -46,11 +46,13 @@ class VideoFullscreenPage extends StatefulWidget {
   final Function()? clearPostId; //netral player
   final bool? isAutoPlay;
   final bool enableWakelock;
+  final bool isLanding;
   const VideoFullscreenPage({
     Key? key,
     required this.aliPlayerView,
     required this.data,
     required this.onClose,
+    required this.isLanding,
     this.fAliplayer,
     this.slider,
     required this.videoIndicator,
@@ -460,7 +462,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                             data: vidData?[index],
                             height: MediaQuery.of(context).size.height,
                             width: MediaQuery.of(context).size.width,
-                            inLanding: true,
+                            inLanding: widget.isLanding,
                             fromDeeplink: false,
                             clearPostId: widget.clearPostId,
                             clearing: true,
@@ -490,7 +492,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           return player;
                         });
                       } else {
-                        print('view ads: 2');
+                        print('view ads: 2 ${notifier.isShowingAds} ${notifier.hasShowedAds}');
                         return GestureDetector(
                           onTap: () {
                             onTapCtrl = true;
@@ -498,7 +500,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           },
                           child: Stack(
                             children: [
-                              if(!notifier.isShowingAds && notifier.hasShowedAds)
+                              if(!notifier.isShowingAds)
                                 Container(
                                   width: context.getWidth(),
                                   height: SizeConfig.screenHeight,

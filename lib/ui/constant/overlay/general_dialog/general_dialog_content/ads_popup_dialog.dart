@@ -501,6 +501,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
+    final language = context.read<TranslateNotifierV2>().translate;
     return WillPopScope(
       onWillPop: () async {
         // if (!loadingAction && secondsSkip < 1 || widget.data.isReport == true) {
@@ -517,7 +518,43 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
           SizedBox(
             width: SizeConfig.screenWidth,
             height: SizeConfig.screenHeight,
-            child: AliPlayerView(
+            child: (widget.data.mediaType?.toLowerCase() ?? '') == 'image' ? CustomBaseCacheImage(
+              memCacheWidth: 100,
+              memCacheHeight: 100,
+              widthPlaceHolder: 80,
+              heightPlaceHolder: 80,
+              imageUrl: widget.data.mediaUri,
+              imageBuilder: (context, imageProvider) => ClipRRect(
+                borderRadius: BorderRadius.circular(20), // Image border
+                child: Image(
+                  image: imageProvider,
+                  fit: BoxFit.fitWidth,
+                  width: context.getWidth(),
+                ),
+              ),
+              emptyWidget: Container(
+                  decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                  width: context.getWidth(),
+                  height: 250,
+                  padding: const EdgeInsets.all(20),
+                  alignment: Alignment.center,
+                  child: CustomTextWidget(
+                    textToDisplay: language.couldntLoadImage ?? 'Error',
+                    maxLines: 3,
+                  )),
+              errorWidget: (context, url, error) {
+                return Container(
+                    decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                    width: context.getWidth(),
+                    height: 250,
+                    padding: const EdgeInsets.all(20),
+                    alignment: Alignment.center,
+                    child: CustomTextWidget(
+                      textToDisplay: language.couldntLoadImage ?? 'Error',
+                      maxLines: 3,
+                    ));
+              },
+            ):AliPlayerView(
               onCreated: onViewPlayerCreated,
               x: 0,
               y: _playerY,
@@ -830,7 +867,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       child: !isPlay
           ? Stack(
         children: [
-          Container(
+          (widget.data.mediaType?.toLowerCase() ?? '') == 'image' ? const SizedBox.shrink() : Container(
             width: double.infinity,
             height: double.infinity,
             child: Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),

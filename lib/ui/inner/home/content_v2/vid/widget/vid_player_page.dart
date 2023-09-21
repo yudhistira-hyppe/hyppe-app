@@ -23,6 +23,7 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dar
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
@@ -176,7 +177,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   StreamSubscription? _networkSubscriptiion;
 
   // GlobalKey<TrackFragmentState> trackFragmentKey = GlobalKey();
-  AdsData? adsData;
+  // AdsData? adsData;
   var secondsSkip = 0;
   var skipAdsCurent = 0;
   bool isActiveAds = false;
@@ -201,9 +202,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     // }
     //cek ikaln
     // adsData = context.read<VidDetailNotifier>().adsData;
-    if (widget.inLanding) {
-      getAdsVideo(false);
-    }
+    // if (widget.inLanding) {
+    //   getAdsVideo(false);
+    // }
     if (widget.clearing) {
       widget.clearPostId?.call();
     }
@@ -469,12 +470,16 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               if(notifier.tempAdsData != null){
                 print('pause here 2');
                 fAliplayer?.pause();
-                setState(() {
-                  adsData = notifier.tempAdsData;
-                });
-                if(widget.onShowAds != null){
-                  widget.onShowAds!(adsData);
+                final tempAds = notifier.tempAdsData;
+                if(tempAds != null){
+                  notifier.setMapAdsContent(widget.data?.postID ?? '', tempAds);
+                  final fixAds = notifier.mapInContentAds[widget.data?.postID ?? ''];
+
+                  if(widget.onShowAds != null && fixAds != null){
+                    widget.onShowAds!(fixAds);
+                  }
                 }
+
               }
 
 
@@ -668,10 +673,14 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             });
           });
 
-          if (widget.inLanding) {
+          if (widget.inLanding && !(widget.data?.isViewed ?? true)) {
             final ref =(Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
             ref.hasShowedAds = false;
-            ref.getAdsVideo(Routing.navigatorKey.currentContext ?? context, _videoDuration);
+            ref.getAdsVideo(Routing.navigatorKey.currentContext ?? context, _videoDuration).whenComplete((){
+              if(widget.index != null){
+                (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().setIsViewed(widget.index!);
+              }
+            });
           }
           // fAliplayer?.play();
           print('=2=2=2=2=2=2=2prepare done');
@@ -719,33 +728,33 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     }
   }
 
-  _initAds(BuildContext context) async {
-    //for ads
-    // getCountVid();
-    await _newInitAds(context, true);
-    // if (context.getAdsCount() == null) {
-    //   context.setAdsCount(0);
-    // } else {
-    //   if (context.getAdsCount() == 5) {
-    //     await _newInitAds(context, true);
-    //   } else if (context.getAdsCount() == 2) {
-    //     // await _newInitAds(false);
-    //   }
-    // }
-  }
-
-  Future _newInitAds(BuildContext context, bool isContent) async {
-    if (isContent) {
-      context.setAdsCount(0);
-    }
-    try {
-      if (adsData == null) {
-        context.read<VidDetailNotifier>().getAdsVideo(context, isContent);
-      }
-    } catch (e) {
-      'Failed to fetch ads data 0 : $e'.logger();
-    }
-  }
+  // _initAds(BuildContext context) async {
+  //   //for ads
+  //   // getCountVid();
+  //   await _newInitAds(context, true);
+  //   // if (context.getAdsCount() == null) {
+  //   //   context.setAdsCount(0);
+  //   // } else {
+  //   //   if (context.getAdsCount() == 5) {
+  //   //     await _newInitAds(context, true);
+  //   //   } else if (context.getAdsCount() == 2) {
+  //   //     // await _newInitAds(false);
+  //   //   }
+  //   // }
+  // }
+  //
+  // Future _newInitAds(BuildContext context, bool isContent) async {
+  //   if (isContent) {
+  //     context.setAdsCount(0);
+  //   }
+  //   try {
+  //     if (notifier.mapInContentAds[widget.data?.postID ?? ''] == null) {
+  //       context.read<VidDetailNotifier>().getAdsVideo(context, isContent);
+  //     }
+  //   } catch (e) {
+  //     'Failed to fetch ads data 0 : $e'.logger();
+  //   }
+  // }
 
   void playVideo(VideoNotifier notifier) async {
     if (mounted) {
@@ -781,7 +790,10 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       //   }
       // });
 
-      System().increaseViewCount2(context, widget.data ?? ContentData());
+      System().increaseViewCount2(context, widget.data ?? ContentData()).whenComplete((){
+
+
+      });
     }
   }
 
@@ -1070,65 +1082,67 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         // print("onViewPlayerCreated ${onViewPlayerCreated}");
         aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
         // AliPlayerView aliPlayerAdsView = AliPlayerView(onCreated: onViewPlayerAdsCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
-        adsPlayerPage = AdsPlayerPage(dataSourceMap: {
-          DataSourceRelated.vidKey: adsData?.videoId,
-          DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
-        },
-          width: widget.width, height: widget.height,
-          thumbnail: (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}'
-          ,data: adsData, functionFullTriger: (){
+        if(notifier.mapInContentAds[widget.data?.postID ?? ''] != null){
+          adsPlayerPage = AdsPlayerPage(dataSourceMap: {
+            DataSourceRelated.vidKey: notifier.mapInContentAds[widget.data?.postID ?? '']?.videoId,
+            DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
+          },
+            width: widget.width, height: widget.height,
+            thumbnail: (widget.data?.isApsara ?? false) ? (widget.data?.mediaThumbEndPoint ?? '') : '${widget.data?.fullThumbPath}'
+            ,data: notifier.mapInContentAds[widget.data?.postID ?? ''], functionFullTriger: (){
 
-          },
-          getPlayer: (player){
+            },
+            getPlayer: (player){
 
-          },
-          onStop: (){
-            setState(() {
-              adsData = null;
-            });
-            if(widget.onShowAds != null){
-              widget.onShowAds!(adsData);
-            }
-          },
-          onFullscreen: (){
-            onFullscreen(notifier);
-          },
-          onClose: (){
-            if(mounted){
-              setState(() {
+            },
+            onStop: (){
+              notifier.setMapAdsContent(widget.data?.postID ?? '', null);
+              if(widget.onShowAds != null){
+                widget.onShowAds!(notifier.mapInContentAds[widget.data?.postID ?? '']);
+              }
+            },
+            onFullscreen: (){
+              onFullscreen(notifier);
+            },
+            onClose: (){
+              if(mounted){
+                notifier.setMapAdsContent(widget.data?.postID ?? '', null);
+                setState(() {
+                  isPlay = true;
+
+
+                  if(widget.onShowAds != null){
+                    widget.onShowAds!(notifier.mapInContentAds[widget.data?.postID ?? '']);
+
+                  }
+                  isloading = false;
+                });
+              }else{
                 isPlay = true;
 
-                adsData = null;
+                notifier.setMapAdsContent(widget.data?.postID ?? '', null);
                 if(widget.onShowAds != null){
-                  widget.onShowAds!(adsData);
+                  widget.onShowAds!(notifier.mapInContentAds[widget.data?.postID ?? '']);
 
                 }
                 isloading = false;
-              });
-            }else{
-              isPlay = true;
-
-              adsData = null;
-              if(widget.onShowAds != null){
-                widget.onShowAds!(adsData);
-
               }
-              isloading = false;
-            }
 
-            if(!notifier.isFullScreen){
-              Future.delayed(const Duration(milliseconds: 500), (){
+              if(!notifier.isFullScreen){
+                Future.delayed(const Duration(milliseconds: 500), (){
 
-                fAliplayer?.play();
-                setState(() {
-                  isPause = false;
-                  _showTipsWidget = false;
+                  fAliplayer?.play();
+                  setState(() {
+                    isPause = false;
+                    _showTipsWidget = false;
+                  });
                 });
-              });
-            }
-          },
-          orientation: Orientation.portrait,
-        );
+              }
+            },
+            orientation: Orientation.portrait,
+          );
+        }
+
         return AnimatedSwitcher(
           duration: const Duration(),
           transitionBuilder: (child, animation) => FadeTransition(child: child, opacity: animation),
@@ -1160,7 +1174,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                       //           child: Container(color: Colors.black, width: widget.width, height: widget.height, child: aliPlayerAdsView));
                       //     }
                       //   ),
-                      if (adsData == null || (adsData != null && !widget.inLanding))
+                      if (notifier.mapInContentAds[widget.data?.postID ?? ''] == null || (notifier.mapInContentAds[widget.data?.postID ?? ''] != null && !widget.inLanding))
                         widget.data!.isLoading
                             ? Container(color: Colors.black, width: widget.width, height: widget.height)
                             : ClipRRect(
@@ -1190,19 +1204,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                             withMargin: true,
                           ),
                         ),
-                      (widget.data?.reportedStatus == "BLURRED")
-                          ? Positioned.fill(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: VideoThumbnailReport(
-                            videoData: widget.data,
-                            function: () {
-                              changeStatusBlur();
-                            },
-                          ),
-                        ),
-                      )
-                          : Container(),
                       // Text("${SharedPreference().readStorage(SpKeys.countAds)}"),
                       // if (isPlay && adsData != null) skipAds(),
                       if (!isPlay && !_showLoading & !(widget.isAutoPlay ?? false))
@@ -1315,7 +1316,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                             ),
                           ),
                         ),
-                      if(adsData != null && isPlay)
+                      if(notifier.mapInContentAds[widget.data?.postID ?? ''] != null && isPlay)
                         Positioned.fill(child: ClipRRect(
                             borderRadius: BorderRadius.all(
                               Radius.circular(widget.fromFullScreen ?? false ? 0 : 16),
@@ -1830,12 +1831,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                               fAliplayer: fAliplayer,
                               data: widget.data ?? ContentData(),
                               onClose: () {
+                                notifier.setMapAdsContent(widget.data?.postID ?? '', null);
                                 setState(() {
                                   isPlay = true;
-
-                                  adsData = null;
                                   if(widget.onShowAds != null){
-                                    widget.onShowAds!(adsData);
+                                    widget.onShowAds!(notifier.mapInContentAds[widget.data?.postID ?? '']);
                                   }
 
                                 });
@@ -1854,6 +1854,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                 widget.loadMoreFunction?.call();
                               },
                               isAutoPlay: widget.isAutoPlay,
+                              isLanding: widget.inLanding
                             ),
                             settings: const RouteSettings()));
                         if (mounted) {
@@ -2015,7 +2016,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
       setState(() {
         notifier.isFullScreen = true;
       });
-      notifier.isShowingAds = adsData != null;
+      notifier.isShowingAds = notifier.mapInContentAds[widget.data?.postID ?? ''] != null;
       VideoIndicator value = await Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
           builder: (_) => VideoFullscreenPage(
             aliPlayerView: aliPlayerView!,
@@ -2026,9 +2027,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             onClose: () {
               isPlay = true;
 
-              adsData = null;
+              notifier.setMapAdsContent(widget.data?.postID ?? '', null);
               if(widget.onShowAds != null){
-                widget.onShowAds!(adsData);
+                widget.onShowAds!(notifier.mapInContentAds[widget.data?.postID ?? '']);
               }
               notifier.hasShowedAds = true;
               notifier.tempAdsData = null;
@@ -2037,9 +2038,18 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             },
             slider: _buildContentWidget(context, widget.orientation, notifier),
             videoIndicator: VideoIndicator(videoDuration: _videoDuration, seekValue: changeValue, positionText: _currentAdsPositionText, isMute: isMute),
+            vidData: widget.vidData,
+            index: widget.index,
+            clearPostId: widget.clearPostId,
+            loadMoreFunction: () {
+              print("loadmore function vidplayer");
+              widget.loadMoreFunction?.call();
+            },
+            isAutoPlay: widget.isAutoPlay,
+            isLanding: widget.inLanding,
           ),
           settings: const RouteSettings()));
-      notifier.isShowingAds = adsData != null;
+      notifier.isShowingAds = notifier.mapInContentAds[widget.data?.postID ?? ''] != null;
       if (mounted) {
         setState(() {
 
@@ -2069,11 +2079,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               if(notifier.tempAdsData != null){
                 print('pause here 2');
                 fAliplayer?.pause();
-                setState(() {
-                  adsData = notifier.tempAdsData;
-                });
+                notifier.setMapAdsContent(widget.data?.postID ?? '', notifier.tempAdsData);
                 if(widget.onShowAds != null){
-                  widget.onShowAds!(adsData);
+                  widget.onShowAds!(notifier.mapInContentAds[widget.data?.postID ?? '']);
                 }
               }
 
@@ -2186,8 +2194,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     ///
     // fAliplayerAds?.stop();
     isActiveAds = false;
-    adsData = null;
-    context.read<VidDetailNotifier>().adsData = null;
+
+    (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>().setMapAdsContent(widget.data?.postID ?? '', null);
+    (Routing.navigatorKey.currentContext ?? context).read<VidDetailNotifier>().adsData = null;
     setState(() {});
   }
 }

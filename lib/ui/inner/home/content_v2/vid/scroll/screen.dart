@@ -529,7 +529,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   data: vidData?[index] ?? ContentData(),
                   height: MediaQuery.of(context).size.width * 9.0 / 16.0,
                   width: MediaQuery.of(context).size.width,
-                  inLanding: true,
+                  inLanding: false,
                   fromDeeplink: false,
                   isAutoPlay: false,
                   functionFullTriger: (value) {

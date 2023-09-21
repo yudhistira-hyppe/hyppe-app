@@ -1034,14 +1034,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           });
                                         }
                                       }
-
-
                                       _lastCurIndex = _curIdx;
                                       _lastCurPostId = _curPostId;
                                     }
                                   },
                                   child: Container(
-                                    margin: EdgeInsets.only(bottom: 20),
+                                    margin: const EdgeInsets.only(bottom: 20),
                                     // width: MediaQuery.of(context).size.width,
                                     // height: MediaQuery.of(context).size.width * 16.0 / 10.8,
                                     decoration: BoxDecoration(
