@@ -698,6 +698,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   //down
                                   setState(() {
                                     scroolUp = false;
+                                    homeClick = false;
                                   });
 
                                   print("-===========reverse==========");
@@ -829,7 +830,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               picData?.height = size.height;
             },
             child:
-                // /ADS IN BETWEEN === Hariyanto Lukman ===
+
+                /// ADS IN BETWEEN === Hariyanto Lukman ===
                 isAds
                     ? VisibilityDetector(
                         key: Key(index.toString()),
@@ -1105,13 +1107,16 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         // });
                                       }
 
-                                      // /ADS IN BETWEEN === Hariyanto Lukman ===
-                                      if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
-                                        context.getInBetweenAds().then((value) {
-                                          if (value != null) {
-                                            notifier.setAdsData(index, value);
-                                          }
-                                        });
+                                      ///ADS IN BETWEEN === Hariyanto Lukman ===
+                                      if (!notifier.loadAds) {
+                                        if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
+                                          notifier.loadAds = true;
+                                          context.getInBetweenAds().then((value) {
+                                            if (value != null) {
+                                              notifier.setAdsData(index, value);
+                                            }
+                                          });
+                                        }
                                       }
 
                                       _lastCurIndex = _curIdx;

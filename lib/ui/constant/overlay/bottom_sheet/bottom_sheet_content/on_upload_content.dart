@@ -123,37 +123,31 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                           ),
                           GestureDetector(
                               onTap: () async {
-                                Routing().moveBack();
                                 SharedPreference().writeStorage(SpKeys.newUser, "FALSE");
                                 // ShowCaseWidget.of(context).next();
                                 context.read<MainNotifier>().isloading = true;
-
-                                unawaited(
-                                  Navigator.of(context, rootNavigator: true).push(
-                                    PageRouteBuilder(
-                                      pageBuilder: (_, __, ___) => WillPopScope(
-                                        onWillPop: () async => false,
-                                        child: Scaffold(
-                                          backgroundColor: Colors.transparent,
-                                          body: const Center(
-                                            child: CircularProgressIndicator.adaptive(),
-                                          ),
-                                        ),
-                                      ),
-                                      transitionDuration: Duration.zero,
-                                      barrierDismissible: false,
-                                      barrierColor: Colors.black45,
-                                      opaque: false,
-                                    ),
-                                  ),
-                                );
-                                await Future.delayed(const Duration(seconds: 1));
+                                // unawaited(
+                                //   Navigator.of(context, rootNavigator: true).push(
+                                //     PageRouteBuilder(
+                                //       pageBuilder: (_, __, ___) => WillPopScope(
+                                //         onWillPop: () async => false,
+                                //         child: Scaffold(
+                                //           backgroundColor: Colors.transparent,
+                                //           body: const Center(
+                                //             child: CircularProgressIndicator.adaptive(),
+                                //           ),
+                                //         ),
+                                //       ),
+                                //       transitionDuration: Duration.zero,
+                                //       barrierDismissible: false,
+                                //       barrierColor: Colors.black45,
+                                //       opaque: false,
+                                //     ),
+                                //   ),
+                                // );
+                                // await Future.delayed(const Duration(seconds: 1));
                                 // context.read<HomeNotifier>().tabIndex = 0;
-
-                                Routing().moveBack();
-                                // Routing().moveReplacement(Routes.lobby);
-
-                                // Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
+                                Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
                               },
                               child: Text(
                                 tn.understand ?? '',

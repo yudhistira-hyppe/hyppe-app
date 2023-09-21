@@ -1420,29 +1420,29 @@ class System {
 
   Future adsView(AdsData data, int time, {bool isClick = false}) async {
     try {
-      // final notifier = AdsDataBloc();
-      // final request = ViewAdsRequest(
-      //   watchingTime: time,
-      //   adsId: data.adsId,
-      //   useradsId: data.useradsId,
-      // );
-      // await notifier.viewAdsBloc(Routing.navigatorKey.currentContext!, request, isClick: isClick);
-      //
-      // final fetch = notifier.adsDataFetch;
-      //
-      // if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-      //   print("ini hasil ${fetch.data['rewards']}");
-      //   if (fetch.data['rewards'] == true) {
-      //     ShowGeneralDialog.adsRewardPop(Routing.navigatorKey.currentContext!).whenComplete(() => null);
-      //     Timer(const Duration(milliseconds: 800), () {
-      //       Routing().moveBack();
-      //       // Routing().moveBack();
-      //       // Timer(const Duration(milliseconds: 800), () {
-      //       //   Routing().moveBack();
-      //       // });
-      //     });
-      //   }
-      // }
+      final notifier = AdsDataBloc();
+      final request = ViewAdsRequest(
+        watchingTime: time,
+        adsId: data.adsId,
+        useradsId: data.useradsId,
+      );
+      await notifier.viewAdsBloc(Routing.navigatorKey.currentContext!, request, isClick: isClick);
+
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        print("ini hasil ${fetch.data['rewards']}");
+        if (fetch.data['rewards'] == true) {
+          ShowGeneralDialog.adsRewardPop(Routing.navigatorKey.currentContext!).whenComplete(() => null);
+          Timer(const Duration(milliseconds: 800), () {
+            Routing().moveBack();
+            // Routing().moveBack();
+            // Timer(const Duration(milliseconds: 800), () {
+            //   Routing().moveBack();
+            // });
+          });
+        }
+      }
     } catch (e) {
       'Failed hit view ads $e'.logger();
     }
@@ -1468,7 +1468,7 @@ class System {
       print("===============222222 ---- ${difference.inHours}");
       print("===============222222 ---- ${difference.inMinutes}");
       // if (difference.inHours >= 24) {
-      if (difference.inSeconds <= -10) {
+      if (difference.inMinutes <= -5) {
         await challange.getBannerLanding(context, ispopUp: true);
         SharedPreference().writeStorage(SpKeys.datetimeLastShowChallange, DateTime.now().toString());
         return ShowGeneralDialog.showBannerPop(context);

@@ -36,19 +36,13 @@ import 'package:wakelock/wakelock.dart';
 
 import '../../../app.dart';
 
-class RIKeys {
-  static final riKey1 = const Key('__RIKEY1__');
-  static final riKey2 = const Key('__RIKEY2__');
-  static final riKey3 = const Key('__RIKEY3__');
-}
-
 class MainNotifier with ChangeNotifier {
-  GlobalKey<NestedScrollViewState> globalKey = GlobalKey(debugLabel: 'sdsdsd');
-  // GlobalKey<NestedScrollViewState> get globalKey => _globalKey;
-  // set globalKey(val) {
-  //   _globalKey = val;
-  //   notifyListeners();
-  // }
+  GlobalKey<NestedScrollViewState> _globalKey = GlobalKey(debugLabel: 'sdsdsd');
+  GlobalKey<NestedScrollViewState> get globalKey => _globalKey;
+  set globalKey(val) {
+    _globalKey = val;
+    notifyListeners();
+  }
 
   final _eventService = EventService();
   SocketService get socketService => _socketService;
@@ -183,24 +177,14 @@ class MainNotifier with ChangeNotifier {
   }
 
   Widget mainScreen(BuildContext context, bool canShowAds, GlobalKey keyPostButton) {
-    String isNewUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
-    List pages = [];
-    if (isNewUser == "TRUE") {
-      pages.add(TutorLandingScreen(keyButton: keyPostButton, canShowAds: false));
-    } else {
-      pages.add(HomeScreen(canShowAds: canShowAds));
-    }
-    pages.add(SearchScreen());
-    pages.add(NotificationScreen());
-    pages.add(const SelfProfileScreen());
-    // List pages = [
-    //   HomeScreen(
-    //     canShowAds: canShowAds,
-    //   ),
-    //   SearchScreen(),
-    //   NotificationScreen(),
-    //   const SelfProfileScreen()
-    // ];
+    List pages = [
+      HomeScreen(
+        canShowAds: canShowAds,
+      ),
+      SearchScreen(),
+      NotificationScreen(),
+      const SelfProfileScreen()
+    ];
     if (page != -1) {
       _pageIndex = page;
     }

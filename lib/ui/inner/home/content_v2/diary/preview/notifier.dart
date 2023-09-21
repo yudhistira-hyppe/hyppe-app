@@ -102,9 +102,17 @@ class PreviewDiaryNotifier with ChangeNotifier {
     _nextAdsShowed = 6;
   }
 
+  bool loadAds = false;
+  // bool get loadAds => _loadAds;
+  // set loadAds(bool state){
+  //   _loadAds = state;
+  //   notifyListeners();
+  // }
+
   void setAdsData(int index, AdsData? adsData) {
     final withAds = diaryData?.where((element) => element.inBetweenAds != null).length ?? 0;
     final adsSize = diaryData?.length ?? 0;
+    loadAds = false;
     if (adsData != null) {
       if (adsSize > nextAdsShowed) {
         if (diaryData?[nextAdsShowed].inBetweenAds == null) {
