@@ -542,6 +542,12 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       },
       child: Stack(
         children: [
+          Positioned.fill(child: Container(
+            width: SizeConfig.screenWidth,
+            height: SizeConfig.screenHeight,
+            color: Colors.black,
+          ),
+          ),
           SizedBox(
             width: SizeConfig.screenWidth,
             height: SizeConfig.screenHeight,
@@ -622,6 +628,27 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
               children: [
+                loadingAction
+                    ? Container(
+                  // padding: const EdgeInsets.only(left: 8.0),
+                    width: 24,
+                    height: 24,
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
+                    : InkWell(
+                  onTap: () async {
+                    print('second close ads: $secondsVideo');
+                    await adsView(widget.data, secondsVideo);
+                    Navigator.pop(context);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: CustomIconWidget(
+                      defaultColor: false,
+                      iconData: "${AssetPath.vectorPath}back-arrow.svg",
+                    ),
+                  ),
+                ),
                 data.isReport ?? false
                     ? Container()
                     : Expanded(
@@ -656,7 +683,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                                 borderRadius: BorderRadius.all(Radius.circular(18)),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                                 ),
                               ),
                             );
@@ -668,7 +695,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                               borderRadius: BorderRadius.all(Radius.circular(18)),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                               ),
                             ),
                           ),
@@ -731,27 +758,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                         color: kHyppeLightButtonText,
                       ),
                     ),
-                    loadingAction
-                        ? Container(
-                      // padding: const EdgeInsets.only(left: 8.0),
-                        width: 24,
-                        height: 24,
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
-                        : InkWell(
-                      onTap: () async {
-                        print('second close ads: $secondsVideo');
-                        await adsView(widget.data, secondsVideo);
-                        Navigator.pop(context);
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: CustomIconWidget(
-                          defaultColor: false,
-                          iconData: "${AssetPath.vectorPath}close_ads.svg",
-                        ),
-                      ),
-                    )
+
                   ],
                 )
               ],
@@ -820,7 +827,6 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                           //   mode: LaunchMode.externalApplication,
                           // );
                           adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
-                            Navigator.pop(context);
                             await launchUrl(
                               uri,
                               mode: LaunchMode.externalApplication,
@@ -1274,7 +1280,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                                 borderRadius: BorderRadius.all(Radius.circular(18)),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                                 ),
                               ),
                             );
@@ -1286,7 +1292,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                               borderRadius: BorderRadius.all(Radius.circular(18)),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                               ),
                             ),
                           ),

@@ -489,7 +489,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                             borderRadius: BorderRadius.all(Radius.circular(18)),
                                             image: DecorationImage(
                                               fit: BoxFit.cover,
-                                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                              image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                                             ),
                                           ),
                                         );
@@ -501,7 +501,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                           borderRadius: BorderRadius.all(Radius.circular(18)),
                                           image: DecorationImage(
                                             fit: BoxFit.cover,
-                                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                            image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                                           ),
                                         ),
                                       ),
@@ -694,7 +694,6 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                                     });
                                                     print('second close ads: $secondsVideo');
                                                     System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
-                                                      Navigator.pop(context);
                                                       await launchUrl(
                                                         uri,
                                                         mode: LaunchMode.externalApplication,

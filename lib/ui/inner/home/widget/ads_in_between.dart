@@ -80,9 +80,18 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                           });
                         }
                         if(info.visibleFraction < 0.3){
-                          setState(() {
+                          try{
+                            if(mounted){
+                              setState(() {
+                                isSeeing = false;
+                              });
+                            }else{
+                              isSeeing = false;
+                            }
+                          }catch(e){
                             isSeeing = false;
-                          });
+                          }
+
                         }
                       },
                       child: GestureDetector(
@@ -114,7 +123,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                                 borderRadius: BorderRadius.all(Radius.circular(18)),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                                 ),
                               ),
                             );
@@ -126,7 +135,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               borderRadius: BorderRadius.all(Radius.circular(18)),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                               ),
                             ),
                           ),
@@ -232,7 +241,6 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                                     loadLaunch = true;
                                   });
                                   System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
-                                    Navigator.pop(context);
                                     await launchUrl(
                                       uri,
                                       mode: LaunchMode.externalApplication,

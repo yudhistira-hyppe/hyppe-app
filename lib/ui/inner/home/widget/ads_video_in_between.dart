@@ -111,7 +111,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                 borderRadius: BorderRadius.all(Radius.circular(18)),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                                 ),
                               ),
                             );
@@ -123,7 +123,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                               borderRadius: BorderRadius.all(Radius.circular(18)),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                               ),
                             ),
                           ),

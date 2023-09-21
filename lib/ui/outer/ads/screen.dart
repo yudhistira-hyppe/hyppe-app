@@ -359,7 +359,7 @@ class _AdsScreenState extends State<AdsScreen> {
                                       image: DecorationImage(
                                         fit: BoxFit.cover,
                                         image: AssetImage(
-                                            '${AssetPath.pngPath}content-error.png'),
+                                            '${AssetPath.pngPath}profile-error.jpg'),
                                       ),
                                     ),
                                   );
@@ -373,7 +373,7 @@ class _AdsScreenState extends State<AdsScreen> {
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
                                       image: AssetImage(
-                                          '${AssetPath.pngPath}content-error.png'),
+                                          '${AssetPath.pngPath}profile-error.jpg'),
                                     ),
                                   ),
                                 ),
@@ -511,7 +511,6 @@ class _AdsScreenState extends State<AdsScreen> {
                         if (await canLaunchUrl(uri)) {
                           adsView(context, widget.argument.data, secondsVideo,
                               isClick: true);
-                          Navigator.pop(context);
                           await launchUrl(
                             uri,
                             mode: LaunchMode.externalApplication,
