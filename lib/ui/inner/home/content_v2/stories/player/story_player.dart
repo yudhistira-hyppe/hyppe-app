@@ -439,8 +439,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     if(count == 5){
       final adsData = await context.getInBetweenAds();
       if(adsData != null){
-        pause();
         final auth = await context.getAuth(context, videoId: adsData.videoId ?? '');
+        pause();
         System().adsPopUp(context, adsData, auth).whenComplete(() {
           play();
         });

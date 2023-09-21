@@ -148,8 +148,12 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
     print("======================ke initstate");
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      secondsSkip = widget.data.adsSkip ?? 4;
+      secondsImage = 0;
+      if((widget.data.mediaType?.toLowerCase() ?? '') == 'image'){
+        startTimer();
+      }
       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-      secondsSkip = widget.data.adsSkip ?? 0;
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: "iklanPopUp");
 
@@ -202,6 +206,29 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       }
 
       _initListener();
+    });
+  }
+
+  Timer? countdownTimer;
+  var secondsImage = 0;
+
+  void stopTime({bool isReset = false}) {
+    setState(() => countdownTimer?.cancel());
+  }
+
+  void startTimer() {
+    countdownTimer = Timer.periodic(const Duration(seconds: 1), (_){
+      if(secondsSkip == 0){
+        countdownTimer?.cancel();
+      }else{
+        setState(() {
+          secondsSkip -= 1;
+          secondsImage += 1;
+          if(((widget.data.adsSkip ?? 4) + 2) == secondsImage){
+            stopTime();
+          }
+        });
+      }
     });
   }
 
@@ -776,40 +803,45 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                       });
                     });
                   } else {
-                    try {
-                      final uri = Uri.parse(data.adsUrlLink ?? '');
-                      print('bottomAdsLayout ${data.adsUrlLink}');
-                      if (await canLaunchUrl(uri)) {
+                    final uri = Uri.parse(data.adsUrlLink ?? '');
+                    if((data.adsUrlLink ?? '').withHttp()){
+                      try {
+
+                        print('bottomAdsLayout ${data.adsUrlLink}');
+
+                        if (await canLaunchUrl(uri)) {
+                          setState(() {
+                            loadLaunch = true;
+                          });
+                          print('second close ads: $secondsVideo');
+                          // Navigator.pop(context);
+                          // await launchUrl(
+                          //   uri,
+                          //   mode: LaunchMode.externalApplication,
+                          // );
+                          adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
+                            Navigator.pop(context);
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          });
+                        } else {
+                          throw "Could not launch $uri";
+                        }
+                        // can't launch url, there is some error
+                      } catch (e) {
                         setState(() {
                           loadLaunch = true;
                         });
                         print('second close ads: $secondsVideo');
-                        // Navigator.pop(context);
-                        // await launchUrl(
-                        //   uri,
-                        //   mode: LaunchMode.externalApplication,
-                        // );
-                        adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
-                          Navigator.pop(context);
-                          await launchUrl(
-                            uri,
-                            mode: LaunchMode.externalApplication,
-                          );
+                        // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                        adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
+                          System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                         });
-                      } else {
-                        throw "Could not launch $uri";
                       }
-                      // can't launch url, there is some error
-                    } catch (e) {
-                      setState(() {
-                        loadLaunch = true;
-                      });
-                      print('second close ads: $secondsVideo');
-                      // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                      adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
-                        System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                      });
                     }
+
                   }
                 }
               }
@@ -870,7 +902,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
           (widget.data.mediaType?.toLowerCase() ?? '') == 'image' ? const SizedBox.shrink() : Container(
             width: double.infinity,
             height: double.infinity,
-            child: Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),
+            child: const Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),
           ),
           // Container(
           //   color: Colors.black,

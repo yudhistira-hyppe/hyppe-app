@@ -1,3 +1,4 @@
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -311,6 +312,8 @@ class ShowGeneralDialog {
       SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, context.getCurrentDate());
     }
     try {
+      isShowingDialog = true;
+
       await showGeneralDialog(
         //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
         context: Routing.navigatorKey.currentState!.overlay!.context,
@@ -327,6 +330,7 @@ class ShowGeneralDialog {
           return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
         },
       );
+      isShowingDialog = false;
     } catch (e) {
       print('Error Pop Ads: $e');
     }

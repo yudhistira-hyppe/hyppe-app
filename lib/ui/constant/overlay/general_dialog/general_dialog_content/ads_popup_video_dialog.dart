@@ -684,33 +684,36 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                                 });
                                               });
                                             } else {
-                                              try {
-                                                final uri = Uri.parse(data.adsUrlLink ?? '');
-                                                print('bottomAdsLayout ${data.adsUrlLink}');
-                                                if (await canLaunchUrl(uri)) {
+                                              if((data.adsUrlLink ?? '').withHttp()){
+                                                try {
+                                                  final uri = Uri.parse(data.adsUrlLink ?? '');
+                                                  print('bottomAdsLayout ${data.adsUrlLink}');
+                                                  if (await canLaunchUrl(uri)) {
+                                                    setState(() {
+                                                      loadLaunch = true;
+                                                    });
+                                                    print('second close ads: $secondsVideo');
+                                                    System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
+                                                      Navigator.pop(context);
+                                                      await launchUrl(
+                                                        uri,
+                                                        mode: LaunchMode.externalApplication,
+                                                      );
+                                                    });
+                                                  } else {
+                                                    throw "Could not launch $uri";
+                                                  }
+                                                } catch (e) {
                                                   setState(() {
                                                     loadLaunch = true;
                                                   });
                                                   print('second close ads: $secondsVideo');
-                                                  System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
-                                                    Navigator.pop(context);
-                                                    await launchUrl(
-                                                      uri,
-                                                      mode: LaunchMode.externalApplication,
-                                                    );
+                                                  System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
+                                                    System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                                                   });
-                                                } else {
-                                                  throw "Could not launch $uri";
                                                 }
-                                              } catch (e) {
-                                                setState(() {
-                                                  loadLaunch = true;
-                                                });
-                                                print('second close ads: $secondsVideo');
-                                                System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
-                                                  System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                                });
                                               }
+
                                             }
                                           }
                                         },

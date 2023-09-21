@@ -1050,39 +1050,42 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                           });
                                                         });
                                                       } else {
-                                                        try {
-                                                          final uri = Uri.parse(data.adsUrlLink ?? '');
-                                                          print('bottomAdsLayout ${data.adsUrlLink}');
-                                                          if (await canLaunchUrl(uri)) {
+                                                        if((data.adsUrlLink ?? '').withHttp()){
+                                                          try {
+                                                            final uri = Uri.parse(data.adsUrlLink ?? '');
+                                                            print('bottomAdsLayout ${data.adsUrlLink}');
+                                                            if (await canLaunchUrl(uri)) {
+                                                              setState(() {
+                                                                loadLaunch = true;
+                                                              });
+                                                              print('second close ads: $secondsVideo');
+                                                              adsView(data, secondsVideo, isClick: true).whenComplete(() async {
+                                                                Navigator.pop(context);
+                                                                await launchUrl(
+                                                                  uri,
+                                                                  mode: LaunchMode.externalApplication,
+                                                                );
+                                                              });
+                                                            } else {
+                                                              throw "Could not launch $uri";
+                                                            }
+                                                            // can't launch url, there is some error
+                                                          } catch (e) {
                                                             setState(() {
                                                               loadLaunch = true;
                                                             });
                                                             print('second close ads: $secondsVideo');
-                                                            adsView(data, secondsVideo, isClick: true).whenComplete(() async {
-                                                              Navigator.pop(context);
-                                                              await launchUrl(
-                                                                uri,
-                                                                mode: LaunchMode.externalApplication,
-                                                              );
+                                                            // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                                            adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                                              System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                                                             });
-                                                          } else {
-                                                            throw "Could not launch $uri";
+                                                          }finally{
+                                                            setState(() {
+                                                              loadLaunch = false;
+                                                            });
                                                           }
-                                                          // can't launch url, there is some error
-                                                        } catch (e) {
-                                                          setState(() {
-                                                            loadLaunch = true;
-                                                          });
-                                                          print('second close ads: $secondsVideo');
-                                                          // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                                          adsView(data, secondsVideo, isClick: true).whenComplete(() {
-                                                            System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                                          });
-                                                        }finally{
-                                                          setState(() {
-                                                            loadLaunch = false;
-                                                          });
                                                         }
+
                                                       }
                                                     }else{
                                                       setState(() {
