@@ -111,7 +111,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                 borderRadius: BorderRadius.all(Radius.circular(18)),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                                 ),
                               ),
                             );
@@ -123,7 +123,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                               borderRadius: BorderRadius.all(Radius.circular(18)),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                               ),
                             ),
                           ),
@@ -222,29 +222,31 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                               });
                             });
                           } else {
-                            try {
-                              final uri = Uri.parse(data.adsUrlLink ?? '');
-                              print('bottomAdsLayout ${data.adsUrlLink}');
-                              if (await canLaunchUrl(uri)) {
+                            if((data.adsUrlLink ?? '').withHttp()){
+                              try {
+                                final uri = Uri.parse(data.adsUrlLink ?? '');
+                                print('bottomAdsLayout ${data.adsUrlLink}');
+                                if (await canLaunchUrl(uri)) {
+                                  setState(() {
+                                    loadLaunch = true;
+                                  });
+                                  System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
+                                    await launchUrl(
+                                      uri,
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  });
+                                } else {
+                                  throw "Could not launch $uri";
+                                }
+                              } catch (e) {
                                 setState(() {
                                   loadLaunch = true;
                                 });
-                                System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
-                                  await launchUrl(
-                                    uri,
-                                    mode: LaunchMode.externalApplication,
-                                  );
+                                System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+                                  System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                                 });
-                              } else {
-                                throw "Could not launch $uri";
                               }
-                            } catch (e) {
-                              setState(() {
-                                loadLaunch = true;
-                              });
-                              System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                                System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                              });
                             }
                           }
                         },

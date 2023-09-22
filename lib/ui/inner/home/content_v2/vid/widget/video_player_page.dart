@@ -751,7 +751,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                                     borderRadius: const BorderRadius.all(Radius.circular(18)),
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                                      image: const AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                                     ),
                                   ),
                                 );
@@ -763,7 +763,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                                   borderRadius: const BorderRadius.all(Radius.circular(18)),
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    image: const AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                                   ),
                                 ),
                               ),
@@ -794,22 +794,25 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                                   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                                 });
                               } else {
-                                try{
-                                  final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
-                                  final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
-                                  if (await canLaunchUrl(uri)) {
-                                    print('adsView part 1');
-                                    adsView(_newClipData?.data ?? AdsData(), second);
-                                    await launchUrl(
-                                      uri,
-                                      mode: LaunchMode.externalApplication,
-                                    );
-                                  } else
-                                    // can't launch url, there is some error
-                                    throw "Could not launch $uri";
-                                }catch(e){
-                                  System().goToWebScreen(_newClipData?.data?.adsUrlLink ?? '');
+                                if((_newClipData?.data?.adsUrlLink ?? '').withHttp()){
+                                  try{
+                                    final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
+                                    final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
+                                    if (await canLaunchUrl(uri)) {
+                                      print('adsView part 1');
+                                      adsView(_newClipData?.data ?? AdsData(), second);
+                                      await launchUrl(
+                                        uri,
+                                        mode: LaunchMode.externalApplication,
+                                      );
+                                    } else
+                                      // can't launch url, there is some error
+                                      throw "Could not launch $uri";
+                                  }catch(e){
+                                    System().goToWebScreen(_newClipData?.data?.adsUrlLink ?? '');
+                                  }
                                 }
+
 
                               }
                             },

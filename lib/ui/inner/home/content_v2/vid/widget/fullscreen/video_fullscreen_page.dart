@@ -22,11 +22,16 @@ import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../../../core/arguments/other_profile_argument.dart';
 import '../../../../../../../core/config/ali_config.dart';
 import '../../../../../../../core/constants/shared_preference_keys.dart';
+import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
 import '../../../../../../../core/models/collection/posts/content_v2/content_data.dart';
 import '../../../../../../../core/services/shared_preference.dart';
+import '../../../../../../../ux/path.dart';
+import '../../../../../../constant/widget/custom_base_cache_image.dart';
 import '../../../../../../constant/widget/custom_cache_image.dart';
 import '../../../../../../constant/widget/custom_text_widget.dart';
 import 'notifier.dart';
@@ -46,11 +51,13 @@ class VideoFullscreenPage extends StatefulWidget {
   final Function()? clearPostId; //netral player
   final bool? isAutoPlay;
   final bool enableWakelock;
+  final bool isLanding;
   const VideoFullscreenPage({
     Key? key,
     required this.aliPlayerView,
     required this.data,
     required this.onClose,
+    required this.isLanding,
     this.fAliplayer,
     this.slider,
     required this.videoIndicator,
@@ -184,9 +191,18 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     widget.fAliplayer?.setOnCompletion((playerId) {
       _showTipsWidget = true;
       // isPause = true;
-      setState(() {
+      try{
+        if(mounted){
+          setState(() {
+            _currentPosition = _videoDuration;
+          });
+        }else{
+          _currentPosition = _videoDuration;
+        }
+      }catch(e){
         _currentPosition = _videoDuration;
-      });
+      }
+
       nextPage();
     });
 
@@ -332,9 +348,13 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
   whileDispose() async {
     widget.fAliplayer?.pause();
+    final notifier = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    widget.fAliplayer?.play();
+    if(!notifier.isShowingAds){
+      widget.fAliplayer?.play();
+    }
+    // widget.fAliplayer?.play();
   }
 
   void scrollPage(height, width) async {
@@ -460,7 +480,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                             data: vidData?[index],
                             height: MediaQuery.of(context).size.height,
                             width: MediaQuery.of(context).size.width,
-                            inLanding: true,
+                            inLanding: widget.isLanding,
                             fromDeeplink: false,
                             clearPostId: widget.clearPostId,
                             clearing: true,
@@ -490,7 +510,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           return player;
                         });
                       } else {
-                        print('view ads: 2');
+                        print('view ads: 2 ${notifier.isShowingAds} ${notifier.hasShowedAds}');
                         return GestureDetector(
                           onTap: () {
                             onTapCtrl = true;
@@ -498,7 +518,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           },
                           child: Stack(
                             children: [
-                              if(!notifier.isShowingAds && notifier.hasShowedAds)
+                              if(!notifier.isShowingAds)
                                 Container(
                                   width: context.getWidth(),
                                   height: SizeConfig.screenHeight,
@@ -548,6 +568,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   // padding: EdgeInsets.only(bottom: 25.0),
                                   child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
                                 ),
+                              if(notifier.isShowingAds && !notifier.hasShowedAds && notifier.tempAdsData != null)
+                                detailAdsWidget(context, notifier.tempAdsData!),
                             ],
                           ),
                         );
@@ -609,6 +631,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           // padding: EdgeInsets.only(bottom: 25.0),
                           child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
                         ),
+                      if(notifier.isShowingAds && !notifier.hasShowedAds && notifier.tempAdsData != null)
+                        detailAdsWidget(context, notifier.tempAdsData!),
                     ],
                   ),
                 ),
@@ -642,6 +666,198 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   }
 
   double heightSkip = 0;
+  bool loadLaunch = false;
+  Widget detailAdsWidget(BuildContext context, AdsData data){
+    final isPortrait = orientation == Orientation.portrait;
+    final width = isPortrait ? context.getWidth() * 2/3 : context.getWidth() * 2/5;
+    final bottom = isPortrait ? 80.0 : 50.0;
+    return Positioned(
+      bottom: bottom,
+      left: 0,
+      child: Container(
+        width: width,
+        color: Colors.transparent,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(margin: const EdgeInsets.only(left: 16), child: CustomTextWidget(textToDisplay: data.adsDescription ?? '', textStyle: const TextStyle(color: Colors.white, fontSize: 12),)),
+            twelvePx,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              decoration: const BoxDecoration(color: kHyppeLightSurface),
+              child: Row(
+                children: [
+                  CustomBaseCacheImage(
+                    imageUrl: data.avatar?.fullLinkURL,
+                    memCacheWidth: 200,
+                    memCacheHeight: 200,
+                    imageBuilder: (_, imageProvider) {
+                      return Container(
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: imageProvider,
+                          ),
+                        ),
+                      );
+                    },
+                    errorWidget: (_, __, ___) {
+                      return Container(
+                        width: 24,
+                        height: 24,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                          ),
+                        ),
+                      );
+                    },
+                    emptyWidget: Container(
+                      width: 24,
+                      height: 24,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                        ),
+                      ),
+                    ),
+                  ),
+                  tenPx,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CustomTextWidget(
+                          textToDisplay: data.fullName ?? '',
+                          textStyle: context
+                              .getTextTheme()
+                              .caption
+                              ?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),
+                        ),
+                        fourPx,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            CustomTextWidget(textToDisplay: 'Ad ·', textStyle: context
+                                .getTextTheme()
+                                .caption
+                                ?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),),
+                            Expanded(child: CustomTextWidget(textAlign: TextAlign.start,textToDisplay: ' ${data.adsUrlLink}', textStyle: context.getTextTheme().caption, maxLines: 1, textOverflow: TextOverflow.ellipsis,)),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Material(
+                    color: Colors.transparent,
+                    child: Ink(
+                      width: 120,
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          color: KHyppeButtonAds),
+                      child: InkWell(
+                        splashColor: context.getColorScheme().secondary,
+                        onTap: () async {
+                          final secondsVideo = data.duration?.round() ?? 10;
+                          if(!loadLaunch){
+                            if(data != null){
+                              if (data.adsUrlLink?.isEmail() ?? false) {
+                                final email = data.adsUrlLink!.replaceAll('email:', '');
+                                setState(() {
+                                  loadLaunch = true;
+                                });
+                                print('second close ads: $secondsVideo');
+                                System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                  Future.delayed(const Duration(milliseconds: 800), () {
+                                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                  });
+                                  setState(() {
+                                    loadLaunch = false;
+                                  });
+                                });
+                              } else {
+                                if((data.adsUrlLink ?? '').withHttp()){
+                                  try {
+                                    final uri = Uri.parse(data.adsUrlLink ?? '');
+                                    print('bottomAdsLayout ${data.adsUrlLink}');
+                                    if (await canLaunchUrl(uri)) {
+                                      setState(() {
+                                        loadLaunch = true;
+                                      });
+                                      print('second close ads: $secondsVideo');
+                                      System().adsView(data, secondsVideo, isClick: true).whenComplete(() async {
+                                        await launchUrl(
+                                          uri,
+                                          mode: LaunchMode.externalApplication,
+                                        );
+                                      });
+                                    } else {
+                                      throw "Could not launch $uri";
+                                    }
+                                    // can't launch url, there is some error
+                                  } catch (e) {
+                                    setState(() {
+                                      loadLaunch = true;
+                                    });
+                                    print('second close ads: $secondsVideo');
+                                    // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                    System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                    });
+                                  }finally{
+                                    setState(() {
+                                      loadLaunch = false;
+                                    });
+                                  }
+                                }
+
+                              }
+                            }else{
+                              setState(() {
+                                loadLaunch = false;
+                              });
+                            }
+                          }
+
+
+                        },
+                        child: Builder(
+                          builder: (context) {
+                            return Container(
+                              padding: const EdgeInsets.all(10),
+                              alignment: Alignment.center,
+                              child: Text(
+                                data.ctaButton ?? 'Learn More',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   _adsBuildContentWidget(BuildContext context, Orientation orientation, VideoNotifier notifier) {
     // print('ORIENTATION: CHANGING ORIENTATION');
@@ -802,7 +1018,14 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                 ),
                 GestureDetector(
                   onTap: () async {
-                    Routing().moveBack();
+                    int changevalue;
+                    changevalue = _currentPosition + 1000;
+                    if (changevalue > _videoDuration) {
+                      changevalue = _videoDuration;
+                    }
+                    widget.data.isLoading = true;
+                    setState(() {});
+                    Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 12.0),

@@ -1028,19 +1028,18 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           context.getInBetweenAds().then((value) {
                                             if (value != null) {
                                               notifier.setAdsData(index, value);
-                                            }else{
+                                            } else {
                                               notifier.loadAds = false;
                                             }
                                           });
                                         }
                                       }
-
                                       _lastCurIndex = _curIdx;
                                       _lastCurPostId = _curPostId;
                                     }
                                   },
                                   child: Container(
-                                    margin: EdgeInsets.only(bottom: 20),
+                                    margin: const EdgeInsets.only(bottom: 20),
                                     // width: MediaQuery.of(context).size.width,
                                     // height: MediaQuery.of(context).size.width * 16.0 / 10.8,
                                     decoration: BoxDecoration(

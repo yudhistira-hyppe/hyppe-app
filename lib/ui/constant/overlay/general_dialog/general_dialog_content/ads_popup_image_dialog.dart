@@ -119,7 +119,7 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
                                               borderRadius: BorderRadius.all(Radius.circular(18)),
                                               image: DecorationImage(
                                                 fit: BoxFit.cover,
-                                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                                image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                                               ),
                                             ),
                                           );
@@ -131,7 +131,7 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
                                             borderRadius: BorderRadius.all(Radius.circular(18)),
                                             image: DecorationImage(
                                               fit: BoxFit.cover,
-                                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                              image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                                             ),
                                           ),
                                         ),
@@ -166,7 +166,7 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
                                         ),
                                       ),
                                       tenPx,
-                                      secondsSkip > 0 ? Container(
+                                      loadingBack ? const SizedBox( height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2,)) : secondsSkip > 0 ? Container(
                                         height: 30,
                                         width: 30,
                                         alignment: Alignment.center,
@@ -176,11 +176,11 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
                                           style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                                         ),
                                       ) : InkWell(
-                                        onTap: (){
+                                        onTap: () async {
                                           setState(() {
                                             loadingBack = true;
                                           });
-                                          System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
+                                          await System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
                                           setState(() {
                                             loadingBack = false;
                                           });
@@ -265,33 +265,35 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
                                                   });
                                                 });
                                               } else {
-                                                try {
-                                                  final uri = Uri.parse(data.adsUrlLink ?? '');
-                                                  print('bottomAdsLayout ${data.adsUrlLink}');
-                                                  if (await canLaunchUrl(uri)) {
+                                                if((data.adsUrlLink ?? '').withHttp()){
+                                                  try {
+                                                    final uri = Uri.parse(data.adsUrlLink ?? '');
+                                                    print('bottomAdsLayout ${data.adsUrlLink}');
+                                                    if (await canLaunchUrl(uri)) {
+                                                      setState(() {
+                                                        loadLaunch = true;
+                                                      });
+                                                      print('second close ads: $secondsImage');
+                                                      System().adsView(widget.data, secondsImage, isClick: true).whenComplete(() async {
+                                                        await launchUrl(
+                                                          uri,
+                                                          mode: LaunchMode.externalApplication,
+                                                        );
+                                                      });
+                                                    } else {
+                                                      throw "Could not launch $uri";
+                                                    }
+                                                  } catch (e) {
                                                     setState(() {
                                                       loadLaunch = true;
                                                     });
                                                     print('second close ads: $secondsImage');
-                                                    System().adsView(widget.data, secondsImage, isClick: true).whenComplete(() async {
-                                                      Navigator.pop(context);
-                                                      await launchUrl(
-                                                        uri,
-                                                        mode: LaunchMode.externalApplication,
-                                                      );
+                                                    System().adsView(widget.data, secondsImage, isClick: true).whenComplete(() {
+                                                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                                                     });
-                                                  } else {
-                                                    throw "Could not launch $uri";
                                                   }
-                                                } catch (e) {
-                                                  setState(() {
-                                                    loadLaunch = true;
-                                                  });
-                                                  print('second close ads: $secondsImage');
-                                                  System().adsView(widget.data, secondsImage, isClick: true).whenComplete(() {
-                                                    System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                                  });
                                                 }
+
                                               }
                                             }
                                           },
