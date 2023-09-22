@@ -28,12 +28,16 @@ import 'package:measured_size/measured_size.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wakelock/wakelock.dart';
 
 import '../../../../../../../app.dart';
+import '../../../../core/arguments/other_profile_argument.dart';
 import '../../../../core/constants/shared_preference_keys.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../core/services/shared_preference.dart';
+import '../../../../ux/path.dart';
+import '../custom_base_cache_image.dart';
 import '../custom_cache_image.dart';
 
 class AdsPlayerPage extends StatefulWidget {
@@ -49,6 +53,7 @@ class AdsPlayerPage extends StatefulWidget {
   final Function() onFullscreen;
   final Orientation orientation;
   final String thumbnail;
+  final bool fromFullScreen;
 
   AdsPlayerPage({
     Key? key,
@@ -63,7 +68,8 @@ class AdsPlayerPage extends StatefulWidget {
     required this.onClose,
     this.getPlayer,
     required this.orientation,
-    required this.thumbnail
+    required this.thumbnail,
+    required this.fromFullScreen,
   }) : super(key: key);
 
   @override
@@ -677,12 +683,207 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                       // padding: EdgeInsets.only(bottom: 25.0),
                       child: Offstage(offstage: _isLock, child: _buildContentWidget(context, widget.orientation, notifier)),
                     ),
+                  if(widget.fromFullScreen)
+                    detailAdsWidget(context, notifier.tempAdsData ?? AdsData())
                 ],
               ),
             );
           }
       );
     }
+  }
+
+  bool loadLaunch = false;
+  Widget detailAdsWidget(BuildContext context, AdsData data){
+    final isPortrait = widget.orientation == Orientation.portrait;
+    final width = isPortrait ? context.getWidth() * 2/3 : context.getWidth() * 2/5;
+    final bottom = isPortrait ? 80.0 : 50.0;
+    return Positioned(
+      bottom: bottom,
+      left: 0,
+      child: Container(
+        width: width,
+        color: Colors.transparent,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(margin: const EdgeInsets.only(left: 16), child: CustomTextWidget(textToDisplay: data.adsDescription ?? '', textStyle: const TextStyle(color: Colors.white, fontSize: 12),)),
+            twelvePx,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              decoration: const BoxDecoration(color: kHyppeLightSurface),
+              child: Row(
+                children: [
+                  CustomBaseCacheImage(
+                    imageUrl: data.avatar?.fullLinkURL,
+                    memCacheWidth: 200,
+                    memCacheHeight: 200,
+                    imageBuilder: (_, imageProvider) {
+                      return Container(
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: imageProvider,
+                          ),
+                        ),
+                      );
+                    },
+                    errorWidget: (_, __, ___) {
+                      return Container(
+                        width: 24,
+                        height: 24,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                          ),
+                        ),
+                      );
+                    },
+                    emptyWidget: Container(
+                      width: 24,
+                      height: 24,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                        ),
+                      ),
+                    ),
+                  ),
+                  tenPx,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CustomTextWidget(
+                          textToDisplay: data.fullName ?? '',
+                          textStyle: context
+                              .getTextTheme()
+                              .caption
+                              ?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),
+                        ),
+                        fourPx,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            CustomTextWidget(textToDisplay: 'Ad ·', textStyle: context
+                                .getTextTheme()
+                                .caption
+                                ?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),),
+                            Expanded(child: CustomTextWidget(textAlign: TextAlign.start,textToDisplay: ' ${data.adsUrlLink}', textStyle: context.getTextTheme().caption, maxLines: 1, textOverflow: TextOverflow.ellipsis,)),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Material(
+                    color: Colors.transparent,
+                    child: Ink(
+                      width: 120,
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          color: KHyppeButtonAds),
+                      child: InkWell(
+                        splashColor: context.getColorScheme().secondary,
+                        onTap: () async {
+                          final secondsVideo = data.duration?.round() ?? 10;
+                          if(!loadLaunch){
+                            if(data != null){
+                              if (data.adsUrlLink?.isEmail() ?? false) {
+                                final email = data.adsUrlLink!.replaceAll('email:', '');
+                                setState(() {
+                                  loadLaunch = true;
+                                });
+                                print('second close ads: $secondsVideo');
+                                System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                  Future.delayed(const Duration(milliseconds: 800), () {
+                                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                  });
+                                  setState(() {
+                                    loadLaunch = false;
+                                  });
+                                });
+                              } else {
+                                if((data.adsUrlLink ?? '').withHttp()){
+                                  try {
+                                    final uri = Uri.parse(data.adsUrlLink ?? '');
+                                    print('bottomAdsLayout ${data.adsUrlLink}');
+                                    if (await canLaunchUrl(uri)) {
+                                      setState(() {
+                                        loadLaunch = true;
+                                      });
+                                      print('second close ads: $secondsVideo');
+                                      System().adsView(data, secondsVideo, isClick: true).whenComplete(() async {
+                                        await launchUrl(
+                                          uri,
+                                          mode: LaunchMode.externalApplication,
+                                        );
+                                      });
+                                    } else {
+                                      throw "Could not launch $uri";
+                                    }
+                                    // can't launch url, there is some error
+                                  } catch (e) {
+                                    setState(() {
+                                      loadLaunch = true;
+                                    });
+                                    print('second close ads: $secondsVideo');
+                                    // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                    System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                    });
+                                  }finally{
+                                    setState(() {
+                                      loadLaunch = false;
+                                    });
+                                  }
+                                }
+
+                              }
+                            }else{
+                              setState(() {
+                                loadLaunch = false;
+                              });
+                            }
+                          }
+
+
+                        },
+                        child: Builder(
+                          builder: (context) {
+                            return Container(
+                              padding: const EdgeInsets.all(10),
+                              alignment: Alignment.center,
+                              child: Text(
+                                data.ctaButton ?? 'Learn More',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
 

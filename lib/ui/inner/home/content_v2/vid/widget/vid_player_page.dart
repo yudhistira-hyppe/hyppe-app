@@ -14,7 +14,6 @@ import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -26,7 +25,6 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:path_provider/path_provider.dart';
@@ -1112,6 +1110,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                 widget.onShowAds!(notifier.mapInContentAds[widget.data?.postID ?? '']);
               }
             },
+            fromFullScreen: widget.fromFullScreen,
             onFullscreen: (){
             print('onFullScreen VideoPlayer: ${notifier.isShowingAds} ${widget.fromFullScreen}');
             if(widget.fromFullScreen){
@@ -1146,6 +1145,15 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               }
 
               if(!notifier.isFullScreen){
+                Future.delayed(const Duration(milliseconds: 500), (){
+
+                  fAliplayer?.play();
+                  setState(() {
+                    isPause = false;
+                    _showTipsWidget = false;
+                  });
+                });
+              }else if(widget.fromFullScreen){
                 Future.delayed(const Duration(milliseconds: 500), (){
 
                   fAliplayer?.play();

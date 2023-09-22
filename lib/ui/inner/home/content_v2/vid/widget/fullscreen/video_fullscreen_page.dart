@@ -568,8 +568,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   // padding: EdgeInsets.only(bottom: 25.0),
                                   child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
                                 ),
-                              if(notifier.isShowingAds && !notifier.hasShowedAds)
-                                detailAdsWidget(context, notifier.mapInContentAds[widget.data.postID] ?? AdsData()),
+                              checkDetail(context, notifier),
                             ],
                           ),
                         );
@@ -631,8 +630,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           // padding: EdgeInsets.only(bottom: 25.0),
                           child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
                         ),
-                      if(notifier.isShowingAds && !notifier.hasShowedAds && notifier.tempAdsData != null)
-                        detailAdsWidget(context, notifier.tempAdsData!),
+                      checkDetail(context, notifier),
                     ],
                   ),
                 ),
@@ -663,6 +661,15 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
     //     ),
     //   ),
     // );
+  }
+
+  Widget checkDetail(BuildContext context, VideoNotifier notifier){
+    print('checkDetail: ${notifier.isShowingAds} ${!notifier.hasShowedAds} ${notifier.mapInContentAds[widget.data.postID]?.adsId} ${notifier.tempAdsData?.adsId}');
+    if(notifier.isShowingAds && !notifier.hasShowedAds){
+      return detailAdsWidget(context, notifier.mapInContentAds[widget.data.postID] ?? (notifier.tempAdsData ?? AdsData()));
+    }else{
+      return const SizedBox.shrink();
+    }
   }
 
   double heightSkip = 0;
