@@ -568,8 +568,8 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   // padding: EdgeInsets.only(bottom: 25.0),
                                   child: Offstage(offstage: false, child: _adsBuildContentWidget(context, Orientation.portrait, notifier)),
                                 ),
-                              if(notifier.isShowingAds && !notifier.hasShowedAds && notifier.tempAdsData != null)
-                                detailAdsWidget(context, notifier.tempAdsData!),
+                              if(notifier.isShowingAds && !notifier.hasShowedAds)
+                                detailAdsWidget(context, notifier.mapInContentAds[widget.data.postID] ?? AdsData()),
                             ],
                           ),
                         );

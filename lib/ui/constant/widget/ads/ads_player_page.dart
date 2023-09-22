@@ -669,7 +669,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                       borderRadius: const BorderRadius.all(
                         Radius.circular(16),
                       ),
-                      child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? notifier.adsAliPlayerView : const SizedBox.shrink())),
+                      child: Container(color: Colors.black, width: widget.width, height: widget.height, child: !notifier.isLoading && isPlay ? notifier.adsAliPlayerView : const SizedBox.shrink())),
                   if (isPlay)
                     SizedBox(
                       width: widget.width,
@@ -760,6 +760,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                           notifier.adsCurrentPositionText = 0;
                           notifier.hasShowedAds = true;
                           notifier.tempAdsData = null;
+                          notifier.isShowingAds = false;
                           widget.onClose();
                         });
                       }

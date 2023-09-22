@@ -39,7 +39,7 @@ import 'fullscreen/notifier.dart';
 import 'fullscreen/video_fullscreen_page.dart';
 
 class VidPlayerPage extends StatefulWidget {
-  final bool? fromFullScreen;
+  final bool fromFullScreen;
   final ModeTypeAliPLayer playMode;
   final Map<String, dynamic> dataSourceMap;
   final ContentData? data;
@@ -82,7 +82,7 @@ class VidPlayerPage extends StatefulWidget {
     this.onShowAds,
     required this.orientation,
     this.vidData,
-    this.fromFullScreen,
+    this.fromFullScreen = false,
     this.index,
     this.loadMoreFunction,
     this.isPlaying,
@@ -684,7 +684,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           final isViewed = widget.data?.isViewed ?? true;
           print('isViewed Setting: ${widget.index} | ${widget.data?.isViewed} | $isViewed');
           final ref =(Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
-          ref.setMapAdsContent(widget.data?.postID ?? '', null);
+          ref.tempAdsData = null;
           if (widget.inLanding && !isViewed) {
             ref.hasShowedAds = false;
             ref.getAdsVideo(Routing.navigatorKey.currentContext ?? context, _videoDuration).whenComplete((){
@@ -1070,7 +1070,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               width: widget.width,
               decoration: BoxDecoration(
                 color: Colors.black,
-                borderRadius: BorderRadius.circular(widget.fromFullScreen ?? false ? 0 : 16),
+                borderRadius: BorderRadius.circular(widget.fromFullScreen ? 0 : 16),
               ),
               child: VideoThumbnail(
                 videoData: widget.data,
@@ -1113,7 +1113,13 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
               }
             },
             onFullscreen: (){
+            print('onFullScreen VideoPlayer: ${notifier.isShowingAds} ${widget.fromFullScreen}');
+            if(widget.fromFullScreen){
+              Routing().moveBack();
+            }else{
               onFullscreen(notifier);
+            }
+
             },
             onClose: (){
               if(mounted){
@@ -1190,7 +1196,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                             ? Container(color: Colors.black, width: widget.width, height: widget.height)
                             : ClipRRect(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(widget.fromFullScreen ?? false ? 0 : 16),
+                              Radius.circular(widget.fromFullScreen ? 0 : 16),
                             ),
                             child: Container(color: Colors.black, width: widget.width, height: widget.height, child: isPlay ? aliPlayerView : const SizedBox.shrink())),
 
@@ -1330,9 +1336,10 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                       if(notifier.mapInContentAds[widget.data?.postID ?? ''] != null && isPlay)
                         Positioned.fill(child: ClipRRect(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(widget.fromFullScreen ?? false ? 0 : 16),
+                              Radius.circular(widget.fromFullScreen ? 0 : 16),
                             ),
-                            child: Container(color: Colors.black, width: widget.width, height: widget.height, child: adsPlayerPage!)))
+                            child: Container(color: Colors.black, width: widget.width, height: widget.height, child: adsPlayerPage))),
+
                     ],
                   ),
                 );
@@ -1790,7 +1797,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                           // });
                           setState(() {
                             _currentPosition = value.ceil();
-                            ;
                           });
                         }),
                   ),
@@ -1813,7 +1819,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                 ),
                 GestureDetector(
                   onTap: () async {
-                    if (widget.fromFullScreen ?? false) {
+                    if (widget.fromFullScreen) {
                       Routing().moveBack();
                     } else {
                       int changevalue;
@@ -1872,6 +1878,10 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                               isLanding: widget.inLanding
                             ),
                             settings: const RouteSettings()));
+                        notifier.isLoading = true;
+                        Future.delayed(const Duration(seconds: 6), (){
+                          notifier.isLoading = false;
+                        });
                         if (mounted) {
                           setState(() {
                             _videoDuration = value.videoDuration ?? 0;
@@ -2041,6 +2051,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         notifier.isFullScreen = true;
       });
       notifier.isShowingAds = notifier.mapInContentAds[widget.data?.postID ?? ''] != null;
+
+
       VideoIndicator value = await Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
           builder: (_) => VideoFullscreenPage(
             aliPlayerView: aliPlayerView!,
@@ -2074,6 +2086,11 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           ),
           settings: const RouteSettings()));
       notifier.isShowingAds = notifier.mapInContentAds[widget.data?.postID ?? ''] != null;
+      notifier.isLoading = true;
+      Future.delayed(const Duration(seconds: 1), (){
+        notifier.isLoading = false;
+      });
+
       if (mounted) {
         setState(() {
 
