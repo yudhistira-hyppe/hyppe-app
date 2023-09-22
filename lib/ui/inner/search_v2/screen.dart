@@ -292,7 +292,7 @@ class _FirstLayoutState extends State<FirstLayout> {
                             ),
                           ),
                         ),
-                        EventBannerWidget(controller: widget.controllerSlider, callback: widget.callback),
+                        // EventBannerWidget(controller: widget.controllerSlider, callback: widget.callback),
                         const HashtagScreen(),
                         InterestScreen(
                           onClick: (value) {

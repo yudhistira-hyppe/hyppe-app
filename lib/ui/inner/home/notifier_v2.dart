@@ -902,9 +902,9 @@ class HomeNotifier with ChangeNotifier {
       }
     }
     //get banner Challange
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (isInAppAds) System().popUpChallange(context);
-    });
+    // Future.delayed(const Duration(milliseconds: 500), () {
+    //   if (isInAppAds) System().popUpChallange(context);
+    // });
   }
 
   /// Old Pop Ads
