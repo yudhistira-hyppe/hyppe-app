@@ -875,9 +875,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                         heightPlaceHolder: 40,
                         imageUrl: (_groupUserStories?[index].story?[_curChildIdx].isApsara ?? false)
                             ? (_groupUserStories?[index].story?[_curChildIdx].media) == null
-                                ? "${_groupUserStories?[index].story?[_curChildIdx].mediaUri}"
-                                : "${_groupUserStories?[index].story?[_curChildIdx].media?.imageInfo?[0].url}"
-                            : "${_groupUserStories?[index].story?[_curChildIdx].fullContent}",
+                                ? "${_groupUserStories?[index].story?[_curChildIdx].mediaUri ?? ''}"
+                                : "${_groupUserStories?[index].story?[_curChildIdx].media?.imageInfo?[0].url ?? ''}"
+                            : "${_groupUserStories?[index].story?[_curChildIdx].fullContent ?? ''}",
                         imageBuilder: (context, imageProvider) {
                           if (_groupUserStories?[index].story?[_curChildIdx].mediaType == 'image') {
                             loadImage++;

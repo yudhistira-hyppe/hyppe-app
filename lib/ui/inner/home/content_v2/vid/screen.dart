@@ -491,8 +491,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                         onVisibilityChanged: (info) async {
                           if (info.visibleFraction >= 0.8) {
                             if (!isShowingDialog) {
-                              adsGlobalAliPlayer?.pause();
+                              globalAdsPopUp?.pause();
                             }
+                            globalAdsInContent?.pause();
                             _curIdx = index;
                             // _curPostId = vidData.inBetweenAds?.adsId ?? index.toString();
                             _curPostId = vidData.postID ?? index.toString();
@@ -575,8 +576,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                     });
                                   }
                                 }
-
-                                adsGlobalAliPlayer?.pause();
+                                if(!isShowingDialog){
+                                  globalAdsPopUp?.pause();
+                                }
+                                globalAdsInBetween?.pause();
                                 _curIdx = index;
                                 _curPostId = vidData.postID ?? index.toString();
 

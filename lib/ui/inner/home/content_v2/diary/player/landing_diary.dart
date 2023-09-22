@@ -816,7 +816,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         onVisibilityChanged: (info) {
                           if (info.visibleFraction >= 0.8) {
                             if (!isShowingDialog) {
-                              adsGlobalAliPlayer?.pause();
+                              globalAdsPopUp?.pause();
                             }
                             context.read<VideoNotifier>().currentPostID = data?.inBetweenAds?.adsId ?? '';
                             _curIdx = index;
@@ -973,7 +973,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     // }
                                     if (info.visibleFraction >= 0.6) {
                                       if (!isShowingDialog) {
-                                        adsGlobalAliPlayer?.pause();
+                                        globalAdsPopUp?.pause();
                                       }
                                       context.read<VideoNotifier>().currentPostID = data?.postID ?? '';
                                       _curIdx = index;

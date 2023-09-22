@@ -139,7 +139,7 @@ class _SearchContentState extends State<SearchContent> {
     return CustomBaseCacheImage(
         widthPlaceHolder: 80,
         heightPlaceHolder: 80,
-        imageUrl: (data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? "") : "${data.fullThumbPath}",
+        imageUrl: (data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? "") : "${data.fullThumbPath ?? ''}",
         imageBuilder: (context, imageProvider) => Container(
               // margin: margin,
               // const EdgeInsets.symmetric(horizontal: 4.5),

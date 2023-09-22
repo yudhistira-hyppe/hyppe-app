@@ -368,7 +368,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     child: CustomBaseCacheImage(
                       widthPlaceHolder: 80,
                       heightPlaceHolder: 80,
-                      imageUrl: (notifier.editData?.isApsara ?? false) ? (notifier.editData?.mediaThumbEndPoint ?? '') : '${notifier.editData?.fullThumbPath}',
+                      imageUrl: (notifier.editData?.isApsara ?? false) ? (notifier.editData?.mediaThumbEndPoint ?? '') : '${notifier.editData?.fullThumbPath ?? ''}',
                       imageBuilder: (context, imageProvider) => Container(
                         // margin: margin,
                         // // const EdgeInsets.symmetric(horizontal: 4.5),

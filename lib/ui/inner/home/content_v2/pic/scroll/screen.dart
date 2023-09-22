@@ -1036,7 +1036,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
                                               memCacheHeight: 100,
                                               widthPlaceHolder: 80,
                                               heightPlaceHolder: 80,
-                                              imageUrl: (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent}" + '&2',
+                                              imageUrl: (pics?[index].isApsara ?? false) ? (pics?[index].mediaEndpoint ?? "") : "${pics?[index].fullContent ?? ''}" + '&2',
                                               // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
                                               imageBuilder: (context, imageProvider) => ClipRRect(
                                                 borderRadius: BorderRadius.circular(20), // Image borderr
