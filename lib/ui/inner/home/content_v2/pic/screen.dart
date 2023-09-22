@@ -954,7 +954,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         featureType: FeatureType.other,
                                         // isCelebrity: vidpicData?.privacy?.isCelebrity,
                                         isCelebrity: false,
-                                        imageUrl: '${System().showUserPicture(picData?.avatar?.mediaEndpoint)}',
+                                        imageUrl: picData?.avatar == null ? '' : '${System().showUserPicture(picData?.avatar?.mediaEndpoint)}',
                                         onTapOnProfileImage: () => System().navigateToProfile(context, picData?.email ?? ''),
                                         createdAt: '2022-02-02',
                                         musicName: picData?.music?.musicTitle ?? '',
