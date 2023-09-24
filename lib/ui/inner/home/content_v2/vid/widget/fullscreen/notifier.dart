@@ -10,6 +10,12 @@ import '../../../../../../../core/models/collection/advertising/ads_video_data.d
 
 class VideoNotifier with ChangeNotifier{
 
+  Map<String, AdsData?> mapInContentAds = {};
+  setMapAdsContent(String id, AdsData? value){
+    mapInContentAds[id] = value;
+    notifyListeners();
+  }
+
   bool _isShowingAds = false;
   bool get isShowingAds => _isShowingAds;
   set isShowingAds(bool state){
@@ -106,10 +112,17 @@ class VideoNotifier with ChangeNotifier{
   FlutterAliplayer? adsAliplayer;
   FlutterAliplayer? betweenPlayer;
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  set isLoading(bool state){
+    _isLoading = state;
+    notifyListeners();
+  }
+
 
   ///ADS IN BETWEEN === Hariyanto Lukman ===
   Future getAdsVideo(BuildContext context, int videoDuration) async {
-
+    print('Hit Api Ads In Content');
     try {
       /// with Dummy
       // final Map<String, dynamic> map = {

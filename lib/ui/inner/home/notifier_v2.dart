@@ -867,22 +867,23 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  /// New Pop Ads
   // Future getAdsApsara(BuildContext context, isInAppAds) async {
   //   print('ke iklan yah');
   //   final ads = await getPopUpAds(context);
   //   final id = ads.videoId;
   //   print('ke iklan yah $id');
   //   print('ke iklan yah ${ads.adsType}');
-  //   if(ads.mediaType?.toLowerCase() == 'image'){
+  //   if (ads.mediaType?.toLowerCase() == 'image') {
   //     await System().adsPopUpV2(context, ads, '');
-  //   }else if (id != null && ads.adsType != null) {
+  //   } else if (id != null && ads.adsType != null) {
   //     try {
   //       final notifier = PostsBloc();
-  //
+
   //       // await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
   //       await notifier.getAuthApsara(context, apsaraId: ads.videoId ?? '');
   //       final fetch = notifier.postsFetch;
-  //
+
   //       if (fetch.postsState == PostsState.videoApsaraSuccess) {
   //         Map jsonMap = json.decode(fetch.data.toString());
   //         print('jsonMap video Apsara : $jsonMap');
@@ -893,15 +894,20 @@ class HomeNotifier with ChangeNotifier {
   //         // if (!isShowAds) {
   //         await System().adsPopUpV2(context, ads, auth);
   //         // }
-  //
+
   //         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
   //       }
   //     } catch (e) {
   //       'Failed to fetch ads data ${e}'.logger();
   //     }
   //   }
+  //   //get banner Challange
+  //   // Future.delayed(const Duration(milliseconds: 500), () {
+  //   //   if (isInAppAds) System().popUpChallange(context);
+  //   // });
   // }
 
+  /// Old Pop Ads
   Future getAdsApsara(BuildContext context, isInAppAds) async {
     print('ke iklan yah');
     final ads = await getPopUpAds(context);

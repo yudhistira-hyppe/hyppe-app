@@ -319,7 +319,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     }
 
     // if (offset >= lastOffset) {
+    // print("============== to position");
     if (!scroolUp) {
+      // print("============== $scroolUp");
       for (var i = 0; i <= itemIndex; i++) {
         if (i == itemIndex) {
           totItemHeightParam += (notifier.pic?[i].height ?? 0.0) * 30 / 100;
@@ -342,8 +344,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
               itemIndex++;
             }
           }
-        } else {}
-      }
+        }
+      } else {}
+      // }
       // for (var i = 0; i <= _curIdx; i++) {
       //   if (i == _curIdx) {
       //     totItemHeightParam += (notifier.pic?[i].height ?? 0.0) * 30 / 100;
@@ -693,21 +696,22 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             onNotification: (notification) {
                               final ScrollDirection direction = notification.direction;
                               setState(() {
-                                print("-===========scrollll==========");
+                                // print("-===========scrollll==========");
                                 if (direction == ScrollDirection.reverse) {
                                   //down
                                   setState(() {
                                     scroolUp = false;
                                     homeClick = false;
                                   });
-
-                                  print("-===========reverse==========");
+                                  // print("-===========reverse ${homeClick}==========");
+                                  // print("-===========reverse==========");
                                 } else if (direction == ScrollDirection.forward) {
                                   //up
                                   setState(() {
+                                    homeClick = false;
                                     scroolUp = true;
                                   });
-                                  print("-===========forward==========");
+                                  // print("-===========forward==========");
                                 }
                               });
                               return true;
@@ -782,6 +786,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                     ),
                                   );
                                 }
+
                                 // return Container(
                                 //   width: SizeConfig.screenWidth,
                                 //   height: heightItem[index].toDouble(),
@@ -830,67 +835,64 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
             },
             child:
 
-                ///ADS IN BETWEEN === Hariyanto Lukman ===
+                /// ADS IN BETWEEN === Hariyanto Lukman ===
                 // isAds
                 //     ? VisibilityDetector(
-                //       key: Key(index.toString()),
-                //       onVisibilityChanged: (info) async {
-                //         if (info.visibleFraction >= 0.8) {
-                //           _curIdx = index;
-                //           _curPostId = picData?.inBetweenAds?.adsId ?? index.toString();
-                //           if (_lastCurIndex > _curIdx) {
-                //             // fAliplayer?.destroy();
-                //             double position = 0.0;
-                //             for (var i = 0; i < _curIdx; i++) {
-                //               position += notifier.pic?[i].height ?? 0.0;
-                //               // position = position - (notifier.pic?[_curIdx].height);
-                //             }
-                //             // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
-                //           }
-                //
-                //           // if (_lastCurIndex != _curIdx) {
-                //           if (_lastCurPostId != _curPostId) {
-                //             if (mounted) {
-                //               setState(() {
-                //                 isShowShowcase = false;
-                //               });
-                //             }
-                //             final indexList = notifier.pic?.indexWhere((element) => element.inBetweenAds?.adsId == _curPostId);
-                //
-                //             if (indexList == (notifier.pic?.length ?? 0) - 1) {
-                //               context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
-                //             }
-                //             fAliplayer?.stop();
-                //
-                //             Future.delayed(const Duration(milliseconds: 500), () {
-                //               System().increaseViewCount2(context, picData ?? ContentData(), check: false);
-                //               if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
-                //                 if (mounted) {
-                //                   setState(() {
-                //                     isShowShowcase = true;
-                //                     keyOwnership = picData?.keyGlobal;
-                //                   });
-                //                 }
-                //                 // ShowCaseWidget.of(context).startShowCase([picData?.keyGlobal ?? GlobalKey()]);
+                //         key: Key(index.toString()),
+                //         onVisibilityChanged: (info) async {
+                //           if (info.visibleFraction >= 0.8) {
+                //             _curIdx = index;
+                //             _curPostId = picData?.inBetweenAds?.adsId ?? index.toString();
+                //             if (_lastCurIndex > _curIdx) {
+                //               // fAliplayer?.destroy();
+                //               double position = 0.0;
+                //               for (var i = 0; i < _curIdx; i++) {
+                //                 position += notifier.pic?[i].height ?? 0.0;
+                //                 // position = position - (notifier.pic?[_curIdx].height);
                 //               }
-                //             });
-                //             setState(() {
-                //               Future.delayed(Duration(milliseconds: 400), () {
-                //                 itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
+                //               // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
+                //             }
+
+                //             // if (_lastCurIndex != _curIdx) {
+                //             if (_lastCurPostId != _curPostId) {
+                //               if (mounted) {
+                //                 setState(() {
+                //                   isShowShowcase = false;
+                //                 });
+                //               }
+                //               final indexList = notifier.pic?.indexWhere((element) => element.inBetweenAds?.adsId == _curPostId);
+
+                //               if (indexList == (notifier.pic?.length ?? 0) - 1) {
+                //                 context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});
+                //               }
+                //               fAliplayer?.stop();
+
+                //               Future.delayed(const Duration(milliseconds: 500), () {
+                //                 System().increaseViewCount2(context, picData ?? ContentData(), check: false);
+                //                 if ((picData?.saleAmount ?? 0) > 0 || ((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
+                //                   if (mounted) {
+                //                     setState(() {
+                //                       isShowShowcase = true;
+                //                       // keyOwnership = picData?.keyGlobal;
+                //                     });
+                //                   }
+                //                   // ShowCaseWidget.of(context).startShowCase([picData?.keyGlobal ?? GlobalKey()]);
+                //                 }
                 //               });
-                //             });
+                //               setState(() {
+                //                 Future.delayed(Duration(milliseconds: 400), () {
+                //                   itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
+                //                 });
+                //               });
+                //             }
+                //             _lastCurIndex = _curIdx;
+                //             _lastCurPostId = _curPostId;
                 //           }
-                //           _lastCurIndex = _curIdx;
-                //           _lastCurPostId = _curPostId;
-                //         }
-                //       },
-                //       child: context.getAdsInBetween(notifier.pic?[index].inBetweenAds, (info) {
-                //
-                //       }, () {
-                //         notifier.setAdsData(index, null);
-                //       },(player, id){
-                //       }),
-                //     )
+                //         },
+                //         child: context.getAdsInBetween(notifier.pic?[index].inBetweenAds, (info) {}, () {
+                //           notifier.setAdsData(index, null);
+                //         }, (player, id) {}),
+                //       )
                 //     :
                 Column(
               children: [
@@ -953,7 +955,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               featureType: FeatureType.other,
                               // isCelebrity: vidpicData?.privacy?.isCelebrity,
                               isCelebrity: false,
-                              imageUrl: '${System().showUserPicture(picData?.avatar?.mediaEndpoint)}',
+                              imageUrl: picData?.avatar == null ? '' : '${System().showUserPicture(picData?.avatar?.mediaEndpoint)}',
                               onTapOnProfileImage: () => System().navigateToProfile(context, picData?.email ?? ''),
                               createdAt: '2022-02-02',
                               musicName: picData?.music?.musicTitle ?? '',
@@ -1108,16 +1110,21 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               //     notifier.getTemp(indexList, latIndexList, indexList);
                               //   }
                               // });
-                            }
 
-                            ///ADS IN BETWEEN === Hariyanto Lukman ===
-                            // if((notifier.pic?.length ?? 0) > notifier.nextAdsShowed){
-                            //   context.getInBetweenAds().then((value){
-                            //     if (value != null) {
-                            //       notifier.setAdsData(index, value);
-                            //     }
-                            //   });
-                            // }
+                              ///ADS IN BETWEEN === Hariyanto Lukman ===
+                              if (!notifier.loadAds) {
+                                if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
+                                  notifier.loadAds = true;
+                                  context.getInBetweenAds().then((value) {
+                                    if (value != null) {
+                                      notifier.setAdsData(index, value);
+                                    } else {
+                                      notifier.loadAds = false;
+                                    }
+                                  });
+                                }
+                              }
+                            }
 
                             _lastCurIndex = _curIdx;
                             _lastCurPostId = _curPostId;

@@ -31,6 +31,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wakelock/wakelock.dart';
 
 import '../../../../../../app.dart';
+import '../../../../../../core/models/collection/advertising/ads_video_data.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
 
 class StoryPlayerPage extends StatefulWidget {
@@ -292,7 +293,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       });
       final fixContext = Routing.navigatorKey.currentContext;
       System().increaseViewCount(fixContext ?? context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()).whenComplete(() {
-        // _showAds(Routing.navigatorKey.currentContext ?? context);
+        _showAds(Routing.navigatorKey.currentContext ?? context);
       });
       isPlay = true;
     });
@@ -438,8 +439,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     if(count == 5){
       final adsData = await context.getInBetweenAds();
       if(adsData != null){
-        pause();
         final auth = await context.getAuth(context, videoId: adsData.videoId ?? '');
+        pause();
         System().adsPopUp(context, adsData, auth).whenComplete(() {
           play();
         });
@@ -972,7 +973,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     (Routing.navigatorKey.currentContext ?? context).read<StoriesPlaylistNotifier>().textEditingController.clear();
     emojiController.reset();
     System().increaseViewCount(fixContext ?? context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()).whenComplete(() {
-      // _showAds(Routing.navigatorKey.currentContext ?? context);
+      _showAds(Routing.navigatorKey.currentContext ?? context);
       storyRef.setViewed(_curIdx, _curChildIdx);
     });
     fAliplayer?.stop();

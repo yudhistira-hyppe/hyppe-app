@@ -178,7 +178,7 @@ class DynamicLinkService {
                   );
                 });
               } else {
-                _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+                // _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
                 Future.delayed(const Duration(milliseconds: 500), () {
                   _routing.move(
                     path,
@@ -204,7 +204,7 @@ class DynamicLinkService {
                   isFromSplash = false;
                 });
               } else {
-                _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+                // _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
                 Future.delayed(const Duration(milliseconds: 500), () {
                   _routing.move(
                     path,

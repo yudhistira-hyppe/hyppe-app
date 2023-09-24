@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
@@ -101,6 +102,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
   MainNotifier? mn;
   int indexKeySell = 0;
   int indexKeyProtection = 0;
+  int itemIndex = 0;
+  bool scroolUp = false;
 
   @override
   void initState() {
@@ -351,7 +354,13 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     double totItemHeight = 0;
     double totItemHeightParam = 0;
     final notifier = context.read<PreviewDiaryNotifier>();
-    if (offset > lastOffset) {
+
+    if (offset < 10) {
+      itemIndex = 0;
+    }
+
+    // if (offset > lastOffset) {
+    if (!scroolUp) {
       homeClick = false;
       for (var i = 0; i <= _curIdx; i++) {
         if (i == _curIdx) {
@@ -363,6 +372,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       }
       if (offset >= totItemHeightParam) {
         var position = totItemHeight;
+        if (_curIdx == 0 && position == 0) {
+          position = notifier.diaryData?[1].height ?? 200.0;
+        }
         if (mounted) widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
       }
     } else {
@@ -739,44 +751,69 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                               overscroll.disallowIndicator();
                               return false;
                             },
-                            child: ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              // controller: notifier.scrollController,
-                              // scrollDirection: Axis.horizontal,
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: notifier.diaryData?.length,
-                              padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                              itemBuilder: (context, index) {
-                                if (notifier.diaryData == null || home.isLoadingDiary) {
-                                  fAliplayer?.pause();
-                                  // _lastCurIndex = -1;
-                                  _lastCurPostId = '';
-                                  return CustomShimmer(
-                                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                                    height: 168,
-                                    radius: 8,
-                                    margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                                  );
-                                } else if (index == notifier.diaryData?.length && notifier.hasNext) {
-                                  return UnconstrainedBox(
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      width: 80 * SizeConfig.scaleDiagonal,
-                                      height: 80 * SizeConfig.scaleDiagonal,
-                                      child: const CustomLoading(),
-                                    ),
-                                  );
-                                }
-                                // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                                if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
-                                  isPlay = false;
-                                  fAliplayer?.stop();
-                                }
-
-                                return itemDiary(context, notifier, index, home);
+                            child: NotificationListener<UserScrollNotification>(
+                              onNotification: (notification) {
+                                final ScrollDirection direction = notification.direction;
+                                setState(() {
+                                  // print("-===========scrollll==========");
+                                  if (direction == ScrollDirection.reverse) {
+                                    //down
+                                    setState(() {
+                                      scroolUp = false;
+                                      homeClick = false;
+                                    });
+                                    // print("-===========reverse ${homeClick}==========");
+                                    // print("-===========reverse==========");
+                                  } else if (direction == ScrollDirection.forward) {
+                                    //up
+                                    setState(() {
+                                      homeClick = false;
+                                      scroolUp = true;
+                                    });
+                                    // print("-===========forward==========");
+                                  }
+                                });
+                                return true;
                               },
+                              child: ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                // controller: notifier.scrollController,
+                                // scrollDirection: Axis.horizontal,
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: notifier.diaryData?.length,
+                                padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                                itemBuilder: (context, index) {
+                                  if (notifier.diaryData == null || home.isLoadingDiary) {
+                                    fAliplayer?.pause();
+                                    // _lastCurIndex = -1;
+                                    _lastCurPostId = '';
+                                    return CustomShimmer(
+                                      width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                      height: 168,
+                                      radius: 8,
+                                      margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                                      padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                    );
+                                  } else if (index == notifier.diaryData?.length && notifier.hasNext) {
+                                    return UnconstrainedBox(
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        width: 80 * SizeConfig.scaleDiagonal,
+                                        height: 80 * SizeConfig.scaleDiagonal,
+                                        child: const CustomLoading(),
+                                      ),
+                                    );
+                                  }
+                                  // if (_curIdx == 0 && notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                                  if (notifier.diaryData?[0].reportedStatus == 'BLURRED') {
+                                    isPlay = false;
+                                    fAliplayer?.stop();
+                                  }
+
+                                  return itemDiary(context, notifier, index, home);
+                                },
+                              ),
                             ),
                           ),
               ),
@@ -815,12 +852,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 //         key: Key(data?.inBetweenAds?.adsId ?? index.toString()),
                 //         onVisibilityChanged: (info) {
                 //           if (info.visibleFraction >= 0.8) {
-                //             if(!isShowingDialog){
+                //             if (!isShowingDialog) {
                 //               adsGlobalAliPlayer?.pause();
                 //             }
                 //             context.read<VideoNotifier>().currentPostID = data?.inBetweenAds?.adsId ?? '';
                 //             _curIdx = index;
-                //
+
                 //             _curPostId = data?.inBetweenAds?.adsId ?? index.toString();
                 //             // if (_lastCurIndex != _curIdx) {
                 //             final indexList = notifier.diaryData?.indexWhere((element) => element.inBetweenAds?.adsId == _curPostId);
@@ -831,7 +868,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 //               fAliplayer?.clearScreen();
                 //               // Wakelock.disable();
                 //               initAlipayer();
-                //
+
                 //               if (mounted) {
                 //                 setState(() {
                 //                   Future.delayed(Duration(milliseconds: 400), () {
@@ -839,7 +876,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 //                   });
                 //                 });
                 //               }
-                //
+
                 //               if (indexList == (notifier.diaryData?.length ?? 0) - 1) {
                 //                 Future.delayed(const Duration(milliseconds: 1000), () async {
                 //                   await context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {
@@ -852,17 +889,14 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                 //                 });
                 //               }
                 //             }
-                //
-                //
+
                 //             _lastCurIndex = _curIdx;
                 //             _lastCurPostId = _curPostId;
                 //           }
                 //         },
-                //         child: context.getAdsInBetween(notifier.diaryData?[index].inBetweenAds, (info) {
-                //         }, () {
+                //         child: context.getAdsInBetween(notifier.diaryData?[index].inBetweenAds, (info) {}, () {
                 //           notifier.setAdsData(index, null);
-                //         }, (player, id){
-                //         }),
+                //         }, (player, id) {}),
                 //       )
                 //     :
                 Column(
@@ -1026,20 +1060,24 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                 }
 
                                 ///ADS IN BETWEEN === Hariyanto Lukman ===
-                                // if((notifier.diaryData?.length ?? 0) > notifier.nextAdsShowed){
-                                //   context.getInBetweenAds().then((value){
-                                //     if (value != null) {
-                                //       notifier.setAdsData(index, value);
-                                //     }
-                                //   });
-                                // }
-
+                                if (!notifier.loadAds) {
+                                  if ((notifier.diaryData?.length ?? 0) > notifier.nextAdsShowed) {
+                                    notifier.loadAds = true;
+                                    context.getInBetweenAds().then((value) {
+                                      if (value != null) {
+                                        notifier.setAdsData(index, value);
+                                      } else {
+                                        notifier.loadAds = false;
+                                      }
+                                    });
+                                  }
+                                }
                                 _lastCurIndex = _curIdx;
                                 _lastCurPostId = _curPostId;
                               }
                             },
                             child: Container(
-                              margin: EdgeInsets.only(bottom: 20),
+                              margin: const EdgeInsets.only(bottom: 20),
                               // width: MediaQuery.of(context).size.width,
                               // height: MediaQuery.of(context).size.width * 16.0 / 10.8,
                               decoration: BoxDecoration(

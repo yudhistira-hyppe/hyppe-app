@@ -57,6 +57,7 @@ class TransactionHistoryModel {
   String? from;
   num? duration;
   num? kredit;
+  num? skipTime;
   String? iconVoucher;
   List<DetailTransaction>? detailTransaction;
 
@@ -122,6 +123,7 @@ class TransactionHistoryModel {
             : MediaModel.fromJSON(json['media']);
     from = json['from'] ?? '';
     duration = (json['duration'] is int) ? json['duration'].toDouble() : json['duration'];
+    skipTime = (json['skipTime'] is int) ? json['skipTime'].toDouble() : json['skipTime'];
     kredit = (json['kredit'] is int) ? json['kredit'].toDouble() : json['kredit'];
     iconVoucher = json['iconVoucher'];
     if (json['detailTransaction'] != null) {

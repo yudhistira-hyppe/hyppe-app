@@ -132,9 +132,17 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     _nextAdsShowed = 6;
   }
 
+  bool loadAds = false;
+  // bool get loadAds => _loadAds;
+  // set loadAds(bool state){
+  //   _loadAds = state;
+  //   notifyListeners();
+  // }
+
   void setInBetweenAds(int index, AdsData? adsData) {
     // final withAds = vidData?.where((element) => element.inBetweenAds != null).length ?? 0;
     // final adsSize = vidData?.length ?? 0;
+    // loadAds = false;
     // if (adsData != null) {
     //   if (adsSize > nextAdsShowed) {
     //     if (vidData?[nextAdsShowed].inBetweenAds == null) {

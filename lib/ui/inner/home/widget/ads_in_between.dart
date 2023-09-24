@@ -80,9 +80,18 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                           });
                         }
                         if(info.visibleFraction < 0.3){
-                          setState(() {
+                          try{
+                            if(mounted){
+                              setState(() {
+                                isSeeing = false;
+                              });
+                            }else{
+                              isSeeing = false;
+                            }
+                          }catch(e){
                             isSeeing = false;
-                          });
+                          }
+
                         }
                       },
                       child: GestureDetector(
@@ -114,7 +123,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                                 borderRadius: BorderRadius.all(Radius.circular(18)),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                                 ),
                               ),
                             );
@@ -126,7 +135,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               borderRadius: BorderRadius.all(Radius.circular(18)),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                               ),
                             ),
                           ),
@@ -145,16 +154,16 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                     GestureDetector(
                       onTap: (){
                         ShowBottomSheet().onReportContent(
-                          context,
-                          adsData: widget.data,
-                          type: adsPopUp,
-                          postData: null,
-                          onUpdate: () {
-                            setState(() {
-                              widget.data.isReport = true;
-                            });
-                          },
-                          onCompleted: widget.afterReport
+                            context,
+                            adsData: widget.data,
+                            type: adsPopUp,
+                            postData: null,
+                            onUpdate: () {
+                              setState(() {
+                                widget.data.isReport = true;
+                              });
+                            },
+                            onCompleted: widget.afterReport
                         );
                       },
                       child: const CustomIconWidget(
@@ -218,35 +227,36 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               loadLaunch = true;
                             });
                             System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                             Future.delayed(const Duration(milliseconds: 800), () {
+                              Future.delayed(const Duration(milliseconds: 800), () {
                                 Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                               });
                             });
                           } else {
-                            try {
-                              final uri = Uri.parse(data.adsUrlLink ?? '');
-                              print('bottomAdsLayout ${data.adsUrlLink}');
-                              if (await canLaunchUrl(uri)) {
+                            if((data.adsUrlLink ?? '').withHttp()){
+                              try {
+                                final uri = Uri.parse(data.adsUrlLink ?? '');
+                                print('bottomAdsLayout ${data.adsUrlLink}');
+                                if (await canLaunchUrl(uri)) {
+                                  setState(() {
+                                    loadLaunch = true;
+                                  });
+                                  System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
+                                    await launchUrl(
+                                      uri,
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  });
+                                } else {
+                                  throw "Could not launch $uri";
+                                }
+                              } catch (e) {
                                 setState(() {
                                   loadLaunch = true;
                                 });
-                                System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
-                                  Navigator.pop(context);
-                                  await launchUrl(
-                                    uri,
-                                    mode: LaunchMode.externalApplication,
-                                  );
+                                System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+                                  System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                                 });
-                              } else {
-                                throw "Could not launch $uri";
                               }
-                            } catch (e) {
-                              setState(() {
-                                loadLaunch = true;
-                              });
-                              System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                                System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                              });
                             }
                           }
                         },
@@ -269,21 +279,21 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                       ),
                       twelvePx,
                       if(widget.data.adsDescription != null)
-                      Builder(
-                        builder: (context) {
-                          final notifier = context.read<TranslateNotifierV2>();
-                          return CustomDescContent(
-                              desc: widget.data.adsDescription!,
-                              trimLines: 2,
-                              textAlign: TextAlign.justify,
-                              seeLess: ' ${notifier.translate.seeLess}',
-                              seeMore: ' ${notifier.translate.seeMoreContent}',
-                              textOverflow: TextOverflow.visible,
-                              normStyle: Theme.of(context).textTheme.bodyText2,
-                              hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                              expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary));
-                        }
-                      )
+                        Builder(
+                            builder: (context) {
+                              final notifier = context.read<TranslateNotifierV2>();
+                              return CustomDescContent(
+                                  desc: widget.data.adsDescription!,
+                                  trimLines: 2,
+                                  textAlign: TextAlign.justify,
+                                  seeLess: ' ${notifier.translate.seeLess}',
+                                  seeMore: ' ${notifier.translate.seeMoreContent}',
+                                  textOverflow: TextOverflow.visible,
+                                  normStyle: Theme.of(context).textTheme.bodyText2,
+                                  hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                                  expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary));
+                            }
+                        )
                     ],
                   ),
                 )

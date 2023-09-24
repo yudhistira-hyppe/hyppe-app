@@ -111,7 +111,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                 borderRadius: BorderRadius.all(Radius.circular(18)),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                                 ),
                               ),
                             );
@@ -123,7 +123,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                               borderRadius: BorderRadius.all(Radius.circular(18)),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                               ),
                             ),
                           ),
@@ -137,14 +137,14 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                             CustomTextWidget(
                               textToDisplay: widget.data.username ?? '',
                               textStyle: context.getTextTheme().caption?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                             CustomTextWidget(
                               textToDisplay: language.sponsored ?? 'Sponsored',
                               textStyle: context.getTextTheme().caption?.copyWith(
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                                fontWeight: FontWeight.w400,
+                              ),
                             )
                           ],
                         ),
@@ -189,20 +189,20 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                             aspectRatio: ratio,
                             child: notifier.currentPostID == widget.data.adsId
                                 ? InBetweenScreen(
-                                    adsData: widget.data,
-                                    player: widget.player,
-                                    ratio: ratio,
+                              adsData: widget.data,
+                              player: widget.player,
+                              ratio: ratio,
                               onRatioChanged: (fix){
-                                      setState(() {
-                                        ratio = fix;
-                                      },);
+                                setState(() {
+                                  ratio = fix;
+                                },);
                               },
-                                  getPlayer: widget.getPlayer,)
+                              getPlayer: widget.getPlayer,)
                                 : Container(
-                                    decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                                    alignment: Alignment.center,
-                                    child: const CustomLoading(),
-                                  ),
+                              decoration: const BoxDecoration(color: Colors.black, borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                              alignment: Alignment.center,
+                              child: const CustomLoading(),
+                            ),
                           ),
                         ),
                       ),
@@ -222,29 +222,31 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                               });
                             });
                           } else {
-                            try {
-                              final uri = Uri.parse(data.adsUrlLink ?? '');
-                              print('bottomAdsLayout ${data.adsUrlLink}');
-                              if (await canLaunchUrl(uri)) {
+                            if((data.adsUrlLink ?? '').withHttp()){
+                              try {
+                                final uri = Uri.parse(data.adsUrlLink ?? '');
+                                print('bottomAdsLayout ${data.adsUrlLink}');
+                                if (await canLaunchUrl(uri)) {
+                                  setState(() {
+                                    loadLaunch = true;
+                                  });
+                                  System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
+                                    await launchUrl(
+                                      uri,
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  });
+                                } else {
+                                  throw "Could not launch $uri";
+                                }
+                              } catch (e) {
                                 setState(() {
                                   loadLaunch = true;
                                 });
-                                System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
-                                  await launchUrl(
-                                    uri,
-                                    mode: LaunchMode.externalApplication,
-                                  );
+                                System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+                                  System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                                 });
-                              } else {
-                                throw "Could not launch $uri";
                               }
-                            } catch (e) {
-                              setState(() {
-                                loadLaunch = true;
-                              });
-                              System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                                System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                              });
                             }
                           }
                         },
@@ -257,13 +259,13 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                             child: loadLaunch
                                 ? const SizedBox(width: 40, height: 20, child: CustomLoading())
                                 : Text(
-                                    learnMore,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                              learnMore,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                           );
                         }),
                       ),

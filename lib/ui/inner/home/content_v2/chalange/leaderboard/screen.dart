@@ -35,12 +35,6 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
   final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
   final CarouselController _controller = CarouselController();
 
-  final List<String> imgList = [
-    'https://images.unsplash.com/photo-1603486002664-a7319421e133?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1842&q=80',
-    'https://images.unsplash.com/photo-1580757468214-c73f7062a5cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80',
-    'https://images.unsplash.com/photo-1626593261859-4fe4865d8cb1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80'
-  ];
-
   late TabController _tabController;
   double offset = 0.0;
   List nameTab = [];
@@ -74,8 +68,6 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
           _currentTab = _tabController.index;
           if (_lastCurrentTab != _currentTab) {
             if (_currentTab == 1) {
-              print("masuk tab slide ${_tabController.index}");
-              print("masuk tab slide");
               cn.getLeaderBoard(
                 context,
                 chllangeid,
@@ -97,8 +89,8 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
   void afterFirstLayout(BuildContext context) {}
 
   void toHideTab(ChallangeNotifier cn) {
-    print("!!!@@@@ hide ${((cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1) || cn.leaderBoardData?.session == 1)}");
-    print("${cn.leaderBoardData?.session}");
+    // print("!!!@@@@ hide ${((cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1) || cn.leaderBoardData?.session == 1)}");
+    // print("${cn.leaderBoardData?.session}");
     if ((cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1) || cn.leaderBoardData?.session == 1) {
       hideTab = true;
     } else {
@@ -125,7 +117,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
     var cn = context.watch<ChallangeNotifier>();
     isFromSplash = false;
     toHideTab(cn);
-    if (chllangeid == '') {
+    if (chllangeid == '' && cn.bannerLeaderboardData.isNotEmpty) {
       chllangeid = cn.bannerLeaderboardData[0].sId ?? '';
     }
 
@@ -134,7 +126,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
           preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
           child: AppBar(
             leading: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios_new_sharp,
                 color: kHyppeTextLightPrimary,
                 size: 16,

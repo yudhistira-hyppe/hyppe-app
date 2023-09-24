@@ -21,6 +21,7 @@ import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/banners_layout.dart';
+import 'package:hyppe/ui/inner/search_v2/widget/event_banner.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
@@ -106,13 +107,12 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     Future.delayed(const Duration(milliseconds: 500), () {
       (Routing.navigatorKey.currentContext ?? context).read<ReportNotifier>().inPosition = contentPosition.searchFirst;
       final notifier = Routing.navigatorKey.currentContext!.read<SearchNotifier>();
-      if(mounted){
+      if (mounted) {
         _controllerSlider.jumpToPage(_currentIndexSlider);
         if (notifier.layout == SearchLayout.searchMore) {
           // notifier.getDataSearch(context);
         }
       }
-
     });
     // debugPrint(_currentIndexSlider.toString());
     //
@@ -141,6 +141,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   }
 
   void changeIndexSlide(int val) {
+    print("-0=-0=-0=-0=-0=-0=-0=-0");
     _currentIndexSlider = val;
     print(_currentIndexSlider); //newValue
   }
@@ -150,8 +151,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     SizeConfig().init(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.getPost));
     return Consumer<SearchNotifier>(
-      builder: (context, notifier, child){
-
+      builder: (context, notifier, child) {
         return WillPopScope(
           onWillPop: () async {
             if (notifier.layout != SearchLayout.first) {
@@ -172,15 +172,14 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
           },
           child: Stack(
             children: [
-              Positioned.fill(
-                  child: _searchLayout(notifier.layout, notifier)),
+              Positioned.fill(child: _searchLayout(notifier.layout, notifier)),
               if (notifier.loadPlaylist)
                 Positioned.fill(
                     child: Container(
-                      decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
-                      alignment: Alignment.center,
-                      child: const CustomLoading(),
-                    ))
+                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                  alignment: Alignment.center,
+                  child: const CustomLoading(),
+                ))
             ],
           ),
         );
@@ -191,7 +190,11 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   Widget _searchLayout(SearchLayout state, SearchNotifier notifier) {
     switch (state) {
       case SearchLayout.first:
-        return FirstLayout(notifier: notifier);
+        return FirstLayout(
+          notifier: notifier,
+          controllerSlider: _controllerSlider,
+          callback: changeIndexSlide,
+        );
       case SearchLayout.search:
         return const SearchMoreScreen();
       case SearchLayout.searchMore:
@@ -222,7 +225,9 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
 
 class FirstLayout extends StatefulWidget {
   final SearchNotifier notifier;
-  const FirstLayout({Key? key, required this.notifier}) : super(key: key);
+  final CarouselController? controllerSlider;
+  final Function(int)? callback;
+  const FirstLayout({Key? key, required this.notifier, this.controllerSlider, this.callback}) : super(key: key);
 
   @override
   State<FirstLayout> createState() => _FirstLayoutState();
@@ -261,50 +266,51 @@ class _FirstLayoutState extends State<FirstLayout> {
             onRefresh: () => notifier.onSearchLandingPage(context),
             child: notifier.connectionError
                 ? OfflineMode(
-              function: () {
-                notifier.checkConnection();
-                notifier.onSearchLandingPage(context);
-              },
-            )
-                : SingleChildScrollView(
-              child: Column(
-                children: [
-                  BannersLayout(layout: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: CustomSearchBar(
-                      hintText: notifier.language.whatAreYouFindOut,
-                      contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
-                      focusNode: notifier.focusNode1,
-                      controller: notifier.searchController1,
-                      withShadow: true,
-                      onTap: () {
-                        if (notifier.layout == SearchLayout.searchMore) {
-                          notifier.isFromComplete = true;
-                        }
-                        notifier.layout = SearchLayout.search;
-                      },
-                    ),
-                  ),),
-                  // EventBannerWidget(controller: _controllerSlider, callback: changeIndexSlide),
-                  const HashtagScreen(),
-                  InterestScreen(
-                    onClick: (value) {
-                      notifier.selectedInterest = value;
-                      if (notifier.layout == SearchLayout.searchMore) {
-                        notifier.isFromComplete = true;
-                      }
-                      notifier.layout = SearchLayout.interestDetail;
+                    function: () {
+                      notifier.checkConnection();
+                      notifier.onSearchLandingPage(context);
                     },
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        BannersLayout(
+                          layout: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: CustomSearchBar(
+                              hintText: notifier.language.whatAreYouFindOut,
+                              contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                              focusNode: notifier.focusNode1,
+                              controller: notifier.searchController1,
+                              withShadow: true,
+                              onTap: () {
+                                if (notifier.layout == SearchLayout.searchMore) {
+                                  notifier.isFromComplete = true;
+                                }
+                                notifier.layout = SearchLayout.search;
+                              },
+                            ),
+                          ),
+                        ),
+                        // EventBannerWidget(controller: widget.controllerSlider, callback: widget.callback),
+                        const HashtagScreen(),
+                        InterestScreen(
+                          onClick: (value) {
+                            notifier.selectedInterest = value;
+                            if (notifier.layout == SearchLayout.searchMore) {
+                              notifier.isFromComplete = true;
+                            }
+                            notifier.layout = SearchLayout.interestDetail;
+                          },
+                        ),
+                        sixtyFourPx,
+                        sixtyFourPx
+                      ],
+                    ),
                   ),
-                  sixtyFourPx,
-                  sixtyFourPx
-                ],
-              ),
-            ),
           )
         ],
       ),
     );
   }
 }
-

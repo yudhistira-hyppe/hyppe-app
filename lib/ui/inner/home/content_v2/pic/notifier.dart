@@ -6,6 +6,7 @@ import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -169,21 +170,29 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     _nextAdsShowed = 6;
   }
 
+  bool loadAds = false;
+  // bool get loadAds => _loadAds;
+  // set loadAds(bool state){
+  //   _loadAds = state;
+  //   notifyListeners();
+  // }
+
   void setAdsData(int index, AdsData? adsData) {
-    final withAds = pic?.where((element) => element.inBetweenAds != null).length ?? 0;
-    final adsSize = pic?.length ?? 0;
-    if (adsData != null) {
-      if (adsSize > nextAdsShowed) {
-        if (pic?[nextAdsShowed].inBetweenAds == null) {
-          pic?.insert(nextAdsShowed, ContentData(inBetweenAds: adsData));
-          _nextAdsShowed = _nextAdsShowed + 6 + withAds;
-          notifyListeners();
-        }
-      }
-    } else {
-      pic?.removeAt(index);
-      notifyListeners();
-    }
+    // final withAds = pic?.where((element) => element.inBetweenAds != null).length ?? 0;
+    // final adsSize = pic?.length ?? 0;
+    // loadAds = false;
+    // if (adsData != null) {
+    //   if (adsSize > nextAdsShowed) {
+    //     if (pic?[nextAdsShowed].inBetweenAds == null) {
+    //       pic?.insert(nextAdsShowed, ContentData(inBetweenAds: adsData));
+    //       _nextAdsShowed = _nextAdsShowed + 6 + withAds;
+    //       notifyListeners();
+    //     }
+    //   }
+    // } else {
+    //   pic?.removeAt(index);
+    //   notifyListeners();
+    // }
   }
 
   void scrollListener(BuildContext context) {

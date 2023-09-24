@@ -85,7 +85,11 @@ class _SettingScreenState extends State<SettingScreen> {
                     onTap: () => context.read<SettingNotifier>().validateUser(context, notifier),
                     caption: '${notifier.translate.transaction}',
                     keyGLobal: keyTransaction,
-                    descriptionCas: notifier.translate.localeDatetime == 'id' ? mn?.tutorialData[indexKey].textID : mn?.tutorialData[indexKey].textEn,
+                    descriptionCas: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                        ? ''
+                        : notifier.translate.localeDatetime == 'id'
+                            ? mn?.tutorialData[indexKey].textID
+                            : mn?.tutorialData[indexKey].textEn,
                     positionTooltip: TooltipPosition.bottom,
                     positionYplus: -10,
                     indexTutor: indexKey,
@@ -136,7 +140,11 @@ class _SettingScreenState extends State<SettingScreen> {
                         icon: 'person-plus.svg',
                         caption: '${notifier.translate.referralID}',
                         keyGLobal: keyReferral,
-                        descriptionCas: notifier.translate.localeDatetime == 'id' ? mn?.tutorialData[indexreferral].textID : mn?.tutorialData[indexreferral].textEn,
+                        descriptionCas: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                            ? ''
+                            : notifier.translate.localeDatetime == 'id'
+                                ? mn?.tutorialData[indexreferral].textID
+                                : mn?.tutorialData[indexreferral].textEn,
                         positionTooltip: TooltipPosition.top,
                         positionYplus: 25,
                         indexTutor: indexreferral,

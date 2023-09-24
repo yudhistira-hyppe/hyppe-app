@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui';
-
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -33,7 +30,6 @@ import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/screen.dart';
-import 'package:showcaseview/showcaseview.dart';
 import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
 import 'package:move_to_background/move_to_background.dart';
@@ -138,6 +134,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
       final notifierMain = context.read<MainNotifier>();
+      notifierMain.globalKey = GlobalKey<NestedScrollViewState>();
 
       if (notifier.preventReloadAfterUploadPost) {
         notifier.preventReloadAfterUploadPost = false;
@@ -440,11 +437,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       print("isOnHomeScreen hit ads");
       homneNotifier.getAdsApsara(context, true);
     }
-    // System().popUpChallange(context);
+    //
   }
 
   void changeTab(postType) {
-    print("#######################################################################################");
     var homneNotifier = context.read<HomeNotifier>();
     if (postType == FeatureType.pic) {
       homneNotifier.tabIndex = 0;

@@ -130,7 +130,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
               ShowGeneralDialog.showToastAlert(
                 context,
                 lang?.internetConnectionLost ?? ' Error',
-                () async {},
+                    () async {},
               );
             }
           }
@@ -150,7 +150,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
       ShowGeneralDialog.showToastAlert(
         context,
         tn.translate.internetConnectionLost ?? ' Error',
-        () async {
+            () async {
           Routing().moveBack();
         },
       );
@@ -260,90 +260,90 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   ),
                   (vidData != null)
                       ? (vidData?.isEmpty ?? true)
-                          ? const NoResultFound()
-                          : Expanded(
-                              child: RefreshIndicator(
-                                onRefresh: () async {
-                                  bool connect = await System().checkConnections();
-                                  if (connect) {
-                                    setState(() {
-                                      isloading = true;
-                                    });
-                                    await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                                    setState(() {
-                                      vidData = vidNotifier.vidData;
-                                    });
-                                  } else {
-                                    if (mounted) {
-                                      ShowGeneralDialog.showToastAlert(
-                                        context,
-                                        lang?.internetConnectionLost ?? ' Error',
-                                        () async {},
-                                      );
-                                    }
-                                  }
-                                },
-                                child: NotificationListener<OverscrollIndicatorNotification>(
-                                  onNotification: (overscroll) {
-                                    overscroll.disallowIndicator();
-                                    return false;
-                                  },
-                                  child: ScrollablePositionedList.builder(
-                                    itemScrollController: itemScrollController,
-                                    itemPositionsListener: itemPositionsListener,
-                                    scrollOffsetController: scrollOffsetController,
-                                    // controller: vidNotifier.pageController,
-                                    // onPageChanged: (index) async {
-                                    //   print('ScrollVid index : $index');
-                                    //   if (index == (vidNotifier.itemCount - 1)) {
-                                    //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
-                                    //     if (values.isNotEmpty) {
-                                    //       vidData = [...(vidData ?? [] as List<ContentData>)] + values;
-                                    //     }
-                                    //   }
-                                    //   // context.read<ScrollVidNotifier>().nextVideo = false;
-                                    //   // context.read<ScrollVidNotifier>().initializeVideo = false;
-                                    // },
-                                    physics: const AlwaysScrollableScrollPhysics(),
-                                    shrinkWrap: false,
-                                    padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                                    itemCount: vidData?.length ?? 0,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      if (vidData == null || homeNotifier.isLoadingVid) {
-                                        vidData?[index].fAliplayer?.pause();
-                                        _lastCurIndex = -1;
-                                        return CustomShimmer(
-                                          margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
-                                          height: context.getHeight() / 8,
-                                          width: double.infinity,
-                                        );
-                                      } else if (index == vidData?.length) {
-                                        return const CustomLoading(size: 5);
-                                      }
-                                      // if (_curIdx == 0 && vidData?[0].reportedStatus == 'BLURRED') {
-                                      //   isPlay = false;
-                                      //   vidData?[index].fAliplayer?.stop();
-                                      // }
-                                      // final vidData = vidData?[index];
+                      ? const NoResultFound()
+                      : Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        bool connect = await System().checkConnections();
+                        if (connect) {
+                          setState(() {
+                            isloading = true;
+                          });
+                          await vidNotifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                          setState(() {
+                            vidData = vidNotifier.vidData;
+                          });
+                        } else {
+                          if (mounted) {
+                            ShowGeneralDialog.showToastAlert(
+                              context,
+                              lang?.internetConnectionLost ?? ' Error',
+                                  () async {},
+                            );
+                          }
+                        }
+                      },
+                      child: NotificationListener<OverscrollIndicatorNotification>(
+                        onNotification: (overscroll) {
+                          overscroll.disallowIndicator();
+                          return false;
+                        },
+                        child: ScrollablePositionedList.builder(
+                          itemScrollController: itemScrollController,
+                          itemPositionsListener: itemPositionsListener,
+                          scrollOffsetController: scrollOffsetController,
+                          // controller: vidNotifier.pageController,
+                          // onPageChanged: (index) async {
+                          //   print('ScrollVid index : $index');
+                          //   if (index == (vidNotifier.itemCount - 1)) {
+                          //     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
+                          //     if (values.isNotEmpty) {
+                          //       vidData = [...(vidData ?? [] as List<ContentData>)] + values;
+                          //     }
+                          //   }
+                          //   // context.read<ScrollVidNotifier>().nextVideo = false;
+                          //   // context.read<ScrollVidNotifier>().initializeVideo = false;
+                          // },
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          shrinkWrap: false,
+                          padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                          itemCount: vidData?.length ?? 0,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (vidData == null || homeNotifier.isLoadingVid) {
+                              vidData?[index].fAliplayer?.pause();
+                              _lastCurIndex = -1;
+                              return CustomShimmer(
+                                margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
+                                height: context.getHeight() / 8,
+                                width: double.infinity,
+                              );
+                            } else if (index == vidData?.length) {
+                              return const CustomLoading(size: 5);
+                            }
+                            // if (_curIdx == 0 && vidData?[0].reportedStatus == 'BLURRED') {
+                            //   isPlay = false;
+                            //   vidData?[index].fAliplayer?.stop();
+                            // }
+                            // final vidData = vidData?[index];
 
-                                      return itemVid(vidNotifier, index);
-                                    },
-                                  ),
-                                ),
-                              ),
-                            )
-                      : const AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: CustomShimmer(
-                            height: double.infinity,
-                            width: double.infinity,
-                          ),
+                            return itemVid(vidNotifier, index);
+                          },
                         ),
+                      ),
+                    ),
+                  )
+                      : const AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: CustomShimmer(
+                      height: double.infinity,
+                      width: double.infinity,
+                    ),
+                  ),
                   vidNotifier.isLoadingLoadmore
                       ? const SizedBox(
-                          height: 50,
-                          child: CustomLoading(),
-                        )
+                    height: 50,
+                    child: CustomLoading(),
+                  )
                       : Container(),
                 ],
               ),
@@ -410,17 +410,17 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                       },
                       child: vidData?[index].insight?.isloadingFollow ?? false
                           ? Container(
-                              height: 40,
-                              width: 30,
-                              child: const Align(
-                                alignment: Alignment.bottomRight,
-                                child: CustomLoading(),
-                              ),
-                            )
+                        height: 40,
+                        width: 30,
+                        child: const Align(
+                          alignment: Alignment.bottomRight,
+                          child: CustomLoading(),
+                        ),
+                      )
                           : Text(
-                              (vidData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                              style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                            ),
+                        (vidData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                        style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                      ),
                     ),
                   ),
                 ),
@@ -519,114 +519,114 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             },
             child: !notifier.connectionError
                 ? Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    child: Builder(builder: (context) {
-                      return VidPlayerPage(
-                        enableWakelock: false,
-                        orientation: Orientation.portrait,
-                        playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                        dataSourceMap: map,
-                        data: vidData?[index] ?? ContentData(),
-                        height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                        width: MediaQuery.of(context).size.width,
-                        inLanding: true,
-                        fromDeeplink: false,
-                        isAutoPlay: false,
-                        functionFullTriger: (value) {
-                          print('===========hahhahahahaa===========');
-                          // fullscreen();
-                          // vidData?[_curIdx].fAliplayer?.pause();
-                          // showDialog(context: context, builder: (context){
-                          //     return VideoFullscreenPage(data: vidData?[_curIdx] ?? ContentData(), onClose: (){
-                          //       // Routing().moveBack();
-                          //     }, seekValue: value ?? 0);
-                          //   });
-                        },
-                        onPlay: (exec) async {
-                          await notifier.checkConnection();
-                          try {
-                            if (_curIdx != -1) {
-                              if (_curIdx != index) {
-                                print('Vid Landing Page: stop $_curIdx ${vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
-                                if (vidData?[_curIdx].fAliplayer != null) {
-                                  vidData?[_curIdx].fAliplayer?.stop();
-                                } else {
-                                  final player = dataAli[_curIdx];
-                                  if (player != null) {
-                                    // vidData?[_curIdx].fAliplayer = player;
-                                    player.stop();
-                                  }
-                                }
-                                // vidData?[_curIdx].fAliplayerAds?.stop();
-                              }
+              margin: const EdgeInsets.only(bottom: 20),
+              child: Builder(builder: (context) {
+                return VidPlayerPage(
+                  enableWakelock: false,
+                  orientation: Orientation.portrait,
+                  playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                  dataSourceMap: map,
+                  data: vidData?[index] ?? ContentData(),
+                  height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                  width: MediaQuery.of(context).size.width,
+                  inLanding: false,
+                  fromDeeplink: false,
+                  isAutoPlay: false,
+                  functionFullTriger: (value) {
+                    print('===========hahhahahahaa===========');
+                    // fullscreen();
+                    // vidData?[_curIdx].fAliplayer?.pause();
+                    // showDialog(context: context, builder: (context){
+                    //     return VideoFullscreenPage(data: vidData?[_curIdx] ?? ContentData(), onClose: (){
+                    //       // Routing().moveBack();
+                    //     }, seekValue: value ?? 0);
+                    //   });
+                  },
+                  onPlay: (exec) async {
+                    await notifier.checkConnection();
+                    try {
+                      if (_curIdx != -1) {
+                        if (_curIdx != index) {
+                          print('Vid Landing Page: stop $_curIdx ${vidData?[_curIdx].fAliplayer} ${dataAli[_curIdx]}');
+                          if (vidData?[_curIdx].fAliplayer != null) {
+                            vidData?[_curIdx].fAliplayer?.stop();
+                          } else {
+                            final player = dataAli[_curIdx];
+                            if (player != null) {
+                              // vidData?[_curIdx].fAliplayer = player;
+                              player.stop();
                             }
-                          } catch (e) {
-                            e.logger();
-                          } finally {
-                            setState(() {
-                              _curIdx = index;
-                            });
                           }
-                          // _lastCurIndex = _curIdx;
-                        },
-                        getPlayer: (main, id) {
-                          print('Vid Player1: screen ${main}');
-                          // notifier.setAliPlayer(index, main);
-                          setState(() {
-                            vidData?[index].fAliplayer = main;
-                            dataAli[index] = main;
-                          });
-                          print('Vid Player1: after $index ${globalAliPlayer} : ${vidData?[index].fAliplayer}');
-                        },
-                        getAdsPlayer: (ads) {
-                          // vidData?[index].fAliplayerAds = ads;
-                        },
-                        loadMoreFunction: () {},
-                        // fAliplayer: vidData?[index].fAliplayer,
-                        // fAliplayerAds: vidData?[index].fAliplayerAds,
-                      );
-                    }),
-                  )
+                          // vidData?[_curIdx].fAliplayerAds?.stop();
+                        }
+                      }
+                    } catch (e) {
+                      e.logger();
+                    } finally {
+                      setState(() {
+                        _curIdx = index;
+                      });
+                    }
+                    // _lastCurIndex = _curIdx;
+                  },
+                  getPlayer: (main, id) {
+                    print('Vid Player1: screen ${main}');
+                    // notifier.setAliPlayer(index, main);
+                    setState(() {
+                      vidData?[index].fAliplayer = main;
+                      dataAli[index] = main;
+                    });
+                    print('Vid Player1: after $index ${globalAliPlayer} : ${vidData?[index].fAliplayer}');
+                  },
+                  getAdsPlayer: (ads) {
+                    // vidData?[index].fAliplayerAds = ads;
+                  },
+                  loadMoreFunction: () {},
+                  // fAliplayer: vidData?[index].fAliplayer,
+                  // fAliplayerAds: vidData?[index].fAliplayerAds,
+                );
+              }),
+            )
                 : GestureDetector(
-                    onTap: () {
-                      notifier.checkConnection();
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                        width: SizeConfig.screenWidth,
-                        height: 250,
-                        alignment: Alignment.center,
-                        child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo ?? 'Error')),
-                  ),
+              onTap: () {
+                notifier.checkConnection();
+              },
+              child: Container(
+                  decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                  width: SizeConfig.screenWidth,
+                  height: 250,
+                  alignment: Alignment.center,
+                  child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo ?? 'Error')),
+            ),
           ),
           SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                  (vidData![index].boosted.isEmpty) &&
-                  (vidData?[index].reportedStatus != 'OWNED' && vidData?[index].reportedStatus != 'BLURRED' && vidData?[index].reportedStatus2 != 'BLURRED') &&
-                  vidData?[index].email == email
+              (vidData![index].boosted.isEmpty) &&
+              (vidData?[index].reportedStatus != 'OWNED' && vidData?[index].reportedStatus != 'BLURRED' && vidData?[index].reportedStatus2 != 'BLURRED') &&
+              vidData?[index].email == email
               ? Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  child: ButtonBoost(
-                    onDetail: false,
-                    marginBool: true,
-                    contentData: vidData?[index] ?? ContentData(),
-                    startState: () {
-                      SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                    },
-                    afterState: () {
-                      SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-                    },
-                  ),
-                )
+            width: double.infinity,
+            margin: const EdgeInsets.only(bottom: 16),
+            child: ButtonBoost(
+              onDetail: false,
+              marginBool: true,
+              contentData: vidData?[index] ?? ContentData(),
+              startState: () {
+                SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+              },
+              afterState: () {
+                SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+              },
+            ),
+          )
               : Container(),
           vidData?[index].email == SharedPreference().readStorage(SpKeys.email) && (vidData?[index].reportedStatus == 'OWNED' || vidData?[index].reportedStatus == 'OWNED')
               ? Padding(
-                  padding: const EdgeInsets.only(bottom: 11.0),
-                  child: ContentViolationWidget(
-                    data: vidData?[index] ?? ContentData(),
-                    text: lang?.thisHyppeVidisSubjectToModeration ?? '',
-                  ),
-                )
+            padding: const EdgeInsets.only(bottom: 11.0),
+            child: ContentViolationWidget(
+              data: vidData?[index] ?? ContentData(),
+              text: lang?.thisHyppeVidisSubjectToModeration ?? '',
+            ),
+          )
               : Container(),
           if (vidData?[index].email == email && (vidData?[index].boostCount ?? 0) >= 0 && (vidData?[index].boosted.isNotEmpty ?? [].isEmpty))
             Container(
@@ -666,26 +666,26 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                         alignment: Alignment.bottomRight,
                         child: vidData?[index].insight?.isloading ?? false
                             ? const SizedBox(
-                                height: 28,
-                                width: 28,
-                                child: CircularProgressIndicator(
-                                  color: kHyppePrimary,
-                                  strokeWidth: 2,
-                                ),
-                              )
+                          height: 28,
+                          width: 28,
+                          child: CircularProgressIndicator(
+                            color: kHyppePrimary,
+                            strokeWidth: 2,
+                          ),
+                        )
                             : InkWell(
-                                child: CustomIconWidget(
-                                  defaultColor: false,
-                                  color: (vidData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                  iconData: '${AssetPath.vectorPath}${(vidData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                  height: 28,
-                                ),
-                                onTap: () {
-                                  if (vidData != null) {
-                                    likeNotifier.likePost(context, vidData?[index] ?? ContentData());
-                                  }
-                                },
-                              ),
+                          child: CustomIconWidget(
+                            defaultColor: false,
+                            color: (vidData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                            iconData: '${AssetPath.vectorPath}${(vidData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                            height: 28,
+                          ),
+                          onTap: () {
+                            if (vidData != null) {
+                              likeNotifier.likePost(context, vidData?[index] ?? ContentData());
+                            }
+                          },
+                        ),
                       ),
                     ),
                     if (vidData?[index].allowComments ?? false)
@@ -802,30 +802,30 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
             ),
           (vidData?[index].comment?.length ?? 0) > 0
               ? Padding(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: (vidData?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
-                    itemBuilder: (context, indexComment) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 6.0),
-                        child: CustomNewDescContent(
-                          // desc: "${vidData?.description}",
-                          username: vidData?[index].comment?[indexComment].userComment?.username ?? '',
-                          desc: vidData?[index].comment?[indexComment].txtMessages ?? '',
-                          trimLines: 2,
-                          textAlign: TextAlign.start,
-                          seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                          seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                          normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                          hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                          expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                        ),
-                      );
-                    },
+            padding: const EdgeInsets.only(top: 0.0),
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: (vidData?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
+              itemBuilder: (context, indexComment) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 6.0),
+                  child: CustomNewDescContent(
+                    // desc: "${vidData?.description}",
+                    username: vidData?[index].comment?[indexComment].userComment?.username ?? '',
+                    desc: vidData?[index].comment?[indexComment].txtMessages ?? '',
+                    trimLines: 2,
+                    textAlign: TextAlign.start,
+                    seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                    seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                    normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                    hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                    expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
                   ),
-                )
+                );
+              },
+            ),
+          )
               : Container(),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 4.0),
@@ -1136,11 +1136,11 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
         // Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data, width: width)),
         (data?.reportedStatus == "BLURRED")
             ? Positioned.fill(
-                child: VideoThumbnailReport(
-                  videoData: data,
-                  seeContent: false,
-                ),
-              )
+          child: VideoThumbnailReport(
+            videoData: data,
+            seeContent: false,
+          ),
+        )
             : Container(),
         // data?.reportedStatus == 'BLURRED'
         //     ? ClipRect(
@@ -1176,75 +1176,75 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
     final transnot = Provider.of<TranslateNotifierV2>(context, listen: false);
     return data.reportedStatus == 'BLURRED'
         ? Positioned.fill(
-            child: Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Spacer(),
-                      const CustomIconWidget(
-                        iconData: "${AssetPath.vectorPath}eye-off.svg",
-                        defaultColor: false,
-                        height: 30,
-                        color: Colors.white,
-                      ),
-                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                      Text("HyppeVid ${transnot.translate.contentContainsSensitiveMaterial}",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                          )),
-                      data.email == SharedPreference().readStorage(SpKeys.email)
-                          ? GestureDetector(
-                              onTap: () async {
-                                System().checkConnections().then((value) {
-                                  if (value) {
-                                    Routing().move(Routes.appeal, argument: data);
-                                  }
-                                });
-                              },
-                              child: Container(
-                                  padding: const EdgeInsets.all(8),
-                                  margin: const EdgeInsets.all(18),
-                                  decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                                  child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                            )
-                          : const SizedBox(),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          data.reportedStatus = '';
-                          // start(data);
-                          // context.read<ReportNotifier>().seeContent(context, data, hyppeVid);
-                          data.fAliplayer?.prepare();
-                          data.fAliplayer?.play();
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 8),
-                          margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
-                          width: SizeConfig.screenWidth,
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              top: BorderSide(
-                                color: Colors.white,
-                                width: 1,
-                              ),
-                            ),
-                          ),
-                          child: Text(
-                            "${transnot.translate.see} HyppeVid",
-                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                            textAlign: TextAlign.center,
-                          ),
+      child: Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Spacer(),
+                const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}eye-off.svg",
+                  defaultColor: false,
+                  height: 30,
+                  color: Colors.white,
+                ),
+                Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                Text("HyppeVid ${transnot.translate.contentContainsSensitiveMaterial}",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                    )),
+                data.email == SharedPreference().readStorage(SpKeys.email)
+                    ? GestureDetector(
+                  onTap: () async {
+                    System().checkConnections().then((value) {
+                      if (value) {
+                        Routing().move(Routes.appeal, argument: data);
+                      }
+                    });
+                  },
+                  child: Container(
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.all(18),
+                      decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                      child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                )
+                    : const SizedBox(),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    data.reportedStatus = '';
+                    // start(data);
+                    // context.read<ReportNotifier>().seeContent(context, data, hyppeVid);
+                    data.fAliplayer?.prepare();
+                    data.fAliplayer?.play();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 8),
+                    margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+                    width: SizeConfig.screenWidth,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: Colors.white,
+                          width: 1,
                         ),
                       ),
-                    ],
+                    ),
+                    child: Text(
+                      "${transnot.translate.see} HyppeVid",
+                      style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                )),
-          )
+                ),
+              ],
+            ),
+          )),
+    )
         : Container();
   }
 

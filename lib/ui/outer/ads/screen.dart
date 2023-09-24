@@ -359,7 +359,7 @@ class _AdsScreenState extends State<AdsScreen> {
                                       image: DecorationImage(
                                         fit: BoxFit.cover,
                                         image: AssetImage(
-                                            '${AssetPath.pngPath}content-error.png'),
+                                            '${AssetPath.pngPath}profile-error.jpg'),
                                       ),
                                     ),
                                   );
@@ -373,7 +373,7 @@ class _AdsScreenState extends State<AdsScreen> {
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
                                       image: AssetImage(
-                                          '${AssetPath.pngPath}content-error.png'),
+                                          '${AssetPath.pngPath}profile-error.jpg'),
                                     ),
                                   ),
                                 ),
@@ -505,25 +505,25 @@ class _AdsScreenState extends State<AdsScreen> {
                       Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                     });
                   }else{
-                    try{
-                      final uri = Uri.parse(data.adsUrlLink ?? '');
-                      if (await canLaunchUrl(uri)) {
+                    if((data.adsUrlLink ?? '').withHttp()){
+                      try{
+                        final uri = Uri.parse(data.adsUrlLink ?? '');
+                        if (await canLaunchUrl(uri)) {
+                          adsView(context, widget.argument.data, secondsVideo,
+                              isClick: true);
+                          await launchUrl(
+                            uri,
+                            mode: LaunchMode.externalApplication,
+                          );
+                        } else {
+                          throw "Could not launch $uri";
+                        }
+                      }catch(e){
                         adsView(context, widget.argument.data, secondsVideo,
                             isClick: true);
-                        Navigator.pop(context);
-                        await launchUrl(
-                          uri,
-                          mode: LaunchMode.externalApplication,
-                        );
-                      } else {
-                        throw "Could not launch $uri";
+                        System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                       }
-                    }catch(e){
-                      adsView(context, widget.argument.data, secondsVideo,
-                          isClick: true);
-                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                     }
-
                   }
                   // can't launch url, there is some error
                 }

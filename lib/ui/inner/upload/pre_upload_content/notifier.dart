@@ -584,15 +584,12 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-
   bool _isLoadVideo = false;
   bool get isLoadVideo => _isLoadVideo;
-  set isLoadVideo(bool state){
+  set isLoadVideo(bool state) {
     _isLoadVideo = state;
     notifyListeners();
   }
-
-
 
   Future _createPostContentV2(BuildContext context, bool mounted) async {
     final BuildContext context = Routing.navigatorKey.currentContext!;
@@ -726,8 +723,8 @@ class PreUploadContentNotifier with ChangeNotifier {
           dio.Response res = value;
           "return data ${jsonEncode(res.data['data'])}".loggerV2();
           ContentData uploadedData = ContentData.fromJson(res.data['data']);
-          (Routing.navigatorKey.currentContext ?? context).read<SelfProfileNotifier>().updateProfilePost(featureType ?? FeatureType.pic, uploadedData);
-          (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().onUploadedSelfUserContent(context: context, contentData: uploadedData);
+          if (mounted) (Routing.navigatorKey.currentContext ?? context).read<SelfProfileNotifier>().updateProfilePost(featureType ?? FeatureType.pic, uploadedData);
+          if (mounted) (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().onUploadedSelfUserContent(context: context, contentData: uploadedData);
         }
         if (_boostContent != null) _boostContentBuy(context);
         context.read<PreviewVidNotifier>().canPlayOpenApps = true;

@@ -52,7 +52,11 @@ class AdsDataBloc {
         setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
       }
     }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
-        host: adsType == AdsType.content ? UrlConstants.getAdsInContent : adsType == AdsType.between ? UrlConstants.getAdsInBetween : UrlConstants.getPopUpAds,
+        host: adsType == AdsType.content
+            ? UrlConstants.getAdsInContent
+            : adsType == AdsType.between
+                ? UrlConstants.getAdsInBetween
+                : UrlConstants.getPopUpAds,
         withAlertMessage: false,
         withCheckConnection: false,
         methodType: MethodType.get,
