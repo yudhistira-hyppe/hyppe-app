@@ -119,7 +119,11 @@ class _ShareBlockState extends State<ShareBlock> {
                           overlayOpacity: 0,
                           targetPadding: const EdgeInsets.all(0),
                           tooltipPosition: widget.positionTooltip,
-                          description: notifier.language.localeDatetime == 'id' ? mn?.tutorialData[widget.indexTutor ?? 0].textID ?? '' : mn?.tutorialData[widget.indexTutor ?? 0].textEn ?? '',
+                          description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                              ? ''
+                              : notifier.language.localeDatetime == 'id'
+                                  ? mn?.tutorialData[widget.indexTutor ?? 0].textID ?? ''
+                                  : mn?.tutorialData[widget.indexTutor ?? 0].textEn ?? '',
                           descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
                           descriptionPadding: EdgeInsets.all(6),
                           textColor: Colors.white,

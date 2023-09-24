@@ -170,7 +170,11 @@ class _ReferralState extends State<Referral> {
         overlayOpacity: 0,
         targetPadding: const EdgeInsets.all(0),
         tooltipPosition: TooltipPosition.top,
-        description: lang.localeDatetime == 'id' ? mn?.tutorialData[indexCode].textID ?? '' : mn?.tutorialData[indexCode].textEn ?? '',
+        description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+            ? ''
+            : lang.localeDatetime == 'id'
+                ? mn?.tutorialData[indexCode].textID ?? ''
+                : mn?.tutorialData[indexCode].textEn ?? '',
         descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
         descriptionPadding: EdgeInsets.all(6),
         textColor: Colors.white,

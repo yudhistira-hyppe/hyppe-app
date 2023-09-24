@@ -427,7 +427,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                 final text = notifier.captionController.text;
                 final selection = notifier.captionController.selection;
                 var newText = text;
-                if(newText.isNotEmpty){
+                if (newText.isNotEmpty) {
                   newText = text.replaceRange(selection.start, selection.end, ' #');
                 }
 
@@ -489,7 +489,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       overlayOpacity: 0,
       targetPadding: const EdgeInsets.all(0),
       tooltipPosition: TooltipPosition.top,
-      description: notifier.language.localeDatetime == 'id' ? mn?.tutorialData[indexKey].textID : mn?.tutorialData[indexKey].textEn,
+      description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+          ? ''
+          : notifier.language.localeDatetime == 'id'
+              ? mn?.tutorialData[indexKey].textID
+              : mn?.tutorialData[indexKey].textEn,
       descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
       descriptionPadding: EdgeInsets.all(6),
       textColor: Colors.white,
@@ -828,7 +832,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             targetPadding: const EdgeInsets.all(0),
             tooltipPosition: TooltipPosition.top,
             // description: notifier.language.registeryourcontentownership,
-            description: notifier.language.localeDatetime == 'id' ? mn?.tutorialData[indexKeyBoost].textID : mn?.tutorialData[indexKeyBoost].textEn,
+            description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                ? ''
+                : notifier.language.localeDatetime == 'id'
+                    ? mn?.tutorialData[indexKeyBoost].textID
+                    : mn?.tutorialData[indexKeyBoost].textEn,
             descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
             descriptionPadding: EdgeInsets.all(6),
             textColor: Colors.white,
@@ -900,7 +908,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             targetPadding: const EdgeInsets.all(0),
             tooltipPosition: TooltipPosition.top,
             // description: notifier.language.registeryourcontentownership,
-            description: notifier.language.localeDatetime == 'id' ? mn?.tutorialData[indexKeyOwn].textID : mn?.tutorialData[indexKeyOwn].textEn,
+            description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                ? ''
+                : notifier.language.localeDatetime == 'id'
+                    ? mn?.tutorialData[indexKeyOwn].textID
+                    : mn?.tutorialData[indexKeyOwn].textEn,
             descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
             descriptionPadding: const EdgeInsets.all(6),
             textColor: Colors.white,

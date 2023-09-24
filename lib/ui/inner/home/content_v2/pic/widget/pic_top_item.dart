@@ -91,7 +91,11 @@ class _PicTopItemState extends State<PicTopItem> {
             overlayOpacity: 0,
             targetPadding: const EdgeInsets.all(0),
             tooltipPosition: TooltipPosition.top,
-            description: lang?.localeDatetime == 'id' ? mn?.tutorialData[indexKeySell].textID ?? '' : mn?.tutorialData[indexKeySell].textEn ?? '',
+            description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                ? ''
+                : lang?.localeDatetime == 'id'
+                    ? mn?.tutorialData[indexKeySell].textID ?? ''
+                    : mn?.tutorialData[indexKeySell].textEn ?? '',
             descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
             descriptionPadding: EdgeInsets.all(6),
             textColor: Colors.white,
@@ -137,7 +141,11 @@ class _PicTopItemState extends State<PicTopItem> {
             overlayOpacity: 0,
             targetPadding: const EdgeInsets.all(0),
             tooltipPosition: TooltipPosition.top,
-            description: lang?.localeDatetime == 'id' ? mn?.tutorialData[indexKeyProtection].textID ?? '' : mn?.tutorialData[indexKeyProtection].textEn ?? '',
+            description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                ? ''
+                : lang?.localeDatetime == 'id'
+                    ? mn?.tutorialData[indexKeyProtection].textID ?? ''
+                    : mn?.tutorialData[indexKeyProtection].textEn ?? '',
             descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
             descriptionPadding: EdgeInsets.all(6),
             textColor: Colors.white,

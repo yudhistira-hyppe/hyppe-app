@@ -734,6 +734,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
         }
       }
     } catch (e) {
+      print(e);
       ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
     }
   }
