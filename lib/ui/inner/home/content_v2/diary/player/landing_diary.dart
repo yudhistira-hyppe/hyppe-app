@@ -1060,18 +1060,18 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                 }
 
                                 ///ADS IN BETWEEN === Hariyanto Lukman ===
-                                if (!notifier.loadAds) {
-                                  if ((notifier.diaryData?.length ?? 0) > notifier.nextAdsShowed) {
-                                    notifier.loadAds = true;
-                                    context.getInBetweenAds().then((value) {
-                                      if (value != null) {
-                                        notifier.setAdsData(index, value);
-                                      } else {
-                                        notifier.loadAds = false;
-                                      }
-                                    });
-                                  }
-                                }
+                                // if (!notifier.loadAds) {
+                                //   if ((notifier.diaryData?.length ?? 0) > notifier.nextAdsShowed) {
+                                //     notifier.loadAds = true;
+                                //     context.getInBetweenAds().then((value) {
+                                //       if (value != null) {
+                                //         notifier.setAdsData(index, value);
+                                //       } else {
+                                //         notifier.loadAds = false;
+                                //       }
+                                //     });
+                                //   }
+                                // }
                                 _lastCurIndex = _curIdx;
                                 _lastCurPostId = _curPostId;
                               }

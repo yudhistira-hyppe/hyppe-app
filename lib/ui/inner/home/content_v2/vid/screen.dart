@@ -564,18 +564,18 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                       print(_curIdx);
                     }
                     if (info.visibleFraction >= 0.8) {
-                      if (!notifier.loadAds) {
-                        if ((notifier.vidData?.length ?? 0) > notifier.nextAdsShowed) {
-                          notifier.loadAds = true;
-                          context.getInBetweenAds().then((value) {
-                            if (value != null) {
-                              notifier.setInBetweenAds(index, value);
-                            } else {
-                              notifier.loadAds = false;
-                            }
-                          });
-                        }
-                      }
+                      // if (!notifier.loadAds) {
+                      //   if ((notifier.vidData?.length ?? 0) > notifier.nextAdsShowed) {
+                      //     notifier.loadAds = true;
+                      //     context.getInBetweenAds().then((value) {
+                      //       if (value != null) {
+                      //         notifier.setInBetweenAds(index, value);
+                      //       } else {
+                      //         notifier.loadAds = false;
+                      //       }
+                      //     });
+                      //   }
+                      // }
 
                       adsGlobalAliPlayer?.pause();
                       _curIdx = index;

@@ -683,14 +683,14 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           print('isViewed Setting: ${widget.index} | ${widget.data?.isViewed} | $isViewed');
           final ref =(Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
           ref.tempAdsData = null;
-          if (widget.inLanding && !isViewed) {
-            ref.hasShowedAds = false;
-            ref.getAdsVideo(Routing.navigatorKey.currentContext ?? context, _videoDuration).whenComplete((){
-              if(widget.index != null){
-                (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().setIsViewed(widget.index!);
-              }
-            });
-          }
+          // if (widget.inLanding && !isViewed) {
+          //   ref.hasShowedAds = false;
+          //   ref.getAdsVideo(Routing.navigatorKey.currentContext ?? context, _videoDuration).whenComplete((){
+          //     if(widget.index != null){
+          //       (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().setIsViewed(widget.index!);
+          //     }
+          //   });
+          // }
           // fAliplayer?.play();
           print('=2=2=2=2=2=2=2prepare done');
         }

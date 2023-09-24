@@ -1112,18 +1112,18 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                               // });
 
                               ///ADS IN BETWEEN === Hariyanto Lukman ===
-                              if (!notifier.loadAds) {
-                                if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
-                                  notifier.loadAds = true;
-                                  context.getInBetweenAds().then((value) {
-                                    if (value != null) {
-                                      notifier.setAdsData(index, value);
-                                    } else {
-                                      notifier.loadAds = false;
-                                    }
-                                  });
-                                }
-                              }
+                              // if (!notifier.loadAds) {
+                              //   if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
+                              //     notifier.loadAds = true;
+                              //     context.getInBetweenAds().then((value) {
+                              //       if (value != null) {
+                              //         notifier.setAdsData(index, value);
+                              //       } else {
+                              //         notifier.loadAds = false;
+                              //       }
+                              //     });
+                              //   }
+                              // }
                             }
 
                             _lastCurIndex = _curIdx;
