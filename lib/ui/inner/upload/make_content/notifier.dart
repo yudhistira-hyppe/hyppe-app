@@ -20,6 +20,7 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -214,7 +215,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   }
 
   Future onClose(BuildContext context) async {
-    try{
+    try {
       bool? _sheetResponse;
       if (isRecordingVideo) {
         _sheetResponse = await ShowBottomSheet().onShowColouredSheet(
@@ -233,7 +234,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
           _routing.moveBack();
         }
       }
-    }catch(e){
+    } catch (e) {
       e.logger();
     }
   }
@@ -282,6 +283,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     setLoading(true);
     try {
       print('isVideo $isVideo');
+
       await System().getLocalMedia(featureType: featureType, context: context, isVideo: isVideo).then((value) async {
         Future.delayed(const Duration(milliseconds: 1000), () async {
           if (value.values.single != null) {
@@ -306,7 +308,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       });
     } catch (e) {
       setLoading(false);
-      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
+      // ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
+      ShowGeneralDialog.pickFileErrorAlert(context, e.toString());
     }
   }
 
@@ -320,7 +323,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   void cancelVideoRecordingWhenAppIsPausedOrInactive() {
     Wakelock.disable();
-"================ disable wakelock 7".logger();
+    "================ disable wakelock 7".logger();
     cancelTimer();
     _progressDev = 0.0;
     _progressHuman = 0;
@@ -329,11 +332,11 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   @override
   void onStopRecordedVideo(BuildContext context) {
-    try{
+    try {
       dynamic cameraNotifier;
 
       Wakelock.disable();
-"================ disable wakelock 6".logger();
+      "================ disable wakelock 6".logger();
       final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
       if (canDeppAr == 'true') {
         cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
@@ -348,9 +351,9 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
       cameraNotifier.stopVideoRecording().then((file) async {
         final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-        if(file?.path != null){
+        if (file?.path != null) {
           notifier.fileContent = [file?.path ?? ''];
-        }else{
+        } else {
           if (canDeppAr == 'true') {
             final newFile = await Provider.of<CameraDevicesNotifier>(context, listen: false).cameraController?.stopVideoRecording();
             notifier.fileContent = [newFile?.path ?? ''];
@@ -365,10 +368,9 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         notifyListeners();
         await _routing.move(Routes.previewContent);
       });
-    }catch(e){
+    } catch (e) {
       e.logger();
     }
-
   }
 
   @override
