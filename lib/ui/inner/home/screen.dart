@@ -247,147 +247,157 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         child: Scaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-            child: HomeAppBar(name: "${selfnotifier.user.profile?.fullName}", offset: offset),
+            child: HomeAppBar(
+              name: "${selfnotifier.user.profile?.fullName}",
+              offset: offset,
+              scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+            ),
           ),
           body: Builder(
             builder: (context) => DefaultTabController(
               length: 3,
-              child: RefreshIndicator(
-                color: kHyppePrimary,
-                notificationPredicate: (notification) {
-                  if (notifier.isLoadingPict || notifier.isLoadingDiary || notifier.isLoadingVid) {
-                    return false;
-                  } else {
-                    // with NestedScrollView local(depth == 2) OverscrollNotification are not sent
-                    if (notification is OverscrollNotification || Platform.isIOS) {
-                      return notification.depth == 2;
+              child: NotificationListener<UserScrollNotification>(
+                onNotification: (notification) {
+                  offset = notification.metrics.pixels;
+                  return true;
+                },
+                child: RefreshIndicator(
+                  color: kHyppePrimary,
+                  notificationPredicate: (notification) {
+                    if (notifier.isLoadingPict || notifier.isLoadingDiary || notifier.isLoadingVid) {
+                      return false;
+                    } else {
+                      // with NestedScrollView local(depth == 2) OverscrollNotification are not sent
+                      if (notification is OverscrollNotification || Platform.isIOS) {
+                        return notification.depth == 2;
+                      }
+                      return notification.depth == 0;
+                      // if (_tabController.index != 0) {}
+                      // return notification.depth == 0;
                     }
-                    return notification.depth == 0;
-                    // if (_tabController.index != 0) {}
-                    // return notification.depth == 0;
-                  }
-                },
-                onRefresh: () async {
-                  print(isZoom);
-                  if (!isZoom) {
-                    Future.delayed(Duration(milliseconds: 400), () async {
-                      imageCache.clear();
-                      imageCache.clearLiveImages();
-                      await notifier.initNewHome(context, mounted, isreload: true);
-                    });
-                  }
-                },
-                child: AbsorbPointer(
-                  // absorbing: true,
-                  absorbing: isZoom,
-                  child: NestedScrollView(
-                    key: context.read<MainNotifier>().globalKey,
-                    controller: context.read<MainNotifier>().scrollController,
-                    // physics: const NeverScrollableScrollPhysics(),
-                    // dragStartBehavior: DragStartBehavior.start,
-                    headerSliverBuilder: (context, bool innerBoxIsScrolled) {
-                      return [
-                        SliverOverlapAbsorber(
-                          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                          sliver: SliverList(
-                            delegate: SliverChildListDelegate([
-                              const ProcessUploadComponent(),
-                              sixPx,
-                              const HyppePreviewStories(),
-                              sixPx,
-                              // GestureDetector(
-                              //     onTap: () {
-                              //       setState(() {
-                              //         changeTab(FeatureType.diary);
-                              //       });
-                              //     },
-                              //     child: Text("hahahahaha")),
-                              Container(
-                                padding: const EdgeInsets.all(16),
-                                color: kHyppeLightSurface,
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(24),
-                                    color: kHyppeLightButtonText,
-                                  ),
-                                  child: TabBar(
-                                    controller: _tabController,
-                                    indicator: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                        25.0,
-                                      ),
-                                      color: kHyppePrimary,
+                  },
+                  onRefresh: () async {
+                    print(isZoom);
+                    if (!isZoom) {
+                      Future.delayed(Duration(milliseconds: 400), () async {
+                        imageCache.clear();
+                        imageCache.clearLiveImages();
+                        await notifier.initNewHome(context, mounted, isreload: true);
+                      });
+                    }
+                  },
+                  child: AbsorbPointer(
+                    // absorbing: true,
+                    absorbing: isZoom,
+                    child: NestedScrollView(
+                      key: context.read<MainNotifier>().globalKey,
+                      controller: context.read<MainNotifier>().scrollController,
+                      // physics: const NeverScrollableScrollPhysics(),
+                      // dragStartBehavior: DragStartBehavior.start,
+                      headerSliverBuilder: (context, bool innerBoxIsScrolled) {
+                        return [
+                          SliverOverlapAbsorber(
+                            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                            sliver: SliverList(
+                              delegate: SliverChildListDelegate([
+                                const ProcessUploadComponent(),
+                                sixPx,
+                                const HyppePreviewStories(),
+                                sixPx,
+                                // GestureDetector(
+                                //     onTap: () {
+                                //       setState(() {
+                                //         changeTab(FeatureType.diary);
+                                //       });
+                                //     },
+                                //     child: Text("hahahahaha")),
+                                Container(
+                                  padding: const EdgeInsets.all(16),
+                                  color: kHyppeLightSurface,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(24),
+                                      color: kHyppeLightButtonText,
                                     ),
-                                    labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                                    labelColor: kHyppeLightButtonText,
-                                    unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                                    labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                    // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                                    unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                    tabs: [
-                                      ...List.generate(filterList.length, (index) {
-                                        return Padding(
-                                          padding: EdgeInsets.all(9),
-                                          child: Text(
-                                            filterList[index]['name'],
-                                            style: TextStyle(fontFamily: 'Lato', fontSize: 14),
-                                          ),
-                                        );
-                                      }),
-                                    ],
+                                    child: TabBar(
+                                      controller: _tabController,
+                                      indicator: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          25.0,
+                                        ),
+                                        color: kHyppePrimary,
+                                      ),
+                                      labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                                      labelColor: kHyppeLightButtonText,
+                                      unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                                      labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                      // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                                      unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                      tabs: [
+                                        ...List.generate(filterList.length, (index) {
+                                          return Padding(
+                                            padding: EdgeInsets.all(9),
+                                            child: Text(
+                                              filterList[index]['name'],
+                                              style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                            ),
+                                          );
+                                        }),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ]),
+                              ]),
+                            ),
                           ),
-                        ),
 
-                        // FilterLanding(),
-                        // HyppePreviewVid(),
-                        // HyppePreviewDiary(),
-                      ];
-                    },
-                    body: TabBarView(
-                      controller: _tabController,
-                      physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
-                      children: [
-                        // Pict
-                        Container(
-                          height: 40,
-                          padding: const EdgeInsets.only(left: 6.0, right: 6),
-                          color: kHyppeLightSurface,
-                          child: HyppePreviewPic(
-                            onScaleStart: () {
-                              zoom(true);
-                              globalTultipShow = true;
-                            },
-                            onScaleStop: () {
-                              zoom(false);
-                              globalTultipShow = false;
-                            },
-                            appbarSeen: appbarSeen,
-                            scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
-                            // offset: offset,
+                          // FilterLanding(),
+                          // HyppePreviewVid(),
+                          // HyppePreviewDiary(),
+                        ];
+                      },
+                      body: TabBarView(
+                        controller: _tabController,
+                        physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
+                        children: [
+                          // Pict
+                          Container(
+                            height: 40,
+                            padding: const EdgeInsets.only(left: 6.0, right: 6),
+                            color: kHyppeLightSurface,
+                            child: HyppePreviewPic(
+                              onScaleStart: () {
+                                zoom(true);
+                                globalTultipShow = true;
+                              },
+                              onScaleStop: () {
+                                zoom(false);
+                                globalTultipShow = false;
+                              },
+                              appbarSeen: appbarSeen,
+                              scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                              // offset: offset,
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 6.0, right: 6),
-                          color: kHyppeLightSurface,
-                          child: LandingDiaryPage(
-                            scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                          Container(
+                            padding: const EdgeInsets.only(left: 6.0, right: 6),
+                            color: kHyppeLightSurface,
+                            child: LandingDiaryPage(
+                              scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                            ),
                           ),
-                        ),
-                        // second tab bar viiew widget
-                        Container(
-                          padding: const EdgeInsets.only(left: 16.0, right: 16),
-                          color: kHyppeLightSurface,
-                          child: HyppePreviewVid(
-                            scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
-                            afterUploading: afterUploading,
+                          // second tab bar viiew widget
+                          Container(
+                            padding: const EdgeInsets.only(left: 16.0, right: 16),
+                            color: kHyppeLightSurface,
+                            child: HyppePreviewVid(
+                              scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                              afterUploading: afterUploading,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

@@ -35,12 +35,12 @@ class _HomeAppBarState extends State<HomeAppBar> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (mounted) {
-        var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
-        notifierMain?.globalKey.currentState?.innerController.addListener(() async {
-          offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-        });
-      }
+      var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
+      context.read<MainNotifier>().globalKey.currentState?.innerController.addListener(() {
+        print("---------scrol------");
+        offset = context.read<MainNotifier>().globalKey.currentState?.innerController.position.pixels ?? 0;
+      });
+      // notifierMain?.globalKey.currentState?.innerController.addListener(() async {});
     });
   }
 
@@ -79,9 +79,10 @@ class _HomeAppBarState extends State<HomeAppBar> {
         // AliPlayer(),
         sixteenPx,
       ],
-      title: (offset) <= 150
+      title: (widget.offset ?? 0) <= 150
           ? Text(
-              "Halo, $helloName!",
+              "Halo, $helloName! ",
+              // "  $offset",
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
             )
           : const CustomIconWidget(
