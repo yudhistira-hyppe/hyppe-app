@@ -63,7 +63,8 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
             ),
             if (notifier.fixSelectedMusic != null)
               Positioned(
-                top: 16,
+                top: notifier.featureType == FeatureType.story ||
+                    notifier.featureType == FeatureType.diary ? 16 : 96,
                 left: 52,
                 child: MusicStatusSelected(
                   music: notifier.fixSelectedMusic!,
