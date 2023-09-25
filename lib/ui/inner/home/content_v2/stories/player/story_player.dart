@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:gif_view/gif_view.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -14,11 +15,13 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/models/collection/sticker/sticker_model.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/transitions/line_indicator_transation.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/link_copied_widget.dart';
+import 'package:hyppe/ui/constant/widget/sticker_overlay.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_bottom_view.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_top_view.dart';
@@ -488,6 +491,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       case AppLifecycleState.paused:
         if (!_mEnablePlayBack) {
           fAliplayer?.pause();
+          setState(() => isPause = true);
         }
         if (_networkSubscriptiion != null) {
           _networkSubscriptiion?.cancel();
@@ -545,7 +549,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   void didPopNext() {
     print("======= didPopNext dari story");
     fAliplayer?.play();
-
+    setState(() => isPause = false);
     // System().disposeBlock();
 
     super.didPopNext();
@@ -559,14 +563,14 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   }
 
   void play() {
-    isPause = false;
+    setState(() => isPause = false);
     fAliplayer?.play();
     _animationController?.forward();
   }
 
   void pause() {
     print('pause pause');
-    isPause = true;
+    setState(() => isPause = true);
     fAliplayer?.pause();
     _animationController?.stop();
   }
@@ -642,16 +646,61 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                 )),
                 Builder(builder: (context) {
                   return !isOnPageTurning
-                      ? AliPlayerView(
-                          onCreated: (id) {
-                            final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
-                            onViewPlayerCreated(id, isImage);
-                          },
-                          x: 0,
-                          y: _playerY,
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,
-                        )
+                      // ? AliPlayerView(
+                      //     onCreated: (id) {
+                      //       final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
+                      //       onViewPlayerCreated(id, isImage);
+                      //     },
+                      //     x: 0,
+                      //     y: _playerY,
+                      //     width: MediaQuery.of(context).size.width,
+                      //     height: MediaQuery.of(context).size.height,
+                      //   )
+                      ? Center(
+                          child: Stack(
+                            children: [
+                              Center(
+                                child: Container(
+                                  clipBehavior: Clip.hardEdge,
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.width * (16/9),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: AliPlayerView(
+                                      onCreated: (id) {
+                                        final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
+                                        onViewPlayerCreated(id, isImage);
+                                      },
+                                      x: 0,
+                                      y: _playerY,
+                                      width: MediaQuery.of(context).size.width,
+                                      height: MediaQuery.of(context).size.width * (16/9),
+                                    ),
+                                ),
+                              ),
+                              Center(
+                                child: Visibility(
+                                  visible: isPlay,
+                                  child: Container(
+                                    clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: StickerOverlay(
+                                      stickers: _groupUserStories?[index].story?[_curChildIdx].stickers,
+                                      fullscreen: true,
+                                      width: double.infinity,
+                                      height: MediaQuery.of(context).size.width * (16/9),
+                                      isPause: isPause,
+                                      canPause: true,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                      )
                       : Container(
                           color: Colors.black,
                           alignment: Alignment.center,
@@ -844,83 +893,119 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         ? Stack(
             children: [
               _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image'
-                  ? Container(
-                      color: Colors.black,
-                      child: CustomBaseCacheImage(
-                        widthPlaceHolder: 112,
-                        heightPlaceHolder: 40,
-                        imageUrl: (_groupUserStories?[index].story?[_curChildIdx].isApsara ?? false)
-                            ? (_groupUserStories?[index].story?[_curChildIdx].media) == null
-                                ? "${_groupUserStories?[index].story?[_curChildIdx].mediaUri}"
-                                : "${_groupUserStories?[index].story?[_curChildIdx].media?.imageInfo?[0].url}"
-                            : "${_groupUserStories?[index].story?[_curChildIdx].fullContent}",
-                        imageBuilder: (context, imageProvider) {
-                          if (_groupUserStories?[index].story?[_curChildIdx].mediaType == 'image') {
-                            loadImage++;
-                          }
-                          return Container(
-                            clipBehavior: Clip.hardEdge,
-                            width: double.infinity,
-                            height: double.infinity,
-                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          );
-                        },
-                        placeHolderWidget: Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          color: Colors.transparent,
-                          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Center(
-                            child: SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Column(
-                                children: [
-                                  CircularProgressIndicator(
-                                    backgroundColor: Colors.white,
-                                    strokeWidth: 3.0,
+                  ? FutureBuilder(
+                    future: Future.wait([
+                        for (StickerModel sticker in _groupUserStories?[index].story?[_curChildIdx].stickers ?? [])
+                          precacheImage(NetworkImage(sticker.image ?? ''), context),
+                    ]),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        Container();
+                      }
+                      return Container(
+                          color: Colors.black,
+                          child: CustomBaseCacheImage(
+                            widthPlaceHolder: 112,
+                            heightPlaceHolder: 40,
+                            imageUrl: (_groupUserStories?[index].story?[_curChildIdx].isApsara ?? false)
+                                ? (_groupUserStories?[index].story?[_curChildIdx].media) == null
+                                    ? "${_groupUserStories?[index].story?[_curChildIdx].mediaUri}"
+                                    : "${_groupUserStories?[index].story?[_curChildIdx].media?.imageInfo?[0].url}"
+                                : "${_groupUserStories?[index].story?[_curChildIdx].fullContent}",
+                            imageBuilder: (context, imageProvider) {
+                              if (_groupUserStories?[index].story?[_curChildIdx].mediaType == 'image') {
+                                loadImage++;
+                              }
+                              return Center(
+                                child: Stack(
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        clipBehavior: Clip.hardEdge,
+                                        width: double.infinity,
+                                        // height: double.infinity,
+                                        height: MediaQuery.of(context).size.width * (16/9),
+                                        // margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8.0),
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Container(
+                                        clipBehavior: Clip.hardEdge,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8.0),
+                                        ),
+                                        child: StickerOverlay(
+                                          stickers: _groupUserStories?[index].story?[_curChildIdx].stickers,
+                                          width: double.infinity,
+                                          height: MediaQuery.of(context).size.width * (16/9),
+                                          fullscreen: true,
+                                          isPause: isPause,
+                                          canPause: true,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            placeHolderWidget: Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              color: Colors.transparent,
+                              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Center(
+                                child: SizedBox(
+                                  height: 40,
+                                  width: 40,
+                                  child: Column(
+                                    children: [
+                                      CircularProgressIndicator(
+                                        backgroundColor: Colors.white,
+                                        strokeWidth: 3.0,
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
+                              // child: _buildBody(index),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                              decoration: BoxDecoration(
+                                image: const DecorationImage(
+                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              // child: _buildBody(index),
+                            ),
+                            emptyWidget: Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                              decoration: BoxDecoration(
+                                image: const DecorationImage(
+                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              // child: _buildBody(index),
                             ),
                           ),
-                          // child: _buildBody(index),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          // child: _buildBody(index),
-                        ),
-                        emptyWidget: Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          // child: _buildBody(index),
-                        ),
-                      ),
-                    )
+                        );
+                    }
+                  )
                   : Center(
                       child: const CircularProgressIndicator(
                         backgroundColor: Colors.white,

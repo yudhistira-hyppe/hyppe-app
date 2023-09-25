@@ -402,7 +402,7 @@ class MainNotifier with ChangeNotifier {
       "=================== init wakelock".logger();
       Wakelock.enable();
       if (_inactivityTimer != null) _inactivityTimer?.cancel();
-      _inactivityTimer = Timer(const Duration(seconds: 30), () => onShowInactivityWarning());
+      _inactivityTimer = Timer(const Duration(seconds: 300), () => onShowInactivityWarning());
     });
   }
 }

@@ -45,6 +45,8 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
           widget.isDrag ? const CustomIconWidget(
             height: 20,
             width: 20,
+            defaultColor: false,
+            color: Colors.white,
             iconData: "${AssetPath.vectorPath}close_ads.svg",
           ): InkWell(
             onTap: () {
@@ -56,6 +58,8 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
             child: const CustomIconWidget(
               height: 20,
               width: 20,
+              defaultColor: false,
+              color: Colors.white,
               iconData: "${AssetPath.vectorPath}close_ads.svg",
             ),
           ),
@@ -63,7 +67,7 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
           Container(
             width: 1,
             height: 13,
-            color: kHyppeGrey,
+            color: Colors.white,
           ),
           sixPx,
           Expanded(

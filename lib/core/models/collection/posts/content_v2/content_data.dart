@@ -7,6 +7,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/boosted.dart';
+import 'package:hyppe/core/models/collection/sticker/sticker_model.dart';
 import 'package:hyppe/core/models/collection/transaction/bank_account/transaction_history_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -201,6 +202,7 @@ class ContentData {
   double? imageHeightTemp;
   double? imageHeightTemp2;
   String? valueCache;
+  List<StickerModel>? stickers;
 
   ContentData({
     this.metadata,
@@ -268,6 +270,7 @@ class ContentData {
     this.imageHeightTemp,
     this.imageHeightTemp2,
     this.valueCache,
+    this.stickers,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -373,6 +376,12 @@ class ContentData {
     limitLandingpage = json['limitLandingpage'] ?? 0;
     imageHeightTemp = json['imageHeightTemp'] ?? 0;
     valueCache = rundom();
+    if (json['stiker'] != null) {
+      stickers = <StickerModel>[];
+      json['stiker'].forEach((v) {
+        stickers!.add( StickerModel.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -434,6 +443,9 @@ class ContentData {
 
     if (urluserBadge != null) {
       data['urluserBadge'] = urluserBadge?.toJson();
+    }
+    if (stickers != null) {
+      data['stiker'] = stickers!.map((v) => v.toJson()).toList();
     }
     return data;
   }

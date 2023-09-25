@@ -620,9 +620,9 @@ class PreUploadContentNotifier with ChangeNotifier {
     try {
       // _connectAndListenToSocket(context);
       final notifier = PostsBloc();
-      final size = context.read<PreviewContentNotifier>();
-      final width = size.width;
-      final height = size.height;
+      final previewContentNotifier = context.read<PreviewContentNotifier>();
+      final width = previewContentNotifier.width;
+      final height = previewContentNotifier.height;
 
       print('featureType : $featureType');
       if (_boostContent == null) {
@@ -669,6 +669,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         isShared: isShared,
         rotate: orientation ?? NativeDeviceOrientation.portraitUp,
         location: locationName == language.addLocation ? '' : locationName,
+        stickers: previewContentNotifier.stickers,
         onReceiveProgress: (count, total) async {
           await eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count.toDouble(), total: total.toDouble()));
         },

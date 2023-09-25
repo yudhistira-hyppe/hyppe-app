@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:gif_view/gif_view.dart';
 import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -19,6 +20,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/models/collection/sticker/sticker_model.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -55,6 +57,7 @@ import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:hyppe/ui/constant/widget/sticker_overlay.dart';
 
 class ScrollDiary extends StatefulWidget {
   final SlidedDiaryDetailScreenArgument? arguments;
@@ -866,27 +869,49 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                 child: Stack(
                   children: [
                     _curIdx == index
-                        ? ClipRRect(
-                            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                            child: Builder(builder: (context) {
-                              // if (!isloading) {
-                              //   return AliPlayerView(
-                              //     onCreated: onViewPlayerCreated,
-                              //     x: 0,
-                              //     y: 0,
-                              //     height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                              //     width: MediaQuery.of(context).size.width,
-                              //   );
-                              // }
-                              return AliPlayerView(
-                                onCreated: onViewPlayerCreated,
-                                x: 0,
-                                y: 0,
-                                height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                width: MediaQuery.of(context).size.width,
+                        ? FutureBuilder(
+                          future: Future.wait([
+                            for (StickerModel sticker in diaryData?[_curIdx].stickers ?? [])
+                              precacheImage(NetworkImage(sticker.image ?? ''), context)
+                          ]),
+                          builder: (context, snapshot) {
+                            return ClipRRect(
+                                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                                child: Builder(builder: (context) {
+                                  // if (!isloading) {
+                                  //   return AliPlayerView(
+                                  //     onCreated: onViewPlayerCreated,
+                                  //     x: 0,
+                                  //     y: 0,
+                                  //     height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                  //     width: MediaQuery.of(context).size.width,
+                                  //   );
+                                  // }
+                                  return Stack(
+                                    children: [
+                                      AliPlayerView(
+                                        onCreated: onViewPlayerCreated,
+                                        x: 0,
+                                        y: 0,
+                                        height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                        width: MediaQuery.of(context).size.width,
+                                      ),
+                                      Visibility(
+                                        visible: isPlay,
+                                        child: StickerOverlay(
+                                          fullscreen: false,
+                                          stickers: diaryData?[_curIdx].stickers,
+                                          width: MediaQuery.of(context).size.width,
+                                          height: (MediaQuery.of(context).size.width) * (16/9),
+                                          isPause: isPause,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
                               );
-                            }),
-                          )
+                          }
+                        )
                         : Container(),
                     // _buildProgressBar(SizeConfig.screenWidth!, 500),
                     !notifier.connectionError

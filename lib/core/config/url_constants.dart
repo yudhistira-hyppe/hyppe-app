@@ -25,8 +25,8 @@ class UrlConstants {
   static const String apiV7 = '/v7/';
 
   /// Production Base url
-  static const String productionBaseApi = "https://p1.hyppe.cloud";
-  static const String productionUploadBaseApi = "https://p1.hyppe.cloud";
+  static const String productionBaseApi = "https://s1.hyppe.cloud";
+  static const String productionUploadBaseApi = "https://s1.hyppe.cloud";
   // static const String productionBaseApi = "https://p1-5003.hyppe.cloud";
   // static const String productionUploadBaseApi = "https://p1-5003.hyppe.cloud";
 
@@ -36,10 +36,10 @@ class UrlConstants {
   // static const String productionUploadBaseApi = "https://s1.hyppe.cloud";
 
   /// Staging v2 Base url
-  // static const String stagingBaseApi = "https://s1.hyppe.cloud";
-  // static const String stagingUploadBaseApi = "https://s1.hyppe.cloud";
-  static const String stagingBaseApi = "https://p1-5003.hyppe.cloud";
-  static const String stagingUploadBaseApi = "https://p1-5003.hyppe.cloud";
+  static const String stagingBaseApi = "https://s1.hyppe.cloud";
+  static const String stagingUploadBaseApi = "https://s1.hyppe.cloud";
+  // static const String stagingBaseApi = "https://p1-5003.hyppe.cloud";
+  // static const String stagingUploadBaseApi = "https://p1-5003.hyppe.cloud";
   // static const String stagingBaseApi = "https://p1-5003.hyppe.cloud";
   // static const String stagingUploadBaseApi = "https://p1-5003.hyppe.cloud";
 
@@ -456,4 +456,7 @@ class UrlConstants {
   // Get Effect
   static const String getEffects = "/api/assets/filter/list";
   static const String downloadEffect = "/api/assets/filter/file";
+  
+  // Get Sticker
+  static const String getStickers = "/api/mediastiker/listingapp";
 }
