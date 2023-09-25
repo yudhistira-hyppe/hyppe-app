@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
       final notifierMain = context.read<MainNotifier>();
-      notifierMain.globalKey = GlobalKey<NestedScrollViewState>();
+      // notifierMain.globalKey = globalKey;
 
       if (notifier.preventReloadAfterUploadPost) {
         notifier.preventReloadAfterUploadPost = false;
@@ -152,21 +152,25 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           {'name': "${_language?.following}", 'code': 'FOLLOWING'},
         ];
       }
-
-      notifierMain.globalKey.currentState?.innerController.addListener(() {
-        try {
-          setState(() {
-            offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-            // print(offset);
-          });
-          if ((notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0) >= (notifierMain.globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
-              !(notifierMain.globalKey.currentState?.innerController.position.outOfRange ?? true)) {
-            notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);
+      Future.delayed(Duration(milliseconds: 500), () {
+        notifierMain.globalKey.currentState?.innerController.addListener(() {
+          try {
+            setState(() {
+              offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
+              // print(offset);
+            });
+            print("======offsettt=====");
+            print("======offsettt $offset=====");
+            if ((notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0) >= (notifierMain.globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
+                !(notifierMain.globalKey.currentState?.innerController.position.outOfRange ?? true)) {
+              notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);
+            }
+          } catch (e) {
+            e.logger();
           }
-        } catch (e) {
-          e.logger();
-        }
+        });
       });
+
       Routing.navigatorKey.currentContext?.read<MainNotifier>().scrollController.addListener(() {
         // print(context.read<MainNotifier>().scrollController.offset);
         try {
@@ -436,6 +440,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     if (isHomeScreen) {
       print("isOnHomeScreen hit ads");
       homneNotifier.getAdsApsara(context, true);
+    }
+    var pic = Provider.of<PreviewPicNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+    if (context.read<MainNotifier>().tutorialData.isEmpty && (pic.pic?.isNotEmpty ?? [].isEmpty)) {
+      context.read<MainNotifier>().tutorialData = pic.pic?.first.tutorial ?? [];
     }
     //
   }

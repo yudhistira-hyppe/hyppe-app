@@ -321,8 +321,10 @@ class HomeNotifier with ChangeNotifier {
           await pic.initialPic(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents).then((value) async {
             if (pic.pic != null && isNew) {
               limit = pic.pic?.first.limitLandingpage ?? 2;
-              if (context.read<MainNotifier>().tutorialData.isEmpty) {
-                context.read<MainNotifier>().tutorialData = pic.pic?.first.tutorial ?? [];
+              if (mounted) {
+                if (context.read<MainNotifier>().tutorialData.isEmpty) {
+                  context.read<MainNotifier>().tutorialData = pic.pic?.first.tutorial ?? [];
+                }
               }
             }
             // if (diary.diaryData == null) {

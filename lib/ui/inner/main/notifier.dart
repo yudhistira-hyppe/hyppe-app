@@ -176,8 +176,10 @@ class MainNotifier with ChangeNotifier {
     }
   }
 
-  Widget mainScreen(BuildContext context, bool canShowAds, GlobalKey keyPostButton) {
-    List pages = [
+  List pages = [];
+
+  void pageInit(bool canShowAds) {
+    pages = [
       HomeScreen(
         canShowAds: canShowAds,
       ),
@@ -185,6 +187,9 @@ class MainNotifier with ChangeNotifier {
       NotificationScreen(),
       const SelfProfileScreen()
     ];
+  }
+
+  Widget mainScreen(BuildContext context, bool canShowAds, GlobalKey keyPostButton) {
     if (page != -1) {
       _pageIndex = page;
     }
