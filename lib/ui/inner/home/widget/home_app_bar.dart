@@ -12,16 +12,42 @@ import 'package:provider/provider.dart';
 
 import '../../main/notifier.dart';
 
-class HomeAppBar extends StatelessWidget {
+class HomeAppBar extends StatefulWidget {
   final String? name;
   final double? offset;
+  final ScrollController? scrollController;
 
-  const HomeAppBar({super.key, this.name = '', this.offset = 0});
+  const HomeAppBar({
+    super.key,
+    this.name = '',
+    this.offset = 0,
+    this.scrollController,
+  });
+
+  @override
+  State<HomeAppBar> createState() => _HomeAppBarState();
+}
+
+class _HomeAppBarState extends State<HomeAppBar> {
+  double offset = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (mounted) {
+        var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
+        notifierMain?.globalKey.currentState?.innerController.addListener(() async {
+          offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeAppBar');
-    String nameTitle = name ?? '';
+    String nameTitle = widget.name ?? '';
     // String nameTitle = "AaaAAAAASKJLKJDiiiiaskdlaksjdlkajsd asdasdas asdasd";
     nameTitle = nameTitle.split(" ").elementAt(0);
 
@@ -53,7 +79,7 @@ class HomeAppBar extends StatelessWidget {
         // AliPlayer(),
         sixteenPx,
       ],
-      title: (offset ?? 0) <= 150
+      title: (offset) <= 150
           ? Text(
               "Halo, $helloName!",
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),

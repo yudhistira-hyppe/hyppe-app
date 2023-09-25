@@ -155,12 +155,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       Future.delayed(Duration(milliseconds: 500), () {
         notifierMain.globalKey.currentState?.innerController.addListener(() {
           try {
-            setState(() {
-              offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-              // print(offset);
-            });
-            print("======offsettt=====");
-            print("======offsettt $offset=====");
             if ((notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0) >= (notifierMain.globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
                 !(notifierMain.globalKey.currentState?.innerController.position.outOfRange ?? true)) {
               notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);
@@ -241,6 +235,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   Widget build(BuildContext context) {
+    final notifierMain = context.read<MainNotifier>();
     // print("iszoom $isZoom");
     isFromSplash = false;
     return Consumer2<HomeNotifier, SelfProfileNotifier>(
@@ -252,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         child: Scaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-            child: HomeAppBar(name: selfnotifier.user.profile?.fullName, offset: offset),
+            child: HomeAppBar(name: "${selfnotifier.user.profile?.fullName}", offset: offset),
           ),
           body: Builder(
             builder: (context) => DefaultTabController(

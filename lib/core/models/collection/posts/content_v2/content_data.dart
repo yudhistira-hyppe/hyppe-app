@@ -469,8 +469,7 @@ class ContentData {
   }
 
   String? concatThumbUri() {
-    // final fixMedia = mediaThumbEndPoint ?? mediaEndpoint ?? '';
-    final fixMedia = mediaEndpoint ?? '';
+    final fixMedia = mediaThumbEndPoint ?? mediaEndpoint ?? '';
     if (fixMedia.isNotEmpty) {
       return Env.data.baseUrl + "${Env.data.versionApi}" + fixMedia + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
     } else {
