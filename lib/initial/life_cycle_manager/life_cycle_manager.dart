@@ -124,12 +124,12 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
             globalAliPlayer?.pause();
           }
         }
-        if(adsGlobalAliPlayer != null){
-          adsGlobalAliPlayer?.pause();
-        }
 
-        if(adsGlobalAliPlayer != null){
-          adsGlobalAliPlayer?.pause();
+        if(globalAdsPopUp != null){
+          globalAdsPopUp?.pause();
+        }
+        if(globalAdsInBetween != null){
+          globalAdsInBetween?.pause();
         }
         if(globalAdsInContent != null){
           globalAdsInContent?.pause();
@@ -152,8 +152,11 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           print('globalAudioPlayer!.resume');
           globalAudioPlayer!.resume();
         }
-        if (adsGlobalAliPlayer != null){
-          adsGlobalAliPlayer?.play();
+        if(globalAdsPopUp != null){
+          globalAdsPopUp?.play();
+        }
+        if(globalAdsInBetween != null){
+          globalAdsInBetween?.play();
         }
         if (globalAdsInContent != null){
           globalAdsInContent?.play();

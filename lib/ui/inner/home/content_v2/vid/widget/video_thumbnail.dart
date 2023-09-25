@@ -54,7 +54,7 @@ class VideoThumbnail extends StatelessWidget {
               memCacheHeight: 100,
               widthPlaceHolder: 80,
               heightPlaceHolder: 80,
-              imageUrl: (videoData?.isApsara ?? false) ? (videoData?.mediaThumbEndPoint ?? '') : '${videoData?.fullThumbPath}',
+              imageUrl: (videoData?.isApsara ?? false) ? (videoData?.mediaThumbEndPoint ?? '') : '${videoData?.fullThumbPath ?? ''}',
               // imageUrl: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/8f37ff162632759.63d906f614037.jpg",
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(

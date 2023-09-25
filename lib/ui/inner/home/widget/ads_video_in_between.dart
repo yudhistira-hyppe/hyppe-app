@@ -179,7 +179,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
 
                           if (info.visibleFraction >= 0.9) {
                             notifier.currentPostID = widget.data.adsId ?? '';
-                            adsGlobalAliPlayer?.play();
+                            globalAdsInBetween?.play();
                           }
                         },
                         child: Container(
@@ -537,7 +537,7 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
         setState(() {});
       }
     });
-    adsGlobalAliPlayer = fAliplayer;
+    globalAdsInContent = fAliplayer;
     Future.delayed(const Duration(milliseconds: 700), () {
       start(widget.adsData);
     });
@@ -566,8 +566,8 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
       isPause = false;
     }
 
+    globalAdsInBetween = fAliplayer;
     await fAliplayer?.prepare();
-
 
     // fAliplayer?.play();
   }
@@ -638,7 +638,7 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
     fAliplayer?.destroy();
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
-    adsGlobalAliPlayer = null;
+    globalAdsInBetween = null;
   }
 
   @override

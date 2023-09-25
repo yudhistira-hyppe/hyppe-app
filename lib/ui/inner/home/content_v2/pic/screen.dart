@@ -1028,7 +1028,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   onVisibilityChanged: (info) {
                                     if (info.visibleFraction == 1) {
                                       if (!isShowingDialog) {
-                                        adsGlobalAliPlayer?.pause();
+                                        globalAdsPopUp?.pause();
                                       }
                                     }
                                     if (info.visibleFraction == 1 || info.visibleFraction >= 0.6) {

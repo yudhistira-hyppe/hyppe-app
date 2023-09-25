@@ -14,7 +14,7 @@ class CustomBackgroundLayer extends StatelessWidget {
     return Stack(
       children: [
         CustomBaseCacheImage(
-            imageUrl: "$thumbnail",
+            imageUrl: thumbnail,
             placeHolderWidget: const Center(child: CustomLoading()),
             imageBuilder: (context, imageProvider) =>
                 Container(decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.cover, image: imageProvider))),

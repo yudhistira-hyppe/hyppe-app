@@ -43,7 +43,7 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                     ? data?.media?.imageInfo?.isEmpty ?? false
                         ? (data?.media?.videoList != null
                             ? data!.media!.videoList!.isNotEmpty
-                                ? "${data?.media?.videoList?[0].coverURL}"
+                                ? "${data?.media?.videoList?[0].coverURL ?? ''}"
                                 : ""
                             : '')
                         : (data?.media?.imageInfo?[0].url ?? '')

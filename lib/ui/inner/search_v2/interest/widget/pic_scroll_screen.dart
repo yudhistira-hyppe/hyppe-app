@@ -707,7 +707,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                                     memCacheHeight: 100,
                                     widthPlaceHolder: 80,
                                     heightPlaceHolder: 80,
-                                    imageUrl: (pics[index].isApsara ?? false) ? (pics[index].mediaEndpoint ?? "") : "${pics[index].fullContent}" + '&2',
+                                    imageUrl: (pics[index].isApsara ?? false) ? (pics[index].mediaEndpoint ?? "") : "${pics[index].fullContent ?? ''}" + '&2',
                                     imageBuilder: (context, imageProvider) => ClipRRect(
                                       borderRadius: BorderRadius.circular(20), // Image borderr
                                       child: pics[index].reportedStatus == 'BLURRED'
