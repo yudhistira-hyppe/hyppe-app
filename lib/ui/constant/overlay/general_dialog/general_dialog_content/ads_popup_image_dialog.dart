@@ -275,6 +275,7 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
                                                       });
                                                       print('second close ads: $secondsImage');
                                                       System().adsView(widget.data, secondsImage, isClick: true).whenComplete(() async {
+                                                        Navigator.pop(context);
                                                         await launchUrl(
                                                           uri,
                                                           mode: LaunchMode.externalApplication,
