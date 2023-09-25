@@ -125,61 +125,61 @@ class VideoNotifier with ChangeNotifier{
     print('Hit Api Ads In Content');
     try {
       /// with Dummy
-      final Map<String, dynamic> map = {
-        "adsId": "64f6b482441437a65cbf9049",
-        "adsUrlLink": "https://youtu.be/XgqQBcJDhxI",
-        "adsDescription": "test action day 4",
-        "name": "test action day 4",
-        "useradsId": "64feb97818d4a0ce8e58075c",
-        "idUser": "62144570602c354635ed7b6d",
-        "fullName": "Sukma Irawan",
-        "email": "sukma_metal@yahoo.com",
-        "username": "hariyantosubang",
-        "avartar": {
-          "mediaBasePath": "62144570602c354635ed7b6d/profilePict/62144570602c354635ed7b6d.jpeg",
-          "mediaUri": "62144570602c354635ed7b6d.jpeg",
-          "mediaType": "image",
-          "mediaEndpoint": "/profilepict/0d0cf1aa-2b71-312b-7087-41e6ea7adfac"
-        },
-        "placingID": "633d3dd52f2800002d0064c2",
-        "adsPlace": "First",
-        "adsType": "Content Ads",
-        "adsSkip": 7,
-        "mediaType": "Video",
-        "ctaButton": "AMBILL BURUAN!!",
-        "videoId": "f69f4b404afd71eead563044f1fd0102"
-      };
-      await Future.delayed(const Duration(seconds: 1));
-      tempAdsData = AdsData.fromJson(map);
-      secondsSkip = tempAdsData?.adsSkip ?? 0;
-      final place = tempAdsData?.adsPlace;
-      if(place != null){
-        double duration = videoDuration/ 1000;
-        adsTime = place.getAdsTime(duration);
-      }else{
-        adsTime = 2;
-      }
+      // final Map<String, dynamic> map = {
+      //   "adsId": "64f6b482441437a65cbf9049",
+      //   "adsUrlLink": "https://youtu.be/XgqQBcJDhxI",
+      //   "adsDescription": "test action day 4",
+      //   "name": "test action day 4",
+      //   "useradsId": "64feb97818d4a0ce8e58075c",
+      //   "idUser": "62144570602c354635ed7b6d",
+      //   "fullName": "Sukma Irawan",
+      //   "email": "sukma_metal@yahoo.com",
+      //   "username": "hariyantosubang",
+      //   "avartar": {
+      //     "mediaBasePath": "62144570602c354635ed7b6d/profilePict/62144570602c354635ed7b6d.jpeg",
+      //     "mediaUri": "62144570602c354635ed7b6d.jpeg",
+      //     "mediaType": "image",
+      //     "mediaEndpoint": "/profilepict/0d0cf1aa-2b71-312b-7087-41e6ea7adfac"
+      //   },
+      //   "placingID": "633d3dd52f2800002d0064c2",
+      //   "adsPlace": "First",
+      //   "adsType": "Content Ads",
+      //   "adsSkip": 7,
+      //   "mediaType": "Video",
+      //   "ctaButton": "AMBILL BURUAN!!",
+      //   "videoId": "f69f4b404afd71eead563044f1fd0102"
+      // };
+      // await Future.delayed(const Duration(seconds: 1));
+      // tempAdsData = AdsData.fromJson(map);
+      // secondsSkip = tempAdsData?.adsSkip ?? 0;
+      // final place = tempAdsData?.adsPlace;
+      // if(place != null){
+      //   double duration = videoDuration/ 1000;
+      //   adsTime = place.getAdsTime(duration);
+      // }else{
+      //   adsTime = 2;
+      // }
 
       ///with api
-      // final notifier = AdsDataBloc();
-      // await notifier.adsVideoBlocV2(context, AdsType.content);
-      // final fetch = notifier.adsDataFetch;
-      //
-      // if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-      //   // print('data : ${fetch.data.toString()}');
-      //   final data = fetch.data;
-      //   tempAdsData = data.data;
-      //   secondsSkip = tempAdsData?.adsSkip ?? 0;
-      //   final place = tempAdsData?.adsPlace;
-      //   if(place != null){
-      //     double duration = videoDuration/ 1000;
-      //     adsTime = place.getAdsTime(duration);
-      //   }else{
-      //     adsTime = 2;
-      //   }
-      //   'videoId : ${tempAdsData?.videoId}'.logger();
-      //
-      // }
+      final notifier = AdsDataBloc();
+      await notifier.adsVideoBlocV2(context, AdsType.content);
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        // print('data : ${fetch.data.toString()}');
+        final data = fetch.data;
+        tempAdsData = data.data;
+        secondsSkip = tempAdsData?.adsSkip ?? 0;
+        final place = tempAdsData?.adsPlace;
+        if(place != null){
+          double duration = videoDuration/ 1000;
+          adsTime = place.getAdsTime(duration);
+        }else{
+          adsTime = 2;
+        }
+        'videoId : ${tempAdsData?.videoId}'.logger();
+
+      }
     } catch (e) {
       'Failed to fetch ads data $e'.logger();
     }
