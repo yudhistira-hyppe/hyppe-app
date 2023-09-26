@@ -63,11 +63,12 @@ class CustomProfileImage extends StatelessWidget {
                           },
                           fit: BoxFit.cover,
                         )
-                      : Image.network(
-                          '$imageUrl',
+                      : FadeInImage(
+                          image: NetworkImage(imageUrl ?? ''),
+                          placeholder: const AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                           width: width,
                           height: height,
-                          errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                          imageErrorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                             return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
                           },
                           fit: BoxFit.cover,

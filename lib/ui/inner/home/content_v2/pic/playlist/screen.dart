@@ -42,6 +42,11 @@ class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayout
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final tempAllow = widget.isOnPageTurning;
 

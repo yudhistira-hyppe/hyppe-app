@@ -157,11 +157,19 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
 
       //scroll
+
       if (mounted) {
-        var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
-        notifierMain?.globalKey?.currentState?.innerController.addListener(() async {
-          double offset = notifierMain.globalKey?.currentState?.innerController.position.pixels ?? 0;
-          if (mounted) await toPosition(offset, notifier, notifierMain);
+        // var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
+        // notifierMain?.globalKey?.currentState?.innerController.addListener(() async {
+        //   double offset = notifierMain.globalKey?.currentState?.innerController.position.pixels ?? 0;
+        //   if (mounted) await toPosition(offset, notifier, notifierMain);
+        // });
+        Future.delayed(Duration(milliseconds: 500), () {
+          print("=========== global key prirnt ${widget.scrollController} ");
+          widget.scrollController?.addListener(() async {
+            double offset = widget.scrollController?.position.pixels ?? 0;
+            if (mounted) await toPosition(offset, notifier);
+          });
         });
       }
 
@@ -310,7 +318,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     });
   }
 
-  Future toPosition(double offset, PreviewPicNotifier notifier, MainNotifier notifierMain) async {
+  Future toPosition(double offset, PreviewPicNotifier notifier) async {
     double totItemHeight = 0;
     double totItemHeightParam = 0;
     // print("======== ${offset}---====");
@@ -1234,9 +1242,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 memCacheHeight: 100,
                                                 widthPlaceHolder: 80,
                                                 heightPlaceHolder: 80,
-                                                imageUrl: (picData?.isApsara ?? false)
-                                                    ? ("${picData?.mediaThumbEndPoint}?key=${picData?.valueCache}")
-                                                    : ("${picData?.fullThumbPath}&key=${picData?.valueCache}"),
+                                                imageUrl:
+                                                    (picData?.isApsara ?? false) ? ("${picData?.mediaEndpoint}?key=${picData?.valueCache}") : ("${picData?.fullContent}&key=${picData?.valueCache}"),
                                                 imageBuilder: (context, imageProvider) {
                                                   return ClipRRect(
                                                     borderRadius: BorderRadius.circular(20), // Image border
