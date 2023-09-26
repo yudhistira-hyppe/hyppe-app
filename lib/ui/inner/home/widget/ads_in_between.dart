@@ -227,6 +227,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                               loadLaunch = true;
                             });
                             System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+                              widget.afterReport();
                               Future.delayed(const Duration(milliseconds: 800), () {
                                 Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                               });
@@ -241,6 +242,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                                     loadLaunch = true;
                                   });
                                   System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
+                                    widget.afterReport();
                                     await launchUrl(
                                       uri,
                                       mode: LaunchMode.externalApplication,
@@ -254,6 +256,7 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                                   loadLaunch = true;
                                 });
                                 System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+                                  widget.afterReport();
                                   System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                                 });
                               }
