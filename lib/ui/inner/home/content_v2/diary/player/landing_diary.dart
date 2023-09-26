@@ -895,7 +895,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           }
                         },
                         child: context.getAdsInBetween(notifier.diaryData?[index].inBetweenAds, (info) {}, () {
+                          // final hasNotAds = (notifier.diaryData?.where((element) => element.inBetweenAds != null).length ?? 0) == 0;
+                          // if(hasNotAds){
+                          //
+                          // }
                           notifier.setAdsData(index, null);
+
                         }, (player, id) {}),
                       )
                     : Column(

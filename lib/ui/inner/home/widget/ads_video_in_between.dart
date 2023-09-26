@@ -15,7 +15,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../core/arguments/other_profile_argument.dart';
-import '../../../../core/bloc/ads_video/bloc.dart';
 import '../../../../core/bloc/posts_v2/bloc.dart';
 import '../../../../core/bloc/posts_v2/state.dart';
 import '../../../../core/config/ali_config.dart';
@@ -216,7 +215,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                               loadLaunch = true;
                             });
                             System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
-                              Navigator.pop(context);
+                              widget.afterReport();
                               Future.delayed(const Duration(milliseconds: 800), () {
                                 Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                               });
@@ -231,6 +230,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                     loadLaunch = true;
                                   });
                                   System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() async {
+                                    widget.afterReport();
                                     await launchUrl(
                                       uri,
                                       mode: LaunchMode.externalApplication,
@@ -244,6 +244,7 @@ class _AdsVideoInBetweenState extends State<AdsVideoInBetween> with WidgetsBindi
                                   loadLaunch = true;
                                 });
                                 System().adsView(widget.data, widget.data.duration?.round() ?? 10, isClick: true).whenComplete(() {
+                                  widget.afterReport();
                                   System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                                 });
                               }
