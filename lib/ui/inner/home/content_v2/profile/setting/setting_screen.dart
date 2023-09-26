@@ -39,13 +39,15 @@ class _SettingScreenState extends State<SettingScreen> {
     super.initState();
     mn = Provider.of<MainNotifier>(context, listen: false);
     super.initState();
-    if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
-      indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'transaction') ?? 0;
-      indexreferral = mn?.tutorialData.indexWhere((element) => element.key == 'idRefferal') ?? 0;
-      if (mn?.tutorialData[indexKey].status == false || mn?.tutorialData[indexreferral].status == false) {
-        WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(myContext).startShowCase([keyTransaction, keyReferral]));
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
+        indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'transaction') ?? 0;
+        indexreferral = mn?.tutorialData.indexWhere((element) => element.key == 'idRefferal') ?? 0;
+        if (mn?.tutorialData[indexKey].status == false || mn?.tutorialData[indexreferral].status == false) {
+          WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(myContext).startShowCase([keyTransaction, keyReferral]));
+        }
       }
-    }
+    });
   }
 
   @override

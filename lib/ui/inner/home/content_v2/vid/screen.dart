@@ -120,8 +120,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       //scroll
       if (mounted) {
         var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
-        notifierMain?.globalKey.currentState?.innerController.addListener(() {
-          var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
+        notifierMain?.globalKey?.currentState?.innerController.addListener(() {
+          var offset = notifierMain.globalKey?.currentState?.innerController.position.pixels ?? 0;
           if (mounted) toPosition(offset);
         });
       }
@@ -789,7 +789,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                           for (var i = 0; i < index; i++) {
                                             position += vidNotifier.vidData?[i].height ?? 0.0;
                                           }
-                                          context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
+                                          context.read<MainNotifier>().globalKey?.currentState?.innerController.animateTo(
                                                 position,
                                                 duration: const Duration(milliseconds: 700),
                                                 curve: Curves.easeOut,
@@ -866,7 +866,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                               for (var i = 0; i <= _curIdx; i++) {
                                                 position += notifier.vidData?[i].height ?? 0.0;
                                               }
-                                              context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
+                                              context.read<MainNotifier>().globalKey?.currentState?.innerController.animateTo(
                                                     position,
                                                     duration: const Duration(milliseconds: 700),
                                                     curve: Curves.easeOut,

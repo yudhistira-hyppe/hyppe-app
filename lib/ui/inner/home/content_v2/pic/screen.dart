@@ -159,8 +159,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       //scroll
       if (mounted) {
         var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
-        notifierMain?.globalKey.currentState?.innerController.addListener(() async {
-          double offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
+        notifierMain?.globalKey?.currentState?.innerController.addListener(() async {
+          double offset = notifierMain.globalKey?.currentState?.innerController.position.pixels ?? 0;
           if (mounted) await toPosition(offset, notifier, notifierMain);
         });
       }

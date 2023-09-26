@@ -36,9 +36,9 @@ class _HomeAppBarState extends State<HomeAppBar> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
-      context.read<MainNotifier>().globalKey.currentState?.innerController.addListener(() {
+      context.read<MainNotifier>().globalKey?.currentState?.innerController.addListener(() {
         print("---------scrol------");
-        offset = context.read<MainNotifier>().globalKey.currentState?.innerController.position.pixels ?? 0;
+        offset = context.read<MainNotifier>().globalKey?.currentState?.innerController.position.pixels ?? 0;
       });
       // notifierMain?.globalKey.currentState?.innerController.addListener(() async {});
     });
@@ -47,7 +47,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeAppBar');
-    String nameTitle = widget.name ?? '';
+    String nameTitle = widget.name == null || widget.name == 'null' ? '' : (widget.name ?? '');
     // String nameTitle = "AaaAAAAASKJLKJDiiiiaskdlaksjdlkajsd asdasdas asdasd";
     nameTitle = nameTitle.split(" ").elementAt(0);
 

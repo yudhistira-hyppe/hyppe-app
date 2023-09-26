@@ -153,10 +153,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         ];
       }
       Future.delayed(Duration(milliseconds: 500), () {
-        notifierMain.globalKey.currentState?.innerController.addListener(() {
+        notifierMain.globalKey?.currentState?.innerController.addListener(() {
           try {
-            if ((notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0) >= (notifierMain.globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
-                !(notifierMain.globalKey.currentState?.innerController.position.outOfRange ?? true)) {
+            if ((notifierMain.globalKey?.currentState?.innerController.position.pixels ?? 0) >= (notifierMain.globalKey?.currentState?.innerController.position.maxScrollExtent ?? 0) &&
+                !(notifierMain.globalKey?.currentState?.innerController.position.outOfRange ?? true)) {
               notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);
             }
           } catch (e) {
@@ -250,13 +250,13 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
             child: HomeAppBar(
               name: "${selfnotifier.user.profile?.fullName}",
               offset: offset,
-              scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+              scrollController: context.read<MainNotifier>().globalKey?.currentState?.innerController,
             ),
           ),
           body: Builder(
             builder: (context) => DefaultTabController(
               length: 3,
-              child: NotificationListener<UserScrollNotification>(
+              child: NotificationListener<ScrollNotification>(
                 onNotification: (notification) {
                   offset = notification.metrics.pixels;
                   return true;
@@ -376,7 +376,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                                 globalTultipShow = false;
                               },
                               appbarSeen: appbarSeen,
-                              scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                              scrollController: context.read<MainNotifier>().globalKey?.currentState?.innerController,
                               // offset: offset,
                             ),
                           ),
@@ -384,7 +384,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                             padding: const EdgeInsets.only(left: 6.0, right: 6),
                             color: kHyppeLightSurface,
                             child: LandingDiaryPage(
-                              scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                              scrollController: context.read<MainNotifier>().globalKey?.currentState?.innerController,
                             ),
                           ),
                           // second tab bar viiew widget
@@ -392,7 +392,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                             padding: const EdgeInsets.only(left: 16.0, right: 16),
                             color: kHyppeLightSurface,
                             child: HyppePreviewVid(
-                              scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                              scrollController: context.read<MainNotifier>().globalKey?.currentState?.innerController,
                               afterUploading: afterUploading,
                             ),
                           ),
