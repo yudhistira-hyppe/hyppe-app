@@ -1174,6 +1174,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           child: Builder(
               key: ValueKey<bool>(isloading),
               builder: (context) {
+                if(notifier.isPlay){
+                  isPlay = true;
+                }
                 return GestureDetector(
                   onTap: () {
                     onTapCtrl = true;

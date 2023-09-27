@@ -684,7 +684,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                       child: Offstage(offstage: _isLock, child: _buildContentWidget(context, widget.orientation, notifier)),
                     ),
                   if(widget.fromFullScreen)
-                    detailAdsWidget(context, notifier.tempAdsData ?? AdsData())
+                    detailAdsWidget(context, notifier.tempAdsData ?? AdsData(), notifier)
                 ],
               ),
             );
@@ -694,7 +694,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
   }
 
   bool loadLaunch = false;
-  Widget detailAdsWidget(BuildContext context, AdsData data){
+  Widget detailAdsWidget(BuildContext context, AdsData data, VideoNotifier notifier){
     final isPortrait = widget.orientation == Orientation.portrait;
     final width = isPortrait ? context.getWidth() * 2/3 : context.getWidth() * 2/5;
     final bottom = isPortrait ? 80.0 : 50.0;
@@ -787,74 +787,95 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                     color: Colors.transparent,
                     child: Ink(
                       width: 120,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: KHyppeButtonAds),
+                      decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(5)),
+                          color: notifier.secondsSkip <= 0 ? KHyppeButtonAds : context.getColorScheme().secondary),
                       child: InkWell(
                         splashColor: context.getColorScheme().secondary,
                         onTap: () async {
-                          final secondsVideo = data.duration?.round() ?? 10;
-                          if(!loadLaunch){
-                            if(data != null){
-                              if (data.adsUrlLink?.isEmail() ?? false) {
-                                final email = data.adsUrlLink!.replaceAll('email:', '');
-                                setState(() {
-                                  loadLaunch = true;
-                                });
-                                print('second close ads: $secondsVideo');
-                                System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
-                                  Future.delayed(const Duration(milliseconds: 800), () {
-                                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                                  });
+                          if(notifier.secondsSkip <= 0){
+                            final secondsVideo = data.duration?.round() ?? 10;
+                            if(!loadLaunch){
+                              if(data != null){
+                                if (data.adsUrlLink?.isEmail() ?? false) {
+                                  final email = data.adsUrlLink!.replaceAll('email:', '');
                                   setState(() {
-                                    loadLaunch = false;
+                                    loadLaunch = true;
                                   });
-                                });
-                              } else {
-                                if((data.adsUrlLink ?? '').withHttp()){
-                                  try {
-                                    final uri = Uri.parse(data.adsUrlLink ?? '');
-                                    print('bottomAdsLayout ${data.adsUrlLink}');
-                                    if (await canLaunchUrl(uri)) {
+                                  print('second close ads: $secondsVideo');
+                                  System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                    notifier.adsAliplayer?.stop();
+                                    notifier.adsCurrentPosition = 0;
+                                    notifier.adsCurrentPositionText = 0;
+                                    notifier.hasShowedAds = true;
+                                    notifier.tempAdsData = null;
+                                    notifier.isShowingAds = false;
+                                    widget.onClose();
+                                    Future.delayed(const Duration(milliseconds: 800), () {
+                                      Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                    });
+                                    setState(() {
+                                      loadLaunch = false;
+                                    });
+                                  });
+                                } else {
+                                  if((data.adsUrlLink ?? '').withHttp()){
+                                    try {
+                                      final uri = Uri.parse(data.adsUrlLink ?? '');
+                                      print('bottomAdsLayout ${data.adsUrlLink}');
+                                      if (await canLaunchUrl(uri)) {
+                                        setState(() {
+                                          loadLaunch = true;
+                                        });
+                                        print('second close ads: $secondsVideo');
+                                        System().adsView(data, secondsVideo, isClick: true).whenComplete(() async {
+                                          notifier.adsAliplayer?.stop();
+                                          notifier.adsCurrentPosition = 0;
+                                          notifier.adsCurrentPositionText = 0;
+                                          notifier.hasShowedAds = true;
+                                          notifier.tempAdsData = null;
+                                          notifier.isShowingAds = false;
+                                          widget.onClose();
+                                          await launchUrl(
+                                            uri,
+                                            mode: LaunchMode.externalApplication,
+                                          );
+                                        });
+                                      } else {
+                                        throw "Could not launch $uri";
+                                      }
+                                      // can't launch url, there is some error
+                                    } catch (e) {
                                       setState(() {
                                         loadLaunch = true;
                                       });
                                       print('second close ads: $secondsVideo');
-                                      System().adsView(data, secondsVideo, isClick: true).whenComplete(() async {
-                                        await launchUrl(
-                                          uri,
-                                          mode: LaunchMode.externalApplication,
-                                        );
+                                      // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                      System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                        notifier.adsAliplayer?.stop();
+                                        notifier.adsCurrentPosition = 0;
+                                        notifier.adsCurrentPositionText = 0;
+                                        notifier.hasShowedAds = true;
+                                        notifier.tempAdsData = null;
+                                        notifier.isShowingAds = false;
+                                        widget.onClose();
+                                        System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                                       });
-                                    } else {
-                                      throw "Could not launch $uri";
+                                    }finally{
+                                      setState(() {
+                                        loadLaunch = false;
+                                      });
                                     }
-                                    // can't launch url, there is some error
-                                  } catch (e) {
-                                    setState(() {
-                                      loadLaunch = true;
-                                    });
-                                    print('second close ads: $secondsVideo');
-                                    // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                    System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
-                                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                    });
-                                  }finally{
-                                    setState(() {
-                                      loadLaunch = false;
-                                    });
                                   }
-                                }
 
+                                }
+                              }else{
+                                setState(() {
+                                  loadLaunch = false;
+                                });
                               }
-                            }else{
-                              setState(() {
-                                loadLaunch = false;
-                              });
                             }
                           }
-
-
                         },
                         child: Builder(
                           builder: (context) {

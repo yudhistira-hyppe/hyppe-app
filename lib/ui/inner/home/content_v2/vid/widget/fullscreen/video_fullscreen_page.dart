@@ -89,7 +89,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   int _currentPlayerState = 0;
   List<ContentData>? vidData;
 
-  bool isloading = true;
+  // bool isloading = true;
 
   bool isLoadingVid = false;
 
@@ -116,9 +116,10 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
       if(!isShowing){
         widget.fAliplayer?.play();
       }
-      setState(() {
-        isloading = false;
-      });
+      notifier.loadVideo = false;
+      // setState(() {
+      //   isloading = false;
+      // });
     });
   }
 
@@ -426,7 +427,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                 _initializeTimer();
               },
               child: Scaffold(
-                body: isloading
+                body: notifier.loadVideo
                     ? Container(
                   color: Colors.black,
                   child: Center(
@@ -666,7 +667,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
   Widget checkDetail(BuildContext context, VideoNotifier notifier){
     print('checkDetail: ${notifier.isShowingAds} ${!notifier.hasShowedAds} ${notifier.mapInContentAds[widget.data.postID]?.adsId} ${notifier.tempAdsData?.adsId}');
     if(notifier.isShowingAds && !notifier.hasShowedAds){
-      return detailAdsWidget(context, notifier.mapInContentAds[widget.data.postID] ?? (notifier.tempAdsData ?? AdsData()));
+      return detailAdsWidget(context, notifier.mapInContentAds[widget.data.postID] ?? (notifier.tempAdsData ?? AdsData()), notifier);
     }else{
       return const SizedBox.shrink();
     }
@@ -674,7 +675,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
   double heightSkip = 0;
   bool loadLaunch = false;
-  Widget detailAdsWidget(BuildContext context, AdsData data){
+  Widget detailAdsWidget(BuildContext context, AdsData data, VideoNotifier notifier){
     final isPortrait = orientation == Orientation.portrait;
     final width = isPortrait ? context.getWidth() * 2/3 : context.getWidth() * 2/5;
     final bottom = isPortrait ? 80.0 : 50.0;
@@ -767,74 +768,95 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                     color: Colors.transparent,
                     child: Ink(
                       width: 120,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: KHyppeButtonAds),
+                      decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(5)),
+                          color: notifier.secondsSkip <= 0 ? KHyppeButtonAds : context.getColorScheme().secondary),
                       child: InkWell(
                         splashColor: context.getColorScheme().secondary,
                         onTap: () async {
-                          final secondsVideo = data.duration?.round() ?? 10;
-                          if(!loadLaunch){
-                            if(data != null){
-                              if (data.adsUrlLink?.isEmail() ?? false) {
-                                final email = data.adsUrlLink!.replaceAll('email:', '');
-                                setState(() {
-                                  loadLaunch = true;
-                                });
-                                print('second close ads: $secondsVideo');
-                                System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
-                                  Future.delayed(const Duration(milliseconds: 800), () {
-                                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                                  });
+                          if(notifier.secondsSkip <= 0){
+                            final secondsVideo = data.duration?.round() ?? 10;
+                            if(!loadLaunch){
+                              if(data != null){
+                                if (data.adsUrlLink?.isEmail() ?? false) {
+                                  final email = data.adsUrlLink!.replaceAll('email:', '');
                                   setState(() {
-                                    loadLaunch = false;
+                                    loadLaunch = true;
                                   });
-                                });
-                              } else {
-                                if((data.adsUrlLink ?? '').withHttp()){
-                                  try {
-                                    final uri = Uri.parse(data.adsUrlLink ?? '');
-                                    print('bottomAdsLayout ${data.adsUrlLink}');
-                                    if (await canLaunchUrl(uri)) {
+                                  print('second close ads: $secondsVideo');
+                                  System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                    notifier.adsAliplayer?.stop();
+                                    notifier.adsCurrentPosition = 0;
+                                    notifier.adsCurrentPositionText = 0;
+                                    notifier.hasShowedAds = true;
+                                    notifier.tempAdsData = null;
+                                    notifier.isShowingAds = false;
+                                    widget.onClose();
+                                    Future.delayed(const Duration(milliseconds: 800), () {
+                                      Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                    });
+                                    setState(() {
+                                      loadLaunch = false;
+                                    });
+                                  });
+                                } else {
+                                  if((data.adsUrlLink ?? '').withHttp()){
+                                    try {
+                                      final uri = Uri.parse(data.adsUrlLink ?? '');
+                                      print('bottomAdsLayout ${data.adsUrlLink}');
+                                      if (await canLaunchUrl(uri)) {
+                                        setState(() {
+                                          loadLaunch = true;
+                                        });
+                                        print('second close ads: $secondsVideo');
+                                        System().adsView(data, secondsVideo, isClick: true).whenComplete(() async {
+                                          notifier.adsAliplayer?.stop();
+                                          notifier.adsCurrentPosition = 0;
+                                          notifier.adsCurrentPositionText = 0;
+                                          notifier.hasShowedAds = true;
+                                          notifier.tempAdsData = null;
+                                          notifier.isShowingAds = false;
+                                          widget.onClose();
+                                          await launchUrl(
+                                            uri,
+                                            mode: LaunchMode.externalApplication,
+                                          );
+                                        });
+                                      } else {
+                                        throw "Could not launch $uri";
+                                      }
+                                      // can't launch url, there is some error
+                                    } catch (e) {
                                       setState(() {
                                         loadLaunch = true;
                                       });
                                       print('second close ads: $secondsVideo');
-                                      System().adsView(data, secondsVideo, isClick: true).whenComplete(() async {
-                                        await launchUrl(
-                                          uri,
-                                          mode: LaunchMode.externalApplication,
-                                        );
+                                      // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                      System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                        notifier.adsAliplayer?.stop();
+                                        notifier.adsCurrentPosition = 0;
+                                        notifier.adsCurrentPositionText = 0;
+                                        notifier.hasShowedAds = true;
+                                        notifier.tempAdsData = null;
+                                        notifier.isShowingAds = false;
+                                        widget.onClose();
+                                        System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                                       });
-                                    } else {
-                                      throw "Could not launch $uri";
+                                    }finally{
+                                      setState(() {
+                                        loadLaunch = false;
+                                      });
                                     }
-                                    // can't launch url, there is some error
-                                  } catch (e) {
-                                    setState(() {
-                                      loadLaunch = true;
-                                    });
-                                    print('second close ads: $secondsVideo');
-                                    // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                    System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
-                                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                    });
-                                  }finally{
-                                    setState(() {
-                                      loadLaunch = false;
-                                    });
                                   }
-                                }
 
+                                }
+                              }else{
+                                setState(() {
+                                  loadLaunch = false;
+                                });
                               }
-                            }else{
-                              setState(() {
-                                loadLaunch = false;
-                              });
                             }
                           }
-
-
                         },
                         child: Builder(
                           builder: (context) {
@@ -891,12 +913,14 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                         await widget.fAliplayer?.seekTo(_currentPosition - 1, FlutterAvpdef.ACCURATE);
                       }
                       widget.onClose();
-                      setState(() {
-                        isloading = true;
-                      });
+                      notifier.loadVideo = true;
+                      // setState(() {
+                      //   isloading = true;
+                      // });
                       Future.delayed(const Duration(seconds: 1), (){
+                        notifier.loadVideo = false;
                         setState(() {
-                          isloading = false;
+                          // isloading = false;
                           isPause = false;
                           _showTipsWidget = false;
                         });
