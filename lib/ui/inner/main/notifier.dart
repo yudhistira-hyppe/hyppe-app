@@ -37,11 +37,11 @@ import 'package:wakelock/wakelock.dart';
 import '../../../app.dart';
 
 class MainNotifier with ChangeNotifier {
-  GlobalKey<NestedScrollViewState> _globalKey = GlobalKey(debugLabel: 'sdsdsd');
-  GlobalKey<NestedScrollViewState> get globalKey => _globalKey;
+  GlobalKey<NestedScrollViewState>? _globalKey;
+  GlobalKey<NestedScrollViewState>? get globalKey => _globalKey;
   set globalKey(val) {
     _globalKey = val;
-    notifyListeners();
+    // notifyListeners();
   }
 
   final _eventService = EventService();
@@ -176,15 +176,23 @@ class MainNotifier with ChangeNotifier {
     }
   }
 
+  List pages = [];
+
+  void pageInit(bool canShowAds) {
+    if (pages.isEmpty) {
+      pages = [
+        HomeScreen(
+          canShowAds: canShowAds,
+        ),
+        SearchScreen(),
+        NotificationScreen(),
+        const SelfProfileScreen()
+      ];
+    }
+  }
+
   Widget mainScreen(BuildContext context, bool canShowAds, GlobalKey keyPostButton) {
-    List pages = [
-      HomeScreen(
-        canShowAds: canShowAds,
-      ),
-      SearchScreen(),
-      NotificationScreen(),
-      const SelfProfileScreen()
-    ];
+    print('my index $pageIndex $page ');
     if (page != -1) {
       _pageIndex = page;
     }

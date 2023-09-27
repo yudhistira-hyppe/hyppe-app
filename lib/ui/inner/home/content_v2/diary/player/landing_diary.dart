@@ -900,7 +900,6 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           //
                           // }
                           notifier.setAdsData(index, null);
-
                         }, (player, id) {}),
                       )
                     : Column(

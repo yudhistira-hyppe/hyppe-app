@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
-import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -18,9 +16,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
-import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
@@ -30,20 +26,16 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
-import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_newdesc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
-import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -157,11 +149,19 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
 
       //scroll
+
       if (mounted) {
-        var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
-        notifierMain?.globalKey.currentState?.innerController.addListener(() async {
-          double offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-          if (mounted) await toPosition(offset, notifier, notifierMain);
+        // var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
+        // notifierMain?.globalKey?.currentState?.innerController.addListener(() async {
+        //   double offset = notifierMain.globalKey?.currentState?.innerController.position.pixels ?? 0;
+        //   if (mounted) await toPosition(offset, notifier, notifierMain);
+        // });
+        Future.delayed(Duration(milliseconds: 500), () {
+          print("=========== global key prirnt ${widget.scrollController} ");
+          widget.scrollController?.addListener(() async {
+            double offset = widget.scrollController?.position.pixels ?? 0;
+            if (mounted) await toPosition(offset, notifier);
+          });
         });
       }
 
@@ -310,7 +310,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     });
   }
 
-  Future toPosition(double offset, PreviewPicNotifier notifier, MainNotifier notifierMain) async {
+  Future toPosition(double offset, PreviewPicNotifier notifier) async {
     double totItemHeight = 0;
     double totItemHeightParam = 0;
     // print("======== ${offset}---====");
@@ -1028,7 +1028,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                   onVisibilityChanged: (info) {
                                     if (info.visibleFraction == 1) {
                                       if (!isShowingDialog) {
-                                        globalAdsPopUp?.pause();
+                                        adsGlobalAliPlayer?.pause();
                                       }
                                     }
                                     if (info.visibleFraction == 1 || info.visibleFraction >= 0.6) {
@@ -1111,18 +1111,18 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         // });
 
                                         ///ADS IN BETWEEN === Hariyanto Lukman ===
-                                        if (!notifier.loadAds) {
-                                          if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
-                                            notifier.loadAds = true;
-                                            context.getInBetweenAds().then((value) {
-                                              if (value != null) {
-                                                notifier.setAdsData(index, value);
-                                              } else {
-                                                notifier.loadAds = false;
-                                              }
-                                            });
-                                          }
-                                        }
+                                        // if (!notifier.loadAds) {
+                                        //   if ((notifier.pic?.length ?? 0) > notifier.nextAdsShowed) {
+                                        //     notifier.loadAds = true;
+                                        //     context.getInBetweenAds().then((value) {
+                                        //       if (value != null) {
+                                        //         notifier.setAdsData(index, value);
+                                        //       } else {
+                                        //         notifier.loadAds = false;
+                                        //       }
+                                        //     });
+                                        //   }
+                                        // }
                                       }
 
                                       _lastCurIndex = _curIdx;
@@ -1234,8 +1234,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                           widthPlaceHolder: 80,
                                                           heightPlaceHolder: 80,
                                                           imageUrl: (picData?.isApsara ?? false)
-                                                              ? ("${picData?.mediaThumbEndPoint}?key=${picData?.valueCache}")
-                                                              : ("${picData?.fullThumbPath}&key=${picData?.valueCache}"),
+                                                              ? ("${picData?.mediaEndpoint}?key=${picData?.valueCache}")
+                                                              : ("${picData?.fullContent}&key=${picData?.valueCache}"),
                                                           imageBuilder: (context, imageProvider) {
                                                             return ClipRRect(
                                                               borderRadius: BorderRadius.circular(20), // Image border

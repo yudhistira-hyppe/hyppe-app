@@ -321,8 +321,10 @@ class HomeNotifier with ChangeNotifier {
           await pic.initialPic(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents).then((value) async {
             if (pic.pic != null && isNew) {
               limit = pic.pic?.first.limitLandingpage ?? 2;
-              if (context.read<MainNotifier>().tutorialData.isEmpty) {
-                context.read<MainNotifier>().tutorialData = pic.pic?.first.tutorial ?? [];
+              if (mounted) {
+                if (context.read<MainNotifier>().tutorialData.isEmpty) {
+                  context.read<MainNotifier>().tutorialData = pic.pic?.first.tutorial ?? [];
+                }
               }
             }
             // if (diary.diaryData == null) {
@@ -868,15 +870,53 @@ class HomeNotifier with ChangeNotifier {
   }
 
   /// New Pop Ads
+  // Future getAdsApsara(BuildContext context, isInAppAds) async {
+  //   print('ke iklan yah');
+  //   final ads = await getPopUpAds(context);
+  //   final id = ads.videoId;
+  //   print('ke iklan yah $id');
+  //   print('ke iklan yah ${ads.adsType}');
+  //   if (ads.mediaType?.toLowerCase() == 'image') {
+  //     await System().adsPopUpV2(context, ads, '');
+  //   } else if (id != null && ads.adsType != null) {
+  //     try {
+  //       final notifier = PostsBloc();
+
+  //       // await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
+  //       await notifier.getAuthApsara(context, apsaraId: ads.videoId ?? '');
+  //       final fetch = notifier.postsFetch;
+
+  //       if (fetch.postsState == PostsState.videoApsaraSuccess) {
+  //         Map jsonMap = json.decode(fetch.data.toString());
+  //         print('jsonMap video Apsara : $jsonMap');
+  //         final auth = jsonMap['PlayAuth'];
+  //         // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
+  //         print('get Ads Video');
+  //         final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+  //         // if (!isShowAds) {
+  //         await System().adsPopUpV2(context, ads, auth);
+  //         // }
+
+  //         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+  //       }
+  //     } catch (e) {
+  //       'Failed to fetch ads data ${e}'.logger();
+  //     }
+  //   }
+  //   //get banner Challange
+  //   // Future.delayed(const Duration(milliseconds: 500), () {
+  //   //   if (isInAppAds) System().popUpChallange(context);
+  //   // });
+  // }
+
+  /// Old Pop Ads
   Future getAdsApsara(BuildContext context, isInAppAds) async {
     print('ke iklan yah');
     final ads = await getPopUpAds(context);
     final id = ads.videoId;
     print('ke iklan yah $id');
     print('ke iklan yah ${ads.adsType}');
-    if (ads.mediaType?.toLowerCase() == 'image') {
-      await System().adsPopUpV2(context, ads, '');
-    } else if (id != null && ads.adsType != null) {
+    if (id != null && ads.adsType != null) {
       try {
         final notifier = PostsBloc();
 
@@ -892,7 +932,7 @@ class HomeNotifier with ChangeNotifier {
           print('get Ads Video');
           final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
           // if (!isShowAds) {
-          await System().adsPopUpV2(context, ads, auth);
+          System().adsPopUp(context, ads, auth, isInAppAds: isInAppAds);
           // }
 
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
@@ -901,45 +941,7 @@ class HomeNotifier with ChangeNotifier {
         'Failed to fetch ads data ${e}'.logger();
       }
     }
-    //get banner Challange
-    // Future.delayed(const Duration(milliseconds: 500), () {
-    //   if (isInAppAds) System().popUpChallange(context);
-    // });
   }
-
-  /// Old Pop Ads
-  // Future getAdsApsara(BuildContext context, isInAppAds) async {
-  //   print('ke iklan yah');
-  //   final ads = await getPopUpAds(context);
-  //   final id = ads.videoId;
-  //   print('ke iklan yah $id');
-  //   print('ke iklan yah ${ads.adsType}');
-  //   if (id != null && ads.adsType != null) {
-  //     try {
-  //       final notifier = PostsBloc();
-  //
-  //       // await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
-  //       await notifier.getAuthApsara(context, apsaraId: ads.videoId ?? '');
-  //       final fetch = notifier.postsFetch;
-  //
-  //       if (fetch.postsState == PostsState.videoApsaraSuccess) {
-  //         Map jsonMap = json.decode(fetch.data.toString());
-  //         print('jsonMap video Apsara : $jsonMap');
-  //         final auth = jsonMap['PlayAuth'];
-  //         // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
-  //         print('get Ads Video');
-  //         final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
-  //         // if (!isShowAds) {
-  //         System().adsPopUp(context, ads, auth, isInAppAds: isInAppAds);
-  //         // }
-  //
-  //         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
-  //       }
-  //     } catch (e) {
-  //       'Failed to fetch ads data ${e}'.logger();
-  //     }
-  //   }
-  // }
 
   // Future<AdsData> getPopUpAds(BuildContext context) async {
   //   var data = AdsData();
@@ -962,7 +964,7 @@ class HomeNotifier with ChangeNotifier {
     var data = AdsData();
     try {
       final notifier = AdsDataBloc();
-      await notifier.adsVideoBlocV2(context, AdsType.popup);
+      await notifier.appAdsBloc(context);
       final fetch = notifier.adsDataFetch;
       print('video ads');
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
