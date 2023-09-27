@@ -158,10 +158,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
       //scroll
       if (mounted) {
-        var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
-        notifierMain?.globalKey.currentState?.innerController.addListener(() async {
-          double offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-          if (mounted) await toPosition(offset, notifier, notifierMain);
+        Future.delayed(Duration(milliseconds: 500), () {
+          print("=========== global key prirnt ${widget.scrollController} ");
+          widget.scrollController?.addListener(() async {
+            double offset = widget.scrollController?.position.pixels ?? 0;
+            if (mounted) await toPosition(offset, notifier);
+          });
         });
       }
 
@@ -310,7 +312,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     });
   }
 
-  Future toPosition(double offset, PreviewPicNotifier notifier, MainNotifier notifierMain) async {
+  Future toPosition(double offset, PreviewPicNotifier notifier) async {
     double totItemHeight = 0;
     double totItemHeightParam = 0;
     // print("======== ${offset}---====");
