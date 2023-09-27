@@ -80,9 +80,14 @@ class SettingTile extends StatelessWidget {
                   },
                   closeWidget: GestureDetector(
                     onTap: () {
-                      context.read<TutorNotifier>().postTutor(context, mn.tutorialData[indexTutor ?? 0].key ?? '');
-                      mn.tutorialData[indexTutor ?? 0].status = true;
-                      ShowCaseWidget.of(context).next();
+                      try {
+                        print(indexTutor);
+                        context.read<TutorNotifier>().postTutor(context, mn.tutorialData[indexTutor ?? 0].key ?? '');
+                        mn.tutorialData[indexTutor ?? 0].status = true;
+                        ShowCaseWidget.of(context).next();
+                      } catch (e) {
+                        print("---===========error $e--====");
+                      }
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),

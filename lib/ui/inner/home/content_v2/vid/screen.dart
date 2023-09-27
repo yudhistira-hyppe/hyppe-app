@@ -556,7 +556,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                     : Column(
                         children: [
                           // Text("vidData.isContentLoading ${vidData.isContentLoading}"),
-                          Text("total ${vidData.height}"),
+                          // Text("total ${vidData.height}"),
                           VisibilityDetector(
                             key: Key(vidData.postID ?? index.toString()),
                             onVisibilityChanged: (info) {
