@@ -1,4 +1,5 @@
 import 'dart:async' show Timer;
+import 'dart:async';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'dart:convert';
 import 'dart:io';
@@ -20,6 +21,7 @@ import 'package:hyppe/core/services/dynamic_link_service.dart';
 
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -146,6 +148,11 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         }
       }
       if (state == AppLifecycleState.resumed) {
+        final notifVid = (Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
+        notifVid.loadVideo = true;
+        Future.delayed(const Duration(seconds: 1), (){
+          notifVid.loadVideo = false;
+        });
         "App Resumed".logger();
         notifier.resumeAudioPreview();
         if (globalAudioPlayer != null) {
