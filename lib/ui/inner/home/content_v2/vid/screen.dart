@@ -119,10 +119,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       //scroll
       if (mounted) {
-        var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
-        notifierMain?.globalKey.currentState?.innerController.addListener(() {
-          var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-          if (mounted) toPosition(offset);
+        Future.delayed(const Duration(milliseconds: 500), () {
+          print("=========== global key prirnt ${widget.scrollController} ");
+          widget.scrollController?.addListener(() {
+            double offset = widget.scrollController?.position.pixels ?? 0;
+            if (mounted) toPosition(offset);
+          });
         });
       }
     });
@@ -576,7 +578,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                     });
                                   }
                                 }
-                                if(!isShowingDialog){
+                                if (!isShowingDialog) {
                                   globalAdsPopUp?.pause();
                                 }
                                 globalAdsInBetween?.pause();
@@ -596,7 +598,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                         } else {
                                           "=============== pause 10".logger();
                                           dataAli[notifier.vidData?[_curIdx].postID]?.pause();
-
                                         }
                                         videoNot.setMapAdsContent(notifier.vidData?[_curIdx].postID ?? '', null);
                                         // Wakelock.disable();
@@ -776,158 +777,159 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                         ),
                                       ),
                                     ],
-                                  ),   // Text("${postIdVisibility}"),
+                                  ), // Text("${postIdVisibility}"),
                                   tenPx,
                                   globalInternetConnection
-                                      ? vidData.reportedStatus == 'BLURRED' ? blurContentWidget(context, vidData) : postIdVisibility != vidData.postID
-                                          ? GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  postIdVisibility = vidData.postID ?? '';
-                                                });
-                                                var vidNotifier = context.read<PreviewVidNotifier>();
-                                                double position = 0.0;
-                                                for (var i = 0; i < index; i++) {
-                                                  position += vidNotifier.vidData?[i].height ?? 0.0;
-                                                }
-                                                context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
+                                      ? vidData.reportedStatus == 'BLURRED'
+                                          ? blurContentWidget(context, vidData)
+                                          : postIdVisibility != vidData.postID
+                                              ? GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      postIdVisibility = vidData.postID ?? '';
+                                                    });
+                                                    var vidNotifier = context.read<PreviewVidNotifier>();
+                                                    double position = 0.0;
+                                                    for (var i = 0; i < index; i++) {
+                                                      position += vidNotifier.vidData?[i].height ?? 0.0;
+                                                    }
+                                                    widget.scrollController?.animateTo(
                                                       position,
                                                       duration: const Duration(milliseconds: 700),
                                                       curve: Curves.easeOut,
                                                     );
-                                              },
-                                              child: Stack(
-                                                children: [
-                                                  Container(
-                                                    margin: const EdgeInsets.only(bottom: 20),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.black,
-                                                      borderRadius: BorderRadius.circular(16),
-                                                    ),
-                                                    height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                                                    width: MediaQuery.of(context).size.width,
-                                                    child: VideoThumbnail(
-                                                      videoData: vidData,
-                                                      onDetail: false,
-                                                      fn: () {},
-                                                      withMargin: true,
-                                                    ),
+                                                  },
+                                                  child: Stack(
+                                                    children: [
+                                                      Container(
+                                                        margin: const EdgeInsets.only(bottom: 20),
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.black,
+                                                          borderRadius: BorderRadius.circular(16),
+                                                        ),
+                                                        height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                                                        width: MediaQuery.of(context).size.width,
+                                                        child: VideoThumbnail(
+                                                          videoData: vidData,
+                                                          onDetail: false,
+                                                          fn: () {},
+                                                          withMargin: true,
+                                                        ),
+                                                      ),
+                                                      // postIdVisibility == ''
+                                                      //     ? Center(
+                                                      //         child: Align(
+                                                      //         alignment: Alignment.center,
+                                                      //         child: SizedBox(
+                                                      //           height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                                                      //           width: MediaQuery.of(context).size.width,
+                                                      //           child: const CustomIconWidget(
+                                                      //             defaultColor: false,
+                                                      //             width: 40,
+                                                      //             iconData: '${AssetPath.vectorPath}pause2.svg',
+                                                      //             // color: kHyppeLightButtonText,
+                                                      //           ),
+                                                      //         ),
+                                                      //       ))
+                                                      //     : Container(),
+                                                    ],
                                                   ),
-                                                  // postIdVisibility == ''
-                                                  //     ? Center(
-                                                  //         child: Align(
-                                                  //         alignment: Alignment.center,
-                                                  //         child: SizedBox(
-                                                  //           height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                                                  //           width: MediaQuery.of(context).size.width,
-                                                  //           child: const CustomIconWidget(
-                                                  //             defaultColor: false,
-                                                  //             width: 40,
-                                                  //             iconData: '${AssetPath.vectorPath}pause2.svg',
-                                                  //             // color: kHyppeLightButtonText,
-                                                  //           ),
-                                                  //         ),
-                                                  //       ))
-                                                  //     : Container(),
-                                                ],
-                                              ),
-                                            )
-                                          : Container(
-                                              margin: const EdgeInsets.only(bottom: 20),
-                                              child: Builder(builder: (context) {
-
-                                                return VidPlayerPage(
-                                                  vidData: notifier.vidData,
-                                                  orientation: Orientation.portrait,
-                                                  onShowAds: (ads){
-                                                    notifier.setAdsData(index, ads);
-                                                  },
-                                                  // betweenAds: (ads) {
-                                                  //   if (ads != null) {
-                                                  //     notifier.setInBetweenAds(index, ads);
-                                                  //   }
-                                                  // },
-                                                  playMode: (vidData.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
-                                                  dataSourceMap: map,
-                                                  data: vidData,
-                                                  height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                                                  width: MediaQuery.of(context).size.width,
-                                                  inLanding: true,
-                                                  fromDeeplink: false,
-                                                  isPlaying: vidData.isPlay,
-                                                  isAutoPlay: true,
-                                                  clearPostId: () {
-                                                    postIdVisibility = '';
-                                                  },
-                                                  autoScroll: () {
-                                                    scrollAuto();
-                                                  },
-                                                  functionFullTriger: () {
-                                                    print('===========hahhahahahaa=========== selesai');
-                                                    double position = 0.0;
-                                                    for (var i = 0; i <= _curIdx; i++) {
-                                                      position += notifier.vidData?[i].height ?? 0.0;
-                                                    }
-                                                    context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
+                                                )
+                                              : Container(
+                                                  margin: const EdgeInsets.only(bottom: 20),
+                                                  child: Builder(builder: (context) {
+                                                    return VidPlayerPage(
+                                                      vidData: notifier.vidData,
+                                                      orientation: Orientation.portrait,
+                                                      onShowAds: (ads) {
+                                                        notifier.setAdsData(index, ads);
+                                                      },
+                                                      // betweenAds: (ads) {
+                                                      //   if (ads != null) {
+                                                      //     notifier.setInBetweenAds(index, ads);
+                                                      //   }
+                                                      // },
+                                                      playMode: (vidData.isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
+                                                      dataSourceMap: map,
+                                                      data: vidData,
+                                                      height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                                                      width: MediaQuery.of(context).size.width,
+                                                      inLanding: true,
+                                                      fromDeeplink: false,
+                                                      isPlaying: vidData.isPlay,
+                                                      isAutoPlay: true,
+                                                      clearPostId: () {
+                                                        postIdVisibility = '';
+                                                      },
+                                                      autoScroll: () {
+                                                        scrollAuto();
+                                                      },
+                                                      functionFullTriger: () {
+                                                        print('===========hahhahahahaa=========== selesai');
+                                                        double position = 0.0;
+                                                        for (var i = 0; i <= _curIdx; i++) {
+                                                          position += notifier.vidData?[i].height ?? 0.0;
+                                                        }
+                                                        widget.scrollController?.animateTo(
                                                           position,
                                                           duration: const Duration(milliseconds: 700),
                                                           curve: Curves.easeOut,
                                                         );
-                                                    // fullscreen();
-                                                    // notifier.vidData?[_curIdx].fAliplayer?.pause();
-                                                    // showDialog(context: context, builder: (context){
-                                                    //     return VideoFullscreenPage(data: notifier.vidData?[_curIdx] ?? ContentData(), onClose: (){
-                                                    //       // Routing().moveBack();
-                                                    //     }, seekValue: value ?? 0);
-                                                    //   });
-                                                  },
-                                                  onPlay: (exec) {
-                                                    try {
-                                                      if (_curIdx != -1) {
-                                                        if (_curIdx != index) {
-                                                          print('Vid Landing Page: stop $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[notifier.vidData?[_curIdx].postID]}');
-                                                          if (notifier.vidData?[_curIdx].fAliplayer != null) {
-                                                            notifier.vidData?[_curIdx].fAliplayer?.stop();
-                                                          } else {
-                                                            final player = dataAli[notifier.vidData?[_curIdx].postID];
-                                                            if (player != null) {
-                                                              // notifier.vidData?[_curIdx].fAliplayer = player;
-                                                              player.stop();
+                                                        // fullscreen();
+                                                        // notifier.vidData?[_curIdx].fAliplayer?.pause();
+                                                        // showDialog(context: context, builder: (context){
+                                                        //     return VideoFullscreenPage(data: notifier.vidData?[_curIdx] ?? ContentData(), onClose: (){
+                                                        //       // Routing().moveBack();
+                                                        //     }, seekValue: value ?? 0);
+                                                        //   });
+                                                      },
+                                                      onPlay: (exec) {
+                                                        try {
+                                                          if (_curIdx != -1) {
+                                                            if (_curIdx != index) {
+                                                              print('Vid Landing Page: stop $_curIdx ${notifier.vidData?[_curIdx].fAliplayer} ${dataAli[notifier.vidData?[_curIdx].postID]}');
+                                                              if (notifier.vidData?[_curIdx].fAliplayer != null) {
+                                                                notifier.vidData?[_curIdx].fAliplayer?.stop();
+                                                              } else {
+                                                                final player = dataAli[notifier.vidData?[_curIdx].postID];
+                                                                if (player != null) {
+                                                                  // notifier.vidData?[_curIdx].fAliplayer = player;
+                                                                  player.stop();
+                                                                }
+                                                              }
+                                                              // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
                                                             }
                                                           }
-                                                          // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
+                                                        } catch (e) {
+                                                          e.logger();
+                                                        } finally {
+                                                          setState(() {
+                                                            _curIdx = index;
+                                                          });
                                                         }
-                                                      }
-                                                    } catch (e) {
-                                                      e.logger();
-                                                    } finally {
-                                                      setState(() {
-                                                        _curIdx = index;
-                                                      });
-                                                    }
-                                                    _lastCurIndex = _curIdx;
-                                                  },
-                                                  getPlayer: (main, id) {
-                                                    print('Vid Player1: screen ${main}');
-                                                    notifier.setAliPlayer(index, main);
-                                                    setState(() {
-                                                      dataAli[id] = main;
-                                                    });
-                                                    print('Vid Player1: after $index ${globalAliPlayer} : ${vidData.fAliplayer}');
-                                                  },
-                                                  getAdsPlayer: (ads) {
-                                                    // notifier.vidData?[index].fAliplayerAds = ads;
-                                                  },
-                                                  index: index,
-                                                  loadMoreFunction: () {
-                                                    print("vid screen widget");
-                                                    notifier.initialVid(context);
-                                                  },
-                                                  // fAliplayer: notifier.vidData?[index].fAliplayer,
-                                                  // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
-                                                );
-                                              }),
-                                            )
+                                                        _lastCurIndex = _curIdx;
+                                                      },
+                                                      getPlayer: (main, id) {
+                                                        print('Vid Player1: screen ${main}');
+                                                        notifier.setAliPlayer(index, main);
+                                                        setState(() {
+                                                          dataAli[id] = main;
+                                                        });
+                                                        print('Vid Player1: after $index ${globalAliPlayer} : ${vidData.fAliplayer}');
+                                                      },
+                                                      getAdsPlayer: (ads) {
+                                                        // notifier.vidData?[index].fAliplayerAds = ads;
+                                                      },
+                                                      index: index,
+                                                      loadMoreFunction: () {
+                                                        print("vid screen widget");
+                                                        notifier.initialVid(context);
+                                                      },
+                                                      // fAliplayer: notifier.vidData?[index].fAliplayer,
+                                                      // fAliplayerAds: notifier.vidData?[index].fAliplayerAds,
+                                                    );
+                                                  }),
+                                                )
                                       : GestureDetector(
                                           onTap: () async {
                                             globalInternetConnection = await System().checkConnections();
@@ -948,7 +950,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                 ),
                                               )),
                                         ),
-                                  if(vidData.adsData != null)
+                                  if (vidData.adsData != null)
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                                       decoration: const BoxDecoration(color: kHyppeLightSurface),
@@ -1004,20 +1006,24 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                               children: [
                                                 CustomTextWidget(
                                                   textToDisplay: vidData.adsData?.fullName ?? '',
-                                                  textStyle: context
-                                                      .getTextTheme()
-                                                      .caption
-                                                      ?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),
+                                                  textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),
                                                 ),
                                                 fourPx,
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.start,
                                                   children: [
-                                                    CustomTextWidget(textToDisplay: 'Ad ·', textStyle: context
-                                                        .getTextTheme()
-                                                        .caption
-                                                        ?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),),
-                                                    Expanded(child: CustomTextWidget(textAlign: TextAlign.start,textToDisplay: ' ${vidData.adsData?.adsUrlLink}', textStyle: context.getTextTheme().caption, maxLines: 1, textOverflow: TextOverflow.ellipsis,)),
+                                                    CustomTextWidget(
+                                                      textToDisplay: 'Ad ·',
+                                                      textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),
+                                                    ),
+                                                    Expanded(
+                                                        child: CustomTextWidget(
+                                                      textAlign: TextAlign.start,
+                                                      textToDisplay: ' ${vidData.adsData?.adsUrlLink}',
+                                                      textStyle: context.getTextTheme().caption,
+                                                      maxLines: 1,
+                                                      textOverflow: TextOverflow.ellipsis,
+                                                    )),
                                                   ],
                                                 ),
                                               ],
@@ -1027,16 +1033,14 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                             color: Colors.transparent,
                                             child: Ink(
                                               width: 120,
-                                              decoration: const BoxDecoration(
-                                                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                                                  color: KHyppeButtonAds),
+                                              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
                                               child: InkWell(
                                                 splashColor: context.getColorScheme().secondary,
                                                 onTap: () async {
                                                   final data = vidData.adsData;
                                                   final secondsVideo = vidData.adsData?.duration?.round() ?? 10;
-                                                  if(!loadLaunch){
-                                                    if(data != null){
+                                                  if (!loadLaunch) {
+                                                    if (data != null) {
                                                       if (data.adsUrlLink?.isEmail() ?? false) {
                                                         final email = data.adsUrlLink!.replaceAll('email:', '');
                                                         setState(() {
@@ -1053,7 +1057,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                           });
                                                         });
                                                       } else {
-                                                        if((data.adsUrlLink ?? '').withHttp()){
+                                                        if ((data.adsUrlLink ?? '').withHttp()) {
                                                           try {
                                                             final uri = Uri.parse(data.adsUrlLink ?? '');
                                                             print('bottomAdsLayout ${data.adsUrlLink}');
@@ -1082,22 +1086,19 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                             adsView(data, secondsVideo, isClick: true).whenComplete(() {
                                                               System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                                                             });
-                                                          }finally{
+                                                          } finally {
                                                             setState(() {
                                                               loadLaunch = false;
                                                             });
                                                           }
                                                         }
-
                                                       }
-                                                    }else{
+                                                    } else {
                                                       setState(() {
                                                         loadLaunch = false;
                                                       });
                                                     }
                                                   }
-
-
                                                 },
                                                 child: Builder(
                                                   builder: (context) {
@@ -1419,12 +1420,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
     );
   }
 
-  Widget blurContentWidget(BuildContext context, ContentData data){
+  Widget blurContentWidget(BuildContext context, ContentData data) {
     final transnot = Provider.of<TranslateNotifierV2>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: AspectRatio(
-        aspectRatio: 19/10,
+        aspectRatio: 19 / 10,
         child: Stack(
           children: [
             Center(
@@ -1440,47 +1441,46 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
             Positioned.fill(
               child: Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        twelvePx,
-                        const CustomIconWidget(
-                          iconData: "${AssetPath.vectorPath}eye-off.svg",
-                          defaultColor: false,
-                          height: 24,
-                          color: Colors.white,
-                        ),
-                        fourPx,
-                        Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
-                        fourPx,
-                        Text("${transnot.translate.contentContainsSensitiveMaterial}",
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            )),
-                        data.email == SharedPreference().readStorage(SpKeys.email)
-                            ? GestureDetector(
-                          onTap: ()async{
-                            System().checkConnections().then((value){
-                              if(value){
-                                Routing().move(Routes.appeal, argument: data);
-                              }
-                            });
-
-                          },
-                          child: Container(
-                              padding: const EdgeInsets.all(8),
-                              margin: const EdgeInsets.only(top: 6),
-                              decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                              child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-                        )
-                            : const SizedBox(),
-                        thirtyTwoPx,
-                      ],
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    twelvePx,
+                    const CustomIconWidget(
+                      iconData: "${AssetPath.vectorPath}eye-off.svg",
+                      defaultColor: false,
+                      height: 24,
+                      color: Colors.white,
                     ),
-                  )),
+                    fourPx,
+                    Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
+                    fourPx,
+                    Text("${transnot.translate.contentContainsSensitiveMaterial}",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        )),
+                    data.email == SharedPreference().readStorage(SpKeys.email)
+                        ? GestureDetector(
+                            onTap: () async {
+                              System().checkConnections().then((value) {
+                                if (value) {
+                                  Routing().move(Routes.appeal, argument: data);
+                                }
+                              });
+                            },
+                            child: Container(
+                                padding: const EdgeInsets.all(8),
+                                margin: const EdgeInsets.only(top: 6),
+                                decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                                child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                          )
+                        : const SizedBox(),
+                    thirtyTwoPx,
+                  ],
+                ),
+              )),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,

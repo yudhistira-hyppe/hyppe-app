@@ -131,12 +131,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
       //scroll
       if (mounted) {
-        var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
-        notifierMain?.globalKey.currentState?.innerController.addListener(() {
-          var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-          if (mounted) {
-            toPosition(offset);
-          }
+        Future.delayed(const Duration(milliseconds: 500), () {
+          print("=========== global key prirnt ${widget.scrollController} ");
+          widget.scrollController?.addListener(() {
+            double offset = widget.scrollController?.position.pixels ?? 0;
+            if (mounted) toPosition(offset);
+          });
         });
       }
     });
@@ -289,11 +289,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           position += notifier.diaryData?[i].height ?? 0.0;
         }
         if (notifier.diaryData?[_curIdx] != notifier.diaryData?.last) {
-          context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
-                position,
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeOut,
-              );
+          widget.scrollController?.animateTo(
+            position,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeOut,
+          );
         }
         if (mounted) {
           setState(() {});

@@ -414,12 +414,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void afterFirstLayout(BuildContext context) async {
-    print("afterrrrrrr============");
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
     var homneNotifier = context.read<HomeNotifier>();
     if (homneNotifier.preventReloadAfterUploadPost) {
-      print("afterrrrrrr preventReloadAfterUploadPost ============");
-      print("afterrrrrrr preventReloadAfterUploadPost ${homneNotifier.uploadedPostType}============");
       afterUploading = true;
       changeTab(homneNotifier.uploadedPostType);
       homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
@@ -430,23 +427,19 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       });
     }
 
-    print("====home not ${homneNotifier.tabIndex}");
-
     setState(() {
       _tabController.index = homneNotifier.tabIndex;
     });
-    print("====_tabController.index ${_tabController.index}");
 
     _tabController.animation?.addListener(() {
       homneNotifier.tabIndex = _tabController.index;
-      print("masuk tab slide");
+
       if (homneNotifier.lastCurIndex != homneNotifier.tabIndex) {
         homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
       }
       homneNotifier.lastCurIndex = homneNotifier.tabIndex;
     });
     if (isHomeScreen) {
-      print("isOnHomeScreen hit ads");
       homneNotifier.getAdsApsara(context, true);
     }
     var pic = Provider.of<PreviewPicNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
