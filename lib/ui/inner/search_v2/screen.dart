@@ -1,13 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/arguments/hashtag_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -19,16 +20,15 @@ import 'package:hyppe/ui/inner/search_v2/interest/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
+import 'package:hyppe/ui/inner/search_v2/widget/banners_layout.dart';
+import 'package:hyppe/ui/inner/search_v2/widget/event_banner.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
-import '../../../core/constants/asset_path.dart';
+import '../../../app.dart';
 import '../../../core/constants/shared_preference_keys.dart';
-import '../../../core/constants/themes/hyppe_colors.dart';
 import '../../../core/services/shared_preference.dart';
-import '../../../ux/path.dart';
 import '../../../ux/routing.dart';
-import '../../constant/widget/custom_icon_widget.dart';
 import '../../constant/widget/custom_spacer.dart';
 import '../home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import 'interest/detail_screen.dart';
@@ -87,6 +87,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   void afterFirstLayout(BuildContext context) {
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
     notifier.onSearchLandingPage(context);
+    page = -1;
   }
 
   @override
@@ -106,13 +107,12 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     Future.delayed(const Duration(milliseconds: 500), () {
       (Routing.navigatorKey.currentContext ?? context).read<ReportNotifier>().inPosition = contentPosition.searchFirst;
       final notifier = Routing.navigatorKey.currentContext!.read<SearchNotifier>();
-      if(mounted){
+      if (mounted) {
         _controllerSlider.jumpToPage(_currentIndexSlider);
         if (notifier.layout == SearchLayout.searchMore) {
           // notifier.getDataSearch(context);
         }
       }
-
     });
     // debugPrint(_currentIndexSlider.toString());
     //
@@ -141,6 +141,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   }
 
   void changeIndexSlide(int val) {
+    print("-0=-0=-0=-0=-0=-0=-0=-0");
     _currentIndexSlider = val;
     print(_currentIndexSlider); //newValue
   }
@@ -150,126 +151,50 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     SizeConfig().init(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.getPost));
     return Consumer<SearchNotifier>(
-      builder: (context, notifier, child) => WillPopScope(
-        onWillPop: () async {
-          if (notifier.layout != SearchLayout.first) {
-            notifier.backFromSearchMore();
-            // if(notifier.isFromComplete){
-            //   notifier.layout = SearchLayout.searchMore;
-            //   notifier.isFromComplete = false;
-            // }else{
-            //   notifier.layout = SearchLayout.first;
-            //   notifier.isFromComplete = false;
-            // }
-            // notifier.layout = SearchLayout.first;
-          } else {
-            'pageIndex now: 0'.logger();
-            context.read<MainNotifier>().pageIndex = 0;
-          }
-          return false;
-        },
-        child: Stack(
-          children: [
-            Positioned.fill(child: _searchLayout(notifier.layout, notifier)),
-            if (notifier.loadPlaylist)
-              Positioned.fill(
-                  child: Container(
-                decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
-                alignment: Alignment.center,
-                child: CustomLoading(),
-              ))
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _firstLayout(SearchNotifier notifier) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-        child: AppBar(
-          centerTitle: false,
-          automaticallyImplyLeading: false,
-          actions: [
-            // Doku(),
-            // Profile(),
-            // // AliPlayer(),
-            // sixteenPx,
-            Consumer<MainNotifier>(builder: (context, notifier, _) {
-              final isReceived = notifier.receivedMsg;
-              return GestureDetector(
-                onTap: () {
-                  Routing().move(Routes.message);
-                  notifier.receivedMsg = false;
-                },
-                child: isReceived
-                    ? CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}message_with_dot.svg')
-                    : CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}message.svg'),
-              );
-            }),
-            sixteenPx
-          ],
-          title: const CustomIconWidget(
-            iconData: "${AssetPath.vectorPath}hyppe.svg",
-            color: kHyppeTextLightPrimary,
+      builder: (context, notifier, child) {
+        return WillPopScope(
+          onWillPop: () async {
+            if (notifier.layout != SearchLayout.first) {
+              notifier.backFromSearchMore();
+              // if(notifier.isFromComplete){
+              //   notifier.layout = SearchLayout.searchMore;
+              //   notifier.isFromComplete = false;
+              // }else{
+              //   notifier.layout = SearchLayout.first;
+              //   notifier.isFromComplete = false;
+              // }
+              // notifier.layout = SearchLayout.first;
+            } else {
+              'pageIndex now: 0'.logger();
+              context.read<MainNotifier>().pageIndex = 0;
+            }
+            return false;
+          },
+          child: Stack(
+            children: [
+              Positioned.fill(child: _searchLayout(notifier.layout, notifier)),
+              if (notifier.loadPlaylist)
+                Positioned.fill(
+                    child: Container(
+                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                  alignment: Alignment.center,
+                  child: const CustomLoading(),
+                ))
+            ],
           ),
-        ),
-      ),
-      body: RefreshIndicator(
-        strokeWidth: 2.0,
-        color: context.getColorScheme().primary,
-        onRefresh: () => notifier.onSearchLandingPage(context),
-        child: notifier.connectionError
-            ? OfflineMode(
-                function: () {
-                  notifier.checkConnection();
-                  notifier.onSearchLandingPage(context);
-                },
-              )
-            : SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: CustomSearchBar(
-                        hintText: notifier.language.whatAreYouFindOut,
-                        contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
-                        focusNode: notifier.focusNode1,
-                        controller: notifier.searchController1,
-                        onTap: () {
-                          if (notifier.layout == SearchLayout.searchMore) {
-                            notifier.isFromComplete = true;
-                          }
-                          notifier.layout = SearchLayout.search;
-                        },
-                      ),
-                    ),
-                    // EventBannerWidget(controller: _controllerSlider, callback: changeIndexSlide),
-                    const HashtagScreen(),
-                    InterestScreen(
-                      onClick: (value) {
-                        notifier.selectedInterest = value;
-                        if (notifier.layout == SearchLayout.searchMore) {
-                          notifier.isFromComplete = true;
-                        }
-                        notifier.layout = SearchLayout.interestDetail;
-                      },
-                    ),
-                    sixtyFourPx,
-                    sixtyFourPx
-                  ],
-                ),
-              ),
-      ),
+        );
+      },
     );
   }
 
   Widget _searchLayout(SearchLayout state, SearchNotifier notifier) {
     switch (state) {
       case SearchLayout.first:
-        return _firstLayout(notifier);
+        return FirstLayout(
+          notifier: notifier,
+          controllerSlider: _controllerSlider,
+          callback: changeIndexSlide,
+        );
       case SearchLayout.search:
         return const SearchMoreScreen();
       case SearchLayout.searchMore:
@@ -280,20 +205,112 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
             argument: HashtagArgument(isTitle: true, hashtag: notifier.selectedHashtag!),
           );
         } else {
-          return _firstLayout(notifier);
+          return FirstLayout(notifier: notifier);
         }
       case SearchLayout.hashtagDetail:
         if (notifier.selectedHashtag != null) {
           return DetailHashtagScreen(argument: HashtagArgument(isTitle: false, hashtag: notifier.selectedHashtag!));
         } else {
-          return _firstLayout(notifier);
+          return FirstLayout(notifier: notifier);
         }
       case SearchLayout.interestDetail:
         if (notifier.selectedInterest != null) {
           return InterestDetailScreen(data: notifier.selectedInterest!);
         } else {
-          return _firstLayout(notifier);
+          return FirstLayout(notifier: notifier);
         }
     }
+  }
+}
+
+class FirstLayout extends StatefulWidget {
+  final SearchNotifier notifier;
+  final CarouselController? controllerSlider;
+  final Function(int)? callback;
+  const FirstLayout({Key? key, required this.notifier, this.controllerSlider, this.callback}) : super(key: key);
+
+  @override
+  State<FirstLayout> createState() => _FirstLayoutState();
+}
+
+class _FirstLayoutState extends State<FirstLayout> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    bool theme = SharedPreference().readStorage(SpKeys.themeData) ?? false;
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarIconBrightness: !theme ? Brightness.light : Brightness.dark,
+      statusBarColor: Colors.transparent,
+    ));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    System().systemUIOverlayTheme();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final notifier = widget.notifier;
+    return Scaffold(
+      key: _scaffoldKey,
+      body: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          RefreshIndicator(
+            strokeWidth: 2.0,
+            color: context.getColorScheme().primary,
+            onRefresh: () => notifier.onSearchLandingPage(context),
+            child: notifier.connectionError
+                ? OfflineMode(
+                    function: () {
+                      notifier.checkConnection();
+                      notifier.onSearchLandingPage(context);
+                    },
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        BannersLayout(
+                          layout: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: CustomSearchBar(
+                              hintText: notifier.language.whatAreYouFindOut,
+                              contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                              focusNode: notifier.focusNode1,
+                              controller: notifier.searchController1,
+                              withShadow: true,
+                              onTap: () {
+                                if (notifier.layout == SearchLayout.searchMore) {
+                                  notifier.isFromComplete = true;
+                                }
+                                notifier.layout = SearchLayout.search;
+                              },
+                            ),
+                          ),
+                        ),
+                        // EventBannerWidget(controller: widget.controllerSlider, callback: widget.callback),
+                        const HashtagScreen(),
+                        InterestScreen(
+                          onClick: (value) {
+                            notifier.selectedInterest = value;
+                            if (notifier.layout == SearchLayout.searchMore) {
+                              notifier.isFromComplete = true;
+                            }
+                            notifier.layout = SearchLayout.interestDetail;
+                          },
+                        ),
+                        sixtyFourPx,
+                        sixtyFourPx
+                      ],
+                    ),
+                  ),
+          )
+        ],
+      ),
+    );
   }
 }

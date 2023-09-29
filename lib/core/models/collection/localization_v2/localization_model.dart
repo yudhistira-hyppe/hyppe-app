@@ -842,7 +842,11 @@ class LocalizationModelV2 {
   String? content;
   String? problemBugs;
   String? ads;
+  String? sponsored;
   String? learnMore;
+  String? skipMessage;
+  String? second;
+  String? skipAds;
   String? newLabel;
   String? inProgress;
   String? solved;
@@ -960,6 +964,23 @@ class LocalizationModelV2 {
   String? postYourHyppePicNow;
   String? postYourHyppeVidNow;
   String? postYourHyppeDiaryNow;
+  String? tutorLanding1;
+  String? tutorLanding2;
+  String? tutorLanding3;
+  String? tutorLanding4;
+  String? tutorLanding5;
+  String? tutorLanding6;
+  String? comeoncreatecontentnow;
+  String? registeryourcontentownership;
+  String? selectContentcategory;
+  String? activeBadgeChallenge;
+  String? yourBadgeCollections;
+  String? myBadgeCollections;
+  String? applyBadge;
+  String? youDontHaveaBadge;
+  String? winachallengetoreceiveabadge;
+  String? badgeCollection;
+  String? understand;
   String? myListOfAchievements;
   String? achievementsPage;
   String? participant;
@@ -1814,7 +1835,11 @@ class LocalizationModelV2 {
     this.content,
     this.problemBugs,
     this.ads,
+    this.sponsored,
     this.learnMore,
+    this.skipMessage,
+    this.second,
+    this.skipAds,
     this.newLabel,
     this.inProgress,
     this.solved,
@@ -1932,6 +1957,23 @@ class LocalizationModelV2 {
     this.postYourHyppePicNow,
     this.postYourHyppeVidNow,
     this.postYourHyppeDiaryNow,
+    this.tutorLanding1,
+    this.tutorLanding2,
+    this.tutorLanding3,
+    this.tutorLanding4,
+    this.tutorLanding5,
+    this.tutorLanding6,
+    this.comeoncreatecontentnow,
+    this.registeryourcontentownership,
+    this.selectContentcategory,
+    this.activeBadgeChallenge,
+    this.yourBadgeCollections,
+    this.myBadgeCollections,
+    this.applyBadge,
+    this.youDontHaveaBadge,
+    this.winachallengetoreceiveabadge,
+    this.badgeCollection,
+    this.understand,
     this.myListOfAchievements,
     this.achievementsPage,
     this.participant,
@@ -2805,7 +2847,11 @@ class LocalizationModelV2 {
     content = json['content'];
     problemBugs = json['problemBugs'];
     ads = json['ads'];
+    sponsored = json['sponsored'];
     learnMore = json['learnMore'];
+    skipAds = json['skipAds'];
+    skipMessage = json['skipMessage'];
+    second = json['second'];
     newLabel = json['new'];
     inProgress = json['inProgress'];
     solved = json['solved'];
@@ -2932,5 +2978,22 @@ class LocalizationModelV2 {
     postYourHyppePicNow = json['postYourHyppePicNow'];
     postYourHyppeVidNow = json['postYourHyppeVidNow'];
     postYourHyppeDiaryNow = json['postYourHyppeDiaryNow'];
+    tutorLanding1 = json['tutorLanding1'];
+    tutorLanding2 = json['tutorLanding2'];
+    tutorLanding3 = json['tutorLanding3'];
+    tutorLanding4 = json['tutorLanding4'];
+    tutorLanding5 = json['tutorLanding5'];
+    tutorLanding6 = json['tutorLanding6'];
+    comeoncreatecontentnow = json['comeoncreatecontentnow'];
+    registeryourcontentownership = json['registeryourcontentownership'];
+    selectContentcategory = json['selectContentcategory'];
+    activeBadgeChallenge = json['activeBadgeChallenge'];
+    yourBadgeCollections = json['yourBadgeCollections'];
+    myBadgeCollections = json['myBadgeCollections'];
+    applyBadge = json['applyBadge'];
+    youDontHaveaBadge = json['youDontHaveaBadge'];
+    winachallengetoreceiveabadge = json['winachallengetoreceiveabadge'];
+    badgeCollection = json['badgeCollection'];
+    understand = json['understand'];
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -13,6 +14,7 @@ import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insight.dart';
 
+import '../../advertising/ads_video_data.dart';
 import '../../music/music.dart';
 
 class StoriesGroup {
@@ -195,6 +197,8 @@ class ContentData {
   bool isLoading = false;
   FlutterAliplayer? fAliplayer;
   FlutterAliplayer? fAliplayerAds;
+  AdsData? inBetweenAds;
+  AdsData? adsData;
   UserBadgeModel? urluserBadge;
   bool? isPlay;
   double? height;
@@ -203,6 +207,11 @@ class ContentData {
   double? imageHeightTemp2;
   String? valueCache;
   List<StickerModel>? stickers;
+
+  List<Tutorial>? tutorial;
+  GlobalKey? keyGlobalOwn;
+  GlobalKey? keyGlobalSell;
+  bool? isContentLoading;
 
   ContentData({
     this.metadata,
@@ -271,6 +280,11 @@ class ContentData {
     this.imageHeightTemp2,
     this.valueCache,
     this.stickers,
+    this.tutorial,
+    this.keyGlobalOwn,
+    this.keyGlobalSell,
+    this.inBetweenAds,
+    this.isContentLoading,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -382,6 +396,16 @@ class ContentData {
         stickers!.add( StickerModel.fromJson(v));
       });
     }
+
+    if (json['tutorial'] != null) {
+      tutorial = <Tutorial>[];
+      json['tutorial'].forEach((v) {
+        tutorial!.add(Tutorial.fromJson(v));
+      });
+    }
+    keyGlobalOwn = GlobalKey();
+    keyGlobalSell = GlobalKey();
+    isContentLoading = false;
   }
 
   Map<String, dynamic> toJson() {
@@ -764,6 +788,31 @@ class UserComment {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
     data['username'] = username;
+    return data;
+  }
+}
+
+class Tutorial {
+  String? key;
+  bool? status;
+  String? textID;
+  String? textEn;
+
+  Tutorial({this.key, this.status, this.textID, this.textEn});
+
+  Tutorial.fromJson(Map<String, dynamic> json) {
+    key = json['key'];
+    status = json['status'];
+    textID = json['textID'];
+    textEn = json['textEn'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['key'] = key;
+    data['status'] = status;
+    data['textID'] = textID;
+    data['textEn'] = textEn;
     return data;
   }
 }

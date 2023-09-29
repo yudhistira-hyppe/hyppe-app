@@ -6,9 +6,11 @@ import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/chalange/achievement_model.dart';
 import 'package:hyppe/core/models/collection/chalange/badge_collection_model.dart';
 import 'package:hyppe/core/models/collection/chalange/banner_chalange_model.dart';
+import 'package:hyppe/core/models/collection/chalange/banner_response.dart';
 import 'package:hyppe/core/models/collection/chalange/challange_model.dart';
 import 'package:hyppe/core/models/collection/chalange/leaderboard_challange_model.dart';
 import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
@@ -110,6 +112,32 @@ class ChallangeNotifier with ChangeNotifier {
       return;
     } else {
       isConnect = true;
+    }
+  }
+
+  List<BannerData>? _banners = null;
+  List<BannerData>? get banners => _banners;
+  set banners(List<BannerData>? values) {
+    _banners = values;
+    notifyListeners();
+  }
+
+  Future getBanners(BuildContext context) async {
+    try {
+      checkInet(context);
+      isLoading = true;
+      final bannerNotifier = ChallangeBloc();
+      await bannerNotifier.getBanners(context);
+      final fetch = bannerNotifier.userFetch;
+
+      if (fetch.challengeState == ChallengeState.getPostSuccess) {
+        List<BannerData>? res = (fetch.data as List<dynamic>?)?.map((e) => BannerData.fromJson(e as Map<String, dynamic>)).toList();
+        banners = res;
+      }
+    } catch (e) {
+      e.logger();
+    } finally {
+      isLoading = false;
     }
   }
 
@@ -465,6 +493,7 @@ class ChallangeNotifier with ChangeNotifier {
       badgeProfile: badgeData?.badgeData?[0].badgeProfile,
       badgeOther: badgeData?.badgeData?[0].badgeOther,
     );
+    notifyListeners();
   }
 
   Future postSelectBadge(BuildContext context, bool mounted, String idUserBadge) async {

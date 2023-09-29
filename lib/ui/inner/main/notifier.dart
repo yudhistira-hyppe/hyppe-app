@@ -11,6 +11,7 @@ import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
 import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
@@ -21,6 +22,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/home/screen.dart';
 import 'package:hyppe/ui/inner/notification/screen.dart';
@@ -32,13 +34,15 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock/wakelock.dart';
 
+import '../../../app.dart';
+
 class MainNotifier with ChangeNotifier {
-  GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
-  // GlobalKey<NestedScrollViewState> get globalKey => _globalKey;
-  // set globalKey(val) {
-  //   _globalKey = val;
-  //   notifyListeners();
-  // }
+  GlobalKey<NestedScrollViewState> _globalKey = GlobalKey(debugLabel: 'sdsdsd');
+  GlobalKey<NestedScrollViewState> get globalKey => _globalKey;
+  set globalKey(val) {
+    _globalKey = val;
+    notifyListeners();
+  }
 
   final _eventService = EventService();
   SocketService get socketService => _socketService;
@@ -56,6 +60,23 @@ class MainNotifier with ChangeNotifier {
 
   ScrollController _scrollController = ScrollController();
   ScrollController get scrollController => _scrollController;
+
+  List<Tutorial> _tutorialData = [];
+  List<Tutorial> get tutorialData => _tutorialData;
+
+  bool _isloading = false;
+  bool get isloading => _isloading;
+
+  set isloading(bool val) {
+    _isloading = val;
+    notifyListeners();
+  }
+
+  set tutorialData(List<Tutorial> val) {
+    _tutorialData = val;
+    notifyListeners();
+  }
+
   set scrollController(val) {
     _scrollController = val;
     notifyListeners();
@@ -155,7 +176,7 @@ class MainNotifier with ChangeNotifier {
     }
   }
 
-  Widget mainScreen(BuildContext context, bool canShowAds) {
+  Widget mainScreen(BuildContext context, bool canShowAds, GlobalKey keyPostButton) {
     List pages = [
       HomeScreen(
         canShowAds: canShowAds,
@@ -164,26 +185,25 @@ class MainNotifier with ChangeNotifier {
       NotificationScreen(),
       const SelfProfileScreen()
     ];
-    late Widget screen;
-
+    if (page != -1) {
+      _pageIndex = page;
+    }
+    print('my index $pageIndex $page ');
     switch (pageIndex) {
       case 0:
-        return screen = pages[0];
+        return pages[0];
       case 1:
-        return screen = pages[1];
+        return pages[1];
       case 3:
-        {
-          setNotification();
-          screen = pages[2];
-        }
-        break;
+        return pages[2];
       case 4:
-        return screen = pages[3];
+        return pages[3];
+      default:
+        return pages[0];
     }
-    return screen;
   }
 
-  int _pageIndex = 0;
+  int _pageIndex = 3;
   int get pageIndex => _pageIndex;
   set pageIndex(int val) {
     if (val != _pageIndex) {
@@ -195,8 +215,6 @@ class MainNotifier with ChangeNotifier {
   setPageIndex(int index) {
     _pageIndex = index;
   }
-
-  void setNotification() => FcmService().setHaveNotification(false);
 
   Future onShowPostContent(BuildContext context) async {
     // System().actionReqiredIdCard(context,

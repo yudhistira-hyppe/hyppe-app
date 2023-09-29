@@ -60,9 +60,13 @@ import 'package:intl/intl.dart' as intl;
 import '../../app.dart';
 import '../arguments/ads_argument.dart';
 import '../arguments/general_argument.dart';
+import '../bloc/ads_video/bloc.dart';
+import '../bloc/ads_video/state.dart';
 import '../models/collection/advertising/ads_video_data.dart';
 import 'package:exif/exif.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+
+import '../models/collection/advertising/view_ads_request.dart';
 
 class System {
   System._private();
@@ -1362,20 +1366,16 @@ class System {
     return intl.NumberFormat.currency(locale: 'id', symbol: '', decimalDigits: 0).format(amount);
   }
 
-  Future adsPopUp(BuildContext context, AdsData data, String auth, {bool isSponsored = false, bool isPopUp = true, bool isInAppAds = false}) async {
+  Future adsPopUp(BuildContext context, AdsData data, String auth, {bool isSponsored = false, bool isInAppAds = false}) async {
     print("========== $isInAppAds)");
     if (!isInAppAds) {
-      if (isPopUp) {
-        return ShowGeneralDialog.adsPopUp(context, data, auth, isSponsored: isSponsored);
-      } else {
-        return Routing().move(Routes.showAds, argument: AdsArgument(data: data, adsUrl: auth, isSponsored: isSponsored));
-      }
+      await ShowGeneralDialog.adsPopUp(context, data, auth, isSponsored: isSponsored);
     } else {
       String lastTimeAds = SharedPreference().readStorage(SpKeys.datetimeLastShowAds) ?? '';
       print("tanggall ======== $lastTimeAds");
 
       if (lastTimeAds == '') {
-        return ShowGeneralDialog.adsPopUp(context, data, auth, isSponsored: isSponsored, isInAppAds: isInAppAds);
+        await ShowGeneralDialog.adsPopUp(context, data, auth, isSponsored: isSponsored, isInAppAds: isInAppAds);
       } else {
         DateTime now = DateTime.now();
         DateTime menitCache = DateTime.parse(lastTimeAds);
@@ -1383,9 +1383,68 @@ class System {
         print(jumlahMenit);
         if (jumlahMenit >= 14) {
           // if (lastTimeAds.canShowAds()) {
-          return ShowGeneralDialog.adsPopUp(context, data, auth, isSponsored: isSponsored, isInAppAds: isInAppAds);
+          await ShowGeneralDialog.adsPopUp(context, data, auth, isSponsored: isSponsored, isInAppAds: isInAppAds);
         }
       }
+    }
+  }
+
+  Future adsPopUpV2(BuildContext context, AdsData data, String auth) async {
+    String lastTimeAds = SharedPreference().readStorage(SpKeys.datetimeLastShowAds) ?? '';
+    print("tanggall ======== $lastTimeAds");
+    if (!isShowingDialog) {
+      isShowingDialog = true;
+      if (lastTimeAds == '') {
+        if (data.mediaType?.toLowerCase() == 'video') {
+          await ShowGeneralDialog.adsPopUpVideo(context, data, auth);
+        } else {
+          await ShowGeneralDialog.adsPopUpImage(context, data);
+        }
+      } else {
+        DateTime now = DateTime.now();
+        DateTime menitCache = DateTime.parse(lastTimeAds);
+        var jumlahMenit = System().menghitungJumlahMenit(menitCache, now);
+        print(jumlahMenit);
+        if (jumlahMenit >= 14) {
+          // if (lastTimeAds.canShowAds()) {
+          if (data.mediaType?.toLowerCase() == 'video') {
+            await ShowGeneralDialog.adsPopUpVideo(context, data, auth);
+          } else {
+            await ShowGeneralDialog.adsPopUpImage(context, data);
+          }
+        }
+      }
+      isShowingDialog = false;
+    }
+  }
+
+  Future adsView(AdsData data, int time, {bool isClick = false}) async {
+    try {
+      final notifier = AdsDataBloc();
+      final request = ViewAdsRequest(
+        watchingTime: time,
+        adsId: data.adsId,
+        useradsId: data.useradsId,
+      );
+      await notifier.viewAdsBloc(Routing.navigatorKey.currentContext!, request, isClick: isClick);
+
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        print("ini hasil ${fetch.data['rewards']}");
+        if (fetch.data['rewards'] == true) {
+          ShowGeneralDialog.adsRewardPop(Routing.navigatorKey.currentContext!).whenComplete(() => null);
+          Timer(const Duration(milliseconds: 800), () {
+            Routing().moveBack();
+            // Routing().moveBack();
+            // Timer(const Duration(milliseconds: 800), () {
+            //   Routing().moveBack();
+            // });
+          });
+        }
+      }
+    } catch (e) {
+      'Failed hit view ads $e'.logger();
     }
   }
 
@@ -1409,7 +1468,7 @@ class System {
       print("===============222222 ---- ${difference.inHours}");
       print("===============222222 ---- ${difference.inMinutes}");
       // if (difference.inHours >= 24) {
-      if (difference.inMinutes <= -0) {
+      if (difference.inMinutes <= -5) {
         await challange.getBannerLanding(context, ispopUp: true);
         SharedPreference().writeStorage(SpKeys.datetimeLastShowChallange, DateTime.now().toString());
         return ShowGeneralDialog.showBannerPop(context);

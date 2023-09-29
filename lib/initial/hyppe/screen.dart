@@ -6,7 +6,7 @@ import 'package:hyppe/ux/generate.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:showcaseview/showcaseview.dart';
 import '../../app.dart';
 
 class Hyppe extends StatefulWidget {

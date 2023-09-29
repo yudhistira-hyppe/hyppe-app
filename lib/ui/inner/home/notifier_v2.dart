@@ -44,6 +44,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:wakelock/wakelock.dart';
 
 import '../../../core/bloc/posts_v2/bloc.dart';
 import '../search_v2/notifier.dart';
@@ -320,6 +321,9 @@ class HomeNotifier with ChangeNotifier {
           await pic.initialPic(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents).then((value) async {
             if (pic.pic != null && isNew) {
               limit = pic.pic?.first.limitLandingpage ?? 2;
+              if (context.read<MainNotifier>().tutorialData.isEmpty) {
+                context.read<MainNotifier>().tutorialData = pic.pic?.first.tutorial ?? [];
+              }
             }
             // if (diary.diaryData == null) {
             //   await initNewHome(context, mounted, forceIndex: 1);
@@ -335,11 +339,17 @@ class HomeNotifier with ChangeNotifier {
           if (!mounted) return;
           if (!isreload && isNew && diary.diaryData != null) return;
           await diary.initialDiary(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
+          if (diary.diaryData != null && context.read<MainNotifier>().tutorialData.isEmpty) {
+            context.read<MainNotifier>().tutorialData = diary.diaryData?.first.tutorial ?? [];
+          }
           break;
         case 2:
           if (!mounted) return;
           if (!isreload && isNew && vid.vidData != null) return;
           await vid.initialVid(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
+          if (vid.vidData != null && context.read<MainNotifier>().tutorialData.isEmpty) {
+            context.read<MainNotifier>().tutorialData = vid.vidData?.first.tutorial ?? [];
+          }
           break;
       }
       isLoadingLoadmore = false;
@@ -857,13 +867,16 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  /// New Pop Ads
   Future getAdsApsara(BuildContext context, isInAppAds) async {
     print('ke iklan yah');
     final ads = await getPopUpAds(context);
     final id = ads.videoId;
     print('ke iklan yah $id');
     print('ke iklan yah ${ads.adsType}');
-    if (id != null && ads.adsType != null) {
+    if (ads.mediaType?.toLowerCase() == 'image') {
+      await System().adsPopUpV2(context, ads, '');
+    } else if (id != null && ads.adsType != null) {
       try {
         final notifier = PostsBloc();
 
@@ -879,7 +892,7 @@ class HomeNotifier with ChangeNotifier {
           print('get Ads Video');
           final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
           // if (!isShowAds) {
-          System().adsPopUp(context, ads, auth, isInAppAds: isInAppAds);
+          await System().adsPopUpV2(context, ads, auth);
           // }
 
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
@@ -888,13 +901,68 @@ class HomeNotifier with ChangeNotifier {
         'Failed to fetch ads data ${e}'.logger();
       }
     }
+    //get banner Challange
+    // Future.delayed(const Duration(milliseconds: 500), () {
+    //   if (isInAppAds) System().popUpChallange(context);
+    // });
   }
+
+  /// Old Pop Ads
+  // Future getAdsApsara(BuildContext context, isInAppAds) async {
+  //   print('ke iklan yah');
+  //   final ads = await getPopUpAds(context);
+  //   final id = ads.videoId;
+  //   print('ke iklan yah $id');
+  //   print('ke iklan yah ${ads.adsType}');
+  //   if (id != null && ads.adsType != null) {
+  //     try {
+  //       final notifier = PostsBloc();
+  //
+  //       // await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
+  //       await notifier.getAuthApsara(context, apsaraId: ads.videoId ?? '');
+  //       final fetch = notifier.postsFetch;
+  //
+  //       if (fetch.postsState == PostsState.videoApsaraSuccess) {
+  //         Map jsonMap = json.decode(fetch.data.toString());
+  //         print('jsonMap video Apsara : $jsonMap');
+  //         final auth = jsonMap['PlayAuth'];
+  //         // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
+  //         print('get Ads Video');
+  //         final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+  //         // if (!isShowAds) {
+  //         System().adsPopUp(context, ads, auth, isInAppAds: isInAppAds);
+  //         // }
+  //
+  //         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+  //       }
+  //     } catch (e) {
+  //       'Failed to fetch ads data ${e}'.logger();
+  //     }
+  //   }
+  // }
+
+  // Future<AdsData> getPopUpAds(BuildContext context) async {
+  //   var data = AdsData();
+  //   try {
+  //     final notifier = AdsDataBloc();
+  //     await notifier.appAdsBloc(context);
+  //     final fetch = notifier.adsDataFetch;
+  //     print('video ads');
+  //     if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+  //       print('data iklan : ${fetch.data.toString()}');
+  //       data = fetch.data?.data;
+  //     }
+  //   } catch (e) {
+  //     'Failed to fetch ads data $e'.logger();
+  //   }
+  //   return data;
+  // }
 
   Future<AdsData> getPopUpAds(BuildContext context) async {
     var data = AdsData();
     try {
       final notifier = AdsDataBloc();
-      await notifier.appAdsBloc(context);
+      await notifier.adsVideoBlocV2(context, AdsType.popup);
       final fetch = notifier.adsDataFetch;
       print('video ads');
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
@@ -1095,6 +1163,7 @@ class HomeNotifier with ChangeNotifier {
       case 'pict':
         if (pic.pic != null) {
           pic.pic = [contentData] + [...(pic.pic ?? [] as List<ContentData>)];
+          pic.pic?[0].isContentLoading = true;
         } else {
           await pic.initialPic(Routing.navigatorKey.currentContext ?? context, list: allContents);
         }
@@ -1102,6 +1171,7 @@ class HomeNotifier with ChangeNotifier {
       case 'diary':
         if (diary.diaryData != null) {
           diary.diaryData = [contentData] + [...(diary.diaryData ?? [] as List<ContentData>)];
+          diary.diaryData?[0].isContentLoading = true;
         } else {
           await diary.initialDiary(Routing.navigatorKey.currentContext ?? context, list: allContents);
         }
@@ -1109,6 +1179,7 @@ class HomeNotifier with ChangeNotifier {
       case 'vid':
         if (vid.vidData != null) {
           vid.vidData = [contentData] + [...(vid.vidData ?? [] as List<ContentData>)];
+          vid.vidData?[0].isContentLoading = true;
         } else {
           await vid.initialVid(Routing.navigatorKey.currentContext ?? context, list: allContents);
         }
@@ -1121,5 +1192,29 @@ class HomeNotifier with ChangeNotifier {
         break;
       default:
     }
+  }
+
+  Timer? _inactivityTimer;
+  Timer? get inactivityTimer => _inactivityTimer;
+  set inactivityTimer(Timer? state) {
+    _inactivityTimer = state;
+    notifyListeners();
+  }
+
+  removeWakelock() async {
+    "=================== remove wakelock".logger();
+    _inactivityTimer?.cancel();
+    _inactivityTimer = null;
+    Wakelock.disable();
+  }
+
+  void initWakelockTimer({required Function() onShowInactivityWarning}) async {
+    // adding delay to prevent if there's another that not disposed yet
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      "=================== init wakelock".logger();
+      Wakelock.enable();
+      if (_inactivityTimer != null) _inactivityTimer?.cancel();
+      _inactivityTimer = Timer(const Duration(seconds: 300), () => onShowInactivityWarning());
+    });
   }
 }

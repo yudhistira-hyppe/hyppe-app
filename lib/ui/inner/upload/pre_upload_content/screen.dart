@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -18,11 +19,15 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_auto_complete_user_tag.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_category.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/validate_type.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 import '../preview_content/notifier.dart';
 
 class PreUploadContentScreen extends StatefulWidget {
@@ -39,6 +44,14 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   bool autoComplete = false;
   String search = '';
   String statusKyc = '';
+  GlobalKey keyKategori = GlobalKey();
+  GlobalKey keyOwnerShip = GlobalKey();
+  GlobalKey keyBoost = GlobalKey();
+  ScrollController controller = ScrollController();
+  MainNotifier? mn;
+  int indexKey = 0;
+  int indexKeyOwn = 0;
+  int indexKeyBoost = 0;
 
   @override
   void dispose() {
@@ -48,11 +61,35 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   @override
   void initState() {
     // final _notifier = context.read<PreUploadContentNotifier>();
-    // Provider.of<PreUploadContentNotifier>(context, listen: false);
+    mn = Provider.of<MainNotifier>(context, listen: false);
     super.initState();
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
+    if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
+      indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'interest') ?? 0;
+      indexKeyOwn = mn?.tutorialData.indexWhere((element) => element.key == 'ownership') ?? 0;
+      indexKeyBoost = mn?.tutorialData.indexWhere((element) => element.key == 'boost') ?? 0;
+
+      if (mn?.tutorialData[indexKey].status == false) {
+        WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(myContext).startShowCase([keyKategori, keyOwnerShip]));
+      }
+      if (widget.arguments.onEdit && widget.arguments.contentData?.reportedStatus != "OWNED" && widget.arguments.contentData?.reportedStatus2 != "BLURRED" && statusKyc == VERIFIED) {
+        if (mn?.tutorialData[indexKeyBoost].status == false) {
+          Future.delayed(const Duration(seconds: 1), () {
+            controller.animateTo(1000, duration: const Duration(milliseconds: 500), curve: Curves.ease).whenComplete(
+                  () => ShowCaseWidget.of(myContext).startShowCase([keyBoost]),
+                );
+          });
+        }
+      }
+    }
   }
+
+  void show() {
+    ShowCaseWidget.of(myContext).startShowCase([keyBoost]);
+  }
+
+  var myContext;
 
   @override
   Widget build(BuildContext context) {
@@ -60,184 +97,208 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     SizeConfig().init(context);
     final textTheme = Theme.of(context).textTheme;
     bool keyboardIsOpen = MediaQuery.of(context).viewInsets.bottom != 0;
+    Routing.navigatorKey.currentContext;
 
-    return Consumer2<PreUploadContentNotifier, PreviewContentNotifier>(
-      builder: (context, notifier, prev, child) => GestureDetector(
-        onTap: () => notifier.checkKeyboardFocus(context),
-        child: WillPopScope(
-          onWillPop: () {
-            notifier.onWillPop(context);
-            return Future.value(true);
-          },
-          child: Scaffold(
-            resizeToAvoidBottomInset: true,
-            appBar: AppBar(
-              elevation: 0,
-              centerTitle: false,
-              leading: CustomIconButtonWidget(
-                onPressed: () => notifier.onWillPop(context),
-                defaultColor: false,
-                iconData: "${AssetPath.vectorPath}back-arrow.svg",
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-              title: CustomTextWidget(
-                textToDisplay: widget.arguments.onEdit ? "${notifier.language.edit} ${notifier.language.post}" : notifier.language.newPost ?? '',
-                textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              backgroundColor: Colors.transparent,
-            ),
-            body: SingleChildScrollView(
-              child: Container(
-                // width: SizeConfig.screenWidth,
-                // height: SizeConfig.screenHeight,
+    return ShowCaseWidget(
+      onStart: (index, key) {
+        print('onStart: $index, $key');
+      },
+      onComplete: (index, key) {
+        print('onComplete: $index, $key');
+      },
+      blurValue: 0,
+      disableBarrierInteraction: true,
+      disableMovingAnimation: true,
+      builder: Builder(builder: (context) {
+        myContext = context;
 
-                padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-                child: Stack(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+        return Consumer2<PreUploadContentNotifier, PreviewContentNotifier>(
+          builder: (_, notifier, prev, __) => GestureDetector(
+            onTap: () => notifier.checkKeyboardFocus(context),
+            child: WillPopScope(
+              onWillPop: () {
+                notifier.onWillPop(context);
+                return Future.value(true);
+              },
+              child: Scaffold(
+                resizeToAvoidBottomInset: true,
+                appBar: AppBar(
+                  elevation: 0,
+                  centerTitle: false,
+                  leading: CustomIconButtonWidget(
+                    onPressed: () => notifier.onWillPop(context),
+                    defaultColor: false,
+                    iconData: "${AssetPath.vectorPath}back-arrow.svg",
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                  title: CustomTextWidget(
+                    textToDisplay: widget.arguments.onEdit ? "${notifier.language.edit} ${notifier.language.post}" : notifier.language.newPost ?? '',
+                    textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  backgroundColor: Colors.transparent,
+                ),
+                body: SingleChildScrollView(
+                  controller: controller,
+                  child: Container(
+                    // width: SizeConfig.screenWidth,
+                    // height: SizeConfig.screenHeight,
+
+                    padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                    child: Stack(
                       children: [
-                        // Text('${widget.arguments.content}'),
-                        // loadingCompress(notifier.progressCompress),
-                        // Text("${notifier.progressCompress}"),
-                        // Text("${notifier.videoSize / 1000000} mb"),
-                        captionWidget(textTheme, notifier),
-                        sixteenPx,
-                        _buildDivider(context),
-                        twentyFourPx,
-                        categoryWidget(textTheme, notifier),
-                        _buildDivider(context),
-                        eightPx,
-                        tagPeopleWidget(textTheme, notifier),
-                        _buildDivider(context),
-                        musicTitle(context, notifier),
-                        tagLocationWidget(textTheme, notifier),
-                        _buildDivider(context),
-                        eightPx,
-                        privacyWidget(textTheme, notifier),
-                        _buildDivider(context),
-                        eightPx,
-                        notifier.featureType != FeatureType.story ? ownershipSellingWidget(textTheme, notifier) : const SizedBox(),
-                        notifier.certified ? detailTotalPrice(notifier) : Container(),
-                        SizedBox(height: 20 * SizeConfig.scaleDiagonal),
-                        widget.arguments.onEdit &&
-                                widget.arguments.contentData?.reportedStatus != "OWNED" &&
-                                widget.arguments.contentData?.reportedStatus2 != "BLURRED" &&
-                                statusKyc == VERIFIED &&
-                                notifier.featureType != FeatureType.story
-                            ? boostWidget(textTheme, notifier)
-                            : Container(),
-                        notifier.boostContent != null ? detailBoostContent(notifier) : Container(),
-                        twentyFourPx,
-                        twentyFourPx,
-                        twentyFourPx,
-                        twentyFourPx,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Text('${widget.arguments.content}'),
+                            // loadingCompress(notifier.progressCompress),
+                            // Text("${notifier.progressCompress}"),
+                            // Text("${notifier.videoSize / 1000000} mb"),
+                            // GestureDetector(
+                            //     onTap: () {
+                            //       show();
+                            //     },
+                            //     child: Text("${mn?.tutorialData[indexKeyBoost].status}")),
+                            // Text("${mn?.tutorialData[indexKeyBoost].textID}"),
+                            // Text("${mn?.tutorialData[indexKeyBoost].textEn}"),
+                            captionWidget(textTheme, notifier),
+                            sixteenPx,
+                            _buildDivider(context),
+                            twentyFourPx,
+                            categoryWidget(textTheme, notifier),
+                            _buildDivider(context),
+                            eightPx,
+                            tagPeopleWidget(textTheme, notifier),
+                            _buildDivider(context),
+                            musicTitle(context, notifier),
+                            tagLocationWidget(textTheme, notifier),
+                            _buildDivider(context),
+                            eightPx,
+                            privacyWidget(textTheme, notifier),
+                            _buildDivider(context),
+                            eightPx,
+                            notifier.featureType != FeatureType.story ? ownershipSellingWidget(textTheme, notifier) : const SizedBox(),
+                            notifier.certified ? detailTotalPrice(notifier) : Container(),
+                            SizedBox(height: 20 * SizeConfig.scaleDiagonal),
+                            widget.arguments.onEdit &&
+                                    widget.arguments.contentData?.reportedStatus != "OWNED" &&
+                                    widget.arguments.contentData?.reportedStatus2 != "BLURRED" &&
+                                    statusKyc == VERIFIED &&
+                                    notifier.featureType != FeatureType.story
+                                ? boostWidget(textTheme, notifier)
+                                : Container(),
+                            notifier.boostContent != null ? detailBoostContent(notifier) : Container(),
+                            twentyFourPx,
+                            twentyFourPx,
+                            twentyFourPx,
+                            twentyFourPx,
+                          ],
+                        ),
+                        const AutoCompleteUserTag(),
                       ],
                     ),
-                    const AutoCompleteUserTag(),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            backgroundColor: Theme.of(context).backgroundColor,
-            bottomSheet: Visibility(
-              visible: !keyboardIsOpen,
-              child: notifier.boostContent != null
-                  ? Container(
-                      color: Theme.of(context).colorScheme.background,
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                backgroundColor: Theme.of(context).backgroundColor,
+                bottomSheet: Visibility(
+                  visible: !keyboardIsOpen,
+                  child: notifier.boostContent != null
+                      ? Container(
+                          color: Theme.of(context).colorScheme.background,
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(notifier.language.total ?? ''),
-                              Text(
-                                System().currencyFormat(amount: notifier.boostContent?.priceTotal ?? 0),
-                                style: Theme.of(context).primaryTextTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
-                              )
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(notifier.language.total ?? ''),
+                                  Text(
+                                    System().currencyFormat(amount: notifier.boostContent?.priceTotal ?? 0),
+                                    style: Theme.of(context).primaryTextTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                              twentyFourPx,
+                              CustomElevatedButton(
+                                function: () {
+                                  print('asdasd');
+                                  notifier.paymentMethod(context);
+                                },
+                                width: 375.0 * SizeConfig.scaleDiagonal,
+                                height: 44.0 * SizeConfig.scaleDiagonal,
+                                buttonStyle: ButtonStyle(
+                                  foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                ),
+                                child: CustomTextWidget(
+                                  textToDisplay: notifier.language.choosePaymentMethods ?? 'Choose Payment Method',
+                                  textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                                ),
+                              ),
                             ],
                           ),
-                          twentyFourPx,
-                          CustomElevatedButton(
-                            function: () {
-                              print('asdasd');
-                              notifier.paymentMethod(context);
-                            },
-                            width: 375.0 * SizeConfig.scaleDiagonal,
-                            height: 44.0 * SizeConfig.scaleDiagonal,
-                            buttonStyle: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                              shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                              overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                            ),
-                            child: CustomTextWidget(
-                              textToDisplay: notifier.language.choosePaymentMethods ?? 'Choose Payment Method',
-                              textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                            ),
+                        )
+                      : Material(
+                          color: Theme.of(context).colorScheme.background,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                            child: CustomElevatedButton(
+                                width: SizeConfig.screenWidth,
+                                height: 44.0 * SizeConfig.scaleDiagonal,
+                                function: () {
+                                  if (!notifier.updateContent && !prev.isLoadVideo) {
+                                    if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
+                                      notifier.onClickPost(
+                                        context,
+                                        mounted,
+                                        onEdit: widget.arguments.onEdit,
+                                        data: widget.arguments.contentData,
+                                        content: widget.arguments.content,
+                                      );
+                                    } else {
+                                      !notifier.certified
+                                          ? notifier.onShowStatement(context, onCancel: () {
+                                              notifier.onClickPost(
+                                                context,
+                                                mounted,
+                                                onEdit: widget.arguments.onEdit,
+                                                data: widget.arguments.contentData,
+                                                content: widget.arguments.content,
+                                              );
+                                            })
+                                          : notifier.onClickPost(
+                                              context,
+                                              mounted,
+                                              onEdit: widget.arguments.onEdit,
+                                              data: widget.arguments.contentData,
+                                              content: widget.arguments.content,
+                                            );
+                                    }
+                                  }
+                                },
+                                buttonStyle: ButtonStyle(
+                                  foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                ),
+                                child: ((widget.arguments.onEdit && notifier.updateContent) || prev.isLoadVideo)
+                                    ? const CustomLoading()
+                                    : CustomTextWidget(
+                                        textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
+                                        textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                                      )),
                           ),
-                        ],
-                      ),
-                    )
-                  : Material(
-                      color: Theme.of(context).colorScheme.background,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-                        child: CustomElevatedButton(
-                            width: SizeConfig.screenWidth,
-                            height: 44.0 * SizeConfig.scaleDiagonal,
-                            function: () {
-                              if (!notifier.updateContent && !prev.isLoadVideo) {
-                                if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
-                                  notifier.onClickPost(
-                                    context,
-                                    mounted,
-                                    onEdit: widget.arguments.onEdit,
-                                    data: widget.arguments.contentData,
-                                    content: widget.arguments.content,
-                                  );
-                                } else {
-                                  !notifier.certified
-                                      ? notifier.onShowStatement(context, onCancel: () {
-                                          notifier.onClickPost(
-                                            context,
-                                            mounted,
-                                            onEdit: widget.arguments.onEdit,
-                                            data: widget.arguments.contentData,
-                                            content: widget.arguments.content,
-                                          );
-                                        })
-                                      : notifier.onClickPost(
-                                          context,
-                                          mounted,
-                                          onEdit: widget.arguments.onEdit,
-                                          data: widget.arguments.contentData,
-                                          content: widget.arguments.content,
-                                        );
-                                }
-                              }
-                            },
-                            buttonStyle: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                              shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                              overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                            ),
-                            child: ((widget.arguments.onEdit && notifier.updateContent) || prev.isLoadVideo)
-                                ? const CustomLoading()
-                                : CustomTextWidget(
-                                    textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
-                                    textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                                  )),
-                      ),
-                    ),
+                        ),
+                ),
+                floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+              ),
             ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -365,8 +426,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
               function: () {
                 final text = notifier.captionController.text;
                 final selection = notifier.captionController.selection;
+                var newText = text;
+                if (newText.isNotEmpty) {
+                  newText = text.replaceRange(selection.start, selection.end, ' #');
+                }
 
-                final newText = text.replaceRange(selection.start, selection.end, ' #');
                 notifier.captionController.value = TextEditingValue(
                   text: newText,
                   selection: TextSelection.collapsed(offset: selection.baseOffset + 2),
@@ -419,56 +483,98 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   }
 
   Widget categoryWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            CustomTextWidget(
-              textToDisplay: notifier.language.categories ?? '',
-              textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
-            ),
-            Container(
-              width: 10,
-              height: 10,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.red),
-            )
-          ],
+    return Showcase(
+      key: keyKategori,
+      tooltipBackgroundColor: kHyppeTextLightPrimary,
+      overlayOpacity: 0,
+      targetPadding: const EdgeInsets.all(0),
+      tooltipPosition: TooltipPosition.top,
+      description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+          ? ''
+          : notifier.language.localeDatetime == 'id'
+              ? mn?.tutorialData[indexKey].textID
+              : mn?.tutorialData[indexKey].textEn,
+      descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+      descriptionPadding: EdgeInsets.all(6),
+      textColor: Colors.white,
+      positionYplus: 50,
+      onTargetClick: () {},
+      disposeOnTap: false,
+      onToolTipClick: () {
+        context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKey].key ?? '');
+        controller.animateTo(10000, duration: Duration(milliseconds: 500), curve: Curves.ease).then((value) {
+          ShowCaseWidget.of(myContext).next();
+        });
+        mn?.tutorialData[indexKey].status = true;
+      },
+      closeWidget: GestureDetector(
+        onTap: () async {
+          context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKey].key ?? '');
+          await controller.animateTo(10000, duration: Duration(milliseconds: 500), curve: Curves.ease).then((value) {
+            ShowCaseWidget.of(myContext).next();
+          });
+          mn?.tutorialData[indexKey].status = true;
+        },
+        child: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: CustomIconWidget(
+            iconData: '${AssetPath.vectorPath}close.svg',
+            defaultColor: false,
+            height: 16,
+          ),
         ),
-        eightPx,
-        Wrap(
-          children: [
-            ...List.generate(
-              notifier.interest.length,
-              (index) => Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: CustomTextButton(
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    notifier.insertInterest(context, index);
-                  },
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    splashFactory: NoSplash.splashFactory,
-                  ),
-                  child: PickitemTitle(
-                    title: notifier.interest[index].interestName ?? '',
-                    select: notifier.pickedInterest(notifier.interest[index].id) ? true : false,
-                    button: true,
-                    function: () {
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              CustomTextWidget(
+                textToDisplay: notifier.language.categories ?? '',
+                textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
+              ),
+              Container(
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.red),
+              )
+            ],
+          ),
+          eightPx,
+          Wrap(
+            children: [
+              ...List.generate(
+                notifier.interest.length,
+                (index) => Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: CustomTextButton(
+                    onPressed: () {
                       FocusScope.of(context).unfocus();
                       notifier.insertInterest(context, index);
                     },
-                    textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: notifier.pickedInterest(notifier.interest[index].id) ? kHyppeLightSurface : Theme.of(context).colorScheme.onBackground,
-                        ),
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      splashFactory: NoSplash.splashFactory,
+                    ),
+                    child: PickitemTitle(
+                      title: notifier.interest[index].interestName ?? '',
+                      select: notifier.pickedInterest(notifier.interest[index].id) ? true : false,
+                      button: true,
+                      function: () {
+                        FocusScope.of(context).unfocus();
+                        notifier.insertInterest(context, index);
+                      },
+                      textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: notifier.pickedInterest(notifier.interest[index].id) ? kHyppeLightSurface : Theme.of(context).colorScheme.onBackground,
+                          ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -719,13 +825,54 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CustomTextWidget(
-            textToDisplay: (notifier.editData?.boosted.isNotEmpty ?? [].isNotEmpty)
-                ? notifier.language.yes ?? ''
-                : notifier.boostContent != null
-                    ? System().capitalizeFirstLetter(notifier.boostContent?.typeBoost ?? '')
-                    : notifier.language.no ?? 'no',
-            textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
+          Showcase(
+            key: keyBoost,
+            tooltipBackgroundColor: kHyppeTextLightPrimary,
+            overlayOpacity: 0,
+            targetPadding: const EdgeInsets.all(0),
+            tooltipPosition: TooltipPosition.top,
+            // description: notifier.language.registeryourcontentownership,
+            description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                ? ''
+                : notifier.language.localeDatetime == 'id'
+                    ? mn?.tutorialData[indexKeyBoost].textID
+                    : mn?.tutorialData[indexKeyBoost].textEn,
+            descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
+            descriptionPadding: EdgeInsets.all(6),
+            textColor: Colors.white,
+            positionYplus: 25,
+            onTargetClick: () {},
+            disposeOnTap: false,
+            onToolTipClick: () {
+              context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeyBoost].key ?? '');
+              mn?.tutorialData[indexKeyBoost].status = true;
+              ShowCaseWidget.of(myContext).next();
+              controller.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+            },
+            closeWidget: GestureDetector(
+              onTap: () {
+                context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeyBoost].key ?? '');
+                mn?.tutorialData[indexKeyBoost].status = true;
+                ShowCaseWidget.of(myContext).next();
+                controller.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CustomIconWidget(
+                  iconData: '${AssetPath.vectorPath}close.svg',
+                  defaultColor: false,
+                  height: 16,
+                ),
+              ),
+            ),
+            child: CustomTextWidget(
+              textToDisplay: (notifier.editData?.boosted.isNotEmpty ?? [].isNotEmpty)
+                  ? notifier.language.yes ?? ''
+                  : notifier.boostContent != null
+                      ? System().capitalizeFirstLetter(notifier.boostContent?.typeBoost ?? '')
+                      : notifier.language.no ?? 'no',
+              textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
+            ),
           ),
           twentyPx,
           const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
@@ -754,9 +901,50 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CustomTextWidget(
-            textToDisplay: notifier.certified ? notifier.language.yes ?? 'yes' : notifier.language.no ?? 'no',
-            textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
+          Showcase(
+            key: keyOwnerShip,
+            tooltipBackgroundColor: kHyppeTextLightPrimary,
+            overlayOpacity: 0,
+            targetPadding: const EdgeInsets.all(0),
+            tooltipPosition: TooltipPosition.top,
+            // description: notifier.language.registeryourcontentownership,
+            description: (mn?.tutorialData.isEmpty ?? [].isEmpty)
+                ? ''
+                : notifier.language.localeDatetime == 'id'
+                    ? mn?.tutorialData[indexKeyOwn].textID
+                    : mn?.tutorialData[indexKeyOwn].textEn,
+            descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
+            descriptionPadding: const EdgeInsets.all(6),
+            textColor: Colors.white,
+            positionYplus: 25,
+            onTargetClick: () {},
+            disposeOnTap: false,
+            onToolTipClick: () {
+              context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeyOwn].key ?? '');
+              mn?.tutorialData[indexKeyOwn].status = true;
+              ShowCaseWidget.of(myContext).next();
+              controller.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+            },
+            closeWidget: GestureDetector(
+              onTap: () {
+                context.read<TutorNotifier>().postTutor(context, mn?.tutorialData[indexKeyOwn].key ?? '');
+                mn?.tutorialData[indexKeyOwn].status = true;
+                ShowCaseWidget.of(myContext).next();
+                controller.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CustomIconWidget(
+                  iconData: '${AssetPath.vectorPath}close.svg',
+                  defaultColor: false,
+                  height: 16,
+                ),
+              ),
+            ),
+            child: CustomTextWidget(
+              textToDisplay: notifier.certified ? notifier.language.yes ?? 'yes' : notifier.language.no ?? 'no',
+              textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
+            ),
           ),
           twentyPx,
           const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),

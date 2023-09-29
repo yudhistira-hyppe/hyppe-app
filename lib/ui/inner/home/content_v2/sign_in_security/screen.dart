@@ -16,6 +16,7 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class HyppeHomeSignAndSecurity extends StatelessWidget {
   var setPin = SharedPreference().readStorage(SpKeys.setPin);
@@ -24,72 +25,85 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppeHomeSignAndSecurity');
     SizeConfig().init(context);
     return Consumer<TranslateNotifierV2>(
-      builder: (_, notifier, __) => Scaffold(
-        appBar: AppBar(
-          leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
-          leading: CustomIconButtonWidget(
-            defaultColor: true,
-            iconData: "${AssetPath.vectorPath}back-arrow.svg",
-            onPressed: () => Routing().moveBack(),
-          ),
-          titleSpacing: 0,
-          title: CustomTextWidget(
-            textToDisplay: notifier.translate.signInAndSecurity ?? '',
-            textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
-          ),
-          centerTitle: false,
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.only(top: 24),
-          scrollDirection: Axis.vertical,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SharedPreference().readStorage(SpKeys.isLoginSosmed) == 'socmed'
-                  ? Container()
-                  : SettingTile(
-                      icon: 'lock.svg',
-                      onTap: () => Routing().move(Routes.changePassword),
-                      caption: '${notifier.translate.password}',
-                    ),
-              SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED
-                  ? SettingTile(
-                      icon: 'lock-pin.svg',
-                      onTap: () => Routing().move(Routes.pinScreen),
-                      caption: setPin == 'true' ? notifier.translate.changePin ?? '' : notifier.translate.setPin ?? '',
-                    )
-                  : Container(),
-              SettingTile(
-                icon: 'verification-icon.svg',
-                onTap: () {
-                  switch (SharedPreference().readStorage(SpKeys.statusVerificationId)) {
-                    case REVIEW:
-                      // ShowBottomSheet().onShowColouredSheet(
-                      //   context,
-                      //   "Your kyc request under review",
-                      //   color: Theme.of(context).colorScheme.error,
-                      //   maxLines: 2,
-                      // );
-                      break;
-                    case VERIFIED:
-                      // ShowBottomSheet().onShowColouredSheet(
-                      //   context,
-                      //   "Your kyc status is verified",
-                      //   color: Theme.of(context).colorScheme.error,
-                      //   maxLines: 2,
-                      // );
-                      break;
-                    default:
-                      Routing().move(Routes.verificationIDStep1);
-                  }
-                },
-                caption: '${notifier.translate.idVerification}',
-                trailing: verificationStatus(context, SharedPreference().readStorage(SpKeys.statusVerificationId) ?? UNVERIFIED), //verified, unverified, review
+      builder: (_, notifier, __) => ShowCaseWidget(
+        onStart: (index, key) {
+          print('onStart: $index, $key');
+        },
+        onComplete: (index, key) {
+          print('onComplete: $index, $key');
+        },
+        blurValue: 0,
+        disableBarrierInteraction: true,
+        disableMovingAnimation: true,
+        builder: Builder(builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
+              leading: CustomIconButtonWidget(
+                defaultColor: true,
+                iconData: "${AssetPath.vectorPath}back-arrow.svg",
+                onPressed: () => Routing().moveBack(),
               ),
-            ],
-          ),
-        ),
+              titleSpacing: 0,
+              title: CustomTextWidget(
+                textToDisplay: notifier.translate.signInAndSecurity ?? '',
+                textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+              ),
+              centerTitle: false,
+            ),
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.only(top: 24),
+              scrollDirection: Axis.vertical,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SharedPreference().readStorage(SpKeys.isLoginSosmed) == 'socmed'
+                      ? Container()
+                      : SettingTile(
+                          icon: 'lock.svg',
+                          onTap: () => Routing().move(Routes.changePassword),
+                          caption: '${notifier.translate.password}',
+                        ),
+                  SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED
+                      ? SettingTile(
+                          icon: 'lock-pin.svg',
+                          onTap: () => Routing().move(Routes.pinScreen),
+                          caption: setPin == 'true' ? notifier.translate.changePin ?? '' : notifier.translate.setPin ?? '',
+                        )
+                      : Container(),
+                  SettingTile(
+                    icon: 'verification-icon.svg',
+                    onTap: () {
+                      switch (SharedPreference().readStorage(SpKeys.statusVerificationId)) {
+                        case REVIEW:
+                          // ShowBottomSheet().onShowColouredSheet(
+                          //   context,
+                          //   "Your kyc request under review",
+                          //   color: Theme.of(context).colorScheme.error,
+                          //   maxLines: 2,
+                          // );
+                          break;
+                        case VERIFIED:
+                          // ShowBottomSheet().onShowColouredSheet(
+                          //   context,
+                          //   "Your kyc status is verified",
+                          //   color: Theme.of(context).colorScheme.error,
+                          //   maxLines: 2,
+                          // );
+                          break;
+                        default:
+                          Routing().move(Routes.verificationIDStep1);
+                      }
+                    },
+                    caption: '${notifier.translate.idVerification}',
+                    trailing: verificationStatus(context, SharedPreference().readStorage(SpKeys.statusVerificationId) ?? UNVERIFIED), //verified, unverified, review
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
       ),
     );
   }

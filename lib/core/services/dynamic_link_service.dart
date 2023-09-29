@@ -117,7 +117,7 @@ class DynamicLinkService {
               if (isFromSplash) {
                 isFromSplash = false;
                 _routing.moveAndRemoveUntil(Routes.lobby, Routes.lobby);
-                Future.delayed(const Duration(seconds: 1), () async {
+                Future.delayed(const Duration(seconds: 2), () async {
                   await _routing.move(
                     path,
                     argument: VidDetailScreenArgument(fromDeepLink: true)
@@ -139,10 +139,10 @@ class DynamicLinkService {
 
               break;
             case Routes.diaryDetail:
-              '_handleDeepLink diaryDetail'.logger();
+              '_handleDeepLink diaryDetail $isFromSplash'.logger();
               if (isFromSplash) {
                 isFromSplash = false;
-                Future.delayed(const Duration(seconds: 10), () async {
+                Future.delayed(const Duration(seconds: 2), () async {
                   await _routing.move(
                     path,
                     argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
@@ -151,7 +151,9 @@ class DynamicLinkService {
                   );
                 });
               } else {
-                _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+                if (!isHomeScreen) {
+                  // _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false, page: 0));
+                }
                 Future.delayed(const Duration(milliseconds: 500), () {
                   _routing.move(
                     path,
@@ -167,7 +169,7 @@ class DynamicLinkService {
               '_handleDeepLink picDetail'.logger();
               if (isFromSplash) {
                 isFromSplash = false;
-                Future.delayed(const Duration(seconds: 10), () async {
+                Future.delayed(const Duration(seconds: 2), () async {
                   await _routing.move(
                     path,
                     argument: PicDetailScreenArgument()
@@ -176,7 +178,7 @@ class DynamicLinkService {
                   );
                 });
               } else {
-                _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+                // _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
                 Future.delayed(const Duration(milliseconds: 500), () {
                   _routing.move(
                     path,
@@ -192,7 +194,7 @@ class DynamicLinkService {
               '_handleDeepLink picSlideDetailPreview'.logger();
               if (isFromSplash) {
                 isFromSplash = false;
-                Future.delayed(const Duration(seconds: 10), () async {
+                Future.delayed(const Duration(seconds: 2), () async {
                   await _routing.move(
                     path,
                     argument: SlidedPicDetailScreenArgument(type: TypePlaylist.none)
@@ -202,7 +204,7 @@ class DynamicLinkService {
                   isFromSplash = false;
                 });
               } else {
-                _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+                // _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
                 Future.delayed(const Duration(milliseconds: 500), () {
                   _routing.move(
                     path,

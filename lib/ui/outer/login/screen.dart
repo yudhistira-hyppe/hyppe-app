@@ -41,22 +41,24 @@ class LoginScreen extends StatelessWidget {
                               child: const CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 30),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                              decoration: BoxDecoration(border: Border.all(color: kHyppeLightSecondary, width: 1.0), borderRadius: const BorderRadius.all(Radius.circular(5))),
-                              child: GestureDetector(
-                                onTap: () async {
-                                  await notifier.goToHelpLogin(context);
-                                },
-                                child: CustomTextWidget(
-                                  textToDisplay: notifier.language.help ?? 'Help',
-                                  textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(fontSize: 14),
-                                ),
-                              ),
-                            ),
-                          ),
+
+                          /// *****JANGAN DIHAPUS*****
+                          // Padding(
+                          //   padding: const EdgeInsets.only(top: 30),
+                          //   child: Container(
+                          //     padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                          //     decoration: BoxDecoration(border: Border.all(color: kHyppeLightSecondary, width: 1.0), borderRadius: const BorderRadius.all(Radius.circular(5))),
+                          //     child: GestureDetector(
+                          //       onTap: () async {
+                          //         await notifier.goToHelpLogin(context);
+                          //       },
+                          //       child: CustomTextWidget(
+                          //         textToDisplay: notifier.language.help ?? 'Help',
+                          //         textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(fontSize: 14),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

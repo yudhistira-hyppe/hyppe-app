@@ -823,11 +823,11 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
   }
 
   _pauseScreen() async {
-    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().removeWakelock();
+    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().removeWakelock();
   }
 
   void _initializeTimer() async {
-    (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
+    (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().initWakelockTimer(onShowInactivityWarning: _handleInactivity);
   }
 
   void _handleInactivity() {
@@ -1269,7 +1269,7 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                                   widthPlaceHolder: 80,
                                   heightPlaceHolder: 80,
                                   placeHolderWidget: Container(),
-                                  imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : "${data?.fullThumbPath}",
+                                  imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : data?.fullThumbPath ?? '',
                                   imageBuilder: (context, imageProvider) => data?.reportedStatus == 'BLURRED'
                                       ? ClipRRect(
                                           borderRadius: BorderRadius.circular(20), // Image border

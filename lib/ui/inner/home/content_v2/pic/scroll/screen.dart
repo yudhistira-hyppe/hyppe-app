@@ -56,6 +56,7 @@ import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:flutter/gestures.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -623,127 +624,140 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
 
     final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
     AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
-    return Scaffold(
-      backgroundColor: kHyppeLightSurface,
-      body: WillPopScope(
-        onWillPop: () async {
-          // Navigator.pop(context, '$_curIdx');
-          Routing().moveBack();
-          return false;
-        },
-        child: Consumer2<ScrollPicNotifier, HomeNotifier>(
-          builder: (_, notifier, home, __) => SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ListTile(
-                  title: Align(
-                    alignment: const Alignment(-1.2, 0),
-                    child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
-                  ),
-                  leading: IconButton(
-                      icon: const Icon(
-                        Icons.chevron_left,
-                        color: kHyppeTextLightPrimary,
+    return ShowCaseWidget(
+      onStart: (index, key) {
+        print('onStart: $index, $key');
+      },
+      onComplete: (index, key) {
+        print('onComplete: $index, $key');
+      },
+      blurValue: 0,
+      disableBarrierInteraction: true,
+      disableMovingAnimation: true,
+      builder: Builder(builder: (context) {
+        return Scaffold(
+          backgroundColor: kHyppeLightSurface,
+          body: WillPopScope(
+            onWillPop: () async {
+              // Navigator.pop(context, '$_curIdx');
+              Routing().moveBack();
+              return false;
+            },
+            child: Consumer2<ScrollPicNotifier, HomeNotifier>(
+              builder: (_, notifier, home, __) => SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ListTile(
+                      title: Align(
+                        alignment: const Alignment(-1.2, 0),
+                        child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
                       ),
-                      onPressed: () {
-                        Future.delayed(Duration.zero, () {
-                          // Navigator.pop(context, '$_curIdx');
-                          Navigator.pop(context);
-                        });
-                      }),
-                ),
-                Expanded(
-                  child: pics?.isEmpty ?? [].isEmpty
-                      ? const NoResultFound()
-                      : RefreshIndicator(
-                          onRefresh: () async {
-                            bool connect = await System().checkConnections();
-                            if (connect) {
-                              setState(() {
-                                isloading = true;
-                              });
-                              await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                              setState(() {
-                                pics = notifier.pics;
-                              });
-                            } else {
-                              if (mounted) {
-                                ShowGeneralDialog.showToastAlert(
-                                  context,
-                                  lang?.internetConnectionLost ?? ' Error',
-                                  () async {},
-                                );
-                              }
-                            }
-                          },
-                          child: NotificationListener<ScrollNotification>(
-                            onNotification: (scrollNotification) {
-                              print("scrollNotification ===== $scrollNotification");
-                              // scrollNotification.disallowIndicator();
-                              if (scrollNotification is ScrollStartNotification) {
-                                print("=======start=======");
-                                // _onStartScroll(scrollNotification.metrics);
-                              } else if (scrollNotification is ScrollUpdateNotification) {
-                                // _onUpdateScroll(scrollNotification.metrics);
-                              } else if (scrollNotification is ScrollEndNotification) {
-                                print("=======end=======");
-                                // _onEndScroll(scrollNotification.metrics);
-                              }
-
-                              return false;
-                            },
-                            child: ScrollablePositionedList.builder(
-                              scrollDirection: Axis.vertical,
-                              itemScrollController: itemScrollController,
-                              itemPositionsListener: itemPositionsListener,
-                              scrollOffsetController: scrollOffsetController,
-                              scrollOffsetListener: scrollOffsetListener,
-                              // scrollDirection: Axis.horizontal,
-                              physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
-                              shrinkWrap: false,
-                              itemCount: pics?.length ?? 0,
-                              padding: const EdgeInsets.symmetric(horizontal: 11.5),
-
-                              itemBuilder: (context, index) {
-                                if (pics == null || home.isLoadingPict) {
-                                  fAliplayer?.pause();
-                                  _lastCurIndex = -1;
-                                  return CustomShimmer(
-                                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                                    height: 168,
-                                    radius: 8,
-                                    margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                                  );
-                                } else if (index == pics?.length) {
-                                  return UnconstrainedBox(
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      width: 80 * SizeConfig.scaleDiagonal,
-                                      height: 80 * SizeConfig.scaleDiagonal,
-                                      child: const CustomLoading(),
-                                    ),
-                                  );
-                                }
-
-                                return itemPict(notifier, index);
-                              },
-                            ),
+                      leading: IconButton(
+                          icon: const Icon(
+                            Icons.chevron_left,
+                            color: kHyppeTextLightPrimary,
                           ),
-                        ),
+                          onPressed: () {
+                            Future.delayed(Duration.zero, () {
+                              // Navigator.pop(context, '$_curIdx');
+                              Navigator.pop(context);
+                            });
+                          }),
+                    ),
+                    Expanded(
+                      child: pics?.isEmpty ?? [].isEmpty
+                          ? const NoResultFound()
+                          : RefreshIndicator(
+                              onRefresh: () async {
+                                bool connect = await System().checkConnections();
+                                if (connect) {
+                                  setState(() {
+                                    isloading = true;
+                                  });
+                                  await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                  setState(() {
+                                    pics = notifier.pics;
+                                  });
+                                } else {
+                                  if (mounted) {
+                                    ShowGeneralDialog.showToastAlert(
+                                      context,
+                                      lang?.internetConnectionLost ?? ' Error',
+                                      () async {},
+                                    );
+                                  }
+                                }
+                              },
+                              child: NotificationListener<ScrollNotification>(
+                                onNotification: (scrollNotification) {
+                                  print("scrollNotification ===== $scrollNotification");
+                                  // scrollNotification.disallowIndicator();
+                                  if (scrollNotification is ScrollStartNotification) {
+                                    print("=======start=======");
+                                    // _onStartScroll(scrollNotification.metrics);
+                                  } else if (scrollNotification is ScrollUpdateNotification) {
+                                    // _onUpdateScroll(scrollNotification.metrics);
+                                  } else if (scrollNotification is ScrollEndNotification) {
+                                    print("=======end=======");
+                                    // _onEndScroll(scrollNotification.metrics);
+                                  }
+
+                                  return false;
+                                },
+                                child: ScrollablePositionedList.builder(
+                                  scrollDirection: Axis.vertical,
+                                  itemScrollController: itemScrollController,
+                                  itemPositionsListener: itemPositionsListener,
+                                  scrollOffsetController: scrollOffsetController,
+                                  scrollOffsetListener: scrollOffsetListener,
+                                  // scrollDirection: Axis.horizontal,
+                                  physics: isZoom ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(),
+                                  shrinkWrap: false,
+                                  itemCount: pics?.length ?? 0,
+                                  padding: const EdgeInsets.symmetric(horizontal: 11.5),
+
+                                  itemBuilder: (context, index) {
+                                    if (pics == null || home.isLoadingPict) {
+                                      fAliplayer?.pause();
+                                      _lastCurIndex = -1;
+                                      return CustomShimmer(
+                                        width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                        height: 168,
+                                        radius: 8,
+                                        margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                      );
+                                    } else if (index == pics?.length) {
+                                      return UnconstrainedBox(
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width: 80 * SizeConfig.scaleDiagonal,
+                                          height: 80 * SizeConfig.scaleDiagonal,
+                                          child: const CustomLoading(),
+                                        ),
+                                      );
+                                    }
+
+                                    return itemPict(notifier, index);
+                                  },
+                                ),
+                              ),
+                            ),
+                    ),
+                    notifier.isLoadingLoadmore
+                        ? const SizedBox(
+                            height: 50,
+                            child: Center(child: CustomLoading()),
+                          )
+                        : Container(),
+                  ],
                 ),
-                notifier.isLoadingLoadmore
-                    ? const SizedBox(
-                        height: 50,
-                        child: Center(child: CustomLoading()),
-                      )
-                    : Container(),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 

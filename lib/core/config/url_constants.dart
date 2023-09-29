@@ -25,8 +25,8 @@ class UrlConstants {
   static const String apiV7 = '/v7/';
 
   /// Production Base url
-  static const String productionBaseApi = "https://s1.hyppe.cloud";
-  static const String productionUploadBaseApi = "https://s1.hyppe.cloud";
+  static const String productionBaseApi = "https://p1.hyppe.cloud";
+  static const String productionUploadBaseApi = "https://p1.hyppe.cloud";
   // static const String productionBaseApi = "https://p1-5003.hyppe.cloud";
   // static const String productionUploadBaseApi = "https://p1-5003.hyppe.cloud";
 
@@ -96,6 +96,8 @@ class UrlConstants {
 
   /* v3 user ads */
   static const String adsRoute = "/api/ads";
+
+  static const String adsRouteV2 = "/api/adsv2/ads";
 
   static const String transactionRoute = "/api/transactions";
 
@@ -399,14 +401,25 @@ class UrlConstants {
   /// get => Get In App Ads
   static const String getInAppAds = "$adsRoute/getAds/user?type=In%20App%20Ads";
 
+  /// get => Get Ads In Between
+  static const String getAdsInBetween = "$adsRouteV2/get/62e238a4f63d0000510026b3";
+
+  /// get => Get Ads In Content
+  static const String getAdsInContent = "$adsRouteV2/get/62f0b435118731ecc0f45772";
+
+  /// get => Get Pop Up Ads
+  static const String getPopUpAds = "$adsRouteV2/get/632a806ad2770000fd007a62";
+
   /// post => View Ads User
-  static const String viewAds = "$adsRoute/viewads";
+  /// static const String viewAds = "$adsRoute/viewads";
+  static const String viewAds = "$adsRouteV2/viewads";
 
   //setting
   static const String settingApps = "$utilsRoute/getSetting";
 
   /// post => Click Learn More Ads
-  static const String clickAds = "$adsRoute/clickads";
+  /// static const String clickAds = "$adsRoute/clickads";
+  static const String clickAds = "$adsRouteV2/clicked";
 
   /// get => categorytickets
   static const String categoryTickets = "/api/categorytickets/all";
@@ -456,6 +469,12 @@ class UrlConstants {
   // Get Effect
   static const String getEffects = "/api/assets/filter/list";
   static const String downloadEffect = "/api/assets/filter/file";
+
+  //Tutor
+  static const String tutorPost = "$userRoute/tutor/update";
+
+  //Banner
+  static const String getBanners = "/api/banner/listing";
   
   // Get Sticker
   static const String getStickers = "/api/mediastiker/listingapp";

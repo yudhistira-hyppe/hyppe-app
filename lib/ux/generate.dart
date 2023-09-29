@@ -68,6 +68,7 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/pin_withdr
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/success_withdraw/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/summary_withdrawal/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/home_tutorial.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/failed_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_1/screen.dart';
@@ -416,6 +417,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const AchievementScreen());
       case Routes.shimmerSlider:
         return MaterialPageRoute(builder: (_) => ShimmerSlider(arguments: settings.arguments as SlidedPicDetailScreenArgument));
+      case Routes.homeTutor:
+        return MaterialPageRoute(builder: (_) => const HomeTutorScreen());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

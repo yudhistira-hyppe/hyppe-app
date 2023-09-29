@@ -55,6 +55,7 @@ import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:hyppe/ui/constant/widget/sticker_overlay.dart';
@@ -600,121 +601,134 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
     SizeConfig().init(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
-    return Scaffold(
-      backgroundColor: kHyppeLightSurface,
-      body: WillPopScope(
-        onWillPop: () async {
-          Navigator.pop(context, '$_curIdx');
-          return false;
-        },
-        child: Consumer2<ScrollDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
-          return SafeArea(
-            child: SizedBox(
-              // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ListTile(
-                    title: Align(
-                      alignment: const Alignment(-1.2, 0),
-                      child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
-                    ),
-                    leading: IconButton(
-                        icon: const Icon(
-                          Icons.chevron_left,
-                          color: kHyppeTextLightPrimary,
+    return ShowCaseWidget(
+      onStart: (index, key) {
+        print('onStart: $index, $key');
+      },
+      onComplete: (index, key) {
+        print('onComplete: $index, $key');
+      },
+      blurValue: 0,
+      disableBarrierInteraction: true,
+      disableMovingAnimation: true,
+      builder: Builder(builder: (context) {
+        return Scaffold(
+          backgroundColor: kHyppeLightSurface,
+          body: WillPopScope(
+            onWillPop: () async {
+              Navigator.pop(context, '$_curIdx');
+              return false;
+            },
+            child: Consumer2<ScrollDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
+              return SafeArea(
+                child: SizedBox(
+                  // margin: const EdgeInsets.only(top: 16.0, bottom: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        title: Align(
+                          alignment: const Alignment(-1.2, 0),
+                          child: Container(margin: const EdgeInsets.symmetric(horizontal: 10), child: widget.arguments?.titleAppbar ?? Container()),
                         ),
-                        onPressed: () {
-                          Navigator.pop(context, '$_curIdx');
-                        }),
-                  ),
-                  Expanded(
-                    child: diaryData?.isEmpty ?? [].isEmpty
-                        ? const NoResultFound()
-                        : RefreshIndicator(
-                            onRefresh: () async {
-                              bool connect = await System().checkConnections();
-                              if (connect) {
-                                setState(() {
-                                  isloading = true;
-                                });
-                                await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                                setState(() {
-                                  diaryData = notifier.diaryData;
-                                });
-                              } else {
-                                if (mounted) {
-                                  ShowGeneralDialog.showToastAlert(
-                                    context,
-                                    lang?.internetConnectionLost ?? ' Error',
-                                    () async {},
-                                  );
-                                }
-                              }
-                            },
-                            child: NotificationListener<OverscrollIndicatorNotification>(
-                              onNotification: (overscroll) {
-                                overscroll.disallowIndicator();
-                                return false;
-                              },
-                              child: RefreshIndicator(
-                                onRefresh: () async {},
-                                child: ScrollablePositionedList.builder(
-                                  scrollDirection: Axis.vertical,
-                                  itemScrollController: itemScrollController,
-                                  itemPositionsListener: itemPositionsListener,
-                                  scrollOffsetController: scrollOffsetController,
-                                  // controller: notifier.scrollController,
-                                  // scrollDirection: Axis.horizontal,
-                                  physics: const AlwaysScrollableScrollPhysics(),
-                                  shrinkWrap: false,
-                                  itemCount: diaryData?.length ?? 0,
-                                  padding: const EdgeInsets.symmetric(horizontal: 11.5),
-                                  itemBuilder: (context, index) {
-                                    if (diaryData == null || home.isLoadingDiary) {
-                                      fAliplayer?.pause();
-                                      _lastCurIndex = -1;
-                                      return CustomShimmer(
-                                        width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                                        height: 168,
-                                        radius: 8,
-                                        margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
-                                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                                      );
-                                    } else if (index == diaryData?.length) {
-                                      return UnconstrainedBox(
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          width: 80 * SizeConfig.scaleDiagonal,
-                                          height: 80 * SizeConfig.scaleDiagonal,
-                                          child: const CustomLoading(),
-                                        ),
+                        leading: IconButton(
+                            icon: const Icon(
+                              Icons.chevron_left,
+                              color: kHyppeTextLightPrimary,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context, '$_curIdx');
+                            }),
+                      ),
+                      Expanded(
+                        child: diaryData?.isEmpty ?? [].isEmpty
+                            ? const NoResultFound()
+                            : RefreshIndicator(
+                                onRefresh: () async {
+                                  bool connect = await System().checkConnections();
+                                  if (connect) {
+                                    setState(() {
+                                      isloading = true;
+                                    });
+                                    await notifier.reload(context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                                    setState(() {
+                                      diaryData = notifier.diaryData;
+                                    });
+                                  } else {
+                                    if (mounted) {
+                                      ShowGeneralDialog.showToastAlert(
+                                        context,
+                                        lang?.internetConnectionLost ?? ' Error',
+                                        () async {},
                                       );
                                     }
-                                    if (_curIdx == 0 && diaryData?[0].reportedStatus == 'BLURRED') {
-                                      isPlay = false;
-                                      fAliplayer?.stop();
-                                    }
-
-                                    return itemDiary(notifier, index);
+                                  }
+                                },
+                                child: NotificationListener<OverscrollIndicatorNotification>(
+                                  onNotification: (overscroll) {
+                                    overscroll.disallowIndicator();
+                                    return false;
                                   },
+                                  child: RefreshIndicator(
+                                    onRefresh: () async {},
+                                    child: ScrollablePositionedList.builder(
+                                      scrollDirection: Axis.vertical,
+                                      itemScrollController: itemScrollController,
+                                      itemPositionsListener: itemPositionsListener,
+                                      scrollOffsetController: scrollOffsetController,
+                                      // controller: notifier.scrollController,
+                                      // scrollDirection: Axis.horizontal,
+                                      physics: const AlwaysScrollableScrollPhysics(),
+                                      shrinkWrap: false,
+                                      itemCount: diaryData?.length ?? 0,
+                                      padding: const EdgeInsets.symmetric(horizontal: 11.5),
+                                      itemBuilder: (context, index) {
+                                        if (diaryData == null || home.isLoadingDiary) {
+                                          fAliplayer?.pause();
+                                          _lastCurIndex = -1;
+                                          return CustomShimmer(
+                                            width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                                            height: 168,
+                                            radius: 8,
+                                            margin: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 10),
+                                            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                                          );
+                                        } else if (index == diaryData?.length) {
+                                          return UnconstrainedBox(
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 80 * SizeConfig.scaleDiagonal,
+                                              height: 80 * SizeConfig.scaleDiagonal,
+                                              child: const CustomLoading(),
+                                            ),
+                                          );
+                                        }
+                                        if (_curIdx == 0 && diaryData?[0].reportedStatus == 'BLURRED') {
+                                          isPlay = false;
+                                          fAliplayer?.stop();
+                                        }
+
+                                        return itemDiary(notifier, index);
+                                      },
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
+                      ),
+                      notifier.isLoadingLoadmore
+                          ? const SizedBox(
+                              height: 50,
+                              child: Center(child: CustomLoading()),
+                            )
+                          : Container(),
+                    ],
                   ),
-                  notifier.isLoadingLoadmore
-                      ? const SizedBox(
-                          height: 50,
-                          child: Center(child: CustomLoading()),
-                        )
-                      : Container(),
-                ],
-              ),
-            ),
-          );
-        }),
-      ),
+                ),
+              );
+            }),
+          ),
+        );
+      }),
     );
   }
 

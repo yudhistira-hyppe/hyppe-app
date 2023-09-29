@@ -29,6 +29,8 @@ GlobalKey<VidPlayerPageState> vidPlayerState = GlobalKey();
 AudioPlayer? globalAudioPlayer;
 // ScrollController? globalScroller;
 FlutterAliplayer? globalAliPlayer;
+FlutterAliplayer? adsGlobalAliPlayer;
+FlutterAliplayer? globalAdsInContent;
 final globalDB = DatabaseHelper();
 bool isHomeScreen = false;
 bool isFromSplash = false;
@@ -36,9 +38,12 @@ bool isStopVideo = false;
 bool isShowingDialog = false;
 bool connectInternet = true;
 int golbalToOther = 0;
+int page = -1;
 bool globalInternetConnection = true;
 bool globalAfterReport = false;
 bool homeClick = false;
+bool globalTultipShow = false;
+
 
 void disposeGlobalAudio() async {
   try {

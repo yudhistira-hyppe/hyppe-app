@@ -722,44 +722,49 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          CustomBaseCacheImage(
-                            imageUrl: _newClipData?.data?.avatar?.fullLinkURL,
-                            memCacheWidth: 200,
-                            memCacheHeight: 200,
-                            imageBuilder: (_, imageProvider) {
-                              return Container(
+                          GestureDetector(
+                            onTap:(){
+                              Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: _newClipData?.data?.email));
+                            },
+                            child: CustomBaseCacheImage(
+                              imageUrl: _newClipData?.data?.avatar?.fullLinkURL,
+                              memCacheWidth: 200,
+                              memCacheHeight: 200,
+                              imageBuilder: (_, imageProvider) {
+                                return Container(
+                                  width: 27,
+                                  height: 27,
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: imageProvider,
+                                    ),
+                                  ),
+                                );
+                              },
+                              errorWidget: (_, __, ___) {
+                                return Container(
+                                  width: 27,
+                                  height: 27,
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: const AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                                    ),
+                                  ),
+                                );
+                              },
+                              emptyWidget: Container(
                                 width: 27,
                                 height: 27,
                                 decoration: BoxDecoration(
                                   borderRadius: const BorderRadius.all(Radius.circular(18)),
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: imageProvider,
+                                    image: const AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                                   ),
-                                ),
-                              );
-                            },
-                            errorWidget: (_, __, ___) {
-                              return Container(
-                                width: 27,
-                                height: 27,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                                  ),
-                                ),
-                              );
-                            },
-                            emptyWidget: Container(
-                              width: 27,
-                              height: 27,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: const AssetImage('${AssetPath.pngPath}content-error.png'),
                                 ),
                               ),
                             ),
@@ -789,22 +794,25 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                                   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                                 });
                               } else {
-                                try{
-                                  final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
-                                  final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
-                                  if (await canLaunchUrl(uri)) {
-                                    print('adsView part 1');
-                                    adsView(_newClipData?.data ?? AdsData(), second);
-                                    await launchUrl(
-                                      uri,
-                                      mode: LaunchMode.externalApplication,
-                                    );
-                                  } else
-                                    // can't launch url, there is some error
-                                    throw "Could not launch $uri";
-                                }catch(e){
-                                  System().goToWebScreen(_newClipData?.data?.adsUrlLink ?? '');
+                                if((_newClipData?.data?.adsUrlLink ?? '').withHttp()){
+                                  try{
+                                    final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
+                                    final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
+                                    if (await canLaunchUrl(uri)) {
+                                      print('adsView part 1');
+                                      adsView(_newClipData?.data ?? AdsData(), second);
+                                      await launchUrl(
+                                        uri,
+                                        mode: LaunchMode.externalApplication,
+                                      );
+                                    } else
+                                      // can't launch url, there is some error
+                                      throw "Could not launch $uri";
+                                  }catch(e){
+                                    System().goToWebScreen(_newClipData?.data?.adsUrlLink ?? '');
+                                  }
                                 }
+
 
                               }
                             },

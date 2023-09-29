@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
 import 'package:hyppe/core/bloc/ads_video/state.dart';
 
@@ -39,6 +40,11 @@ class PreviewDiaryNotifier with ChangeNotifier {
 
   set diaryData(List<ContentData>? val) {
     _diaryData = val;
+    notifyListeners();
+  }
+
+  setIsViewed(int index) {
+    diaryData?[index].isViewed = true;
     notifyListeners();
   }
 
@@ -83,6 +89,42 @@ class PreviewDiaryNotifier with ChangeNotifier {
   set heightTitleFeature(double val) {
     _heightTitleFeature = val;
     notifyListeners();
+  }
+
+  int _nextAdsShowed = 6;
+  int get nextAdsShowed => _nextAdsShowed;
+  set nextAdsShowed(int state) {
+    _nextAdsShowed = state;
+    notifyListeners();
+  }
+
+  initAdsCounter() {
+    _nextAdsShowed = 6;
+  }
+
+  bool loadAds = false;
+  // bool get loadAds => _loadAds;
+  // set loadAds(bool state){
+  //   _loadAds = state;
+  //   notifyListeners();
+  // }
+
+  void setAdsData(int index, AdsData? adsData) {
+    final withAds = diaryData?.where((element) => element.inBetweenAds != null).length ?? 0;
+    final adsSize = diaryData?.length ?? 0;
+    loadAds = false;
+    if (adsData != null) {
+      if (adsSize > nextAdsShowed) {
+        if (diaryData?[nextAdsShowed].inBetweenAds == null) {
+          diaryData?.insert(nextAdsShowed, ContentData(inBetweenAds: adsData));
+          _nextAdsShowed = _nextAdsShowed + 6 + withAds;
+          notifyListeners();
+        }
+      }
+    } else {
+      diaryData?.removeAt(index);
+      notifyListeners();
+    }
   }
 
   double scaleDiary(BuildContext context) {
@@ -130,6 +172,8 @@ class PreviewDiaryNotifier with ChangeNotifier {
         // }
 
         if (scrollController.hasClients) {
+          homeClick = true;
+
           scrollController.animateTo(
             scrollController.initialScrollOffset,
             duration: const Duration(milliseconds: 300),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_alilistplayer.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -49,6 +50,11 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
 
   set vidData(List<ContentData>? val) {
     _vidData = val;
+    notifyListeners();
+  }
+
+  setIsViewed(int index) {
+    vidData?[index].isViewed = true;
     notifyListeners();
   }
 
@@ -115,6 +121,51 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  int _nextAdsShowed = 6;
+  int get nextAdsShowed => _nextAdsShowed;
+  set nextAdsShowed(int state) {
+    _nextAdsShowed = state;
+    notifyListeners();
+  }
+
+  initAdsCounter() {
+    _nextAdsShowed = 6;
+  }
+
+  bool loadAds = false;
+  // bool get loadAds => _loadAds;
+  // set loadAds(bool state){
+  //   _loadAds = state;
+  //   notifyListeners();
+  // }
+
+  void setInBetweenAds(int index, AdsData? adsData) {
+    final withAds = vidData?.where((element) => element.inBetweenAds != null).length ?? 0;
+    final adsSize = vidData?.length ?? 0;
+    loadAds = false;
+    if (adsData != null) {
+      if (adsSize > nextAdsShowed) {
+        if (vidData?[nextAdsShowed].inBetweenAds == null) {
+          vidData?.insert(nextAdsShowed, ContentData(inBetweenAds: adsData));
+          _nextAdsShowed = _nextAdsShowed + 6 + withAds;
+          notifyListeners();
+        }
+      }
+    } else {
+      vidData?.removeAt(index);
+      notifyListeners();
+    }
+  }
+  // setInBetweenAds(int index, AdsData? adsData){
+  //   vidData?[index].inBetweenAds = adsData;
+  //   notifyListeners();
+  // }
+
+  setAdsData(int index, AdsData? adsData) {
+    vidData?[index].adsData = adsData;
+    notifyListeners();
+  }
+
   Future<void> initialVid(BuildContext context, {bool reload = false, List<ContentData>? list}) async {
     List<ContentData> res = [];
 
@@ -152,6 +203,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
         // }
 
         if (pageController.hasClients) {
+          homeClick = true;
           pageController.animateToPage(
             0,
             duration: const Duration(milliseconds: 300),

@@ -73,7 +73,7 @@ class SearchNotifier with ChangeNotifier {
 
   bool _isZoom = false;
   bool get isZoom => _isZoom;
-  set isZoom(bool state){
+  set isZoom(bool state) {
     _isZoom = state;
     notifyListeners();
   }
@@ -125,15 +125,15 @@ class SearchNotifier with ChangeNotifier {
 
   Map<String, SearchContentModel?> mapDetailHashtag = {};
 
-  SearchContentModel? getMapHashtag(String tag){
+  SearchContentModel? getMapHashtag(String tag) {
     return mapDetailHashtag[tag];
   }
 
-  setMapHashtag(SearchContentModel value, String tag){
+  setMapHashtag(SearchContentModel value, String tag) {
     mapDetailHashtag[tag] = value;
   }
 
-  deleteMapHashtag(String tag){
+  deleteMapHashtag(String tag) {
     mapDetailHashtag[tag] = null;
   }
 
@@ -146,61 +146,67 @@ class SearchNotifier with ChangeNotifier {
 
   bool _isHasNextPic = false;
   bool get isHasNextPic => _isHasNextPic;
-  set isHasNextPic(bool state){
+  set isHasNextPic(bool state) {
     _isHasNextPic = state;
     notifyListeners();
   }
-  setHasNextPic(bool state){
+
+  setHasNextPic(bool state) {
     _isHasNextPic = state;
   }
 
   bool _isHasNextVid = false;
   bool get isHasNextVid => _isHasNextVid;
-  set isHasNextVid(bool state){
+  set isHasNextVid(bool state) {
     _isHasNextVid = state;
     notifyListeners();
   }
-  setHasNextVid(bool state){
+
+  setHasNextVid(bool state) {
     _isHasNextVid = state;
   }
 
   bool _isHasNextDiary = false;
   bool get isHasNextDiary => _isHasNextDiary;
-  set isHasNextDiary(bool state){
+  set isHasNextDiary(bool state) {
     _isHasNextDiary = state;
     notifyListeners();
   }
-  setHasNextDiary(bool state){
+
+  setHasNextDiary(bool state) {
     _isHasNextDiary = state;
   }
 
   bool _intHasNextPic = false;
   bool get intHasNextPic => _intHasNextPic;
-  set intHasNextPic(bool state){
+  set intHasNextPic(bool state) {
     _intHasNextPic = state;
     notifyListeners();
   }
-  setIntHasNextPic(bool state){
+
+  setIntHasNextPic(bool state) {
     _intHasNextPic = state;
   }
 
   bool _intHasNextVid = false;
   bool get intHasNextVid => _intHasNextVid;
-  set intHasNextVid(bool state){
+  set intHasNextVid(bool state) {
     _intHasNextVid = state;
     notifyListeners();
   }
-  setIntHasNextVid(bool state){
+
+  setIntHasNextVid(bool state) {
     _intHasNextVid = state;
   }
 
   bool _intHasNextDiary = false;
   bool get intHasNextDiary => _intHasNextDiary;
-  set intHasNextDiary(bool state){
+  set intHasNextDiary(bool state) {
     _intHasNextDiary = state;
     notifyListeners();
   }
-  setIntHasNextDiary(bool state){
+
+  setIntHasNextDiary(bool state) {
     _intHasNextDiary = state;
   }
 
@@ -211,7 +217,7 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  initAllHasNext(){
+  initAllHasNext() {
     _isHasNextVid = true;
     _isHasNextDiary = true;
     _isHasNextPic = true;
@@ -262,48 +268,47 @@ class SearchNotifier with ChangeNotifier {
   AllContents? _searchContentFirstPage;
   AllContents? get searchContentFirstPage => _searchContentFirstPage;
 
+  bool isloadingGetMore = false;
   bool _isLoading = true;
   bool get isLoading => _isLoading;
 
-
-
   bool _loadTagDetail = true;
   bool get loadTagDetail => _loadTagDetail;
-  set loadTagDetail(bool val){
+  set loadTagDetail(bool val) {
     _loadTagDetail = val;
     notifyListeners();
   }
 
   bool _loadIntDetailPic = true;
   bool get loadIntDetailPic => _loadIntDetailPic;
-  set loadIntDetailPic(bool val){
+  set loadIntDetailPic(bool val) {
     _loadIntDetailPic = val;
     notifyListeners();
   }
 
   bool _loadIntDetailDiary = true;
   bool get loadIntDetailDiary => _loadIntDetailDiary;
-  set loadIntDetailDiary(bool val){
+  set loadIntDetailDiary(bool val) {
     _loadIntDetailDiary = val;
     notifyListeners();
   }
 
   bool _loadIntDetailVid = true;
   bool get loadIntDetailVid => _loadIntDetailVid;
-  set loadIntDetailVid(bool val){
+  set loadIntDetailVid(bool val) {
     _loadIntDetailVid = val;
     notifyListeners();
   }
 
-  initDetailInterest(){
+  initDetailInterest() {
     _loadIntDetailPic = true;
     _loadIntDetailDiary = true;
     _loadIntDetailVid = true;
   }
 
-  removeInterestItem(String key, String postID){
+  removeInterestItem(String key, String postID) {
     final interest = interestContents[key];
-    if(interest != null){
+    if (interest != null) {
       interest.vid?.removeWhere((element) => element.postID == postID);
       interest.pict?.removeWhere((element) => element.postID == postID);
       interest.diary?.removeWhere((element) => element.postID == postID);
@@ -519,7 +524,7 @@ class SearchNotifier with ChangeNotifier {
 
   bool _isFromComplete = false;
   bool get isFromComplete => _isFromComplete;
-  set isFromComplete(bool state){
+  set isFromComplete(bool state) {
     _isFromComplete = state;
     notifyListeners();
   }
@@ -824,7 +829,7 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  Future getDetailHashtag(BuildContext context, String keys, {reload = true, HyppeType? hyppe, bool force = false}) async{
+  Future getDetailHashtag(BuildContext context, String keys, {reload = true, HyppeType? hyppe, bool force = false}) async {
     print('getDetailHashtag keys: $keys');
     final detail = mapDetailHashtag[keys];
     checkConnection();
@@ -833,7 +838,7 @@ class SearchNotifier with ChangeNotifier {
       final lenghtDiary = mapDetailHashtag[keys]?.diary?.length ?? 0;
       final lenghtPic = mapDetailHashtag[keys]?.pict?.length ?? 0;
       if (reload) {
-        if(force){
+        if (force) {
           initAllHasNext();
           loadTagDetail = true;
           final _res = await _hitApiGetDetail(context, keys.replaceAll(' ', ''), TypeApiSearch.detailHashTag, 0, type: hyppe);
@@ -853,7 +858,7 @@ class SearchNotifier with ChangeNotifier {
               } else {
                 _countTag = count;
               }
-            }else{
+            } else {
               _countTag = 0;
             }
             // for(int i = 0; pics.length > i; i++){
@@ -871,14 +876,13 @@ class SearchNotifier with ChangeNotifier {
               final data = pics[0];
               final url = data != null ? ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
               _tagImageMain = url;
-            }else{
+            } else {
               _tagImageMain = '';
             }
-
           }
           loadTagDetail = false;
-        }else{
-          if(detail == null){
+        } else {
+          if (detail == null) {
             initAllHasNext();
             loadTagDetail = true;
             final _res = await _hitApiGetDetail(context, keys.replaceAll(' ', ''), TypeApiSearch.detailHashTag, 0, type: hyppe);
@@ -898,7 +902,7 @@ class SearchNotifier with ChangeNotifier {
                 } else {
                   _countTag = count;
                 }
-              }else{
+              } else {
                 _countTag = 0;
               }
               // for(int i = 0; pics.length > i; i++){
@@ -916,13 +920,12 @@ class SearchNotifier with ChangeNotifier {
                 final data = pics[0];
                 final url = data != null ? ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
                 _tagImageMain = url;
-              }else{
+              } else {
                 _tagImageMain = '';
               }
-
             }
             loadTagDetail = false;
-          }else{
+          } else {
             detailHashTag = mapDetailHashtag[keys];
             final videos = mapDetailHashtag[keys]?.vid ?? [];
             final diaries = mapDetailHashtag[keys]?.diary ?? [];
@@ -937,14 +940,14 @@ class SearchNotifier with ChangeNotifier {
               } else {
                 _countTag = count;
               }
-            }else{
+            } else {
               _countTag = 0;
             }
             if (pics.isNotNullAndEmpty()) {
               final data = pics[0];
               final url = data != null ? ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
               _tagImageMain = url;
-            }else{
+            } else {
               _tagImageMain = '';
             }
           }
@@ -955,31 +958,33 @@ class SearchNotifier with ChangeNotifier {
         final currentSkip = hyppe == HyppeType.HyppeVid
             ? lenghtVid
             : hyppe == HyppeType.HyppeDiary
-            ? lenghtDiary
-            : hyppe == HyppeType.HyppePic ? lenghtPic : 0;
+                ? lenghtDiary
+                : hyppe == HyppeType.HyppePic
+                    ? lenghtPic
+                    : 0;
         if (currentSkip % 12 == 0) {
           if (!hasNext) {
             hasNext = true;
             final _res = await _hitApiGetDetail(context, keys.replaceAll(' ', ''), TypeApiSearch.detailHashTag, currentSkip, type: hyppe);
             if (_res != null) {
-              if(currentSkip != 0){
+              if (currentSkip != 0) {
                 final videos = _res.vid;
                 final diaries = _res.diary;
                 final pics = _res.pict;
-                if(hyppe == HyppeType.HyppePic){
-                  if(pics?.isEmpty ?? true){
+                if (hyppe == HyppeType.HyppePic) {
+                  if (pics?.isEmpty ?? true) {
                     isHasNextPic = false;
                   }
                 }
 
-                if(hyppe == HyppeType.HyppeDiary){
-                  if(diaries?.isEmpty ?? true){
+                if (hyppe == HyppeType.HyppeDiary) {
+                  if (diaries?.isEmpty ?? true) {
                     isHasNextDiary = false;
                   }
                 }
 
-                if(hyppe == HyppeType.HyppeVid){
-                  if(videos?.isEmpty ?? true){
+                if (hyppe == HyppeType.HyppeVid) {
+                  if (videos?.isEmpty ?? true) {
                     isHasNextVid = false;
                   }
                 }
@@ -994,7 +999,7 @@ class SearchNotifier with ChangeNotifier {
                     mapDetailHashtag[keys]?.diary?.add(diary);
                   }
                   // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
-                } else if (hyppe == HyppeType.HyppePic){
+                } else if (hyppe == HyppeType.HyppePic) {
                   for (ContentData pic in pics ?? []) {
                     // await pic.getBlob();
                     mapDetailHashtag[keys]?.pict?.add(pic);
@@ -1005,7 +1010,6 @@ class SearchNotifier with ChangeNotifier {
                   // _hashtagPic = [...(_hashtagPic ?? []), ...(pics ?? [])];
                 }
               }
-
             }
           }
         }
@@ -1029,15 +1033,14 @@ class SearchNotifier with ChangeNotifier {
         hasNext = false;
       }
     }
-
   }
 
-  Future saveThumb(ContentData dataitem) async{
-    if(!(dataitem.isApsara ?? true)){
+  Future saveThumb(ContentData dataitem) async {
+    if (!(dataitem.isApsara ?? true)) {
       final imageUrl = System().showUserPicture(dataitem.mediaThumbEndPoint);
-      if(imageUrl?.isNotEmpty ?? false){
+      if (imageUrl?.isNotEmpty ?? false) {
         final id = dataitem.postID;
-        if(id != null){
+        if (id != null) {
           System().saveThumbnail(imageUrl!, id);
         }
       }
@@ -1056,71 +1059,76 @@ class SearchNotifier with ChangeNotifier {
       print('the interest id: $keys');
       if (reload) {
         initDetailInterest();
-        if(interestContents[keys] == null){
+        if (interestContents[keys] == null) {
           interestContents[keys] = SearchContentModel();
         }
 
         notifyListeners();
-        _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppePic).then((value){
-          if(value != null){
+        _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppePic).then((value) {
+          if (value != null) {
             interestContents[keys]?.pict = value.pict;
             notifyListeners();
-            Future.delayed(const Duration(milliseconds: 500), (){
+            Future.delayed(const Duration(milliseconds: 500), () {
               loadIntDetailPic = false;
             });
           }
         });
-        _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppeDiary).then((value){
-          if(value != null){
+        _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppeDiary).then((value) {
+          if (value != null) {
             interestContents[keys]?.diary = value.diary;
             notifyListeners();
-            Future.delayed(const Duration(milliseconds: 500), (){
+            Future.delayed(const Duration(milliseconds: 500), () {
               loadIntDetailDiary = false;
             });
           }
         });
-        await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppeVid).then((value){
-          if(value != null){
+        await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, 0, type: HyppeType.HyppeVid).then((value) {
+          if (value != null) {
             interestContents[keys]?.vid = value.vid;
             notifyListeners();
-            Future.delayed(const Duration(milliseconds: 500), (){
+            Future.delayed(const Duration(milliseconds: 500), () {
               loadIntDetailVid = false;
             });
           }
         });
-
       } else {
+        if (isloadingGetMore) {
+          return;
+        }
         final currentSkip = hyppe == HyppeType.HyppeVid
             ? lenghtVid
             : hyppe == HyppeType.HyppeDiary
                 ? lenghtDiary
-                : hyppe == HyppeType.HyppePic ? lenghtPic : 0;
+                : hyppe == HyppeType.HyppePic
+                    ? lenghtPic
+                    : 0;
         if (currentSkip % 12 == 0) {
-          if(hyppe == HyppeType.HyppeVid){
+          if (hyppe == HyppeType.HyppeVid) {
             intHasNextVid = true;
-          }else if(hyppe == HyppeType.HyppeDiary){
+          } else if (hyppe == HyppeType.HyppeDiary) {
             intHasNextDiary = true;
-          }else if(hyppe == HyppeType.HyppePic){
+          } else if (hyppe == HyppeType.HyppePic) {
             intHasNextPic = true;
           }
+          isloadingGetMore = true;
           final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailInterest, currentSkip, type: hyppe);
           if (_res != null) {
-            if(currentSkip != 0){
+            if (currentSkip != 0) {
               final videos = _res.vid;
               final diaries = _res.diary;
               final pics = _res.pict;
-              if(hyppe == HyppeType.HyppeVid){
-                if(videos?.isEmpty ?? true){
+              if (hyppe == HyppeType.HyppeVid) {
+                if (videos?.isEmpty ?? true) {
                   intHasNextVid = false;
                 }
               }
-              if(hyppe == HyppeType.HyppeDiary){
-                if(diaries?.isEmpty ?? true){
+              if (hyppe == HyppeType.HyppeDiary) {
+                if (diaries?.isEmpty ?? true) {
                   intHasNextDiary = false;
                 }
               }
-              if(hyppe == HyppeType.HyppePic){
-                if(pics?.isEmpty ?? true){
+              if (hyppe == HyppeType.HyppePic) {
+                if (pics?.isEmpty ?? true) {
                   intHasNextPic = false;
                 }
               }
@@ -1135,7 +1143,7 @@ class SearchNotifier with ChangeNotifier {
                   interestContents[keys]?.diary?.add(diary);
                 }
                 // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
-              } else if (hyppe == HyppeType.HyppePic){
+              } else if (hyppe == HyppeType.HyppePic) {
                 for (final pic in pics ?? []) {
                   interestContents[keys]?.pict?.add(pic);
                 }
@@ -1143,9 +1151,9 @@ class SearchNotifier with ChangeNotifier {
               }
               notifyListeners();
             }
-
           }
         }
+        isloadingGetMore = false;
         hasNext = false;
       }
     } catch (e) {
@@ -1158,13 +1166,13 @@ class SearchNotifier with ChangeNotifier {
       if (loadIntDetailVid) {
         _loadIntDetailVid = false;
       }
-      if(hyppe == HyppeType.HyppeVid){
+      if (hyppe == HyppeType.HyppeVid) {
         _intHasNextVid = false;
       }
-      if(hyppe == HyppeType.HyppeDiary){
+      if (hyppe == HyppeType.HyppeDiary) {
         _intHasNextDiary = false;
       }
-      if(hyppe == HyppeType.HyppePic){
+      if (hyppe == HyppeType.HyppePic) {
         _intHasNextPic = false;
       }
       notifyListeners();
@@ -1180,61 +1188,69 @@ class SearchNotifier with ChangeNotifier {
       if (loadIntDetailVid) {
         _loadIntDetailVid = false;
       }
-      if(hyppe == HyppeType.HyppeVid){
+      if (hyppe == HyppeType.HyppeVid) {
         _intHasNextVid = false;
       }
-      if(hyppe == HyppeType.HyppeDiary){
+      if (hyppe == HyppeType.HyppeDiary) {
         _intHasNextDiary = false;
       }
-      if(hyppe == HyppeType.HyppePic){
+      if (hyppe == HyppeType.HyppePic) {
         _intHasNextPic = false;
       }
       notifyListeners();
     }
   }
 
-
-
   List<Widget> getGridHashtag(String hashtag, bool fromRoute, ScrollController controller, double top) {
     Map<String, List<Widget>> map = {
       'Vid': [
-        GridHashtagVid(tag: hashtag, controller: controller, top: top,),
+        GridHashtagVid(
+          tag: hashtag,
+          controller: controller,
+          top: top,
+        ),
         if ((_detailHashTag?.vid ?? []).length % limitSearch == 0 && (_detailHashTag?.vid ?? []).isNotEmpty && isHasNextVid)
           SliverToBoxAdapter(
-            child: Container(
-                margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
+            child: Container(margin: EdgeInsets.only(bottom: fromRoute ? 90 : 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
           )
       ],
       'Diary': [
-        GridHashtagDiary(tag: hashtag, controller: controller, top: top,),
+        GridHashtagDiary(
+          tag: hashtag,
+          controller: controller,
+          top: top,
+        ),
         if ((_detailHashTag?.diary ?? []).length % limitSearch == 0 && (_detailHashTag?.diary ?? []).isNotEmpty && isHasNextDiary)
           SliverToBoxAdapter(
-            child: Container(
-                margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
+            child: Container(margin: EdgeInsets.only(bottom: fromRoute ? 90 : 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
           )
       ],
       'Pic': [
-        GridHashtagPic(tag: hashtag, controller: controller, top: top,),
+        GridHashtagPic(
+          tag: hashtag,
+          controller: controller,
+          top: top,
+        ),
         if ((_detailHashTag?.pict ?? []).length % limitSearch == 0 && (_detailHashTag?.pict ?? []).isNotEmpty && isHasNextPic)
           SliverToBoxAdapter(
-            child: Container(
-                margin: EdgeInsets.only(bottom: fromRoute ? 90: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
+            child: Container(margin: EdgeInsets.only(bottom: fromRoute ? 90 : 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
           )
       ]
     };
     final key = System().getTitleHyppe(hashtagTab);
     return map[key] ??
         [
-          GridHashtagVid(tag: hashtag, controller: controller, top: top,),
+          GridHashtagVid(
+            tag: hashtag,
+            controller: controller,
+            top: top,
+          ),
           if ((hashtagVid ?? []).length % limitSearch == 0)
             SliverToBoxAdapter(
-              child: Container(
-                margin: EdgeInsets.only(bottom: fromRoute ? 90: 30),
-                  width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
+              child: Container(margin: EdgeInsets.only(bottom: fromRoute ? 90 : 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
             )
         ];
   }
-
 
   Future<SearchContentModel?> _hitApiGetDetail(BuildContext context, String keys, TypeApiSearch typeApi, int currentSkip, {HyppeType? type}) async {
     try {
@@ -1263,9 +1279,9 @@ class SearchNotifier with ChangeNotifier {
       }
 
       final notifier = SearchContentBloc();
-      if(typeApi == TypeApiSearch.detailInterest){
+      if (typeApi == TypeApiSearch.detailInterest) {
         await notifier.getDetailContents(context, param, type: typeApi);
-      }else{
+      } else {
         await notifier.getSearchContent(context, param, type: typeApi);
       }
 
@@ -1284,8 +1300,7 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  Future<List<ContentData>> getDetailContents(BuildContext context, String keys, HyppeType type, TypeApiSearch api, int limit,
-      {int? skip}) async {
+  Future<List<ContentData>> getDetailContents(BuildContext context, String keys, HyppeType type, TypeApiSearch api, int limit, {int? skip}) async {
     try {
       loadPlaylist = true;
       String email = SharedPreference().readStorage(SpKeys.email);
@@ -1300,7 +1315,7 @@ class SearchNotifier with ChangeNotifier {
         "limit": limit,
       };
 
-      if(api == TypeApiSearch.normal){
+      if (api == TypeApiSearch.normal) {
         param['listtag'] = false;
         param['listuser'] = false;
       }
@@ -1310,7 +1325,11 @@ class SearchNotifier with ChangeNotifier {
       final fetch = notifier.searchContentFetch;
       if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
         final _res = SearchContentModel.fromJson(fetch.data[0]);
-        return type == HyppeType.HyppePic ? (_res.pict ?? []) : type == HyppeType.HyppeDiary ? (_res.diary ?? []) : (_res.vid ?? []);
+        return type == HyppeType.HyppePic
+            ? (_res.pict ?? [])
+            : type == HyppeType.HyppeDiary
+                ? (_res.diary ?? [])
+                : (_res.vid ?? []);
       } else if (fetch.searchContentState == SearchContentState.getSearchContentBlocError) {
         throw 'getDetailContents failed';
       } else {
@@ -1319,38 +1338,37 @@ class SearchNotifier with ChangeNotifier {
     } catch (e) {
       'Error getDetailContents: $e'.logger();
       return [];
-    }finally{
+    } finally {
       loadPlaylist = false;
     }
   }
 
   String _lastKey = '';
-  setEmptyLastKey(){
+  setEmptyLastKey() {
     _lastKey = '';
   }
 
   Future getDataSearch(BuildContext context, {SearchLoadData typeSearch = SearchLoadData.all, bool reload = true, bool forceLoad = false}) async {
     checkConnection();
     String search = searchController.text;
-    if(forceLoad){
+    if (forceLoad) {
       hitApiSearchData(context, search, typeSearch: typeSearch, reload: reload);
-    }else{
+    } else {
       print('result reload: $_lastKey $search');
-      if(search.isNotEmpty){
-        if(_lastKey != search){
+      if (search.isNotEmpty) {
+        if (_lastKey != search) {
           _lastKey = search;
           hitApiSearchData(context, search, typeSearch: typeSearch, reload: reload);
-        }else if(forceLoad){
+        } else if (forceLoad) {
           hitApiSearchData(context, search, typeSearch: typeSearch, reload: reload);
         }
-      }else{
+      } else {
         setEmptyLastKey();
       }
     }
-
   }
 
-  Future hitApiSearchData(BuildContext context, String search, {SearchLoadData typeSearch = SearchLoadData.all, bool reload = true}) async{
+  Future hitApiSearchData(BuildContext context, String search, {SearchLoadData typeSearch = SearchLoadData.all, bool reload = true}) async {
     try {
       final lenghtVid = _searchVid?.length ?? limitSearch;
       final lenghtDiary = _searchDiary?.length ?? limitSearch;
@@ -1360,12 +1378,12 @@ class SearchNotifier with ChangeNotifier {
       final int currentSkip = typeSearch == SearchLoadData.all
           ? 0
           : typeSearch == SearchLoadData.hashtag
-          ? (_searchHashtag?.length ?? 0)
-          : typeSearch == SearchLoadData.content
-          ? skipContent
-          : typeSearch == SearchLoadData.user
-          ? _searchUsers?.length ?? 0
-          : 0;
+              ? (_searchHashtag?.length ?? 0)
+              : typeSearch == SearchLoadData.content
+                  ? skipContent
+                  : typeSearch == SearchLoadData.user
+                      ? _searchUsers?.length ?? 0
+                      : 0;
       if ((currentSkip != 0 && typeSearch == SearchLoadData.all)) {
         throw 'Error get all because the state is not from beginning $currentSkip';
       } else if (currentSkip % limitSearch != 0) {
@@ -1375,7 +1393,7 @@ class SearchNotifier with ChangeNotifier {
       }
 
       if (reload) {
-        if(typeSearch == TypeApiSearch.detailHashTag){
+        if (typeSearch == TypeApiSearch.detailHashTag) {
           initAllHasNext();
         }
         isLoading = true;
@@ -1416,7 +1434,7 @@ class SearchNotifier with ChangeNotifier {
             "listdiary": false,
             "listpict": false,
             "listtag": false,
-            "skip": reload ? 0 :currentSkip,
+            "skip": reload ? 0 : currentSkip,
             "limit": limitSearch,
           };
           await _hitApiGetSearchData(context, param, typeSearch, reload);
@@ -1483,19 +1501,19 @@ class SearchNotifier with ChangeNotifier {
             final videos = _res.vid ?? [];
             final diaries = _res.diary ?? [];
             final picts = _res.pict ?? [];
-            if(videos.isEmpty){
+            if (videos.isEmpty) {
               isHasNextVid = false;
-            }else{
+            } else {
               searchVid = [...(searchVid ?? []), ...videos];
             }
-            if(diaries.isEmpty){
+            if (diaries.isEmpty) {
               isHasNextDiary = false;
-            }else{
+            } else {
               searchDiary = [...(searchDiary ?? []), ...diaries];
             }
-            if(picts.isEmpty){
+            if (picts.isEmpty) {
               isHasNextPic = false;
-            }else{
+            } else {
               searchPic = [...(searchPic ?? []), ...picts];
             }
 
@@ -1607,8 +1625,6 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-
-
   void moveSearchMore() {
     print('kesini seacrhmore');
     focusNode1.unfocus();
@@ -1619,10 +1635,10 @@ class SearchNotifier with ChangeNotifier {
   void backPage() {
     searchController1.clear();
     setEmptyLastKey();
-    if(isFromComplete){
+    if (isFromComplete) {
       layout = SearchLayout.searchMore;
       _isFromComplete = false;
-    }else{
+    } else {
       layout = SearchLayout.first;
       _isFromComplete = false;
     }
@@ -1633,14 +1649,14 @@ class SearchNotifier with ChangeNotifier {
     searchController1.text = '';
     // setEmptyLastKey();
     // searchController.clear();
-    if(layout == SearchLayout.searchMore){
+    if (layout == SearchLayout.searchMore) {
       layout = SearchLayout.first;
       _isFromComplete = false;
-    }else{
-      if(isFromComplete){
+    } else {
+      if (isFromComplete) {
         layout = SearchLayout.searchMore;
         _isFromComplete = false;
-      }else{
+      } else {
         layout = SearchLayout.first;
         _isFromComplete = false;
       }
@@ -1724,7 +1740,7 @@ class SearchNotifier with ChangeNotifier {
 
   bool _loadPlaylist = false;
   bool get loadPlaylist => _loadPlaylist;
-  set loadPlaylist(bool state){
+  set loadPlaylist(bool state) {
     _loadPlaylist = state;
     notifyListeners();
   }
@@ -1746,127 +1762,143 @@ class SearchNotifier with ChangeNotifier {
     print("========== height box ${heightIndex}");
   }
 
-  navigateToSeeAllScreen4(BuildContext context, List<ContentData> data, int index, HyppeType type, TypeApiSearch api, String keys, PageSrc pageSrc, ScrollController controller, double heightBox, double heightTop) async {
+  navigateToSeeAllScreen4(
+      BuildContext context, List<ContentData> data, int index, HyppeType type, TypeApiSearch api, String keys, PageSrc pageSrc, ScrollController controller, double heightBox, double heightTop) async {
     context.read<ReportNotifier>().inPosition = contentPosition.myprofile;
     final connect = await System().checkConnections();
     if (connect) {
       var result;
 
-      switch(type){
+      switch (type) {
         case HyppeType.HyppePic:
           final pics = await getDetailContents(context, keys, type, api, data.length);
-          if(pageSrc == PageSrc.searchData){
+          if (pageSrc == PageSrc.searchData) {
             searchPic = pics;
-          }else if(pageSrc == PageSrc.hashtag){
+          } else if (pageSrc == PageSrc.hashtag) {
             mapDetailHashtag[keys]?.pict = pics;
-          }else if(pageSrc == PageSrc.interest){
+          } else if (pageSrc == PageSrc.interest) {
             interestContents[keys]?.pict = pics;
           }
-          result = await _routing.move(Routes.scrollPic, argument: SlidedPicDetailScreenArgument(
-            page: index,
-            type: TypePlaylist.search,
-            titleAppbar: pageSrc == PageSrc.hashtag ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:  [
-                CustomTextWidget(textToDisplay: language.topPic ?? 'Top Pic', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
-                fourPx,
-                Text(
-                  "#$keys",
-                  style: TextStyle(color: kHyppeTextLightPrimary),
-                )
-              ],
-            ) : const Text(
-              "Pic",
-              style: TextStyle(color: kHyppeTextLightPrimary),
-            ),
-            pageSrc: pageSrc,
-            picData: pics,
-            key: keys,
-              heightBox: heightBox,
-              heightTopProfile: heightTop,
-              scrollController: controller
-          ));
+          result = await _routing.move(Routes.scrollPic,
+              argument: SlidedPicDetailScreenArgument(
+                  page: index,
+                  type: TypePlaylist.search,
+                  titleAppbar: pageSrc == PageSrc.hashtag
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextWidget(
+                              textToDisplay: language.topPic ?? 'Top Pic',
+                              textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),
+                            ),
+                            fourPx,
+                            Text(
+                              "#$keys",
+                              style: TextStyle(color: kHyppeTextLightPrimary),
+                            )
+                          ],
+                        )
+                      : const Text(
+                          "Pic",
+                          style: TextStyle(color: kHyppeTextLightPrimary),
+                        ),
+                  pageSrc: pageSrc,
+                  picData: pics,
+                  key: keys,
+                  heightBox: heightBox,
+                  heightTopProfile: heightTop,
+                  scrollController: controller));
           // _routing.move(Routes.picSlideDetailPreview,
           //     argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
-          if(result != null){
+          if (result != null) {
             scrollAuto(result);
           }
 
           break;
         case HyppeType.HyppeDiary:
           final diaries = await getDetailContents(context, keys, type, api, data.length);
-          if(pageSrc == PageSrc.searchData){
+          if (pageSrc == PageSrc.searchData) {
             searchDiary = diaries;
-          }else if(pageSrc == PageSrc.hashtag){
+          } else if (pageSrc == PageSrc.hashtag) {
             mapDetailHashtag[keys]?.diary = diaries;
-          }else if(pageSrc == PageSrc.interest){
+          } else if (pageSrc == PageSrc.interest) {
             interestContents[keys]?.diary = diaries;
           }
-          result = await _routing.move(Routes.scrollDiary, argument: SlidedDiaryDetailScreenArgument(
-            page: index,
-            type: TypePlaylist.search,
-            titleAppbar:  pageSrc == PageSrc.hashtag ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:  [
-                CustomTextWidget(textToDisplay: language.topDiaty ?? 'Top Diary', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
-                fourPx,
-                Text(
-                  "#$keys",
-                  style: TextStyle(color: kHyppeTextLightPrimary),
-                )
-              ],
-            ) : const Text(
-              "Diary",
-              style: TextStyle(color: kHyppeTextLightPrimary),
-            ),
-            pageSrc: pageSrc,
-            diaryData: diaries,
-              key: keys,
-              heightBox: heightBox,
-              heightTopProfile: heightTop,
-              scrollController: controller
-          ));
+          result = await _routing.move(Routes.scrollDiary,
+              argument: SlidedDiaryDetailScreenArgument(
+                  page: index,
+                  type: TypePlaylist.search,
+                  titleAppbar: pageSrc == PageSrc.hashtag
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextWidget(
+                              textToDisplay: language.topDiaty ?? 'Top Diary',
+                              textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),
+                            ),
+                            fourPx,
+                            Text(
+                              "#$keys",
+                              style: TextStyle(color: kHyppeTextLightPrimary),
+                            )
+                          ],
+                        )
+                      : const Text(
+                          "Diary",
+                          style: TextStyle(color: kHyppeTextLightPrimary),
+                        ),
+                  pageSrc: pageSrc,
+                  diaryData: diaries,
+                  key: keys,
+                  heightBox: heightBox,
+                  heightTopProfile: heightTop,
+                  scrollController: controller));
           // _routing.move(Routes.diaryDetail,
           //     argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
-          if(result != null){
+          if (result != null) {
             scrollAuto(result);
           }
           break;
         case HyppeType.HyppeVid:
           final vids = await getDetailContents(context, keys, type, api, data.length);
-          if(pageSrc == PageSrc.searchData){
+          if (pageSrc == PageSrc.searchData) {
             searchVid = vids;
-          }else if(pageSrc == PageSrc.hashtag){
+          } else if (pageSrc == PageSrc.hashtag) {
             mapDetailHashtag[keys]?.vid = vids;
-          }else if(pageSrc == PageSrc.interest){
+          } else if (pageSrc == PageSrc.interest) {
             interestContents[keys]?.vid = vids;
           }
-          result = await _routing.move(Routes.scrollVid, argument: SlidedVidDetailScreenArgument(
-            page: index,
-            type: TypePlaylist.search,
-            titleAppbar:  pageSrc == PageSrc.hashtag ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:  [
-                CustomTextWidget(textToDisplay: language.topVid ?? 'Top Vic', textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),),
-                fourPx,
-                Text(
-                  "#$keys",
-                  style: TextStyle(color: kHyppeTextLightPrimary),
-                )
-              ],
-            ) : const Text(
-              "Vid",
-              style: TextStyle(color: kHyppeTextLightPrimary),
-            ),
-            pageSrc: pageSrc,
-            vidData: vids,
-              key: keys,
-              heightBox: heightBox,
-              heightTopProfile: heightTop,
-              scrollController: controller
-          ));
+          result = await _routing.move(Routes.scrollVid,
+              argument: SlidedVidDetailScreenArgument(
+                  page: index,
+                  type: TypePlaylist.search,
+                  titleAppbar: pageSrc == PageSrc.hashtag
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextWidget(
+                              textToDisplay: language.topVid ?? 'Top Vic',
+                              textStyle: TextStyle(fontSize: 10, color: kHyppeBurem),
+                            ),
+                            fourPx,
+                            Text(
+                              "#$keys",
+                              style: TextStyle(color: kHyppeTextLightPrimary),
+                            )
+                          ],
+                        )
+                      : const Text(
+                          "Vid",
+                          style: TextStyle(color: kHyppeTextLightPrimary),
+                        ),
+                  pageSrc: pageSrc,
+                  vidData: vids,
+                  key: keys,
+                  heightBox: heightBox,
+                  heightTopProfile: heightTop,
+                  scrollController: controller));
           // result = await _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
-          if(result != null){
+          if (result != null) {
             scrollAuto(result);
           }
           break;

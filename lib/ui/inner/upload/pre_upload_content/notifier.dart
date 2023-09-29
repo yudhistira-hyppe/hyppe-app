@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart' as dio;
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -30,7 +32,6 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_c
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
@@ -583,6 +584,13 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
+  bool _isLoadVideo = false;
+  bool get isLoadVideo => _isLoadVideo;
+  set isLoadVideo(bool state) {
+    _isLoadVideo = state;
+    notifyListeners();
+  }
+
   Future _createPostContentV2(BuildContext context, bool mounted) async {
     final BuildContext context = Routing.navigatorKey.currentContext!;
     final orientation = context.read<CameraNotifier>().orientation;
@@ -716,8 +724,8 @@ class PreUploadContentNotifier with ChangeNotifier {
           dio.Response res = value;
           "return data ${jsonEncode(res.data['data'])}".loggerV2();
           ContentData uploadedData = ContentData.fromJson(res.data['data']);
-          (Routing.navigatorKey.currentContext ?? context).read<SelfProfileNotifier>().updateProfilePost(featureType ?? FeatureType.pic, uploadedData);
-          (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().onUploadedSelfUserContent(context: context, contentData: uploadedData);
+          if (mounted) (Routing.navigatorKey.currentContext ?? context).read<SelfProfileNotifier>().updateProfilePost(featureType ?? FeatureType.pic, uploadedData);
+          if (mounted) (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().onUploadedSelfUserContent(context: context, contentData: uploadedData);
         }
         if (_boostContent != null) _boostContentBuy(context);
         context.read<PreviewVidNotifier>().canPlayOpenApps = true;
@@ -853,22 +861,18 @@ class PreUploadContentNotifier with ChangeNotifier {
   void checkForCompress() async {
     if (isEdit == false && (featureType == FeatureType.diary || featureType == FeatureType.vid)) {
       await getVideoSize();
-      Duration? _duration;
-      int? _size;
-      await System().getVideoMetadata(File(fileContent?[0] ?? '').path).then((value) {
-        _size = value?.filesize ?? 0;
-        print('sebelum di bagi $_size');
-        var inMB = _size! / 1024 / 1024;
-        _size = inMB.toInt();
-        _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
-
-        // _duration.inSeconds
-      });
-
-      print("size video ini $_size");
-      print(_duration?.inSeconds);
-      var normalSize = _duration!.inSeconds * 0.91;
-      if (_size! >= normalSize) {
+      Duration? duration;
+      int? size;
+      final value = await System().getVideoMetadata(File(fileContent?[0] ?? '').path);
+      size = value?.filesize ?? 0;
+      print('sebelum di bagi $size');
+      var inMB = size / 1024 / 1024;
+      size = inMB.toInt();
+      duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
+      print("size video ini $size");
+      print(duration.inSeconds);
+      var normalSize = duration.inSeconds * 0.91;
+      if (size >= normalSize) {
         _isCompress = true;
       } else {
         _isCompress = false;

@@ -14,6 +14,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/sticker/sticker_model.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
@@ -33,6 +34,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wakelock/wakelock.dart';
 
 import '../../../../../../app.dart';
+import '../../../../../../core/models/collection/advertising/ads_video_data.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
 
 class StoryPlayerPage extends StatefulWidget {
@@ -293,7 +295,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         });
       });
       final fixContext = Routing.navigatorKey.currentContext;
-      System().increaseViewCount(fixContext ?? context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData());
+      System().increaseViewCount(fixContext ?? context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()).whenComplete(() {
+        _showAds(Routing.navigatorKey.currentContext ?? context);
+      });
       isPlay = true;
     });
     fAliplayer?.setOnRenderingStart((playerId) {
@@ -427,6 +431,26 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     });
 
     globalAliPlayer = fAliplayer;
+  }
+
+  ///ADS IN BETWEEN === Hariyanto Lukman ===
+  _showAds(BuildContext context) async {
+    //for ads
+    // getCountVid();
+    // await _newInitAds(true);
+    final count = context.getAdsCount();
+    if(count == 5){
+      final adsData = await context.getInBetweenAds();
+      if(adsData != null){
+        final auth = await context.getAuth(context, videoId: adsData.videoId ?? '');
+        pause();
+        System().adsPopUp(context, adsData, auth).whenComplete(() {
+          play();
+        });
+      }
+
+    }
+    context.incrementAdsCount();
   }
 
   void storyComplete(StoriesPlaylistNotifier not) {
@@ -1034,6 +1058,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     (Routing.navigatorKey.currentContext ?? context).read<StoriesPlaylistNotifier>().textEditingController.clear();
     emojiController.reset();
     System().increaseViewCount(fixContext ?? context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()).whenComplete(() {
+      _showAds(Routing.navigatorKey.currentContext ?? context);
       storyRef.setViewed(_curIdx, _curChildIdx);
     });
     fAliplayer?.stop();

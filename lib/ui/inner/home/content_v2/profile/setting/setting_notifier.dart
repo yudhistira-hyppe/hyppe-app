@@ -10,6 +10,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.da
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/outer/login/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_interest/user_interest_notifier.dart';
@@ -91,6 +92,9 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
       context.read<TransactionNotifier>().dataTransaction = [];
       context.read<TransactionNotifier>().dataAllTransaction = [];
       context.read<TransactionNotifier>().dataAcccount = [];
+
+      context.read<MainNotifier>().tutorialData = [];
+
       _eventService.cleanUp();
       _streamService.reset();
       context.read<WelcomeLoginNotifier>().signOutGoogle.handleSignOut();

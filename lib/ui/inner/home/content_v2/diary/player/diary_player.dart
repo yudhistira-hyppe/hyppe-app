@@ -136,10 +136,10 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     // stopwatch = new Stopwatch()..start();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'DiaryPlayerPage');
     super.initState();
+    _pageController = PageController(initialPage: widget.argument.index.toInt());
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _curIdx = widget.argument.index.toInt();
       _lastCurIndex = widget.argument.index.toInt();
-      _pageController = PageController(initialPage: widget.argument.index.toInt());
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
       initDiary();
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: "${Random().nextInt(60).toDouble()}");

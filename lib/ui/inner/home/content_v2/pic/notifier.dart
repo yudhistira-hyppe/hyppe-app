@@ -6,6 +6,7 @@ import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -13,12 +14,13 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/inner/search_v2/notifier.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import '../../../../../app.dart';
 import '../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
+import '../../../../../core/models/collection/advertising/ads_video_data.dart';
 import '../../notifier_v2.dart';
 
 class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
@@ -42,6 +44,11 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
 
   set pic(List<ContentData>? val) {
     _pic = val;
+    notifyListeners();
+  }
+
+  setIsViewed(int index) {
+    pic?[index].isViewed = true;
     notifyListeners();
   }
 
@@ -95,11 +102,14 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
         // }
 
         if (scrollController.hasClients) {
-          scrollController.animateTo(
-            scrollController.initialScrollOffset,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeIn,
-          );
+          homeClick = true;
+          // notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+          (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+          // scrollController.animateTo(
+          //   scrollController.initialScrollOffset,
+          //   duration: const Duration(milliseconds: 300),
+          //   curve: Curves.easeIn,
+          // );
         }
       } else {
         pic = [...(pic ?? [] as List<ContentData>)] + res;
@@ -146,6 +156,42 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
       // }
     } catch (e) {
       'load pic list: ERROR: $e'.logger();
+    }
+  }
+
+  int _nextAdsShowed = 6;
+  int get nextAdsShowed => _nextAdsShowed;
+  set nextAdsShowed(int state) {
+    _nextAdsShowed = state;
+    notifyListeners();
+  }
+
+  initAdsCounter() {
+    _nextAdsShowed = 6;
+  }
+
+  bool loadAds = false;
+  // bool get loadAds => _loadAds;
+  // set loadAds(bool state){
+  //   _loadAds = state;
+  //   notifyListeners();
+  // }
+
+  void setAdsData(int index, AdsData? adsData) {
+    final withAds = pic?.where((element) => element.inBetweenAds != null).length ?? 0;
+    final adsSize = pic?.length ?? 0;
+    loadAds = false;
+    if (adsData != null) {
+      if (adsSize > nextAdsShowed) {
+        if (pic?[nextAdsShowed].inBetweenAds == null) {
+          pic?.insert(nextAdsShowed, ContentData(inBetweenAds: adsData));
+          _nextAdsShowed = _nextAdsShowed + 6 + withAds;
+          notifyListeners();
+        }
+      }
+    } else {
+      pic?.removeAt(index);
+      notifyListeners();
     }
   }
 

@@ -148,24 +148,35 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
 
   Widget empty() {
     return Container(
-      padding: const EdgeInsets.all(40.0),
+      padding: const EdgeInsets.all(20.0),
       height: SizeConfig.screenWidth! * 1.1,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         children: [
           Text("${lang?.youHaveNotAchievedAnythingYet}",
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
               )),
           twelvePx,
-          Text(
-            "${lang?.joinTheChallengeAndGetOther}",
-            textAlign: TextAlign.center,
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20),
+            child: Text(
+              "${lang?.joinTheChallengeAndGetOther}",
+              style: const TextStyle(color: kHyppeBurem),
+              textAlign: TextAlign.center,
+            ),
           ),
           twentyFourPx,
-          ButtonChallangeWidget(bgColor: kHyppePrimary, text: "${lang?.joinTheChallengeNow}"),
+          ButtonChallangeWidget(
+            bgColor: kHyppePrimary,
+            text: "${lang?.joinTheChallengeNow}",
+            function: () {
+              Routing().moveBack();
+            },
+          ),
         ],
       ),
     );

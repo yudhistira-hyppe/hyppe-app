@@ -327,26 +327,44 @@ class _AdsScreenState extends State<AdsScreen> {
                     : Expanded(
                       child: Row(
                           children: [
-                            CustomBaseCacheImage(
-                              imageUrl: data.avatar?.fullLinkURL,
-                              memCacheWidth: 200,
-                              memCacheHeight: 200,
-                              imageBuilder: (_, imageProvider) {
-                                return Container(
-                                  width: 36,
-                                  height: 36,
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(18)),
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: imageProvider,
-                                    ),
-                                  ),
-                                );
+                            GestureDetector(
+                              onTap:(){
+                                Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data.email));
                               },
-                              errorWidget: (_, __, ___) {
-                                return Container(
+                              child: CustomBaseCacheImage(
+                                imageUrl: data.avatar?.fullLinkURL,
+                                memCacheWidth: 200,
+                                memCacheHeight: 200,
+                                imageBuilder: (_, imageProvider) {
+                                  return Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(18)),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: imageProvider,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                errorWidget: (_, __, ___) {
+                                  return Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: const BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(18)),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: AssetImage(
+                                            '${AssetPath.pngPath}profile-error.jpg'),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                emptyWidget: Container(
                                   width: 36,
                                   height: 36,
                                   decoration: const BoxDecoration(
@@ -355,21 +373,8 @@ class _AdsScreenState extends State<AdsScreen> {
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
                                       image: AssetImage(
-                                          '${AssetPath.pngPath}content-error.png'),
+                                          '${AssetPath.pngPath}profile-error.jpg'),
                                     ),
-                                  ),
-                                );
-                              },
-                              emptyWidget: Container(
-                                width: 36,
-                                height: 36,
-                                decoration: const BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(18)),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage(
-                                        '${AssetPath.pngPath}content-error.png'),
                                   ),
                                 ),
                               ),
@@ -500,25 +505,25 @@ class _AdsScreenState extends State<AdsScreen> {
                       Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                     });
                   }else{
-                    try{
-                      final uri = Uri.parse(data.adsUrlLink ?? '');
-                      if (await canLaunchUrl(uri)) {
+                    if((data.adsUrlLink ?? '').withHttp()){
+                      try{
+                        final uri = Uri.parse(data.adsUrlLink ?? '');
+                        if (await canLaunchUrl(uri)) {
+                          adsView(context, widget.argument.data, secondsVideo,
+                              isClick: true);
+                          await launchUrl(
+                            uri,
+                            mode: LaunchMode.externalApplication,
+                          );
+                        } else {
+                          throw "Could not launch $uri";
+                        }
+                      }catch(e){
                         adsView(context, widget.argument.data, secondsVideo,
                             isClick: true);
-                        Navigator.pop(context);
-                        await launchUrl(
-                          uri,
-                          mode: LaunchMode.externalApplication,
-                        );
-                      } else {
-                        throw "Could not launch $uri";
+                        System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                       }
-                    }catch(e){
-                      adsView(context, widget.argument.data, secondsVideo,
-                          isClick: true);
-                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
                     }
-
                   }
                   // can't launch url, there is some error
                 }

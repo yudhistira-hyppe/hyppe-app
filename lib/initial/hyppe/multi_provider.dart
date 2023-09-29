@@ -11,7 +11,6 @@ import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
@@ -28,9 +27,11 @@ import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -67,6 +68,7 @@ import 'package:hyppe/ui/inner/search_v2/notifier.dart' as sV2;
 import '../../ui/constant/entities/comment_v2/notifier.dart';
 import '../../ui/inner/home/content_v2/help/detail_ticket/notifier.dart';
 import '../../ui/inner/home/content_v2/vid/playlist/notifier.dart';
+import '../../ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 
 class AppDependencies {
   static List<SingleChildWidget> inject({required HyppeNotifier rootNotifier}) => [
@@ -103,6 +105,7 @@ class AppDependencies {
         ChangeNotifierProvider(create: (context) => DiariesPlaylistNotifier()),
         ChangeNotifierProvider(create: (context) => PreUploadContentNotifier()),
         ChangeNotifierProvider(create: (context) => VidDetailNotifier()),
+        ChangeNotifierProvider(create: (context) => VideoNotifier()),
 
         ChangeNotifierProvider(create: (context) => cpV2.ChangePasswordNotifier()),
 
@@ -242,6 +245,8 @@ class AppDependencies {
         ChangeNotifierProvider<ScrollPicNotifier>(create: (context) => ScrollPicNotifier()),
         ChangeNotifierProvider<ScrollDiaryNotifier>(create: (context) => ScrollDiaryNotifier()),
         ChangeNotifierProvider<ScrollVidNotifier>(create: (context) => ScrollVidNotifier()),
-        ChangeNotifierProvider<ChallangeNotifier>(create: (context) => ChallangeNotifier())
+        ChangeNotifierProvider<ChallangeNotifier>(create: (context) => ChallangeNotifier()),
+        ChangeNotifierProvider<TutorNotifier>(create: (context) => TutorNotifier()),
+        ChangeNotifierProvider<VideoNotifier>(create: (context) => VideoNotifier()),
       ];
 }

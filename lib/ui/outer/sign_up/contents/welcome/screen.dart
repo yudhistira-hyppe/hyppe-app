@@ -67,7 +67,7 @@ class _SignUpWelcomeState extends State<SignUpWelcome> with SingleTickerProvider
                   ? Align(
                       alignment: const Alignment(0, 0.75),
                       child: CustomTextButton(
-                        onPressed: () => Routing().moveAndRemoveUntil(Routes.lobby, Routes.root),
+                        onPressed: () => Routing().moveAndRemoveUntil(Routes.homeTutor, Routes.root),
                         child: CustomTextWidget(
                           textToDisplay: notifier.language.completeLater ?? '',
                           textStyle: Theme.of(context).textTheme.button?.copyWith(color: Theme.of(context).colorScheme.primary),

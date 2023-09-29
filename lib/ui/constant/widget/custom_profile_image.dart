@@ -47,7 +47,7 @@ class CustomProfileImage extends StatelessWidget {
           child: Stack(
             children: [
               Padding(
-                padding:  EdgeInsets.all(
+                padding: EdgeInsets.all(
                   badge != null || allwaysUseBadgePadding ? (width * 0.08) : 0,
                 ),
                 child: ClipRRect(

@@ -157,7 +157,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
       });
       isPlay = true;
       dataSelected?.isDiaryPlay = true;
-      _initAds(context);
+      // _initAds(context);
     });
     fAliplayer?.setOnRenderingStart((playerId) {
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
@@ -359,15 +359,19 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
           region: DataSourceRelated.defaultRegion,
           playAuth: auth,
         );
-        setState(() {
-          isloading = false;
-        });
+        if(mounted){
+          setState(() {
+            isloading = false;
+          });
+        }
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
-      setState(() {
-        isloading = false;
-      });
+      if(mounted){
+        setState(() {
+          isloading = false;
+        });
+      }
       // 'Failed to fetch ads data $e'.logger();
     }
   }

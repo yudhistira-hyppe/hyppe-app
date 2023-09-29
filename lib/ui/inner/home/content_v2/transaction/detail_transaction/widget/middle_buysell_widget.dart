@@ -95,7 +95,7 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                   ),
                   data?.type == TransactionType.reward
                       ? CustomTextWidget(
-                          textToDisplay: "${data?.duration.toString()}s",
+                          textToDisplay: "${data?.duration ?? data?.skipTime }s",
                           textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.onBackground, fontSize: 10),
                           maxLines: 3,
                           textAlign: TextAlign.start,

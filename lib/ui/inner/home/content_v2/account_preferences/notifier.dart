@@ -415,7 +415,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
               hold = false;
               ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation ?? '');
               notifyListeners();
-              Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+              Routing().moveAndRemoveUntil(Routes.homeTutor, Routes.root);
             } else {
               final _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
               await _mainNotifier.initMain(context, onUpdateProfile: true);
@@ -734,6 +734,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
         }
       }
     } catch (e) {
+      print(e);
       ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
     }
   }

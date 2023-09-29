@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>compileBitcode</key>
-	<false/>
+	<true/>
 	<key>destination</key>
 	<string>export</string>
 	<key>method</key>
@@ -13,7 +13,7 @@
 	<key>stripSwiftSymbols</key>
 	<true/>
 	<key>teamID</key>
-	<string>6NS52F57C2</string>
+	<string>Z4489DNPPA</string>
 	<key>thinning</key>
 	<string>&lt;none&gt;</string>
 </dict>

@@ -8,13 +8,16 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../ui/inner/message_v2/notifier.dart';
 import '../../ui/inner/notification/notifier.dart';
 import '../../ux/path.dart';
 import '../../ux/routing.dart';
 import '../arguments/discuss_argument.dart';
+import '../arguments/main_argument.dart';
 import '../bloc/message_v2/bloc.dart';
 import '../models/collection/message_v2/message_data_v2.dart';
 
@@ -136,7 +139,17 @@ class NotificationService {
           final index1 = result.indexWhere((element) => element.disqusLogs[0].sender == sender);
           "array yg di dapat $index1".logger();
           notifier.onClickUser(materialAppKey.currentContext!, result[index1]);
-        } else {
+        } else if(map['url'] != null){
+          if(isFromSplash){
+            page = 3;
+          }else{
+            Routing().moveAndRemoveUntil(
+                Routes.lobby,
+                Routes.lobby,
+                argument: MainArgument(canShowAds: false, page: 3));
+
+          }
+        }else {
           throw 'Not recognize the type of the object of the notification ';
         }
       }
@@ -177,7 +190,7 @@ class NotificationService {
 
   // show notification
 
-  Future showNotification(RemoteMessage message, {MessageDataV2? data, String? idNotif}) async {
+  Future showNotification(RemoteMessage message, {MessageDataV2? data, String? idNotif, isBackground = false}) async {
     print("===''''-- ${message.hashCode}");
     if (idNotif != null) {
       try {
@@ -205,6 +218,7 @@ class NotificationService {
       } else {
         print("masuk 2");
         final Map<String, dynamic> jsonNotif = message.data;
+        jsonNotif['isBackground'] = isBackground;
         final value = NotificationBody.fromJson(jsonNotif);
         // var body;
         // Platform.isIOS ? body = json.decode(message.notification?.body ?? '') : '';
@@ -213,13 +227,15 @@ class NotificationService {
           value.title ?? message.notification?.title,
           message.data['body'],
           platformChannelSpecifics,
-          payload: Platform.isIOS ? json.encode(message.data) : json.encode(message.data),
+          payload: Platform.isIOS ? json.encode(jsonNotif) : json.encode(jsonNotif),
         );
       }
     } catch (e) {
       print("===error $e");
       if (message.notification != null) {
         print("======= test notif ${message.data}");
+        final Map<String, dynamic> jsonNotif = message.data;
+        jsonNotif['isBackground'] = isBackground;
         // final Map<String, dynamic> map = json.decode(message.notification?.body ?? '{}');
         var body;
         // Platform.isIOS ? body = json.decode(message.notification?.body ?? '') : '';
@@ -229,7 +245,7 @@ class NotificationService {
           message.notification?.body,
           // message.notification?.body,
           platformChannelSpecifics,
-          payload: Platform.isIOS ? json.encode(message.data) : json.encode(message.data),
+          payload: Platform.isIOS ? json.encode(jsonNotif) : json.encode(jsonNotif),
         );
       }
       e.logger();
@@ -243,8 +259,9 @@ class NotificationBody {
   String? message;
   String? title;
   String? index;
+  String? url;
 
-  NotificationBody({this.postId, this.postType, this.message, this.index});
+  NotificationBody({this.postId, this.postType, this.message, this.index, this.url});
 
   NotificationBody.fromJson(Map<String, dynamic> json) {
     postId = json['postID'];
@@ -252,6 +269,7 @@ class NotificationBody {
     message = json['body'];
     title = json['title'];
     index = json['index'];
+    url = json['url'];
   }
 
   Map<String, dynamic> toJson() {
@@ -260,6 +278,7 @@ class NotificationBody {
     result['postType'] = postType;
     result['message'] = message;
     result['index'] = index;
+    result['url'] = url;
     return result;
   }
 }
