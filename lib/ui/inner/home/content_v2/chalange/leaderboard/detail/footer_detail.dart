@@ -40,10 +40,17 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
               twoWidget = true;
             }
           }
-
           if (challengeData?.metrik?[0].interaksiKonten?.isNotEmpty ?? [].isEmpty) {
-            if (((challengeData?.metrik?[0].interaksiKonten?[0].suka?.isNotEmpty ?? [].isEmpty) || (challengeData?.metrik?[0].interaksiKonten?[0].tonton?.isNotEmpty ?? [].isEmpty)) &&
-                (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty)) {
+            var dataChallange = challengeData?.metrik?[0].interaksiKonten;
+            var suka = dataChallange?[0].suka;
+            var tonton = dataChallange?[0].tonton;
+            var buatKonten = dataChallange?[0].buatKonten;
+
+            int sukaHyppe = (suka?[0].hyppeDiary ?? 0) > 0 || (suka?[0].hyppePic ?? 0) > 0 || (suka?[0].hyppeVid ?? 0) > 0 ? 1 : 0;
+            int tontonHyppe = (tonton?[0].hyppeDiary ?? 0) > 0 || (tonton?[0].hyppeVid ?? 0) > 0 ? 1 : 0;
+            int buatHyppe = (buatKonten?[0].hyppeDiary ?? 0) > 0 || (buatKonten?[0].hyppePic ?? 0) > 0 || (buatKonten?[0].hyppeVid ?? 0) > 0 ? 1 : 0;
+            int tot = sukaHyppe + tontonHyppe + buatHyppe;
+            if (tot == 3) {
               twoWidget = true;
             }
           }
