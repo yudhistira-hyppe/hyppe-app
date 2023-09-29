@@ -537,7 +537,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
         // } else {
         //   return false;
         // }
-        adsView(widget.data, secondsVideo);
+        // adsView(widget.data, secondsVideo);
         return true;
       },
       child: Stack(
@@ -638,7 +638,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                     : InkWell(
                   onTap: () async {
                     print('second close ads: $secondsVideo');
-                    await adsView(widget.data, secondsVideo);
+                    // await adsView(widget.data, secondsVideo);
                     Navigator.pop(context);
                   },
                   child: const Padding(
@@ -1363,7 +1363,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                         : InkWell(
                       onTap: () async {
                         print('second close ads: $secondsVideo');
-                        await adsView(widget.data, secondsVideo);
+                        // await adsView(widget.data, secondsVideo);
                         Navigator.pop(context);
                       },
                       child: const Padding(

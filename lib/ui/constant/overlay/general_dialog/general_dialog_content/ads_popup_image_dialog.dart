@@ -177,13 +177,14 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
                                         ),
                                       ) : InkWell(
                                         onTap: () async {
-                                          setState(() {
-                                            loadingBack = true;
-                                          });
-                                          await System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
-                                          setState(() {
-                                            loadingBack = false;
-                                          });
+                                          // setState(() {
+                                          //   loadingBack = true;
+                                          // });
+                                          // await System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
+                                          // setState(() {
+                                          //   loadingBack = false;
+                                          // });
+                                          Routing().moveBack();
                                         },
                                         child: const Padding(
                                           padding: EdgeInsets.only(left: 8.0),

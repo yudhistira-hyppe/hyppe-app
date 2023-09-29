@@ -229,20 +229,20 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     }
   }
 
-  Future adsView(AdsData data, int time) async {
-    try {
-      final notifier = AdsDataBloc();
-      final request = ViewAdsRequest(watchingTime: time, adsId: data.adsId, useradsId: data.useradsId);
-      await notifier.viewAdsBloc(context, request);
-      final fetch = notifier.adsDataFetch;
-      print("ini hasil iklan ${fetch.data}");
-      print("ini hasil iklan ${fetch.adsDataState}");
-
-      // final fetch = notifier.adsVideoFetch;
-    } catch (e) {
-      'Failed hit view ads ${e}'.logger();
-    }
-  }
+  // Future adsView(AdsData data, int time) async {
+  //   try {
+  //     final notifier = AdsDataBloc();
+  //     final request = ViewAdsRequest(watchingTime: time, adsId: data.adsId, useradsId: data.useradsId);
+  //     await notifier.viewAdsBloc(context, request);
+  //     final fetch = notifier.adsDataFetch;
+  //     print("ini hasil iklan ${fetch.data}");
+  //     print("ini hasil iklan ${fetch.adsDataState}");
+  //
+  //     // final fetch = notifier.adsVideoFetch;
+  //   } catch (e) {
+  //     'Failed hit view ads ${e}'.logger();
+  //   }
+  // }
 
   void _initialize() async {
     'Hyppe Vid Post ID ${widget.videoData?.postID}'.logger();
@@ -530,7 +530,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
           'Closing ads'.logger();
           'second end ads2 $second'.logger();
           if ((_newClipData?.data?.adsSkip ?? 2) <= second) {
-            adsView(_newClipData?.data ?? AdsData(), second);
+            // adsView(_newClipData?.data ?? AdsData(), second);
             _handleClosingAdsEvent(roll);
           }
         }
@@ -800,7 +800,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                                     final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
                                     if (await canLaunchUrl(uri)) {
                                       print('adsView part 1');
-                                      adsView(_newClipData?.data ?? AdsData(), second);
+                                      // adsView(_newClipData?.data ?? AdsData(), second);
                                       await launchUrl(
                                         uri,
                                         mode: LaunchMode.externalApplication,

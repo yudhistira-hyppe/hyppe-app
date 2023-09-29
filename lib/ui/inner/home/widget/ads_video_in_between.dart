@@ -351,7 +351,7 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
       fAliplayer?.pause();
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(false);
-      System().adsView(widget.adsData, widget.adsData.duration?.round() ?? 10);
+      // System().adsView(widget.adsData, widget.adsData.duration?.round() ?? 10);
 
       //Turn on mix mode
       if (Platform.isIOS) {

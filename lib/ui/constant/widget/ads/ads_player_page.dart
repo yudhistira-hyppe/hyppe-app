@@ -563,29 +563,6 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
     }
   }
 
-  Future adsView(AdsData data, int time) async {
-    try {
-      final notifier = AdsDataBloc();
-      final request = ViewAdsRequest(watchingTime: time, adsId: data.adsId, useradsId: data.useradsId);
-      await notifier.viewAdsBloc(context, request);
-      final fetch = notifier.adsDataFetch;
-      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-        print("ini hasil ${fetch.data['rewards']}");
-        if (fetch.data['rewards'] == true) {
-          print("ini hasil ${mounted}");
-          if (mounted) {
-            ShowGeneralDialog.adsRewardPop(context);
-            Timer(const Duration(milliseconds: 800), () {
-              Routing().moveBack();
-            });
-          }
-        }
-      }
-    } catch (e) {
-      'Failed hit view ads ${e}'.logger();
-    }
-  }
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
@@ -976,15 +953,22 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                   onTap: (){
                     if(notifier.secondsSkip <= 0){
                       if(widget.data != null){
-                        System().adsView(widget.data!, widget.data?.duration?.round() ?? 10).whenComplete((){
-                          notifier.adsAliplayer?.stop();
-                          notifier.adsCurrentPosition = 0;
-                          notifier.adsCurrentPositionText = 0;
-                          notifier.hasShowedAds = true;
-                          notifier.tempAdsData = null;
-                          notifier.isShowingAds = false;
-                          widget.onClose();
-                        });
+                        // System().adsView(widget.data!, widget.data?.duration?.round() ?? 10).whenComplete((){
+                        //   notifier.adsAliplayer?.stop();
+                        //   notifier.adsCurrentPosition = 0;
+                        //   notifier.adsCurrentPositionText = 0;
+                        //   notifier.hasShowedAds = true;
+                        //   notifier.tempAdsData = null;
+                        //   notifier.isShowingAds = false;
+                        //   widget.onClose();
+                        // });
+                        notifier.adsAliplayer?.stop();
+                        notifier.adsCurrentPosition = 0;
+                        notifier.adsCurrentPositionText = 0;
+                        notifier.hasShowedAds = true;
+                        notifier.tempAdsData = null;
+                        notifier.isShowingAds = false;
+                        widget.onClose();
                       }
                     }
                   },
