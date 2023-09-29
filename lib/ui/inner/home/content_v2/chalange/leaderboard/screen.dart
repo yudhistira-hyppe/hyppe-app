@@ -263,7 +263,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                               //   ),
                                               // )
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(20), // Image border
+                                                borderRadius: BorderRadius.circular(12), // Image border
                                                 child: Image.network(
                                                   item.bannerLandingpage ?? '',
                                                   width: SizeConfig.screenWidth,

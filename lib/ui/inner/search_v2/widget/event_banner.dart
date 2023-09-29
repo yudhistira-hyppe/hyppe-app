@@ -31,6 +31,8 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
       var cn = context.read<ChallangeNotifier>();
       cn.getBannerLanding(context, isSearch: true);
     });
+
+    print("===-=-=-=-=-= init banner challange");
     super.initState();
   }
 
