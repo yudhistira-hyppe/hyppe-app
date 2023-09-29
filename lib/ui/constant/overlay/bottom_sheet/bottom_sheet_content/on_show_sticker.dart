@@ -115,7 +115,7 @@ class OnShowSticker extends StatelessWidget {
                                     color: Colors.white,
                                   )
                                 : null,
-                            hintText: notifier.stickerSearchActive ? '' : 'Cari GIF seru',
+                            hintText: notifier.stickerSearchActive ? '' : 'Cari ${notifier.stickerTab[notifier.stickerTabIndex].name} seru',
                             contentPadding: const EdgeInsets.all(16),
                             border: OutlineInputBorder(
                               borderSide: const BorderSide(color: kHyppeTextLightPrimary),
