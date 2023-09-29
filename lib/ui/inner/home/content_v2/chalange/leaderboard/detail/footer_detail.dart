@@ -225,12 +225,12 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
                           },
                           child: Container(
                             height: 24,
-                            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
                             decoration: BoxDecoration(color: kHyppePrimary, borderRadius: BorderRadius.circular(8)),
                             child: Text(
                               tn.translate.copy ?? '',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
                                 fontFamily: 'Lato',

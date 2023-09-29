@@ -179,12 +179,11 @@ class ChallangeNotifier with ChangeNotifier {
   }
 
   Future initLeaderboard(BuildContext context) async {
-    print("=========asdasdasd");
     isLoadingLeaderboard = true;
     notifyListeners();
     checkInet(context);
     await getBannerLanding(context, isLeaderBoard: true);
-    await getLeaderBoard(context, bannerSearchData[0].sId ?? '');
+    await getLeaderBoard(context, bannerLeaderboardData[0].sId ?? '');
     await getOtherChallange(context);
 
     isLoadingLeaderboard = false;
@@ -192,7 +191,6 @@ class ChallangeNotifier with ChangeNotifier {
   }
 
   Future initLeaderboardDetail(BuildContext context, bool mounted, String id) async {
-    print("=========asdasdasd");
     isLoadingLeaderboard = true;
     notifyListeners();
     checkInet(context);
