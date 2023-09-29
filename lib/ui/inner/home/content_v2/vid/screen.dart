@@ -1419,46 +1419,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
 
   var loadLaunch = false;
 
-  Future adsView(AdsData data, int time, {bool isClick = false}) async {
-    try {
-      setState(() {
-        loadingAction = true;
-      });
-
-      final notifier = AdsDataBloc();
-      final request = ViewAdsRequest(
-        watchingTime: time,
-        adsId: data.adsId,
-        useradsId: data.useradsId,
-      );
-      await notifier.viewAdsBloc(context, request, isClick: isClick);
-
-      final fetch = notifier.adsDataFetch;
-
-      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-        print("ini hasil ${fetch.data['rewards']}");
-        if (fetch.data['rewards'] == true) {
-          print("ini hasil ${mounted}");
-          if (mounted) {
-            ShowGeneralDialog.adsRewardPop(context).whenComplete(() => null);
-            Timer(const Duration(milliseconds: 800), () {
-              Routing().moveBack();
-              // Routing().moveBack();
-              // Timer(const Duration(milliseconds: 800), () {
-              //   Routing().moveBack();
-              // });
-            });
-          }
-        }
-      }
-    } catch (e) {
-      'Failed hit view ads $e'.logger();
-      setState(() {
-        loadingAction = false;
-      });
-    }
-  }
-
 // void finish(ContentData data) async {
 //
 //   data.fAliplayer?.stop();

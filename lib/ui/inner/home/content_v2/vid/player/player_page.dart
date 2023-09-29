@@ -658,32 +658,6 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     }
   }
 
-  Future adsView(AdsData data, int time) async {
-    try {
-      final notifier = AdsDataBloc();
-      final request = ViewAdsRequest(watchingTime: time, adsId: data.adsId, useradsId: data.useradsId);
-      await notifier.viewAdsBloc(context, request);
-      final fetch = notifier.adsDataFetch;
-      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-        print("ini hasil ${fetch.data['rewards']}");
-        if (fetch.data['rewards'] == true) {
-          print("ini hasil ${mounted}");
-          if (mounted) {
-            ShowGeneralDialog.adsRewardPop(context);
-            Timer(const Duration(milliseconds: 800), () {
-              Routing().moveBack();
-              // Timer(const Duration(milliseconds: 800), () {
-              //   Routing().moveBack();
-              // });
-            });
-          }
-        }
-      }
-    } catch (e) {
-      'Failed hit view ads ${e}'.logger();
-    }
-  }
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
@@ -1373,7 +1347,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   }
 
   void adsComleteOrSkip() {
-    adsView(adsData?.data ?? AdsData(), _currentAdsPosition);
+    // adsView(adsData?.data ?? AdsData(), _currentAdsPosition);
 
     /////
     _showTipsWidget = true;

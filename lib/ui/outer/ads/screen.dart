@@ -124,8 +124,8 @@ class _AdsScreenState extends State<AdsScreen> {
     return WillPopScope(
       onWillPop: () async{
         if(secondsSkip < 1 || widget.argument.data.isReport == true){
-          await adsView(context, widget.argument.data,
-              secondsVideo);
+          // await adsView(context, widget.argument.data,
+          //     secondsVideo);
           return true;
         }else{
           return false;
@@ -448,8 +448,8 @@ class _AdsScreenState extends State<AdsScreen> {
                                     strokeWidth: 3.0))
                             : InkWell(
                                 onTap: () {
-                                  adsView(context, widget.argument.data,
-                                      secondsVideo);
+                                  // adsView(context, widget.argument.data,
+                                  //     secondsVideo);
                                   Navigator.pop(context);
                                 },
                                 child: const Padding(
@@ -500,6 +500,8 @@ class _AdsScreenState extends State<AdsScreen> {
                 if (secondsSkip < 1) {
                   if(data.adsUrlLink?.isEmail() ?? false){
                     final email = data.adsUrlLink!.replaceAll('email:', '');
+                    adsView(context, widget.argument.data, secondsVideo,
+                        isClick: true);
                     Navigator.pop(context);
                     Future.delayed(const Duration(milliseconds: 500), (){
                       Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
@@ -509,7 +511,7 @@ class _AdsScreenState extends State<AdsScreen> {
                       try{
                         final uri = Uri.parse(data.adsUrlLink ?? '');
                         if (await canLaunchUrl(uri)) {
-                          adsView(context, widget.argument.data, secondsVideo,
+                          adsView(Routing.navigatorKey.currentContext ?? context, widget.argument.data, secondsVideo,
                               isClick: true);
                           await launchUrl(
                             uri,
