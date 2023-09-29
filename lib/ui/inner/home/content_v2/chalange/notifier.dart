@@ -217,6 +217,8 @@ class ChallangeNotifier with ChangeNotifier {
     if (oldLeaderboard) {
       param["session"] = selectOptionSession;
     }
+    isLoading = true;
+    notifyListeners();
     final bannerNotifier = ChallangeBloc();
     await bannerNotifier.postChallange(context, data: param, url: oldLeaderboard ? UrlConstants.getLeaderBoardSession : UrlConstants.getLeaderBoard);
     final bannerFatch = bannerNotifier.userFetch;
