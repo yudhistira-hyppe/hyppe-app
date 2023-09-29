@@ -129,7 +129,7 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                                   // )
 
                                   child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(8),
                                 child: Image.network(
                                   item.bannerLandingpage ?? '',
                                   width: SizeConfig.screenWidth,
