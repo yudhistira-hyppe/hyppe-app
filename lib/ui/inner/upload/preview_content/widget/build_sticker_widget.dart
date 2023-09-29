@@ -1,8 +1,4 @@
-import 'package:gif_view/gif_view.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
-import 'package:hyppe/core/extension/log_extension.dart';
-import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
 import 'package:flutter/material.dart';
 import 'package:optimized_cached_image/optimized_cached_image.dart';

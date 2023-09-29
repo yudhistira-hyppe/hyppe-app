@@ -168,7 +168,10 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                       if (notifier.featureType == FeatureType.story || notifier.featureType == FeatureType.diary)
                       InkWell(
                         onTap: () async {
+                          notifier.initStickerScroll(context);
+                          notifier.stickerScrollPosition = 0.0;
                           ShowBottomSheet.onShowSticker(context: context, whenComplete: () {
+                            notifier.removeStickerScroll(context);
                             notifier.stickerSearchActive = false;
                             notifier.stickerSearchText = '';
                             notifier.stickerTextController.text = '';

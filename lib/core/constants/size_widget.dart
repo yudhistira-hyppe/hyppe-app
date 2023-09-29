@@ -16,7 +16,7 @@ class SizeWidget {
   static const double baseWidthXD = 375;
   static const double baseHeightXD = 812;
 
-  static const double stickerScale = 0.5;
+  static const double stickerScale = 0.4;
 
   double calculateSize(double sizeWidget, double heightOrWidthXD, double heightOrWidthDevice) {
     double result = sizeWidget / heightOrWidthXD * heightOrWidthDevice;

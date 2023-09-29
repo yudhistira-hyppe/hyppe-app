@@ -179,6 +179,13 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  double _stickerMaxScroll = 0.0;
+  double get stickerMaxScroll => _stickerMaxScroll;
+  set stickerMaxScroll(double val) {
+    _stickerMaxScroll = val;
+    notifyListeners();
+  }
+
   String _stickerSearchText = '';
   String get stickerSearchText => _stickerSearchText;
   set stickerSearchText(String val) {
@@ -1365,6 +1372,19 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
+  initStickerScroll(BuildContext context) {
+    stickerScrollController.addListener(() {
+      stickerScrollPosition = stickerScrollController.offset;
+      if (stickerScrollController.position.maxScrollExtent != stickerMaxScroll) {
+        stickerMaxScroll = stickerScrollController.position.maxScrollExtent;
+      }
+    });
+  }
+
+  removeStickerScroll(BuildContext context) {
+    stickerScrollController.removeListener(() => this);
+  }
+
   void addSticker(BuildContext context, StickerModel? sticker) {
     var datetime = DateTime.now();
     stickers.add(StickerModel(
@@ -1396,7 +1416,7 @@ class PreviewContentNotifier with ChangeNotifier {
         stickers.where((element) => element.key == key).first.matrix = matrix;
         notifyListeners();
         if (
-          offset.dy > (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 140) &&
+          offset.dy > (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 160) &&
           offset.dy < (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 80) &&
           offset.dx > ((MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.width / 2) - 30) &&
           offset.dx < ((MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.width / 2) + 30)
@@ -1407,12 +1427,6 @@ class PreviewContentNotifier with ChangeNotifier {
         }
       },
       onDragUpdate: (matrix, offset, key) {
-        // print(matrix);
-        // var screenWidth = SizeConfig.screenWidth!;
-        // var screenHeight = SizeConfig.screenHeight!;
-        // var paddingTop = SizeConfig.paddingTop;
-        // var paddingBottom = SizeConfig.paddingBottom;
-        // var paddingHeight = (screenHeight - ((screenWidth * (16/9)) + paddingTop + paddingBottom)) / 2;
         if (
           offset.dy > (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 160) &&
           offset.dy < (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 80) &&

@@ -240,10 +240,11 @@ class OnShowSticker extends StatelessWidget {
     required StickerTab tab,
   }) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         notifier.stickerTabIndex = tab.index;
-        notifier.stickerScrollController.animateTo(0, duration: Duration.zero, curve: Curves.easeIn);
-        notifier.getSticker(context, index: tab.index);
+        await notifier.getSticker(context, index: tab.index);
+        notifier.stickerScrollController.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+        notifier.stickerScrollPosition = 0.0;
       },
       child: Column(
         children: [
@@ -298,7 +299,6 @@ class OnShowSticker extends StatelessWidget {
                   int rowCount = ((tab.data[i].data?.length ?? 0) / tab.column).ceil();
                   position = position + (rowCount * itemHeight);  
                 }
-                notifier.stickerCategoryIndex = index;
                 notifier.stickerScrollController.animateTo(
                   position,
                   duration: const Duration(milliseconds: 100),
@@ -308,7 +308,7 @@ class OnShowSticker extends StatelessWidget {
               child: Container(
                 decoration:  BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(45)),
-                  color: index == notifier.stickerCategoryIndex ? Colors.black : Colors.transparent,
+                  color: highlight(context, notifier, cat)
                 ),
                 margin: const EdgeInsets.all(8),
                 padding: const EdgeInsets.all(8),
@@ -323,6 +323,13 @@ class OnShowSticker extends StatelessWidget {
     }
   }
 
+  Color highlight(BuildContext context, PreviewContentNotifier notifier, StickerCategoryModel cat) {
+    if (notifier.stickerScrollPosition + 50 >= cat.heightStart && notifier.stickerScrollPosition + 50 <= cat.heightEnd) {
+      return Colors.black;
+    }
+    return Colors.transparent;
+  }
+
   Widget gridView(
     BuildContext context, {
     required PreviewContentNotifier notifier,
@@ -330,29 +337,49 @@ class OnShowSticker extends StatelessWidget {
     required int categoryIndex,
     required List<StickerModel> stickers,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (tab.data[categoryIndex].id != '')
-            SizedBox(
-              height: 40,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  tab.data[categoryIndex].id,
-                  style: const TextStyle(color: Color(0xffcecece)),
+    return WidgetSize(
+      onChange: (Size size) {
+        if (!notifier.stickerSearchActive) {
+          notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex].height = size.height;
+          if (categoryIndex == 0) {
+            notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex].heightStart = 0.0;
+            notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex].heightEnd = notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex].height;
+          } else {
+            notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex].heightStart = notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex - 1].heightEnd;
+            notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex].heightEnd = notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex - 1].heightEnd + notifier.stickerTab[notifier.stickerTabIndex].data[categoryIndex].height;
+          }
+          // adding this code below to trigger highlight on first render
+          if (categoryIndex == 0 && notifier.stickerScrollPosition == 0.0) {
+            notifier.stickerScrollController.animateTo(1, duration: const Duration(milliseconds: 50), curve: Curves.easeIn);
+          }
+          size.loggerV2();
+        }
+      },
+      child: Container(
+        constraints: BoxConstraints(minHeight: categoryIndex + 1 == tab.data.length ? (MediaQuery.of(context).size.height * 0.8) - 175 : 0),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (tab.data[categoryIndex].id != '')
+              SizedBox(
+                height: 40,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    tab.data[categoryIndex].id,
+                    style: const TextStyle(color: Color(0xffcecece)),
+                  ),
                 ),
               ),
+            Wrap(
+              children: [
+                for (StickerModel sticker in stickers)
+                  renderSticker(context, notifier: notifier, tab: tab, sticker: sticker),
+              ],
             ),
-          Wrap(
-            children: [
-              for (StickerModel sticker in stickers)
-                renderSticker(context, notifier: notifier, tab: tab, sticker: sticker, categoryIndex: categoryIndex),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -362,65 +389,68 @@ class OnShowSticker extends StatelessWidget {
     required PreviewContentNotifier notifier,
     required StickerTab tab,
     required StickerModel sticker,
-    required int categoryIndex,
   }) {
-    if (sticker == tab.data[categoryIndex].data?.first) {
-      return VisibilityDetector(
-        key: Key(sticker.id ?? ''),
-        onVisibilityChanged: (info) {
-          if (info.visibleFraction > 0.2) {
-            'onVisibilityChanged ${info.visibleFraction}'.loggerV2();
-            notifier.stickerCategoryIndex = categoryIndex;
-          }
+    return Visibility(
+      visible: (sticker.name ?? '')
+              .toLowerCase()
+              .contains(notifier.stickerSearchText.toLowerCase()) ||
+          (sticker.kategori ?? '')
+              .toLowerCase()
+              .contains(notifier.stickerSearchText.toLowerCase()),
+      child: InkWell(
+        onTap: () {
+          notifier.addSticker(context, sticker);
         },
-        child: Visibility(
-          visible: (sticker.name ?? '')
-                  .toLowerCase()
-                  .contains(notifier.stickerSearchText.toLowerCase()) ||
-              (sticker.kategori ?? '')
-                  .toLowerCase()
-                  .contains(notifier.stickerSearchText.toLowerCase()),
-          child: InkWell(
-            onTap: () {
-              notifier.addSticker(context, sticker);
-            },
-            child: Container(
-              width: (MediaQuery.of(context).size.width - 32) / tab.column,
-              height: (MediaQuery.of(context).size.width - 32) / tab.column,
-              padding: const EdgeInsets.all(8),
-              // child: OptimizedCacheImage(imageUrl: sticker.image ?? ''),
-              // child: CustomBaseCacheImage(imageUrl: sticker.image ?? '', emptyWidget: Container()),
-              child: (sticker.image ?? '').toLowerCase().endsWith('.gif')
-                  ? GifView.network(sticker.image ?? '')
-                  : OptimizedCacheImage(imageUrl: sticker.image ?? ''),
-            ),
-          ),
+        child: Container(
+          width: (MediaQuery.of(context).size.width - 32) / tab.column,
+          height: (MediaQuery.of(context).size.width - 32) / tab.column,
+          padding: const EdgeInsets.all(8),
+          // child: OptimizedCacheImage(imageUrl: sticker.image ?? ''),
+          // child: CustomBaseCacheImage(imageUrl: sticker.image ?? '', emptyWidget: Container()),
+          child: (sticker.image ?? '').toLowerCase().endsWith('.gif')
+              ? GifView.network(sticker.image ?? '')
+              : OptimizedCacheImage(imageUrl: sticker.image ?? ''),
         ),
-      );
-    } else {
-      return Visibility(
-        visible: (sticker.name ?? '')
-                .toLowerCase()
-                .contains(notifier.stickerSearchText.toLowerCase()) ||
-            (sticker.kategori ?? '')
-                .toLowerCase()
-                .contains(notifier.stickerSearchText.toLowerCase()),
-        child: InkWell(
-          onTap: () {
-            notifier.addSticker(context, sticker);
-          },
-          child: Container(
-            width: (MediaQuery.of(context).size.width - 32) / tab.column,
-            height: (MediaQuery.of(context).size.width - 32) / tab.column,
-            padding: const EdgeInsets.all(8),
-            // child: OptimizedCacheImage(imageUrl: sticker.image ?? ''),
-            // child: CustomBaseCacheImage(imageUrl: sticker.image ?? '', emptyWidget: Container()),
-            child: (sticker.image ?? '').toLowerCase().endsWith('.gif')
-                ? GifView.network(sticker.image ?? '')
-                : OptimizedCacheImage(imageUrl: sticker.image ?? ''),
-          ),
-        ),
-      );
-    }
+      ),
+    );
+  }
+}
+
+class WidgetSize extends StatefulWidget {
+  final Widget child;
+  final Function onChange;
+
+  const WidgetSize({
+    Key? key,
+    required this.onChange,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  State<WidgetSize> createState() => _WidgetSizeState();
+}
+
+class _WidgetSizeState extends State<WidgetSize> {
+  @override
+  Widget build(BuildContext context) {
+    SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
+    return Container(
+      key: widgetKey,
+      child: widget.child,
+    );
+  }
+
+  var widgetKey = GlobalKey();
+  var oldSize;
+
+  void postFrameCallback(_) {
+    var context = widgetKey.currentContext;
+    if (context == null) return;
+
+    var newSize = context.size;
+    if (oldSize == newSize) return;
+
+    oldSize = newSize;
+    widget.onChange(newSize);
   }
 }

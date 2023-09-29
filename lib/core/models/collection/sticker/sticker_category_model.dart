@@ -3,9 +3,9 @@ import 'package:hyppe/core/models/collection/sticker/sticker_model.dart';
 class StickerCategoryModel {
   late String id;
   late String queryname;
-  // late double height;
-  // late double heightStart;
-  // late double heightEnd;
+  late double height;
+  late double heightStart;
+  late double heightEnd;
   String? kategoritime;
   String? kategoriicon;
   List<StickerModel>? data;
@@ -16,7 +16,7 @@ class StickerCategoryModel {
     this.kategoritime,
     this.kategoriicon,
     this.data,
-    // this.height = 0,
+    this.height = 0,
     // this.heightStart = 0,
     // this.heightEnd = 0,
   });
@@ -35,9 +35,9 @@ class StickerCategoryModel {
         query = "$query - ${sticker.name}";
       });
     }
-    // height = 0;
-    // heightStart = 0;
-    // heightEnd = 0;
+    height = 0;
+    heightStart = 0;
+    heightEnd = 0;
     queryname = query;
   }
 
