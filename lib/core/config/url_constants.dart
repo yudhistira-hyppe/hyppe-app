@@ -475,4 +475,7 @@ class UrlConstants {
 
   //Banner
   static const String getBanners = "/api/banner/listing";
+  
+  // Get Sticker
+  static const String getStickers = "/api/mediastiker/listingapp";
 }

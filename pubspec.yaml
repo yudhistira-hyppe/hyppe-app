@@ -90,6 +90,8 @@ dependencies:
   measured_size: ^1.0.0
   flutter_cache_manager: ^3.3.0
   flutter_cupertino_datetime_picker: ^3.0.0
+  flutter_staggered_grid_view: ^0.7.0
+  gif_view: ^0.3.1
 
 
   dynamic_widget: # Dynamic widget builder
@@ -109,6 +111,10 @@ dependencies:
   # deepar_flutter: ^0.0.5
   deepar_flutter: # Flutter DeepAR
     path: packages/deepar_flutter
+
+  # matrix_gesture_detector: ^0.2.0-nullsafety.1
+  matrix_gesture_detector:
+    path: packages/matrix_gesture_detector
   
   qr_flutter: ^4.0.0
   pattern_formatter: ^2.0.0

@@ -19,6 +19,7 @@ class CustomTextFormField extends StatelessWidget {
   final InputDecoration? inputDecoration;
   final TextInputAction textInputAction;
   final Color containerColor;
+  final Color? cursorColor;
   final String obscuringCharacter;
   final FocusNode? focusNode;
   final double? cursorHeight;
@@ -46,6 +47,7 @@ class CustomTextFormField extends StatelessWidget {
       this.textInputAction = TextInputAction.next,
       this.validator,
       this.containerColor = Colors.transparent,
+      this.cursorColor,
       this.obscuringCharacter = '•',
       this.focusNode,
       this.maxLength,
@@ -60,6 +62,7 @@ class CustomTextFormField extends StatelessWidget {
         width: inputAreaWidth,
         height: inputAreaHeight,
         child: TextFormField(
+          cursorColor: cursorColor,
           enabled: isEnabled,
           autovalidateMode: autovalidateMode,
           style: style,

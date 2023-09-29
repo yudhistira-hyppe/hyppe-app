@@ -70,6 +70,7 @@ enum ErrorType {
   getLanguage,
   getEffect,
   downloadEffect,
+  getSticker,
   unknown,
   register,
   login,

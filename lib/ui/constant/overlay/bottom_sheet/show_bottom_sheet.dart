@@ -39,6 +39,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_s
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_id_verification_failed.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_idcard_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_license_agreement.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_sticker.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_tag.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_view_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_statement_ownership.dart';
@@ -1493,6 +1494,23 @@ class ShowBottomSheet {
         );
       },
     );
+  }
+
+  static onShowSticker({
+    required BuildContext context,
+    required VoidCallback whenComplete,
+  }) async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return const OnShowSticker();
+      }
+    );
+    whenComplete();
   }
 
   static onQRCodeChallange(context) async {

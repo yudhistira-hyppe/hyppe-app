@@ -37,6 +37,7 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
+import 'package:hyppe/ui/constant/widget/sticker_overlay.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
@@ -1096,13 +1097,27 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                           _curPostId == (data?.postID ?? index.toString())
                                               ? ClipRRect(
                                                   borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                                                  child: AliPlayerView(
-                                                    onCreated: onViewPlayerCreated,
-                                                    x: 0,
-                                                    y: 0,
-                                                    height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                                                    width: MediaQuery.of(context).size.width,
-                                                    aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
+                                                  child: Stack(
+                                                    children: [
+                                                      AliPlayerView(
+                                                        onCreated: onViewPlayerCreated,
+                                                        x: 0,
+                                                        y: 0,
+                                                        height: MediaQuery.of(context).size.width * 9.0 / 16.0,
+                                                        width: MediaQuery.of(context).size.width,
+                                                        aliPlayerViewType: AliPlayerViewTypeForAndroid.surfaceview,
+                                                      ),
+                                                      Visibility(
+                                                        visible: isPlay,
+                                                        child: StickerOverlay(
+                                                          fullscreen: false,
+                                                          stickers: data?.stickers,
+                                                          width: MediaQuery.of(context).size.width,
+                                                          height: (MediaQuery.of(context).size.width) * (16/9),
+                                                          isPause: isPause,
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 )
                                               : Container(),
