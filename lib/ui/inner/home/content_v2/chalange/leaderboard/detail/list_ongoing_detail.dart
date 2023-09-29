@@ -11,7 +11,6 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/butto
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/content_leader.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/litem_leader.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class ListOnGoingDetail extends StatefulWidget {
