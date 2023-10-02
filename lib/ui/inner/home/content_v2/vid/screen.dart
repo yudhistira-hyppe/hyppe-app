@@ -835,7 +835,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                       vidData: notifier.vidData,
                                                       orientation: Orientation.portrait,
                                                       onShowAds: (ads) {
-                                                        notifier.setAdsData(index, ads);
+                                                        notifier.setAdsData(index, ads, context);
                                                       },
                                                       // betweenAds: (ads) {
                                                       //   if (ads != null) {
@@ -944,178 +944,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                               )),
                                         ),
                                   if (vidData.adsData != null)
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                                      decoration: const BoxDecoration(color: kHyppeLightSurface),
-                                      child: Row(
-                                        children: [
-                                          CustomBaseCacheImage(
-                                            imageUrl: vidData.adsData?.avatar?.fullLinkURL,
-                                            memCacheWidth: 200,
-                                            memCacheHeight: 200,
-                                            imageBuilder: (_, imageProvider) {
-                                              return Container(
-                                                width: 36,
-                                                height: 36,
-                                                decoration: BoxDecoration(
-                                                  borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                                  image: DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    image: imageProvider,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            errorWidget: (_, __, ___) {
-                                              return Container(
-                                                width: 36,
-                                                height: 36,
-                                                decoration: const BoxDecoration(
-                                                  borderRadius: BorderRadius.all(Radius.circular(18)),
-                                                  image: DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            emptyWidget: Container(
-                                              width: 36,
-                                              height: 36,
-                                              decoration: const BoxDecoration(
-                                                borderRadius: BorderRadius.all(Radius.circular(18)),
-                                                image: DecorationImage(
-                                                  fit: BoxFit.cover,
-                                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          tenPx,
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                CustomTextWidget(
-                                                  textToDisplay: vidData.adsData?.fullName ?? '',
-                                                  textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),
-                                                ),
-                                                fourPx,
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  children: [
-                                                    CustomTextWidget(
-                                                      textToDisplay: 'Ad ·',
-                                                      textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w700, color: Colors.black),
-                                                    ),
-                                                    Expanded(
-                                                        child: CustomTextWidget(
-                                                      textAlign: TextAlign.start,
-                                                      textToDisplay: ' ${vidData.adsData?.adsUrlLink}',
-                                                      textStyle: context.getTextTheme().caption,
-                                                      maxLines: 1,
-                                                      textOverflow: TextOverflow.ellipsis,
-                                                    )),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Material(
-                                            color: Colors.transparent,
-                                            child: Ink(
-                                              width: 120,
-                                              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
-                                              child: InkWell(
-                                                splashColor: context.getColorScheme().secondary,
-                                                onTap: () async {
-                                                  final data = vidData.adsData;
-                                                  final secondsVideo = vidData.adsData?.duration?.round() ?? 10;
-                                                  if (!loadLaunch) {
-                                                    if (data != null) {
-                                                      if (data.adsUrlLink?.isEmail() ?? false) {
-                                                        final email = data.adsUrlLink!.replaceAll('email:', '');
-                                                        setState(() {
-                                                          loadLaunch = true;
-                                                        });
-                                                        print('second close ads: $secondsVideo');
-                                                        adsView(data, secondsVideo, isClick: true).whenComplete(() {
-                                                          Navigator.pop(context);
-                                                          Future.delayed(const Duration(milliseconds: 800), () {
-                                                            Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                                                          });
-                                                          setState(() {
-                                                            loadLaunch = false;
-                                                          });
-                                                        });
-                                                      } else {
-                                                        if ((data.adsUrlLink ?? '').withHttp()) {
-                                                          try {
-                                                            final uri = Uri.parse(data.adsUrlLink ?? '');
-                                                            print('bottomAdsLayout ${data.adsUrlLink}');
-                                                            if (await canLaunchUrl(uri)) {
-                                                              setState(() {
-                                                                loadLaunch = true;
-                                                              });
-                                                              print('second close ads: $secondsVideo');
-                                                              adsView(data, secondsVideo, isClick: true).whenComplete(() async {
-                                                                Navigator.pop(context);
-                                                                await launchUrl(
-                                                                  uri,
-                                                                  mode: LaunchMode.externalApplication,
-                                                                );
-                                                              });
-                                                            } else {
-                                                              throw "Could not launch $uri";
-                                                            }
-                                                            // can't launch url, there is some error
-                                                          } catch (e) {
-                                                            setState(() {
-                                                              loadLaunch = true;
-                                                            });
-                                                            print('second close ads: $secondsVideo');
-                                                            // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                                            adsView(data, secondsVideo, isClick: true).whenComplete(() {
-                                                              System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                                            });
-                                                          } finally {
-                                                            setState(() {
-                                                              loadLaunch = false;
-                                                            });
-                                                          }
-                                                        }
-                                                      }
-                                                    } else {
-                                                      setState(() {
-                                                        loadLaunch = false;
-                                                      });
-                                                    }
-                                                  }
-                                                },
-                                                child: Builder(
-                                                  builder: (context) {
-                                                    return Container(
-                                                      padding: const EdgeInsets.all(10),
-                                                      alignment: Alignment.center,
-                                                      child: Text(
-                                                        vidData.adsData?.ctaButton ?? 'Learn More',
-                                                        overflow: TextOverflow.ellipsis,
-                                                        maxLines: 1,
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.w700,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                    AdsCTALayout(
+                                      adsData: vidData.adsData!,
+                                      onClose: () {
+                                        notifier.setAdsData(index, null, context);
+                                      },
+                                      postId: notifier.vidData?[index].postID ?? '',
                                     ),
                                   twelvePx,
                                   SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
