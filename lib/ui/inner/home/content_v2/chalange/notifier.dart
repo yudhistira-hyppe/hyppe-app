@@ -41,6 +41,7 @@ class ChallangeNotifier with ChangeNotifier {
   ///////
   bool isConnect = false;
   bool isLoading = false;
+  bool isLoadingBanner = false;
   bool isLoadingLeaderboard = false;
   bool isLoadingAchivement = false;
   bool isLoadingCollection = false;
@@ -143,7 +144,7 @@ class ChallangeNotifier with ChangeNotifier {
 
   Future getBannerLanding(BuildContext context, {bool ispopUp = false, bool isSearch = false, bool isLeaderBoard = false}) async {
     checkInet(context);
-    isLoading = true;
+    isLoadingBanner = true;
     notifyListeners();
 
     Map data = {"page": 0};
@@ -173,7 +174,7 @@ class ChallangeNotifier with ChangeNotifier {
           bannerFatch.data.forEach((v) => bannerLeaderboardData.add(BannerChalangeModel.fromJson(v)));
         }
       }
-      isLoading = false;
+      isLoadingBanner = false;
       notifyListeners();
     }
   }

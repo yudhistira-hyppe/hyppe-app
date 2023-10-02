@@ -45,6 +45,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
   final CarouselController _controller = CarouselController();
   bool hideTab = false;
   String dateText = '';
+  Color bgColor = kHyppeLightSurface;
 
   LocalizationModelV2? lang;
   @override
@@ -160,6 +161,10 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
     var tn = context.read<TranslateNotifierV2>();
     toHideTab(cn);
 
+    if (!cn.isLoadingLeaderboard || cn.leaderBoardDetailData?.sId != null) {
+      bgColor = System().colorFromHex(cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].warnaBackground ?? "#F5F5F5");
+    }
+
     return WillPopScope(
       onWillPop: () async {
         if (cn.isLoadingLeaderboard) {
@@ -169,7 +174,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
         }
       },
       child: Scaffold(
-        backgroundColor: kHyppeLightSurface,
+        backgroundColor: bgColor,
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
             child: AppBar(
@@ -307,65 +312,71 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                                   ),
                                 ),
                                 sixPx,
-                                Center(
-                                  child: Container(
-                                      width: SizeConfig.screenWidth,
-                                      padding: const EdgeInsets.only(top: 24, bottom: 24),
-                                      margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
-                                      decoration: const ShapeDecoration(
-                                        color: Colors.white,
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8))),
-                                      ),
-                                      child: const Center(
-                                        child: Text("Leaderboard",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w700,
-                                            )),
-                                      )),
-                                ),
-                                //Tab
-                                hideTab
+                                cn.leaderBoardDetailData?.onGoing == false
                                     ? Container()
-                                    : Container(
-                                        margin: const EdgeInsets.only(left: 16.0, right: 16),
-                                        padding: const EdgeInsets.only(top: 8, left: 16.0, right: 16),
-                                        color: Colors.white,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(4),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(8),
-                                            color: kHyppeLightSurface,
+                                    : Column(
+                                        children: [
+                                          Center(
+                                            child: Container(
+                                                width: SizeConfig.screenWidth,
+                                                padding: const EdgeInsets.only(top: 24, bottom: 24),
+                                                margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
+                                                decoration: const ShapeDecoration(
+                                                  color: Colors.white,
+                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8))),
+                                                ),
+                                                child: const Center(
+                                                  child: Text("Leaderboard",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w700,
+                                                      )),
+                                                )),
                                           ),
-                                          child: TabBar(
-                                            controller: _tabController,
-                                            indicator: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(
-                                                8.0,
-                                              ),
-                                              color: kHyppeLightButtonText,
-                                            ),
-                                            labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                                            labelColor: kHyppeTextLightPrimary,
-                                            unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                                            labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                            // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                                            unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                            tabs: [
-                                              ...List.generate(
-                                                nameTab.length,
-                                                (index) => Padding(
-                                                  padding: EdgeInsets.all(9),
-                                                  child: Text(
-                                                    nameTab[index],
-                                                    style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                          hideTab
+                                              ? Container()
+                                              : Container(
+                                                  margin: const EdgeInsets.only(left: 16.0, right: 16),
+                                                  padding: const EdgeInsets.only(top: 8, left: 16.0, right: 16),
+                                                  color: Colors.white,
+                                                  child: Container(
+                                                    padding: const EdgeInsets.all(4),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(8),
+                                                      color: kHyppeLightSurface,
+                                                    ),
+                                                    child: TabBar(
+                                                      controller: _tabController,
+                                                      indicator: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(
+                                                          8.0,
+                                                        ),
+                                                        color: kHyppeLightButtonText,
+                                                      ),
+                                                      labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                                                      labelColor: kHyppeTextLightPrimary,
+                                                      unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                                                      labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                                      // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                                                      unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                                      tabs: [
+                                                        ...List.generate(
+                                                          nameTab.length,
+                                                          (index) => Padding(
+                                                            padding: EdgeInsets.all(9),
+                                                            child: Text(
+                                                              nameTab[index],
+                                                              style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                        ],
                                       ),
+                                //Tab
                               ]),
                             ),
                           ),

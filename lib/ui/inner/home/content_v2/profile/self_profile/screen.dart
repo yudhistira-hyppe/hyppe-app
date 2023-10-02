@@ -59,8 +59,14 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
     // _globalKey.currentState?.innerController.addListener(() {
     //   setState(() {});
     // });
+    cekImei();
 
     super.initState();
+  }
+
+  void cekImei() async {
+    var a = await System().getDeviceIdentifier();
+    print("=====imeeiii======== $a");
   }
 
   @override
@@ -264,7 +270,7 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                           SliverToBoxAdapter(
                             child: MeasuredSize(
                                 onChange: (e) async {
-                                  if(mounted){
+                                  if (mounted) {
                                     heightProfileCard = e.height;
                                     await Future.delayed(Duration(milliseconds: 300), () {
                                       isloading = true;
