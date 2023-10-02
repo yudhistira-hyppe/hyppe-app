@@ -272,8 +272,28 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
       if (challengeData?.metrik?[0].interaksiKonten?.isNotEmpty ?? [].isEmpty) {
         if (((challengeData?.metrik?[0].interaksiKonten?[0].suka?.isNotEmpty ?? [].isEmpty) || (challengeData?.metrik?[0].interaksiKonten?[0].tonton?.isNotEmpty ?? [].isEmpty)) &&
             (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty)) {
-          // titleText = "Unggah konten sebanyak mungkin untuk menangin challenge nya!";
-          // buttonText = "Unggah Konten - Konten Menarik Disini!";
+          var interaksiData = challengeData?.metrik?[0].interaksiKonten?[0];
+          if ((interaksiData?.suka?[0].hyppeVid ?? 0) > 0) {
+            context.read<MainNotifier>().pageIndex = 2;
+            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+          } else if ((interaksiData?.suka?[0].hyppeDiary ?? 0) > 0) {
+            context.read<MainNotifier>().pageIndex = 1;
+            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+          } else if ((interaksiData?.suka?[0].hyppePic ?? 0) > 0) {
+            context.read<MainNotifier>().pageIndex = 0;
+            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+          } else if ((interaksiData?.tonton?[0].hyppeVid ?? 0) > 0) {
+            context.read<MainNotifier>().pageIndex = 2;
+            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+          } else if ((interaksiData?.tonton?[0].hyppeDiary ?? 0) > 0) {
+            context.read<MainNotifier>().pageIndex = 1;
+            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+          } else if ((interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0) {
+            context.read<MainNotifier>().pageIndex = 1;
+            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+          } else if ((interaksiData?.buatKonten?[0].hyppeVid ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppePic ?? 0) > 0) {
+            onTapbuatKonten(contentD: interaksiData?.buatKonten?[0] ?? BuatKonten());
+          }
         }
       }
     } else {
@@ -310,21 +330,32 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
               context.read<MainNotifier>().pageIndex = 1;
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
             } else if ((interaksiData?.buatKonten?[0].hyppeVid ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppePic ?? 0) > 0) {
-              onTapbuatKonten(interaksiData?.buatKonten?[0] ?? BuatKonten());
+              onTapbuatKonten(contentD: interaksiData?.buatKonten?[0] ?? BuatKonten());
             }
           }
         }
       } else {
-        onTapbuatKonten(challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?[0] ?? BuatKonten());
+        onTapbuatKonten(interaksiKonten: challengeData?.metrik?[0].interaksiKonten?[0] ?? InteraksiKonten());
       }
     }
   }
 
-  void onTapbuatKonten(BuatKonten contentD) {
-    int contentVid = (contentD.hyppeVid ?? 0) > 0 ? 1 : 0;
-    int contentDiary = (contentD.hyppeDiary ?? 0) > 0 ? 1 : 0;
-    int contentPict = (contentD.hyppePic ?? 0) > 0 ? 1 : 0;
+  void onTapbuatKonten({BuatKonten? contentD, InteraksiKonten? interaksiKonten}) {
+    int contentVid = 0;
+    int contentDiary = 0;
+    int contentPict = 0;
+    if (contentD != null) {
+      contentVid = (contentD.hyppeVid ?? 0) > 0 ? 1 : 0;
+      contentDiary = (contentD.hyppeDiary ?? 0) > 0 ? 1 : 0;
+      contentPict = (contentD.hyppePic ?? 0) > 0 ? 1 : 0;
+    } else {
+      contentDiary = (interaksiKonten?.suka?[0].hyppeDiary ?? 0) >= 1 || (interaksiKonten?.tonton?[0].hyppeDiary ?? 0) >= 1 ? 1 : 0;
+      contentPict = ((interaksiKonten?.suka?[0].hyppePic ?? 0) >= 1 ? 1 : 0);
+      contentVid = (interaksiKonten?.suka?[0].hyppeVid ?? 0) >= 1 || (interaksiKonten?.tonton?[0].hyppeVid ?? 0) >= 1 ? 1 : 0;
+    }
+    print(contentVid);
     var tot = contentVid + contentDiary + contentPict;
+    print(tot);
     if (tot > 1) {
       ShowBottomSheet.onUploadContent(
         context,

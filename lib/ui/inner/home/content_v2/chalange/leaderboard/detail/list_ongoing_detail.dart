@@ -30,14 +30,16 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
       var boollUser = false;
       var participant = 0;
       cn.leaderBoardDetailData?.getlastrank?.forEach((e) {
+        print("=hahaha=");
         if (e.isUserLogin == true) {
           boollUser = true;
         }
-        if (cn.leaderBoardData?.challengeData?[0].objectChallenge == "KONTEN") {
+        if (cn.leaderBoardDetailData?.challengeData?[0].objectChallenge == "KONTEN") {
           if (e.postChallengess?.isNotEmpty ?? [].isEmpty) {
             participant++;
           }
         } else {
+          print("=hihihi= ${participant++}");
           participant++;
         }
       });
@@ -62,41 +64,41 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                   //     },
                   //     child: Text("sdsd")),
                   cn.leaderBoardDetailData?.onGoing == false
-                      ? const Padding(
-                          padding: EdgeInsets.all(32.0),
+                      ? Padding(
+                          padding: const EdgeInsets.all(32.0),
                           child: CustomCommingSoon(
-                            title: 'Yuk, Ikut Kompetisi Menarik',
-                            subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                            title: cn.language.letsJoinTheCompetition ?? 'Yuk, Ikut Kompetisi Menarik',
+                            subtitle: cn.language.getFirstPlaceByEnteringThisExcitingCompetition ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                           ),
                         )
                       : cn.isLoadingLeaderboard
                           ? Container()
                           : cn.leaderBoardDetailData?.getlastrank?.isEmpty ?? [].isEmpty
-                              ? const Padding(
-                                  padding: EdgeInsets.all(32.0),
+                              ? Padding(
+                                  padding: const EdgeInsets.all(32.0),
                                   child: CustomEmptyWidget(
-                                    title: 'Belum ada Leaderboard Tersedia',
-                                    subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                                    title: cn.language.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
+                                    subtitle: cn.language.getFirstPlaceByFollowingThisExciting ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                                   ),
                                 )
                               : cn.leaderBoardDetailData?.getlastrank?[0].score == 0 || participant == 0
-                                  ? const Padding(
-                                      padding: EdgeInsets.all(32.0),
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(32.0),
                                       child: CustomEmptyWidget(
-                                        title: 'Belum ada Leaderboard Tersedia',
-                                        subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                                        title: cn.language.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
+                                        subtitle: cn.language.getFirstPlaceByFollowingThisExciting ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                                       ),
                                     )
                                   : ScrollConfiguration(
                                       behavior: const ScrollBehavior().copyWith(overscroll: false),
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 24),
+                                        padding: const EdgeInsets.only(bottom: 24),
                                         child: ListView.builder(
                                           itemCount: cn.leaderBoardDetailData?.getlastrank?.length,
                                           shrinkWrap: true,
                                           physics: const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, index) {
-                                            if (cn.leaderBoardData?.getlastrank?[index].score == 0) {
+                                            if (cn.leaderBoardDetailData?.getlastrank?[index].score == 0) {
                                               return Container();
                                             } else {
                                               if (cn.leaderBoardDetailData?.challengeData?[0].objectChallenge == 'KONTEN') {
@@ -156,8 +158,8 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      "Deskripsi",
+                    Text(
+                      cn.language.description ?? "Deskripsi",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -167,7 +169,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                     Text("${cn.leaderBoardDetailData?.challengeData?[0].description}"),
                   ],
                 )),
-            cn.leaderBoardDetailData?.onGoing == false || !boollUser || participant == 0
+            cn.leaderBoardDetailData?.onGoing == false || !boollUser
                 ? Container()
                 : Container(
                     width: SizeConfig.screenWidth,

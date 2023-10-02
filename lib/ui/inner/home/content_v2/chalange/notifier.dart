@@ -243,6 +243,7 @@ class ChallangeNotifier with ChangeNotifier {
 
         if (getdata?.startDatetime != '' || getdata?.startDatetime != null) {
           var dateNote = await System().compareDate(getdata?.startDatetime ?? '', getdata?.endDatetime ?? '');
+          print("--===-=-=-=- date $dateNote");
           getdata?.onGoing = dateNote[0];
           if (dateNote[1].inDays == 0) {
             if (dateNote[1].inHours == 0) {

@@ -942,6 +942,8 @@ class LocalizationModelV2 {
   String? joinOtherInterestingChallenges;
   String? startIn;
   String? hariLagi;
+  String? jamLagi;
+  String? menitLagi;
   String? endsIn;
   String? nonParticipant;
   String? yourAchievements;
@@ -979,6 +981,7 @@ class LocalizationModelV2 {
   String? applyBadge;
   String? youDontHaveaBadge;
   String? winachallengetoreceiveabadge;
+  String? thecompetitionhasended;
   String? badgeCollection;
   String? understand;
   String? myListOfAchievements;
@@ -1935,6 +1938,8 @@ class LocalizationModelV2 {
     this.joinOtherInterestingChallenges,
     this.startIn,
     this.hariLagi,
+    this.jamLagi,
+    this.menitLagi,
     this.endsIn,
     this.nonParticipant,
     this.yourAchievements,
@@ -1972,6 +1977,7 @@ class LocalizationModelV2 {
     this.applyBadge,
     this.youDontHaveaBadge,
     this.winachallengetoreceiveabadge,
+    this.thecompetitionhasended,
     this.badgeCollection,
     this.understand,
     this.myListOfAchievements,
@@ -2952,6 +2958,8 @@ class LocalizationModelV2 {
     joinOtherInterestingChallenges = json['joinOtherInterestingChallenges'];
     startIn = json['startIn'];
     hariLagi = json['hariLagi'];
+    jamLagi = json['jamLagi'];
+    menitLagi = json['menitLagi'];
     endsIn = json['endsIn'];
     nonParticipant = json['nonParticipant'];
     yourAchievements = json['yourAchievements'];
@@ -2993,6 +3001,7 @@ class LocalizationModelV2 {
     applyBadge = json['applyBadge'];
     youDontHaveaBadge = json['youDontHaveaBadge'];
     winachallengetoreceiveabadge = json['winachallengetoreceiveabadge'];
+    thecompetitionhasended = json['thecompetitionhasended'];
     badgeCollection = json['badgeCollection'];
     understand = json['understand'];
   }

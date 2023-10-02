@@ -87,29 +87,29 @@ class _ListEndDetailState extends State<ListEndDetail> {
                     ),
                   ),
                   cn.leaderBoardDetaiEndlData?.onGoing == false
-                      ? const Padding(
-                          padding: EdgeInsets.all(32.0),
+                      ? Padding(
+                          padding: const EdgeInsets.all(32.0),
                           child: CustomCommingSoon(
-                            title: 'Yuk, Ikut Kompetisi Menarik',
-                            subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                            title: cn.language.letsJoinTheCompetition ?? 'Yuk, Ikut Kompetisi Menarik',
+                            subtitle: cn.language.getFirstPlaceByEnteringThisExcitingCompetition ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                           ),
                         )
                       : cn.isLoadingLeaderboard
                           ? Container()
                           : cn.leaderBoardDetaiEndlData?.getlastrank?.isEmpty ?? [].isEmpty
-                              ? const Padding(
-                                  padding: EdgeInsets.all(32.0),
+                              ? Padding(
+                                  padding: const EdgeInsets.all(32.0),
                                   child: CustomEmptyWidget(
-                                    title: 'Belum ada Leaderboard Tersedia',
-                                    subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                                    title: cn.language.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
+                                    subtitle: cn.language.getFirstPlaceByEnteringThisExcitingCompetition ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                                   ),
                                 )
                               : cn.leaderBoardDetaiEndlData?.getlastrank?[0].score == 0 || participant == 0
-                                  ? const Padding(
+                                  ? Padding(
                                       padding: EdgeInsets.all(32.0),
                                       child: CustomEmptyWidget(
-                                        title: 'Belum ada Leaderboard Tersedia',
-                                        subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                                        title: cn.language.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
+                                        subtitle: cn.language.getFirstPlaceByFollowingThisExciting ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                                       ),
                                     )
                                   : ScrollConfiguration(
@@ -157,8 +157,8 @@ class _ListEndDetailState extends State<ListEndDetail> {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      "Deskripsi",
+                    Text(
+                      cn.language.description ?? "Deskripsi",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,

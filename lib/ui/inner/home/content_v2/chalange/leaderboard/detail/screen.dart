@@ -70,8 +70,6 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
           _current = _tabController.index;
           if (_lastCurrent != _current) {
             if (_current == 1) {
-              print("masuk tab slide ${_tabController.index}");
-              print("masuk tab slide");
               cn.getLeaderBoard(
                 context,
                 chllangeid,
@@ -131,29 +129,28 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
 
     switch (cn.leaderBoardDetailData?.noteTime) {
       case "inDays":
-        inTime = "Hari";
+        inTime = cn.language.hariLagi ?? "Hari Lagi";
         break;
       case "inHours":
-        inTime = "Jam";
+        inTime = cn.language.jamLagi ?? "Jam Lagi";
         break;
       default:
-        inTime = "Menit";
+        inTime = cn.language.menitLagi ?? "Menit Lagi";
     }
 
     if (cn.leaderBoardDetailData?.status == "BERAKHIR") {
-      dateText = "Kompetisi telah berakhir";
+      dateText = cn.language.thecompetitionhasended ?? "Kompetisi telah berakhir";
     } else {
       if (cn.leaderBoardDetailData?.onGoing == true) {
-        dateText = "Berakhir dalam ${cn.leaderBoardDetailData?.totalDays} $inTime Lagi";
+        dateText = "${cn.language.endsIn} ${cn.leaderBoardDetailData?.totalDays} $inTime";
       } else {
-        dateText = "Mulai  dalam ${cn.leaderBoardDetailData?.totalDays} $inTime Lagi";
+        dateText = "${cn.language.startIn} ${cn.leaderBoardDetailData?.totalDays} $inTime";
       }
     }
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -292,14 +289,14 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Container(
-                                        padding: EdgeInsets.all(8),
+                                        padding: const EdgeInsets.all(8),
                                         decoration: ShapeDecoration(
                                           color: Colors.black.withOpacity(0.5),
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                                         ),
                                         child: Text(
                                           dateText,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w400,
                                             color: Colors.white,
@@ -315,11 +312,11 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                                       width: SizeConfig.screenWidth,
                                       padding: const EdgeInsets.only(top: 24, bottom: 24),
                                       margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
-                                      decoration: ShapeDecoration(
+                                      decoration: const ShapeDecoration(
                                         color: Colors.white,
                                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8))),
                                       ),
-                                      child: Center(
+                                      child: const Center(
                                         child: Text("Leaderboard",
                                             style: TextStyle(
                                               fontSize: 16,
@@ -332,7 +329,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                                     ? Container()
                                     : Container(
                                         margin: const EdgeInsets.only(left: 16.0, right: 16),
-                                        padding: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
+                                        padding: const EdgeInsets.only(top: 8, left: 16.0, right: 16),
                                         color: Colors.white,
                                         child: Container(
                                           padding: const EdgeInsets.all(4),

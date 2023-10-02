@@ -948,6 +948,8 @@
   "joinOtherInterestingChallenges": "Ikuti Challenge Menarik Lainnya",
   "startIn": "Mulai dalam",
   "hariLagi": "Hari Lagi",
+  "jamLagi": "Jam Lagi",
+  "menitLagi": "Menit Lagi",
   "endsIn": "Berakhir dalam",
   "challengePeriod": "Challenge Periode",
   "nonParticipant": "Bukan Partisipan",
@@ -990,5 +992,6 @@
   "badgeCollection": "Koleksi Badge",
   "applyBadge": "Terapkan Badge",
   "youDontHaveaBadge": "Kamu Belum Memiliki Badge",
-  "winachallengetoreceiveabadge": "Menangkan sebuah challenge untuk mendapatkan badge!"
+  "winachallengetoreceiveabadge": "Menangkan sebuah challenge untuk mendapatkan badge!",
+  "thecompetitionhasended": "Kompetisi telah berakhir"
 }
