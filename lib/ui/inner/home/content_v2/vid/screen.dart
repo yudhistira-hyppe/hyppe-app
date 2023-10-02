@@ -26,6 +26,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/ads_cta_layout.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
@@ -44,21 +45,14 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'package:wakelock/wakelock.dart';
 import '../../../../../app.dart';
 import '../../../../../core/arguments/other_profile_argument.dart';
-import '../../../../../core/bloc/ads_video/bloc.dart';
-import '../../../../../core/bloc/ads_video/state.dart';
 import '../../../../../core/config/ali_config.dart';
-import '../../../../../core/models/collection/advertising/ads_video_data.dart';
-import '../../../../../core/models/collection/advertising/view_ads_request.dart';
 import '../../../../../core/services/route_observer_service.dart';
 import '../../../../../ux/path.dart';
 import '../../../../../ux/routing.dart';
 import '../../../../constant/entities/like/notifier.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-
-import '../../../../constant/overlay/general_dialog/show_general_dialog.dart';
 import '../../../../constant/widget/custom_background_layer.dart';
 import '../../../../constant/widget/custom_base_cache_image.dart';
 
@@ -556,7 +550,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                     : Column(
                         children: [
                           // Text("vidData.isContentLoading ${vidData.isContentLoading}"),
-                          // Text("total ${vidData.height}"),
                           VisibilityDetector(
                             key: Key(vidData.postID ?? index.toString()),
                             onVisibilityChanged: (info) {
@@ -1586,46 +1579,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   var loadingAction = false;
 
   var loadLaunch = false;
-
-  Future adsView(AdsData data, int time, {bool isClick = false}) async {
-    try {
-      setState(() {
-        loadingAction = true;
-      });
-
-      final notifier = AdsDataBloc();
-      final request = ViewAdsRequest(
-        watchingTime: time,
-        adsId: data.adsId,
-        useradsId: data.useradsId,
-      );
-      await notifier.viewAdsBloc(context, request, isClick: isClick);
-
-      final fetch = notifier.adsDataFetch;
-
-      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-        print("ini hasil ${fetch.data['rewards']}");
-        if (fetch.data['rewards'] == true) {
-          print("ini hasil ${mounted}");
-          if (mounted) {
-            ShowGeneralDialog.adsRewardPop(context).whenComplete(() => null);
-            Timer(const Duration(milliseconds: 800), () {
-              Routing().moveBack();
-              // Routing().moveBack();
-              // Timer(const Duration(milliseconds: 800), () {
-              //   Routing().moveBack();
-              // });
-            });
-          }
-        }
-      }
-    } catch (e) {
-      'Failed hit view ads $e'.logger();
-      setState(() {
-        loadingAction = false;
-      });
-    }
-  }
 
 // void finish(ContentData data) async {
 //

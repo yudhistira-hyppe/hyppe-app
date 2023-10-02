@@ -10,15 +10,22 @@ import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/bloc/music/bloc.dart';
 import 'package:hyppe/core/bloc/music/state.dart';
+import 'package:hyppe/core/bloc/sticker/bloc.dart';
+import 'package:hyppe/core/bloc/sticker/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/file_extension.dart';
 import 'package:hyppe/core/constants/filter_matrix.dart';
+import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/models/collection/sticker/sticker_category_model.dart';
+import 'package:hyppe/core/models/collection/sticker/sticker_tab.dart';
+import 'package:hyppe/core/models/collection/sticker/sticker_model.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_service.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -29,9 +36,11 @@ import 'package:hyppe/ui/constant/widget/custom_text_field_for_overlay.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
+import 'package:hyppe/ui/inner/upload/preview_content/widget/build_sticker_widget.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:provider/provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
@@ -120,7 +129,8 @@ class PreviewContentNotifier with ChangeNotifier {
 
   BetterPlayerController? _betterPlayerController;
   PersistentBottomSheetController? _persistentBottomSheetController;
-  final TransformationController _transformationController = TransformationController();
+  final TransformationController _transformationController =
+      TransformationController();
   var audioPlayer = AudioPlayer();
   var audioPreviewPlayer = AudioPlayer();
   final searchController = TextEditingController();
@@ -129,8 +139,10 @@ class PreviewContentNotifier with ChangeNotifier {
   final focusNode = FocusNode();
 
   BetterPlayerController? get betterPlayerController => _betterPlayerController;
-  TransformationController get transformationController => _transformationController;
-  PersistentBottomSheetController? get persistentBottomSheetController => _persistentBottomSheetController;
+  TransformationController get transformationController =>
+      _transformationController;
+  PersistentBottomSheetController? get persistentBottomSheetController =>
+      _persistentBottomSheetController;
   bool get showNext => _showNext;
   List<Uint8List?>? get thumbNails => _thumbNails;
   double get sizeDragTarget => _sizeDragTarget;
@@ -156,6 +168,90 @@ class PreviewContentNotifier with ChangeNotifier {
   FeatureType? get featureType => _featureType;
   List<String?>? get fileContent => _fileContent;
   List<double> filterMatrix(int index) => _filterMatrix[index];
+  
+  TextEditingController stickerTextController = TextEditingController();
+  ScrollController stickerScrollController = ScrollController();
+
+  double _stickerScrollPosition = 0.0;
+  double get stickerScrollPosition => _stickerScrollPosition;
+  set stickerScrollPosition(double val) {
+    _stickerScrollPosition = val;
+    notifyListeners();
+  }
+
+  double _stickerMaxScroll = 0.0;
+  double get stickerMaxScroll => _stickerMaxScroll;
+  set stickerMaxScroll(double val) {
+    _stickerMaxScroll = val;
+    notifyListeners();
+  }
+
+  String _stickerSearchText = '';
+  String get stickerSearchText => _stickerSearchText;
+  set stickerSearchText(String val) {
+    _stickerSearchText = val;
+    notifyListeners();
+  }
+
+  bool _stickerSearchActive = false;
+  bool get stickerSearchActive => _stickerSearchActive;
+  set stickerSearchActive(bool val) {
+    _stickerSearchActive = val;
+    notifyListeners();
+  }
+
+  bool _isDragging = false;
+  bool get isDragging => _isDragging;
+  set isDragging(bool val) {
+    _isDragging = val;
+    notifyListeners();
+  }
+
+  bool _isDeleteButtonActive = false;
+  bool get isDeleteButtonActive => _isDeleteButtonActive;
+  set isDeleteButtonActive(bool val) {
+    _isDeleteButtonActive = val;
+    notifyListeners();
+  }
+
+  List<StickerTab> _stickerTab = [
+    StickerTab(index: 0, name: 'Sticker', type: 'STICKER', column: 3, data: []),
+    StickerTab(index: 1, name: 'Emoji', type: 'EMOJI', column: 5, data: []),
+    StickerTab(index: 2, name: 'GIF', type: 'GIF', column: 3, data: []),
+  ];
+  List<StickerTab> get stickerTab => _stickerTab;
+  set stickerTab(List<StickerTab> val) {
+    _stickerTab = val;
+    notifyListeners();
+  }
+
+  List<StickerModel> _stickers = [];
+  List<StickerModel> get stickers => _stickers;
+  set stickers(List<StickerModel> val) {
+    _stickers = val;
+    notifyListeners();
+  }
+
+  int _stickerTabIndex = 0;
+  int get stickerTabIndex => _stickerTabIndex;
+  set stickerTabIndex(val){
+    _stickerTabIndex = val;
+    notifyListeners();
+  }
+  
+  int _stickerCategoryIndex = 0;
+  int get stickerCategoryIndex => _stickerCategoryIndex;
+  set stickerCategoryIndex(val){
+    _stickerCategoryIndex = val;
+    notifyListeners();
+  }
+
+  List<Widget> _onScreenStickers = [];
+  List<Widget> get onScreenStickers => _onScreenStickers;
+  set onScreenStickers(List<Widget> val){
+    _onScreenStickers = val;
+    notifyListeners();
+  }
 
   set height(int? val) {
     _height = val;
@@ -407,7 +503,9 @@ class PreviewContentNotifier with ChangeNotifier {
   void onScrollExpMusics(
     BuildContext context,
   ) async {
-    if (scrollExpController.offset >= scrollExpController.position.maxScrollExtent && !scrollExpController.position.outOfRange) {
+    if (scrollExpController.offset >=
+            scrollExpController.position.maxScrollExtent &&
+        !scrollExpController.position.outOfRange) {
       if (!_isLoadNextExpMusic) {
         print('Test onScrollExpMusics');
         if (_isNextExpMusic) {
@@ -418,11 +516,20 @@ class PreviewContentNotifier with ChangeNotifier {
             final myId = _selectedType?.id;
             if (myId != null) {
               if (_selectedMusicEnum == MusicEnum.mood) {
-                res = await getMusics(context, keyword: searchController.text, idMood: myId, pageNumber: pageNumber);
+                res = await getMusics(context,
+                    keyword: searchController.text,
+                    idMood: myId,
+                    pageNumber: pageNumber);
               } else if (_selectedMusicEnum == MusicEnum.genre) {
-                res = await getMusics(context, keyword: searchController.text, idGenre: myId, pageNumber: pageNumber);
+                res = await getMusics(context,
+                    keyword: searchController.text,
+                    idGenre: myId,
+                    pageNumber: pageNumber);
               } else {
-                res = await getMusics(context, keyword: searchController.text, idTheme: myId, pageNumber: pageNumber);
+                res = await getMusics(context,
+                    keyword: searchController.text,
+                    idTheme: myId,
+                    pageNumber: pageNumber);
               }
               _isNextExpMusic = res.isEmpty ? false : res.length % 15 == 0;
               _listExpMusics.addAll(res);
@@ -439,13 +546,15 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void onScrollMusics(BuildContext context) async {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
       if (!_isLoadNextMusic) {
         if (_isNextMusic) {
           try {
             _isLoadNextMusic = true;
             final int pageNumber = _listMusics.length ~/ 15;
-            final res = await getMusics(context, keyword: searchController.text, pageNumber: pageNumber);
+            final res = await getMusics(context,
+                keyword: searchController.text, pageNumber: pageNumber);
             _isNextMusic = res.isEmpty ? false : res.length % 15 == 0;
             _listMusics.addAll(res);
             notifyListeners();
@@ -484,9 +593,12 @@ class PreviewContentNotifier with ChangeNotifier {
           notifyListeners();
           try {
             listMusics = await getMusics(context, keyword: value);
-            _listGenres = await getMusicCategories(context, MusicEnum.genre, keyword: value);
-            _listThemes = await getMusicCategories(context, MusicEnum.theme, keyword: value);
-            _listMoods = await getMusicCategories(context, MusicEnum.mood, keyword: value);
+            _listGenres = await getMusicCategories(context, MusicEnum.genre,
+                keyword: value);
+            _listThemes = await getMusicCategories(context, MusicEnum.theme,
+                keyword: value);
+            _listMoods = await getMusicCategories(context, MusicEnum.mood,
+                keyword: value);
           } catch (e) {
             'Error onChangeSearchMusic : $e'.logger();
           } finally {
@@ -580,20 +692,39 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
-  Future getMusicByType(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood = ''}) async {
-    listExpMusics = await getMusics(context, keyword: keyword, idGenre: idGenre, idTheme: idTheme, idMood: idMood);
+  Future getMusicByType(BuildContext context,
+      {String keyword = '',
+      String idGenre = '',
+      String idTheme = '',
+      String idMood = ''}) async {
+    listExpMusics = await getMusics(context,
+        keyword: keyword, idGenre: idGenre, idTheme: idTheme, idMood: idMood);
     notifyListeners();
   }
 
-  Future<List<Music>> getMusics(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood = '', int pageNumber = 0, int pageRow = 15}) async {
+  Future<List<Music>> getMusics(BuildContext context,
+      {String keyword = '',
+      String idGenre = '',
+      String idTheme = '',
+      String idMood = '',
+      int pageNumber = 0,
+      int pageRow = 15}) async {
     List<Music>? res = [];
     _isLoadingMusic = true;
     try {
       final bloc = MusicDataBloc();
-      await bloc.getMusics(context, keyword: keyword, idTheme: idTheme, idGenre: idGenre, idMood: idMood, pageNumber: pageNumber, pageRow: pageRow);
+      await bloc.getMusics(context,
+          keyword: keyword,
+          idTheme: idTheme,
+          idGenre: idGenre,
+          idMood: idMood,
+          pageNumber: pageNumber,
+          pageRow: pageRow);
       final fetch = bloc.musicDataFetch;
       if (fetch.musicDataState == MusicState.getMusicsBlocSuccess) {
-        res = (fetch.data as List<dynamic>?)?.map((item) => Music.fromJson(item as Map<String, dynamic>)).toList();
+        res = (fetch.data as List<dynamic>?)
+            ?.map((item) => Music.fromJson(item as Map<String, dynamic>))
+            .toList();
         print('res length = ${res?.length}');
         return res ?? [];
       } else if (fetch.musicDataState == MusicState.getMusicBlocError) {
@@ -607,14 +738,18 @@ class PreviewContentNotifier with ChangeNotifier {
     return [];
   }
 
-  Future<List<MusicType>> getMusicCategories(BuildContext context, MusicEnum type, {String keyword = ''}) async {
+  Future<List<MusicType>> getMusicCategories(
+      BuildContext context, MusicEnum type,
+      {String keyword = ''}) async {
     List<MusicType>? res = [];
     try {
       final bloc = MusicDataBloc();
       await bloc.getTypeMusic(context, type, keyword: keyword);
       final fetch = bloc.musicDataFetch;
       if (fetch.musicDataState == MusicState.getMusicsBlocSuccess) {
-        res = (fetch.data as List<dynamic>?)?.map((item) => MusicType.fromJson(item as Map<String, dynamic>)).toList();
+        res = (fetch.data as List<dynamic>?)
+            ?.map((item) => MusicType.fromJson(item as Map<String, dynamic>))
+            .toList();
       } else if (fetch.musicDataState == MusicState.getMusicBlocError) {
         throw '${(fetch.data as dio.DioError).message}';
       }
@@ -677,9 +812,11 @@ class PreviewContentNotifier with ChangeNotifier {
         _isLoadVideo = true;
         notifyListeners();
         String outputPath = await System().getSystemPath(params: 'postVideo');
-        outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
+        outputPath =
+            '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
 
-        String command = '-stream_loop -1 -i $urlAudio -i ${_fileContent?[_indexView]} -shortest -c copy $outputPath';
+        String command =
+            '-stream_loop -1 -i $urlAudio -i ${_fileContent?[_indexView]} -shortest -c copy $outputPath';
         await FFmpegKit.executeAsync(
           command,
           (session) async {
@@ -714,7 +851,8 @@ class PreviewContentNotifier with ChangeNotifier {
       }
     } catch (e) {
       'videoMerger Error : $e'.logger();
-      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
+      ShowBottomSheet()
+          .onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
     } finally {
       _isLoadVideo = false;
       notifyListeners();
@@ -777,7 +915,8 @@ class PreviewContentNotifier with ChangeNotifier {
       }
     } catch (e) {
       e.logger();
-      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
+      ShowBottomSheet()
+          .onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
     } finally {
       _isLoadVideo = false;
       notifyListeners();
@@ -919,7 +1058,8 @@ class PreviewContentNotifier with ChangeNotifier {
         notifyListeners();
         _listExpMusics[index].isSelected = false;
       } else {
-        _listExpMusics[_listExpMusics.indexOf(_selectedMusic!)].isSelected = false;
+        _listExpMusics[_listExpMusics.indexOf(_selectedMusic!)].isSelected =
+            false;
         _listExpMusics[index].isSelected = true;
         _selectedMusic = music;
       }
@@ -961,7 +1101,8 @@ class PreviewContentNotifier with ChangeNotifier {
     _isLoadingBetterPlayer = true;
     _errorMessage = '';
 
-    BetterPlayerConfiguration betterPlayerConfiguration = const BetterPlayerConfiguration(
+    BetterPlayerConfiguration betterPlayerConfiguration =
+        const BetterPlayerConfiguration(
       autoPlay: false,
       fit: BoxFit.contain,
       showPlaceholderUntilPlay: true,
@@ -993,8 +1134,10 @@ class PreviewContentNotifier with ChangeNotifier {
       bufferingConfiguration: const BetterPlayerBufferingConfiguration(
         minBufferMs: BetterPlayerBufferingConfiguration.defaultMinBufferMs,
         maxBufferMs: BetterPlayerBufferingConfiguration.defaultMaxBufferMs,
-        bufferForPlaybackMs: BetterPlayerBufferingConfiguration.defaultBufferForPlaybackMs,
-        bufferForPlaybackAfterRebufferMs: BetterPlayerBufferingConfiguration.defaultBufferForPlaybackAfterRebufferMs,
+        bufferForPlaybackMs:
+            BetterPlayerBufferingConfiguration.defaultBufferForPlaybackMs,
+        bufferForPlaybackAfterRebufferMs: BetterPlayerBufferingConfiguration
+            .defaultBufferForPlaybackAfterRebufferMs,
       ),
     );
 
@@ -1004,7 +1147,9 @@ class PreviewContentNotifier with ChangeNotifier {
       await _betterPlayerController?.setupDataSource(dataSource).then((_) {
         _betterPlayerController?.play();
         _betterPlayerController?.setLooping(true);
-        _betterPlayerController?.setOverriddenAspectRatio(_betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0.0);
+        _betterPlayerController?.setOverriddenAspectRatio(
+            _betterPlayerController?.videoPlayerController?.value.aspectRatio ??
+                0.0);
         notifyListeners();
       });
 
@@ -1013,8 +1158,13 @@ class PreviewContentNotifier with ChangeNotifier {
           _totalDuration = _.parameters?['duration'];
 
           if (_totalDuration != null) {
-            if (_betterPlayerController?.isVideoInitialized() ?? false) if ((_betterPlayerController?.videoPlayerController?.value.position ?? Duration.zero) >=
-                (_betterPlayerController?.videoPlayerController?.value.duration ?? Duration.zero)) {
+            if (_betterPlayerController?.isVideoInitialized() ??
+                false) if ((_betterPlayerController
+                        ?.videoPlayerController?.value.position ??
+                    Duration.zero) >=
+                (_betterPlayerController
+                        ?.videoPlayerController?.value.duration ??
+                    Duration.zero)) {
               _nextVideo = true;
             }
           }
@@ -1054,7 +1204,8 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void addAdditionalItem({required Widget widgetItem, required Offset offsetItem}) {
+  void addAdditionalItem(
+      {required Widget widgetItem, required Offset offsetItem}) {
     _additionalItem.add(widgetItem);
     _positions.add(offsetItem);
     notifyListeners();
@@ -1081,7 +1232,8 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void setVideoPlayerController(BetterPlayerController? val) => _betterPlayerController = val;
+  void setVideoPlayerController(BetterPlayerController? val) =>
+      _betterPlayerController = val;
 
   void clearAdditionalItem() {
     _additionalItem.clear();
@@ -1109,7 +1261,8 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void animateToPage(int index, PageController pageController) {
-    pageController.animateToPage(index, duration: const Duration(milliseconds: 200), curve: Curves.easeInCirc);
+    pageController.animateToPage(index,
+        duration: const Duration(milliseconds: 200), curve: Curves.easeInCirc);
     indexView = index;
     notifyListeners();
   }
@@ -1140,7 +1293,8 @@ class PreviewContentNotifier with ChangeNotifier {
     );
   }
 
-  void navigateToPreUploaded(BuildContext context, [GlobalKey? globalKey]) async {
+  void navigateToPreUploaded(BuildContext context,
+      [GlobalKey? globalKey]) async {
     if (featureType == FeatureType.diary) {
       final ms = totalDuration?.inMilliseconds;
       if (ms != null) {
@@ -1157,7 +1311,8 @@ class PreviewContentNotifier with ChangeNotifier {
 
     if (_isSheetOpen) closeFilters();
     if (betterPlayerController != null) isForcePaused = true;
-    final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
+    final notifier =
+        Provider.of<PreUploadContentNotifier>(context, listen: false);
     notifier.isEdit = false;
     notifier.featureType = featureType;
     notifier.fileContent = fileContent;
@@ -1166,8 +1321,13 @@ class PreviewContentNotifier with ChangeNotifier {
             ? _thumbNails![0]
             : null
         : null;
-    notifier.privacyTitle == '' ? notifier.privacyTitle = notifier.language.public ?? 'public' : notifier.privacyTitle = notifier.privacyTitle;
-    notifier.locationName == '' ? notifier.locationName = notifier.language.addLocation ?? 'add location' : notifier.locationName = notifier.locationName;
+    notifier.privacyTitle == ''
+        ? notifier.privacyTitle = notifier.language.public ?? 'public'
+        : notifier.privacyTitle = notifier.privacyTitle;
+    notifier.locationName == ''
+        ? notifier.locationName =
+            notifier.language.addLocation ?? 'add location'
+        : notifier.locationName = notifier.locationName;
     notifier.musicSelected = _fixSelectedMusic;
     _fixSelectedMusic = null;
     notifier.checkForCompress();
@@ -1176,7 +1336,10 @@ class PreviewContentNotifier with ChangeNotifier {
 
   //Tag Hariyanto
   Future makeThumbnail(BuildContext context, int index) async {
-    if (System().lookupContentMimeType(fileContent?[index] ?? '')?.startsWith('image') ?? false) {
+    if (System()
+            .lookupContentMimeType(fileContent?[index] ?? '')
+            ?.startsWith('image') ??
+        false) {
       showNext = true;
     } else {
       _thumbNails = [];
@@ -1187,7 +1350,8 @@ class PreviewContentNotifier with ChangeNotifier {
           Uint8List? _thumbnail = await VideoThumbnail.thumbnailData(
             video: fileContent?[index] ?? '',
             imageFormat: ImageFormat.JPEG,
-            maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+            maxWidth:
+                128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
             quality: 25,
           );
           _thumbNails?.add(_thumbnail);
@@ -1210,18 +1374,117 @@ class PreviewContentNotifier with ChangeNotifier {
     _sourceFile = sourceFile;
   }
 
-  void showFilters(BuildContext context, GlobalKey<ScaffoldState> scaffoldState, GlobalKey? globalKey) {
+  void showFilters(BuildContext context, GlobalKey<ScaffoldState> scaffoldState,
+      GlobalKey? globalKey) {
     if (System().extensionFiles(_fileContent?[indexView] ?? '') == '.$PNG' ||
         System().extensionFiles(_fileContent?[indexView] ?? '') == '.$JPG' ||
         System().extensionFiles(_fileContent?[indexView] ?? '') == '.$JPEG') {
       isSheetOpen = true;
-      persistentBottomSheetController = ShowBottomSheet().onShowFilters(context, scaffoldState, fileContent?[indexView] ?? '', globalKey);
+      persistentBottomSheetController = ShowBottomSheet().onShowFilters(
+          context, scaffoldState, fileContent?[indexView] ?? '', globalKey);
 
       // listen to Scaffold status
-      persistentBottomSheetController?.closed.whenComplete(() => isSheetOpen = false);
+      persistentBottomSheetController?.closed
+          .whenComplete(() => isSheetOpen = false);
     } else {
-      ShowBottomSheet().onShowColouredSheet(context, language.filterIsOnlySupportedForImage ?? '', color: kHyppeTextWarning, maxLines: 2);
+      ShowBottomSheet().onShowColouredSheet(
+          context, language.filterIsOnlySupportedForImage ?? '',
+          color: kHyppeTextWarning, maxLines: 2);
     }
+  }
+
+  Future<void> getSticker(BuildContext context, {required int index}) async {
+    if (stickerTab[index].data.isEmpty) {
+      try {
+        final notifier = StickerBloc();
+        await notifier.getStickers(context, stickerTab[index].type);
+        final fetch = notifier.stickerFetch;
+        if (fetch.state == StickerState.getStickerSuccess) {
+          List<StickerCategoryModel>? res = (fetch.data as List<dynamic>?)?.map((e) => StickerCategoryModel.fromJson(e as Map<String, dynamic>)).toList();
+          stickerTab[index].data.addAll(res ?? []);
+        }
+        notifyListeners();
+      } catch (e) {
+        'get sticker: ERROR: $e'.logger();
+      }
+    }
+  }
+
+  initStickerScroll(BuildContext context) {
+    stickerScrollController.addListener(() {
+      stickerScrollPosition = stickerScrollController.offset;
+      if (stickerScrollController.position.maxScrollExtent != stickerMaxScroll) {
+        stickerMaxScroll = stickerScrollController.position.maxScrollExtent;
+      }
+    });
+  }
+
+  removeStickerScroll(BuildContext context) {
+    stickerScrollController.removeListener(() => this);
+  }
+
+  void addSticker(BuildContext context, StickerModel? sticker) {
+    var datetime = DateTime.now();
+    stickers.add(StickerModel(
+      key: Key(datetime.toString()),
+      id: sticker?.id,
+      type: sticker?.type,
+      image: sticker?.image,
+      matrix: Matrix4
+        .identity()
+        .scaled(SizeWidget.stickerScale)
+        ..setTranslationRaw(
+          (MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width * SizeWidget.stickerScale)) / 2,
+          MediaQuery.of(context).size.height / 5,
+          0,
+        ),
+    ));
+    onScreenStickers.add(BuildStickerWidget(
+      key: Key(datetime.toString()),
+      image: sticker?.image ?? '',
+      onDragStart: () {
+        if (!isDragging) {
+          isDragging = true;
+          notifyListeners();
+        }
+      },
+      onDragEnd: (matrix, offset, key) {
+        isDragging = false;
+        isDeleteButtonActive = false;
+        stickers.where((element) => element.key == key).first.matrix = matrix;
+        notifyListeners();
+        if (
+          offset.dy > (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 160) &&
+          offset.dy < (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 80) &&
+          offset.dx > ((MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.width / 2) - 30) &&
+          offset.dx < ((MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.width / 2) + 30)
+        ) {
+          stickers.removeWhere((element) => element.key == key);
+          onScreenStickers.removeWhere((element) => element.key == key);
+          notifyListeners();
+        }
+      },
+      onDragUpdate: (matrix, offset, key) {
+        if (
+          offset.dy > (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 160) &&
+          offset.dy < (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 80) &&
+          offset.dx > ((MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.width / 2) - 30) &&
+          offset.dx < ((MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.width / 2) + 30)
+        ) {
+          if (!isDeleteButtonActive) {
+            isDeleteButtonActive = true;
+            notifyListeners();
+          }
+        } else {
+          if (_isDeleteButtonActive) {
+            isDeleteButtonActive = false;
+            notifyListeners();
+          }
+        }
+      },
+    ));
+    Navigator.pop(context);
+    notifyListeners();
   }
 
   Future postStoryContent(BuildContext context) async {
@@ -1251,11 +1514,14 @@ class PreviewContentNotifier with ChangeNotifier {
         saleView: false,
         rotate: _orientation ?? NativeDeviceOrientation.portraitUp,
         location: '',
+        stickers: _stickers,
         onReceiveProgress: (count, total) async {
-          await eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count.toDouble(), total: total.toDouble()));
+          await eventService.notifyUploadReceiveProgress(ProgressUploadArgument(
+              count: count.toDouble(), total: total.toDouble()));
         },
         onSendProgress: (received, total) async {
-          await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received.toDouble(), total: total.toDouble()));
+          await eventService.notifyUploadSendProgress(ProgressUploadArgument(
+              count: received.toDouble(), total: total.toDouble()));
         },
       ).then((value) {
         _uploadSuccess = value;
@@ -1266,10 +1532,13 @@ class PreviewContentNotifier with ChangeNotifier {
           dio.Response res = value;
           "return data ${jsonEncode(res.data['data'])}".loggerV2();
           ContentData uploadedData = ContentData.fromJson(res.data['data']);
-          (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().onUploadedSelfUserContent(context: context, contentData: uploadedData);
+          (Routing.navigatorKey.currentContext ?? context)
+              .read<HomeNotifier>()
+              .onUploadedSelfUserContent(
+                  context: context, contentData: uploadedData);
         }
       });
-      
+
       homeNotifier.preventReloadAfterUploadPost = true;
       homeNotifier.uploadedPostType = FeatureType.story;
       Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
@@ -1329,9 +1598,12 @@ class PreviewContentNotifier with ChangeNotifier {
     if (System().extensionFiles(_fileContent?[indexView] ?? '') == '.$PNG' ||
         System().extensionFiles(_fileContent?[indexView] ?? '') == '.$JPG' ||
         System().extensionFiles(_fileContent?[indexView] ?? '') == '.$JPEG') {
-      OverlayService().addOverlayElement(context, const CustomTextFieldForOverlay());
+      OverlayService()
+          .addOverlayElement(context, const CustomTextFieldForOverlay());
     } else {
-      ShowBottomSheet().onShowColouredSheet(context, language.filterIsOnlySupportedForImage ?? '', color: kHyppeTextWarning, maxLines: 2);
+      ShowBottomSheet().onShowColouredSheet(
+          context, language.filterIsOnlySupportedForImage ?? '',
+          color: kHyppeTextWarning, maxLines: 2);
     }
   }
 
@@ -1346,6 +1618,63 @@ class PreviewContentNotifier with ChangeNotifier {
       _fileContent?[indexView] = _file;
       clearAdditionalItem();
       notifyListeners();
+    }
+  }
+
+  void openImageCropper(BuildContext context, int currIndex) async {
+    try {
+      final pathFile = fileContent?[currIndex];
+      if (pathFile != null) {
+        final newFile = await ImageCropper().cropImage(
+          sourcePath: pathFile,
+          compressFormat: ImageCompressFormat.jpg,
+          compressQuality: 100,
+          aspectRatioPresets: [
+            CropAspectRatioPreset.square,
+            CropAspectRatioPreset.ratio3x2,
+            CropAspectRatioPreset.original,
+            CropAspectRatioPreset.ratio4x3,
+            // CropAspectRatioPreset.ratio16x9
+          ],
+          uiSettings: [
+            AndroidUiSettings(
+              toolbarTitle: language.editImage,
+              toolbarColor: kHyppePrimary,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: true,
+              showCropGrid: true,
+            ),
+            IOSUiSettings(
+              title: language.editImage,
+            ),
+            WebUiSettings(
+              context: context,
+              presentStyle: CropperPresentStyle.page,
+              // boundary: const CroppieBoundary(
+              //   width: 520,
+              //   height: 520,
+              // ),
+              // viewPort:
+              // const CroppieViewPort(width: 480, height: 480, type: 'circle'),
+              enableExif: true,
+              enableZoom: true,
+              showZoomer: true,
+            ),
+          ],
+        );
+        if (newFile != null) {
+          await File(pathFile).delete();
+          setFileContent(newFile.path, currIndex);
+        } else {
+          throw 'file result is null';
+        }
+      } else {
+        throw 'file is null';
+      }
+    } catch (e) {
+      print('Error ImageCropper: $e');
+      // ShowBottomSheet().onShowColouredSheet(context, e.toString(), color: kHyppeDanger, maxLines: 2);
     }
   }
 }

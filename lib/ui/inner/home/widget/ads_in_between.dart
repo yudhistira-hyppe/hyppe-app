@@ -73,11 +73,11 @@ class _AdsInBetweenState extends State<AdsInBetween> {
                           setState(() {
                             isSeeing = true;
                           });
-                          Future.delayed(const Duration(seconds: 1), (){
-                            if(isSeeing){
-                              System().adsView(widget.data, widget.data.duration?.round() ?? 10);
-                            }
-                          });
+                          // Future.delayed(const Duration(seconds: 1), (){
+                          //   if(isSeeing){
+                          //     System().adsView(widget.data, widget.data.duration?.round() ?? 10);
+                          //   }
+                          // });
                         }
                         if(info.visibleFraction < 0.3){
                           try{

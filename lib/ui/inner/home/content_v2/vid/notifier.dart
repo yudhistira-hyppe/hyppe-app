@@ -14,6 +14,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -161,8 +162,13 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   //   notifyListeners();
   // }
 
-  setAdsData(int index, AdsData? adsData) {
+
+
+  setAdsData(int index, AdsData? adsData, BuildContext context) {
     vidData?[index].adsData = adsData;
+    if(adsData == null){
+      context.read<VideoNotifier>().isPlay = false;
+    }
     notifyListeners();
   }
 

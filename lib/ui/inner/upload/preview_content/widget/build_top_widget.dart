@@ -16,7 +16,7 @@ class BuildTopWidget extends StatelessWidget {
   Widget build(BuildContext context) => Consumer<PreviewContentNotifier>(
         builder: (context, notifier, child) => SafeArea(
           child: Container(
-            color: Colors.white,
+            // color: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

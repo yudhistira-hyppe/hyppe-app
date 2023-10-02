@@ -509,7 +509,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
         // } else {
         //   return false;
         // }
-        adsView(widget.data, secondsVideo);
+        // adsView(widget.data, secondsVideo);
         return true;
       },
       child: Stack(
@@ -558,6 +558,27 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
               children: [
+                loadingAction
+                    ? Container(
+                        // padding: const EdgeInsets.only(left: 8.0),
+                        width: 24,
+                        height: 24,
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
+                    : InkWell(
+                        onTap: () async {
+                          print('second close ads: $secondsVideo');
+                          // await adsView(widget.data, secondsVideo);
+                          Navigator.pop(context);
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: CustomIconWidget(
+                            defaultColor: false,
+                            iconData: "${AssetPath.vectorPath}back-arrow.svg",
+                          ),
+                        ),
+                      ),
                 data.isReport ?? false
                     ? Container()
                     : Expanded(
@@ -1297,7 +1318,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                         : InkWell(
                             onTap: () async {
                               print('second close ads: $secondsVideo');
-                              await adsView(widget.data, secondsVideo);
+                              // await adsView(widget.data, secondsVideo);
                               Navigator.pop(context);
                             },
                             child: const Padding(

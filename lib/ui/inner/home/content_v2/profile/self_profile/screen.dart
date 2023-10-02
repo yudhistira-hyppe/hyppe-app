@@ -156,36 +156,6 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
     // _scrollController.jumpTo(10000);
   }
 
-  Future adsView(BuildContext context, {bool isClick = false}) async {
-    bool lanjutan = false;
-    try {
-      final notifier = AdsDataBloc();
-      final request = ViewAdsRequest(
-        watchingTime: 11,
-        adsId: '63bfebdfa121c14ab4a564cb',
-        useradsId: '63d0ea69d4c2c926ce5cad12',
-      );
-      await notifier.viewAdsBloc(context, request, isClick: isClick);
-
-      final fetch = notifier.adsDataFetch;
-      // if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-      // print("ini hasil ${fetch.data['rewards']}");
-      // if (fetch.data['rewards'] == true) {
-      print("ini hasil ${mounted}");
-
-      var res = await ShowGeneralDialog.adsRewardPop(context);
-      Timer(const Duration(milliseconds: 800), () {
-        Routing().moveBack();
-        Timer(const Duration(milliseconds: 800), () {
-          Routing().moveBack();
-        });
-      });
-      return lanjutan;
-    } catch (e) {
-      // 'Failed hit view ads $e'.logger();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
