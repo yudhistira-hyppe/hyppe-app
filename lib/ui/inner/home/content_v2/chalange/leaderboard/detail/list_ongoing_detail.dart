@@ -67,8 +67,8 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                       ? Padding(
                           padding: const EdgeInsets.all(32.0),
                           child: CustomCommingSoon(
-                            title: cn.language.letsJoinTheCompetition ?? 'Yuk, Ikut Kompetisi Menarik',
-                            subtitle: cn.language.getFirstPlaceByEnteringThisExcitingCompetition ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                            title: tn.translate.letsJoinTheCompetition ?? 'Yuk, Ikut Kompetisi Menarik',
+                            subtitle: tn.translate.getFirstPlaceByEnteringThisExcitingCompetition ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                           ),
                         )
                       : cn.isLoadingLeaderboard
@@ -77,16 +77,16 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                               ? Padding(
                                   padding: const EdgeInsets.all(32.0),
                                   child: CustomEmptyWidget(
-                                    title: cn.language.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
-                                    subtitle: cn.language.getFirstPlaceByFollowingThisExciting ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                                    title: tn.translate.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
+                                    subtitle: tn.translate.getFirstPlaceByFollowingThisExciting ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                                   ),
                                 )
                               : cn.leaderBoardDetailData?.getlastrank?[0].score == 0 || participant == 0
                                   ? Padding(
                                       padding: const EdgeInsets.all(32.0),
                                       child: CustomEmptyWidget(
-                                        title: cn.language.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
-                                        subtitle: cn.language.getFirstPlaceByFollowingThisExciting ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                                        title: tn.translate.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
+                                        subtitle: tn.translate.getFirstPlaceByFollowingThisExciting ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                                       ),
                                     )
                                   : ScrollConfiguration(
@@ -120,14 +120,15 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                           : Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                               child: ButtonChallangeWidget(
-                                  bgColor: cn.leaderBoardDetailData?.joined == 'NOT ALLOWED' ? kHyppeBottomNavBarIcon : kHyppePrimary,
-                                  text: "${tn.translate.joinTheChallengeNow}",
-                                  isloading: isloadingButton,
-                                  function: () async {
-                                    if (!isloadingButton) {
-                                      setState(() {
-                                        isloadingButton = true;
-                                      });
+                                bgColor: cn.leaderBoardDetailData?.joined == 'NOT ALLOWED' ? kHyppeBottomNavBarIcon : kHyppePrimary,
+                                text: "${tn.translate.joinTheChallengeNow}",
+                                isloading: isloadingButton,
+                                function: () async {
+                                  if (!isloadingButton) {
+                                    setState(() {
+                                      isloadingButton = true;
+                                    });
+                                    if (cn.leaderBoardDetailData?.joined != 'NOT ALLOWED') {
                                       await cn.joinChallange(context, cn.leaderBoardDetailData?.challengeId ?? '').then((value) {
                                         if (value == true) {
                                           setState(() {
@@ -143,7 +144,9 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                         }
                                       });
                                     }
-                                  }),
+                                  }
+                                },
+                              ),
                             ),
                 ],
               ),
@@ -159,7 +162,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                 child: Column(
                   children: [
                     Text(
-                      cn.language.description ?? "Deskripsi",
+                      tn.translate.description ?? "Deskripsi",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,

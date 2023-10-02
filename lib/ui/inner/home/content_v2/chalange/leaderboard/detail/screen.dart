@@ -129,22 +129,22 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
 
     switch (cn.leaderBoardDetailData?.noteTime) {
       case "inDays":
-        inTime = cn.language.hariLagi ?? "Hari Lagi";
+        inTime = lang?.hariLagi ?? "Hari Lagi";
         break;
       case "inHours":
-        inTime = cn.language.jamLagi ?? "Jam Lagi";
+        inTime = lang?.jamLagi ?? "Jam Lagi";
         break;
       default:
-        inTime = cn.language.menitLagi ?? "Menit Lagi";
+        inTime = lang?.menitLagi ?? "Menit Lagi";
     }
 
     if (cn.leaderBoardDetailData?.status == "BERAKHIR") {
-      dateText = cn.language.thecompetitionhasended ?? "Kompetisi telah berakhir";
+      dateText = lang?.thecompetitionhasended ?? "Kompetisi telah berakhir";
     } else {
       if (cn.leaderBoardDetailData?.onGoing == true) {
-        dateText = "${cn.language.endsIn} ${cn.leaderBoardDetailData?.totalDays} $inTime";
+        dateText = " ${lang?.endsIn} ${cn.leaderBoardDetailData?.totalDays} $inTime";
       } else {
-        dateText = "${cn.language.startIn} ${cn.leaderBoardDetailData?.totalDays} $inTime";
+        dateText = "${lang?.startIn} ${cn.leaderBoardDetailData?.totalDays} $inTime";
       }
     }
   }
