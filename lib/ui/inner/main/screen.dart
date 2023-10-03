@@ -9,6 +9,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/home/widget/profile.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -341,6 +342,8 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
         notifier.pageIndex = index;
       });
     } else {
+      PreUploadContentNotifier pn = context.read<PreUploadContentNotifier>();
+      pn.hastagChallange = '';
       await notifier.onShowPostContent(consumerContext);
     }
   }

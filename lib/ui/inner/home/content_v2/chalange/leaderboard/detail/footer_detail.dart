@@ -14,6 +14,7 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -153,9 +154,9 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
         }
       } else {
         var list = challengeData?.metrik?[0].interaksiKonten?[0];
-        var hyppeDiary = ((list?.suka?[0].hyppeDiary ?? 0) >= 1 ? 1 : 0) + ((list?.tonton?[0].hyppeDiary ?? 0) >= 1 ? 1 : 0);
+        var hyppeDiary = ((list?.suka?[0].hyppeDiary ?? 0) >= 1 || (list?.tonton?[0].hyppeDiary ?? 0) >= 1 ? 1 : 0);
         var hyppePic = ((list?.suka?[0].hyppePic ?? 0) >= 1 ? 1 : 0);
-        var hyppeVid = ((list?.suka?[0].hyppeVid ?? 0) >= 1 ? 1 : 0) + ((list?.tonton?[0].hyppeVid ?? 0) >= 1 ? 1 : 0);
+        var hyppeVid = ((list?.suka?[0].hyppeVid ?? 0) >= 1 || (list?.tonton?[0].hyppeVid ?? 0) >= 1 ? 1 : 0);
         var tot = hyppeDiary + hyppePic + hyppeVid;
         titleText = "${tn.translate.takeonthechallengeanduploadyourbestideashere}"; //Ikuti challenge dan unggah ide terbaikmu disini!";
         textColors = kHyppeLightButtonText;
@@ -260,6 +261,8 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
 
   void navigate(BuildContext context, TranslateNotifierV2 tn, ChallangeNotifier cn, {bool widgetTwo = false}) {
     var challengeData = cn.leaderBoardDetailData?.challengeData?[0];
+    print("======navigate=======");
+    print("${widgetTwo} ${challengeData?.objectChallenge}  ${challengeData?.metrik?[0].aktivitasAkun?.isNotEmpty}");
     if (widgetTwo) {
       if (challengeData?.objectChallenge == "AKUN") {
         if (challengeData?.metrik?[0].aktivitasAkun?.isNotEmpty ?? [].isEmpty) {
@@ -267,32 +270,15 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
           Routing().moveBack();
           // titleText = "Ikuti akun - akun TerhHyppe untuk memenangkan kompetisi";
           // buttonText = "Jelajahi dan Ikuti Akun Terhyppe disini!";
-        }
-      }
-      if (challengeData?.metrik?[0].interaksiKonten?.isNotEmpty ?? [].isEmpty) {
-        if (((challengeData?.metrik?[0].interaksiKonten?[0].suka?.isNotEmpty ?? [].isEmpty) || (challengeData?.metrik?[0].interaksiKonten?[0].tonton?.isNotEmpty ?? [].isEmpty)) &&
-            (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty)) {
-          var interaksiData = challengeData?.metrik?[0].interaksiKonten?[0];
-          if ((interaksiData?.suka?[0].hyppeVid ?? 0) > 0) {
-            context.read<MainNotifier>().pageIndex = 2;
-            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
-          } else if ((interaksiData?.suka?[0].hyppeDiary ?? 0) > 0) {
-            context.read<MainNotifier>().pageIndex = 1;
-            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
-          } else if ((interaksiData?.suka?[0].hyppePic ?? 0) > 0) {
-            context.read<MainNotifier>().pageIndex = 0;
-            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
-          } else if ((interaksiData?.tonton?[0].hyppeVid ?? 0) > 0) {
-            context.read<MainNotifier>().pageIndex = 2;
-            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
-          } else if ((interaksiData?.tonton?[0].hyppeDiary ?? 0) > 0) {
-            context.read<MainNotifier>().pageIndex = 1;
-            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
-          } else if ((interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0) {
-            context.read<MainNotifier>().pageIndex = 1;
-            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
-          } else if ((interaksiData?.buatKonten?[0].hyppeVid ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppePic ?? 0) > 0) {
-            onTapbuatKonten(contentD: interaksiData?.buatKonten?[0] ?? BuatKonten());
+        } else {
+          if (challengeData?.metrik?[0].interaksiKonten?.isNotEmpty ?? [].isEmpty) {
+            if (((challengeData?.metrik?[0].interaksiKonten?[0].suka?.isNotEmpty ?? [].isEmpty) || (challengeData?.metrik?[0].interaksiKonten?[0].tonton?.isNotEmpty ?? [].isEmpty)) &&
+                (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty)) {
+              var interaksiData = challengeData?.metrik?[0].interaksiKonten?[0];
+              if ((interaksiData?.buatKonten?[0].hyppeVid ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppePic ?? 0) > 0) {
+                onTapbuatKonten(contentD: interaksiData?.buatKonten?[0] ?? BuatKonten());
+              }
+            }
           }
         }
       }
@@ -353,9 +339,9 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
       contentPict = ((interaksiKonten?.suka?[0].hyppePic ?? 0) >= 1 ? 1 : 0);
       contentVid = (interaksiKonten?.suka?[0].hyppeVid ?? 0) >= 1 || (interaksiKonten?.tonton?[0].hyppeVid ?? 0) >= 1 ? 1 : 0;
     }
-    print(contentVid);
     var tot = contentVid + contentDiary + contentPict;
-    print(tot);
+    PreUploadContentNotifier pn = context.read<PreUploadContentNotifier>();
+    pn.hastagChallange = interaksiKonten?.tagar ?? '';
     if (tot > 1) {
       ShowBottomSheet.onUploadContent(
         context,

@@ -207,6 +207,14 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool _isCompress = false;
   bool get isCompress => _isCompress;
 
+  String _hastagChallange = '';
+  String get hastagChallange => _hastagChallange;
+
+  set hastagChallange(String val) {
+    _hastagChallange = val;
+    notifyListeners();
+  }
+
   set isCompress(bool val) {
     _isCompress = val;
     notifyListeners();

@@ -70,9 +70,11 @@ class _ListOnGoingState extends State<ListOnGoing> {
                 : cn.leaderBoardData?.onGoing == false
                     ? Padding(
                         padding: const EdgeInsets.all(32.0),
-                        child: CustomCommingSoon(
-                          title: '${tn.translate.letsJoinTheCompetition}',
-                          subtitle: '${tn.translate.getFirstPlaceByEnteringThisExcitingCompetition}',
+                        child: Center(
+                          child: CustomCommingSoon(
+                            title: '${tn.translate.letsJoinTheCompetition}',
+                            subtitle: '${tn.translate.getFirstPlaceByEnteringThisExcitingCompetition}',
+                          ),
                         ),
                       )
                     : cn.isLoadingLeaderboard
@@ -117,7 +119,6 @@ class _ListOnGoingState extends State<ListOnGoing> {
                                               return GestureDetector(
                                                   onTap: () {
                                                     System().navigateToProfile(context, cn.leaderBoardData?.getlastrank?[index].email ?? '');
-                                                    // Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardData?.getlastrank?[index].email));
                                                   },
                                                   child: ItemLeader(data: cn.leaderBoardData?.getlastrank?[index]));
                                             }

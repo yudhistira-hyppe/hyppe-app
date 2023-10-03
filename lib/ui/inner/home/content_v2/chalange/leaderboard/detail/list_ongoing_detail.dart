@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_commingsoon_page.dart';
@@ -14,7 +15,8 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:provider/provider.dart';
 
 class ListOnGoingDetail extends StatefulWidget {
-  const ListOnGoingDetail({super.key});
+  final GlobalKey<NestedScrollViewState>? globalKey;
+  const ListOnGoingDetail({super.key, this.globalKey});
 
   @override
   State<ListOnGoingDetail> createState() => _ListOnGoingDetailState();
@@ -96,9 +98,19 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                                 return Container();
                                               } else {
                                                 if (cn.leaderBoardDetailData?.challengeData?[0].objectChallenge == 'KONTEN') {
-                                                  return ContentLeaderboard(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                                  return GestureDetector(
+                                                      onTap: () {
+                                                        var post = cn.leaderBoardDetailData?.getlastrank?[index].postChallengess?[0];
+                                                        var email = cn.leaderBoardDetailData?.getlastrank?[index].email;
+                                                        cn.navigateToScreen(context, post?.index, email, post?.postType);
+                                                      },
+                                                      child: ContentLeaderboard(data: cn.leaderBoardDetailData?.getlastrank?[index]));
                                                 } else {
-                                                  return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                                  return GestureDetector(
+                                                      onTap: () {
+                                                        System().navigateToProfile(context, cn.leaderBoardData?.getlastrank?[index].email ?? '');
+                                                      },
+                                                      child: ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]));
                                                 }
                                               }
 
@@ -130,6 +142,11 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                                 });
                                                 ShowGeneralDialog.joinChallange(context, mounted, cn.leaderBoardDetailData?.challengeId ?? '').then((value) => print("kelar om")).whenComplete(() {
                                                   // cn.initLeaderboardDetail(context, mounted, cn.leaderBoardDetailData?.challengeId ?? '');
+                                                  widget.globalKey?.currentState?.innerController.animateTo(
+                                                    1000,
+                                                    duration: Duration(milliseconds: 300),
+                                                    curve: Curves.ease,
+                                                  );
                                                 });
                                               } else {
                                                 setState(() {
@@ -145,21 +162,25 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                       ],
                     ),
                   ),
+            // Text("${cn.leaderBoardDetailData?.onGoing}"),
             Container(
                 width: SizeConfig.screenWidth,
                 margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      tn.translate.description ?? "Deskripsi",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                    Center(
+                      child: Text(
+                        tn.translate.description ?? "Deskripsi",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                     twentyPx,
@@ -170,7 +191,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                 ? Container()
                 : Container(
                     width: SizeConfig.screenWidth,
-                    margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
+                    margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16, bottom: 16),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),

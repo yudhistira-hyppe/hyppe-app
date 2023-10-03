@@ -120,7 +120,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
   void afterFirstLayout(BuildContext context) {}
 
   void toHideTab(ChallangeNotifier cn) {
-    if ((cn.leaderBoardDetailData?.onGoing == true && cn.leaderBoardDetailData?.session == 1) || cn.leaderBoardDetailData?.session == 1 || cn.leaderBoardDetailData?.status == 'BERAKHIR') {
+    if ((cn.leaderBoardDetailData?.status == "BERLANGSUNG" && cn.leaderBoardDetailData?.session == 1)) {
       hideTab = true;
     } else {
       hideTab = false;
@@ -251,6 +251,9 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                             handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                             sliver: SliverList(
                               delegate: SliverChildListDelegate([
+                                // Text("${cn.leaderBoardDetailData?.onGoing}"),
+                                // Text("${cn.leaderBoardDetailData?.session}"),
+                                // Text("${cn.leaderBoardDetailData?.status}"),
                                 CustomBaseCacheImage(
                                   memCacheWidth: 100,
                                   memCacheHeight: 100,
@@ -389,9 +392,9 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                       body: TabBarView(
                         controller: _tabController,
                         physics: const NeverScrollableScrollPhysics(),
-                        children: const [
-                          ListOnGoingDetail(),
-                          ListEndDetail(),
+                        children: [
+                          ListOnGoingDetail(globalKey: globalKey),
+                          const ListEndDetail(),
                         ],
                       ),
                     ),

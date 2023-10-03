@@ -107,7 +107,7 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                                       width: SizeConfig.screenWidth,
                                       color: Colors.black,
                                       child: UnconstrainedBox(
-                                        child: const Container(
+                                        child: Container(
                                           height: 50,
                                           width: 50,
                                           child: const CircularProgressIndicator(

@@ -16,6 +16,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_end.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_ongoing.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_leaderboard.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_list.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -172,7 +173,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
             await cn.initLeaderboard(context);
           },
           child: cn.isLoadingLeaderboard || cn.leaderBoardData?.sId == null
-              ? const ShimmerListLeaderboard()
+              ? const ShimmerLeaderboard()
               : ScrollConfiguration(
                   behavior: const ScrollBehavior().copyWith(overscroll: false),
                   child: NestedScrollView(
@@ -206,7 +207,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                       viewportFraction: 0.8,
                                       // aspectRatio: 343 / 103,
                                       // height: 176,
-                                      height: SizeConfig.screenWidth! * 0.29,
+                                      height: SizeConfig.screenWidth! * 0.27,
                                       onPageChanged: (index, reason) async {
                                         setState(() {
                                           _currentSlidder = index;
@@ -220,74 +221,63 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                         });
                                       }),
                                   items: cn.bannerLeaderboardData
-                                      .map((item) => ClipRRect(
-                                            borderRadius: BorderRadius.circular(10),
-                                            child: Center(
-                                              //     child: CustomBaseCacheImage(
-                                              //   memCacheWidth: 100,
-                                              //   memCacheHeight: 100,
-                                              //   widthPlaceHolder: 80,
-                                              //   heightPlaceHolder: 80,
-                                              //   imageUrl: item.bannerLandingpage ?? '',
-                                              //   imageBuilder: (context, imageProvider) => ClipRRect(
-                                              //     borderRadius: BorderRadius.circular(20), // Image border
-                                              //     child: Image(
-                                              //       image: imageProvider,
-                                              //       fit: BoxFit.fitHeight,
-                                              //       width: SizeConfig.screenWidth,
-                                              //     ),
-                                              //   ),
-                                              //   errorWidget: (context, url, error) {
-                                              //     return Container(
-                                              //       // const EdgeInsets.symmetric(horizontal: 4.5),
-                                              //       // height: 500,
-                                              //       decoration: BoxDecoration(
-                                              //         image: const DecorationImage(
-                                              //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                              //           fit: BoxFit.cover,
-                                              //         ),
-                                              //         borderRadius: BorderRadius.circular(8.0),
-                                              //       ),
-                                              //     );
-                                              //   },
-                                              //   emptyWidget: Container(
-                                              //     // const EdgeInsets.symmetric(horizontal: 4.5),
-                                              //     // height: 500,
-                                              //     decoration: BoxDecoration(
-                                              //       image: const DecorationImage(
-                                              //         image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                              //         fit: BoxFit.cover,
-                                              //       ),
-                                              //       borderRadius: BorderRadius.circular(8.0),
-                                              //     ),
-                                              //   ),
-                                              // )
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(12), // Image border
-                                                child: Image.network(
-                                                  item.bannerLandingpage ?? '',
-                                                  width: SizeConfig.screenWidth,
-                                                  fit: BoxFit.cover,
-                                                  loadingBuilder: (context, child, loadingProgress) {
-                                                    if (loadingProgress == null) return child;
-                                                    return Center(
-                                                      child: Container(
-                                                        height: SizeConfig.screenHeight,
-                                                        width: SizeConfig.screenWidth,
-                                                        color: Colors.black,
-                                                        child: UnconstrainedBox(
-                                                          child: Container(
-                                                            height: 50,
-                                                            width: 50,
-                                                            child: CircularProgressIndicator(
-                                                                // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                                ),
-                                                          ),
+                                      .map((item) =>
+                                          //  Container(
+                                          //   alignment: Alignment.center,
+                                          //   margin: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+                                          //   decoration: BoxDecoration(
+                                          //     borderRadius: BorderRadius.circular(20),
+                                          //     image: DecorationImage(
+                                          //       fit: BoxFit.cover,
+                                          //       // colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
+                                          //       image: NetworkImage(item.bannerLandingpage ?? ''),
+                                          //     ),
+                                          //     boxShadow: [
+                                          //       BoxShadow(
+                                          //         color: Colors.grey,
+                                          //         spreadRadius: 2,
+                                          //         blurRadius: 8,
+                                          //         offset: Offset(4, 4),
+                                          //       ),
+                                          //     ],
+                                          //   ),
+                                          // ),
+
+                                          Container(
+                                            margin: EdgeInsets.only(bottom: 10),
+                                            decoration: BoxDecoration(boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(0.8),
+                                                offset: Offset(5, 8),
+                                                blurRadius: 5,
+                                                spreadRadius: -5,
+                                              ),
+                                            ]),
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(10), //
+                                              child: Image.network(
+                                                item.bannerLandingpage ?? '',
+                                                width: SizeConfig.screenWidth,
+                                                fit: BoxFit.cover,
+                                                loadingBuilder: (context, child, loadingProgress) {
+                                                  if (loadingProgress == null) return child;
+                                                  return Center(
+                                                    child: Container(
+                                                      height: SizeConfig.screenHeight,
+                                                      width: SizeConfig.screenWidth,
+                                                      color: Colors.black,
+                                                      child: UnconstrainedBox(
+                                                        child: Container(
+                                                          height: 50,
+                                                          width: 50,
+                                                          child: CircularProgressIndicator(
+                                                              // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                              ),
                                                         ),
                                                       ),
-                                                    );
-                                                  },
-                                                ),
+                                                    ),
+                                                  );
+                                                },
                                               ),
                                             ),
                                           ))
@@ -296,47 +286,45 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                               ),
                               sixPx,
                               //Tab
-                              cn.isLoading
+                              hideTab
                                   ? Container()
-                                  : hideTab
-                                      ? Container()
-                                      : Container(
-                                          padding: const EdgeInsets.all(16),
-                                          child: Container(
-                                            padding: const EdgeInsets.all(4),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(8),
-                                              color: kHyppeLightSurface,
-                                            ),
-                                            child: TabBar(
-                                              controller: _tabController,
-                                              indicator: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(
-                                                  8.0,
-                                                ),
-                                                color: kHyppeLightButtonText,
-                                              ),
-                                              labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                                              labelColor: kHyppeTextLightPrimary,
-                                              unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                                              labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                              // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                                              unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                              tabs: [
-                                                ...List.generate(
-                                                  nameTab.length,
-                                                  (index) => Padding(
-                                                    padding: EdgeInsets.all(9),
-                                                    child: Text(
-                                                      nameTab[index],
-                                                      style: TextStyle(fontFamily: 'Lato', fontSize: 14),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                  : Container(
+                                      padding: const EdgeInsets.all(16),
+                                      child: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8),
+                                          color: kHyppeLightSurface,
                                         ),
+                                        child: TabBar(
+                                          controller: _tabController,
+                                          indicator: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              8.0,
+                                            ),
+                                            color: kHyppeLightButtonText,
+                                          ),
+                                          labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                                          labelColor: kHyppeTextLightPrimary,
+                                          unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                                          labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                          // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                                          unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                          tabs: [
+                                            ...List.generate(
+                                              nameTab.length,
+                                              (index) => Padding(
+                                                padding: EdgeInsets.all(9),
+                                                child: Text(
+                                                  nameTab[index],
+                                                  style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                             ]),
                           ),
                         ),

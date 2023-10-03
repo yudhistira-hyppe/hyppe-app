@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/challange/bloc.dart';
@@ -228,8 +230,8 @@ class ChallangeNotifier with ChangeNotifier {
       if (bannerFatch.data.isNotEmpty) {
         LeaderboardChallangeModel? getdata;
         leaderBoardDataArray = [];
-        leaderBoardDetaiEndlData = LeaderboardChallangeModel();
-        leaderBoardDetailData = LeaderboardChallangeModel();
+        leaderBoardDetaiEndlData ??= LeaderboardChallangeModel();
+        leaderBoardDetailData ??= LeaderboardChallangeModel();
         bannerFatch.data.forEach((v) => leaderBoardDataArray?.add(LeaderboardChallangeModel.fromJson(v)));
 
         getdata = leaderBoardDataArray?.firstWhereOrNull((element) => element.status == berlangsung);
@@ -266,9 +268,10 @@ class ChallangeNotifier with ChangeNotifier {
 
           if (oldLeaderboard) {
             leaderBoardDetaiEndlData = getdata;
-            if (leaderBoardDetailData?.sId == null) {
-              leaderBoardDetailData = getdata;
-              getOption(getdata ?? LeaderboardChallangeModel(), session: selectOptionSession);
+            if (leaderBoardDetailData == null) {
+              getLeaderBoard(context, idchallenge, isDetail: true);
+              // leaderBoardDetailData = getdata;
+              // getOption(getdata ?? LeaderboardChallangeModel(), session: selectOptionSession);
             }
           } else {
             leaderBoardDetailData = getdata;
@@ -387,12 +390,31 @@ class ChallangeNotifier with ChangeNotifier {
   }
 
   void navigateToScreen(BuildContext context, index, email, postType) async {
-    Routing().move(
-      Routes.shimmerSlider,
-      argument: SlidedPicDetailScreenArgument(
-        type: TypePlaylist.mine,
-        titleAppbar: Text("Pict"),
-        pageSrc: PageSrc.otherProfile,
+    // Routing().move(
+    //   Routes.shimmerSlider,
+    //   argument: SlidedPicDetailScreenArgument(
+    //     type: TypePlaylist.mine,
+    //     titleAppbar: Text("Pict"),
+    //     pageSrc: PageSrc.otherProfile,
+    //   ),
+    // );
+    unawaited(
+      Navigator.of(context, rootNavigator: true).push(
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => WillPopScope(
+            onWillPop: () async => false,
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            ),
+          ),
+          transitionDuration: Duration.zero,
+          barrierDismissible: false,
+          barrierColor: Colors.black45,
+          opaque: false,
+        ),
       ),
     );
     OtherProfileNotifier on = context.read<OtherProfileNotifier>();
