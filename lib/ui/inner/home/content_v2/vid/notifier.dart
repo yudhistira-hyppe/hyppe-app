@@ -14,6 +14,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -140,29 +141,34 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   // }
 
   void setInBetweenAds(int index, AdsData? adsData) {
-    final withAds = vidData?.where((element) => element.inBetweenAds != null).length ?? 0;
-    final adsSize = vidData?.length ?? 0;
-    loadAds = false;
-    if (adsData != null) {
-      if (adsSize > nextAdsShowed) {
-        if (vidData?[nextAdsShowed].inBetweenAds == null) {
-          vidData?.insert(nextAdsShowed, ContentData(inBetweenAds: adsData));
-          _nextAdsShowed = _nextAdsShowed + 6 + withAds;
-          notifyListeners();
-        }
-      }
-    } else {
-      vidData?.removeAt(index);
-      notifyListeners();
-    }
+    // final withAds = vidData?.where((element) => element.inBetweenAds != null).length ?? 0;
+    // final adsSize = vidData?.length ?? 0;
+    // loadAds = false;
+    // if (adsData != null) {
+    //   if (adsSize > nextAdsShowed) {
+    //     if (vidData?[nextAdsShowed].inBetweenAds == null) {
+    //       vidData?.insert(nextAdsShowed, ContentData(inBetweenAds: adsData));
+    //       _nextAdsShowed = _nextAdsShowed + 6 + withAds;
+    //       notifyListeners();
+    //     }
+    //   }
+    // } else {
+    //   vidData?.removeAt(index);
+    //   notifyListeners();
+    // }
   }
   // setInBetweenAds(int index, AdsData? adsData){
   //   vidData?[index].inBetweenAds = adsData;
   //   notifyListeners();
   // }
 
-  setAdsData(int index, AdsData? adsData) {
+
+
+  setAdsData(int index, AdsData? adsData, BuildContext context) {
     vidData?[index].adsData = adsData;
+    if(adsData == null){
+      context.read<VideoNotifier>().isPlay = false;
+    }
     notifyListeners();
   }
 

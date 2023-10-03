@@ -132,12 +132,12 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
       //scroll
       if (mounted) {
-        var notifierMain = Routing.navigatorKey.currentState?.overlay?.context.read<MainNotifier>();
-        notifierMain?.globalKey.currentState?.innerController.addListener(() {
-          var offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-          if (mounted) {
-            toPosition(offset);
-          }
+        Future.delayed(const Duration(milliseconds: 500), () {
+          print("=========== global key prirnt ${widget.scrollController} ");
+          widget.scrollController?.addListener(() {
+            double offset = widget.scrollController?.position.pixels ?? 0;
+            if (mounted) toPosition(offset);
+          });
         });
       }
     });
@@ -290,11 +290,11 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           position += notifier.diaryData?[i].height ?? 0.0;
         }
         if (notifier.diaryData?[_curIdx] != notifier.diaryData?.last) {
-          context.read<MainNotifier>().globalKey.currentState?.innerController.animateTo(
-                position,
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeOut,
-              );
+          widget.scrollController?.animateTo(
+            position,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeOut,
+          );
         }
         if (mounted) {
           setState(() {});
@@ -854,7 +854,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                         onVisibilityChanged: (info) {
                           if (info.visibleFraction >= 0.8) {
                             if (!isShowingDialog) {
-                              adsGlobalAliPlayer?.pause();
+                              globalAdsPopUp?.pause();
                             }
                             context.read<VideoNotifier>().currentPostID = data?.inBetweenAds?.adsId ?? '';
                             _curIdx = index;
@@ -896,6 +896,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                           }
                         },
                         child: context.getAdsInBetween(notifier.diaryData?[index].inBetweenAds, (info) {}, () {
+                          // final hasNotAds = (notifier.diaryData?.where((element) => element.inBetweenAds != null).length ?? 0) == 0;
+                          // if(hasNotAds){
+                          //
+                          // }
                           notifier.setAdsData(index, null);
                         }, (player, id) {}),
                       )
@@ -1011,7 +1015,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                     // }
                                     if (info.visibleFraction >= 0.6) {
                                       if (!isShowingDialog) {
-                                        adsGlobalAliPlayer?.pause();
+                                        globalAdsPopUp?.pause();
                                       }
                                       context.read<VideoNotifier>().currentPostID = data?.postID ?? '';
                                       _curIdx = index;

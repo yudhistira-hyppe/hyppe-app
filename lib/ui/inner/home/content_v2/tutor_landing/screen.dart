@@ -308,7 +308,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                           color: kHyppeLightSurface,
                           child: PicTutor(
                             appbarSeen: appbarSeen,
-                            scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                            scrollController: context.read<MainNotifier>().globalKey?.currentState?.innerController,
                             // offset: offset,
                           ),
                         ),
@@ -316,7 +316,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                           padding: const EdgeInsets.only(left: 6.0, right: 6),
                           color: kHyppeLightSurface,
                           child: DiaryTutor(
-                            scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                            scrollController: context.read<MainNotifier>().globalKey?.currentState?.innerController,
                           ),
                         ),
                         // second tab bar viiew widget
@@ -324,7 +324,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                           padding: const EdgeInsets.only(left: 6.0, right: 6),
                           color: kHyppeLightSurface,
                           child: VidTutor(
-                            scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                            scrollController: context.read<MainNotifier>().globalKey?.currentState?.innerController,
                           ),
                         ),
                       ],

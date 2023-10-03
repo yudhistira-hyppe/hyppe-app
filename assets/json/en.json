@@ -927,8 +927,8 @@
   "captureYourMoment": "Capture your moment!",
   "howAreYouToday": "How are you today?",
   "shareWithUsYourCreatifity": "Share with us your creativity!",
-  "comeOnJoinTheInterestingCompetition": "Come on Join",
-  "otherCompetitions": "Other Competitions",
+  "comeOnJoinTheInterestingCompetition": "Let's Join The Interesting Competion",
+  "otherCompetitions": "See More",
   "challengePage": "Challenge Page",
   "mainChallenge": "Main Challenge",
   "goingOn": "Ongoing",
@@ -943,10 +943,13 @@
   "letsJoinTheCompetition": "Let's Join the Competition",
   "getFirstPlaceByEnteringThisExcitingCompetition": "Get first place by entering this exciting competition!",
   "joinTheChallengeNow": "Join the Challenge Now",
+  "joinTheChallenge": "Join Challenge",
   "viewChallenge": "View Challenge",
   "joinOtherInterestingChallenges": "Join Other Interesting Challenges",
   "startIn": "Start In",
   "hariLagi": "Days",
+  "jamLagi": "Hours",
+  "menitLagi": "Minutes",
   "endsIn": "Ends in",
   "challengePeriod": "Challenge Period",
   "nonParticipant": "Non Participant",
@@ -989,5 +992,7 @@
   "badgeCollection": "Badge Collection",
   "applyBadge": "Apply Badge",
   "youDontHaveaBadge": "You Don't Have a Badge",
-  "winachallengetoreceiveabadge": "Win a challenge to receive a badge!"
+  "winachallengetoreceiveabadge": "Win a challenge to receive a badge!",
+  "thecompetitionhasended": "The competition has ended",
+  "competitionends": "Competition ends"
 }

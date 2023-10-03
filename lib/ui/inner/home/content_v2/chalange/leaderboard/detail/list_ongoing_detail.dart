@@ -11,7 +11,6 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/butto
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/content_leader.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/litem_leader.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class ListOnGoingDetail extends StatefulWidget {
@@ -31,14 +30,16 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
       var boollUser = false;
       var participant = 0;
       cn.leaderBoardDetailData?.getlastrank?.forEach((e) {
+        print("=hahaha=");
         if (e.isUserLogin == true) {
           boollUser = true;
         }
-        if (cn.leaderBoardData?.challengeData?[0].objectChallenge == "KONTEN") {
+        if (cn.leaderBoardDetailData?.challengeData?[0].objectChallenge == "KONTEN") {
           if (e.postChallengess?.isNotEmpty ?? [].isEmpty) {
             participant++;
           }
         } else {
+          print("=hihihi= ${participant++}");
           participant++;
         }
       });
@@ -48,105 +49,102 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              margin: const EdgeInsets.only(left: 16.0, right: 16),
-              padding: const EdgeInsets.only(bottom: 16),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
-              ),
-              child: Column(
-                children: [
-                  // GestureDetector(
-                  //     onTap: () {
-                  //       ShowGeneralDialog.joinChallange(context, mounted, cn.leaderBoardDetailData?.challengeId ?? '');
-                  //     },
-                  //     child: Text("sdsd")),
-                  cn.leaderBoardDetailData?.onGoing == false
-                      ? const Padding(
-                          padding: EdgeInsets.all(32.0),
-                          child: CustomCommingSoon(
-                            title: 'Yuk, Ikut Kompetisi Menarik',
-                            subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
-                          ),
-                        )
-                      : cn.isLoadingLeaderboard
-                          ? Container()
-                          : cn.leaderBoardDetailData?.getlastrank?.isEmpty ?? [].isEmpty
-                              ? const Padding(
-                                  padding: EdgeInsets.all(32.0),
-                                  child: CustomEmptyWidget(
-                                    title: 'Belum ada Leaderboard Tersedia',
-                                    subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
-                                  ),
-                                )
-                              : cn.leaderBoardDetailData?.getlastrank?[0].score == 0 || participant == 0
-                                  ? const Padding(
-                                      padding: EdgeInsets.all(32.0),
-                                      child: CustomEmptyWidget(
-                                        title: 'Belum ada Leaderboard Tersedia',
-                                        subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
-                                      ),
-                                    )
-                                  : ScrollConfiguration(
-                                      behavior: const ScrollBehavior().copyWith(overscroll: false),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 24),
-                                        child: ListView.builder(
-                                          itemCount: cn.leaderBoardDetailData?.getlastrank?.length,
-                                          shrinkWrap: true,
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          itemBuilder: (context, index) {
-                                            if (cn.leaderBoardData?.getlastrank?[index].score == 0) {
-                                              return Container();
-                                            } else {
-                                              if (cn.leaderBoardDetailData?.challengeData?[0].objectChallenge == 'KONTEN') {
-                                                return ContentLeaderboard(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+            cn.leaderBoardDetailData?.onGoing == false
+                ? Container()
+                : Container(
+                    margin: const EdgeInsets.only(left: 16.0, right: 16),
+                    padding: const EdgeInsets.only(bottom: 16),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
+                    ),
+                    child: Column(
+                      children: [
+                        // GestureDetector(
+                        //     onTap: () {
+                        //       ShowGeneralDialog.joinChallange(context, mounted, cn.leaderBoardDetailData?.challengeId ?? '');
+                        //     },
+                        //     child: Text("sdsd")),
+                        cn.isLoadingLeaderboard
+                            ? Container()
+                            : cn.leaderBoardDetailData?.getlastrank?.isEmpty ?? [].isEmpty
+                                ? Padding(
+                                    padding: const EdgeInsets.all(32.0),
+                                    child: CustomEmptyWidget(
+                                      title: tn.translate.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
+                                      subtitle: tn.translate.getFirstPlaceByFollowingThisExciting ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                                    ),
+                                  )
+                                : cn.leaderBoardDetailData?.getlastrank?[0].score == 0 || participant == 0
+                                    ? Padding(
+                                        padding: const EdgeInsets.all(32.0),
+                                        child: CustomEmptyWidget(
+                                          title: tn.translate.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
+                                          subtitle: tn.translate.getFirstPlaceByFollowingThisExciting ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                                        ),
+                                      )
+                                    : ScrollConfiguration(
+                                        behavior: const ScrollBehavior().copyWith(overscroll: false),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(bottom: 24),
+                                          child: ListView.builder(
+                                            itemCount: cn.leaderBoardDetailData?.getlastrank?.length,
+                                            shrinkWrap: true,
+                                            physics: const NeverScrollableScrollPhysics(),
+                                            itemBuilder: (context, index) {
+                                              if (cn.leaderBoardDetailData?.getlastrank?[index].score == 0) {
+                                                return Container();
                                               } else {
-                                                return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                                if (cn.leaderBoardDetailData?.challengeData?[0].objectChallenge == 'KONTEN') {
+                                                  return ContentLeaderboard(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                                } else {
+                                                  return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                                }
                                               }
-                                            }
 
-                                            // return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
-                                          },
+                                              // return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                            },
+                                          ),
                                         ),
                                       ),
-                                    ),
-                  cn.leaderBoardDetailData?.onGoing == false
-                      ? Container()
-                      : boollUser
-                          ? Container()
-                          : Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                              child: ButtonChallangeWidget(
-                                  bgColor: cn.leaderBoardDetailData?.joined == 'NOT ALLOWED' ? kHyppeBottomNavBarIcon : kHyppePrimary,
-                                  text: "${tn.translate.joinTheChallengeNow}",
-                                  isloading: isloadingButton,
-                                  function: () async {
-                                    if (!isloadingButton) {
-                                      setState(() {
-                                        isloadingButton = true;
-                                      });
-                                      await cn.joinChallange(context, cn.leaderBoardDetailData?.challengeId ?? '').then((value) {
-                                        if (value == true) {
+                        cn.leaderBoardDetailData?.onGoing == false
+                            ? Container()
+                            : boollUser
+                                ? Container()
+                                : Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                                    child: ButtonChallangeWidget(
+                                      bgColor: cn.leaderBoardDetailData?.joined == 'NOT ALLOWED' ? kHyppeBottomNavBarIcon : kHyppePrimary,
+                                      text: "${tn.translate.joinTheChallengeNow}",
+                                      isloading: isloadingButton,
+                                      function: () async {
+                                        if (!isloadingButton) {
                                           setState(() {
-                                            isloadingButton = false;
+                                            isloadingButton = true;
                                           });
-                                          ShowGeneralDialog.joinChallange(context, mounted, cn.leaderBoardDetailData?.challengeId ?? '').then((value) => print("kelar om")).whenComplete(() {
-                                            // cn.initLeaderboardDetail(context, mounted, cn.leaderBoardDetailData?.challengeId ?? '');
-                                          });
-                                        } else {
-                                          setState(() {
-                                            isloadingButton = false;
-                                          });
+                                          if (cn.leaderBoardDetailData?.joined != 'NOT ALLOWED') {
+                                            await cn.joinChallange(context, cn.leaderBoardDetailData?.challengeId ?? '').then((value) {
+                                              if (value == true) {
+                                                setState(() {
+                                                  isloadingButton = false;
+                                                });
+                                                ShowGeneralDialog.joinChallange(context, mounted, cn.leaderBoardDetailData?.challengeId ?? '').then((value) => print("kelar om")).whenComplete(() {
+                                                  // cn.initLeaderboardDetail(context, mounted, cn.leaderBoardDetailData?.challengeId ?? '');
+                                                });
+                                              } else {
+                                                setState(() {
+                                                  isloadingButton = false;
+                                                });
+                                              }
+                                            });
+                                          }
                                         }
-                                      });
-                                    }
-                                  }),
-                            ),
-                ],
-              ),
-            ),
+                                      },
+                                    ),
+                                  ),
+                      ],
+                    ),
+                  ),
             Container(
                 width: SizeConfig.screenWidth,
                 margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
@@ -157,8 +155,8 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      "Deskripsi",
+                    Text(
+                      tn.translate.description ?? "Deskripsi",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -168,7 +166,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                     Text("${cn.leaderBoardDetailData?.challengeData?[0].description}"),
                   ],
                 )),
-            cn.leaderBoardDetailData?.onGoing == false || !boollUser || participant == 0
+            cn.leaderBoardDetailData?.onGoing == false || !boollUser
                 ? Container()
                 : Container(
                     width: SizeConfig.screenWidth,

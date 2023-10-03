@@ -127,7 +127,7 @@ class _ImageComponentState extends State<ImageComponent> {
 
         },
         child: CustomBaseCacheImage(
-          imageUrl: (widget.data?.isApsara ?? false) ? '${widget.data?.mediaThumbEndpoint}' : '${widget.data?.fullThumbPath}',
+          imageUrl: (widget.data?.isApsara ?? false) ? '${widget.data?.mediaThumbEndpoint ?? ''}' : '${widget.data?.fullThumbPath ?? ''}',
           errorWidget: (_, __, ___) {
             return Container(
                 width: widget.width * SizeConfig.scaleDiagonal,

@@ -296,7 +296,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       });
       final fixContext = Routing.navigatorKey.currentContext;
       System().increaseViewCount(fixContext ?? context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()).whenComplete(() {
-        _showAds(Routing.navigatorKey.currentContext ?? context);
+        // _showAds(Routing.navigatorKey.currentContext ?? context);
       });
       isPlay = true;
     });
@@ -439,16 +439,15 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     // getCountVid();
     // await _newInitAds(true);
     final count = context.getAdsCount();
-    if(count == 5){
+    if (count == 5) {
       final adsData = await context.getInBetweenAds();
-      if(adsData != null){
+      if (adsData != null) {
         final auth = await context.getAuth(context, videoId: adsData.videoId ?? '');
         pause();
         System().adsPopUp(context, adsData, auth).whenComplete(() {
           play();
         });
       }
-
     }
     context.incrementAdsCount();
   }
@@ -687,20 +686,20 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                                 child: Container(
                                   clipBehavior: Clip.hardEdge,
                                   width: MediaQuery.of(context).size.width,
-                                  height: MediaQuery.of(context).size.width * (16/9),
+                                  height: MediaQuery.of(context).size.width * (16 / 9),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
                                   child: AliPlayerView(
-                                      onCreated: (id) {
-                                        final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
-                                        onViewPlayerCreated(id, isImage);
-                                      },
-                                      x: 0,
-                                      y: _playerY,
-                                      width: MediaQuery.of(context).size.width,
-                                      height: MediaQuery.of(context).size.width * (16/9),
-                                    ),
+                                    onCreated: (id) {
+                                      final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
+                                      onViewPlayerCreated(id, isImage);
+                                    },
+                                    x: 0,
+                                    y: _playerY,
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.width * (16 / 9),
+                                  ),
                                 ),
                               ),
                               Center(
@@ -715,7 +714,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                                       stickers: _groupUserStories?[index].story?[_curChildIdx].stickers,
                                       fullscreen: true,
                                       width: double.infinity,
-                                      height: MediaQuery.of(context).size.width * (16/9),
+                                      height: MediaQuery.of(context).size.width * (16 / 9),
                                       isPause: isPause,
                                       canPause: true,
                                     ),
@@ -724,7 +723,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                               ),
                             ],
                           ),
-                      )
+                        )
                       : Container(
                           color: Colors.black,
                           alignment: Alignment.center,
@@ -918,15 +917,14 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             children: [
               _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image'
                   ? FutureBuilder(
-                    future: Future.wait([
-                        for (StickerModel sticker in _groupUserStories?[index].story?[_curChildIdx].stickers ?? [])
-                          precacheImage(NetworkImage(sticker.image ?? ''), context),
-                    ]),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        Container();
-                      }
-                      return Container(
+                      future: Future.wait([
+                        for (StickerModel sticker in _groupUserStories?[index].story?[_curChildIdx].stickers ?? []) precacheImage(NetworkImage(sticker.image ?? ''), context),
+                      ]),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          Container();
+                        }
+                        return Container(
                           color: Colors.black,
                           child: CustomBaseCacheImage(
                             widthPlaceHolder: 112,
@@ -948,7 +946,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                                         clipBehavior: Clip.hardEdge,
                                         width: double.infinity,
                                         // height: double.infinity,
-                                        height: MediaQuery.of(context).size.width * (16/9),
+                                        height: MediaQuery.of(context).size.width * (16 / 9),
                                         // margin: const EdgeInsets.symmetric(horizontal: 4.0),
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(8.0),
@@ -968,7 +966,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                                         child: StickerOverlay(
                                           stickers: _groupUserStories?[index].story?[_curChildIdx].stickers,
                                           width: double.infinity,
-                                          height: MediaQuery.of(context).size.width * (16/9),
+                                          height: MediaQuery.of(context).size.width * (16 / 9),
                                           fullscreen: true,
                                           isPause: isPause,
                                           canPause: true,
@@ -1028,8 +1026,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                             ),
                           ),
                         );
-                    }
-                  )
+                      })
                   : Center(
                       child: const CircularProgressIndicator(
                         backgroundColor: Colors.white,
@@ -1058,7 +1055,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     (Routing.navigatorKey.currentContext ?? context).read<StoriesPlaylistNotifier>().textEditingController.clear();
     emojiController.reset();
     System().increaseViewCount(fixContext ?? context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()).whenComplete(() {
-      _showAds(Routing.navigatorKey.currentContext ?? context);
+      // _showAds(Routing.navigatorKey.currentContext ?? context);
       storyRef.setViewed(_curIdx, _curChildIdx);
     });
     fAliplayer?.stop();

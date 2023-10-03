@@ -148,12 +148,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
     print("======================ke initstate");
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      secondsSkip = widget.data.adsSkip ?? 4;
-      secondsImage = 0;
-      if((widget.data.mediaType?.toLowerCase() ?? '') == 'image'){
-        startTimer();
-      }
       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+      secondsSkip = widget.data.adsSkip ?? 0;
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: "iklanPopUp");
 
@@ -174,8 +170,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
         vsync: this,
         // duration: Duration(milliseconds: _videoDuration),
       )..addListener(() {
-        setState(() {});
-      });
+          setState(() {});
+        });
 
       _playMode = ModeTypeAliPLayer.auth;
       // if (widget.data?.apsaraId != '') {
@@ -206,29 +202,6 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       }
 
       _initListener();
-    });
-  }
-
-  Timer? countdownTimer;
-  var secondsImage = 0;
-
-  void stopTime({bool isReset = false}) {
-    setState(() => countdownTimer?.cancel());
-  }
-
-  void startTimer() {
-    countdownTimer = Timer.periodic(const Duration(seconds: 1), (_){
-      if(secondsSkip == 0){
-        countdownTimer?.cancel();
-      }else{
-        setState(() {
-          secondsSkip -= 1;
-          secondsImage += 1;
-          if(((widget.data.adsSkip ?? 4) + 2) == secondsImage){
-            stopTime();
-          }
-        });
-      }
     });
   }
 
@@ -528,7 +501,6 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    final language = context.read<TranslateNotifierV2>().translate;
     return WillPopScope(
       onWillPop: () async {
         // if (!loadingAction && secondsSkip < 1 || widget.data.isReport == true) {
@@ -537,57 +509,15 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
         // } else {
         //   return false;
         // }
-        adsView(widget.data, secondsVideo);
+        // adsView(widget.data, secondsVideo);
         return true;
       },
       child: Stack(
         children: [
-          Positioned.fill(child: Container(
-            width: SizeConfig.screenWidth,
-            height: SizeConfig.screenHeight,
-            color: Colors.black,
-          ),
-          ),
           SizedBox(
             width: SizeConfig.screenWidth,
             height: SizeConfig.screenHeight,
-            child: (widget.data.mediaType?.toLowerCase() ?? '') == 'image' ? CustomBaseCacheImage(
-              memCacheWidth: 100,
-              memCacheHeight: 100,
-              widthPlaceHolder: 80,
-              heightPlaceHolder: 80,
-              imageUrl: widget.data.mediaUri,
-              imageBuilder: (context, imageProvider) => ClipRRect(
-                borderRadius: BorderRadius.circular(20), // Image border
-                child: Image(
-                  image: imageProvider,
-                  fit: BoxFit.fitWidth,
-                  width: context.getWidth(),
-                ),
-              ),
-              emptyWidget: Container(
-                  decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                  width: context.getWidth(),
-                  height: 250,
-                  padding: const EdgeInsets.all(20),
-                  alignment: Alignment.center,
-                  child: CustomTextWidget(
-                    textToDisplay: language.couldntLoadImage ?? 'Error',
-                    maxLines: 3,
-                  )),
-              errorWidget: (context, url, error) {
-                return Container(
-                    decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                    width: context.getWidth(),
-                    height: 250,
-                    padding: const EdgeInsets.all(20),
-                    alignment: Alignment.center,
-                    child: CustomTextWidget(
-                      textToDisplay: language.couldntLoadImage ?? 'Error',
-                      maxLines: 3,
-                    ));
-              },
-            ):AliPlayerView(
+            child: AliPlayerView(
               onCreated: onViewPlayerCreated,
               x: 0,
               y: _playerY,
@@ -630,111 +560,111 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
               children: [
                 loadingAction
                     ? Container(
-                  // padding: const EdgeInsets.only(left: 8.0),
-                    width: 24,
-                    height: 24,
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
+                        // padding: const EdgeInsets.only(left: 8.0),
+                        width: 24,
+                        height: 24,
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
                     : InkWell(
-                  onTap: () async {
-                    print('second close ads: $secondsVideo');
-                    await adsView(widget.data, secondsVideo);
-                    Navigator.pop(context);
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.only(left: 8.0),
-                    child: CustomIconWidget(
-                      defaultColor: false,
-                      iconData: "${AssetPath.vectorPath}back-arrow.svg",
-                    ),
-                  ),
-                ),
-                data.isReport ?? false
-                    ? Container()
-                    : Expanded(
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap:(){
-                          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
+                        onTap: () async {
+                          print('second close ads: $secondsVideo');
+                          // await adsView(widget.data, secondsVideo);
+                          Navigator.pop(context);
                         },
-                        child: CustomBaseCacheImage(
-                          imageUrl: data.avatar?.fullLinkURL,
-                          memCacheWidth: 200,
-                          memCacheHeight: 200,
-                          imageBuilder: (_, imageProvider) {
-                            return Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: imageProvider,
-                                ),
-                              ),
-                            );
-                          },
-                          errorWidget: (_, __, ___) {
-                            return Container(
-                              width: 36,
-                              height: 36,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(18)),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                                ),
-                              ),
-                            );
-                          },
-                          emptyWidget: Container(
-                            width: 36,
-                            height: 36,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(18)),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                              ),
-                            ),
+                        child: const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: CustomIconWidget(
+                            defaultColor: false,
+                            iconData: "${AssetPath.vectorPath}back-arrow.svg",
                           ),
                         ),
                       ),
-                      twelvePx,
-                      Expanded(
+                data.isReport ?? false
+                    ? Container()
+                    : Expanded(
                         child: Row(
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const CustomIconWidget(
-                                  defaultColor: false,
-                                  iconData: "${AssetPath.vectorPath}ad_yellow_icon.svg",
-                                ),
-                                sixPx,
-                                Text(
-                                  widget.isSponsored ? 'Sponsored' : '',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
+                            GestureDetector(
+                              onTap: () {
+                                Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
+                              },
+                              child: CustomBaseCacheImage(
+                                imageUrl: data.avatar?.fullLinkURL,
+                                memCacheWidth: 200,
+                                memCacheHeight: 200,
+                                imageBuilder: (_, imageProvider) {
+                                  return Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: imageProvider,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                errorWidget: (_, __, ___) {
+                                  return Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(18)),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                emptyWidget: Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(18)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    ),
                                   ),
-                                )
-                              ],
+                                ),
+                              ),
                             ),
-                            sixPx,
+                            twelvePx,
                             Expanded(
-                                child: Text(
-                                  maxLines: 3,
-                                  data.adsDescription ?? 'Nike',
-                                  style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
-                                ))
+                              child: Row(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const CustomIconWidget(
+                                        defaultColor: false,
+                                        iconData: "${AssetPath.vectorPath}ad_yellow_icon.svg",
+                                      ),
+                                      sixPx,
+                                      Text(
+                                        widget.isSponsored ? 'Sponsored' : '',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  sixPx,
+                                  Expanded(
+                                      child: Text(
+                                    maxLines: 3,
+                                    data.adsDescription ?? 'Nike',
+                                    style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+                                  ))
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
                 sixPx,
                 Row(
                   children: [
@@ -758,7 +688,27 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                         color: kHyppeLightButtonText,
                       ),
                     ),
-
+                    loadingAction
+                        ? Container(
+                            // padding: const EdgeInsets.only(left: 8.0),
+                            width: 24,
+                            height: 24,
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
+                        : InkWell(
+                            onTap: () async {
+                              print('second close ads: $secondsVideo');
+                              await adsView(widget.data, secondsVideo);
+                              Navigator.pop(context);
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: CustomIconWidget(
+                                defaultColor: false,
+                                iconData: "${AssetPath.vectorPath}close_ads.svg",
+                              ),
+                            ),
+                          )
                   ],
                 )
               ],
@@ -790,7 +740,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
           margin: const EdgeInsets.only(left: 16, right: 16, bottom: 15),
           child: InkWell(
             onTap: () async {
-              if(!loadingAction){
+              if (!loadingAction) {
                 if (secondsSkip < 1) {
                   if (data.adsUrlLink?.isEmail() ?? false) {
                     final email = data.adsUrlLink!.replaceAll('email:', '');
@@ -811,9 +761,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                     });
                   } else {
                     final uri = Uri.parse(data.adsUrlLink ?? '');
-                    if((data.adsUrlLink ?? '').withHttp()){
+                    if ((data.adsUrlLink ?? '').withHttp()) {
                       try {
-
                         print('bottomAdsLayout ${data.adsUrlLink}');
 
                         if (await canLaunchUrl(uri)) {
@@ -821,7 +770,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                             loadLaunch = true;
                           });
                           print('second close ads: $secondsVideo');
-                          // Navigator.pop(context);
+                          Navigator.pop(context);
                           // await launchUrl(
                           //   uri,
                           //   mode: LaunchMode.externalApplication,
@@ -841,17 +790,23 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                           loadLaunch = true;
                         });
                         print('second close ads: $secondsVideo');
-                        // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                        adsView(widget.data, secondsVideo, isClick: true).whenComplete(() {
-                          System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                        // Navigator.pop(context);
+                        // await launchUrl(
+                        //   uri,
+                        //   mode: LaunchMode.externalApplication,
+                        // );
+                        adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
+                          Navigator.pop(context);
+                          await launchUrl(
+                            uri,
+                            mode: LaunchMode.externalApplication,
+                          );
                         });
                       }
                     }
-
                   }
                 }
               }
-
             },
             child: Builder(builder: (context) {
               final learnMore = secondsSkip < 1 ? (notifier.translate.learnMore ?? 'Learn More') : "${notifier.translate.learnMore ?? 'Learn More'}($secondsSkip)";
@@ -862,13 +817,13 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                 child: loadLaunch
                     ? const SizedBox(width: 40, height: 20, child: CustomLoading())
                     : Text(
-                  learnMore,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                        learnMore,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
               );
             }),
           ),
@@ -904,63 +859,63 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       onTap: () {},
       child: !isPlay
           ? Stack(
-        children: [
-          (widget.data.mediaType?.toLowerCase() ?? '') == 'image' ? const SizedBox.shrink() : Container(
-            width: double.infinity,
-            height: double.infinity,
-            child: const Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),
-          ),
-          // Container(
-          //   color: Colors.black,
-          //   child: CustomBaseCacheImage(
-          //     widthPlaceHolder: 112,
-          //     heightPlaceHolder: 40,
-          //     imageUrl: (_listData?[index].isApsara ?? false) ? "${_listData?[index].mediaThumbEndPoint}" : "${_listData?[index].fullThumbPath}",
-          //     imageBuilder: (context, imageProvider) => Container(
-          //       clipBehavior: Clip.hardEdge,
-          //       width: double.infinity,
-          //       height: double.infinity,
-          //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
-          //       decoration: BoxDecoration(
-          //         borderRadius: BorderRadius.circular(8.0),
-          //         image: DecorationImage(
-          //           image: imageProvider,
-          //           fit: BoxFit.contain,
-          //         ),
-          //       ),
-          //       // child: _buildBody(index),
-          //     ),
-          //     errorWidget: (context, url, error) => Container(
-          //       width: double.infinity,
-          //       height: double.infinity,
-          //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
-          //       decoration: BoxDecoration(
-          //         image: const DecorationImage(
-          //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
-          //           fit: BoxFit.cover,
-          //         ),
-          //         borderRadius: BorderRadius.circular(8.0),
-          //       ),
-          //       // child: _buildBody(index),
-          //     ),
-          //     emptyWidget: Container(
-          //       width: double.infinity,
-          //       height: double.infinity,
-          //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
-          //       decoration: BoxDecoration(
-          //         image: const DecorationImage(
-          //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
-          //           fit: BoxFit.cover,
-          //         ),
-          //         borderRadius: BorderRadius.circular(8.0),
-          //       ),
-          //       // child: _buildBody(index),
-          //     ),
-          //   ),
-          // ),
-          _buildFillDiary()
-        ],
-      )
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),
+                ),
+                // Container(
+                //   color: Colors.black,
+                //   child: CustomBaseCacheImage(
+                //     widthPlaceHolder: 112,
+                //     heightPlaceHolder: 40,
+                //     imageUrl: (_listData?[index].isApsara ?? false) ? "${_listData?[index].mediaThumbEndPoint}" : "${_listData?[index].fullThumbPath}",
+                //     imageBuilder: (context, imageProvider) => Container(
+                //       clipBehavior: Clip.hardEdge,
+                //       width: double.infinity,
+                //       height: double.infinity,
+                //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                //       decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(8.0),
+                //         image: DecorationImage(
+                //           image: imageProvider,
+                //           fit: BoxFit.contain,
+                //         ),
+                //       ),
+                //       // child: _buildBody(index),
+                //     ),
+                //     errorWidget: (context, url, error) => Container(
+                //       width: double.infinity,
+                //       height: double.infinity,
+                //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                //       decoration: BoxDecoration(
+                //         image: const DecorationImage(
+                //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                //           fit: BoxFit.cover,
+                //         ),
+                //         borderRadius: BorderRadius.circular(8.0),
+                //       ),
+                //       // child: _buildBody(index),
+                //     ),
+                //     emptyWidget: Container(
+                //       width: double.infinity,
+                //       height: double.infinity,
+                //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                //       decoration: BoxDecoration(
+                //         image: const DecorationImage(
+                //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                //           fit: BoxFit.cover,
+                //         ),
+                //         borderRadius: BorderRadius.circular(8.0),
+                //       ),
+                //       // child: _buildBody(index),
+                //     ),
+                //   ),
+                // ),
+                _buildFillDiary()
+              ],
+            )
           : Container(),
     );
   }
@@ -1090,135 +1045,135 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
             children: [
               (widget.data.mediaType ?? '').translateType() == ContentType.image
                   ? Stack(
-                children: [
-                  // Background
-                  CustomBackgroundLayer(
-                    sigmaX: 30,
-                    sigmaY: 30,
-                    thumbnail: widget.urlAds,
-                  ),
-                  // Content
-                  InteractiveViewer(
-                    child: InkWell(
-                      child: CustomCacheImage(
-                        imageUrl: widget.urlAds,
-                        imageBuilder: (ctx, imageProvider) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-                            ),
-                          );
-                        },
-                        errorWidget: (_, __, ___) {
-                          return Container(
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                fit: BoxFit.contain,
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                              ),
-                            ),
-                          );
-                        },
-                        emptyWidget: Container(
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.contain,
-                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                            ),
-                          ),
+                      children: [
+                        // Background
+                        CustomBackgroundLayer(
+                          sigmaX: 30,
+                          sigmaY: 30,
+                          thumbnail: widget.urlAds,
                         ),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-                  : Stack(
-                children: [
-                  StoryView(
-                    inline: false,
-                    repeat: false,
-                    progressColor: kHyppeLightButtonText,
-                    durationColor: kHyppeLightButtonText,
-                    storyItems: _storyItems,
-                    controller: _storyController,
-                    progressPosition: ProgressPosition.top,
-                    isAds: true,
-                    onStoryShow: (storyItem) {},
-                    onEverySecond: (dur) {
-                      'second of video $dur'.logger();
-                      setState(() {
-                        secondsSkip -= 1;
-                        secondsVideo += 1;
-                      });
-                    },
-                    nextDebouncer: false,
-                    onComplete: () async {
-                      _storyController.pause();
-                      // await adsView(widget.data, secondsVideo);
-                      // Navigator.pop(context);
-                    },
-                  ),
-                  widget.data.isReport ?? false
-                      ? BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                    child: Container(
-                      color: Colors.black.withOpacity(0),
-                    ),
-                  )
-                      : Container()
-                ],
-              ),
-              widget.data.isReport!
-                  ? SafeArea(
-                  child: SizedBox(
-                    width: SizeConfig.screenWidth,
-                    child: Consumer<TranslateNotifierV2>(
-                      builder: (context, transnot, child) => Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Spacer(),
-                          const CustomIconWidget(
-                            iconData: "${AssetPath.vectorPath}valid-invert.svg",
-                            defaultColor: false,
-                            height: 30,
-                          ),
-                          Text(transnot.translate.reportReceived ?? '', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                          Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 13,
-                              )),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                widget.data.isReport = false;
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.only(top: 8),
-                              margin: const EdgeInsets.all(8),
-                              width: SizeConfig.screenWidth,
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  top: BorderSide(
-                                    color: Colors.white,
-                                    width: 1,
+                        // Content
+                        InteractiveViewer(
+                          child: InkWell(
+                            child: CustomCacheImage(
+                              imageUrl: widget.urlAds,
+                              imageBuilder: (ctx, imageProvider) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                                  ),
+                                );
+                              },
+                              errorWidget: (_, __, ___) {
+                                return Container(
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      fit: BoxFit.contain,
+                                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    ),
+                                  ),
+                                );
+                              },
+                              emptyWidget: Container(
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
                                   ),
                                 ),
                               ),
-                              child: Text(
-                                "See Ads",
-                                style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                                textAlign: TextAlign.center,
-                              ),
                             ),
                           ),
-                          thirtyTwoPx,
-                        ],
-                      ),
+                        ),
+                      ],
+                    )
+                  : Stack(
+                      children: [
+                        StoryView(
+                          inline: false,
+                          repeat: false,
+                          progressColor: kHyppeLightButtonText,
+                          durationColor: kHyppeLightButtonText,
+                          storyItems: _storyItems,
+                          controller: _storyController,
+                          progressPosition: ProgressPosition.top,
+                          isAds: true,
+                          onStoryShow: (storyItem) {},
+                          onEverySecond: (dur) {
+                            'second of video $dur'.logger();
+                            setState(() {
+                              secondsSkip -= 1;
+                              secondsVideo += 1;
+                            });
+                          },
+                          nextDebouncer: false,
+                          onComplete: () async {
+                            _storyController.pause();
+                            // await adsView(widget.data, secondsVideo);
+                            // Navigator.pop(context);
+                          },
+                        ),
+                        widget.data.isReport ?? false
+                            ? BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                child: Container(
+                                  color: Colors.black.withOpacity(0),
+                                ),
+                              )
+                            : Container()
+                      ],
                     ),
-                  ))
+              widget.data.isReport!
+                  ? SafeArea(
+                      child: SizedBox(
+                      width: SizeConfig.screenWidth,
+                      child: Consumer<TranslateNotifierV2>(
+                        builder: (context, transnot, child) => Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Spacer(),
+                            const CustomIconWidget(
+                              iconData: "${AssetPath.vectorPath}valid-invert.svg",
+                              defaultColor: false,
+                              height: 30,
+                            ),
+                            Text(transnot.translate.reportReceived ?? '', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                            Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                )),
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  widget.data.isReport = false;
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.only(top: 8),
+                                margin: const EdgeInsets.all(8),
+                                width: SizeConfig.screenWidth,
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    top: BorderSide(
+                                      color: Colors.white,
+                                      width: 1,
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  "See Ads",
+                                  style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            thirtyTwoPx,
+                          ],
+                        ),
+                      ),
+                    ))
                   : Container(),
               Positioned(left: 0, top: 50, right: 0, child: topAdsLayout(widget.data)),
               Positioned(
@@ -1249,88 +1204,88 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                 data.isReport ?? false
                     ? Container()
                     : Expanded(
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap:(){
-                          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
-                        },
-                        child: CustomBaseCacheImage(
-                          imageUrl: data.avatar?.fullLinkURL,
-                          memCacheWidth: 200,
-                          memCacheHeight: 200,
-                          imageBuilder: (_, imageProvider) {
-                            return Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: imageProvider,
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
+                              },
+                              child: CustomBaseCacheImage(
+                                imageUrl: data.avatar?.fullLinkURL,
+                                memCacheWidth: 200,
+                                memCacheHeight: 200,
+                                imageBuilder: (_, imageProvider) {
+                                  return Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: imageProvider,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                errorWidget: (_, __, ___) {
+                                  return Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(18)),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                emptyWidget: Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(18)),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          errorWidget: (_, __, ___) {
-                            return Container(
-                              width: 36,
-                              height: 36,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(18)),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                                ),
-                              ),
-                            );
-                          },
-                          emptyWidget: Container(
-                            width: 36,
-                            height: 36,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(18)),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
                               ),
                             ),
-                          ),
+                            twelvePx,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const CustomIconWidget(
+                                      defaultColor: false,
+                                      iconData: "${AssetPath.vectorPath}ad_yellow_icon.svg",
+                                    ),
+                                    fourPx,
+                                    Expanded(
+                                      child: CustomTextWidget(
+                                        textToDisplay: data.adsDescription ?? 'Nike',
+                                        maxLines: 3,
+                                        textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                sixPx,
+                                Text(
+                                  widget.isSponsored ? 'Sponsored' : '',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      twelvePx,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const CustomIconWidget(
-                                defaultColor: false,
-                                iconData: "${AssetPath.vectorPath}ad_yellow_icon.svg",
-                              ),
-                              fourPx,
-                              Expanded(
-                                child: CustomTextWidget(
-                                  textToDisplay: data.adsDescription ?? 'Nike',
-                                  maxLines: 3,
-                                  textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
-                                ),
-                              )
-                            ],
-                          ),
-                          sixPx,
-                          Text(
-                            widget.isSponsored ? 'Sponsored' : '',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
                 Row(
                   children: [
                     GestureDetector(
@@ -1355,41 +1310,41 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                     ),
                     loadingAction
                         ? Container(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        width: 24,
-                        height: 24,
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
+                            padding: const EdgeInsets.only(left: 8.0),
+                            width: 24,
+                            height: 24,
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
                         : InkWell(
-                      onTap: () async {
-                        print('second close ads: $secondsVideo');
-                        await adsView(widget.data, secondsVideo);
-                        Navigator.pop(context);
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: CustomIconWidget(
-                          defaultColor: false,
-                          iconData: "${AssetPath.vectorPath}close_ads.svg",
-                        ),
-                      ),
-                    )
+                            onTap: () async {
+                              print('second close ads: $secondsVideo');
+                              // await adsView(widget.data, secondsVideo);
+                              Navigator.pop(context);
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: CustomIconWidget(
+                                defaultColor: false,
+                                iconData: "${AssetPath.vectorPath}close_ads.svg",
+                              ),
+                            ),
+                          )
                   ],
                 )
               ],
             ),
             secondsSkip > 0 && widget.data.isReport != true
                 ? Container(
-              height: 30,
-              width: 30,
-              margin: EdgeInsets.only(top: 0),
-              child: Text(
-                '$secondsSkip',
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Colors.grey),
-            )
+                    height: 30,
+                    width: 30,
+                    margin: EdgeInsets.only(top: 0),
+                    child: Text(
+                      '$secondsSkip',
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Colors.grey),
+                  )
                 : Container()
           ],
         ),
@@ -1405,11 +1360,10 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
           margin: const EdgeInsets.only(left: 16, right: 16, bottom: 15),
           child: InkWell(
             onTap: () async {
-              if(!loadingAction){
+              if (!loadingAction) {
                 if (secondsSkip < 1) {
                   if (data.adsUrlLink?.isEmail() ?? false) {
                     final email = data.adsUrlLink!.replaceAll('email:', '');
-
 
                     print('second close ads: $secondsVideo');
                     await adsView(widget.data, secondsVideo, isClick: true);
@@ -1439,7 +1393,6 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                   }
                 }
               }
-
             },
             child: Builder(builder: (context) {
               final learnMore = secondsSkip < 1 ? (notifier.translate.learnMore ?? 'Learn More') : "${notifier.translate.learnMore ?? 'Learn More'}($secondsSkip)";

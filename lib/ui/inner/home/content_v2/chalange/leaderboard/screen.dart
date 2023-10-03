@@ -212,12 +212,11 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                           _currentSlidder = index;
                                           _tabController.index = 0;
                                           chllangeid = cn.bannerLeaderboardData[index].sId ?? '';
-                                          Future.delayed(Duration(milliseconds: 500), () {
-                                            lastchallangeid = cn.bannerLeaderboardData[index].sId ?? '';
-                                            if (lastchallangeid == chllangeid) {
-                                              cn.getLeaderBoard(context, cn.bannerLeaderboardData[index].sId ?? '');
-                                            }
-                                          });
+
+                                          lastchallangeid = cn.bannerLeaderboardData[index].sId ?? '';
+                                          if (lastchallangeid == chllangeid) {
+                                            cn.getLeaderBoard(context, cn.bannerLeaderboardData[index].sId ?? '');
+                                          }
                                         });
                                       }),
                                   items: cn.bannerLeaderboardData
@@ -264,7 +263,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                               //   ),
                                               // )
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(20), // Image border
+                                                borderRadius: BorderRadius.circular(12), // Image border
                                                 child: Image.network(
                                                   item.bannerLandingpage ?? '',
                                                   width: SizeConfig.screenWidth,
@@ -297,45 +296,47 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                               ),
                               sixPx,
                               //Tab
-                              hideTab
+                              cn.isLoading
                                   ? Container()
-                                  : Container(
-                                      padding: const EdgeInsets.all(16),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(8),
-                                          color: kHyppeLightSurface,
-                                        ),
-                                        child: TabBar(
-                                          controller: _tabController,
-                                          indicator: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              8.0,
+                                  : hideTab
+                                      ? Container()
+                                      : Container(
+                                          padding: const EdgeInsets.all(16),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(4),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(8),
+                                              color: kHyppeLightSurface,
                                             ),
-                                            color: kHyppeLightButtonText,
-                                          ),
-                                          labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                                          labelColor: kHyppeTextLightPrimary,
-                                          unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                                          labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                          // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                                          unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                          tabs: [
-                                            ...List.generate(
-                                              nameTab.length,
-                                              (index) => Padding(
-                                                padding: EdgeInsets.all(9),
-                                                child: Text(
-                                                  nameTab[index],
-                                                  style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                            child: TabBar(
+                                              controller: _tabController,
+                                              indicator: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(
+                                                  8.0,
                                                 ),
+                                                color: kHyppeLightButtonText,
                                               ),
+                                              labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                                              labelColor: kHyppeTextLightPrimary,
+                                              unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                                              labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                              // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                                              unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                              tabs: [
+                                                ...List.generate(
+                                                  nameTab.length,
+                                                  (index) => Padding(
+                                                    padding: EdgeInsets.all(9),
+                                                    child: Text(
+                                                      nameTab[index],
+                                                      style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                    ),
                             ]),
                           ),
                         ),

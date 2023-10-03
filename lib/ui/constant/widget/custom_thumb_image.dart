@@ -27,7 +27,7 @@ class CustomThumbImage extends StatelessWidget {
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: CustomBaseCacheImage(
-        imageUrl: "$imageUrl",
+        imageUrl: imageUrl,
         memCacheHeight: memCacheHeight,
         memCacheWidth: memCacheWidth,
         widthPlaceHolder: 100,

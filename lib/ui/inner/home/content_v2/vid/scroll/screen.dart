@@ -572,6 +572,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                   getPlayer: (main, id) {
                     print('Vid Player1: screen ${main}');
                     // notifier.setAliPlayer(index, main);
+                    globalAliPlayer = main;
                     setState(() {
                       vidData?[index].fAliplayer = main;
                       dataAli[index] = main;

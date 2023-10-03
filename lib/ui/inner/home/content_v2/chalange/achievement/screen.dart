@@ -172,7 +172,7 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
           twentyFourPx,
           ButtonChallangeWidget(
             bgColor: kHyppePrimary,
-            text: "${lang?.joinTheChallengeNow}",
+            text: "${lang?.joinTheChallenge}",
             function: () {
               Routing().moveBack();
             },

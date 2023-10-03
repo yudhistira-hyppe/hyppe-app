@@ -880,6 +880,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     } else {
       _isCompress = false;
     }
+    print('My Result Compress: $_isCompress');
   }
 
   Future<void> compressVideo() async {

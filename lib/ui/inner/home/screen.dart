@@ -46,7 +46,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
   // final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
-  // final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
+  final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
   bool appbarSeen = true;
   bool afterUploading = false;
   late TabController _tabController;
@@ -101,6 +101,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   @override
   void dispose() {
     CustomRouteObserver.routeObserver.unsubscribe(this);
+    globalKey.currentState?.innerController.dispose();
     super.dispose();
   }
 
@@ -124,8 +125,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     'initState isOnHomeScreen $isHomeScreen'.logger();
     _tabController = TabController(length: 3, vsync: this);
 
-    offset = 0;
-
     Future.delayed(Duration.zero, () {
       // _tabController.index = 0;
       final notifier = context.read<HomeNotifier>();
@@ -134,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
       final notifierMain = context.read<MainNotifier>();
-      notifierMain.globalKey = GlobalKey<NestedScrollViewState>();
+      // notifierMain.globalKey = globalKey;
 
       if (notifier.preventReloadAfterUploadPost) {
         notifier.preventReloadAfterUploadPost = false;
@@ -152,21 +151,26 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           {'name': "${_language?.following}", 'code': 'FOLLOWING'},
         ];
       }
-
-      notifierMain.globalKey.currentState?.innerController.addListener(() {
-        try {
-          setState(() {
-            offset = notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0;
-            // print(offset);
-          });
-          if ((notifierMain.globalKey.currentState?.innerController.position.pixels ?? 0) >= (notifierMain.globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
-              !(notifierMain.globalKey.currentState?.innerController.position.outOfRange ?? true)) {
-            notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);
+      Future.delayed(Duration(milliseconds: 500), () {
+        notifierMain.globalKey?.currentState?.innerController.addListener(() {
+          try {
+            if ((notifierMain.globalKey?.currentState?.innerController.position.pixels ?? 0) >= (notifierMain.globalKey?.currentState?.innerController.position.maxScrollExtent ?? 0) &&
+                !(notifierMain.globalKey?.currentState?.innerController.position.outOfRange ?? true)) {
+              notifier.initNewHome(context, mounted, isreload: false, isgetMore: true);
+            }
+          } catch (e) {
+            e.logger();
           }
-        } catch (e) {
-          e.logger();
-        }
+        });
       });
+
+      globalKey.currentState?.innerController.addListener(() {
+        setState(() {
+          offset = globalKey.currentState?.innerController.position.pixels ?? 0;
+          print("======offset ${offset}");
+        });
+      });
+
       Routing.navigatorKey.currentContext?.read<MainNotifier>().scrollController.addListener(() {
         // print(context.read<MainNotifier>().scrollController.offset);
         try {
@@ -237,6 +241,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   Widget build(BuildContext context) {
+    final notifierMain = context.read<MainNotifier>();
     // print("iszoom $isZoom");
     isFromSplash = false;
     return Consumer2<HomeNotifier, SelfProfileNotifier>(
@@ -248,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         child: Scaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-            child: HomeAppBar(name: selfnotifier.user.profile?.fullName, offset: offset),
+            child: HomeAppBar(name: "${selfnotifier.user.profile?.fullName}", offset: offset),
           ),
           body: Builder(
             builder: (context) => DefaultTabController(
@@ -282,7 +287,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                   // absorbing: true,
                   absorbing: isZoom,
                   child: NestedScrollView(
-                    key: context.read<MainNotifier>().globalKey,
+                    // key: context.read<MainNotifier>().globalKey,
+                    key: globalKey,
                     controller: context.read<MainNotifier>().scrollController,
                     // physics: const NeverScrollableScrollPhysics(),
                     // dragStartBehavior: DragStartBehavior.start,
@@ -292,10 +298,13 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                           handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                           sliver: SliverList(
                             delegate: SliverChildListDelegate([
+                              // Text("${globalKey.currentState?.innerController}"),
+                              // Text("${globalKey}"),
                               const ProcessUploadComponent(),
                               sixPx,
                               const HyppePreviewStories(),
                               sixPx,
+
                               // GestureDetector(
                               //     onTap: () {
                               //       setState(() {
@@ -368,7 +377,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                               globalTultipShow = false;
                             },
                             appbarSeen: appbarSeen,
-                            scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                            scrollController: globalKey.currentState?.innerController,
+                            // scrollController: context.read<MainNotifier>().globalKey?.currentState?.innerController,
                             // offset: offset,
                           ),
                         ),
@@ -376,7 +386,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                           padding: const EdgeInsets.only(left: 6.0, right: 6),
                           color: kHyppeLightSurface,
                           child: LandingDiaryPage(
-                            scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                            scrollController: globalKey.currentState?.innerController,
+                            // scrollController: context.read<MainNotifier>().globalKey?.currentState?.innerController,
                           ),
                         ),
                         // second tab bar viiew widget
@@ -384,7 +395,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                           padding: const EdgeInsets.only(left: 16.0, right: 16),
                           color: kHyppeLightSurface,
                           child: HyppePreviewVid(
-                            scrollController: context.read<MainNotifier>().globalKey.currentState?.innerController,
+                            scrollController: globalKey.currentState?.innerController,
+                            // scrollController: context.read<MainNotifier>().globalKey?.currentState?.innerController,
                             afterUploading: afterUploading,
                           ),
                         ),
@@ -402,12 +414,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void afterFirstLayout(BuildContext context) async {
-    print("afterrrrrrr============");
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
     var homneNotifier = context.read<HomeNotifier>();
     if (homneNotifier.preventReloadAfterUploadPost) {
-      print("afterrrrrrr preventReloadAfterUploadPost ============");
-      print("afterrrrrrr preventReloadAfterUploadPost ${homneNotifier.uploadedPostType}============");
       afterUploading = true;
       changeTab(homneNotifier.uploadedPostType);
       homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
@@ -418,26 +427,24 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       });
     }
 
-    print("====home not ${homneNotifier.tabIndex}");
-
     setState(() {
       _tabController.index = homneNotifier.tabIndex;
     });
-    print("====_tabController.index ${_tabController.index}");
 
     _tabController.animation?.addListener(() {
       homneNotifier.tabIndex = _tabController.index;
-      print("masuk tab slide");
+
       if (homneNotifier.lastCurIndex != homneNotifier.tabIndex) {
         homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
       }
       homneNotifier.lastCurIndex = homneNotifier.tabIndex;
     });
     if (isHomeScreen) {
-      print("isOnHomeScreen hit ads");
-      homneNotifier.getAdsApsara(context, true).then((value) {
-        print(value);
-      });
+      homneNotifier.getAdsApsara(context, true);
+    }
+    var pic = Provider.of<PreviewPicNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+    if (context.read<MainNotifier>().tutorialData.isEmpty && (pic.pic?.isNotEmpty ?? [].isEmpty)) {
+      context.read<MainNotifier>().tutorialData = pic.pic?.first.tutorial ?? [];
     }
     //
   }

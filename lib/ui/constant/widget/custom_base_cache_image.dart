@@ -78,7 +78,7 @@ class CustomBaseCacheImage extends StatelessWidget {
     if ((imageUrl ?? '').isNotEmpty || (imageUrl ?? '').isUrlLink()) {
       return (imageUrl ?? '').isNotEmpty
           ? OptimizedCacheImage(
-              imageUrl: "$imageUrl",
+              imageUrl: imageUrl ?? '',
               memCacheHeight: 60,
               memCacheWidth: 45,
               imageBuilder: imageBuilder,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/home/widget/profile.dart';
@@ -44,6 +45,9 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'MainScreen');
     _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
+    _mainNotifier.globalKey = GlobalKey<NestedScrollViewState>(debugLabel: System().generateNonce());
+    _mainNotifier.pageInit(widget.args?.canShowAds ?? true);
+    print("=========init main ${_mainNotifier.globalKey}");
 
     ScrollController(initialScrollOffset: 50.0);
 
@@ -170,12 +174,17 @@ class _MainScreenState extends State<MainScreen> with AfterFirstLayoutMixin {
 
                                     // } else {
                                     tapMenu(0, notifier, consumerContext);
+                                    print("==== has ${notifier.scrollController.hasClients}");
                                     if (notifier.scrollController.hasClients) {
                                       if (globalTultipShow) {
                                         return;
                                       }
-                                      homeClick = true;
-                                      notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+                                      if (mounted) {
+                                        homeClick = true;
+                                        if (notifier.scrollController.offset > 0) {
+                                          notifier.scrollController.animateTo(0, duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+                                        }
+                                      }
                                       // Routing.navigatorKey.currentState?.overlay?.context
                                       //     .read<MainNotifier>()
                                       //     .globalKey

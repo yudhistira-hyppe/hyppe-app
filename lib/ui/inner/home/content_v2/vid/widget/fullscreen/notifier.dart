@@ -119,6 +119,12 @@ class VideoNotifier with ChangeNotifier{
     notifyListeners();
   }
 
+  bool _loadVideo = false;
+  bool get loadVideo => _loadVideo;
+  set loadVideo(bool state){
+    _loadVideo = state;
+    notifyListeners();
+  }
 
   ///ADS IN BETWEEN === Hariyanto Lukman ===
   Future getAdsVideo(BuildContext context, int videoDuration) async {
@@ -183,5 +189,12 @@ class VideoNotifier with ChangeNotifier{
     } catch (e) {
       'Failed to fetch ads data $e'.logger();
     }
+  }
+
+  bool _isPlay = false;
+  bool get isPlay => _isPlay;
+  set isPlay(bool state){
+    _isPlay = state;
+    notifyListeners();
   }
 }

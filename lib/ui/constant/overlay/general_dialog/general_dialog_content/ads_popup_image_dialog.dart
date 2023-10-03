@@ -177,13 +177,14 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
                                         ),
                                       ) : InkWell(
                                         onTap: () async {
-                                          setState(() {
-                                            loadingBack = true;
-                                          });
-                                          await System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
-                                          setState(() {
-                                            loadingBack = false;
-                                          });
+                                          // setState(() {
+                                          //   loadingBack = true;
+                                          // });
+                                          // await System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
+                                          // setState(() {
+                                          //   loadingBack = false;
+                                          // });
+                                          Routing().moveBack();
                                         },
                                         child: const Padding(
                                           padding: EdgeInsets.only(left: 8.0),
@@ -275,6 +276,7 @@ class _AdsPopupImageDialogState extends State<AdsPopupImageDialog> {
                                                       });
                                                       print('second close ads: $secondsImage');
                                                       System().adsView(widget.data, secondsImage, isClick: true).whenComplete(() async {
+                                                        Navigator.pop(context);
                                                         await launchUrl(
                                                           uri,
                                                           mode: LaunchMode.externalApplication,

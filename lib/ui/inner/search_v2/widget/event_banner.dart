@@ -31,11 +31,14 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
       var cn = context.read<ChallangeNotifier>();
       cn.getBannerLanding(context, isSearch: true);
     });
+
+    print("===-=-=-=-=-= init banner challange");
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("asdasdasdasdasdasdasdasd");
     TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
     return Consumer<ChallangeNotifier>(
       builder: (_, notifier, __) => Padding(
@@ -61,103 +64,65 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
               ],
             ),
             sixteenPx,
-            notifier.isLoading
-                ? AspectRatio(
-                    aspectRatio: 16 / 7,
-                    child: CustomLoading(),
-                  )
-                : CarouselSlider(
-                    carouselController: widget.controller,
-                    options: CarouselOptions(
-                        // height: 300
-                        enlargeCenterPage: true,
-                        enableInfiniteScroll: false,
-                        viewportFraction: 1.0,
-                        // aspectRatio: 343 / 103,
-                        height: SizeConfig.screenWidth! * 0.3,
-                        autoPlayInterval: const Duration(seconds: 3),
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            _current = index;
-                            widget.callback!(index);
-                          });
-                        }),
-                    items: notifier.bannerSearchData
-                        .map((item) => GestureDetector(
-                              onTap: () => Routing().move(Routes.chalenge),
-                              // onTap: () => Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: item.sId)),
-                              child: Center(
-                                  //     child: CustomBaseCacheImage(
-                                  //   memCacheWidth: 100,
-                                  //   memCacheHeight: 100,
-                                  //   widthPlaceHolder: 80,
-                                  //   heightPlaceHolder: 80,
-                                  //   imageUrl: item.bannerLandingpage ?? '',
-                                  //   imageBuilder: (context, imageProvider) => ClipRRect(
-                                  //     borderRadius: BorderRadius.circular(16), // Image border
-                                  //     child: Image(
-                                  //       width: SizeConfig.screenWidth,
-                                  //       fit: BoxFit.cover,
-                                  //       image: imageProvider,
-                                  //     ),
-                                  //   ),
-                                  //   errorWidget: (context, url, error) {
-                                  //     return Container(
-                                  //       // const EdgeInsets.symmetric(horizontal: 4.5),
-                                  //       // height: 500,
-                                  //       decoration: BoxDecoration(
-                                  //         image: const DecorationImage(
-                                  //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                  //           fit: BoxFit.cover,
-                                  //         ),
-                                  //         borderRadius: BorderRadius.circular(8.0),
-                                  //       ),
-                                  //     );
-                                  //   },
-                                  //   emptyWidget: Container(
-                                  //     // const EdgeInsets.symmetric(horizontal: 4.5),
-
-                                  //     // height: 500,
-                                  //     decoration: BoxDecoration(
-                                  //       image: const DecorationImage(
-                                  //         image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                  //         fit: BoxFit.cover,
-                                  //       ),
-                                  //       borderRadius: BorderRadius.circular(8.0),
-                                  //     ),
-                                  //   ),
-                                  // )
-
-                                  child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: Image.network(
-                                  item.bannerLandingpage ?? '',
-                                  width: SizeConfig.screenWidth,
-                                  fit: BoxFit.cover,
-                                  loadingBuilder: (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return Center(
-                                      child: Container(
-                                        height: SizeConfig.screenHeight,
-                                        width: SizeConfig.screenWidth,
-                                        color: Colors.black,
-                                        child: UnconstrainedBox(
-                                          child: Container(
-                                            height: 50,
-                                            width: 50,
-                                            child: CircularProgressIndicator(
-                                                // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                ),
-                                          ),
+            CarouselSlider(
+              carouselController: widget.controller,
+              options: CarouselOptions(
+                  // height: 300
+                  padEnds: true,
+                  enlargeCenterPage: true,
+                  enableInfiniteScroll: false,
+                  viewportFraction: 1.0,
+                  // aspectRatio: 343 / 103,
+                  height: SizeConfig.screenWidth! * 0.3,
+                  autoPlayInterval: const Duration(seconds: 3),
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _current = index;
+                      widget.callback!(index);
+                    });
+                  }),
+              items: notifier.isLoadingBanner
+                  ? notifier.bannerSearchData
+                      .map((e) => AspectRatio(
+                            aspectRatio: 16 / 7,
+                            child: CustomLoading(),
+                          ))
+                      .toList()
+                  : notifier.bannerSearchData
+                      .map((item) => GestureDetector(
+                            onTap: () => Routing().move(Routes.chalenge),
+                            // onTap: () => Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: item.sId)),
+                            child: Center(
+                                child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.network(
+                                item.bannerLandingpage ?? '',
+                                width: SizeConfig.screenWidth,
+                                fit: BoxFit.cover,
+                                loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                    child: Container(
+                                      height: SizeConfig.screenHeight,
+                                      width: SizeConfig.screenWidth,
+                                      color: Colors.black,
+                                      child: UnconstrainedBox(
+                                        child: Container(
+                                          height: 50,
+                                          width: 50,
+                                          child: CircularProgressIndicator(
+                                              // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                              ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
-                              )),
-                            ))
-                        .toList(),
-                  ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            )),
+                          ))
+                      .toList(),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: notifier.bannerSearchData.asMap().entries.map((entry) {

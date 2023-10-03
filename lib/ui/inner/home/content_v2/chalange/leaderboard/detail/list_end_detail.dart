@@ -3,6 +3,8 @@ import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_commingsoon_page.dart';
 import 'package:hyppe/ui/constant/widget/custom_empty_page.dart';
@@ -25,6 +27,14 @@ class ListEndDetail extends StatefulWidget {
 }
 
 class _ListEndDetailState extends State<ListEndDetail> {
+  LocalizationModelV2? lang;
+
+  @override
+  void initState() {
+    super.initState();
+    lang = context.read<TranslateNotifierV2>().translate;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ChallangeNotifier>(builder: (_, cn, __) {
@@ -87,29 +97,29 @@ class _ListEndDetailState extends State<ListEndDetail> {
                     ),
                   ),
                   cn.leaderBoardDetaiEndlData?.onGoing == false
-                      ? const Padding(
-                          padding: EdgeInsets.all(32.0),
+                      ? Padding(
+                          padding: const EdgeInsets.all(32.0),
                           child: CustomCommingSoon(
-                            title: 'Yuk, Ikut Kompetisi Menarik',
-                            subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                            title: lang?.letsJoinTheCompetition ?? 'Yuk, Ikut Kompetisi Menarik',
+                            subtitle: lang?.getFirstPlaceByEnteringThisExcitingCompetition ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                           ),
                         )
                       : cn.isLoadingLeaderboard
                           ? Container()
                           : cn.leaderBoardDetaiEndlData?.getlastrank?.isEmpty ?? [].isEmpty
-                              ? const Padding(
-                                  padding: EdgeInsets.all(32.0),
+                              ? Padding(
+                                  padding: const EdgeInsets.all(32.0),
                                   child: CustomEmptyWidget(
-                                    title: 'Belum ada Leaderboard Tersedia',
-                                    subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                                    title: lang?.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
+                                    subtitle: lang?.getFirstPlaceByEnteringThisExcitingCompetition ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                                   ),
                                 )
                               : cn.leaderBoardDetaiEndlData?.getlastrank?[0].score == 0 || participant == 0
-                                  ? const Padding(
+                                  ? Padding(
                                       padding: EdgeInsets.all(32.0),
                                       child: CustomEmptyWidget(
-                                        title: 'Belum ada Leaderboard Tersedia',
-                                        subtitle: "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                                        title: lang?.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
+                                        subtitle: lang?.getFirstPlaceByFollowingThisExciting ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                                       ),
                                     )
                                   : ScrollConfiguration(
@@ -157,8 +167,8 @@ class _ListEndDetailState extends State<ListEndDetail> {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      "Deskripsi",
+                    Text(
+                      lang?.description ?? "Deskripsi",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,

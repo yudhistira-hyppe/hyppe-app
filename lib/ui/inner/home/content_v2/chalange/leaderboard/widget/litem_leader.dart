@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -7,6 +8,8 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 
 class ItemLeader extends StatelessWidget {
   final Getlastrank? data;
@@ -69,37 +72,42 @@ class ItemLeader extends StatelessWidget {
                   ),
                 ),
                 twelvePx,
-                Stack(
-                  fit: StackFit.passthrough,
-                  children: [
-                    Container(
-                      // padding: const EdgeInsets.only(top: 5.0, left: 6, right: 6, bottom: 2),
-                      margin: const EdgeInsets.only(top: 5.0, left: 6, right: 6, bottom: 2),
-                      child: ClipOval(
-                        child: CustomProfileImage(
-                          following: true,
-                          forStory: false,
-                          width: 43,
-                          height: 43,
-                          // imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
-                          imageUrl: data?.avatar?.mediaEndpoint != null ? System().showUserPicture("${data?.avatar?.mediaEndpoint}") : '',
+                GestureDetector(
+                  onTap: () {
+                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data?.email ?? ''));
+                  },
+                  child: Stack(
+                    fit: StackFit.passthrough,
+                    children: [
+                      Container(
+                        // padding: const EdgeInsets.only(top: 5.0, left: 6, right: 6, bottom: 2),
+                        margin: const EdgeInsets.only(top: 5.0, left: 6, right: 6, bottom: 2),
+                        child: ClipOval(
+                          child: CustomProfileImage(
+                            following: true,
+                            forStory: false,
+                            width: 43,
+                            height: 43,
+                            // imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
+                            imageUrl: data?.avatar?.mediaEndpoint != null ? System().showUserPicture("${data?.avatar?.mediaEndpoint}") : '',
+                          ),
                         ),
                       ),
-                    ),
-                    data?.ranking == 1 || data?.ranking == 2 || data?.ranking == 3
-                        ? Positioned.fill(
-                            child: Center(
-                              child: data?.winnerBadgeOther != null
-                                  ? Image.network(
-                                      "${data?.winnerBadgeOther}",
-                                      width: 50 * SizeConfig.scaleDiagonal,
-                                      height: 50 * SizeConfig.scaleDiagonal,
-                                    )
-                                  : Container(),
-                            ),
-                          )
-                        : Container()
-                  ],
+                      data?.ranking == 1 || data?.ranking == 2 || data?.ranking == 3
+                          ? Positioned.fill(
+                              child: Center(
+                                child: data?.winnerBadgeOther != null
+                                    ? Image.network(
+                                        "${data?.winnerBadgeOther}",
+                                        width: 50 * SizeConfig.scaleDiagonal,
+                                        height: 50 * SizeConfig.scaleDiagonal,
+                                      )
+                                    : Container(),
+                              ),
+                            )
+                          : Container()
+                    ],
+                  ),
                 ),
                 twelvePx,
                 Column(

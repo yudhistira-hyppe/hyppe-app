@@ -377,7 +377,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
         });
       }
     });
-    adsGlobalAliPlayer = fAliplayer;
+    globalAdsPopUp = fAliplayer;
   }
 
   @override
@@ -415,7 +415,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
     fAliplayer?.stop();
     fAliplayer?.destroy();
     super.dispose();
-    adsGlobalAliPlayer = null;
+    globalAdsPopUp = null;
     WidgetsBinding.instance.removeObserver(this);
     if (_networkSubscriptiion != null) {
       _networkSubscriptiion?.cancel();
@@ -547,13 +547,14 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                       ),
                                     ) : InkWell(
                                       onTap: () async {
-                                        setState(() {
-                                          loadingBack = true;
-                                        });
-                                        await System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
-                                        setState(() {
-                                          loadingBack = false;
-                                        });
+                                        // setState(() {
+                                        //   loadingBack = true;
+                                        // });
+                                        // await System().adsView(widget.data, widget.data.duration?.round() ?? 10).whenComplete(() => Routing().moveBack());
+                                        // setState(() {
+                                        //   loadingBack = false;
+                                        // });
+                                        Routing().moveBack();
                                       },
                                       child: const Padding(
                                         padding: EdgeInsets.only(left: 8.0),
@@ -694,6 +695,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
                                                     });
                                                     print('second close ads: $secondsVideo');
                                                     System().adsView(widget.data, secondsVideo, isClick: true).whenComplete(() async {
+                                                      Navigator.pop(context);
                                                       await launchUrl(
                                                         uri,
                                                         mode: LaunchMode.externalApplication,

@@ -15,13 +15,19 @@ import '../../main/notifier.dart';
 class HomeAppBar extends StatelessWidget {
   final String? name;
   final double? offset;
+  final ScrollController? scrollController;
 
-  const HomeAppBar({super.key, this.name = '', this.offset = 0});
+  const HomeAppBar({
+    super.key,
+    this.name = '',
+    this.offset,
+    this.scrollController,
+  });
 
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HomeAppBar');
-    String nameTitle = name ?? '';
+    String nameTitle = name == null || name == 'null' ? '' : (name ?? '');
     // String nameTitle = "AaaAAAAASKJLKJDiiiiaskdlaksjdlkajsd asdasdas asdasd";
     nameTitle = nameTitle.split(" ").elementAt(0);
 
@@ -55,7 +61,8 @@ class HomeAppBar extends StatelessWidget {
       ],
       title: (offset ?? 0) <= 150
           ? Text(
-              "Halo, $helloName!",
+              // "$offset",
+              "Halo, $helloName! ",
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
             )
           : const CustomIconWidget(

@@ -359,6 +359,15 @@ class ShowGeneralDialog {
   static Future adsPopUpVideo(BuildContext context, AdsData data, String auth) async {
     SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, context.getCurrentDate());
     try {
+      if(globalAliPlayer != null){
+        globalAliPlayer?.pause();
+      }
+      if(globalAdsInBetween != null){
+        globalAdsInBetween?.pause();
+      }
+      if(globalAdsInContent != null){
+        globalAdsInContent?.pause();
+      }
       await showGeneralDialog(
         //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
         context: Routing.navigatorKey.currentState?.overlay?.context ?? context,
@@ -371,6 +380,15 @@ class ShowGeneralDialog {
           return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
         },
       );
+      if(globalAliPlayer != null){
+        globalAliPlayer?.play();
+      }
+      if(globalAdsInBetween != null){
+        globalAdsInBetween?.play();
+      }
+      if(globalAdsInContent != null){
+        globalAdsInContent?.play();
+      }
     } catch (e) {
       print('Error Pop Ads: $e');
     }

@@ -46,10 +46,12 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
   @override
   void initState() {
     super.initState();
-    newUser = SharedPreference().readStorage(SpKeys.newUser) ?? 'FALSE';
-    if (newUser == "TRUE") {
-      WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keybutton]));
-    }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      newUser = SharedPreference().readStorage(SpKeys.newUser) ?? 'FALSE';
+      if (newUser == "TRUE") {
+        WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keybutton]));
+      }
+    });
   }
 
   @override

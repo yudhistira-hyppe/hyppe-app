@@ -307,7 +307,7 @@ class System {
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceIdentifier = androidInfo.androidId ?? deviceID;
+      deviceIdentifier = androidInfo.id ?? deviceID;
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       deviceIdentifier = iosInfo.identifierForVendor ?? deviceID;
@@ -525,6 +525,28 @@ class System {
     }
   }
 
+  Future<void> _getStoragePermission() async {
+    DeviceInfoPlugin plugin = DeviceInfoPlugin();
+    AndroidDeviceInfo android = await plugin.androidInfo;
+    if (android.version.sdkInt! < 33) {
+      if (await Permission.storage.request().isGranted) {
+        // permissionGranted = true;
+      } else if (await Permission.storage.request().isPermanentlyDenied) {
+        await openAppSettings();
+      } else if (await Permission.audio.request().isDenied) {
+        // permissionGranted = false;
+      }
+    } else {
+      if (await Permission.photos.request().isGranted) {
+        // permissionGranted = true;
+      } else if (await Permission.photos.request().isPermanentlyDenied) {
+        await openAppSettings();
+      } else if (await Permission.photos.request().isDenied) {
+        // permissionGranted = false;
+      }
+    }
+  }
+
   Future<Map<String, List<File>?>> getLocalMedia({
     FeatureType? featureType,
     required BuildContext context,
@@ -610,6 +632,27 @@ class System {
 
       // used for picking content posts
       if (featureType == FeatureType.vid) {
+        var permsiion = await System().checkPermission(permission: Permission.storage);
+        print("------------------request permsiion-------------");
+        print(permsiion);
+        if (permsiion == PermissionStatus.denied) {
+          try {
+            await Permission.storage.request();
+            await Permission.storage.status.isGranted;
+            await Permission.videos.status.isGranted;
+            await Permission.photos.status.isGranted;
+
+            // I noticed that sometimes popup won't show after user press deny
+            // so I do the check once again but now go straight to appSettings
+            // if (permsiion == PermissionStatus.denied) {
+            //   await openAppSettings();
+            // }
+          } catch (e) {
+            print(e);
+          }
+        }
+        print(permsiion);
+        await _getStoragePermission();
         await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false).then((result) {
           if (result != null) {
             if (result.files.single.extension?.toLowerCase() == MP4 || result.files.single.extension?.toLowerCase() == MOV) {
@@ -1468,7 +1511,7 @@ class System {
       print("===============222222 ---- ${difference.inHours}");
       print("===============222222 ---- ${difference.inMinutes}");
       // if (difference.inHours >= 24) {
-      if (difference.inMinutes <= -5) {
+      if (difference.inSeconds <= -10) {
         await challange.getBannerLanding(context, ispopUp: true);
         SharedPreference().writeStorage(SpKeys.datetimeLastShowChallange, DateTime.now().toString());
         return ShowGeneralDialog.showBannerPop(context);
@@ -1767,5 +1810,10 @@ class System {
       final difference = startDay.difference(d1);
       return [false, difference];
     }
+  }
+
+  Color colorFromHex(String hexColor) {
+    final hexCode = hexColor.replaceAll('#', '');
+    return Color(int.parse('FF$hexCode', radix: 16));
   }
 }

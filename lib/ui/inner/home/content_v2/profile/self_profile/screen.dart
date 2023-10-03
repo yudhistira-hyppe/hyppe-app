@@ -59,8 +59,14 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
     // _globalKey.currentState?.innerController.addListener(() {
     //   setState(() {});
     // });
+    cekImei();
 
     super.initState();
+  }
+
+  void cekImei() async {
+    var a = await System().getDeviceIdentifier();
+    print("=====imeeiii======== $a");
   }
 
   @override
@@ -154,36 +160,6 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
     // var jumpTo = heightProfileCard + notifier.heightIndex;
     // _scrollController.jumpTo(jumpTo.toDouble());
     // _scrollController.jumpTo(10000);
-  }
-
-  Future adsView(BuildContext context, {bool isClick = false}) async {
-    bool lanjutan = false;
-    try {
-      final notifier = AdsDataBloc();
-      final request = ViewAdsRequest(
-        watchingTime: 11,
-        adsId: '63bfebdfa121c14ab4a564cb',
-        useradsId: '63d0ea69d4c2c926ce5cad12',
-      );
-      await notifier.viewAdsBloc(context, request, isClick: isClick);
-
-      final fetch = notifier.adsDataFetch;
-      // if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-      // print("ini hasil ${fetch.data['rewards']}");
-      // if (fetch.data['rewards'] == true) {
-      print("ini hasil ${mounted}");
-
-      var res = await ShowGeneralDialog.adsRewardPop(context);
-      Timer(const Duration(milliseconds: 800), () {
-        Routing().moveBack();
-        Timer(const Duration(milliseconds: 800), () {
-          Routing().moveBack();
-        });
-      });
-      return lanjutan;
-    } catch (e) {
-      // 'Failed hit view ads $e'.logger();
-    }
   }
 
   @override
@@ -294,7 +270,7 @@ class SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, A
                           SliverToBoxAdapter(
                             child: MeasuredSize(
                                 onChange: (e) async {
-                                  if(mounted){
+                                  if (mounted) {
                                     heightProfileCard = e.height;
                                     await Future.delayed(Duration(milliseconds: 300), () {
                                       isloading = true;

@@ -8,6 +8,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
@@ -64,6 +65,7 @@ class SelfProfileTop extends StatelessWidget {
           children: [
             // SelectableText("${notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}")}"),
             // SelectableText("${SharedPreference().readStorage(SpKeys.fcmToken)}"),
+            // SelectableText("${System().getDeviceIdentifier().toString()}"),
 
             Row(
               children: <Widget>[
@@ -298,35 +300,35 @@ class SelfProfileTop extends StatelessWidget {
               ),
             ),
             notifier.isLoadingBio
-                    ? Builder(builder: (context) {
-                        Future.delayed(Duration(milliseconds: 500), () {
-                          notifier.isLoadingBio = false;
-                        });
-                        return Container();
-                      })
-                    : Container(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.3),
-                        // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
-                        child: SingleChildScrollView(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomDescContent(
-                                desc: notifier.user.profile?.bio ?? '',
-                                trimLines: 3,
-                                isloading: notifier.isLoadingBio,
-                                textAlign: TextAlign.start,
-                                seeLess: ' ${notifier.language.seeLess}',
-                                seeMore: ' ${notifier.language.seeMoreContent}',
-                                normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
-                                hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
-                                expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
-                                      color: Theme.of(context).colorScheme.primary,
-                                    )),
-                          ],
-                        )),
-                      ),
+                ? Builder(builder: (context) {
+                    Future.delayed(Duration(milliseconds: 500), () {
+                      notifier.isLoadingBio = false;
+                    });
+                    return Container();
+                  })
+                : Container(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.3),
+                    // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
+                    child: SingleChildScrollView(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomDescContent(
+                            desc: notifier.user.profile?.bio ?? '',
+                            trimLines: 3,
+                            isloading: notifier.isLoadingBio,
+                            textAlign: TextAlign.start,
+                            seeLess: ' ${notifier.language.seeLess}',
+                            seeMore: ' ${notifier.language.seeMoreContent}',
+                            normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
+                            hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
+                            expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                )),
+                      ],
+                    )),
+                  ),
             notifier.displayPlace() != null
                 ? Padding(
                     padding: EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),

@@ -944,10 +944,13 @@
   "letsJoinTheCompetition": "Yuk, Ikut Kompetisi Menarik",
   "getFirstPlaceByEnteringThisExcitingCompetition": "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
   "joinTheChallengeNow": "Ikuti Challenge Sekarang",
+  "joinTheChallenge": "Ikuti Challenge",
   "viewChallenge": "Lihat Challenge",
   "joinOtherInterestingChallenges": "Ikuti Challenge Menarik Lainnya",
   "startIn": "Mulai dalam",
   "hariLagi": "Hari Lagi",
+  "jamLagi": "Jam Lagi",
+  "menitLagi": "Menit Lagi",
   "endsIn": "Berakhir dalam",
   "challengePeriod": "Challenge Periode",
   "nonParticipant": "Bukan Partisipan",
@@ -990,5 +993,6 @@
   "badgeCollection": "Koleksi Badge",
   "applyBadge": "Terapkan Badge",
   "youDontHaveaBadge": "Kamu Belum Memiliki Badge",
-  "winachallengetoreceiveabadge": "Menangkan sebuah challenge untuk mendapatkan badge!"
+  "winachallengetoreceiveabadge": "Menangkan sebuah challenge untuk mendapatkan badge!",
+  "thecompetitionhasended": "Kompetisi telah berakhir"
 }

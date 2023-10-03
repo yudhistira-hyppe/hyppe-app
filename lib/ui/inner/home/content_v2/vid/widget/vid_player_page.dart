@@ -683,14 +683,14 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           print('isViewed Setting: ${widget.index} | ${widget.data?.isViewed} | $isViewed');
           final ref =(Routing.navigatorKey.currentContext ?? context).read<VideoNotifier>();
           ref.tempAdsData = null;
-          if (widget.inLanding && !isViewed) {
-            ref.hasShowedAds = false;
-            ref.getAdsVideo(Routing.navigatorKey.currentContext ?? context, _videoDuration).whenComplete((){
-              if(widget.index != null){
-                (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().setIsViewed(widget.index!);
-              }
-            });
-          }
+          // if (widget.inLanding && !isViewed) {
+          //   ref.hasShowedAds = false;
+          //   ref.getAdsVideo(Routing.navigatorKey.currentContext ?? context, _videoDuration).whenComplete((){
+          //     if(widget.index != null){
+          //       (Routing.navigatorKey.currentContext ?? context).read<PreviewVidNotifier>().setIsViewed(widget.index!);
+          //     }
+          //   });
+          // }
           // fAliplayer?.play();
           print('=2=2=2=2=2=2=2prepare done');
         }
@@ -934,31 +934,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   //   }
   // }
 
-  Future adsView(AdsData data, int time) async {
-    try {
-      final notifier = AdsDataBloc();
-      final request = ViewAdsRequest(watchingTime: time, adsId: data.adsId, useradsId: data.useradsId);
-      await notifier.viewAdsBloc(context, request);
-      final fetch = notifier.adsDataFetch;
-      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-        print("ini hasil ${fetch.data['rewards']}");
-        if (fetch.data['rewards'] == true) {
-          print("ini hasil ${mounted}");
-          if (mounted) {
-            ShowGeneralDialog.adsRewardPop(context);
-            Timer(const Duration(milliseconds: 800), () {
-              Routing().moveBack();
-              // Timer(const Duration(milliseconds: 800), () {
-              //   Routing().moveBack();
-              // });
-            });
-          }
-        }
-      }
-    } catch (e) {
-      'Failed hit view ads ${e}'.logger();
-    }
-  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -1174,6 +1149,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
           child: Builder(
               key: ValueKey<bool>(isloading),
               builder: (context) {
+                if(notifier.isPlay){
+                  isPlay = true;
+                }
                 return GestureDetector(
                   onTap: () {
                     onTapCtrl = true;

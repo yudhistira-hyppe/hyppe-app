@@ -41,6 +41,7 @@ class ChallangeNotifier with ChangeNotifier {
   ///////
   bool isConnect = false;
   bool isLoading = false;
+  bool isLoadingBanner = false;
   bool isLoadingLeaderboard = false;
   bool isLoadingAchivement = false;
   bool isLoadingCollection = false;
@@ -143,7 +144,7 @@ class ChallangeNotifier with ChangeNotifier {
 
   Future getBannerLanding(BuildContext context, {bool ispopUp = false, bool isSearch = false, bool isLeaderBoard = false}) async {
     checkInet(context);
-    isLoading = true;
+    isLoadingBanner = true;
     notifyListeners();
 
     Map data = {"page": 0};
@@ -173,18 +174,17 @@ class ChallangeNotifier with ChangeNotifier {
           bannerFatch.data.forEach((v) => bannerLeaderboardData.add(BannerChalangeModel.fromJson(v)));
         }
       }
-      isLoading = false;
+      isLoadingBanner = false;
       notifyListeners();
     }
   }
 
   Future initLeaderboard(BuildContext context) async {
-    print("=========asdasdasd");
     isLoadingLeaderboard = true;
     notifyListeners();
     checkInet(context);
     await getBannerLanding(context, isLeaderBoard: true);
-    await getLeaderBoard(context, bannerSearchData[0].sId ?? '');
+    await getLeaderBoard(context, bannerLeaderboardData[0].sId ?? '');
     await getOtherChallange(context);
 
     isLoadingLeaderboard = false;
@@ -192,7 +192,6 @@ class ChallangeNotifier with ChangeNotifier {
   }
 
   Future initLeaderboardDetail(BuildContext context, bool mounted, String id) async {
-    print("=========asdasdasd");
     isLoadingLeaderboard = true;
     notifyListeners();
     checkInet(context);
@@ -219,6 +218,8 @@ class ChallangeNotifier with ChangeNotifier {
     if (oldLeaderboard) {
       param["session"] = selectOptionSession;
     }
+    isLoading = true;
+    notifyListeners();
     final bannerNotifier = ChallangeBloc();
     await bannerNotifier.postChallange(context, data: param, url: oldLeaderboard ? UrlConstants.getLeaderBoardSession : UrlConstants.getLeaderBoard);
     final bannerFatch = bannerNotifier.userFetch;
@@ -243,6 +244,7 @@ class ChallangeNotifier with ChangeNotifier {
 
         if (getdata?.startDatetime != '' || getdata?.startDatetime != null) {
           var dateNote = await System().compareDate(getdata?.startDatetime ?? '', getdata?.endDatetime ?? '');
+          print("--===-=-=-=- date $dateNote");
           getdata?.onGoing = dateNote[0];
           if (dateNote[1].inDays == 0) {
             if (dateNote[1].inHours == 0) {

@@ -985,7 +985,7 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                 widthPlaceHolder: 80,
                                 heightPlaceHolder: 80,
                                 placeHolderWidget: Container(),
-                                imageUrl: (diaryData?[index].isApsara ?? false) ? (diaryData?[index].mediaThumbEndPoint ?? "") : "${diaryData?[index].fullThumbPath}",
+                                imageUrl: (diaryData?[index].isApsara ?? false) ? (diaryData?[index].mediaThumbEndPoint ?? "") : "${diaryData?[index].fullThumbPath ?? ''}",
                                 imageBuilder: (context, imageProvider) => diaryData?[index].reportedStatus == 'BLURRED'
                                     ? ClipRRect(
                                         borderRadius: BorderRadius.circular(20), // Image border
