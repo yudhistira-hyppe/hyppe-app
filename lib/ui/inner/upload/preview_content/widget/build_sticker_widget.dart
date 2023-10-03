@@ -70,10 +70,10 @@ class _BuildStickerWidgetState extends State<BuildStickerWidget> {
                 child: SizedBox.expand(
                   child: FittedBox(
                     fit: BoxFit.contain,
-                    child: OptimizedCacheImage(imageUrl: widget.image),
-                    // child: widget.image.toLowerCase().endsWith('.gif')
-                    //     ? GifView.network(widget.image)
-                    //     : OptimizedCacheImage(imageUrl: widget.image),
+                    child: OptimizedCacheImage(
+                      imageUrl: widget.image,
+                      fadeInDuration: const Duration(milliseconds: 100),
+                    ),
                   ),
                 ),
               ),
