@@ -83,7 +83,7 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                   }),
               items: notifier.isLoadingBanner
                   ? notifier.bannerSearchData
-                      .map((e) => AspectRatio(
+                      .map((e) => const AspectRatio(
                             aspectRatio: 16 / 7,
                             child: CustomLoading(),
                           ))
@@ -107,10 +107,10 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                                       width: SizeConfig.screenWidth,
                                       color: Colors.black,
                                       child: UnconstrainedBox(
-                                        child: Container(
+                                        child: const Container(
                                           height: 50,
                                           width: 50,
-                                          child: CircularProgressIndicator(
+                                          child: const CircularProgressIndicator(
                                               // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
                                               ),
                                         ),
