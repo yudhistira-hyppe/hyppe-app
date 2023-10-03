@@ -675,7 +675,30 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
                               ),
                             );
                           },
-                          errorWidget: (_, __, ___) {
+                          errorWidget: (_, url, ___) {
+                            if(url.isNotEmpty && url.withHttp()){
+                              return ClipRRect(
+                                  borderRadius: BorderRadius.circular(18),
+                                  child: Image.network(url, width: 36, height: 36, fit: BoxFit.cover,loadingBuilder: (BuildContext context, Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress.expectedTotalBytes != null
+                                              ? loadingProgress.cumulativeBytesLoaded /
+                                              loadingProgress.expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                        return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
+                                      }));
+                            }
                             return Container(
                               width: 36,
                               height: 36,
@@ -1272,7 +1295,40 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                               ),
                             );
                           },
-                          errorWidget: (_, __, ___) {
+                          errorWidget: (_, url, ___) {
+                            if(url.isNotEmpty && url.withHttp()){
+                              return ClipRRect(
+                                  borderRadius: BorderRadius.circular(18),
+                                  child: Image.network(url, width: 36, height: 36, fit: BoxFit.cover,loadingBuilder: (BuildContext context, Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress.expectedTotalBytes != null
+                                              ? loadingProgress.cumulativeBytesLoaded /
+                                              loadingProgress.expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                        return Container(
+                                          width: 36,
+                                          height: 36,
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(Radius.circular(18)),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
+                                            ),
+                                          ),
+                                        );
+                                      }));
+                            }
                             return Container(
                               width: 36,
                               height: 36,

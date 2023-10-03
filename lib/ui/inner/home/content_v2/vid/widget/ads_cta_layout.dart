@@ -58,7 +58,30 @@ class _AdsCTALayoutState extends State<AdsCTALayout> {
                     ),
                   );
                 },
-                errorWidget: (_, __, ___) {
+                errorWidget: (_, url, ___) {
+                  if(url.isNotEmpty && url.withHttp()){
+                    return ClipRRect(
+                        borderRadius: BorderRadius.circular(18),
+                        child: Image.network(url, width: 36, height: 36, fit: BoxFit.cover,loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            ),
+                          );
+                        },
+                            errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                              return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
+                            }));
+                  }
                   return Container(
                     width: 36,
                     height: 36,
