@@ -179,6 +179,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
           body: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
