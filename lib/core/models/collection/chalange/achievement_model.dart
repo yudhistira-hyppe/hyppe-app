@@ -39,13 +39,13 @@ class AcievementModel {
     if (json['badge_data'] != null) {
       badgeData = <BadgeData>[];
       json['badge_data'].forEach((v) {
-        badgeData!.add(new BadgeData.fromJson(v));
+        badgeData!.add(BadgeData.fromJson(v));
       });
     }
     if (json['subChallenge_data'] != null) {
       subChallengeData = <SubChallengeData>[];
       json['subChallenge_data'].forEach((v) {
-        subChallengeData!.add(new SubChallengeData.fromJson(v));
+        subChallengeData!.add(SubChallengeData.fromJson(v));
       });
     }
     avatar = json['avatar'] != null ? new Avatar.fromJson(json['avatar']) : null;

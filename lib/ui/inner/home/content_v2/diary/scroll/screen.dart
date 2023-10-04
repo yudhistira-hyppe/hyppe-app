@@ -715,12 +715,6 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
                                 ),
                               ),
                       ),
-                      notifier.isLoadingLoadmore
-                          ? const SizedBox(
-                              height: 50,
-                              child: Center(child: CustomLoading()),
-                            )
-                          : Container(),
                     ],
                   ),
                 ),
@@ -733,557 +727,563 @@ class _ScrollDiaryState extends State<ScrollDiary> with WidgetsBindingObserver, 
   }
 
   Widget itemDiary(ScrollDiaryNotifier notifier, int index) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
-      ),
-      padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
-      margin: const EdgeInsets.only(bottom: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // SelectableText("isApsara : ${diaryData?[index].isApsara}"),
-          // SelectableText("post id : ${diaryData?[index].postID})"),
-          // sixteenPx,
-          // SelectableText((diaryData?[index].isApsara ?? false) ? (diaryData?[index].mediaThumbEndPoint ?? "") : "${diaryData?[index].fullThumbPath}"),
-          // sixteenPx,
-          // SelectableText((diaryData?[index].isApsara ?? false) ? (diaryData?[index].apsaraId ?? "") : "${UrlConstants.oldVideo + diaryData![index].postID!}"),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: Colors.white,
+          ),
+          padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+          margin: const EdgeInsets.only(bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: ProfileLandingPage(
-                  show: true,
-                  // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
-                  onFollow: () {},
-                  following: true,
-                  haveStory: false,
-                  textColor: kHyppeTextLightPrimary,
-                  username: diaryData?[index].username,
-                  featureType: FeatureType.other,
-                  // isCelebrity: viddiaryData?[index].privacy?.isCelebrity,
-                  isCelebrity: false,
-                  imageUrl: '${System().showUserPicture(diaryData?[index].avatar?.mediaEndpoint)}',
-                  onTapOnProfileImage: () => System().navigateToProfile(context, diaryData?[index].email ?? ''),
-                  createdAt: '2022-02-02',
-                  musicName: diaryData?[index].music?.musicTitle ?? '',
-                  location: diaryData?[index].location ?? '',
-                  isIdVerified: diaryData?[index].privacy?.isIdVerified,
-                  badge: diaryData?[index].urluserBadge,
-                ),
+              // SelectableText("isApsara : ${diaryData?[index].isApsara}"),
+              // SelectableText("post id : ${diaryData?[index].postID})"),
+              // sixteenPx,
+              // SelectableText((diaryData?[index].isApsara ?? false) ? (diaryData?[index].mediaThumbEndPoint ?? "") : "${diaryData?[index].fullThumbPath}"),
+              // sixteenPx,
+              // SelectableText((diaryData?[index].isApsara ?? false) ? (diaryData?[index].apsaraId ?? "") : "${UrlConstants.oldVideo + diaryData![index].postID!}"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: ProfileLandingPage(
+                      show: true,
+                      // cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
+                      onFollow: () {},
+                      following: true,
+                      haveStory: false,
+                      textColor: kHyppeTextLightPrimary,
+                      username: diaryData?[index].username,
+                      featureType: FeatureType.other,
+                      // isCelebrity: viddiaryData?[index].privacy?.isCelebrity,
+                      isCelebrity: false,
+                      imageUrl: '${System().showUserPicture(diaryData?[index].avatar?.mediaEndpoint)}',
+                      onTapOnProfileImage: () => System().navigateToProfile(context, diaryData?[index].email ?? ''),
+                      createdAt: '2022-02-02',
+                      musicName: diaryData?[index].music?.musicTitle ?? '',
+                      location: diaryData?[index].location ?? '',
+                      isIdVerified: diaryData?[index].privacy?.isIdVerified,
+                      badge: diaryData?[index].urluserBadge,
+                    ),
+                  ),
+                  if (diaryData?[index].email != email && (diaryData?[index].isNewFollowing ?? false))
+                    Consumer<PreviewPicNotifier>(
+                      builder: (context, picNot, child) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            if (diaryData?[index].insight?.isloadingFollow != true) {
+                              picNot.followUser(context, diaryData?[index] ?? ContentData(), isUnFollow: diaryData?[index].following, isloading: diaryData?[index].insight!.isloadingFollow ?? false);
+                            }
+                          },
+                          child: diaryData?[index].insight?.isloadingFollow ?? false
+                              ? Container(
+                                  height: 40,
+                                  width: 30,
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: CustomLoading(),
+                                  ),
+                                )
+                              : Text(
+                                  (diaryData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
+                                  style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                ),
+                        ),
+                      ),
+                    ),
+                  GestureDetector(
+                    onTap: () {
+                      if (diaryData?[index].email != email) {
+                        // FlutterAliplayer? fAliplayer
+                        context.read<PreviewPicNotifier>().reportContent(context, diaryData?[index] ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
+                          bool connect = await System().checkConnections();
+                          if (connect) {
+                            setState(() {
+                              isloading = true;
+                            });
+                            await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
+                            setState(() {
+                              diaryData = notifier.diaryData;
+                            });
+                          } else {
+                            if (mounted) {
+                              ShowGeneralDialog.showToastAlert(
+                                context,
+                                lang?.internetConnectionLost ?? ' Error',
+                                () async {},
+                              );
+                            }
+                          }
+                        });
+                      } else {
+                        fAliplayer?.setMuted(true);
+                        fAliplayer?.pause();
+                        ShowBottomSheet().onShowOptionContent(
+                          context,
+                          contentData: diaryData?[index] ?? ContentData(),
+                          captionTitle: hyppeDiary,
+                          onDetail: false,
+                          isShare: diaryData?[index].isShared,
+                          onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                          fAliplayer: fAliplayer,
+                        );
+                      }
+                    },
+                    child: const Icon(
+                      Icons.more_vert,
+                      color: kHyppeTextLightPrimary,
+                    ),
+                  ),
+                ],
               ),
-              if (diaryData?[index].email != email && (diaryData?[index].isNewFollowing ?? false))
-                Consumer<PreviewPicNotifier>(
-                  builder: (context, picNot, child) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        if (diaryData?[index].insight?.isloadingFollow != true) {
-                          picNot.followUser(context, diaryData?[index] ?? ContentData(), isUnFollow: diaryData?[index].following, isloading: diaryData?[index].insight!.isloadingFollow ?? false);
-                        }
-                      },
-                      child: diaryData?[index].insight?.isloadingFollow ?? false
-                          ? Container(
-                              height: 40,
-                              width: 30,
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: CustomLoading(),
+              tenPx,
+              VisibilityDetector(
+                key: Key(index.toString()),
+                onVisibilityChanged: (info) {
+                  if (info.visibleFraction >= 0.6) {
+                    _curIdx = index;
+                    if (_lastCurIndex != _curIdx) {
+                      try {
+                        widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, widget.arguments?.heightBox?.toInt() ?? 175));
+                      } catch (e) {
+                        print("ini error $e");
+                      }
+                      Future.delayed(const Duration(milliseconds: 400), () {
+                        start(diaryData?[index] ?? ContentData());
+                        System().increaseViewCount2(context, diaryData?[index] ?? ContentData(), check: false);
+                      });
+                      if (diaryData?[index].certified ?? false) {
+                        System().block(context);
+                      } else {
+                        System().disposeBlock();
+                      }
+                    }
+                    _lastCurIndex = _curIdx;
+                  }
+                },
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  // width: MediaQuery.of(context).size.width,
+                  // height: 500,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    // color: Colors.yellow,
+                  ),
+                  child: AspectRatio(
+                    aspectRatio: 9 / 16,
+                    child: Stack(
+                      children: [
+                        _curIdx == index
+                            ? FutureBuilder(
+                                future: Future.wait([for (StickerModel sticker in diaryData?[_curIdx].stickers ?? []) precacheImage(NetworkImage(sticker.image ?? ''), context)]),
+                                builder: (context, snapshot) {
+                                  return ClipRRect(
+                                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                                    child: Builder(builder: (context) {
+                                      // if (!isloading) {
+                                      //   return AliPlayerView(
+                                      //     onCreated: onViewPlayerCreated,
+                                      //     x: 0,
+                                      //     y: 0,
+                                      //     height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                      //     width: MediaQuery.of(context).size.width,
+                                      //   );
+                                      // }
+                                      return Stack(
+                                        children: [
+                                          AliPlayerView(
+                                            onCreated: onViewPlayerCreated,
+                                            x: 0,
+                                            y: 0,
+                                            height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                            width: MediaQuery.of(context).size.width,
+                                          ),
+                                          Visibility(
+                                            visible: isPlay,
+                                            child: StickerOverlay(
+                                              fullscreen: false,
+                                              stickers: diaryData?[_curIdx].stickers,
+                                              width: MediaQuery.of(context).size.width,
+                                              height: (MediaQuery.of(context).size.width) * (16 / 9),
+                                              isPause: isPause,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }),
+                                  );
+                                })
+                            : Container(),
+                        // _buildProgressBar(SizeConfig.screenWidth!, 500),
+                        !notifier.connectionError
+                            ? Positioned.fill(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    fAliplayer?.play();
+                                    setState(() {
+                                      isMute = !isMute;
+                                    });
+                                    fAliplayer?.setMuted(isMute);
+                                  },
+                                  onDoubleTap: () {
+                                    final _likeNotifier = context.read<LikeNotifier>();
+                                    if (diaryData?[index] != null) {
+                                      _likeNotifier.likePost(context, diaryData![index]);
+                                    }
+                                  },
+                                  child: Container(
+                                    color: Colors.transparent,
+                                    width: SizeConfig.screenWidth,
+                                    height: SizeConfig.screenHeight,
+                                  ),
+                                ),
+                              )
+                            : Positioned.fill(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    notifier.checkConnection().then((value) {
+                                      if (value == true) {
+                                        fAliplayer?.stop();
+                                        start(diaryData?[index] ?? ContentData());
+                                      }
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                    width: SizeConfig.screenWidth,
+                                    height: SizeConfig.screenHeight,
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.all(20),
+                                    child: diaryData?[index].reportedStatus == 'BLURRED'
+                                        ? Container()
+                                        : CustomTextWidget(
+                                            textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                            maxLines: 3,
+                                          ),
+                                  ),
+                                ),
                               ),
-                            )
-                          : Text(
-                              (diaryData?[index].following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                              style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
-                            ),
+                        dataSelected?.postID == diaryData?[index].postID && isPlay
+                            ? Container()
+                            : !notifier.connectionError
+                                ? CustomBaseCacheImage(
+                                    memCacheWidth: 100,
+                                    memCacheHeight: 100,
+                                    widthPlaceHolder: 80,
+                                    heightPlaceHolder: 80,
+                                    placeHolderWidget: Container(),
+                                    imageUrl: (diaryData?[index].isApsara ?? false) ? (diaryData?[index].mediaThumbEndPoint ?? "") : "${diaryData?[index].fullThumbPath ?? ''}",
+                                    imageBuilder: (context, imageProvider) => diaryData?[index].reportedStatus == 'BLURRED'
+                                        ? ClipRRect(
+                                            borderRadius: BorderRadius.circular(20), // Image border
+                                            child: ImageFiltered(
+                                              imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                              child: Image(
+                                                height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                                width: MediaQuery.of(context).size.width,
+                                                image: imageProvider,
+                                              ),
+                                            ),
+                                          )
+                                        : Container(
+                                            // const EdgeInsets.symmetric(horizontal: 4.5),
+                                            height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                            width: MediaQuery.of(context).size.width,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
+                                              ),
+                                              borderRadius: BorderRadius.circular(16.0),
+                                            ),
+                                          ),
+                                    errorWidget: (context, url, error) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          notifier.checkConnection();
+                                        },
+                                        child: Container(
+                                            decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                            width: SizeConfig.screenWidth,
+                                            height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                            alignment: Alignment.center,
+                                            child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo ?? 'Error')),
+                                      );
+                                    },
+                                    emptyWidget: GestureDetector(
+                                      onTap: () {
+                                        notifier.checkConnection();
+                                      },
+                                      child: Container(
+                                          decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
+                                          width: SizeConfig.screenWidth,
+                                          height: MediaQuery.of(context).size.width * 16.0 / 9.0,
+                                          alignment: Alignment.center,
+                                          padding: EdgeInsets.all(20),
+                                          child: CustomTextWidget(
+                                            textToDisplay: lang?.couldntLoadVideo ?? 'Error',
+                                            maxLines: 3,
+                                          )),
+                                    ),
+                                  )
+                                : Container(),
+                        _showLoading && !notifier.connectionError
+                            ? Positioned.fill(
+                                child: Align(
+                                alignment: Alignment.center,
+                                child: CircularProgressIndicator(),
+                              ))
+                            : Container(),
+                        _buildBody(context, SizeConfig.screenWidth, diaryData?[index] ?? ContentData()),
+                        blurContentWidget(context, diaryData?[index] ?? ContentData()),
+                      ],
                     ),
                   ),
                 ),
+              ),
+              SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
+                      (diaryData?[index].boosted.isEmpty ?? [].isEmpty) &&
+                      (diaryData?[index].reportedStatus != 'OWNED' && diaryData?[index].reportedStatus != 'BLURRED' && diaryData?[index].reportedStatus2 != 'BLURRED') &&
+                      diaryData?[index].email == email
+                  ? Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      child: ButtonBoost(
+                        onDetail: false,
+                        marginBool: true,
+                        contentData: diaryData?[index],
+                        startState: () {
+                          SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                        },
+                        afterState: () {
+                          SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                        },
+                      ),
+                    )
+                  : Container(),
+              diaryData?[index].email == SharedPreference().readStorage(SpKeys.email) && (diaryData?[index].reportedStatus == 'OWNED')
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 11.0),
+                      child: ContentViolationWidget(
+                        data: diaryData?[index] ?? ContentData(),
+                        text: lang?.thisHyppeVidisSubjectToModeration ?? '',
+                      ),
+                    )
+                  : Container(),
+              if (diaryData?[index].email == email && (diaryData?[index].boostCount ?? 0) >= 0 && (diaryData?[index].boosted.isNotEmpty ?? [].isEmpty))
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  margin: EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: kHyppeGreyLight,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}reach.svg",
+                        defaultColor: false,
+                        height: 24,
+                        color: kHyppeTextLightPrimary,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 13),
+                        child: Text(
+                          "${diaryData?[index].boostJangkauan ?? '0'} ${lang?.reach}",
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              Consumer<LikeNotifier>(
+                builder: (context, likeNotifier, child) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 30,
+                          child: Consumer<LikeNotifier>(
+                            builder: (context, likeNotifier, child) => Align(
+                              alignment: Alignment.bottomRight,
+                              child: diaryData?[index].insight?.isloading ?? false
+                                  ? const SizedBox(
+                                      height: 28,
+                                      width: 28,
+                                      child: CircularProgressIndicator(
+                                        color: kHyppePrimary,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : InkWell(
+                                      child: CustomIconWidget(
+                                        defaultColor: false,
+                                        color: (diaryData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
+                                        iconData: '${AssetPath.vectorPath}${(diaryData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                        height: 28,
+                                      ),
+                                      onTap: () {
+                                        if (diaryData?[index] != null) {
+                                          likeNotifier.likePost(context, diaryData![index]);
+                                        }
+                                      },
+                                    ),
+                            ),
+                          ),
+                        ),
+                        if (diaryData?[index].allowComments ?? false)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 21.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                toComment = true;
+                                Routing().move(Routes.commentsDetail,
+                                    argument: CommentsArgument(
+                                      postID: diaryData?[index].postID ?? '',
+                                      fromFront: true,
+                                      data: diaryData?[index] ?? ContentData(),
+                                      pageDetail: true,
+                                    ));
+                              },
+                              child: const CustomIconWidget(
+                                defaultColor: false,
+                                color: kHyppeTextLightPrimary,
+                                iconData: '${AssetPath.vectorPath}comment2.svg',
+                                height: 24,
+                              ),
+                            ),
+                          ),
+                        if ((diaryData?[index].isShared ?? false))
+                          Padding(
+                            padding: EdgeInsets.only(left: 21.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                context.read<DiariesPlaylistNotifier>().createdDynamicLink(context, data: diaryData?[index]);
+                              },
+                              child: CustomIconWidget(
+                                defaultColor: false,
+                                color: kHyppeTextLightPrimary,
+                                iconData: '${AssetPath.vectorPath}share2.svg',
+                                height: 24,
+                              ),
+                            ),
+                          ),
+                        if ((diaryData?[index].saleAmount ?? 0) > 0 && email != diaryData?[index].email)
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () async {
+                                fAliplayer?.pause();
+                                await ShowBottomSheet.onBuyContent(context, data: diaryData?[index], fAliplayer: fAliplayer);
+                                // fAliplayer?.play();
+                              },
+                              child: const Align(
+                                alignment: Alignment.centerRight,
+                                child: CustomIconWidget(
+                                  defaultColor: false,
+                                  color: kHyppeTextLightPrimary,
+                                  iconData: '${AssetPath.vectorPath}cart.svg',
+                                  height: 24,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    twelvePx,
+                    Text(
+                      "${diaryData?[index].insight?.likes}  ${lang?.like}",
+                      style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
+              twelvePx,
+              CustomNewDescContent(
+                // desc: "${data?.description}",
+                username: diaryData?[index].username ?? '',
+                desc: "${diaryData?[index].description}",
+                trimLines: 2,
+                textAlign: TextAlign.start,
+                seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+              ),
               GestureDetector(
                 onTap: () {
-                  if (diaryData?[index].email != email) {
-                    // FlutterAliplayer? fAliplayer
-                    context.read<PreviewPicNotifier>().reportContent(context, diaryData?[index] ?? ContentData(), fAliplayer: fAliplayer, onCompleted: () async {
-                      bool connect = await System().checkConnections();
-                      if (connect) {
-                        setState(() {
-                          isloading = true;
-                        });
-                        await notifier.reload(Routing.navigatorKey.currentContext ?? context, widget.arguments!.pageSrc!, key: widget.arguments?.key ?? '');
-                        setState(() {
-                          diaryData = notifier.diaryData;
-                        });
-                      } else {
-                        if (mounted) {
-                          ShowGeneralDialog.showToastAlert(
-                            context,
-                            lang?.internetConnectionLost ?? ' Error',
-                            () async {},
-                          );
-                        }
-                      }
-                    });
-                  } else {
-                    fAliplayer?.setMuted(true);
-                    fAliplayer?.pause();
-                    ShowBottomSheet().onShowOptionContent(
-                      context,
-                      contentData: diaryData?[index] ?? ContentData(),
-                      captionTitle: hyppeDiary,
-                      onDetail: false,
-                      isShare: diaryData?[index].isShared,
-                      onUpdate: () => context.read<HomeNotifier>().onUpdate(),
-                      fAliplayer: fAliplayer,
-                    );
-                  }
+                  toComment = true;
+                  Routing().move(Routes.commentsDetail,
+                      argument: CommentsArgument(
+                        postID: diaryData?[index].postID ?? '',
+                        fromFront: true,
+                        data: diaryData?[index] ?? ContentData(),
+                        pageDetail: true,
+                      ));
                 },
-                child: const Icon(
-                  Icons.more_vert,
-                  color: kHyppeTextLightPrimary,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Text(
+                    "${lang?.seeAll} ${diaryData?[index].comments} ${lang?.comment}",
+                    style: const TextStyle(fontSize: 12, color: kHyppeBurem),
+                  ),
+                ),
+              ),
+              (diaryData?[index].comment?.length ?? 0) > 0
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 0.0),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: (diaryData?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
+                        itemBuilder: (context, indexComment) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 6.0),
+                            child: CustomNewDescContent(
+                              // desc: "${diaryData?[index]?.description}",
+                              username: diaryData?[index].comment?[indexComment].userComment?.username ?? '',
+                              desc: diaryData?[index].comment?[indexComment].txtMessages ?? '',
+                              trimLines: 2,
+                              textAlign: TextAlign.start,
+                              seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
+                              seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
+                              normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
+                              hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                              expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  : Container(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 4.0),
+                child: Text(
+                  "${System().readTimestamp(
+                    DateTime.parse(System().dateTimeRemoveT(diaryData?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
+                    context,
+                    fullCaption: true,
+                  )}",
+                  style: TextStyle(fontSize: 12, color: kHyppeBurem),
                 ),
               ),
             ],
           ),
-          tenPx,
-          VisibilityDetector(
-            key: Key(index.toString()),
-            onVisibilityChanged: (info) {
-              if (info.visibleFraction >= 0.6) {
-                _curIdx = index;
-                if (_lastCurIndex != _curIdx) {
-                  try {
-                    widget.arguments?.scrollController?.jumpTo(System().scrollAuto(_curIdx, widget.arguments?.heightTopProfile ?? 0, widget.arguments?.heightBox?.toInt() ?? 175));
-                  } catch (e) {
-                    print("ini error $e");
-                  }
-                  Future.delayed(const Duration(milliseconds: 400), () {
-                    start(diaryData?[index] ?? ContentData());
-                    System().increaseViewCount2(context, diaryData?[index] ?? ContentData(), check: false);
-                  });
-                  if (diaryData?[index].certified ?? false) {
-                    System().block(context);
-                  } else {
-                    System().disposeBlock();
-                  }
-                }
-                _lastCurIndex = _curIdx;
-              }
-            },
-            child: Container(
-              margin: EdgeInsets.only(bottom: 20),
-              // width: MediaQuery.of(context).size.width,
-              // height: 500,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                // color: Colors.yellow,
-              ),
-              child: AspectRatio(
-                aspectRatio: 9 / 16,
-                child: Stack(
-                  children: [
-                    _curIdx == index
-                        ? FutureBuilder(
-                          future: Future.wait([
-                            for (StickerModel sticker in diaryData?[_curIdx].stickers ?? [])
-                              precacheImage(NetworkImage(sticker.image ?? ''), context)
-                          ]),
-                          builder: (context, snapshot) {
-                            return ClipRRect(
-                                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                                child: Builder(builder: (context) {
-                                  // if (!isloading) {
-                                  //   return AliPlayerView(
-                                  //     onCreated: onViewPlayerCreated,
-                                  //     x: 0,
-                                  //     y: 0,
-                                  //     height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                  //     width: MediaQuery.of(context).size.width,
-                                  //   );
-                                  // }
-                                  return Stack(
-                                    children: [
-                                      AliPlayerView(
-                                        onCreated: onViewPlayerCreated,
-                                        x: 0,
-                                        y: 0,
-                                        height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                        width: MediaQuery.of(context).size.width,
-                                      ),
-                                      Visibility(
-                                        visible: isPlay,
-                                        child: StickerOverlay(
-                                          fullscreen: false,
-                                          stickers: diaryData?[_curIdx].stickers,
-                                          width: MediaQuery.of(context).size.width,
-                                          height: (MediaQuery.of(context).size.width) * (16/9),
-                                          isPause: isPause,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }),
-                              );
-                          }
-                        )
-                        : Container(),
-                    // _buildProgressBar(SizeConfig.screenWidth!, 500),
-                    !notifier.connectionError
-                        ? Positioned.fill(
-                            child: GestureDetector(
-                              onTap: () {
-                                fAliplayer?.play();
-                                setState(() {
-                                  isMute = !isMute;
-                                });
-                                fAliplayer?.setMuted(isMute);
-                              },
-                              onDoubleTap: () {
-                                final _likeNotifier = context.read<LikeNotifier>();
-                                if (diaryData?[index] != null) {
-                                  _likeNotifier.likePost(context, diaryData![index]);
-                                }
-                              },
-                              child: Container(
-                                color: Colors.transparent,
-                                width: SizeConfig.screenWidth,
-                                height: SizeConfig.screenHeight,
-                              ),
-                            ),
-                          )
-                        : Positioned.fill(
-                            child: GestureDetector(
-                              onTap: () {
-                                notifier.checkConnection().then((value) {
-                                  if (value == true) {
-                                    fAliplayer?.stop();
-                                    start(diaryData?[index] ?? ContentData());
-                                  }
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                width: SizeConfig.screenWidth,
-                                height: SizeConfig.screenHeight,
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.all(20),
-                                child: diaryData?[index].reportedStatus == 'BLURRED'
-                                    ? Container()
-                                    : CustomTextWidget(
-                                        textToDisplay: lang?.couldntLoadVideo ?? 'Error',
-                                        maxLines: 3,
-                                      ),
-                              ),
-                            ),
-                          ),
-                    dataSelected?.postID == diaryData?[index].postID && isPlay
-                        ? Container()
-                        : !notifier.connectionError
-                            ? CustomBaseCacheImage(
-                                memCacheWidth: 100,
-                                memCacheHeight: 100,
-                                widthPlaceHolder: 80,
-                                heightPlaceHolder: 80,
-                                placeHolderWidget: Container(),
-                                imageUrl: (diaryData?[index].isApsara ?? false) ? (diaryData?[index].mediaThumbEndPoint ?? "") : "${diaryData?[index].fullThumbPath ?? ''}",
-                                imageBuilder: (context, imageProvider) => diaryData?[index].reportedStatus == 'BLURRED'
-                                    ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(20), // Image border
-                                        child: ImageFiltered(
-                                          imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                          child: Image(
-                                            height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                            width: MediaQuery.of(context).size.width,
-                                            image: imageProvider,
-                                          ),
-                                        ),
-                                      )
-                                    : Container(
-                                        // const EdgeInsets.symmetric(horizontal: 4.5),
-                                        height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                        width: MediaQuery.of(context).size.width,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover,
-                                          ),
-                                          borderRadius: BorderRadius.circular(16.0),
-                                        ),
-                                      ),
-                                errorWidget: (context, url, error) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      notifier.checkConnection();
-                                    },
-                                    child: Container(
-                                        decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                        width: SizeConfig.screenWidth,
-                                        height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                        alignment: Alignment.center,
-                                        child: CustomTextWidget(textToDisplay: lang?.couldntLoadVideo ?? 'Error')),
-                                  );
-                                },
-                                emptyWidget: GestureDetector(
-                                  onTap: () {
-                                    notifier.checkConnection();
-                                  },
-                                  child: Container(
-                                      decoration: BoxDecoration(color: kHyppeNotConnect, borderRadius: BorderRadius.circular(16)),
-                                      width: SizeConfig.screenWidth,
-                                      height: MediaQuery.of(context).size.width * 16.0 / 9.0,
-                                      alignment: Alignment.center,
-                                      padding: EdgeInsets.all(20),
-                                      child: CustomTextWidget(
-                                        textToDisplay: lang?.couldntLoadVideo ?? 'Error',
-                                        maxLines: 3,
-                                      )),
-                                ),
-                              )
-                            : Container(),
-                    _showLoading && !notifier.connectionError
-                        ? Positioned.fill(
-                            child: Align(
-                            alignment: Alignment.center,
-                            child: CircularProgressIndicator(),
-                          ))
-                        : Container(),
-                    _buildBody(context, SizeConfig.screenWidth, diaryData?[index] ?? ContentData()),
-                    blurContentWidget(context, diaryData?[index] ?? ContentData()),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED &&
-                  (diaryData?[index].boosted.isEmpty ?? [].isEmpty) &&
-                  (diaryData?[index].reportedStatus != 'OWNED' && diaryData?[index].reportedStatus != 'BLURRED' && diaryData?[index].reportedStatus2 != 'BLURRED') &&
-                  diaryData?[index].email == email
-              ? Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  child: ButtonBoost(
-                    onDetail: false,
-                    marginBool: true,
-                    contentData: diaryData?[index],
-                    startState: () {
-                      SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                    },
-                    afterState: () {
-                      SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-                    },
-                  ),
-                )
-              : Container(),
-          diaryData?[index].email == SharedPreference().readStorage(SpKeys.email) && (diaryData?[index].reportedStatus == 'OWNED')
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 11.0),
-                  child: ContentViolationWidget(
-                    data: diaryData?[index] ?? ContentData(),
-                    text: lang?.thisHyppeVidisSubjectToModeration ?? '',
-                  ),
-                )
-              : Container(),
-          if (diaryData?[index].email == email && (diaryData?[index].boostCount ?? 0) >= 0 && (diaryData?[index].boosted.isNotEmpty ?? [].isEmpty))
-            Container(
-              padding: const EdgeInsets.all(10),
-              margin: EdgeInsets.only(bottom: 10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                color: kHyppeGreyLight,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const CustomIconWidget(
-                    iconData: "${AssetPath.vectorPath}reach.svg",
-                    defaultColor: false,
-                    height: 24,
-                    color: kHyppeTextLightPrimary,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 13),
-                    child: Text(
-                      "${diaryData?[index].boostJangkauan ?? '0'} ${lang?.reach}",
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          Consumer<LikeNotifier>(
-            builder: (context, likeNotifier, child) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 30,
-                      child: Consumer<LikeNotifier>(
-                        builder: (context, likeNotifier, child) => Align(
-                          alignment: Alignment.bottomRight,
-                          child: diaryData?[index].insight?.isloading ?? false
-                              ? const SizedBox(
-                                  height: 28,
-                                  width: 28,
-                                  child: CircularProgressIndicator(
-                                    color: kHyppePrimary,
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : InkWell(
-                                  child: CustomIconWidget(
-                                    defaultColor: false,
-                                    color: (diaryData?[index].insight?.isPostLiked ?? false) ? kHyppeRed : kHyppeTextLightPrimary,
-                                    iconData: '${AssetPath.vectorPath}${(diaryData?[index].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                    height: 28,
-                                  ),
-                                  onTap: () {
-                                    if (diaryData?[index] != null) {
-                                      likeNotifier.likePost(context, diaryData![index]);
-                                    }
-                                  },
-                                ),
-                        ),
-                      ),
-                    ),
-                    if (diaryData?[index].allowComments ?? false)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 21.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            toComment = true;
-                            Routing().move(Routes.commentsDetail,
-                                argument: CommentsArgument(
-                                  postID: diaryData?[index].postID ?? '',
-                                  fromFront: true,
-                                  data: diaryData?[index] ?? ContentData(),
-                                  pageDetail: true,
-                                ));
-                          },
-                          child: const CustomIconWidget(
-                            defaultColor: false,
-                            color: kHyppeTextLightPrimary,
-                            iconData: '${AssetPath.vectorPath}comment2.svg',
-                            height: 24,
-                          ),
-                        ),
-                      ),
-                    if ((diaryData?[index].isShared ?? false))
-                      Padding(
-                        padding: EdgeInsets.only(left: 21.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            context.read<DiariesPlaylistNotifier>().createdDynamicLink(context, data: diaryData?[index]);
-                          },
-                          child: CustomIconWidget(
-                            defaultColor: false,
-                            color: kHyppeTextLightPrimary,
-                            iconData: '${AssetPath.vectorPath}share2.svg',
-                            height: 24,
-                          ),
-                        ),
-                      ),
-                    if ((diaryData?[index].saleAmount ?? 0) > 0 && email != diaryData?[index].email)
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () async {
-                            fAliplayer?.pause();
-                            await ShowBottomSheet.onBuyContent(context, data: diaryData?[index], fAliplayer: fAliplayer);
-                            // fAliplayer?.play();
-                          },
-                          child: const Align(
-                            alignment: Alignment.centerRight,
-                            child: CustomIconWidget(
-                              defaultColor: false,
-                              color: kHyppeTextLightPrimary,
-                              iconData: '${AssetPath.vectorPath}cart.svg',
-                              height: 24,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-                twelvePx,
-                Text(
-                  "${diaryData?[index].insight?.likes}  ${lang?.like}",
-                  style: const TextStyle(color: kHyppeTextLightPrimary, fontWeight: FontWeight.w700, fontSize: 14),
-                ),
-              ],
-            ),
-          ),
-          twelvePx,
-          CustomNewDescContent(
-            // desc: "${data?.description}",
-            username: diaryData?[index].username ?? '',
-            desc: "${diaryData?[index].description}",
-            trimLines: 2,
-            textAlign: TextAlign.start,
-            seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-            seeMore: '  ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-            normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-            expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
-          ),
-          GestureDetector(
-            onTap: () {
-              toComment = true;
-              Routing().move(Routes.commentsDetail,
-                  argument: CommentsArgument(
-                    postID: diaryData?[index].postID ?? '',
-                    fromFront: true,
-                    data: diaryData?[index] ?? ContentData(),
-                    pageDetail: true,
-                  ));
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Text(
-                "${lang?.seeAll} ${diaryData?[index].comments} ${lang?.comment}",
-                style: const TextStyle(fontSize: 12, color: kHyppeBurem),
-              ),
-            ),
-          ),
-          (diaryData?[index].comment?.length ?? 0) > 0
-              ? Padding(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: (diaryData?[index].comment?.length ?? 0) >= 2 ? 2 : 1,
-                    itemBuilder: (context, indexComment) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 6.0),
-                        child: CustomNewDescContent(
-                          // desc: "${diaryData?[index]?.description}",
-                          username: diaryData?[index].comment?[indexComment].userComment?.username ?? '',
-                          desc: diaryData?[index].comment?[indexComment].txtMessages ?? '',
-                          trimLines: 2,
-                          textAlign: TextAlign.start,
-                          seeLess: ' ${lang?.seeLess}', // ${notifier2.translate.seeLess}',
-                          seeMore: ' ${lang?.seeMoreContent}', //${notifier2.translate.seeMoreContent}',
-                          normStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary),
-                          hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                          expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                        ),
-                      );
-                    },
-                  ),
-                )
-              : Container(),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 4.0),
-            child: Text(
-              "${System().readTimestamp(
-                DateTime.parse(System().dateTimeRemoveT(diaryData?[index].createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                context,
-                fullCaption: true,
-              )}",
-              style: TextStyle(fontSize: 12, color: kHyppeBurem),
-            ),
-          ),
-        ],
-      ),
+        ),
+        index == diaryData?.length && notifier.isLoadingLoadmore
+            ? const SizedBox(
+                height: 50,
+                child: Center(child: CustomLoading()),
+              )
+            : Container(),
+      ],
     );
   }
 

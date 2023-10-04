@@ -47,6 +47,8 @@ class ChallangeNotifier with ChangeNotifier {
   bool isLoadingLeaderboard = false;
   bool isLoadingAchivement = false;
   bool isLoadingCollection = false;
+  bool _newJoinChallenge = false;
+  bool get newJoinChallenge => _newJoinChallenge;
 
   int pageGetChallange = 0;
   int pageAchievement = 0;
@@ -85,6 +87,11 @@ class ChallangeNotifier with ChangeNotifier {
   DateTime challangeOption = DateTime.now();
 
   ///////
+
+  set newJoinChallenge(bool val) {
+    _newJoinChallenge = val;
+    notifyListeners();
+  }
 
   set iduserbadge(String val) {
     _iduserbadge = val;
@@ -193,7 +200,7 @@ class ChallangeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future initLeaderboardDetail(BuildContext context, bool mounted, String id) async {
+  Future initLeaderboardDetail(BuildContext context, bool mounted, String id, {bool? isNewJoin}) async {
     isLoadingLeaderboard = true;
     notifyListeners();
     checkInet(context);
@@ -205,6 +212,9 @@ class ChallangeNotifier with ChangeNotifier {
     }
 
     isLoadingLeaderboard = false;
+    if (isNewJoin != null || isNewJoin == true) {
+      newJoinChallenge = true;
+    }
 
     notifyListeners();
   }

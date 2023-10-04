@@ -57,31 +57,35 @@ class BadgeWidget extends StatelessWidget {
                       child: Stack(
                         fit: StackFit.passthrough,
                         children: [
-                          Container(
-                            // padding: const EdgeInsets.only(top: 5.0, left: 6, right: 6, bottom: 2),
-                            margin: const EdgeInsets.only(top: 2.0, left: 6, right: 6, bottom: 2),
-                            child: const ClipOval(
-                              child: CustomProfileImage(
-                                following: true,
-                                forStory: false,
-                                width: 43,
-                                height: 43,
-                                // imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
-                                imageUrl: '',
+                          Center(
+                            child: Container(
+                              // padding: const EdgeInsets.only(top: 5.0, left: 6, right: 6, bottom: 2),
+                              margin: const EdgeInsets.only(top: 2.0, left: 6, right: 6, bottom: 2),
+                              child: const ClipOval(
+                                child: CustomProfileImage(
+                                  following: true,
+                                  forStory: false,
+                                  width: 43,
+                                  height: 43,
+                                  // imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
+                                  imageUrl: '',
+                                ),
                               ),
                             ),
                           ),
-                          Positioned.fill(
-                            child: Center(
-                              child: badgeData?[index].badgeData != null
-                                  ? Image.network(
-                                      "${badgeData?[index].badgeData?[0].badgeOther}",
-                                      width: 50 * SizeConfig.scaleDiagonal,
-                                      height: 50 * SizeConfig.scaleDiagonal,
-                                    )
-                                  : Container(),
-                            ),
-                          )
+                          badgeData?[index].badgeData?.isNotEmpty ?? [].isEmpty
+                              ? Positioned.fill(
+                                  child: Center(
+                                    child: badgeData?[index].badgeData != null
+                                        ? Image.network(
+                                            "${badgeData?[index].badgeData?[0].badgeOther}",
+                                            width: 50 * SizeConfig.scaleDiagonal,
+                                            height: 50 * SizeConfig.scaleDiagonal,
+                                          )
+                                        : Container(),
+                                  ),
+                                )
+                              : Container()
                         ],
                       ),
                     ),

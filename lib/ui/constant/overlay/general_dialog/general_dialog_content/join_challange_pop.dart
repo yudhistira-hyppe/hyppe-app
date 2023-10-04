@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_convetti.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
@@ -20,8 +21,7 @@ class JoinChallangePop extends StatefulWidget {
 class _JoinChallangePopState extends State<JoinChallangePop> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
+    TranslateNotifierV2 lang = context.read<TranslateNotifierV2>();
     return Consumer<ChallangeNotifier>(
       builder: (_, notifier, __) => GestureDetector(
         onTap: () {
@@ -50,10 +50,10 @@ class _JoinChallangePopState extends State<JoinChallangePop> {
                               height: 160,
                             ),
                             sixteenPx,
-                            const Text(
-                              'Berhasil Mengikuti Challenge',
+                            Text(
+                              lang.translate.successfulChallengeParticipation ?? '',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color(0xFF3E3E3E),
                                 fontSize: 18,
                                 fontFamily: 'Lato',
@@ -61,10 +61,10 @@ class _JoinChallangePopState extends State<JoinChallangePop> {
                               ),
                             ),
                             sixteenPx,
-                            const Text(
-                              'Raih peringkat pertama dengan mengikuti\nkompetisi yang seru ini, yuk!',
+                            Text(
+                              lang.translate.getfirstplacebyentering ?? '',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color(0xFF9B9B9B),
                                 fontSize: 14,
                                 fontFamily: 'Lato',
@@ -72,7 +72,7 @@ class _JoinChallangePopState extends State<JoinChallangePop> {
                               ),
                             ),
                             sixteenPx,
-                            ButtonChallangeWidget(bgColor: kHyppePrimary, text: "Tingkatkan Poinmu Sekarang", function: () {}),
+                            ButtonChallangeWidget(bgColor: kHyppePrimary, text: "${lang.translate.increaseYourPointsNow}", function: () {}),
                           ],
                         )),
                   ],

@@ -45,6 +45,16 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
           participant++;
         }
       });
+      if (cn.newJoinChallenge) {
+        Future.delayed(const Duration(milliseconds: 400), () {
+          widget.globalKey?.currentState?.innerController.animateTo(
+            widget.globalKey?.currentState?.innerController.position.maxScrollExtent ?? 1000,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.ease,
+          );
+          cn.newJoinChallenge = false;
+        });
+      }
       return SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         child: Column(
@@ -142,11 +152,6 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                                 });
                                                 ShowGeneralDialog.joinChallange(context, mounted, cn.leaderBoardDetailData?.challengeId ?? '').then((value) => print("kelar om")).whenComplete(() {
                                                   // cn.initLeaderboardDetail(context, mounted, cn.leaderBoardDetailData?.challengeId ?? '');
-                                                  widget.globalKey?.currentState?.innerController.animateTo(
-                                                    1000,
-                                                    duration: Duration(milliseconds: 300),
-                                                    curve: Curves.ease,
-                                                  );
                                                 });
                                               } else {
                                                 setState(() {
@@ -165,7 +170,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
             // Text("${cn.leaderBoardDetailData?.onGoing}"),
             Container(
                 width: SizeConfig.screenWidth,
-                margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
+                margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16, bottom: 16),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -191,7 +196,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                 ? Container()
                 : Container(
                     width: SizeConfig.screenWidth,
-                    margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16, bottom: 16),
+                    margin: const EdgeInsets.only(left: 16.0, right: 16, bottom: 16),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),

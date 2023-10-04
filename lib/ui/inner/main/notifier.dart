@@ -139,6 +139,7 @@ class MainNotifier with ChangeNotifier {
 
       System().userVerified(selfProfile.user.profile?.statusKyc);
       SharedPreference().writeStorage(SpKeys.setPin, selfProfile.user.profile?.pinVerified.toString());
+      SharedPreference().writeStorage(SpKeys.userID, context.read<SelfProfileNotifier>().user.profile?.idUser);
       // SharedPreference().writeStorage(SpKeys.statusVerificationId, 'sdsd')asdasd
       notifyListeners();
     }
@@ -424,7 +425,7 @@ class MainNotifier with ChangeNotifier {
 
   void initWakelockTimer({required Function() onShowInactivityWarning}) async {
     // adding delay to prevent if there's another that not disposed yet
-    Future.delayed(const Duration(seconds: 2),() {
+    Future.delayed(const Duration(seconds: 2), () {
       "=================== init wakelock".logger();
       Wakelock.enable();
       if (_inactivityTimer != null) _inactivityTimer?.cancel();

@@ -185,7 +185,7 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
         children: [
           Text(
             titleText,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w400,
             ),

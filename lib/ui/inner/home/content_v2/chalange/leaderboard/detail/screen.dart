@@ -362,6 +362,8 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                                                       labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
                                                       // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
                                                       unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                                      isScrollable: true,
+
                                                       tabs: [
                                                         ...List.generate(
                                                           nameTab.length,

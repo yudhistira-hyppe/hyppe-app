@@ -981,7 +981,10 @@ class LocalizationModelV2 {
   String? applyBadge;
   String? youDontHaveaBadge;
   String? winachallengetoreceiveabadge;
+  String? successfulChallengeParticipation;
   String? thecompetitionhasended;
+  String? increaseYourPointsNow;
+  String? getfirstplacebyentering;
   String? joinTheChallenge;
   String? badgeCollection;
   String? understand;
@@ -1978,7 +1981,10 @@ class LocalizationModelV2 {
     this.applyBadge,
     this.youDontHaveaBadge,
     this.winachallengetoreceiveabadge,
+    this.successfulChallengeParticipation,
     this.thecompetitionhasended,
+    this.increaseYourPointsNow,
+    this.getfirstplacebyentering,
     this.joinTheChallenge,
     this.badgeCollection,
     this.understand,
@@ -3003,7 +3009,10 @@ class LocalizationModelV2 {
     applyBadge = json['applyBadge'];
     youDontHaveaBadge = json['youDontHaveaBadge'];
     winachallengetoreceiveabadge = json['winachallengetoreceiveabadge'];
+    successfulChallengeParticipation = json['successfulChallengeParticipation'];
     thecompetitionhasended = json['thecompetitionhasended'];
+    increaseYourPointsNow = json['increaseYourPointsNow'];
+    getfirstplacebyentering = json['getfirstplacebyentering'];
     joinTheChallenge = json['joinTheChallenge'];
     badgeCollection = json['badgeCollection'];
     understand = json['understand'];
