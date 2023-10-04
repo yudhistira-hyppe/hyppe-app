@@ -1,15 +1,12 @@
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/sticker/sticker_category_model.dart';
 import 'package:hyppe/core/models/collection/sticker/sticker_model.dart';
 import 'package:hyppe/core/models/collection/sticker/sticker_tab.dart';
-import 'package:gif_view/gif_view.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -19,7 +16,7 @@ import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:optimized_cached_image/optimized_cached_image.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class OnShowSticker extends StatelessWidget {
   const OnShowSticker({Key? key}) : super(key: key);
@@ -405,11 +402,19 @@ class OnShowSticker extends StatelessWidget {
           width: (MediaQuery.of(context).size.width - 32) / tab.column,
           height: (MediaQuery.of(context).size.width - 32) / tab.column,
           padding: const EdgeInsets.all(8),
-          // child: OptimizedCacheImage(imageUrl: sticker.image ?? ''),
-          // child: CustomBaseCacheImage(imageUrl: sticker.image ?? '', emptyWidget: Container()),
-          child: (sticker.image ?? '').toLowerCase().endsWith('.gif')
-              ? GifView.network(sticker.image ?? '')
-              : OptimizedCacheImage(imageUrl: sticker.image ?? ''),
+          child: CachedNetworkImage(
+            imageUrl: sticker.image ?? '',
+            progressIndicatorBuilder: (context, url, downloadProgress) => 
+               Padding(
+                 padding: EdgeInsets.all(60 / tab.column),
+                 child: CircularProgressIndicator(
+                    value: downloadProgress.progress ?? 0.0,
+                    strokeWidth: 1,
+                    color: kHyppeDisabled,
+                    backgroundColor: kHyppeTextLightPrimary,
+                  )
+               ),
+          ),
         ),
       ),
     );
