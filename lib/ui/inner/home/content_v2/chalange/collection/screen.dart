@@ -79,7 +79,7 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
                 children: [
                   Stack(
                     children: [
-                      Image.asset("${AssetPath.pngPath}bg_collection.jpg"),
+                      Image.asset("${AssetPath.pngPath}badge_banner_background.png"),
                       Positioned.fill(
                           child: Align(
                         alignment: Alignment.center,

@@ -45,7 +45,7 @@ class BadgeWidget extends StatelessWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: badgeData?[index].idBadge == cn.badgeUser?.idUserBadge ? kHyppePrimary : Color(0xFFEAEAEA)),
+              border: Border.all(color: badgeData?[index].sId == cn.badgeUser?.id ? kHyppePrimary : Color(0xFFEAEAEA)),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Stack(
@@ -132,7 +132,7 @@ class BadgeWidget extends StatelessWidget {
                   ],
                 ),
                 Positioned.fill(
-                    child: badgeData?[index].idBadge == cn.badgeUser?.idUserBadge
+                    child: badgeData?[index].sId == cn.badgeUser?.id
                         ? Align(
                             alignment: Alignment.topRight,
                             child: Container(

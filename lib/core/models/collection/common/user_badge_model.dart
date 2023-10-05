@@ -1,4 +1,5 @@
 class UserBadgeModel {
+  String? id;
   String? idUserBadge;
   String? badgeProfile;
   String? badgeOther;
@@ -8,6 +9,7 @@ class UserBadgeModel {
   String? createdAt;
 
   UserBadgeModel({
+    this.id,
     this.idUserBadge,
     this.badgeProfile,
     this.badgeOther,
@@ -18,6 +20,7 @@ class UserBadgeModel {
   });
 
   UserBadgeModel.fromJson(Map<String, dynamic> json) {
+    // id = json['id'];
     idUserBadge = json['idUserBadge'];
     badgeProfile = json['badgeProfile'];
     badgeOther = json['badgeOther'];
@@ -29,6 +32,7 @@ class UserBadgeModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    // data['id'] = id;
     data['idUserBadge'] = idUserBadge;
     data['badgeProfile'] = badgeProfile;
     data['badgeOther'] = badgeOther;

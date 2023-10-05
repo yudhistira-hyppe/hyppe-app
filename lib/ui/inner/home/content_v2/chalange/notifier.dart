@@ -523,6 +523,7 @@ class ChallangeNotifier with ChangeNotifier {
 
   void selectBadge(BadgeAktif? badgeData) {
     badgeUser = UserBadgeModel(
+      id: badgeData?.sId,
       idUserBadge: badgeData?.idBadge,
       badgeProfile: badgeData?.badgeData?[0].badgeProfile,
       badgeOther: badgeData?.badgeData?[0].badgeOther,

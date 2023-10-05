@@ -1195,7 +1195,7 @@ class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
                         builder: (context, transnot, child) => Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Spacer(),
+                            const Spacer(),
                             const CustomIconWidget(
                               iconData: "${AssetPath.vectorPath}valid-invert.svg",
                               defaultColor: false,
