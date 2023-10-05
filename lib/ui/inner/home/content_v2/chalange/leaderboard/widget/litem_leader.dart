@@ -44,7 +44,7 @@ class ItemLeader extends StatelessWidget {
     return data?.ranking == 11 && data?.isUserLogin == false
         ? Container()
         : Container(
-            margin: const EdgeInsets.symmetric(horizontal: 8),
+            // margin: const EdgeInsets.symmetric(horizontal: 8),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
             decoration: BoxDecoration(
               color: (data?.isUserLogin ?? false) ? kHyppePrimaryTransparent : kHyppeLightButtonText,
@@ -115,6 +115,7 @@ class ItemLeader extends StatelessWidget {
                   children: [
                     Text(
                       '${data?.username}',
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: Color(0xFF3E3E3E),
                         fontSize: 16,
@@ -134,7 +135,10 @@ class ItemLeader extends StatelessWidget {
                 ),
                 twelvePx,
                 data?.currentstatistik == "NETRAL"
-                    ? Container()
+                    ? Expanded(
+                        child: Container(
+                        width: 1,
+                      ))
                     : Expanded(
                         child: Align(
                         alignment: Alignment.centerRight,

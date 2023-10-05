@@ -647,49 +647,49 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   //   }
   // }
 
-  // Future testLogin(BuildContext context) async {
-  //   bool connection = await System().checkConnections();
-  //   setLoading(true);
-  //   await System().getLocation(context).then((value) async {
-  //     print(value);
-  //     if (value) {
-  //       if (connection) {
-  //         await FcmService().initializeFcmIfNot();
-  //         final notifier = UserBloc();
+  Future testLogin(BuildContext context) async {
+    bool connection = await System().checkConnections();
+    setLoading(true);
+    await System().getLocation(context).then((value) async {
+      print(value);
+      if (value) {
+        if (connection) {
+          await FcmService().initializeFcmIfNot();
+          final notifier = UserBloc();
 
-  //         await notifier.googleSignInBlocV2(
-  //           context,
-  //           email: emailController.text,
-  //           latitude: latitude,
-  //           longtitude: longitude,
-  //           function: () => loginGoogleSign(context),
-  //           uuid: 'asddddfsd',
-  //         );
-  //         final fetch = notifier.userFetch;
-  //         print('ini respone google ${fetch.data}');
-  //         if (fetch.userState == UserState.LoginSuccess) {
-  //           hide = true;
-  //           final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
-  //           _validateUserData(context, _result, true, onlineVersion: fetch.version);
-  //         }
-  //         if (fetch.userState == UserState.LoginError) {
-  //           _googleSignInService.handleSignOut();
-  //           if (fetch.data != null) {
-  //             clearTextController();
-  //             incorrect = true;
-  //           }
-  //         }
+          await notifier.googleSignInBlocV2(
+            context,
+            email: emailController.text,
+            latitude: latitude,
+            longtitude: longitude,
+            function: () => loginGoogleSign(context),
+            uuid: 'asddddfsd',
+          );
+          final fetch = notifier.userFetch;
+          print('ini respone google ${fetch.data}');
+          if (fetch.userState == UserState.LoginSuccess) {
+            hide = true;
+            final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
+            _validateUserData(context, _result, true, onlineVersion: fetch.version);
+          }
+          if (fetch.userState == UserState.LoginError) {
+            _googleSignInService.handleSignOut();
+            if (fetch.data != null) {
+              clearTextController();
+              incorrect = true;
+            }
+          }
 
-  //         // if (data != null) {
-  //         //   Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
-  //         //       argument: UserInterestScreenArgument());
-  //         //   notifyListeners();
-  //         // }
-  //       } else {
-  //         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
-  //       }
-  //     }
-  //     setLoading(false);
-  //   });
-  // }
+          // if (data != null) {
+          //   Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
+          //       argument: UserInterestScreenArgument());
+          //   notifyListeners();
+          // }
+        } else {
+          ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
+        }
+      }
+      setLoading(false);
+    });
+  }
 }

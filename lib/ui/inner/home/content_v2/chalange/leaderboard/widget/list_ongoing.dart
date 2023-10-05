@@ -106,7 +106,9 @@ class _ListOnGoingState extends State<ListOnGoing> {
                                           physics: const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, index) {
                                             if (cn.leaderBoardData?.getlastrank?[index].score == 0) {
-                                              return Container();
+                                              return Container(
+                                                  // child: Text("${cn.leaderBoardData?.getlastrank?[index].score}"),
+                                                  );
                                             } else {
                                               if (cn.leaderBoardData?.challengeData?[0].objectChallenge == 'KONTEN') {
                                                 return GestureDetector(

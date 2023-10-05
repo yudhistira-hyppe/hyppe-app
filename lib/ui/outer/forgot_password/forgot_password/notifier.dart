@@ -65,7 +65,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
     notifyListeners();
   }
 
-  set invalidEmail(String? val){
+  set invalidEmail(String? val) {
     _invalidEmail = val;
     notifyListeners();
   }
@@ -94,7 +94,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
     });
   }
 
-  initStateNewPass(){
+  initStateNewPass() {
     _password = "";
     Future.delayed(Duration.zero, () {
       passwordConfirmController.clear();
@@ -123,18 +123,18 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
           //   subCaption: language.weHaveSentAVerificationCodeToYourEmail,
           // );
           ShowBottomSheet().onShowColouredSheet(
-              context,
-              language.titleSuccessPin ?? ' ',
-              subCaption: language.messageSuccessPin,
-              maxLines: 3,
-              borderRadius: 8,
-              color: kHyppeTextLightPrimary,
-              padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
-              margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
+            context,
+            language.titleSuccessPin ?? ' ',
+            subCaption: language.messageSuccessPin,
+            maxLines: 3,
+            borderRadius: 8,
+            color: kHyppeTextLightPrimary,
+            padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
+            margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
           );
           _sharedPrefs.writeStorage(SpKeys.email, emailController.text);
           // _sharedPrefs.writeStorage(SpKeys.isUserRequestRecoverPassword, true);
-          Future.delayed(const Duration(seconds: 2), (){
+          Future.delayed(const Duration(seconds: 2), () {
             _routing.moveReplacement(
               Routes.userOtpScreen,
               argument: UserOtpScreenArgument(
@@ -143,32 +143,27 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
             );
           });
           // _routing.move(signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toHome));
-
         } else {
           final responseCode = fetch.data['response_code'];
           print('onClickForgotPassword: error $responseCode ');
 
-          if(responseCode == 800){
-            ShowBottomSheet().onShowColouredSheet(
-              context,
-              language.titleEmailIsGmail ?? '',
-              subCaption: language.messageEmailIsGmail,
-              maxLines: 3,
-              borderRadius: 8,
-              sizeIcon: 20,
-              color: kHyppeTextLightPrimary,
-              isArrow: true,
-              iconColor: kHyppeBorder,
-              padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
-              margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
-              iconSvg: "${AssetPath.vectorPath}info_white.svg",
-              function: (){
-                _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
-              }
-            );
-          }else if(responseCode == 801){
+          if (responseCode == 800) {
+            ShowBottomSheet().onShowColouredSheet(context, language.titleEmailIsGmail ?? '',
+                subCaption: language.messageEmailIsGmail,
+                maxLines: 3,
+                borderRadius: 8,
+                sizeIcon: 20,
+                color: kHyppeTextLightPrimary,
+                isArrow: true,
+                iconColor: kHyppeBorder,
+                padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
+                margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
+                iconSvg: "${AssetPath.vectorPath}info_white.svg", function: () {
+              _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
+            });
+          } else if (responseCode == 801) {
             invalidEmail = language.pleaseEnterRegisteredEmail;
-          }else{
+          } else {
             ShowBottomSheet().onShowColouredSheet(
               context,
               "${fetch.data['messages']['info'][0]}",
@@ -179,7 +174,6 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
               iconSvg: "${AssetPath.vectorPath}remove.svg",
             );
           }
-
         }
       } catch (e) {
         setLoading(false);
@@ -206,8 +200,6 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
         iconData: '${AssetPath.vectorPath}valid.svg',
       );
     } else {
-
-
       return const SizedBox.shrink();
     }
   }
@@ -335,6 +327,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
         } else {
           SharedPreference().writeStorage(SpKeys.userToken, _result.token);
           SharedPreference().writeStorage(SpKeys.email, _result.email);
+          SharedPreference().writeStorage(SpKeys.userID, _result.idUser);
           try {
             DeviceBloc().activityAwake(context);
           } catch (e) {

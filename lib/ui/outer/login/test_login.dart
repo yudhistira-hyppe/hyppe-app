@@ -175,7 +175,8 @@ class _TestLoginState extends State<TestLogin> {
               CustomElevatedButton(
                 function: () {
                   if (!notifier.isLoading) {
-                    // notifier.testLogin(context);
+                    print("sdsd");
+                    notifier.testLogin(context);
                   }
                 },
                 buttonStyle: ButtonStyle(

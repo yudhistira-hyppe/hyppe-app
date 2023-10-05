@@ -32,7 +32,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
       var boollUser = false;
       var participant = 0;
       cn.leaderBoardDetailData?.getlastrank?.forEach((e) {
-        print("=hahaha=");
+        // print("=hahaha=");
         if (e.isUserLogin == true) {
           boollUser = true;
         }
@@ -41,7 +41,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
             participant++;
           }
         } else {
-          print("=hihihi= ${participant++}");
+          // print("=hihihi= ${participant++}");
           participant++;
         }
       });
@@ -64,8 +64,6 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
             cn.leaderBoardDetailData?.onGoing == false
                 ? Container()
                 : Container(
-                    margin: const EdgeInsets.only(left: 16.0, right: 16),
-                    padding: const EdgeInsets.only(bottom: 16),
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
@@ -166,42 +164,6 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                   ),
                       ],
                     ),
-                  ),
-            // Text("${cn.leaderBoardDetailData?.onGoing}"),
-            Container(
-                width: SizeConfig.screenWidth,
-                margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16, bottom: 16),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Text(
-                        tn.translate.description ?? "Deskripsi",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    twentyPx,
-                    Text("${cn.leaderBoardDetailData?.challengeData?[0].description}"),
-                  ],
-                )),
-            cn.leaderBoardDetailData?.onGoing == false || !boollUser
-                ? Container()
-                : Container(
-                    width: SizeConfig.screenWidth,
-                    margin: const EdgeInsets.only(left: 16.0, right: 16, bottom: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const FooterChallangeDetail(),
                   ),
           ],
         ),

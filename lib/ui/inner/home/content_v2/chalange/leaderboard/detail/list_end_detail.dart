@@ -58,7 +58,6 @@ class _ListEndDetailState extends State<ListEndDetail> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.only(left: 16.0, right: 16),
               padding: const EdgeInsets.only(bottom: 16),
               decoration: const BoxDecoration(
                 color: Colors.white,
@@ -74,7 +73,6 @@ class _ListEndDetailState extends State<ListEndDetail> {
                       print(cn.selectOptionSession);
                     },
                     child: Container(
-                      margin: EdgeInsets.all(16),
                       height: 44,
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
                       decoration: BoxDecoration(color: Color(0xFFF5F5F5), borderRadius: BorderRadius.circular(4)),
@@ -157,27 +155,6 @@ class _ListEndDetailState extends State<ListEndDetail> {
                 ],
               ),
             ),
-            Container(
-                width: SizeConfig.screenWidth,
-                margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      lang?.description ?? "Deskripsi",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    twentyPx,
-                    Text("${cn.leaderBoardDetailData?.challengeData?[0].description}"),
-                  ],
-                )),
           ],
         ),
       );

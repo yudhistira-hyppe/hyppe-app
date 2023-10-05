@@ -11,15 +11,11 @@ import 'package:hyppe/core/models/collection/localization_v2/localization_model.
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
-import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_end.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_ongoing.dart';
-import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_leaderboard.dart';
-import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_list.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
-import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -141,42 +137,48 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-          appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-              child: AppBar(
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new_sharp,
-                    color: kHyppeTextLightPrimary,
-                    size: 16,
-                  ),
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
+            child: AppBar(
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_sharp,
+                  color: kHyppeTextLightPrimary,
+                  size: 16,
+                ),
+                onPressed: () {
+                  Routing().moveBack();
+                },
+              ),
+              title: Text(
+                '${lang?.challengePage}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Lato',
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              titleSpacing: 0,
+              actions: [
+                IconButton(
                   onPressed: () {
-                    Routing().moveBack();
+                    Routing().move(Routes.chalengeAchievement, argument: GeneralArgument(id: cn.leaderBoardData?.challengeId));
                   },
-                ),
-                title: Text(
-                  '${lang?.challengePage}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'Lato',
-                    fontWeight: FontWeight.w700,
+                  icon: const CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}achievement.svg",
+                    defaultColor: false,
+                    height: 20,
                   ),
-                ),
-                titleSpacing: 0,
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      Routing().move(Routes.chalengeAchievement, argument: GeneralArgument(id: cn.leaderBoardData?.challengeId));
-                    },
-                    icon: const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}achievement.svg",
-                      defaultColor: false,
-                      height: 20,
-                    ),
-                  )
-                ],
-              )),
-          body: SingleChildScrollView(
+                )
+              ],
+            )),
+        body: RefreshIndicator(
+          color: kHyppePrimary,
+          onRefresh: () async {
+            await cn.initLeaderboard(context);
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,7 +186,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
                   child: Text(lang?.mainChallenge ?? '',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                       )),
@@ -257,46 +259,48 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                   ),
                 ),
                 sixPx,
-                Container(
-                  height: 50,
-                  padding: const EdgeInsets.all(6),
-                  margin: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: kHyppeLightSurface,
-                  ),
-                  child: AppBar(
-                    bottom: TabBar(
-                      indicator: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          8.0,
+                hideTab
+                    ? Container()
+                    : Container(
+                        height: 50,
+                        padding: const EdgeInsets.all(6),
+                        margin: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: kHyppeLightSurface,
                         ),
-                        color: kHyppeLightButtonText,
-                      ),
-                      labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                      labelColor: kHyppeTextLightPrimary,
-                      unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                      labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
-                      // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                      isScrollable: false,
-                      unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                      controller: _tabController,
-
-                      tabs: [
-                        ...List.generate(
-                          nameTab.length,
-                          (index) => Padding(
-                            padding: EdgeInsets.all(9),
-                            child: Text(
-                              nameTab[index],
-                              style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                        child: AppBar(
+                          bottom: TabBar(
+                            indicator: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                8.0,
+                              ),
+                              color: kHyppeLightButtonText,
                             ),
+                            labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                            labelColor: kHyppeTextLightPrimary,
+                            unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                            labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
+                            // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                            isScrollable: false,
+                            unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                            controller: _tabController,
+
+                            tabs: [
+                              ...List.generate(
+                                nameTab.length,
+                                (index) => Padding(
+                                  padding: EdgeInsets.all(9),
+                                  child: Text(
+                                    nameTab[index],
+                                    style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
+                      ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: _tabs![_currentTab],
@@ -344,7 +348,9 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                       ),
               ],
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }

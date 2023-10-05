@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -16,6 +17,7 @@ import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/footer_detail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/list_end_detail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/list_ongoing_detail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_list.dart';
@@ -48,6 +50,9 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
   Color bgColor = kHyppeLightSurface;
 
   LocalizationModelV2? lang;
+
+  List<Widget>? _tabs;
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'Chalange Screen');
@@ -57,6 +62,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
     nameTab = [lang?.goingOn, lang?.end];
     offset = 0;
     Future.delayed(Duration.zero, () {
+      _preprareTabItems();
       globalKey.currentState?.innerController.addListener(() {
         if ((globalKey.currentState?.innerController.position.pixels ?? 0) >= (globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
             !(globalKey.currentState?.innerController.position.outOfRange ?? true)) {}
@@ -67,21 +73,21 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
       chllangeid = widget.arguments?.id ?? '';
 
       _tabController.animation?.addListener(() {
-        _tabController.animation?.addListener(() {
+        setState(() {
           _current = _tabController.index;
-          if (_lastCurrent != _current) {
-            if (_current == 1) {
-              cn.getLeaderBoard(
-                context,
-                chllangeid,
-                oldLeaderboard: true,
-                isDetail: true,
-              );
-            }
-            // homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
-          }
-          _lastCurrent = _current;
         });
+        if (_lastCurrent != _current) {
+          if (_current == 1) {
+            cn.getLeaderBoard(
+              context,
+              chllangeid,
+              oldLeaderboard: true,
+              isDetail: true,
+            );
+          }
+          // homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
+        }
+        _lastCurrent = _current;
       });
 
       if (widget.arguments?.index == 1) {
@@ -118,6 +124,13 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
 
   @override
   void afterFirstLayout(BuildContext context) {}
+
+  List<Widget> _preprareTabItems() {
+    return _tabs = <Widget>[
+      ListOnGoingDetail(globalKey: globalKey),
+      const ListEndDetail(),
+    ];
+  }
 
   void toHideTab(ChallangeNotifier cn) {
     if ((cn.leaderBoardDetailData?.status == "BERLANGSUNG" && cn.leaderBoardDetailData?.session == 1)) {
@@ -160,248 +173,274 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
     var cn = context.watch<ChallangeNotifier>();
     var tn = context.read<TranslateNotifierV2>();
     toHideTab(cn);
+    var boollUser = false;
 
     if (!cn.isLoadingLeaderboard || cn.leaderBoardDetailData?.sId != null) {
       bgColor = System().colorFromHex(cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].warnaBackground ?? "#F5F5F5");
     }
+    cn.leaderBoardDetailData?.getlastrank?.forEach((e) {
+      // print("=hahaha=");
+      if (e.isUserLogin == true) {
+        boollUser = true;
+      }
+    });
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (cn.isLoadingLeaderboard) {
-          return false;
-        } else {
-          return true;
-        }
-      },
-      child: Scaffold(
-        backgroundColor: bgColor,
-        appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-            child: AppBar(
-              backgroundColor: Colors.white,
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios_new_sharp,
-                  color: kHyppeTextLightPrimary,
-                  size: 16,
-                ),
-                onPressed: () {
-                  if (!cn.isLoadingLeaderboard) {
-                    Routing().moveBack();
-                  }
-                },
+    return Scaffold(
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
+          child: AppBar(
+            backgroundColor: Colors.white,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios_new_sharp,
+                color: kHyppeTextLightPrimary,
+                size: 16,
               ),
-              title: Text(
-                cn.leaderBoardDetailData?.challengeData?[0].nameChallenge == null ? '' : '${cn.leaderBoardDetailData?.challengeData?[0].nameChallenge}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontFamily: 'Lato',
-                  fontWeight: FontWeight.w700,
-                ),
+              onPressed: () {
+                if (!cn.isLoadingLeaderboard) {
+                  Routing().moveBack();
+                }
+              },
+            ),
+            title: Text(
+              cn.leaderBoardDetailData?.challengeData?[0].nameChallenge == null ? '' : '${cn.leaderBoardDetailData?.challengeData?[0].nameChallenge}',
+              style: const TextStyle(
+                fontSize: 16,
+                fontFamily: 'Lato',
+                fontWeight: FontWeight.w700,
               ),
-              titleSpacing: 0,
-              actions: [
-                cn.isLoadingLeaderboard || cn.leaderBoardDetailData?.sId == null
-                    ? Container()
-                    : IconButton(
-                        onPressed: () {
-                          String thumb = cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].bannerLeaderboard ?? '';
-                          String desc = 'Ikuti challange dan menangkan kesempatan menang';
-                          String fullname = "${cn.leaderBoardDetailData?.challengeData?[0].nameChallenge ?? ''} | Hyppe Challange";
-                          String postId = cn.leaderBoardDetailData?.challengeId ?? '';
-                          String routes = "/chalenge-detail";
-                          DynamicLinkData dynamicLinkData = DynamicLinkData(description: desc, fullName: fullname, postID: postId, routes: routes, thumb: thumb);
-                          System().createdDynamicLink(context, dynamicLinkData: dynamicLinkData);
-                        },
-                        icon: const CustomIconWidget(
-                          iconData: "${AssetPath.vectorPath}share2.svg",
-                          defaultColor: false,
-                          height: 20,
+            ),
+            titleSpacing: 0,
+            actions: [
+              cn.isLoadingLeaderboard || cn.leaderBoardDetailData?.sId == null
+                  ? Container()
+                  : IconButton(
+                      onPressed: () {
+                        unawaited(
+                          Navigator.of(context, rootNavigator: true).push(
+                            PageRouteBuilder(
+                              pageBuilder: (_, __, ___) => WillPopScope(
+                                onWillPop: () async => false,
+                                child: Scaffold(
+                                  backgroundColor: Colors.transparent,
+                                  body: const Center(
+                                    child: CircularProgressIndicator.adaptive(),
+                                  ),
+                                ),
+                              ),
+                              transitionDuration: Duration.zero,
+                              barrierDismissible: false,
+                              barrierColor: Colors.black45,
+                              opaque: false,
+                            ),
+                          ),
+                        );
+                        String thumb = cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].bannerLeaderboard ?? '';
+                        String desc = 'Ikuti challange dan menangkan kesempatan menang';
+                        String fullname = "${cn.leaderBoardDetailData?.challengeData?[0].nameChallenge ?? ''} | Hyppe Challange";
+                        String postId = cn.leaderBoardDetailData?.challengeId ?? '';
+                        String routes = "/chalenge-detail";
+                        DynamicLinkData dynamicLinkData = DynamicLinkData(description: desc, fullName: fullname, postID: postId, routes: routes, thumb: thumb);
+
+                        System().createdDynamicLink(context, dynamicLinkData: dynamicLinkData).then((value) => Routing().moveBack());
+                      },
+                      icon: const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}share2.svg",
+                        defaultColor: false,
+                        height: 20,
+                      ),
+                    )
+            ],
+          )),
+      body: RefreshIndicator(
+        color: kHyppePrimary,
+        onRefresh: () async {
+          await cn.initLeaderboardDetail(context, mounted, widget.arguments?.id ?? '');
+        },
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: cn.isLoadingLeaderboard
+              //  || (cn.leaderBoardDetailData?.sId == null || cn.leaderBoardDetaiEndlData?.sId == null)
+              ? const ShimmerListLeaderboard()
+              : Container(
+                  color: bgColor,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomBaseCacheImage(
+                        memCacheWidth: 100,
+                        memCacheHeight: 100,
+                        widthPlaceHolder: 80,
+                        heightPlaceHolder: 80,
+                        imageUrl: (cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].bannerLeaderboard),
+                        imageBuilder: (context, imageProvider) => Image(
+                          image: imageProvider,
+                          fit: BoxFit.fitHeight,
+                          width: SizeConfig.screenWidth,
                         ),
-                      )
-              ],
-            )),
-        body: DefaultTabController(
-          length: 2,
-          child: RefreshIndicator(
-            color: kHyppePrimary,
-            notificationPredicate: (notification) {
-              // with NestedScrollView local(depth == 2) OverscrollNotification are not sent
-              if (notification is OverscrollNotification || Platform.isIOS) {
-                return notification.depth == 2;
-              }
-              return notification.depth == 0;
-            },
-            onRefresh: () async {
-              await cn.initLeaderboardDetail(context, mounted, widget.arguments?.id ?? '');
-            },
-            child: cn.isLoadingLeaderboard
-                //  || (cn.leaderBoardDetailData?.sId == null || cn.leaderBoardDetaiEndlData?.sId == null)
-                ? const ShimmerListLeaderboard()
-                : ScrollConfiguration(
-                    behavior: const ScrollBehavior().copyWith(overscroll: false),
-                    child: NestedScrollView(
-                      key: globalKey,
-                      controller: context.read<MainNotifier>().scrollController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      // dragStartBehavior: DragStartBehavior.start,
-                      headerSliverBuilder: (context, bool innerBoxIsScrolled) {
-                        return [
-                          SliverOverlapAbsorber(
-                            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                            sliver: SliverList(
-                              delegate: SliverChildListDelegate([
-                                // Text("${cn.leaderBoardDetailData?.onGoing}"),
-                                // Text("${cn.leaderBoardDetailData?.session}"),
-                                // Text("${cn.leaderBoardDetailData?.status}"),
-                                CustomBaseCacheImage(
-                                  memCacheWidth: 100,
-                                  memCacheHeight: 100,
-                                  widthPlaceHolder: 80,
-                                  heightPlaceHolder: 80,
-                                  imageUrl: (cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].bannerLeaderboard),
-                                  imageBuilder: (context, imageProvider) => Image(
-                                    image: imageProvider,
-                                    fit: BoxFit.fitHeight,
-                                    width: SizeConfig.screenWidth,
+                        emptyWidget: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                              decoration: BoxDecoration(color: kHyppeNotConnect),
+                              width: SizeConfig.screenWidth,
+                              height: 250,
+                              alignment: Alignment.center,
+                              child: CustomTextWidget(textToDisplay: tn.translate.couldntLoadImage ?? 'Error')),
+                        ),
+                        errorWidget: (context, url, error) {
+                          return GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                                decoration: BoxDecoration(color: kHyppeNotConnect),
+                                width: SizeConfig.screenWidth,
+                                height: 250,
+                                alignment: Alignment.center,
+                                child: CustomTextWidget(textToDisplay: tn.translate.couldntLoadImage ?? 'Error')),
+                          );
+                        },
+                      ),
+                      twelvePx,
+                      Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: ShapeDecoration(
+                                color: Colors.black.withOpacity(0.5),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                              ),
+                              child: Text(
+                                dateText,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      sixPx,
+                      cn.leaderBoardDetailData?.onGoing == false
+                          ? Container()
+                          : Container(
+                              margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
+                              decoration: const ShapeDecoration(
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(8),
+                                    bottomLeft: Radius.circular(8),
+                                    bottomRight: Radius.circular(8),
                                   ),
-                                  emptyWidget: GestureDetector(
-                                    onTap: () {},
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Center(
                                     child: Container(
-                                        decoration: BoxDecoration(color: kHyppeNotConnect),
                                         width: SizeConfig.screenWidth,
-                                        height: 250,
-                                        alignment: Alignment.center,
-                                        child: CustomTextWidget(textToDisplay: tn.translate.couldntLoadImage ?? 'Error')),
+                                        padding: const EdgeInsets.only(top: 24, bottom: 24),
+                                        child: const Center(
+                                          child: Text("Leaderboard",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700,
+                                              )),
+                                        )),
                                   ),
-                                  errorWidget: (context, url, error) {
-                                    return GestureDetector(
-                                      onTap: () {},
-                                      child: Container(
-                                          decoration: BoxDecoration(color: kHyppeNotConnect),
-                                          width: SizeConfig.screenWidth,
-                                          height: 250,
-                                          alignment: Alignment.center,
-                                          child: CustomTextWidget(textToDisplay: tn.translate.couldntLoadImage ?? 'Error')),
-                                    );
-                                  },
-                                ),
-                                twelvePx,
-                                // GestureDetector(
-                                //     onTap: () {
-                                //       ShowGeneralDialog.winChallange(context);
-                                //     },
-                                //     child: Text("hahaha")),
-                                Center(
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: ShapeDecoration(
-                                          color: Colors.black.withOpacity(0.5),
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                                        ),
-                                        child: Text(
-                                          dateText,
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.white,
+                                  hideTab
+                                      ? Container()
+                                      : Container(
+                                          height: 50,
+                                          padding: const EdgeInsets.all(6),
+                                          margin: const EdgeInsets.all(16),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(8),
+                                            color: kHyppeLightSurface,
                                           ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                sixPx,
-                                cn.leaderBoardDetailData?.onGoing == false
-                                    ? Container()
-                                    : Column(
-                                        children: [
-                                          Center(
-                                            child: Container(
-                                                width: SizeConfig.screenWidth,
-                                                padding: const EdgeInsets.only(top: 24, bottom: 24),
-                                                margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
-                                                decoration: const ShapeDecoration(
-                                                  color: Colors.white,
-                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8))),
+                                          child: AppBar(
+                                            bottom: TabBar(
+                                              indicator: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(
+                                                  8.0,
                                                 ),
-                                                child: const Center(
-                                                  child: Text("Leaderboard",
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.w700,
-                                                      )),
-                                                )),
-                                          ),
-                                          hideTab
-                                              ? Container()
-                                              : Container(
-                                                  margin: const EdgeInsets.only(left: 16.0, right: 16),
-                                                  padding: const EdgeInsets.only(top: 8, left: 16.0, right: 16),
-                                                  color: Colors.white,
-                                                  child: Container(
-                                                    padding: const EdgeInsets.all(4),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(8),
-                                                      color: kHyppeLightSurface,
-                                                    ),
-                                                    child: TabBar(
-                                                      controller: _tabController,
-                                                      indicator: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(
-                                                          8.0,
-                                                        ),
-                                                        color: kHyppeLightButtonText,
-                                                      ),
-                                                      labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                                                      labelColor: kHyppeTextLightPrimary,
-                                                      unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                                                      labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                                      // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                                                      unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                                      isScrollable: true,
+                                                color: kHyppeLightButtonText,
+                                              ),
+                                              labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                                              labelColor: kHyppeTextLightPrimary,
+                                              unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                                              labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                              // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                                              isScrollable: false,
+                                              unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                              controller: _tabController,
 
-                                                      tabs: [
-                                                        ...List.generate(
-                                                          nameTab.length,
-                                                          (index) => Padding(
-                                                            padding: EdgeInsets.all(9),
-                                                            child: Text(
-                                                              nameTab[index],
-                                                              style: TextStyle(fontFamily: 'Lato', fontSize: 14),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
+                                              tabs: [
+                                                ...List.generate(
+                                                  nameTab.length,
+                                                  (index) => Padding(
+                                                    padding: EdgeInsets.all(9),
+                                                    child: Text(
+                                                      nameTab[index],
+                                                      style: TextStyle(fontFamily: 'Lato', fontSize: 14),
                                                     ),
                                                   ),
                                                 ),
-                                        ],
-                                      ),
-                                //Tab
-                              ]),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                                    child: _tabs![_current],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-
-                          // FilterLanding(),
-                          // HyppePreviewVid(),
-                          // HyppePreviewDiary(),
-                        ];
-                      },
-                      body: TabBarView(
-                        controller: _tabController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          ListOnGoingDetail(globalKey: globalKey),
-                          const ListEndDetail(),
-                        ],
+                      Container(
+                        width: SizeConfig.screenWidth,
+                        margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16, bottom: 16),
+                        padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: Text(
+                                tn.translate.description ?? "Deskripsi",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            twentyPx,
+                            Text("${cn.leaderBoardDetailData?.challengeData?[0].description}"),
+                          ],
+                        ),
                       ),
-                    ),
+                      cn.leaderBoardDetailData?.onGoing == false || !boollUser
+                          ? Container()
+                          : Container(
+                              width: SizeConfig.screenWidth,
+                              margin: const EdgeInsets.only(left: 16.0, right: 16, bottom: 16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: _current == 0 ? const FooterChallangeDetail() : Container(),
+                            ),
+                    ],
                   ),
-          ),
+                ),
         ),
       ),
     );

@@ -133,6 +133,7 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
                                 twentyFourPx,
                                 ListView.builder(
                                   shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
                                   itemCount: cn.achievementData?.length,
                                   itemBuilder: (context, index) {
                                     return item(cn.achievementData?[index] ?? AcievementModel());
