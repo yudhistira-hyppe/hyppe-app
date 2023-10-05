@@ -258,6 +258,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
           await cn.initLeaderboardDetail(context, mounted, widget.arguments?.id ?? '');
         },
         child: SingleChildScrollView(
+          key: globalKey,
           physics: AlwaysScrollableScrollPhysics(),
           child: cn.isLoadingLeaderboard
               //  || (cn.leaderBoardDetailData?.sId == null || cn.leaderBoardDetaiEndlData?.sId == null)

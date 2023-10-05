@@ -12,6 +12,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -298,22 +299,22 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
             var interaksiData = challengeData?.metrik?[0].interaksiKonten?[0];
 
             if ((interaksiData?.suka?[0].hyppeVid ?? 0) > 0) {
-              context.read<MainNotifier>().pageIndex = 2;
+              context.read<HomeNotifier>().tabIndex = 2;
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
             } else if ((interaksiData?.suka?[0].hyppeDiary ?? 0) > 0) {
-              context.read<MainNotifier>().pageIndex = 1;
+              context.read<HomeNotifier>().tabIndex = 1;
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
             } else if ((interaksiData?.suka?[0].hyppePic ?? 0) > 0) {
-              context.read<MainNotifier>().pageIndex = 0;
+              context.read<HomeNotifier>().tabIndex = 0;
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
             } else if ((interaksiData?.tonton?[0].hyppeVid ?? 0) > 0) {
-              context.read<MainNotifier>().pageIndex = 2;
+              context.read<HomeNotifier>().tabIndex = 2;
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
             } else if ((interaksiData?.tonton?[0].hyppeDiary ?? 0) > 0) {
-              context.read<MainNotifier>().pageIndex = 1;
+              context.read<HomeNotifier>().tabIndex = 1;
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
             } else if ((interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0) {
-              context.read<MainNotifier>().pageIndex = 1;
+              context.read<HomeNotifier>().tabIndex = 1;
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
             } else if ((interaksiData?.buatKonten?[0].hyppeVid ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppePic ?? 0) > 0) {
               onTapbuatKonten(contentD: interaksiData?.buatKonten?[0] ?? BuatKonten());

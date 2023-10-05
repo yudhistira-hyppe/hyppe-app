@@ -220,7 +220,7 @@ class DynamicLinkService {
             case Routes.otherProfile:
               '_handleDeepLink otherProfile'.logger();
               _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
-              Future.delayed(const Duration(milliseconds: 500), () {
+              Future.delayed(const Duration(milliseconds: 1000), () {
                 _routing.move(
                   path,
                   argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
@@ -231,7 +231,7 @@ class DynamicLinkService {
             case Routes.chalengeDetail:
               '_handleDeepLink otherProfile'.logger();
               _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
-              Future.delayed(const Duration(milliseconds: 500), () {
+              Future.delayed(const Duration(milliseconds: 1000), () {
                 _routing.move(
                   path,
                   argument: GeneralArgument()

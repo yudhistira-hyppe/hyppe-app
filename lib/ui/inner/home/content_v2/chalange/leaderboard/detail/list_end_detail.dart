@@ -129,7 +129,7 @@ class _ListEndDetailState extends State<ListEndDetail> {
                                           shrinkWrap: true,
                                           physics: const NeverScrollableScrollPhysics(),
                                           itemBuilder: (context, index) {
-                                            if (cn.leaderBoardEndData?.getlastrank?[index].score == 0) {
+                                            if (cn.leaderBoardDetaiEndlData?.getlastrank?[index].score == 0) {
                                               return Container();
                                             } else {
                                               if (cn.leaderBoardDetaiEndlData?.challengeData?[0].objectChallenge == 'KONTEN') {

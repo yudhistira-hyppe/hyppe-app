@@ -15,6 +15,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_end.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_ongoing.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_leaderboard.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/path.dart';
@@ -106,8 +107,8 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
 
   List<Widget> _preprareTabItems() {
     return _tabs = <Widget>[
-      ListOnGoing(),
-      ListEnd(),
+      const ListOnGoing(),
+      const ListEnd(),
     ];
   }
 
@@ -177,178 +178,181 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
           onRefresh: () async {
             await cn.initLeaderboard(context);
           },
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
-                  child: Text(lang?.mainChallenge ?? '',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                      )),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: CarouselSlider(
-                    carouselController: _controller,
-                    options: CarouselOptions(
-                        enlargeCenterPage: true,
-                        enableInfiniteScroll: false,
-                        viewportFraction: 0.8,
-                        // aspectRatio: 343 / 103,
-                        // height: 176,
-                        height: SizeConfig.screenWidth! * 0.27,
-                        onPageChanged: (index, reason) async {
-                          setState(() {
-                            _currentSlidder = index;
-                            _tabController.index = 0;
-                            chllangeid = cn.bannerLeaderboardData[index].sId ?? '';
-
-                            lastchallangeid = cn.bannerLeaderboardData[index].sId ?? '';
-                            if (lastchallangeid == chllangeid) {
-                              cn.getLeaderBoard(context, cn.bannerLeaderboardData[index].sId ?? '');
-                            }
-                          });
-                        }),
-                    items: cn.bannerLeaderboardData
-                        .map((item) => Container(
-                              margin: EdgeInsets.only(bottom: 10),
-                              decoration: BoxDecoration(boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.8),
-                                  offset: Offset(5, 8),
-                                  blurRadius: 5,
-                                  spreadRadius: -5,
-                                ),
-                              ]),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10), //
-                                child: Image.network(
-                                  item.bannerLandingpage ?? '',
-                                  width: SizeConfig.screenWidth,
-                                  fit: BoxFit.cover,
-                                  loadingBuilder: (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return Center(
-                                      child: Container(
-                                        height: SizeConfig.screenHeight,
-                                        width: SizeConfig.screenWidth,
-                                        color: Colors.black,
-                                        child: UnconstrainedBox(
-                                          child: Container(
-                                            height: 50,
-                                            width: 50,
-                                            child: CircularProgressIndicator(
-                                                // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ))
-                        .toList(),
-                  ),
-                ),
-                sixPx,
-                hideTab
-                    ? Container()
-                    : Container(
-                        height: 50,
-                        padding: const EdgeInsets.all(6),
-                        margin: const EdgeInsets.all(16),
+          child: cn.isLoadingLeaderboard
+              ? const ShimmerLeaderboard()
+              : SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+                        child: Text(lang?.mainChallenge ?? '',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            )),
+                      ),
+                      Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          color: kHyppeLightSurface,
                         ),
-                        child: AppBar(
-                          bottom: TabBar(
-                            indicator: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                8.0,
-                              ),
-                              color: kHyppeLightButtonText,
-                            ),
-                            labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                            labelColor: kHyppeTextLightPrimary,
-                            unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                            labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
-                            // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                            isScrollable: false,
-                            unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                            controller: _tabController,
+                        child: CarouselSlider(
+                          carouselController: _controller,
+                          options: CarouselOptions(
+                              enlargeCenterPage: true,
+                              enableInfiniteScroll: false,
+                              viewportFraction: 0.8,
+                              // aspectRatio: 343 / 103,
+                              // height: 176,
+                              height: SizeConfig.screenWidth! * 0.27,
+                              onPageChanged: (index, reason) async {
+                                setState(() {
+                                  _currentSlidder = index;
+                                  _tabController.index = 0;
+                                  chllangeid = cn.bannerLeaderboardData[index].sId ?? '';
 
-                            tabs: [
-                              ...List.generate(
-                                nameTab.length,
-                                (index) => Padding(
-                                  padding: EdgeInsets.all(9),
-                                  child: Text(
-                                    nameTab[index],
-                                    style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                  lastchallangeid = cn.bannerLeaderboardData[index].sId ?? '';
+                                  if (lastchallangeid == chllangeid) {
+                                    cn.getLeaderBoard(context, cn.bannerLeaderboardData[index].sId ?? '');
+                                  }
+                                });
+                              }),
+                          items: cn.bannerLeaderboardData
+                              .map((item) => Container(
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    decoration: BoxDecoration(boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.8),
+                                        offset: Offset(5, 8),
+                                        blurRadius: 5,
+                                        spreadRadius: -5,
+                                      ),
+                                    ]),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10), //
+                                      child: Image.network(
+                                        item.bannerLandingpage ?? '',
+                                        width: SizeConfig.screenWidth,
+                                        fit: BoxFit.cover,
+                                        loadingBuilder: (context, child, loadingProgress) {
+                                          if (loadingProgress == null) return child;
+                                          return Center(
+                                            child: Container(
+                                              height: SizeConfig.screenHeight,
+                                              width: SizeConfig.screenWidth,
+                                              color: Colors.black,
+                                              child: UnconstrainedBox(
+                                                child: Container(
+                                                  height: 50,
+                                                  width: 50,
+                                                  child: CircularProgressIndicator(
+                                                      // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                      ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ))
+                              .toList(),
+                        ),
+                      ),
+                      sixPx,
+                      hideTab
+                          ? Container()
+                          : Container(
+                              height: 50,
+                              padding: const EdgeInsets.all(6),
+                              margin: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: kHyppeLightSurface,
+                              ),
+                              child: AppBar(
+                                bottom: TabBar(
+                                  indicator: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                      8.0,
+                                    ),
+                                    color: kHyppeLightButtonText,
                                   ),
+                                  labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                                  labelColor: kHyppeTextLightPrimary,
+                                  unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                                  labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                  // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                                  isScrollable: false,
+                                  unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                  controller: _tabController,
+
+                                  tabs: [
+                                    ...List.generate(
+                                      nameTab.length,
+                                      (index) => Padding(
+                                        padding: EdgeInsets.all(9),
+                                        child: Text(
+                                          nameTab[index],
+                                          style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
+                            ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        child: _tabs![_currentTab],
                       ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: _tabs![_currentTab],
+                      cn.listChallangeData.isEmpty
+                          ? Container()
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 20,
+                                  color: kHyppeLightSurface,
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                                  child: Text(
+                                    lang?.joinOtherInterestingChallenges ?? '',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 200,
+                                  child: ListView.builder(
+                                    itemCount: cn.listChallangeData.length,
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: false,
+                                    itemBuilder: (context, index) {
+                                      var dateText = "";
+                                      if (cn.listChallangeData[index].onGoing == true) {
+                                        dateText = "${lang?.endsIn} ${cn.listChallangeData[index].totalDays} ${lang?.hariLagi}";
+                                      } else {
+                                        dateText = "${lang?.startIn} ${cn.listChallangeData[index].totalDays} ${lang?.hariLagi}";
+                                      }
+                                      return CardChalange(
+                                        data: cn.listChallangeData[index],
+                                        dateText: dateText,
+                                        last: index == cn.listChallangeData.length - 1,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ],
+                  ),
                 ),
-                cn.listChallangeData.isEmpty
-                    ? Container()
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 20,
-                            color: kHyppeLightSurface,
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                            child: Text(
-                              lang?.joinOtherInterestingChallenges ?? '',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 200,
-                            child: ListView.builder(
-                              itemCount: cn.listChallangeData.length,
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: false,
-                              itemBuilder: (context, index) {
-                                var dateText = "";
-                                if (cn.listChallangeData[index].onGoing == true) {
-                                  dateText = "${lang?.endsIn} ${cn.listChallangeData[index].totalDays} ${lang?.hariLagi}";
-                                } else {
-                                  dateText = "${lang?.startIn} ${cn.listChallangeData[index].totalDays} ${lang?.hariLagi}";
-                                }
-                                return CardChalange(
-                                  data: cn.listChallangeData[index],
-                                  dateText: dateText,
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-              ],
-            ),
-          ),
         ),
       ),
     );
