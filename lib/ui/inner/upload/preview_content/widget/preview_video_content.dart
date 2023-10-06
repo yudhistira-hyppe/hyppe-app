@@ -275,12 +275,23 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                     ),
                   ),
                   if (!(notifier.betterPlayerController?.isPlaying() ?? false))
-                    const Center(
-                      child: CustomIconWidget(
-                        defaultColor: false,
-                        iconData: "${AssetPath.vectorPath}pause.svg",
+                    const IgnorePointer(
+                      child: Center(
+                        child: CustomIconWidget(
+                          defaultColor: false,
+                          iconData: "${AssetPath.vectorPath}pause.svg",
+                        ),
                       ),
-                    )
+                    ),
+                  if (notifier.isLoadVideo || notifier.isLoadingBetterPlayer || !(notifier.betterPlayerController?.isVideoInitialized() ?? false))
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      color: Colors.white,
+                      child: const Center(
+                        child: CustomLoading()
+                      ),
+                    ),
           ],
         );
       },

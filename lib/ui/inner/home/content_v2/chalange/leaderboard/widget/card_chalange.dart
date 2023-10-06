@@ -8,6 +8,7 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -26,6 +27,7 @@ class CardChalange extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
+        context.read<ChallangeNotifier>().leaderBoardDetailData = null;
         Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: data?.sId));
       },
       child: Column(
