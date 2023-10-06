@@ -125,8 +125,10 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       WidgetsBinding.instance.addObserver(this);
-      indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
-      indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
+      if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
+        indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
+        indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
+      }
 
       initAlipayer();
 
@@ -1112,7 +1114,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                           fullscreen: false,
                                                           stickers: data?.stickers,
                                                           width: MediaQuery.of(context).size.width,
-                                                          height: (MediaQuery.of(context).size.width) * (16/9),
+                                                          height: (MediaQuery.of(context).size.width) * (16 / 9),
                                                           isPause: isPause,
                                                         ),
                                                       ),
