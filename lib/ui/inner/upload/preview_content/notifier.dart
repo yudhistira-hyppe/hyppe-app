@@ -1144,6 +1144,7 @@ class PreviewContentNotifier with ChangeNotifier {
     _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
     try {
       _isLoadVideo = true;
+      notifyListeners();
       await _betterPlayerController?.setupDataSource(dataSource).then((_) {
         _betterPlayerController?.play();
         _betterPlayerController?.setLooping(true);
@@ -1188,6 +1189,7 @@ class PreviewContentNotifier with ChangeNotifier {
     } finally {
       _isLoadVideo = false;
       _isLoadingBetterPlayer = false;
+      notifyListeners();
     }
   }
 
