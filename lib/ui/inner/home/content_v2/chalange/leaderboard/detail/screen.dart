@@ -37,6 +37,7 @@ class ChalangeDetailScreen extends StatefulWidget {
 
 class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteAware, AfterFirstLayoutMixin, SingleTickerProviderStateMixin {
   final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
+  final ScrollController scrollController = ScrollController();
 
   late TabController _tabController;
   double offset = 0.0;
@@ -127,7 +128,9 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
 
   List<Widget> _preprareTabItems() {
     return _tabs = <Widget>[
-      ListOnGoingDetail(globalKey: globalKey),
+      ListOnGoingDetail(
+        scrollController: scrollController,
+      ),
       const ListEndDetail(),
     ];
   }
@@ -203,7 +206,11 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
               },
             ),
             title: Text(
-              cn.leaderBoardDetailData?.challengeData?[0].nameChallenge == null ? '' : '${cn.leaderBoardDetailData?.challengeData?[0].nameChallenge}',
+              cn.isLoadingLeaderboard
+                  ? ''
+                  : cn.leaderBoardDetailData?.challengeData?[0].nameChallenge == null
+                      ? ''
+                      : '${cn.leaderBoardDetailData?.challengeData?[0].nameChallenge}',
               style: const TextStyle(
                 fontSize: 16,
                 fontFamily: 'Lato',
@@ -258,7 +265,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
           await cn.initLeaderboardDetail(context, mounted, widget.arguments?.id ?? '');
         },
         child: SingleChildScrollView(
-          key: globalKey,
+          controller: scrollController,
           physics: AlwaysScrollableScrollPhysics(),
           child: cn.isLoadingLeaderboard
               //  || (cn.leaderBoardDetailData?.sId == null || cn.leaderBoardDetaiEndlData?.sId == null)

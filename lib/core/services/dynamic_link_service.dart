@@ -238,21 +238,33 @@ class DynamicLinkService {
 
             case Routes.chalengeDetail:
               '_handleDeepLink otherProfile'.logger();
-              _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
-              Future.delayed(const Duration(milliseconds: 1000), () {
-                _routing.move(
-                  path,
-                  argument: GeneralArgument()
-                    ..id = deepLink.queryParameters['postID']
-                    ..index = 0,
-                );
-                _routing.moveReplacement(
-                  path,
-                  argument: GeneralArgument()
-                    ..id = deepLink.queryParameters['postID']
-                    ..index = 0,
-                );
-              });
+              if (isFromSplash) {
+                // _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+                Future.delayed(const Duration(milliseconds: 2000), () {
+                  _routing.move(
+                    path,
+                    argument: GeneralArgument()
+                      ..id = deepLink.queryParameters['postID']
+                      ..index = 0,
+                  );
+                });
+              } else {
+                Future.delayed(const Duration(milliseconds: 1000), () {
+                  _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+                  _routing.move(
+                    path,
+                    argument: GeneralArgument()
+                      ..id = deepLink.queryParameters['postID']
+                      ..index = 0,
+                  );
+                  _routing.moveReplacement(
+                    path,
+                    argument: GeneralArgument()
+                      ..id = deepLink.queryParameters['postID']
+                      ..index = 0,
+                  );
+                });
+              }
               break;
           }
           // SharedPreference().writeStorage(SpKeys.isPreventRoute, false);

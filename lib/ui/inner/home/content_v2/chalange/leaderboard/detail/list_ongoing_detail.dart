@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
-import 'package:hyppe/ui/constant/widget/custom_commingsoon_page.dart';
 import 'package:hyppe/ui/constant/widget/custom_empty_page.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/footer_detail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/button_challange.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/content_leader.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/litem_leader.dart';
@@ -15,8 +11,8 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:provider/provider.dart';
 
 class ListOnGoingDetail extends StatefulWidget {
-  final GlobalKey<NestedScrollViewState>? globalKey;
-  const ListOnGoingDetail({super.key, this.globalKey});
+  final ScrollController? scrollController;
+  const ListOnGoingDetail({super.key, this.scrollController});
 
   @override
   State<ListOnGoingDetail> createState() => _ListOnGoingDetailState();
@@ -47,8 +43,8 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
       });
       if (cn.newJoinChallenge) {
         Future.delayed(const Duration(milliseconds: 400), () {
-          widget.globalKey?.currentState?.innerController.animateTo(
-            widget.globalKey?.currentState?.innerController.position.maxScrollExtent ?? 1000,
+          widget.scrollController?.animateTo(
+            widget.scrollController?.position.maxScrollExtent ?? 1000,
             duration: const Duration(milliseconds: 500),
             curve: Curves.ease,
           );
@@ -61,6 +57,16 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // GestureDetector(
+            //   onTap: () {
+            //     widget.scrollController?.animateTo(
+            //       widget.scrollController?.position.maxScrollExtent ?? 1000,
+            //       duration: const Duration(milliseconds: 500),
+            //       curve: Curves.ease,
+            //     );
+            //   },
+            //   child: Text("hahahaha"),
+            // ),
             cn.leaderBoardDetailData?.onGoing == false
                 ? Container()
                 : Container(

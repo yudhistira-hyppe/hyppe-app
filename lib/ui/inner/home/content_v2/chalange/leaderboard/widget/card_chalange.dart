@@ -38,7 +38,7 @@ class CardChalange extends StatelessWidget {
             decoration: ShapeDecoration(
               color: Color(0xFFFCFCFC),
               shape: RoundedRectangleBorder(
-                side: BorderSide(width: 0.38, color: kHyppeBorderTab),
+                side: BorderSide(width: 2, color: kHyppeBorderTab),
                 borderRadius: BorderRadius.circular(12),
               ),
               shadows: const [
