@@ -133,6 +133,7 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
                                 twentyFourPx,
                                 ListView.builder(
                                   shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
                                   itemCount: cn.achievementData?.length,
                                   itemBuilder: (context, index) {
                                     return item(cn.achievementData?[index] ?? AcievementModel());
@@ -219,17 +220,19 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
                     ),
                   ),
                 ),
-                Positioned.fill(
-                  child: Center(
-                    child: data.badgeData != null
-                        ? Image.network(
-                            "${data.badgeData?[0].badgeOther}",
-                            width: 50 * SizeConfig.scaleDiagonal,
-                            height: 50 * SizeConfig.scaleDiagonal,
-                          )
-                        : Container(),
-                  ),
-                )
+                data.badgeData?.isNotEmpty ?? [].isEmpty
+                    ? Positioned.fill(
+                        child: Center(
+                          child: data.badgeData != null
+                              ? Image.network(
+                                  "${data.badgeData?[0].badgeOther}",
+                                  width: 50 * SizeConfig.scaleDiagonal,
+                                  height: 50 * SizeConfig.scaleDiagonal,
+                                )
+                              : Container(),
+                        ),
+                      )
+                    : Container()
               ],
             ),
             twelvePx,

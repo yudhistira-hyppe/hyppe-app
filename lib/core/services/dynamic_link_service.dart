@@ -90,6 +90,7 @@ class DynamicLinkService {
 
         if (isOpening == false) {
           // await Future.delayed(const Duration(seconds: 1));
+          print("======222222 email ${deepLink.queryParameters['referral']}");
           if (deepLink.queryParameters['referral'] != '1') {
             try {
               print('masuk sini dynamic');
@@ -220,8 +221,15 @@ class DynamicLinkService {
             case Routes.otherProfile:
               '_handleDeepLink otherProfile'.logger();
               _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
-              Future.delayed(const Duration(milliseconds: 500), () {
+              Future.delayed(const Duration(milliseconds: 1000), () {
+                if (deepLink.queryParameters['referral'] == '1') {
+                  hitReferralBackend(Routing.navigatorKey.currentContext!);
+                }
                 _routing.move(
+                  path,
+                  argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
+                );
+                _routing.moveReplacement(
                   path,
                   argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
                 );
@@ -231,12 +239,18 @@ class DynamicLinkService {
             case Routes.chalengeDetail:
               '_handleDeepLink otherProfile'.logger();
               _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
-              Future.delayed(const Duration(milliseconds: 500), () {
+              Future.delayed(const Duration(milliseconds: 1000), () {
                 _routing.move(
                   path,
                   argument: GeneralArgument()
                     ..id = deepLink.queryParameters['postID']
-                    ..index = 1,
+                    ..index = 0,
+                );
+                _routing.moveReplacement(
+                  path,
+                  argument: GeneralArgument()
+                    ..id = deepLink.queryParameters['postID']
+                    ..index = 0,
                 );
               });
               break;
@@ -258,6 +272,8 @@ class DynamicLinkService {
 
   static Future followSender(BuildContext context) async {
     final _receiverParty = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+    print(_sharedPrefs.readStorage(SpKeys.email));
+    print(_receiverParty);
     if (_sharedPrefs.readStorage(SpKeys.email) != _receiverParty) {
       try {
         if (_pendingDynamicLinkData?.link.queryParameters['referral'] == '1') {

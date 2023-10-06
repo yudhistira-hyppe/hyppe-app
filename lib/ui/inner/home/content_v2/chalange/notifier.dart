@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/challange/bloc.dart';
@@ -45,6 +47,8 @@ class ChallangeNotifier with ChangeNotifier {
   bool isLoadingLeaderboard = false;
   bool isLoadingAchivement = false;
   bool isLoadingCollection = false;
+  bool _newJoinChallenge = false;
+  bool get newJoinChallenge => _newJoinChallenge;
 
   int pageGetChallange = 0;
   int pageAchievement = 0;
@@ -83,6 +87,11 @@ class ChallangeNotifier with ChangeNotifier {
   DateTime challangeOption = DateTime.now();
 
   ///////
+
+  set newJoinChallenge(bool val) {
+    _newJoinChallenge = val;
+    notifyListeners();
+  }
 
   set iduserbadge(String val) {
     _iduserbadge = val;
@@ -191,7 +200,7 @@ class ChallangeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future initLeaderboardDetail(BuildContext context, bool mounted, String id) async {
+  Future initLeaderboardDetail(BuildContext context, bool mounted, String id, {bool? isNewJoin}) async {
     isLoadingLeaderboard = true;
     notifyListeners();
     checkInet(context);
@@ -203,6 +212,9 @@ class ChallangeNotifier with ChangeNotifier {
     }
 
     isLoadingLeaderboard = false;
+    if (isNewJoin != null || isNewJoin == true) {
+      newJoinChallenge = true;
+    }
 
     notifyListeners();
   }
@@ -228,8 +240,8 @@ class ChallangeNotifier with ChangeNotifier {
       if (bannerFatch.data.isNotEmpty) {
         LeaderboardChallangeModel? getdata;
         leaderBoardDataArray = [];
-        leaderBoardDetaiEndlData = LeaderboardChallangeModel();
-        leaderBoardDetailData = LeaderboardChallangeModel();
+        leaderBoardDetaiEndlData ??= LeaderboardChallangeModel();
+        leaderBoardDetailData ??= LeaderboardChallangeModel();
         bannerFatch.data.forEach((v) => leaderBoardDataArray?.add(LeaderboardChallangeModel.fromJson(v)));
 
         getdata = leaderBoardDataArray?.firstWhereOrNull((element) => element.status == berlangsung);
@@ -266,9 +278,10 @@ class ChallangeNotifier with ChangeNotifier {
 
           if (oldLeaderboard) {
             leaderBoardDetaiEndlData = getdata;
-            if (leaderBoardDetailData?.sId == null) {
-              leaderBoardDetailData = getdata;
-              getOption(getdata ?? LeaderboardChallangeModel(), session: selectOptionSession);
+            if (leaderBoardDetailData == null) {
+              getLeaderBoard(context, idchallenge, isDetail: true);
+              // leaderBoardDetailData = getdata;
+              // getOption(getdata ?? LeaderboardChallangeModel(), session: selectOptionSession);
             }
           } else {
             leaderBoardDetailData = getdata;
@@ -387,21 +400,42 @@ class ChallangeNotifier with ChangeNotifier {
   }
 
   void navigateToScreen(BuildContext context, index, email, postType) async {
-    Routing().move(
-      Routes.shimmerSlider,
-      argument: SlidedPicDetailScreenArgument(
-        type: TypePlaylist.mine,
-        titleAppbar: Text("Pict"),
-        pageSrc: PageSrc.otherProfile,
+    // Routing().move(
+    //   Routes.shimmerSlider,
+    //   argument: SlidedPicDetailScreenArgument(
+    //     type: TypePlaylist.mine,
+    //     titleAppbar: Text("Pict"),
+    //     pageSrc: PageSrc.otherProfile,
+    //   ),
+    // );
+    unawaited(
+      Navigator.of(context, rootNavigator: true).push(
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => WillPopScope(
+            onWillPop: () async => false,
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            ),
+          ),
+          transitionDuration: Duration.zero,
+          barrierDismissible: false,
+          barrierColor: Colors.black45,
+          opaque: false,
+        ),
       ),
     );
     OtherProfileNotifier on = context.read<OtherProfileNotifier>();
+
     // await on.initialOtherProfile(context, argument: OtherProfileArgument(senderEmail: email));
     on.user.profile = null;
     on.user = UserInfoModel();
     List<ContentData> data;
     on.manyUser = [];
     on.manyUser.add(UserInfoModel(profile: UserProfileModel(email: email)));
+    on.userEmail = email;
 
     on.vidContentsQuery.featureType = FeatureType.vid;
     on.diaryContentsQuery.featureType = FeatureType.diary;
@@ -491,6 +525,7 @@ class ChallangeNotifier with ChangeNotifier {
 
   void selectBadge(BadgeAktif? badgeData) {
     badgeUser = UserBadgeModel(
+      id: badgeData?.sId,
       idUserBadge: badgeData?.idBadge,
       badgeProfile: badgeData?.badgeData?[0].badgeProfile,
       badgeOther: badgeData?.badgeData?[0].badgeOther,

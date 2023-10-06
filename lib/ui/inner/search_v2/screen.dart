@@ -303,8 +303,6 @@ class _FirstLayoutState extends State<FirstLayout> {
                             notifier.layout = SearchLayout.interestDetail;
                           },
                         ),
-                        sixtyFourPx,
-                        sixtyFourPx
                       ],
                     ),
                   ),

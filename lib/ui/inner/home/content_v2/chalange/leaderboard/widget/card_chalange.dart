@@ -16,7 +16,8 @@ import 'package:provider/provider.dart';
 class CardChalange extends StatelessWidget {
   final ChallangeModel? data;
   final String? dateText;
-  const CardChalange({super.key, this.data, this.dateText});
+  final bool last;
+  const CardChalange({super.key, this.data, this.dateText, this.last = false});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class CardChalange extends StatelessWidget {
         children: [
           Container(
             width: 257,
-            margin: const EdgeInsets.only(left: 16),
+            margin: EdgeInsets.only(left: 16, right: last ? 16 : 0),
             clipBehavior: Clip.antiAlias,
             decoration: ShapeDecoration(
               color: Color(0xFFFCFCFC),

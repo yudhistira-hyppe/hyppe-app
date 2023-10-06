@@ -45,7 +45,7 @@ class BadgeWidget extends StatelessWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: badgeData?[index].idBadge == cn.badgeUser?.idUserBadge ? kHyppePrimary : Color(0xFFEAEAEA)),
+              border: Border.all(color: badgeData?[index].sId == cn.badgeUser?.id ? kHyppePrimary : Color(0xFFEAEAEA)),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Stack(
@@ -57,31 +57,35 @@ class BadgeWidget extends StatelessWidget {
                       child: Stack(
                         fit: StackFit.passthrough,
                         children: [
-                          Container(
-                            // padding: const EdgeInsets.only(top: 5.0, left: 6, right: 6, bottom: 2),
-                            margin: const EdgeInsets.only(top: 2.0, left: 6, right: 6, bottom: 2),
-                            child: const ClipOval(
-                              child: CustomProfileImage(
-                                following: true,
-                                forStory: false,
-                                width: 43,
-                                height: 43,
-                                // imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
-                                imageUrl: '',
+                          Center(
+                            child: Container(
+                              // padding: const EdgeInsets.only(top: 5.0, left: 6, right: 6, bottom: 2),
+                              margin: const EdgeInsets.only(top: 2.0, left: 6, right: 6, bottom: 2),
+                              child: const ClipOval(
+                                child: CustomProfileImage(
+                                  following: true,
+                                  forStory: false,
+                                  width: 43,
+                                  height: 43,
+                                  // imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
+                                  imageUrl: '',
+                                ),
                               ),
                             ),
                           ),
-                          Positioned.fill(
-                            child: Center(
-                              child: badgeData?[index].badgeData != null
-                                  ? Image.network(
-                                      "${badgeData?[index].badgeData?[0].badgeOther}",
-                                      width: 50 * SizeConfig.scaleDiagonal,
-                                      height: 50 * SizeConfig.scaleDiagonal,
-                                    )
-                                  : Container(),
-                            ),
-                          )
+                          badgeData?[index].badgeData?.isNotEmpty ?? [].isEmpty
+                              ? Positioned.fill(
+                                  child: Center(
+                                    child: badgeData?[index].badgeData != null
+                                        ? Image.network(
+                                            "${badgeData?[index].badgeData?[0].badgeOther}",
+                                            width: 50 * SizeConfig.scaleDiagonal,
+                                            height: 50 * SizeConfig.scaleDiagonal,
+                                          )
+                                        : Container(),
+                                  ),
+                                )
+                              : Container()
                         ],
                       ),
                     ),
@@ -128,7 +132,7 @@ class BadgeWidget extends StatelessWidget {
                   ],
                 ),
                 Positioned.fill(
-                    child: badgeData?[index].idBadge == cn.badgeUser?.idUserBadge
+                    child: badgeData?[index].sId == cn.badgeUser?.id
                         ? Align(
                             alignment: Alignment.topRight,
                             child: Container(

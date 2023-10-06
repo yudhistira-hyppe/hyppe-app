@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_commingsoon_page.dart';
@@ -14,7 +15,8 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:provider/provider.dart';
 
 class ListOnGoingDetail extends StatefulWidget {
-  const ListOnGoingDetail({super.key});
+  final GlobalKey<NestedScrollViewState>? globalKey;
+  const ListOnGoingDetail({super.key, this.globalKey});
 
   @override
   State<ListOnGoingDetail> createState() => _ListOnGoingDetailState();
@@ -30,7 +32,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
       var boollUser = false;
       var participant = 0;
       cn.leaderBoardDetailData?.getlastrank?.forEach((e) {
-        print("=hahaha=");
+        // print("=hahaha=");
         if (e.isUserLogin == true) {
           boollUser = true;
         }
@@ -39,10 +41,20 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
             participant++;
           }
         } else {
-          print("=hihihi= ${participant++}");
+          // print("=hihihi= ${participant++}");
           participant++;
         }
       });
+      if (cn.newJoinChallenge) {
+        Future.delayed(const Duration(milliseconds: 400), () {
+          widget.globalKey?.currentState?.innerController.animateTo(
+            widget.globalKey?.currentState?.innerController.position.maxScrollExtent ?? 1000,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.ease,
+          );
+          cn.newJoinChallenge = false;
+        });
+      }
       return SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         child: Column(
@@ -52,8 +64,6 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
             cn.leaderBoardDetailData?.onGoing == false
                 ? Container()
                 : Container(
-                    margin: const EdgeInsets.only(left: 16.0, right: 16),
-                    padding: const EdgeInsets.only(bottom: 16),
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
@@ -96,9 +106,19 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                                 return Container();
                                               } else {
                                                 if (cn.leaderBoardDetailData?.challengeData?[0].objectChallenge == 'KONTEN') {
-                                                  return ContentLeaderboard(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                                  return GestureDetector(
+                                                      onTap: () {
+                                                        var post = cn.leaderBoardDetailData?.getlastrank?[index].postChallengess?[0];
+                                                        var email = cn.leaderBoardDetailData?.getlastrank?[index].email;
+                                                        cn.navigateToScreen(context, post?.index, email, post?.postType);
+                                                      },
+                                                      child: ContentLeaderboard(data: cn.leaderBoardDetailData?.getlastrank?[index]));
                                                 } else {
-                                                  return ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]);
+                                                  return GestureDetector(
+                                                      onTap: () {
+                                                        System().navigateToProfile(context, cn.leaderBoardDetailData?.getlastrank?[index].email ?? '');
+                                                      },
+                                                      child: ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]));
                                                 }
                                               }
 
@@ -144,38 +164,6 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                   ),
                       ],
                     ),
-                  ),
-            Container(
-                width: SizeConfig.screenWidth,
-                margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      tn.translate.description ?? "Deskripsi",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    twentyPx,
-                    Text("${cn.leaderBoardDetailData?.challengeData?[0].description}"),
-                  ],
-                )),
-            cn.leaderBoardDetailData?.onGoing == false || !boollUser
-                ? Container()
-                : Container(
-                    width: SizeConfig.screenWidth,
-                    margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const FooterChallangeDetail(),
                   ),
           ],
         ),

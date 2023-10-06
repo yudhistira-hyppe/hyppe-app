@@ -11,18 +11,17 @@ import 'package:hyppe/core/models/collection/localization_v2/localization_model.
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
-import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_end.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/list_ongoing.dart';
-import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_list.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_leaderboard.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
-import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/card_chalange.dart';
 
 class ChalangeScreen extends StatefulWidget {
   const ChalangeScreen({Key? key}) : super(key: key);
@@ -46,6 +45,8 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
   bool hideTab = false;
 
   LocalizationModelV2? lang;
+  List<Widget>? _tabs;
+
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'Chalange Screen');
@@ -54,7 +55,10 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
     lang = context.read<TranslateNotifierV2>().translate;
     nameTab = [lang?.goingOn, lang?.end];
     offset = 0;
+
     Future.delayed(Duration.zero, () {
+      _preprareTabItems();
+
       globalKey.currentState?.innerController.addListener(() {
         if ((globalKey.currentState?.innerController.position.pixels ?? 0) >= (globalKey.currentState?.innerController.position.maxScrollExtent ?? 0) &&
             !(globalKey.currentState?.innerController.position.outOfRange ?? true)) {}
@@ -65,7 +69,10 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
 
       _tabController.animation?.addListener(() {
         _tabController.animation?.addListener(() {
-          _currentTab = _tabController.index;
+          setState(() {
+            _currentTab = _tabController.index;
+          });
+
           if (_lastCurrentTab != _currentTab) {
             if (_currentTab == 1) {
               cn.getLeaderBoard(
@@ -98,6 +105,13 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
     }
   }
 
+  List<Widget> _preprareTabItems() {
+    return _tabs = <Widget>[
+      const ListOnGoing(),
+      const ListEnd(),
+    ];
+  }
+
   @override
   void didChangeDependencies() {
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
@@ -121,239 +135,222 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
       chllangeid = cn.bannerLeaderboardData[0].sId ?? '';
     }
 
-    return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-          child: AppBar(
-            leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios_new_sharp,
-                color: kHyppeTextLightPrimary,
-                size: 16,
-              ),
-              onPressed: () {
-                Routing().moveBack();
-              },
-            ),
-            title: Text(
-              '${lang?.challengePage}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontFamily: 'Lato',
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            titleSpacing: 0,
-            actions: [
-              IconButton(
-                onPressed: () {
-                  Routing().move(Routes.chalengeAchievement, argument: GeneralArgument(id: cn.leaderBoardData?.challengeId));
-                },
-                icon: const CustomIconWidget(
-                  iconData: "${AssetPath.vectorPath}achievement.svg",
-                  defaultColor: false,
-                  height: 20,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
+            child: AppBar(
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_sharp,
+                  color: kHyppeTextLightPrimary,
+                  size: 16,
                 ),
-              )
-            ],
-          )),
-      body: DefaultTabController(
-        length: 2,
-        child: RefreshIndicator(
+                onPressed: () {
+                  Routing().moveBack();
+                },
+              ),
+              title: Text(
+                '${lang?.challengePage}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Lato',
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              titleSpacing: 0,
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Routing().move(Routes.chalengeAchievement, argument: GeneralArgument(id: cn.leaderBoardData?.challengeId));
+                  },
+                  icon: const CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}achievement.svg",
+                    defaultColor: false,
+                    height: 20,
+                  ),
+                )
+              ],
+            )),
+        body: RefreshIndicator(
           color: kHyppePrimary,
-          notificationPredicate: (notification) {
-            // with NestedScrollView local(depth == 2) OverscrollNotification are not sent
-            if (notification is OverscrollNotification || Platform.isIOS) {
-              return notification.depth == 2;
-            }
-            return notification.depth == 0;
-          },
           onRefresh: () async {
             await cn.initLeaderboard(context);
           },
-          child: cn.isLoadingLeaderboard || cn.leaderBoardData?.sId == null
-              ? const ShimmerListLeaderboard()
-              : ScrollConfiguration(
-                  behavior: const ScrollBehavior().copyWith(overscroll: false),
-                  child: NestedScrollView(
-                    key: globalKey,
-                    controller: context.read<MainNotifier>().scrollController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    // dragStartBehavior: DragStartBehavior.start,
-                    headerSliverBuilder: (context, bool innerBoxIsScrolled) {
-                      return [
-                        SliverOverlapAbsorber(
-                          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                          sliver: SliverList(
-                            delegate: SliverChildListDelegate([
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
-                                child: Text(lang?.mainChallenge ?? '',
-                                    style: TextStyle(
+          child: cn.isLoadingLeaderboard
+              ? const ShimmerLeaderboard()
+              : SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+                        child: Text(lang?.mainChallenge ?? '',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            )),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: CarouselSlider(
+                          carouselController: _controller,
+                          options: CarouselOptions(
+                              enlargeCenterPage: true,
+                              enableInfiniteScroll: false,
+                              viewportFraction: 0.8,
+                              // aspectRatio: 343 / 103,
+                              // height: 176,
+                              height: SizeConfig.screenWidth! * 0.27,
+                              onPageChanged: (index, reason) async {
+                                setState(() {
+                                  _currentSlidder = index;
+                                  _tabController.index = 0;
+                                  chllangeid = cn.bannerLeaderboardData[index].sId ?? '';
+
+                                  lastchallangeid = cn.bannerLeaderboardData[index].sId ?? '';
+                                  if (lastchallangeid == chllangeid) {
+                                    cn.getLeaderBoard(context, cn.bannerLeaderboardData[index].sId ?? '');
+                                  }
+                                });
+                              }),
+                          items: cn.bannerLeaderboardData
+                              .map((item) => Container(
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    decoration: BoxDecoration(boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.8),
+                                        offset: Offset(5, 8),
+                                        blurRadius: 5,
+                                        spreadRadius: -5,
+                                      ),
+                                    ]),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10), //
+                                      child: Image.network(
+                                        item.bannerLandingpage ?? '',
+                                        width: SizeConfig.screenWidth,
+                                        fit: BoxFit.cover,
+                                        loadingBuilder: (context, child, loadingProgress) {
+                                          if (loadingProgress == null) return child;
+                                          return Center(
+                                            child: Container(
+                                              height: SizeConfig.screenHeight,
+                                              width: SizeConfig.screenWidth,
+                                              color: Colors.black,
+                                              child: UnconstrainedBox(
+                                                child: Container(
+                                                  height: 50,
+                                                  width: 50,
+                                                  child: CircularProgressIndicator(
+                                                      // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                      ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ))
+                              .toList(),
+                        ),
+                      ),
+                      sixPx,
+                      hideTab
+                          ? Container()
+                          : Container(
+                              height: 50,
+                              padding: const EdgeInsets.all(6),
+                              margin: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: kHyppeLightSurface,
+                              ),
+                              child: AppBar(
+                                bottom: TabBar(
+                                  indicator: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                      8.0,
+                                    ),
+                                    color: kHyppeLightButtonText,
+                                  ),
+                                  labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                                  labelColor: kHyppeTextLightPrimary,
+                                  unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                                  labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                  // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                                  isScrollable: false,
+                                  unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                                  controller: _tabController,
+
+                                  tabs: [
+                                    ...List.generate(
+                                      nameTab.length,
+                                      (index) => Padding(
+                                        padding: EdgeInsets.all(9),
+                                        child: Text(
+                                          nameTab[index],
+                                          style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        child: _tabs![_currentTab],
+                      ),
+                      cn.listChallangeData.isEmpty
+                          ? Container()
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 20,
+                                  color: kHyppeLightSurface,
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                                  child: Text(
+                                    lang?.joinOtherInterestingChallenges ?? '',
+                                    style: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w700,
-                                    )),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
                                 ),
-                                child: CarouselSlider(
-                                  carouselController: _controller,
-                                  options: CarouselOptions(
-                                      enlargeCenterPage: true,
-                                      enableInfiniteScroll: false,
-                                      viewportFraction: 0.8,
-                                      // aspectRatio: 343 / 103,
-                                      // height: 176,
-                                      height: SizeConfig.screenWidth! * 0.29,
-                                      onPageChanged: (index, reason) async {
-                                        setState(() {
-                                          _currentSlidder = index;
-                                          _tabController.index = 0;
-                                          chllangeid = cn.bannerLeaderboardData[index].sId ?? '';
-
-                                          lastchallangeid = cn.bannerLeaderboardData[index].sId ?? '';
-                                          if (lastchallangeid == chllangeid) {
-                                            cn.getLeaderBoard(context, cn.bannerLeaderboardData[index].sId ?? '');
-                                          }
-                                        });
-                                      }),
-                                  items: cn.bannerLeaderboardData
-                                      .map((item) => ClipRRect(
-                                            borderRadius: BorderRadius.circular(10),
-                                            child: Center(
-                                              //     child: CustomBaseCacheImage(
-                                              //   memCacheWidth: 100,
-                                              //   memCacheHeight: 100,
-                                              //   widthPlaceHolder: 80,
-                                              //   heightPlaceHolder: 80,
-                                              //   imageUrl: item.bannerLandingpage ?? '',
-                                              //   imageBuilder: (context, imageProvider) => ClipRRect(
-                                              //     borderRadius: BorderRadius.circular(20), // Image border
-                                              //     child: Image(
-                                              //       image: imageProvider,
-                                              //       fit: BoxFit.fitHeight,
-                                              //       width: SizeConfig.screenWidth,
-                                              //     ),
-                                              //   ),
-                                              //   errorWidget: (context, url, error) {
-                                              //     return Container(
-                                              //       // const EdgeInsets.symmetric(horizontal: 4.5),
-                                              //       // height: 500,
-                                              //       decoration: BoxDecoration(
-                                              //         image: const DecorationImage(
-                                              //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                              //           fit: BoxFit.cover,
-                                              //         ),
-                                              //         borderRadius: BorderRadius.circular(8.0),
-                                              //       ),
-                                              //     );
-                                              //   },
-                                              //   emptyWidget: Container(
-                                              //     // const EdgeInsets.symmetric(horizontal: 4.5),
-                                              //     // height: 500,
-                                              //     decoration: BoxDecoration(
-                                              //       image: const DecorationImage(
-                                              //         image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                              //         fit: BoxFit.cover,
-                                              //       ),
-                                              //       borderRadius: BorderRadius.circular(8.0),
-                                              //     ),
-                                              //   ),
-                                              // )
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(12), // Image border
-                                                child: Image.network(
-                                                  item.bannerLandingpage ?? '',
-                                                  width: SizeConfig.screenWidth,
-                                                  fit: BoxFit.cover,
-                                                  loadingBuilder: (context, child, loadingProgress) {
-                                                    if (loadingProgress == null) return child;
-                                                    return Center(
-                                                      child: Container(
-                                                        height: SizeConfig.screenHeight,
-                                                        width: SizeConfig.screenWidth,
-                                                        color: Colors.black,
-                                                        child: UnconstrainedBox(
-                                                          child: Container(
-                                                            height: 50,
-                                                            width: 50,
-                                                            child: CircularProgressIndicator(
-                                                                // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                                ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          ))
-                                      .toList(),
+                                SizedBox(
+                                  height: 200,
+                                  child: ListView.builder(
+                                    itemCount: cn.listChallangeData.length,
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: false,
+                                    itemBuilder: (context, index) {
+                                      var dateText = "";
+                                      if (cn.listChallangeData[index].onGoing == true) {
+                                        dateText = "${lang?.endsIn} ${cn.listChallangeData[index].totalDays} ${lang?.hariLagi}";
+                                      } else {
+                                        dateText = "${lang?.startIn} ${cn.listChallangeData[index].totalDays} ${lang?.hariLagi}";
+                                      }
+                                      return CardChalange(
+                                        data: cn.listChallangeData[index],
+                                        dateText: dateText,
+                                        last: index == cn.listChallangeData.length - 1,
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                              sixPx,
-                              //Tab
-                              cn.isLoading
-                                  ? Container()
-                                  : hideTab
-                                      ? Container()
-                                      : Container(
-                                          padding: const EdgeInsets.all(16),
-                                          child: Container(
-                                            padding: const EdgeInsets.all(4),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(8),
-                                              color: kHyppeLightSurface,
-                                            ),
-                                            child: TabBar(
-                                              controller: _tabController,
-                                              indicator: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(
-                                                  8.0,
-                                                ),
-                                                color: kHyppeLightButtonText,
-                                              ),
-                                              labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                                              labelColor: kHyppeTextLightPrimary,
-                                              unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                                              labelStyle: TextStyle(fontFamily: "Lato", fontWeight: FontWeight.w700, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                              // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                                              unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                                              tabs: [
-                                                ...List.generate(
-                                                  nameTab.length,
-                                                  (index) => Padding(
-                                                    padding: EdgeInsets.all(9),
-                                                    child: Text(
-                                                      nameTab[index],
-                                                      style: TextStyle(fontFamily: 'Lato', fontSize: 14),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                            ]),
-                          ),
-                        ),
-
-                        // FilterLanding(),
-                        // HyppePreviewVid(),
-                        // HyppePreviewDiary(),
-                      ];
-                    },
-                    body: TabBarView(
-                      controller: _tabController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: const [
-                        ListOnGoing(),
-                        ListEnd(),
-                      ],
-                    ),
+                              ],
+                            ),
+                    ],
                   ),
                 ),
         ),

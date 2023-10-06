@@ -1,9 +1,7 @@
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ux/path.dart';
@@ -60,7 +58,7 @@ class _BannerPopState extends State<BannerPop> {
                     height: constraints.maxHeight,
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(8.0),
                       child: Container(
                         child: CarouselSlider(
                           options: CarouselOptions(

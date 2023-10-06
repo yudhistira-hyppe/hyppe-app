@@ -126,6 +126,7 @@ class ScrollPicNotifier with ChangeNotifier {
     final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
     if (connect) {
+      print("hahahaha======== $pageSrc");
       if (pageSrc == PageSrc.selfProfile) {
         final sp = context.read<SelfProfileNotifier>();
         sp.pageIndex = 0;

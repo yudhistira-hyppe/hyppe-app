@@ -64,6 +64,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     mn = Provider.of<MainNotifier>(context, listen: false);
     super.initState();
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+    PreUploadContentNotifier notifier = context.read<PreUploadContentNotifier>();
+    notifier.captionController.text = notifier.hastagChallange;
+    notifier.captionController.selection = TextSelection.collapsed(offset: 0);
+
     // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
     if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
       indexKey = mn?.tutorialData.indexWhere((element) => element.key == 'interest') ?? 0;
@@ -87,6 +91,19 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
 
   void show() {
     ShowCaseWidget.of(myContext).startShowCase([keyBoost]);
+  }
+
+  tapCursor(PreUploadContentNotifier notifier) {
+    var lengthHastag = notifier.hastagChallange.length;
+    var selectionPosition = notifier.captionController.selection.base.offset;
+    var lengthHastagPlus = notifier.captionController.text.length - lengthHastag;
+
+    if (selectionPosition > lengthHastagPlus) {
+      notifier.captionController.selection = TextSelection(
+        baseOffset: lengthHastagPlus,
+        extentOffset: lengthHastagPlus,
+      );
+    }
   }
 
   var myContext;
@@ -302,6 +319,28 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     );
   }
 
+  void _handleTextChange(String newText) {
+    PreUploadContentNotifier notifier = context.read<PreUploadContentNotifier>();
+
+    // if (newText.startsWith(_text)) {
+    //   setState(() {
+    //     notifier.captionController.text = newText;
+    //   });
+    // }
+    // if (newText.length >= _text.length) {
+    //   // Only allow text to be added, not deleted
+    //   setState(() {
+    //     _text = newText;
+    //     notifier.captionController.value = TextEditingValue(
+    //       text: _text,
+    //       selection: TextSelection.fromPosition(
+    //         TextPosition(offset: newText.length),
+    //       ),
+    //     );
+    //   });
+    // }
+  }
+
   Widget captionWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -355,6 +394,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     counterText: ""),
                 onChanged: (value) {
                   notifier.showAutoComplete(value, context);
+                  _handleTextChange(value);
+                },
+                onTap: () {
+                  tapCursor(notifier);
                 },
               ),
             ),

@@ -345,7 +345,9 @@ class ShowGeneralDialog {
         barrierLabel: 'Barrier',
         barrierDismissible: false,
         transitionDuration: const Duration(milliseconds: 500),
-        pageBuilder: (context, animation, secondAnimation) => AdsPopupImageDialog(data: data,),
+        pageBuilder: (context, animation, secondAnimation) => AdsPopupImageDialog(
+          data: data,
+        ),
         transitionBuilder: (context, animation, secondaryAnimation, child) {
           animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
           return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
@@ -359,13 +361,13 @@ class ShowGeneralDialog {
   static Future adsPopUpVideo(BuildContext context, AdsData data, String auth) async {
     SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, context.getCurrentDate());
     try {
-      if(globalAliPlayer != null){
+      if (globalAliPlayer != null) {
         globalAliPlayer?.pause();
       }
-      if(globalAdsInBetween != null){
+      if (globalAdsInBetween != null) {
         globalAdsInBetween?.pause();
       }
-      if(globalAdsInContent != null){
+      if (globalAdsInContent != null) {
         globalAdsInContent?.pause();
       }
       await showGeneralDialog(
@@ -374,19 +376,22 @@ class ShowGeneralDialog {
         barrierLabel: 'Barrier',
         barrierDismissible: false,
         transitionDuration: const Duration(milliseconds: 500),
-        pageBuilder: (context, animation, secondAnimation) => AdsPopupVideoDialog(data: data, auth: auth,),
+        pageBuilder: (context, animation, secondAnimation) => AdsPopupVideoDialog(
+          data: data,
+          auth: auth,
+        ),
         transitionBuilder: (context, animation, secondaryAnimation, child) {
           animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
           return ScaleTransition(scale: animation, alignment: Alignment.center, child: child);
         },
       );
-      if(globalAliPlayer != null){
+      if (globalAliPlayer != null) {
         globalAliPlayer?.play();
       }
-      if(globalAdsInBetween != null){
+      if (globalAdsInBetween != null) {
         globalAdsInBetween?.play();
       }
-      if(globalAdsInContent != null){
+      if (globalAdsInContent != null) {
         globalAdsInContent?.play();
       }
     } catch (e) {
@@ -502,7 +507,7 @@ class ShowGeneralDialog {
         );
       },
     ).whenComplete(() {
-      context.read<ChallangeNotifier>().initLeaderboardDetail(Routing.navigatorKey.currentState!.overlay!.context, mounted, id);
+      context.read<ChallangeNotifier>().initLeaderboardDetail(Routing.navigatorKey.currentState!.overlay!.context, mounted, id, isNewJoin: true);
     });
   }
 
