@@ -428,12 +428,14 @@ class ChallangeNotifier with ChangeNotifier {
       ),
     );
     OtherProfileNotifier on = context.read<OtherProfileNotifier>();
+
     // await on.initialOtherProfile(context, argument: OtherProfileArgument(senderEmail: email));
     on.user.profile = null;
     on.user = UserInfoModel();
     List<ContentData> data;
     on.manyUser = [];
     on.manyUser.add(UserInfoModel(profile: UserProfileModel(email: email)));
+    on.userEmail = email;
 
     on.vidContentsQuery.featureType = FeatureType.vid;
     on.diaryContentsQuery.featureType = FeatureType.diary;

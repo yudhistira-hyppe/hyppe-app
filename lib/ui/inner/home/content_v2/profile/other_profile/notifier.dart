@@ -1,8 +1,6 @@
 import 'package:hyppe/app.dart';
-import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_vid_detail_screen_argument.dart';
-import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';

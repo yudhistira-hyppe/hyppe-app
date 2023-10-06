@@ -116,7 +116,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                                 } else {
                                                   return GestureDetector(
                                                       onTap: () {
-                                                        System().navigateToProfile(context, cn.leaderBoardData?.getlastrank?[index].email ?? '');
+                                                        System().navigateToProfile(context, cn.leaderBoardDetailData?.getlastrank?[index].email ?? '');
                                                       },
                                                       child: ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]));
                                                 }
