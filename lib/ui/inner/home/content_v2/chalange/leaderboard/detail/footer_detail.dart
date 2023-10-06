@@ -298,23 +298,23 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
               (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty)) {
             var interaksiData = challengeData?.metrik?[0].interaksiKonten?[0];
 
-            if ((interaksiData?.suka?[0].hyppeVid ?? 0) > 0) {
-              context.read<HomeNotifier>().tabIndex = 2;
+            if ((interaksiData?.suka?[0].hyppePic ?? 0) > 0) {
+              context.read<HomeNotifier>().tabIndex = 0;
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
             } else if ((interaksiData?.suka?[0].hyppeDiary ?? 0) > 0) {
               context.read<HomeNotifier>().tabIndex = 1;
-              Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
-            } else if ((interaksiData?.suka?[0].hyppePic ?? 0) > 0) {
-              context.read<HomeNotifier>().tabIndex = 0;
-              Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
-            } else if ((interaksiData?.tonton?[0].hyppeVid ?? 0) > 0) {
-              context.read<HomeNotifier>().tabIndex = 2;
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
             } else if ((interaksiData?.tonton?[0].hyppeDiary ?? 0) > 0) {
               context.read<HomeNotifier>().tabIndex = 1;
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
             } else if ((interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0) {
               context.read<HomeNotifier>().tabIndex = 1;
+              Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+            } else if ((interaksiData?.suka?[0].hyppeVid ?? 0) > 0) {
+              context.read<HomeNotifier>().tabIndex = 2;
+              Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+            } else if ((interaksiData?.tonton?[0].hyppeVid ?? 0) > 0) {
+              context.read<HomeNotifier>().tabIndex = 2;
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
             } else if ((interaksiData?.buatKonten?[0].hyppeVid ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppePic ?? 0) > 0) {
               onTapbuatKonten(contentD: interaksiData?.buatKonten?[0] ?? BuatKonten());

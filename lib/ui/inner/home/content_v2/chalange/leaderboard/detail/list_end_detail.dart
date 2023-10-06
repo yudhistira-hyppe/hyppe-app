@@ -80,7 +80,7 @@ class _ListEndDetailState extends State<ListEndDetail> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Challenge Periode ${cn.selectOptionSession}',
+                            '${lang?.challengePeriod} ${cn.selectOptionSession}',
                             style: TextStyle(
                               color: Color(0xFF9B9B9B),
                               fontWeight: FontWeight.w400,
@@ -94,64 +94,59 @@ class _ListEndDetailState extends State<ListEndDetail> {
                       ),
                     ),
                   ),
-                  cn.leaderBoardDetaiEndlData?.onGoing == false
-                      ? Padding(
-                          padding: const EdgeInsets.all(32.0),
-                          child: CustomCommingSoon(
-                            title: lang?.letsJoinTheCompetition ?? 'Yuk, Ikut Kompetisi Menarik',
-                            subtitle: lang?.getFirstPlaceByEnteringThisExcitingCompetition ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
-                          ),
-                        )
-                      : cn.isLoadingLeaderboard
-                          ? Container()
-                          : cn.leaderBoardDetaiEndlData?.getlastrank?.isEmpty ?? [].isEmpty
+                  cn.isLoadingLeaderboard
+                      ? Container()
+                      : (cn.leaderBoardDetaiEndlData?.getlastrank?.isEmpty ?? [].isEmpty) || cn.leaderBoardDetaiEndlData?.status == "BERLANGSUNG"
+                          ? Padding(
+                              padding: const EdgeInsets.all(32.0),
+                              child: CustomEmptyWidget(
+                                title: lang?.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
+                                subtitle: lang?.getFirstPlaceByEnteringThisExcitingCompetition ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                              ),
+                            )
+                          : cn.leaderBoardDetaiEndlData?.getlastrank?[0].score == 0 || participant == 0
                               ? Padding(
                                   padding: const EdgeInsets.all(32.0),
                                   child: CustomEmptyWidget(
                                     title: lang?.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
-                                    subtitle: lang?.getFirstPlaceByEnteringThisExcitingCompetition ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
+                                    subtitle: lang?.getFirstPlaceByFollowingThisExciting ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
                                   ),
                                 )
-                              : cn.leaderBoardDetaiEndlData?.getlastrank?[0].score == 0 || participant == 0
-                                  ? Padding(
-                                      padding: EdgeInsets.all(32.0),
-                                      child: CustomEmptyWidget(
-                                        title: lang?.theresNoLeaderboardAvailable ?? 'Belum ada Leaderboard Tersedia',
-                                        subtitle: lang?.getFirstPlaceByFollowingThisExciting ?? "Raih peringkat pertama dengan mengikuti kompetisi yang seru ini, yuk!",
-                                      ),
-                                    )
-                                  : ScrollConfiguration(
-                                      behavior: const ScrollBehavior().copyWith(overscroll: false),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 24),
-                                        child: ListView.builder(
-                                          itemCount: cn.leaderBoardDetaiEndlData?.getlastrank?.length,
-                                          shrinkWrap: true,
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          itemBuilder: (context, index) {
-                                            if (cn.leaderBoardDetaiEndlData?.getlastrank?[index].score == 0) {
-                                              return Container();
-                                            } else {
-                                              if (cn.leaderBoardDetaiEndlData?.challengeData?[0].objectChallenge == 'KONTEN') {
-                                                return GestureDetector(
-                                                    onTap: () {
-                                                      var post = cn.leaderBoardDetaiEndlData?.getlastrank?[index].postChallengess?[0];
-                                                      var email = cn.leaderBoardDetaiEndlData?.getlastrank?[index].email;
-                                                      cn.navigateToScreen(context, post?.index, email, post?.postType);
-                                                    },
-                                                    child: ContentLeaderboard(data: cn.leaderBoardDetaiEndlData?.getlastrank?[index]));
-                                              } else {
-                                                return GestureDetector(
-                                                    onTap: () {
-                                                      Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardDetaiEndlData?.getlastrank?[index].email));
-                                                    },
-                                                    child: ItemLeader(data: cn.leaderBoardDetaiEndlData?.getlastrank?[index]));
-                                              }
-                                            }
-                                          },
-                                        ),
-                                      ),
+                              : ScrollConfiguration(
+                                  behavior: const ScrollBehavior().copyWith(overscroll: false),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 24),
+                                    child: ListView.builder(
+                                      itemCount: cn.leaderBoardDetaiEndlData?.getlastrank?.length,
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        if (cn.leaderBoardDetaiEndlData?.getlastrank?[index].score == 0) {
+                                          return Container();
+                                        } else {
+                                          if (cn.leaderBoardDetaiEndlData?.challengeData?[0].objectChallenge == 'KONTEN') {
+                                            return GestureDetector(
+                                                onTap: () {
+                                                  var post = cn.leaderBoardDetaiEndlData?.getlastrank?[index].postChallengess?[0];
+                                                  var email = cn.leaderBoardDetaiEndlData?.getlastrank?[index].email;
+                                                  cn.navigateToScreen(context, post?.index, email, post?.postType);
+                                                },
+                                                child: ContentLeaderboard(data: cn.leaderBoardDetaiEndlData?.getlastrank?[index]));
+                                          } else {
+                                            return GestureDetector(
+                                                onTap: () {
+                                                  Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardDetaiEndlData?.getlastrank?[index].email));
+                                                },
+                                                child: ItemLeader(
+                                                  data: cn.leaderBoardDetaiEndlData?.getlastrank?[index],
+                                                  dataStatusLead: cn.leaderBoardDetaiEndlData?.challengeData?[0].leaderBoard?[0],
+                                                ));
+                                          }
+                                        }
+                                      },
                                     ),
+                                  ),
+                                ),
                 ],
               ),
             ),

@@ -87,6 +87,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         }
       }
     }
+    Future.delayed(const Duration(seconds: 1), () async{
+      notifier.check(Routing.navigatorKey.currentContext ?? context);
+    });
   }
 
   void show() {
@@ -925,19 +928,22 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   }
 
   Widget ownershipSellingWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
+    final enable = !notifier.checkChallenge;
     return ListTile(
       onTap: () {
-        if (!notifier.certified || statusKyc != VERIFIED) {
-          System().actionReqiredIdCard(context, action: () {
+        if(enable){
+          if (!notifier.certified || statusKyc != VERIFIED) {
+            System().actionReqiredIdCard(context, action: () {
+              notifier.navigateToOwnership(context);
+            });
+          } else {
             notifier.navigateToOwnership(context);
-          });
-        } else {
-          notifier.navigateToOwnership(context);
+          }
         }
       },
       title: CustomTextWidget(
         textToDisplay: notifier.language.ownershipSelling ?? '',
-        textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
+        textStyle: textTheme.caption?.copyWith(color: enable ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.secondary.withOpacity(0.5)),
         textAlign: TextAlign.start,
       ),
       contentPadding: EdgeInsets.zero,
@@ -986,11 +992,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             ),
             child: CustomTextWidget(
               textToDisplay: notifier.certified ? notifier.language.yes ?? 'yes' : notifier.language.no ?? 'no',
-              textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
+              textStyle: textTheme.caption?.copyWith(color: enable ? kHyppeTextLightPrimary : Theme.of(context).colorScheme.secondary.withOpacity(0.5), fontFamily: "Lato"),
             ),
           ),
           twentyPx,
-          const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
+          Icon(Icons.arrow_forward_ios_rounded, color: enable ? kHyppeTextLightPrimary : Theme.of(context).colorScheme.secondary.withOpacity(0.5)),
         ],
       ),
     );

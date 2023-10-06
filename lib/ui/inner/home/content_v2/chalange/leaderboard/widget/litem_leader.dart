@@ -13,7 +13,9 @@ import 'package:hyppe/ux/routing.dart';
 
 class ItemLeader extends StatelessWidget {
   final Getlastrank? data;
-  const ItemLeader({super.key, this.data});
+  final LeaderBoard? dataStatusLead;
+  final bool? statusPengguna;
+  const ItemLeader({super.key, this.data, this.dataStatusLead, this.statusPengguna});
 
   @override
   Widget build(BuildContext context) {
@@ -43,112 +45,114 @@ class ItemLeader extends StatelessWidget {
     }
     return data?.ranking == 11 && data?.isUserLogin == false
         ? Container()
-        : Container(
-            // margin: const EdgeInsets.symmetric(horizontal: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            decoration: BoxDecoration(
-              color: (data?.isUserLogin ?? false) ? kHyppePrimaryTransparent : kHyppeLightButtonText,
-              border: Border.all(color: (data?.isUserLogin ?? false) ? kHyppePrimary : kHyppeLightButtonText),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(color: colorRank, borderRadius: BorderRadius.circular(100)),
-                  child: Center(
-                    child: Text(
-                      "${data?.ranking}",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: colorRankFont,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
+        : data?.ranking == 11 && (statusPengguna ?? false)
+            ? Container()
+            : Container(
+                // margin: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                decoration: BoxDecoration(
+                  color: (data?.isUserLogin ?? false) ? kHyppePrimaryTransparent : kHyppeLightButtonText,
+                  border: Border.all(color: (data?.isUserLogin ?? false) ? kHyppePrimary : kHyppeLightButtonText),
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                twelvePx,
-                GestureDetector(
-                  onTap: () {
-                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data?.email ?? ''));
-                  },
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    children: [
-                      Container(
-                        // padding: const EdgeInsets.only(top: 5.0, left: 6, right: 6, bottom: 2),
-                        margin: const EdgeInsets.only(top: 5.0, left: 6, right: 6, bottom: 2),
-                        child: ClipOval(
-                          child: CustomProfileImage(
-                            following: true,
-                            forStory: false,
-                            width: 43,
-                            height: 43,
-                            // imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
-                            imageUrl: data?.avatar?.mediaEndpoint != null ? System().showUserPicture("${data?.avatar?.mediaEndpoint}") : '',
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(color: colorRank, borderRadius: BorderRadius.circular(100)),
+                      child: Center(
+                        child: Text(
+                          "${data?.ranking}",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: colorRankFont,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
-                      data?.ranking == 1 || data?.ranking == 2 || data?.ranking == 3
-                          ? Positioned.fill(
-                              child: Center(
-                                child: data?.winnerBadgeOther != null
-                                    ? Image.network(
-                                        "${data?.winnerBadgeOther}",
-                                        width: 50 * SizeConfig.scaleDiagonal,
-                                        height: 50 * SizeConfig.scaleDiagonal,
-                                      )
-                                    : Container(),
+                    ),
+                    twelvePx,
+                    GestureDetector(
+                      onTap: () {
+                        Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data?.email ?? ''));
+                      },
+                      child: Stack(
+                        fit: StackFit.passthrough,
+                        children: [
+                          Container(
+                            // padding: const EdgeInsets.only(top: 5.0, left: 6, right: 6, bottom: 2),
+                            margin: const EdgeInsets.only(top: 5.0, left: 6, right: 6, bottom: 2),
+                            child: ClipOval(
+                              child: CustomProfileImage(
+                                following: true,
+                                forStory: false,
+                                width: 43,
+                                height: 43,
+                                // imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
+                                imageUrl: data?.avatar?.mediaEndpoint != null ? System().showUserPicture("${data?.avatar?.mediaEndpoint}") : '',
                               ),
-                            )
-                          : Container()
-                    ],
-                  ),
-                ),
-                twelvePx,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${data?.username}',
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Color(0xFF3E3E3E),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          (data?.ranking == 1 || data?.ranking == 2 || data?.ranking == 3) && (dataStatusLead?.tampilBadge ?? false)
+                              ? Positioned.fill(
+                                  child: Center(
+                                    child: data?.winnerBadgeOther != null
+                                        ? Image.network(
+                                            "${data?.winnerBadgeOther}",
+                                            width: 50 * SizeConfig.scaleDiagonal,
+                                            height: 50 * SizeConfig.scaleDiagonal,
+                                          )
+                                        : Container(),
+                                  ),
+                                )
+                              : Container()
+                        ],
                       ),
                     ),
-                    Text(
-                      '${data?.score} poin',
-                      style: const TextStyle(
-                        color: Color(0xFF9B9B9B),
-                        fontSize: 12,
-                        fontFamily: 'Lato',
-                        fontWeight: FontWeight.w400,
-                      ),
+                    twelvePx,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${data?.username}',
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Color(0xFF3E3E3E),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        Text(
+                          '${data?.score} poin',
+                          style: const TextStyle(
+                            color: Color(0xFF9B9B9B),
+                            fontSize: 12,
+                            fontFamily: 'Lato',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
                     ),
+                    twelvePx,
+                    data?.currentstatistik == "NETRAL"
+                        ? Expanded(
+                            child: Container(
+                            width: 1,
+                          ))
+                        : Expanded(
+                            child: Align(
+                            alignment: Alignment.centerRight,
+                            child: CustomIconWidget(
+                              iconData: data?.currentstatistik == 'UP' ? "${AssetPath.vectorPath}arrow_drop_up.svg" : "${AssetPath.vectorPath}arrow_drop_down.svg",
+                              defaultColor: false,
+                            ),
+                          ))
                   ],
                 ),
-                twelvePx,
-                data?.currentstatistik == "NETRAL"
-                    ? Expanded(
-                        child: Container(
-                        width: 1,
-                      ))
-                    : Expanded(
-                        child: Align(
-                        alignment: Alignment.centerRight,
-                        child: CustomIconWidget(
-                          iconData: data?.currentstatistik == 'UP' ? "${AssetPath.vectorPath}arrow_drop_up.svg" : "${AssetPath.vectorPath}arrow_drop_down.svg",
-                          defaultColor: false,
-                        ),
-                      ))
-              ],
-            ),
-          );
+              );
   }
 }

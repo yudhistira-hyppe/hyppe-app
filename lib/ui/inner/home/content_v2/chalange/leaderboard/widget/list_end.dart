@@ -46,7 +46,7 @@ class _ListEndState extends State<ListEnd> {
                 ShowBottomSheet.onPeriodChallange(context, cn.leaderBoardData?.challengeId ?? '', false, cn.selectOptionSession);
               },
               child: Container(
-                margin: EdgeInsets.all(16),
+                // margin: EdgeInsets.all(16),
                 height: 44,
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
                 decoration: BoxDecoration(color: Color(0xFFF5F5F5), borderRadius: BorderRadius.circular(4)),
@@ -55,12 +55,12 @@ class _ListEndState extends State<ListEnd> {
                   children: [
                     Text(
                       '${tn.translate.challengePeriod} ${cn.selectOptionSession}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Color(0xFF9B9B9B),
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    Icon(
+                    const Icon(
                       Icons.keyboard_arrow_down_rounded,
                       color: kHyppeTextLightPrimary,
                     )
@@ -71,14 +71,14 @@ class _ListEndState extends State<ListEnd> {
             cn.leaderBoardEndData?.onGoing == false
                 ? Padding(
                     padding: const EdgeInsets.all(32.0),
-                    child: CustomCommingSoon(
+                    child: CustomEmptyWidget(
                       title: '${tn.translate.theresNoLeaderboardAvailable}',
                       subtitle: '${tn.translate.getFirstPlaceByFollowingThisExciting}',
                     ),
                   )
                 : cn.isLoadingLeaderboard
                     ? Container()
-                    : cn.leaderBoardEndData?.getlastrank?.isEmpty ?? [].isEmpty
+                    : (cn.leaderBoardEndData?.getlastrank?.isEmpty ?? [].isEmpty) || cn.leaderBoardEndData?.status == "BERLANGSUNG"
                         ? Padding(
                             padding: const EdgeInsets.all(32.0),
                             child: CustomEmptyWidget(
@@ -118,7 +118,10 @@ class _ListEndState extends State<ListEnd> {
                                               System().navigateToProfile(context, cn.leaderBoardEndData?.getlastrank?[index].email ?? '');
                                               // Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardEndData?.getlastrank?[index].email));
                                             },
-                                            child: ItemLeader(data: cn.leaderBoardEndData?.getlastrank?[index]));
+                                            child: ItemLeader(
+                                              data: cn.leaderBoardEndData?.getlastrank?[index],
+                                              dataStatusLead: cn.leaderBoardEndData?.challengeData?[0].leaderBoard?[0],
+                                            ));
                                       }
                                     }
                                   },

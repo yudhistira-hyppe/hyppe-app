@@ -1,11 +1,13 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
@@ -71,6 +73,7 @@ class OtherProfileTop extends StatelessWidget {
   Widget build(BuildContext context) {
     final sn = Provider.of<PreviewStoriesNotifier>(context);
     FirebaseCrashlytics.instance.setCustomKey('layout', 'OtherProfileTop');
+    final myEmail = SharedPreference().readStorage(SpKeys.email);
     return Consumer<OtherProfileNotifier>(
       builder: (_, notifier, __) => Padding(
         padding: EdgeInsets.only(top: 16.0 * SizeConfig.scaleDiagonal, left: 16.0, right: 16.0),
@@ -187,20 +190,20 @@ class OtherProfileTop extends StatelessWidget {
               constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.2),
               child: SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomDescContent(
-                        desc: displayBio(),
-                        trimLines: 5,
-                        textAlign: TextAlign.start,
-                        seeLess: ' ${notifier.language.seeLess}',
-                        seeMore: ' ${notifier.language.seeMoreContent}',
-                        normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
-                        hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
-                        expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
-                      ),
-                    ],
-                  )),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomDescContent(
+                    desc: displayBio(),
+                    trimLines: 5,
+                    textAlign: TextAlign.start,
+                    seeLess: ' ${notifier.language.seeLess}',
+                    seeMore: ' ${notifier.language.seeMoreContent}',
+                    normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
+                    hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
+                    expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                  ),
+                ],
+              )),
             ),
             displayPlace() != null
                 ? Padding(
@@ -220,64 +223,66 @@ class OtherProfileTop extends StatelessWidget {
                     ),
                   )
                 : const SizedBox.shrink(),
-            Padding(
-              padding: EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  CustomElevatedButton(
-                    width: 167 * SizeConfig.scaleDiagonal,
-                    height: 42 * SizeConfig.scaleDiagonal,
-                    buttonStyle: ButtonStyle(
-                      backgroundColor: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following)
-                          ? null
-                          : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                    ),
-                    function: notifier.isCheckLoading
-                        ? null
-                        : () {
-                            if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
-                              notifier.followUser(context);
-                            } else if (notifier.statusFollowing == StatusFollowing.following) {
-                              notifier.followUser(context, isUnFollow: true);
+            myEmail == email
+                ? Container()
+                : Padding(
+                    padding: EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CustomElevatedButton(
+                          width: 167 * SizeConfig.scaleDiagonal,
+                          height: 42 * SizeConfig.scaleDiagonal,
+                          buttonStyle: ButtonStyle(
+                            backgroundColor: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following)
+                                ? null
+                                : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                          ),
+                          function: notifier.isCheckLoading
+                              ? null
+                              : () {
+                                  if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
+                                    notifier.followUser(context);
+                                  } else if (notifier.statusFollowing == StatusFollowing.following) {
+                                    notifier.followUser(context, isUnFollow: true);
+                                  }
+                                },
+                          child: notifier.isCheckLoading
+                              ? const CustomLoading()
+                              : CustomTextWidget(
+                                  textToDisplay: notifier.statusFollowing == StatusFollowing.following
+                                      ? notifier.language.following ?? 'following '
+                                      : notifier.statusFollowing == StatusFollowing.requested
+                                          ? notifier.language.requested ?? 'requested'
+                                          : notifier.language.follow ?? 'follow',
+                                  textStyle: Theme.of(context).textTheme.button?.copyWith(
+                                        color: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? kHyppeGrey : kHyppeLightButtonText,
+                                      ),
+                                ),
+                        ),
+                        CustomElevatedButton(
+                          child: CustomTextWidget(
+                            textToDisplay: notifier.language.message ?? 'message',
+                            textStyle: Theme.of(context).textTheme.button,
+                          ),
+                          width: 167 * SizeConfig.scaleDiagonal,
+                          height: 42 * SizeConfig.scaleDiagonal,
+                          buttonStyle: Theme.of(context).elevatedButtonTheme.style,
+                          function: () async {
+                            if (notifier.manyUser.first.profile != null) {
+                              try {
+                                await notifier.createDiscussion(context);
+                              } catch (e) {
+                                e.logger();
+                              }
+                            } else {
+                              ShowBottomSheet.onInternalServerError(context);
                             }
                           },
-                    child: notifier.isCheckLoading
-                        ? const CustomLoading()
-                        : CustomTextWidget(
-                            textToDisplay: notifier.statusFollowing == StatusFollowing.following
-                                ? notifier.language.following ?? 'following '
-                                : notifier.statusFollowing == StatusFollowing.requested
-                                    ? notifier.language.requested ?? 'requested'
-                                    : notifier.language.follow ?? 'follow',
-                            textStyle: Theme.of(context).textTheme.button?.copyWith(
-                                  color: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? kHyppeGrey : kHyppeLightButtonText,
-                                ),
-                          ),
-                  ),
-                  CustomElevatedButton(
-                    child: CustomTextWidget(
-                      textToDisplay: notifier.language.message ?? 'message',
-                      textStyle: Theme.of(context).textTheme.button,
+                        ),
+                      ],
                     ),
-                    width: 167 * SizeConfig.scaleDiagonal,
-                    height: 42 * SizeConfig.scaleDiagonal,
-                    buttonStyle: Theme.of(context).elevatedButtonTheme.style,
-                    function: () async {
-                      if (notifier.manyUser.first.profile != null) {
-                        try {
-                          await notifier.createDiscussion(context);
-                        } catch (e) {
-                          e.logger();
-                        }
-                      } else {
-                        ShowBottomSheet.onInternalServerError(context);
-                      }
-                    },
-                  ),
-                ],
-              ),
-            )
+                  )
           ],
         ),
       ),

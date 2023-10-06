@@ -118,7 +118,10 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                                       onTap: () {
                                                         System().navigateToProfile(context, cn.leaderBoardDetailData?.getlastrank?[index].email ?? '');
                                                       },
-                                                      child: ItemLeader(data: cn.leaderBoardDetailData?.getlastrank?[index]));
+                                                      child: ItemLeader(
+                                                        data: cn.leaderBoardDetailData?.getlastrank?[index],
+                                                        dataStatusLead: cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0],
+                                                      ));
                                                 }
                                               }
 
@@ -138,11 +141,12 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                       text: "${tn.translate.joinTheChallengeNow}",
                                       isloading: isloadingButton,
                                       function: () async {
-                                        if (!isloadingButton) {
-                                          setState(() {
-                                            isloadingButton = true;
-                                          });
-                                          if (cn.leaderBoardDetailData?.joined != 'NOT ALLOWED') {
+                                        if (cn.leaderBoardDetailData?.joined != 'NOT ALLOWED') {
+                                          if (!isloadingButton) {
+                                            setState(() {
+                                              isloadingButton = true;
+                                            });
+                                            print(cn.leaderBoardDetailData?.joined);
                                             await cn.joinChallange(context, cn.leaderBoardDetailData?.challengeId ?? '').then((value) {
                                               if (value == true) {
                                                 setState(() {

@@ -123,7 +123,7 @@ class _ListOnGoingState extends State<ListOnGoing> {
                                                     onTap: () {
                                                       System().navigateToProfile(context, cn.leaderBoardData?.getlastrank?[index].email ?? '');
                                                     },
-                                                    child: ItemLeader(data: cn.leaderBoardData?.getlastrank?[index]));
+                                                    child: ItemLeader(data: cn.leaderBoardData?.getlastrank?[index], dataStatusLead: cn.leaderBoardData?.challengeData?[0].leaderBoard?[0]));
                                               }
                                             }
                                           },

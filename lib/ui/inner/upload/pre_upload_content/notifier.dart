@@ -55,6 +55,8 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:light_compressor/light_compressor.dart';
 import 'package:path_provider/path_provider.dart' as path;
 
+import '../../../../core/bloc/challange/bloc.dart';
+import '../../../../core/bloc/challange/state.dart';
 import '../../../../core/models/collection/search/search_content.dart';
 
 class PreUploadContentNotifier with ChangeNotifier {
@@ -1731,5 +1733,29 @@ class PreUploadContentNotifier with ChangeNotifier {
     tmpBoostTimeId = '';
     notifyListeners();
     Routing().moveBack();
+  }
+
+  bool _checkChallenge = true;
+  bool get checkChallenge => _checkChallenge;
+  set checkChallenge(bool state){
+    _checkChallenge = state;
+    notifyListeners();
+  }
+
+  Future check(BuildContext context) async {
+    try {
+      final bannerNotifier = ChallangeBloc();
+      await bannerNotifier.checkChallengeStatus(context);
+      final fetch = bannerNotifier.userFetch;
+
+      if (fetch.challengeState == ChallengeState.getPostSuccess) {
+        checkChallenge =  fetch.data['join_status'];
+      }else{
+        checkChallenge = false;
+      }
+    } catch (e) {
+      e.logger();
+      checkChallenge = false;
+    }
   }
 }

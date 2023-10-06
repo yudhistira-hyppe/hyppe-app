@@ -98,7 +98,7 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
                             Text(
                               lang?.yourBadgeCollections ?? '',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18.36,
                                 fontFamily: 'Lato',
@@ -193,9 +193,7 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
                     ),
                   ),
                 )
-              : SizedBox(
-                  height: 0,
-                ),
+              : const SizedBox.shrink(),
     );
   }
 
