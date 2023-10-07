@@ -527,14 +527,24 @@ class System {
 
   Future<void> _getStoragePermission() async {
     DeviceInfoPlugin plugin = DeviceInfoPlugin();
-    AndroidDeviceInfo android = await plugin.androidInfo;
-    if (android.version.sdkInt! < 33) {
-      if (await Permission.storage.request().isGranted) {
-        // permissionGranted = true;
-      } else if (await Permission.storage.request().isPermanentlyDenied) {
-        await openAppSettings();
-      } else if (await Permission.audio.request().isDenied) {
-        // permissionGranted = false;
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo android = await plugin.androidInfo;
+      if (android.version.sdkInt! < 33) {
+        if (await Permission.storage.request().isGranted) {
+          // permissionGranted = true;
+        } else if (await Permission.storage.request().isPermanentlyDenied) {
+          await openAppSettings();
+        } else if (await Permission.audio.request().isDenied) {
+          // permissionGranted = false;
+        }
+      } else {
+        if (await Permission.photos.request().isGranted) {
+          // permissionGranted = true;
+        } else if (await Permission.photos.request().isPermanentlyDenied) {
+          await openAppSettings();
+        } else if (await Permission.photos.request().isDenied) {
+          // permissionGranted = false;
+        }
       }
     } else {
       if (await Permission.photos.request().isGranted) {
