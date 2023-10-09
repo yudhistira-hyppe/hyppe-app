@@ -412,7 +412,12 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                             ),
                       Container(
                         width: SizeConfig.screenWidth,
-                        margin: const EdgeInsets.only(top: 16, left: 16.0, right: 16, bottom: 16),
+                        margin: EdgeInsets.only(
+                          top: 16,
+                          left: 16.0,
+                          right: 16,
+                          bottom: (cn.leaderBoardDetailData?.onGoing ?? false) ? 16 : SizeConfig.screenHeight! * 0.7,
+                        ),
                         padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 16),
                         decoration: BoxDecoration(
                           color: Colors.white,

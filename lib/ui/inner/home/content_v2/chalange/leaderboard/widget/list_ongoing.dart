@@ -67,7 +67,8 @@ class _ListOnGoingState extends State<ListOnGoing> {
                           height: 60,
                           child: CustomLoading(),
                         ),
-                      ))
+                      ),
+                    )
                   : cn.leaderBoardData?.onGoing == false
                       ? Padding(
                           padding: const EdgeInsets.all(32.0),

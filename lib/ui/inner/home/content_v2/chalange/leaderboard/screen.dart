@@ -43,6 +43,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
   String chllangeid = "";
   String lastchallangeid = "";
   bool hideTab = false;
+  bool isDidpop = false;
 
   LocalizationModelV2? lang;
   List<Widget>? _tabs;
@@ -122,7 +123,11 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
   void didPopNext() {
     print("======121212");
     print(_currentSlidder);
+    isDidpop = true;
     _controller.jumpToPage(_currentSlidder);
+    Future.delayed(Duration(milliseconds: 50), () {
+      isDidpop = false;
+    });
     super.didPopNext();
   }
 
@@ -214,7 +219,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                   chllangeid = cn.bannerLeaderboardData[index].sId ?? '';
 
                                   lastchallangeid = cn.bannerLeaderboardData[index].sId ?? '';
-                                  if (lastchallangeid == chllangeid) {
+                                  if (lastchallangeid == chllangeid && !isDidpop) {
                                     cn.getLeaderBoard(context, cn.bannerLeaderboardData[index].sId ?? '');
                                   }
                                 });

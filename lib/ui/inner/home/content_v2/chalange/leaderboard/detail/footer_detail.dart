@@ -51,8 +51,8 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
             int sukaHyppe = (suka?[0].hyppeDiary ?? 0) > 0 || (suka?[0].hyppePic ?? 0) > 0 || (suka?[0].hyppeVid ?? 0) > 0 ? 1 : 0;
             int tontonHyppe = (tonton?[0].hyppeDiary ?? 0) > 0 || (tonton?[0].hyppeVid ?? 0) > 0 ? 1 : 0;
             int buatHyppe = (buatKonten?[0].hyppeDiary ?? 0) > 0 || (buatKonten?[0].hyppePic ?? 0) > 0 || (buatKonten?[0].hyppeVid ?? 0) > 0 ? 1 : 0;
-            int tot = sukaHyppe + tontonHyppe + buatHyppe;
-            if (tot == 3) {
+            int tot = ((sukaHyppe > 0) || (tontonHyppe > 0) ? 1 : 0) + buatHyppe;
+            if (tot == 2) {
               twoWidget = true;
             }
           }
@@ -277,7 +277,7 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
                 (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty)) {
               var interaksiData = challengeData?.metrik?[0].interaksiKonten?[0];
               if ((interaksiData?.buatKonten?[0].hyppeVid ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppePic ?? 0) > 0) {
-                onTapbuatKonten(contentD: interaksiData?.buatKonten?[0] ?? BuatKonten());
+                onTapbuatKonten(interaksiKonten: challengeData?.metrik?[0].interaksiKonten?[0] ?? InteraksiKonten());
               }
             }
           }
@@ -324,7 +324,7 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
               return;
             } else if ((interaksiData?.buatKonten?[0].hyppeVid ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppePic ?? 0) > 0) {
-              onTapbuatKonten(contentD: interaksiData?.buatKonten?[0] ?? BuatKonten());
+              onTapbuatKonten(interaksiKonten: challengeData?.metrik?[0].interaksiKonten?[0] ?? InteraksiKonten());
               return;
             }
           }
@@ -339,6 +339,7 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
     int contentVid = 0;
     int contentDiary = 0;
     int contentPict = 0;
+    String tagar = "";
     if (contentD != null) {
       contentVid = (contentD.hyppeVid ?? 0) > 0 ? 1 : 0;
       contentDiary = (contentD.hyppeDiary ?? 0) > 0 ? 1 : 0;
@@ -351,6 +352,10 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
     var tot = contentVid + contentDiary + contentPict;
     PreUploadContentNotifier pn = context.read<PreUploadContentNotifier>();
     pn.hastagChallange = interaksiKonten?.tagar ?? '';
+    print("====== pn.hastagChallange ${contentD}");
+    print("====== pn.hastagChallange ${interaksiKonten}");
+    print("====== pn.hastagChallange ${interaksiKonten?.tagar}");
+    print("====== pn.hastagChallange ${pn.hastagChallange}");
     if (tot > 1) {
       ShowBottomSheet.onUploadContent(
         context,
