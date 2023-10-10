@@ -177,6 +177,9 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
     var tn = context.read<TranslateNotifierV2>();
     toHideTab(cn);
     var boollUser = false;
+    var image = '';
+    var desc = '';
+    var participant = 0;
 
     if (!cn.isLoadingLeaderboard || cn.leaderBoardDetailData?.sId != null) {
       bgColor = System().colorFromHex(cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].warnaBackground ?? "#F5F5F5");
@@ -187,6 +190,22 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
         boollUser = true;
       }
     });
+
+    if (cn.leaderBoardDetailData?.challengeData != null) {
+      image = cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].bannerLeaderboard ?? '';
+      desc = cn.leaderBoardDetailData?.challengeData?[0].description ?? '';
+      if (cn.leaderBoardDetailData?.getlastrank?.isNotEmpty ?? [].isNotEmpty) {
+        participant = 1;
+      }
+    } else {
+      if (cn.leaderBoardDetaiEndlData?.challengeData != null) {
+        image = cn.leaderBoardDetaiEndlData?.challengeData?[0].leaderBoard?[0].bannerLeaderboard ?? '';
+        desc = cn.leaderBoardDetaiEndlData?.challengeData?[0].description ?? '';
+        if (cn.leaderBoardDetaiEndlData?.getlastrank?.isNotEmpty ?? [].isNotEmpty) {
+          participant = 1;
+        }
+      }
+    }
 
     return Scaffold(
       appBar: PreferredSize(
@@ -281,7 +300,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                         memCacheHeight: 100,
                         widthPlaceHolder: 80,
                         heightPlaceHolder: 80,
-                        imageUrl: (cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].bannerLeaderboard),
+                        imageUrl: image,
                         imageBuilder: (context, imageProvider) => Image(
                           image: imageProvider,
                           fit: BoxFit.fitHeight,
@@ -416,7 +435,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                           top: 16,
                           left: 16.0,
                           right: 16,
-                          bottom: (cn.leaderBoardDetailData?.onGoing ?? false) ? 16 : SizeConfig.screenHeight! * 0.7,
+                          bottom: participant > 0 || (cn.leaderBoardDetailData?.onGoing ?? false) ? 16 : SizeConfig.screenHeight! * 0.7,
                         ),
                         padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 16),
                         decoration: BoxDecoration(
@@ -436,7 +455,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                               ),
                             ),
                             twentyPx,
-                            Text("${cn.leaderBoardDetailData?.challengeData?[0].description}"),
+                            Text(desc),
                           ],
                         ),
                       ),

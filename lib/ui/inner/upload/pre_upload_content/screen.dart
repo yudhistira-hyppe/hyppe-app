@@ -65,8 +65,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     super.initState();
     statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     PreUploadContentNotifier notifier = context.read<PreUploadContentNotifier>();
-    notifier.captionController.text = notifier.hastagChallange;
-    notifier.captionController.selection = TextSelection.collapsed(offset: 0);
+    if (!widget.arguments.onEdit) {
+      notifier.captionController.text = notifier.hastagChallange;
+      notifier.captionController.selection = TextSelection.collapsed(offset: 0);
+    }
 
     // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
     if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
@@ -87,7 +89,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         }
       }
     }
-    Future.delayed(const Duration(seconds: 1), () async{
+    Future.delayed(const Duration(seconds: 1), () async {
       notifier.check(Routing.navigatorKey.currentContext ?? context);
     });
   }
@@ -931,7 +933,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     final enable = !notifier.checkChallenge;
     return ListTile(
       onTap: () {
-        if(enable){
+        if (enable) {
           if (!notifier.certified || statusKyc != VERIFIED) {
             System().actionReqiredIdCard(context, action: () {
               notifier.navigateToOwnership(context);

@@ -172,6 +172,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                 icon: 'edit-content.svg',
                 onTap: () {
                   final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
+                  notifier.hastagChallange = "";
                   notifier.editData = widget.contentData;
                   notifier.isEdit = true;
                   notifier.isUpdate = true;
@@ -255,7 +256,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                     if (value) _handleDelete(context);
                   });
                   widget.fAliplayer?.stop();
-                  if(widget.onUpdate != null){
+                  if (widget.onUpdate != null) {
                     widget.onUpdate!();
                   }
                 });

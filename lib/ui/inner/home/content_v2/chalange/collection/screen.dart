@@ -183,7 +183,7 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
                           setState(() {
                             isLoadingButton = true;
                           });
-                          await cn.postSelectBadge(context, mounted, cn.badgeUser?.idUserBadge ?? '').then((value) {
+                          await cn.postSelectBadge(context, mounted, cn.badgeUser?.id ?? '').then((value) {
                             setState(() {
                               isLoadingButton = false;
                             });

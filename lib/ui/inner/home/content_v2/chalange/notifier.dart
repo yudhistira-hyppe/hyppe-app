@@ -295,6 +295,8 @@ class ChallangeNotifier with ChangeNotifier {
             leaderBoardData = getdata;
           }
         }
+      } else {
+        Routing().moveReplacement(Routes.chalenge);
       }
 
       isLoading = false;
