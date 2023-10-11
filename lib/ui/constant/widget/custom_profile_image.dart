@@ -80,8 +80,6 @@ class CustomProfileImage extends StatelessWidget {
                 width: width,
                 height: height,
                 fit: BoxFit.cover,
-                width: width,
-                height: height,
                 errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                   return Container();
                 },

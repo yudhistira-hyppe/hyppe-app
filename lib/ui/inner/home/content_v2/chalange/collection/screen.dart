@@ -93,6 +93,7 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
                               height: 80,
                               badge: cn.badgeUser,
                               imageUrl: System().showUserPicture(hn.profileImage) ?? '',
+                              allwaysUseBadgePadding: true,
                             ),
                             sixteenPx,
                             Text(

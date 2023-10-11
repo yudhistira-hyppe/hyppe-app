@@ -41,15 +41,15 @@ class _ComponentState extends State<Component> {
     return InkWell(
       onTap: () async {
         if (widget.data?.eventType != 'CONTENTMOD') {
-          if(isAnnouncement){
+          if (isAnnouncement) {
             final url = widget.data?.actionButtons;
-            if(url?.trim().isNotEmpty ?? false){
+            if (url?.trim().isNotEmpty ?? false) {
               var fixUrl = url;
-              if(!fixUrl!.withHttp()){
+              if (!fixUrl!.withHttp()) {
                 fixUrl = 'https://$fixUrl';
               }
               final allow = Uri.parse(fixUrl).isAbsolute;
-              if(allow){
+              if (allow) {
                 try {
                   final uri = Uri.parse(fixUrl);
                   if (await canLaunchUrl(uri)) {
@@ -67,9 +67,7 @@ class _ComponentState extends State<Component> {
                 }
               }
             }
-
-
-          }else if (!isLoading) {
+          } else if (!isLoading) {
             setState(() {
               isLoading = true;
             });
@@ -98,23 +96,44 @@ class _ComponentState extends State<Component> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // profile picture
-
-            isAnnouncement ? CustomIconWidget(
-              width: 50 * SizeConfig.scaleDiagonal,
-              height: 50 * SizeConfig.scaleDiagonal,
-              iconData: "${AssetPath.vectorPath}ic_rounded_hyppe.svg",
-              defaultColor: false,) : StoryColorValidator(
-              featureType: FeatureType.other,
-              haveStory: false,
-              child: CustomProfileImage(
-                following: true,
-                width: 50 * SizeConfig.scaleDiagonal,
-                height: 50 * SizeConfig.scaleDiagonal,
-                onTap: () => System().navigateToProfile(context, widget.data?.mate ?? ''),
-                imageUrl: '${System().showUserPicture(widget.data?.senderOrReceiverInfo?.avatar?.mediaEndpoint)}',
-                badge: widget.data?.urluserBadge,
-              ),
-            ),
+            widget.data?.eventType == 'CHALLENGE'
+                ? Container(
+                    padding: EdgeInsets.all(
+                      12 * SizeConfig.scaleDiagonal,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFe8e8e8),
+                      borderRadius: BorderRadius.circular(
+                        100,
+                      ),
+                    ),
+                    child: CustomIconWidget(
+                      width: 30 * SizeConfig.scaleDiagonal,
+                      height: 30 * SizeConfig.scaleDiagonal,
+                      iconData: "${AssetPath.vectorPath}notification-active.svg",
+                      defaultColor: false,
+                      color: const Color(0xFFcecece),
+                    ),
+                  )
+                : isAnnouncement
+                    ? CustomIconWidget(
+                        width: 50 * SizeConfig.scaleDiagonal,
+                        height: 50 * SizeConfig.scaleDiagonal,
+                        iconData: "${AssetPath.vectorPath}ic_rounded_hyppe.svg",
+                        defaultColor: false,
+                      )
+                    : StoryColorValidator(
+                        featureType: FeatureType.other,
+                        haveStory: false,
+                        child: CustomProfileImage(
+                          following: true,
+                          width: 50 * SizeConfig.scaleDiagonal,
+                          height: 50 * SizeConfig.scaleDiagonal,
+                          onTap: () => System().navigateToProfile(context, widget.data?.mate ?? ''),
+                          imageUrl: '${System().showUserPicture(widget.data?.senderOrReceiverInfo?.avatar?.mediaEndpoint)}',
+                          badge: widget.data?.urluserBadge,
+                        ),
+                      ),
             sixteenPx,
             Expanded(
               child: Row(
@@ -126,7 +145,11 @@ class _ComponentState extends State<Component> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomTextWidget(
-                          textToDisplay: isAnnouncement ? (System().bodyMultiLang(bodyEn: widget.data?.titleEN ?? widget.data?.title, bodyId: widget.data?.title) ?? '') : widget.data?.senderOrReceiverInfo?.username ?? '',
+                          textToDisplay: widget.data?.eventType == 'CHALLENGE'
+                              ? widget.data?.title ?? ''
+                              : isAnnouncement
+                                  ? (System().bodyMultiLang(bodyEn: widget.data?.titleEN ?? widget.data?.title, bodyId: widget.data?.title) ?? '')
+                                  : widget.data?.senderOrReceiverInfo?.username ?? '',
                           textAlign: TextAlign.start,
                           textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
                           textOverflow: TextOverflow.fade,

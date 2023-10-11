@@ -37,32 +37,31 @@ class ProfileLandingPage extends StatelessWidget {
   final bool? isIdVerified;
   final UserBadgeModel? badge;
 
-  const ProfileLandingPage(
-      {Key? key,
-      required this.show,
-      required this.onTapOnProfileImage,
-      required this.imageUrl,
-      required this.username,
-      required this.isCelebrity,
-      required this.createdAt,
-      required this.following,
-      this.isDetail = false,
-      this.widthText = 150,
-      this.showNameAndTimeStamp = true,
-      this.spaceProfileAndId = eightPx,
-      this.widthCircle = SizeWidget.circleDiameterImageProfileInLongVideoView,
-      this.heightCircle = SizeWidget.circleDiameterImageProfileInLongVideoView,
-      required this.onFollow,
-      this.textColor,
-      this.cacheKey,
-      this.haveStory = false,
-      this.musicName,
-      this.location,
-      this.isIdVerified,
-      required this.featureType,
-      this.badge,
-    })
-      : super(key: key);
+  const ProfileLandingPage({
+    Key? key,
+    required this.show,
+    required this.onTapOnProfileImage,
+    required this.imageUrl,
+    required this.username,
+    required this.isCelebrity,
+    required this.createdAt,
+    required this.following,
+    this.isDetail = false,
+    this.widthText = 150,
+    this.showNameAndTimeStamp = true,
+    this.spaceProfileAndId = eightPx,
+    this.widthCircle = SizeWidget.circleDiameterImageProfileInLongVideoView,
+    this.heightCircle = SizeWidget.circleDiameterImageProfileInLongVideoView,
+    required this.onFollow,
+    this.textColor,
+    this.cacheKey,
+    this.haveStory = false,
+    this.musicName,
+    this.location,
+    this.isIdVerified,
+    required this.featureType,
+    this.badge,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
