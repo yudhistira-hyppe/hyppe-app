@@ -192,9 +192,9 @@ class ChallangeNotifier with ChangeNotifier {
     isLoadingLeaderboard = true;
     notifyListeners();
     checkInet(context);
+    getOtherChallange(context);
     await getBannerLanding(context, isLeaderBoard: true);
     await getLeaderBoard(context, bannerLeaderboardData[0].sId ?? '');
-    await getOtherChallange(context);
 
     isLoadingLeaderboard = false;
     notifyListeners();

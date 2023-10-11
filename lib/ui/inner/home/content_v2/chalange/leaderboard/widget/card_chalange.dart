@@ -132,13 +132,13 @@ class CardChalange extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                             clipBehavior: Clip.antiAlias,
                             decoration: ShapeDecoration(
-                              color: data?.statusJoined == 'Bukan Partisipan' ? kHyppeNotConnect : kHyppePrimaryTransparent,
+                              color: data?.statusJoined == 'NOT ALLOWED' ? kHyppeNotConnect : kHyppePrimaryTransparent,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
                             ),
                             child: Text(
-                              data?.statusJoined == 'Bukan Partisipan' ? "${tn.translate.nonParticipant}" : "${tn.translate.participant}",
+                              data?.statusJoined == 'NOT ALLOWED' ? "${tn.translate.nonParticipant}" : "${tn.translate.participant}",
                               style: TextStyle(
-                                color: data?.statusJoined == 'Bukan Partisipan' ? Color(0xFF9B9B9B) : kHyppePrimary,
+                                color: data?.statusJoined == 'NOT ALLOWED' ? Color(0xFF9B9B9B) : kHyppePrimary,
                                 fontSize: 10,
                                 fontFamily: 'Lato',
                                 fontWeight: FontWeight.w700,

@@ -12,7 +12,8 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 
 class ContentLeaderboard extends StatelessWidget {
   final Getlastrank? data;
-  const ContentLeaderboard({super.key, this.data});
+  final bool? statusPengguna;
+  const ContentLeaderboard({super.key, this.data, this.statusPengguna});
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +43,10 @@ class ContentLeaderboard extends StatelessWidget {
     }
     return data?.postChallengess?.isEmpty ?? [].isEmpty
         ? Container()
-        : data?.ranking == 11 && data?.isUserLogin == false
-            ? Container()
+        : (data?.ranking ?? 0) >= 11 && data?.isUserLogin == false
+            ? (data?.ranking ?? 0) >= 11 && ((statusPengguna ?? false) == false)
+                ? Container()
+                : Container()
             : Container(
                 margin: const EdgeInsets.symmetric(horizontal: 8),
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),

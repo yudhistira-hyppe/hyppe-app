@@ -118,13 +118,20 @@ class _ListOnGoingState extends State<ListOnGoing> {
                                                       var email = cn.leaderBoardData?.getlastrank?[index].email;
                                                       cn.navigateToScreen(context, post?.index, email, post?.postType);
                                                     },
-                                                    child: ContentLeaderboard(data: cn.leaderBoardData?.getlastrank?[index]));
+                                                    child: ContentLeaderboard(
+                                                      data: cn.leaderBoardData?.getlastrank?[index],
+                                                      statusPengguna: cn.leaderBoardData?.challengeData?[0].tampilStatusPengguna,
+                                                    ));
                                               } else {
                                                 return GestureDetector(
                                                     onTap: () {
                                                       System().navigateToProfile(context, cn.leaderBoardData?.getlastrank?[index].email ?? '');
                                                     },
-                                                    child: ItemLeader(data: cn.leaderBoardData?.getlastrank?[index], dataStatusLead: cn.leaderBoardData?.challengeData?[0].leaderBoard?[0]));
+                                                    child: ItemLeader(
+                                                      data: cn.leaderBoardData?.getlastrank?[index],
+                                                      dataStatusLead: cn.leaderBoardData?.challengeData?[0].leaderBoard?[0],
+                                                      statusPengguna: cn.leaderBoardData?.challengeData?[0].tampilStatusPengguna,
+                                                    ));
                                               }
                                             }
                                           },
@@ -134,7 +141,7 @@ class _ListOnGoingState extends State<ListOnGoing> {
               cn.isLoading
                   ? Container()
                   : Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 16),
                       child: ButtonChallangeWidget(
                           bgColor: kHyppePrimary,
                           text: boollUser ? tn.translate.viewChallenge : tn.translate.joinTheChallengeNow,

@@ -962,6 +962,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         musicName: picData?.music?.musicTitle ?? '',
                                         location: picData?.location ?? '',
                                         isIdVerified: picData?.privacy?.isIdVerified,
+                                        badge: picData?.urluserBadge,
                                       ),
                                     ),
                                     if (picData?.email != email && (picData?.isNewFollowing ?? false))

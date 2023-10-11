@@ -118,7 +118,10 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                                         var email = cn.leaderBoardDetailData?.getlastrank?[index].email;
                                                         cn.navigateToScreen(context, post?.index, email, post?.postType);
                                                       },
-                                                      child: ContentLeaderboard(data: cn.leaderBoardDetailData?.getlastrank?[index]));
+                                                      child: ContentLeaderboard(
+                                                        data: cn.leaderBoardDetailData?.getlastrank?[index],
+                                                        statusPengguna: cn.leaderBoardDetailData?.challengeData?[0].tampilStatusPengguna,
+                                                      ));
                                                 } else {
                                                   return GestureDetector(
                                                       onTap: () {
@@ -127,6 +130,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                                       child: ItemLeader(
                                                         data: cn.leaderBoardDetailData?.getlastrank?[index],
                                                         dataStatusLead: cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0],
+                                                        statusPengguna: cn.leaderBoardDetailData?.challengeData?[0].tampilStatusPengguna,
                                                       ));
                                                 }
                                               }

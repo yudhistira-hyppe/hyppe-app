@@ -43,6 +43,7 @@ class ChallangeBloc {
         Routing().moveBack();
       },
       data: data,
+      cancelToken: CancelToken(),
       withAlertMessage: false,
       withCheckConnection: false,
       host: url,
@@ -50,19 +51,19 @@ class ChallangeBloc {
     );
   }
 
-  Future getBanners(BuildContext context) async{
+  Future getBanners(BuildContext context) async {
     setChallangeFetch(ChallangeFetch(ChallengeState.loading));
 
     await Repos().reposPost(
       context,
-          (onResult) {
+      (onResult) {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setChallangeFetch(ChallangeFetch(ChallengeState.getPostError, data: onResult.data));
         } else {
           setChallangeFetch(ChallangeFetch(ChallengeState.getPostSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
-          (errorData) {
+      (errorData) {
         ShowBottomSheet.onInternalServerError(context);
         setChallangeFetch(ChallangeFetch(ChallengeState.getPostError));
         Dio().close(force: true);
@@ -81,7 +82,7 @@ class ChallangeBloc {
   Future checkChallengeStatus(BuildContext context) async {
     final userId = SharedPreference().readStorage(SpKeys.userID);
     setChallangeFetch(ChallangeFetch(ChallengeState.loading));
-    await Repos().reposPost(context, (onResult){
+    await Repos().reposPost(context, (onResult) {
       if ((onResult.statusCode ?? 300) > HTTP_CODE) {
         setChallangeFetch(ChallangeFetch(ChallengeState.getPostError, data: onResult.data));
       } else {
@@ -91,12 +92,6 @@ class ChallangeBloc {
       ShowBottomSheet.onInternalServerError(context);
       setChallangeFetch(ChallangeFetch(ChallengeState.getPostError));
       Dio().close(force: true);
-    }, host: UrlConstants.checkChallengeStatus,
-        data: {
-          'idUser' : userId
-        },
-        withAlertMessage: false,
-        methodType: MethodType.post,
-        withCheckConnection: false);
+    }, host: UrlConstants.checkChallengeStatus, data: {'idUser': userId}, withAlertMessage: false, methodType: MethodType.post, withCheckConnection: false);
   }
 }

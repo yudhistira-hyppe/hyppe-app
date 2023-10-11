@@ -78,6 +78,8 @@ class CustomProfileImage extends StatelessWidget {
               Image.network(
                 forStory ? '${badge?.badgeProfile}' : '${badge?.badgeOther}',
                 fit: BoxFit.cover,
+                width: width,
+                height: height,
                 errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                   return Container();
                 },

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/rendering.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -125,9 +126,9 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
     print(_currentSlidder);
     isDidpop = true;
     _controller.jumpToPage(_currentSlidder);
-    Future.delayed(Duration(milliseconds: 50), () {
-      isDidpop = false;
-    });
+    // Future.delayed(Duration(milliseconds: 150), () {
+    //   isDidpop = false;
+    // });
     super.didPopNext();
   }
 
@@ -182,6 +183,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
           color: kHyppePrimary,
           onRefresh: () async {
             await cn.initLeaderboard(context);
+            _currentTab = 0;
           },
           child: cn.isLoadingLeaderboard
               ? const ShimmerLeaderboard()
@@ -203,67 +205,79 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: CarouselSlider(
-                          carouselController: _controller,
-                          options: CarouselOptions(
-                              enlargeCenterPage: true,
-                              enableInfiniteScroll: false,
-                              viewportFraction: 0.8,
-                              // aspectRatio: 343 / 103,
-                              // height: 176,
-                              height: SizeConfig.screenWidth! * 0.27,
-                              onPageChanged: (index, reason) async {
-                                setState(() {
-                                  _currentSlidder = index;
-                                  _tabController.index = 0;
-                                  chllangeid = cn.bannerLeaderboardData[index].sId ?? '';
+                        child: NotificationListener<UserScrollNotification>(
+                          onNotification: (notification) {
+                            final ScrollDirection direction = notification.direction;
+                            setState(() {
+                              isDidpop = false;
+                            });
+                            print("-=-=-=-=-=-=-=-=- scrolll direction $direction");
+                            return true;
+                          },
+                          child: CarouselSlider(
+                            carouselController: _controller,
+                            options: CarouselOptions(
+                                enlargeCenterPage: true,
+                                enableInfiniteScroll: false,
+                                viewportFraction: 0.8,
+                                // aspectRatio: 343 / 103,
+                                // height: 176,
+                                height: SizeConfig.screenWidth! * 0.27,
+                                onPageChanged: (index, reason) async {
+                                  setState(() {
+                                    _currentSlidder = index;
+                                    _tabController.index = 0;
 
-                                  lastchallangeid = cn.bannerLeaderboardData[index].sId ?? '';
-                                  if (lastchallangeid == chllangeid && !isDidpop) {
-                                    cn.getLeaderBoard(context, cn.bannerLeaderboardData[index].sId ?? '');
-                                  }
-                                });
-                              }),
-                          items: cn.bannerLeaderboardData
-                              .map((item) => Container(
-                                    margin: EdgeInsets.only(bottom: 10),
-                                    decoration: BoxDecoration(boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.8),
-                                        offset: Offset(5, 8),
-                                        blurRadius: 5,
-                                        spreadRadius: -5,
-                                      ),
-                                    ]),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10), //
-                                      child: Image.network(
-                                        item.bannerLandingpage ?? '',
-                                        width: SizeConfig.screenWidth,
-                                        fit: BoxFit.cover,
-                                        loadingBuilder: (context, child, loadingProgress) {
-                                          if (loadingProgress == null) return child;
-                                          return Center(
-                                            child: Container(
-                                              height: SizeConfig.screenHeight,
-                                              width: SizeConfig.screenWidth,
-                                              color: Colors.black,
-                                              child: UnconstrainedBox(
-                                                child: Container(
-                                                  height: 50,
-                                                  width: 50,
-                                                  child: CircularProgressIndicator(
-                                                      // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                      ),
+                                    Future.delayed(Duration(milliseconds: 500), () {
+                                      chllangeid = cn.bannerLeaderboardData[index].sId ?? '';
+                                      if (lastchallangeid == chllangeid && !isDidpop) {
+                                        cn.getLeaderBoard(context, cn.bannerLeaderboardData[index].sId ?? '');
+                                      }
+                                    });
+                                    lastchallangeid = cn.bannerLeaderboardData[index].sId ?? '';
+                                  });
+                                }),
+                            items: cn.bannerLeaderboardData
+                                .map((item) => Container(
+                                      margin: EdgeInsets.only(bottom: 10),
+                                      decoration: BoxDecoration(boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.8),
+                                          offset: Offset(5, 8),
+                                          blurRadius: 5,
+                                          spreadRadius: -5,
+                                        ),
+                                      ]),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10), //
+                                        child: Image.network(
+                                          item.bannerLandingpage ?? '',
+                                          width: SizeConfig.screenWidth,
+                                          fit: BoxFit.cover,
+                                          loadingBuilder: (context, child, loadingProgress) {
+                                            if (loadingProgress == null) return child;
+                                            return Center(
+                                              child: Container(
+                                                height: SizeConfig.screenHeight,
+                                                width: SizeConfig.screenWidth,
+                                                color: Colors.black,
+                                                child: UnconstrainedBox(
+                                                  child: Container(
+                                                    height: 50,
+                                                    width: 50,
+                                                    child: CircularProgressIndicator(
+                                                        // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                        ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          );
-                                        },
+                                            );
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                  ))
-                              .toList(),
+                                    ))
+                                .toList(),
+                          ),
                         ),
                       ),
                       sixPx,

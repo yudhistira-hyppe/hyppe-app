@@ -15,6 +15,7 @@ class ItemLeader extends StatelessWidget {
   final Getlastrank? data;
   final LeaderBoard? dataStatusLead;
   final bool? statusPengguna;
+
   const ItemLeader({super.key, this.data, this.dataStatusLead, this.statusPengguna});
 
   @override
@@ -43,9 +44,9 @@ class ItemLeader extends StatelessWidget {
       colorRank = kHyppePrimary;
       colorRankFont = kHyppeLightButtonText;
     }
-    return data?.ranking == 11 && data?.isUserLogin == false
+    return (data?.ranking ?? 0) >= 11 && data?.isUserLogin == false
         ? Container()
-        : data?.ranking == 11 && (statusPengguna ?? false)
+        : (data?.ranking ?? 0) >= 11 && ((statusPengguna ?? false) == false)
             ? Container()
             : Container(
                 // margin: const EdgeInsets.symmetric(horizontal: 8),
