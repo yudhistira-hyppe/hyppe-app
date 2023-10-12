@@ -156,7 +156,7 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
                                     ),
                                   ),
                                   twentyFourPx,
-                                  BadgeWidget(badgeData: cn.collectionBadgeData?[0].badgeNonAktif),
+                                  BadgeWidget(badgeData: cn.collectionBadgeData?[0].badgeNonAktif, isActive: false),
                                 ],
                               ),
                             ),

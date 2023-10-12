@@ -59,22 +59,22 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     }
   }
 
-  // Future<AdsData> getPopUpAds() async {
-  //   var data = AdsData();
-  //   try {
-  //     final notifier = AdsDataBloc();
-  //     await notifier.adsVideoBlocV2(context, AdsType.popup);
-  //     final fetch = notifier.adsDataFetch;
-  //
-  //     if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-  //       // print('data : ${fetch.data.toString()}');
-  //       data = fetch.data?.data;
-  //     }
-  //   } catch (e) {
-  //     'Failed to fetch ads data $e'.logger();
-  //   }
-  //   return data;
-  // }
+  Future<AdsData> getPopUpAds() async {
+    var data = AdsData();
+    try {
+      final notifier = AdsDataBloc();
+      await notifier.adsVideoBlocV2(context, AdsType.popup);
+      final fetch = notifier.adsDataFetch;
+
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        // print('data : ${fetch.data.toString()}');
+        data = fetch.data?.data;
+      }
+    } catch (e) {
+      'Failed to fetch ads data $e'.logger();
+    }
+    return data;
+  }
 
   @override
   void initState() {
@@ -225,23 +225,23 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     print("device aku $nameDevice");
     SharedPreference().writeStorage(SpKeys.brand, nameDevice);
   }
-
-  Future<AdsData> getPopUpAds() async {
-    var data = AdsData();
-    try {
-      final notifier = AdsDataBloc();
-      await notifier.appAdsBloc(context);
-      final fetch = notifier.adsDataFetch;
-
-      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-        // print('data : ${fetch.data.toString()}');
-        data = fetch.data?.data;
-      }
-    } catch (e) {
-      'Failed to fetch ads data $e'.logger();
-    }
-    return data;
-  }
+  //
+  // Future<AdsData> getPopUpAds() async {
+  //   var data = AdsData();
+  //   try {
+  //     final notifier = AdsDataBloc();
+  //     await notifier.appAdsBloc(context);
+  //     final fetch = notifier.adsDataFetch;
+  //
+  //     if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+  //       // print('data : ${fetch.data.toString()}');
+  //       data = fetch.data?.data;
+  //     }
+  //   } catch (e) {
+  //     'Failed to fetch ads data $e'.logger();
+  //   }
+  //   return data;
+  // }
 
   // Future getAdsApsara() async {
   //   final ads = await getPopUpAds();

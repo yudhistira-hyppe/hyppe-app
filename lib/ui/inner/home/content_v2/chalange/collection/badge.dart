@@ -15,6 +15,7 @@ class BadgeWidget extends StatelessWidget {
   final double? height;
   final List<BadgeAktif>? badgeData;
   final String? avatar;
+  final bool isActive;
 
   const BadgeWidget({
     Key? key,
@@ -22,6 +23,7 @@ class BadgeWidget extends StatelessWidget {
     this.height,
     this.badgeData,
     this.avatar,
+    this.isActive = true,
   }) : super(key: key);
 
   @override
@@ -41,11 +43,11 @@ class BadgeWidget extends StatelessWidget {
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () {
-            cn.selectBadge(badgeData?[index]);
+            if (isActive) cn.selectBadge(badgeData?[index]);
           },
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: badgeData?[index].sId == cn.badgeUser?.id ? kHyppePrimary : Color(0xFFEAEAEA)),
+              border: Border.all(color: badgeData?[index].sId == cn.badgeUser?.id ? kHyppePrimary : const Color(0xFFEAEAEA)),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Stack(
