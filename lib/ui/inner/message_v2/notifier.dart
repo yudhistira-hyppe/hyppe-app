@@ -120,7 +120,7 @@ class MessageNotifier extends ChangeNotifier {
           fullnameReceiver: data?.senderOrReceiverInfo?.fullName ?? '',
           photoReceiver: System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint) ?? '',
           disqusID: data?.disqusID ?? '',
-          badgeReceiver: _selfProfile.user.profile?.urluserBadge,
+          badgeReceiver: data?.senderOrReceiverInfo?.urluserBadge,
           discussData: messageData),
     );
   }

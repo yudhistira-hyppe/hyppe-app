@@ -474,6 +474,7 @@ class ChallangeNotifier with ChangeNotifier {
   }
 
   Future getOption(LeaderboardChallangeModel data, {DateTime? dateTime, int? session}) async {
+    print(dateTime);
     if (dateTime == null) {
       data.subChallenges?.forEach((element) {
         element.detail?.forEach((e) {
@@ -515,6 +516,10 @@ class ChallangeNotifier with ChangeNotifier {
               notifyListeners();
             }
           }
+        } else {
+          optionData = DetailSub();
+          challangeOption = dateTime;
+          notifyListeners();
         }
       });
     }

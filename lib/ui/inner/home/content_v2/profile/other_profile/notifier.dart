@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_vid_detail_screen_argument.dart';
@@ -640,10 +642,12 @@ class OtherProfileNotifier with ChangeNotifier {
                   ),
                 ),
                 emailReceiver: userEmail ?? '',
-                usernameReceiver: displayUserName(),
-                fullnameReceiver: displayFullName() ?? '',
+                // usernameReceiver: displayUserName(),
+                // fullnameReceiver: displayFullName() ?? '',
+                usernameReceiver: "@${manyUser.last.profile?.username}",
+                fullnameReceiver: manyUser.last.profile?.fullName ?? '',
                 photoReceiver: displayPhotoProfile() ?? '',
-                badgeReceiver: _selfProfile.user.profile?.urluserBadge,
+                badgeReceiver: manyUser.last.profile?.urluserBadge,
                 disqusID: '',
               ))
           .then((value) {});
