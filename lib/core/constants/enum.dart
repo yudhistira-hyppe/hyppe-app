@@ -36,7 +36,7 @@ enum SearchLoadData { all, content, user, hashtag }
 
 enum TypeApiSearch { normal, detailHashTag, detailInterest }
 
-enum AdsType {between, content, popup}
+enum AdsType { between, content, popup }
 
 enum ErrorType {
   myStory,

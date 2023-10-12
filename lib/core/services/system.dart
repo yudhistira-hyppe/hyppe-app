@@ -986,7 +986,7 @@ class System {
         return NotificationCategory.adsClick;
       case 'ADS VIEW':
         return NotificationCategory.adsView;
-      case 'CHALLANGE':
+      case 'CHALLENGE':
         return NotificationCategory.challange;
       default:
         return NotificationCategory.all;

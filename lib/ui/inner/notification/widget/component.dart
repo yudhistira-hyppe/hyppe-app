@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -79,8 +80,13 @@ class _ComponentState extends State<Component> {
               NotificationCategory.adsView,
             ];
 
+            print("asdasdasd ${widget.data?.eventType}");
+            print("asdasdasd $eventType");
+
             if (listTransacation.contains(eventType)) {
               await Routing().move(Routes.transaction);
+            } else if (NotificationCategory.challange == eventType) {
+              await Routing().move(Routes.chalengeDetail, argument: GeneralArgument()..id = widget.data?.postID);
             } else {
               await context.read<NotificationNotifier>().navigateToContent(context, widget.data?.postType, widget.data?.postID);
             }
@@ -98,9 +104,7 @@ class _ComponentState extends State<Component> {
             // profile picture
             widget.data?.eventType == 'CHALLENGE'
                 ? Container(
-                    padding: EdgeInsets.all(
-                      12 * SizeConfig.scaleDiagonal,
-                    ),
+                    padding: EdgeInsets.all(16 * SizeConfig.scaleDiagonal),
                     decoration: BoxDecoration(
                       color: const Color(0xFFe8e8e8),
                       borderRadius: BorderRadius.circular(
@@ -108,8 +112,8 @@ class _ComponentState extends State<Component> {
                       ),
                     ),
                     child: CustomIconWidget(
-                      width: 30 * SizeConfig.scaleDiagonal,
-                      height: 30 * SizeConfig.scaleDiagonal,
+                      width: 20 * SizeConfig.scaleDiagonal,
+                      height: 20 * SizeConfig.scaleDiagonal,
                       iconData: "${AssetPath.vectorPath}notification-active.svg",
                       defaultColor: false,
                       color: const Color(0xFFcecece),
