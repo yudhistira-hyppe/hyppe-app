@@ -137,7 +137,8 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                   return CommentTile(logs: comments, fromFront: fromFront, notifier: notifier, index: index);
                                 },
                               ),
-                            ))
+                            ),
+                            )
                           : Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 100.0),
@@ -247,8 +248,16 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
                                               fontWeight: FontWeight.w700,
                                             ),
                                           ),
-                                          onPressed: () {
-                                            notifier.addComment(context, pageDetail: widget.argument.pageDetail);
+                                          onPressed: () async {
+                                            await notifier.addComment(context, pageDetail: widget.argument.pageDetail);
+                                            if (context.mounted) {
+                                              notifier.initState(
+                                                context,
+                                                widget.argument.postID,
+                                                widget.argument.fromFront,
+                                                widget.argument.parentComment,
+                                              );
+                                            }
                                           },
                                         )
                                   : const SizedBox.shrink(),
