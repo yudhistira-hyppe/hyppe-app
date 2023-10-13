@@ -218,7 +218,6 @@ class RegisterNotifier with ChangeNotifier {
                 data: SignUpDataArgument(email: email, password: password, deviceId: deviceId, imei: realDeviceId != "" ? realDeviceId : deviceId, platForm: platForm, lang: lang),
               );
               final fetch = notifier.userFetch;
-              loading = false;
               if (fetch.userState == UserState.signUpSuccess) {
                 final SignUpResponse _result = SignUpResponse.fromJson(fetch.data);
                 if(_result.insight == null && _result.isEmailVerified == "false"){
@@ -271,6 +270,7 @@ class RegisterNotifier with ChangeNotifier {
                   final tempEmail = email;
                   onReset();
                   notifyListeners();
+                  loading = false;
                   Routing().move(
                     Routes.signUpPin,
                     argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: tempEmail),
@@ -288,8 +288,10 @@ class RegisterNotifier with ChangeNotifier {
                       margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
                   );
                 }
+
+                loading = false;
               } else {
-                // loading = false;
+                loading = false;
                 // // >>>>> Agar failed tetap ke signUpPin page
                 // signUpPinNotifier.email = emailController.text;
                 // Routing().moveAndRemoveUntil(
@@ -299,7 +301,7 @@ class RegisterNotifier with ChangeNotifier {
                 // );
               }
             } else {
-              loading = false;
+
               ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
                 Routing().moveBack();
                 nextButton(context);
