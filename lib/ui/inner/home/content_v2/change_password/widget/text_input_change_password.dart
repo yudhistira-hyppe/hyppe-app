@@ -41,16 +41,12 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
                 hintStyle: notifier.hint(context),
                 labelStyle: notifier.label(context),
                 suffixIcon: CustomTextButton(
-                  style: ButtonStyle(
-                      alignment: Alignment.centerRight,
-                      padding: MaterialStateProperty.all(EdgeInsets.zero),
-                      overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                  style: ButtonStyle(alignment: Alignment.centerRight, padding: MaterialStateProperty.all(EdgeInsets.zero), overlayColor: MaterialStateProperty.all(Colors.transparent)),
                   onPressed: () => setState(() => notifier.obscureCurrentPassword = !notifier.obscureCurrentPassword),
                   child: CustomIconWidget(iconData: "${AssetPath.vectorPath}${notifier.obscureCurrentPassword ? "eye-off" : "eye"}.svg"),
                 ),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: notifier.currentPasswordController.text.isEmpty ? Theme.of(context).iconTheme.color ?? Colors.white : kHyppePrimary, width: 1)),
+                enabledBorder:
+                    UnderlineInputBorder(borderSide: BorderSide(color: notifier.currentPasswordController.text.isEmpty ? Theme.of(context).iconTheme.color ?? Colors.white : kHyppePrimary, width: 1)),
                 focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: kHyppePrimary, width: 1)),
                 contentPadding: const EdgeInsets.only(bottom: 2),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -74,16 +70,12 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
                 hintStyle: notifier.hint(context),
                 labelStyle: notifier.label(context),
                 suffixIcon: CustomTextButton(
-                  style: ButtonStyle(
-                      alignment: Alignment.centerRight,
-                      padding: MaterialStateProperty.all(EdgeInsets.zero),
-                      overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                  style: ButtonStyle(alignment: Alignment.centerRight, padding: MaterialStateProperty.all(EdgeInsets.zero), overlayColor: MaterialStateProperty.all(Colors.transparent)),
                   onPressed: () => setState(() => notifier.obscureNewPassword = !notifier.obscureNewPassword),
                   child: CustomIconWidget(iconData: "${AssetPath.vectorPath}${notifier.obscureNewPassword ? "eye-off" : "eye"}.svg"),
                 ),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: notifier.newPasswordController.text.isEmpty ? Theme.of(context).iconTheme.color ?? Colors.white : kHyppePrimary, width: 1)),
+                enabledBorder:
+                    UnderlineInputBorder(borderSide: BorderSide(color: notifier.newPasswordController.text.isEmpty ? Theme.of(context).iconTheme.color ?? Colors.white : kHyppePrimary, width: 1)),
                 focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: kHyppePrimary, width: 1)),
                 contentPadding: const EdgeInsets.only(bottom: 2),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -107,16 +99,12 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
                 hintStyle: notifier.hint(context),
                 labelStyle: notifier.label(context),
                 suffixIcon: CustomTextButton(
-                  style: ButtonStyle(
-                      alignment: Alignment.centerRight,
-                      padding: MaterialStateProperty.all(EdgeInsets.zero),
-                      overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                  style: ButtonStyle(alignment: Alignment.centerRight, padding: MaterialStateProperty.all(EdgeInsets.zero), overlayColor: MaterialStateProperty.all(Colors.transparent)),
                   onPressed: () => setState(() => notifier.obscureReTypePassword = !notifier.obscureReTypePassword),
                   child: CustomIconWidget(iconData: "${AssetPath.vectorPath}${notifier.obscureReTypePassword ? "eye-off" : "eye"}.svg"),
                 ),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: notifier.reTypePasswordController.text.isEmpty ? Theme.of(context).iconTheme.color ?? Colors.white : kHyppePrimary, width: 1)),
+                enabledBorder:
+                    UnderlineInputBorder(borderSide: BorderSide(color: notifier.reTypePasswordController.text.isEmpty ? Theme.of(context).iconTheme.color ?? Colors.white : kHyppePrimary, width: 1)),
                 focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: kHyppePrimary, width: 1)),
                 contentPadding: const EdgeInsets.only(bottom: 2),
                 floatingLabelBehavior: FloatingLabelBehavior.always,

@@ -365,8 +365,8 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
     // if (offset > lastOffset) {
     if (!scroolUp) {
       homeClick = false;
-      for (var i = 0; i <= _curIdx; i++) {
-        if (i == _curIdx) {
+      for (var i = 0; i <= itemIndex; i++) {
+        if (i == itemIndex) {
           totItemHeightParam += (notifier.diaryData?[i].height ?? 0.0) * 30 / 100;
         } else {
           totItemHeightParam += notifier.diaryData?[i].height ?? 0.0;
@@ -375,29 +375,35 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
       }
       if (offset >= totItemHeightParam) {
         var position = totItemHeight;
-        if (_curIdx == 0 && position == 0) {
+        if (itemIndex == 0 && position == 0) {
           position = notifier.diaryData?[1].height ?? 200.0;
         }
-        if (mounted) widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
+        if (mounted) {
+          widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
+          itemIndex++;
+        }
       }
     } else {
       if (!homeClick) {
-        for (var i = 0; i < _curIdx; i++) {
-          if (i == _curIdx - 1) {
+        for (var i = 0; i < itemIndex; i++) {
+          if (i == itemIndex - 1) {
             totItemHeightParam += (notifier.diaryData?[i].height ?? 0.0) * 75 / 100;
-          } else if (i == _curIdx) {
+          } else if (i == itemIndex) {
           } else {
             totItemHeightParam += notifier.diaryData?[i].height ?? 0.0;
           }
           totItemHeight += notifier.diaryData?[i].height ?? 0.0;
         }
-        if (_curIdx > 0) {
-          totItemHeight -= notifier.diaryData?[_curIdx - 1].height ?? 0.0;
+        if (itemIndex > 0) {
+          totItemHeight -= notifier.diaryData?[itemIndex - 1].height ?? 0.0;
         }
 
         if (offset <= totItemHeightParam && offset > 0) {
           var position = totItemHeight;
-          if (mounted) widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
+          if (mounted) {
+            widget.scrollController?.animateTo(position, duration: const Duration(milliseconds: 200), curve: Curves.ease);
+            itemIndex--;
+          }
         }
       }
     }
