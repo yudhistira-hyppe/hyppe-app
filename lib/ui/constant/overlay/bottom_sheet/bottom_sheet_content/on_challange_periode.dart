@@ -18,7 +18,8 @@ class OnChallangePeriodeBottomSheet extends StatefulWidget {
   final int? session;
   final String? idchallenge;
   final bool? isDetail;
-  const OnChallangePeriodeBottomSheet({super.key, this.session, this.idchallenge, this.isDetail});
+  final bool? isWinner;
+  const OnChallangePeriodeBottomSheet({super.key, this.session, this.idchallenge, this.isDetail, this.isWinner});
 
   @override
   State<OnChallangePeriodeBottomSheet> createState() => _OnChallangePeriodeBottomSheetState();
@@ -145,13 +146,20 @@ class _OnChallangePeriodeBottomSheetState extends State<OnChallangePeriodeBottom
                     },
                   ),
           ),
+          Text(widget.idchallenge ?? ''),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             child: ButtonChallangeWidget(
                 bgColor: kHyppePrimary,
                 text: "${tn.translate.apply}",
                 function: () {
-                  cn.setFilter(context, widget.idchallenge ?? '', _currentSession, widget.isDetail ?? false);
+                  cn.setFilter(
+                    context,
+                    widget.idchallenge ?? '',
+                    _currentSession,
+                    widget.isDetail ?? false,
+                    // isWinner: widget.isWinner ?? false,
+                  );
                   Routing().moveBack();
                 }),
           ),

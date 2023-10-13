@@ -107,14 +107,15 @@ class NotificationService {
       if (payload != null) {
         if (map['postID'] != null) {
           final data = NotificationBody.fromJson(map);
+
           if (data.postType == 'TRANSACTION') {
             Routing().move(Routes.transaction);
-          } else if (data.postType == 'CHALLANGE') {
+          } else if (data.postType == 'CHALLENGE') {
             Routing().move(
               Routes.chalengeDetail,
               argument: GeneralArgument(
                 id: data.postId,
-                index: int.parse(data.index ?? '0'),
+                index: (data.winner ?? false) ? 1 : 0, //int.parse(data.index ?? '0'),
                 title: data.title,
                 body: data.message,
               ),
@@ -139,17 +140,13 @@ class NotificationService {
           final index1 = result.indexWhere((element) => element.disqusLogs[0].sender == sender);
           "array yg di dapat $index1".logger();
           notifier.onClickUser(materialAppKey.currentContext!, result[index1]);
-        } else if(map['url'] != null){
-          if(isFromSplash){
+        } else if (map['url'] != null) {
+          if (isFromSplash) {
             page = 3;
-          }else{
-            Routing().moveAndRemoveUntil(
-                Routes.lobby,
-                Routes.lobby,
-                argument: MainArgument(canShowAds: false, page: 3));
-
+          } else {
+            Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby, argument: MainArgument(canShowAds: false, page: 3));
           }
-        }else {
+        } else {
           throw 'Not recognize the type of the object of the notification ';
         }
       }
@@ -260,8 +257,9 @@ class NotificationBody {
   String? title;
   String? index;
   String? url;
+  bool? winner;
 
-  NotificationBody({this.postId, this.postType, this.message, this.index, this.url});
+  NotificationBody({this.postId, this.postType, this.message, this.index, this.url, this.winner});
 
   NotificationBody.fromJson(Map<String, dynamic> json) {
     postId = json['postID'];
@@ -270,6 +268,7 @@ class NotificationBody {
     title = json['title'];
     index = json['index'];
     url = json['url'];
+    winner = json['winner'] == "true" ? true : false;
   }
 
   Map<String, dynamic> toJson() {

@@ -962,7 +962,7 @@ class System {
       case NotificationCategory.adsView:
         return 'ADS VIEW';
       case NotificationCategory.challange:
-        return 'CHALLANGE';
+        return 'CHALLENGE';
     }
   }
 

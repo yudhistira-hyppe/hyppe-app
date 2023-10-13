@@ -1437,7 +1437,7 @@ class ShowBottomSheet {
     );
   }
 
-  static onPeriodChallange(context, String idchallenge, bool isDetail, int session) async {
+  static onPeriodChallange(context, String idchallenge, bool isDetail, int session, {bool isWinner = false}) async {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -1461,6 +1461,7 @@ class ShowBottomSheet {
               session: session,
               idchallenge: idchallenge,
               isDetail: isDetail,
+              isWinner: isWinner,
             ),
           ),
         );
@@ -1501,15 +1502,14 @@ class ShowBottomSheet {
     required VoidCallback whenComplete,
   }) async {
     await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      isDismissible: true,
-      enableDrag: true,
-      backgroundColor: Colors.transparent,
-      builder: (builder) {
-        return const OnShowSticker();
-      }
-    );
+        context: context,
+        isScrollControlled: true,
+        isDismissible: true,
+        enableDrag: true,
+        backgroundColor: Colors.transparent,
+        builder: (builder) {
+          return const OnShowSticker();
+        });
     whenComplete();
   }
 

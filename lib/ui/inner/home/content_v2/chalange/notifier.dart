@@ -109,6 +109,11 @@ class ChallangeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  clearData() {
+    leaderBoardDetailData = null;
+    leaderBoardDetaiEndlData = null;
+  }
+
   void checkInet(BuildContext context) async {
     final connect = await _system.checkConnections();
     if (!connect) {
@@ -200,11 +205,11 @@ class ChallangeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future initLeaderboardDetail(BuildContext context, bool mounted, String id, {bool? isNewJoin}) async {
+  Future initLeaderboardDetail(BuildContext context, bool mounted, String id, {bool? isNewJoin, bool isWinner = false}) async {
     isLoadingLeaderboard = true;
     notifyListeners();
     checkInet(context);
-    await getLeaderBoard(context, id, isDetail: true);
+    await getLeaderBoard(context, id, isDetail: true, isWinner: isWinner);
     if (mounted) {
       var result = await System().createdReferralLink(context);
       referralLink = result.toString();
@@ -219,7 +224,13 @@ class ChallangeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future getLeaderBoard(BuildContext context, String idchallenge, {bool isDetail = false, bool oldLeaderboard = false}) async {
+  Future getLeaderBoard(
+    BuildContext context,
+    String idchallenge, {
+    bool isDetail = false,
+    bool oldLeaderboard = false,
+    bool isWinner = false,
+  }) async {
     Map param = {
       "idchallenge": idchallenge,
       // "idchallenge": "6486f6d4b8ab34f61602f85a",
@@ -270,7 +281,6 @@ class ChallangeNotifier with ChangeNotifier {
             getdata?.totalDays = dateNote[1].inDays;
             getdata?.noteTime = 'inDays';
           }
-          print("===000 ${getdata?.totalDays}");
         }
 
         if (isDetail) {
@@ -286,9 +296,9 @@ class ChallangeNotifier with ChangeNotifier {
           } else {
             leaderBoardDetailData = getdata;
           }
-          print("leaderBoardDetailData ${leaderBoardDetailData?.onGoing} - ${leaderBoardDetailData?.totalDays}  - ${leaderBoardDetailData?.noteTime}");
+          // print("leaderBoardDetailData ${leaderBoardDetailData?.onGoing} - ${leaderBoardDetailData?.totalDays}  - ${leaderBoardDetailData?.noteTime}");
         } else {
-          print("===2");
+          // print("===2");
           if (oldLeaderboard) {
             leaderBoardEndData = getdata;
           } else {
@@ -296,7 +306,7 @@ class ChallangeNotifier with ChangeNotifier {
           }
         }
       } else {
-        Routing().moveReplacement(Routes.chalenge);
+        if (!isWinner) Routing().moveReplacement(Routes.chalenge);
       }
 
       isLoading = false;

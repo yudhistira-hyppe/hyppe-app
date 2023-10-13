@@ -14,7 +14,8 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class ListEndDetail extends StatefulWidget {
-  const ListEndDetail({super.key});
+  final bool? isWinner;
+  const ListEndDetail({super.key, this.isWinner});
 
   @override
   State<ListEndDetail> createState() => _ListEndDetailState();
@@ -65,7 +66,13 @@ class _ListEndDetailState extends State<ListEndDetail> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            ShowBottomSheet.onPeriodChallange(context, cn.leaderBoardDetailData?.challengeId ?? '', true, cn.selectOptionSession);
+                            ShowBottomSheet.onPeriodChallange(
+                              context,
+                              cn.leaderBoardDetaiEndlData?.challengeId ?? '',
+                              true,
+                              cn.selectOptionSession,
+                              isWinner: widget.isWinner ?? false,
+                            );
                             print(cn.selectOptionSession);
                           },
                           child: Container(

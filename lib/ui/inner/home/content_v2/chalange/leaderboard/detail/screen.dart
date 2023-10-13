@@ -7,6 +7,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/chalange/leaderboard_challange_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -70,7 +71,27 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
       });
 
       var cn = context.read<ChallangeNotifier>();
-      cn.initLeaderboardDetail(context, mounted, widget.arguments?.id ?? '');
+      cn.clearData();
+
+      print("hahahaha hihihihihihi");
+
+      if (widget.arguments?.index == 1) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _tabController.index = widget.arguments?.index ?? 0;
+          cn.getLeaderBoard(
+            context,
+            chllangeid,
+            oldLeaderboard: true,
+            isDetail: true,
+          );
+          Future.delayed(const Duration(milliseconds: 500), () {
+            ShowGeneralDialog.winChallange(context, widget.arguments?.title ?? '', widget.arguments?.body ?? '');
+          });
+        });
+      } else {
+        cn.initLeaderboardDetail(context, mounted, widget.arguments?.id ?? '');
+      }
+
       chllangeid = widget.arguments?.id ?? '';
 
       _tabController.animation?.addListener(() {
@@ -90,21 +111,6 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
         }
         _lastCurrent = _current;
       });
-
-      if (widget.arguments?.index == 1) {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          _tabController.index = widget.arguments?.index ?? 0;
-          cn.getLeaderBoard(
-            context,
-            chllangeid,
-            oldLeaderboard: true,
-            isDetail: true,
-          );
-          Future.delayed(const Duration(milliseconds: 500), () {
-            ShowGeneralDialog.winChallange(context, widget.arguments?.title ?? '', widget.arguments?.body ?? '');
-          });
-        });
-      }
 
       if (widget.arguments?.session != null) {
         Future.delayed(const Duration(milliseconds: 500), () {
@@ -131,7 +137,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
       ListOnGoingDetail(
         scrollController: scrollController,
       ),
-      const ListEndDetail(),
+      ListEndDetail(isWinner: widget.arguments?.index == 1 ? true : false),
     ];
   }
 
@@ -143,8 +149,14 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
     }
 
     String inTime = '';
+    LeaderboardChallangeModel data;
+    if (cn.leaderBoardDetailData?.challengeData == null) {
+      data = cn.leaderBoardDetaiEndlData ?? LeaderboardChallangeModel();
+    } else {
+      data = cn.leaderBoardDetailData ?? LeaderboardChallangeModel();
+    }
 
-    switch (cn.leaderBoardDetailData?.noteTime) {
+    switch (data.noteTime) {
       case "inDays":
         inTime = lang?.hariLagi ?? "Hari Lagi";
         break;
@@ -155,13 +167,13 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
         inTime = lang?.menitLagi ?? "Menit Lagi";
     }
 
-    if (cn.leaderBoardDetailData?.status == "BERAKHIR") {
+    if (data.status == "BERAKHIR") {
       dateText = lang?.thecompetitionhasended ?? "Kompetisi telah berakhir";
     } else {
-      if (cn.leaderBoardDetailData?.onGoing == true) {
-        dateText = " ${lang?.endsIn} ${cn.leaderBoardDetailData?.totalDays} $inTime";
+      if (data.onGoing == true) {
+        dateText = " ${lang?.endsIn} ${data.totalDays} $inTime";
       } else {
-        dateText = "${lang?.startIn} ${cn.leaderBoardDetailData?.totalDays} $inTime";
+        dateText = "${lang?.startIn} ${data.totalDays} $inTime";
       }
     }
   }
@@ -424,7 +436,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                                         ),
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 16.0),
-                                    child: _tabs![_current],
+                                    child: _tabs?[_current],
                                   ),
                                 ],
                               ),

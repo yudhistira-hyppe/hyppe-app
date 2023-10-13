@@ -267,8 +267,7 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
     if (widgetTwo) {
       if (challengeData?.objectChallenge == "AKUN") {
         if (challengeData?.metrik?[0].aktivitasAkun?.isNotEmpty ?? [].isEmpty) {
-          Routing().moveBack();
-          Routing().moveBack();
+          Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
           // titleText = "Ikuti akun - akun TerhHyppe untuk memenangkan kompetisi";
           // buttonText = "Jelajahi dan Ikuti Akun Terhyppe disini!";
         } else {
@@ -289,8 +288,7 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
           if ((challengeData?.metrik?[0].aktivitasAkun?[0].referal ?? 0) > 0) {
             ShowBottomSheet.onQRCodeChallange(context);
           } else if ((challengeData?.metrik?[0].aktivitasAkun?[0].ikuti ?? 0) > 0) {
-            Routing().moveBack();
-            Routing().moveBack();
+            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
           }
         }
         if (challengeData?.metrik?[0].interaksiKonten?.isNotEmpty ?? [].isEmpty) {
