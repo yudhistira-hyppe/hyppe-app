@@ -200,7 +200,7 @@ class RegisterNotifier with ChangeNotifier {
             bool connection = await System().checkConnections();
             if (connection) {
               email = email.toLowerCase();
-              final signUpPinNotifier = Provider.of<SignUpPinNotifier>(context, listen: false);
+              final signUpPinNotifier = Provider.of<SignUpPinNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
 
               // initialize Fcm service if not
               await FcmService().initializeFcmIfNot();
@@ -214,7 +214,7 @@ class RegisterNotifier with ChangeNotifier {
 
               final notifier = UserBloc();
               await notifier.signUpBlocV2(
-                context,
+                Routing.navigatorKey.currentContext ?? context,
                 data: SignUpDataArgument(email: email, password: password, deviceId: deviceId, imei: realDeviceId != "" ? realDeviceId : deviceId, platForm: platForm, lang: lang),
               );
               final fetch = notifier.userFetch;
@@ -222,7 +222,7 @@ class RegisterNotifier with ChangeNotifier {
                 final SignUpResponse _result = SignUpResponse.fromJson(fetch.data);
                 if(_result.insight == null && _result.isEmailVerified == "false"){
                   await ShowBottomSheet().onShowColouredSheet(
-                      context,
+                      Routing.navigatorKey.currentContext ?? context,
                       language.emailVerification ?? '',
                       subCaption: language.emailHasRegistered,
                       maxLines: 3,
@@ -231,8 +231,8 @@ class RegisterNotifier with ChangeNotifier {
                       color: kHyppeTextLightPrimary,
                       isArrow: true,
                       iconColor: kHyppeBorder,
-                      padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
-                      margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
+                      padding: const EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
+                      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 25),
                       iconSvg: "${AssetPath.vectorPath}info_white.svg",
                       function: (){
                         SharedPreference().writeStorage(SpKeys.email, _result.email);
@@ -277,7 +277,7 @@ class RegisterNotifier with ChangeNotifier {
                   );
                 }else{
                   await ShowBottomSheet().onShowColouredSheet(
-                      context,
+                    Routing.navigatorKey.currentContext ?? context,
                       fetch.message?.info[0] ?? '',
                       maxLines: 3,
                       borderRadius: 8,
