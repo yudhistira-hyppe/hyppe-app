@@ -28,7 +28,7 @@ dependencies:
   carousel_slider: ^4.2.1 # Untuk kebutuhan Carousel Slider
   cupertino_icons: ^1.0.4 # The following adds the Cupertino Icons font to your application, Use with the CupertinoIcons class for iOS style icons.
   dio: ^5.0.1 # Untuk kebutuhan [HTTP Request]
-  file_picker: ^4.4.0 # Use a native file explorer to pick single or multiple absolute file paths, with extension filtering support
+  # file_picker: ^4.4.0 # Use a native file explorer to pick single or multiple absolute file paths, with extension filtering support
   flutter_local_notifications: ^9.9.1 # Untuk kebutuhan push notification
   flutter_svg: ^1.0.3 # Untuk kebutuhan rendering svg file
   flutter_video_info: ^1.2.0 # Get basic metadata information of a video file.
@@ -115,6 +115,12 @@ dependencies:
   matrix_gesture_detector:
     path: packages/matrix_gesture_detector
   
+
+  # matrix_gesture_detector: ^0.2.0-nullsafety.1
+  file_picker:
+    path: packages/file_picker-4.6.1
+  
+
   qr_flutter: ^4.0.0
   pattern_formatter: ^2.0.0
   flutter_countdown_timer: ^4.1.0
