@@ -12,7 +12,8 @@ import 'package:provider/provider.dart';
 import 'dart:math' as math;
 
 class VerificationIDStep7 extends StatefulWidget {
-  const VerificationIDStep7({Key? key}) : super(key: key);
+  final bool isFromBack;
+  const VerificationIDStep7({Key? key, required this.isFromBack}) : super(key: key);
 
   @override
   State<VerificationIDStep7> createState() => _VerificationIDStep7State();
@@ -40,7 +41,25 @@ class _VerificationIDStep7State extends State<VerificationIDStep7> {
           body: SafeArea(
             child: Stack(
               children: [
-                Transform(
+                Platform.isIOS ? Transform(
+                  transform: Matrix4.rotationY(math.pi),
+                  alignment: Alignment.center,
+                  child: Image.file(
+                    File(notifier.selfiePath),
+                    // notifier.pickedSupportingDocs![0],
+                    fit: BoxFit.cover,
+                    height: double.infinity,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                  ),
+                ): widget.isFromBack ? Image.file(
+                  File(notifier.selfiePath),
+                  // notifier.pickedSupportingDocs![0],
+                  fit: BoxFit.cover,
+                  height: double.infinity,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                ): Transform(
                   transform: Matrix4.rotationY(math.pi),
                   alignment: Alignment.center,
                   child: Image.file(
