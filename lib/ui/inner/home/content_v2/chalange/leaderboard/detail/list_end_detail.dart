@@ -97,6 +97,8 @@ class _ListEndDetailState extends State<ListEndDetail> {
                             ),
                           ),
                         ),
+                        // Text("${cn.leaderBoardDetaiEndlData?.getlastrank}"),
+                        // Text("asdasdasd"),
                         cn.isLoadingLeaderboard
                             ? Container()
                             : (cn.leaderBoardDetaiEndlData?.getlastrank?.isEmpty ?? [].isEmpty) || cn.leaderBoardDetaiEndlData?.status == "BERLANGSUNG"

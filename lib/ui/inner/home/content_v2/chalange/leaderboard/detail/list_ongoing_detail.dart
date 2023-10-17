@@ -140,7 +140,7 @@ class _ListOnGoingDetailState extends State<ListOnGoingDetail> {
                                           ),
                                         ),
                                       ),
-                        cn.leaderBoardDetailData?.onGoing == false
+                        cn.leaderBoardDetailData?.onGoing == false || (cn.leaderBoardDetailData?.challengeData?.isEmpty ?? [].isEmpty)
                             ? Container()
                             : boollUser
                                 ? Container()

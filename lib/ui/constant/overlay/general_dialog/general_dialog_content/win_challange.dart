@@ -114,7 +114,7 @@ class _WinChallangePopState extends State<WinChallangePop> {
                           ),
                           sixteenPx,
                           Text(
-                            widget.title,
+                            widget.body,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.transparent,

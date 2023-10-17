@@ -7,7 +7,7 @@ import 'package:hyppe/core/models/collection/notification_v2/notification_sender
 class NotificationModel {
   bool? active;
   bool? flowIsDone;
-  String? actionButtons;
+  String? actionButtons; //
   String? eventType;
   String? title;
   String? titleEN;
@@ -26,6 +26,10 @@ class NotificationModel {
   String? postID;
   String? postType;
   UserBadgeModel? urluserBadge;
+  bool? winner;
+  int? index;
+  int? challengeSession;
+  String? contentEventID; // untuk challeng masuk ke tab isinya 1 atau 0
 
   NotificationModel({
     this.active,
@@ -49,6 +53,7 @@ class NotificationModel {
     this.postID,
     this.postType,
     this.urluserBadge,
+    this.contentEventID,
   });
 
   NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -83,6 +88,7 @@ class NotificationModel {
         urluserBadge = UserBadgeModel.fromJson(json['urluserBadge']);
       }
     }
+    contentEventID = json["contentEventID"];
   }
 
   Map<String, dynamic> toJson() {

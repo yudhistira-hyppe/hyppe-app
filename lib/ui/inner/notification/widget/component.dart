@@ -80,13 +80,17 @@ class _ComponentState extends State<Component> {
               NotificationCategory.adsView,
             ];
 
-            print("asdasdasd ${widget.data?.eventType}");
-            print("asdasdasd $eventType");
-
             if (listTransacation.contains(eventType)) {
               await Routing().move(Routes.transaction);
             } else if (NotificationCategory.challange == eventType) {
-              await Routing().move(Routes.chalengeDetail, argument: GeneralArgument()..id = widget.data?.postID);
+              await Routing().move(Routes.chalengeDetail,
+                  argument: GeneralArgument()
+                    ..id = widget.data?.postID
+                    ..index = widget.data?.contentEventID != null ? 1 : 0
+                    ..isTrue = widget.data?.actionButtons == "true" ? true : false
+                    ..title = widget.data?.title
+                    ..body = System().bodyMultiLang(bodyEn: widget.data?.body ?? widget.data?.bodyId, bodyId: widget.data?.bodyId) ?? ''
+                    ..session = widget.data?.contentEventID == null ? null : int.parse(widget.data?.contentEventID ?? '0'));
             } else {
               await context.read<NotificationNotifier>().navigateToContent(context, widget.data?.postType, widget.data?.postID);
             }

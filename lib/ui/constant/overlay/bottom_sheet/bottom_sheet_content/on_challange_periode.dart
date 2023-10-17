@@ -146,7 +146,7 @@ class _OnChallangePeriodeBottomSheetState extends State<OnChallangePeriodeBottom
                     },
                   ),
           ),
-          Text(widget.idchallenge ?? ''),
+          // Text(widget.idchallenge ?? ''),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             child: ButtonChallangeWidget(

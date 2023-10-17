@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/arguments/main_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/chalange/leaderboard_challange_model.dart';
@@ -267,7 +268,8 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
     if (widgetTwo) {
       if (challengeData?.objectChallenge == "AKUN") {
         if (challengeData?.metrik?[0].aktivitasAkun?.isNotEmpty ?? [].isEmpty) {
-          Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+          Routing().moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false, page: 1));
+          // notifier.pageIndex
           // titleText = "Ikuti akun - akun TerhHyppe untuk memenangkan kompetisi";
           // buttonText = "Jelajahi dan Ikuti Akun Terhyppe disini!";
         } else {
@@ -288,7 +290,7 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
           if ((challengeData?.metrik?[0].aktivitasAkun?[0].referal ?? 0) > 0) {
             ShowBottomSheet.onQRCodeChallange(context);
           } else if ((challengeData?.metrik?[0].aktivitasAkun?[0].ikuti ?? 0) > 0) {
-            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false, page: 1));
           }
         }
         if (challengeData?.metrik?[0].interaksiKonten?.isNotEmpty ?? [].isEmpty) {

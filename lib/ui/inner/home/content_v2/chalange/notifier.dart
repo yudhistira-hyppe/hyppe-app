@@ -230,6 +230,7 @@ class ChallangeNotifier with ChangeNotifier {
     bool isDetail = false,
     bool oldLeaderboard = false,
     bool isWinner = false,
+    int? session,
   }) async {
     Map param = {
       "idchallenge": idchallenge,
@@ -238,8 +239,11 @@ class ChallangeNotifier with ChangeNotifier {
       // "status":"BERLANGSUNG",
       // "session":1
     };
+    if (leaderBoardDetailData == null) {
+      isLoadingLeaderboard = true;
+    }
     if (oldLeaderboard) {
-      param["session"] = selectOptionSession;
+      param["session"] = session ?? selectOptionSession;
     }
     isLoading = true;
     notifyListeners();
@@ -310,6 +314,9 @@ class ChallangeNotifier with ChangeNotifier {
       }
 
       isLoading = false;
+
+      isLoadingLeaderboard = false;
+
       notifyListeners();
       print("selesai");
     }

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
@@ -23,7 +22,6 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/list_
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/list_ongoing_detail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_list.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
-import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -76,18 +74,22 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
       print("hahahaha hihihihihihi");
 
       if (widget.arguments?.index == 1) {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          _tabController.index = widget.arguments?.index ?? 0;
-          cn.getLeaderBoard(
-            context,
-            chllangeid,
-            oldLeaderboard: true,
-            isDetail: true,
-          );
+        // Future.delayed(const Duration(milliseconds: 500), () {
+        _tabController.index = 1;
+        _current = 1;
+        cn.getLeaderBoard(
+          context,
+          widget.arguments?.id ?? chllangeid,
+          oldLeaderboard: true,
+          isDetail: true,
+          session: widget.arguments?.session,
+        );
+        if (widget.arguments?.isTrue ?? false) {
           Future.delayed(const Duration(milliseconds: 500), () {
             ShowGeneralDialog.winChallange(context, widget.arguments?.title ?? '', widget.arguments?.body ?? '');
           });
-        });
+        }
+        // });
       } else {
         cn.initLeaderboardDetail(context, mounted, widget.arguments?.id ?? '');
       }
@@ -193,8 +195,14 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
     var desc = '';
     var participant = 0;
 
+    String title = '';
+
     if (!cn.isLoadingLeaderboard || cn.leaderBoardDetailData?.sId != null) {
       bgColor = System().colorFromHex(cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].warnaBackground ?? "#F5F5F5");
+      title = cn.leaderBoardDetailData?.challengeData?[0].nameChallenge ?? '';
+    } else if (!cn.isLoadingLeaderboard || cn.leaderBoardDetaiEndlData?.sId != null) {
+      bgColor = System().colorFromHex(cn.leaderBoardDetaiEndlData?.challengeData?[0].leaderBoard?[0].warnaBackground ?? "#F5F5F5");
+      title = cn.leaderBoardDetaiEndlData?.challengeData?[0].nameChallenge ?? '';
     }
     cn.leaderBoardDetailData?.getlastrank?.forEach((e) {
       // print("=hahaha=");
@@ -219,94 +227,91 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
       }
     }
 
-    return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-          child: AppBar(
-            backgroundColor: Colors.white,
-            leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios_new_sharp,
-                color: kHyppeTextLightPrimary,
-                size: 16,
-              ),
-              onPressed: () {
-                if (!cn.isLoadingLeaderboard) {
-                  Routing().moveBack();
-                }
-              },
-            ),
-            title: Text(
-              cn.isLoadingLeaderboard
-                  ? ''
-                  : cn.leaderBoardDetailData?.challengeData?[0].nameChallenge == null
-                      ? ''
-                      : '${cn.leaderBoardDetailData?.challengeData?[0].nameChallenge}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontFamily: 'Lato',
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            titleSpacing: 0,
-            actions: [
-              cn.isLoadingLeaderboard || cn.leaderBoardDetailData?.sId == null
-                  ? Container()
-                  : IconButton(
-                      onPressed: () {
-                        unawaited(
-                          Navigator.of(context, rootNavigator: true).push(
-                            PageRouteBuilder(
-                              pageBuilder: (_, __, ___) => WillPopScope(
-                                onWillPop: () async => false,
-                                child: Scaffold(
-                                  backgroundColor: Colors.transparent,
-                                  body: const Center(
-                                    child: CircularProgressIndicator.adaptive(),
+    return cn.isLoadingLeaderboard
+        //  || (cn.leaderBoardDetailData?.sId == null || cn.leaderBoardDetaiEndlData?.sId == null)
+        ? const ShimmerListLeaderboard()
+        : Scaffold(
+            backgroundColor: bgColor,
+            appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
+                child: AppBar(
+                  leading: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new_sharp,
+                      color: kHyppeTextLightPrimary,
+                      size: 16,
+                    ),
+                    onPressed: () {
+                      if (!cn.isLoadingLeaderboard) {
+                        Routing().moveBack();
+                      }
+                    },
+                  ),
+                  title: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Lato',
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  titleSpacing: 0,
+                  actions: [
+                    cn.isLoadingLeaderboard || cn.leaderBoardDetailData?.sId == null
+                        ? Container()
+                        : IconButton(
+                            onPressed: () {
+                              unawaited(
+                                Navigator.of(context, rootNavigator: true).push(
+                                  PageRouteBuilder(
+                                    pageBuilder: (_, __, ___) => WillPopScope(
+                                      onWillPop: () async => false,
+                                      child: Scaffold(
+                                        backgroundColor: Colors.transparent,
+                                        body: const Center(
+                                          child: CircularProgressIndicator.adaptive(),
+                                        ),
+                                      ),
+                                    ),
+                                    transitionDuration: Duration.zero,
+                                    barrierDismissible: false,
+                                    barrierColor: Colors.black45,
+                                    opaque: false,
                                   ),
                                 ),
-                              ),
-                              transitionDuration: Duration.zero,
-                              barrierDismissible: false,
-                              barrierColor: Colors.black45,
-                              opaque: false,
-                            ),
-                          ),
-                        );
-                        String thumb = cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].bannerLeaderboard ?? '';
-                        String desc = 'Ikuti challange dan menangkan kesempatan menang';
-                        String fullname = "${cn.leaderBoardDetailData?.challengeData?[0].nameChallenge ?? ''} | Hyppe Challange";
-                        String postId = cn.leaderBoardDetailData?.challengeId ?? '';
-                        String routes = "/chalenge-detail";
-                        DynamicLinkData dynamicLinkData = DynamicLinkData(description: desc, fullName: fullname, postID: postId, routes: routes, thumb: thumb);
+                              );
+                              String thumb = cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].bannerLeaderboard ?? '';
+                              String desc = 'Ikuti challange dan menangkan kesempatan menang';
+                              String fullname = "${cn.leaderBoardDetailData?.challengeData?[0].nameChallenge ?? ''} | Hyppe Challange";
+                              String postId = cn.leaderBoardDetailData?.challengeId ?? '';
+                              String routes = "/chalenge-detail";
+                              DynamicLinkData dynamicLinkData = DynamicLinkData(description: desc, fullName: fullname, postID: postId, routes: routes, thumb: thumb);
 
-                        System().createdDynamicLink(context, dynamicLinkData: dynamicLinkData).then((value) => Routing().moveBack());
-                      },
-                      icon: const CustomIconWidget(
-                        iconData: "${AssetPath.vectorPath}share2.svg",
-                        defaultColor: false,
-                        height: 20,
-                      ),
-                    )
-            ],
-          )),
-      body: RefreshIndicator(
-        color: kHyppePrimary,
-        onRefresh: () async {
-          await cn.initLeaderboardDetail(context, mounted, widget.arguments?.id ?? '');
-        },
-        child: SingleChildScrollView(
-          controller: scrollController,
-          physics: AlwaysScrollableScrollPhysics(),
-          child: cn.isLoadingLeaderboard
-              //  || (cn.leaderBoardDetailData?.sId == null || cn.leaderBoardDetaiEndlData?.sId == null)
-              ? const ShimmerListLeaderboard()
-              : Container(
+                              System().createdDynamicLink(context, dynamicLinkData: dynamicLinkData).then((value) => Routing().moveBack());
+                            },
+                            icon: const CustomIconWidget(
+                              iconData: "${AssetPath.vectorPath}share2.svg",
+                              defaultColor: false,
+                              height: 20,
+                            ),
+                          )
+                  ],
+                )),
+            body: RefreshIndicator(
+              color: kHyppePrimary,
+              onRefresh: () async {
+                await cn.initLeaderboardDetail(context, mounted, widget.arguments?.id ?? '');
+              },
+              child: SingleChildScrollView(
+                controller: scrollController,
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Container(
                   color: bgColor,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Text(_current.toString()),
                       CustomBaseCacheImage(
                         memCacheWidth: 100,
                         memCacheHeight: 100,
@@ -485,8 +490,8 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                     ],
                   ),
                 ),
-        ),
-      ),
-    );
+              ),
+            ),
+          );
   }
 }
