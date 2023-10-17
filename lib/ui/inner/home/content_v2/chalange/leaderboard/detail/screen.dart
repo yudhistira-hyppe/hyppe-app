@@ -197,10 +197,12 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
 
     String title = '';
 
-    if (!cn.isLoadingLeaderboard || cn.leaderBoardDetailData?.sId != null) {
+    print("bahahahahahahahahahahahhaha ${cn.leaderBoardDetailData?.sId}");
+
+    if (!cn.isLoadingLeaderboard && cn.leaderBoardDetailData?.sId != null) {
       bgColor = System().colorFromHex(cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].warnaBackground ?? "#F5F5F5");
       title = cn.leaderBoardDetailData?.challengeData?[0].nameChallenge ?? '';
-    } else if (!cn.isLoadingLeaderboard || cn.leaderBoardDetaiEndlData?.sId != null) {
+    } else if (!cn.isLoadingLeaderboard && cn.leaderBoardDetaiEndlData?.sId != null) {
       bgColor = System().colorFromHex(cn.leaderBoardDetaiEndlData?.challengeData?[0].leaderBoard?[0].warnaBackground ?? "#F5F5F5");
       title = cn.leaderBoardDetaiEndlData?.challengeData?[0].nameChallenge ?? '';
     }
