@@ -115,11 +115,11 @@ class NotificationService {
               Routes.chalengeDetail,
               argument: GeneralArgument(
                 id: data.postId,
-                index: int.parse(data.index ?? '0'), //int.parse(data.index ?? '0'),
+                index: data.index == '' ? 0 : int.parse(data.index ?? '0'), //int.parse(data.index ?? '0'),
                 title: data.title,
                 body: data.message,
                 isTrue: data.winner ?? false,
-                session: data.challengeSession,
+                session: data.challengeSession == '' ? null : int.parse(data.challengeSession ?? '0'), //int.parse(data.index ?? '0'),  data.challengeSession,
               ),
             );
           } else if (data.postType == 'FOLLOWER' || data.postType == 'FOLLOWING') {
@@ -153,7 +153,7 @@ class NotificationService {
         }
       }
     } catch (e) {
-      e.logger();
+      "error notification $e".logger();
     }
   }
 
@@ -260,7 +260,7 @@ class NotificationBody {
   String? index;
   String? url;
   bool? winner;
-  int? challengeSession;
+  String? challengeSession;
 
   NotificationBody({this.postId, this.postType, this.message, this.index, this.url, this.winner, this.challengeSession});
 
@@ -277,7 +277,8 @@ class NotificationBody {
             ? json['index'].toString()
             : json['index']
         : '';
-    challengeSession = json['challengeSession'] ?? 0;
+
+    challengeSession = json['challengeSession'] ?? '';
   }
 
   Map<String, dynamic> toJson() {

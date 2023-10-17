@@ -42,7 +42,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
   double offset = 0.0;
   List nameTab = [];
   int _current = 0;
-  int _lastCurrent = 0;
+  int _lastCurrent = -1;
   String chllangeid = "";
   final CarouselController _controller = CarouselController();
   bool hideTab = false;
@@ -100,6 +100,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
         setState(() {
           _current = _tabController.index;
         });
+        print("haha tab conotrol $_current");
         if (_lastCurrent != _current) {
           if (_current == 1) {
             cn.getLeaderBoard(
@@ -108,6 +109,15 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
               oldLeaderboard: true,
               isDetail: true,
             );
+          } else if (_current == 0) {
+            if (cn.leaderBoardDetailData?.sId == null) {
+              cn.getLeaderBoard(
+                context,
+                chllangeid,
+                oldLeaderboard: false,
+                isDetail: true,
+              );
+            }
           }
           // homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
         }
@@ -196,8 +206,6 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
     var participant = 0;
 
     String title = '';
-
-    print("bahahahahahahahahahahahhaha ${cn.leaderBoardDetailData?.sId}");
 
     if (!cn.isLoadingLeaderboard && cn.leaderBoardDetailData?.sId != null) {
       bgColor = System().colorFromHex(cn.leaderBoardDetailData?.challengeData?[0].leaderBoard?[0].warnaBackground ?? "#F5F5F5");

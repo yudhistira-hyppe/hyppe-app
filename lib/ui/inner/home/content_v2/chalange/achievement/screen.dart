@@ -261,7 +261,7 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
                   ),
                   fourPx,
                   Text(
-                    '${System().dateFormatter(data.startDatetime ?? '2023-01-01', 5)} - ${System().dateFormatter(data.startDatetime ?? '2023-01-01', 5)}',
+                    '${System().dateFormatter(data.startDatetime ?? '2023-01-01', 5)} - ${System().dateFormatter(data.endDatetime ?? '2023-01-01', 5)}',
                     style: const TextStyle(
                       color: Color(0xFF9B9B9B),
                       fontSize: 10,

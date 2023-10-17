@@ -239,7 +239,7 @@ class ChallangeNotifier with ChangeNotifier {
       // "status":"BERLANGSUNG",
       // "session":1
     };
-    if (leaderBoardDetailData == null) {
+    if (leaderBoardDetailData == null && leaderBoardDetaiEndlData == null) {
       isLoadingLeaderboard = true;
     }
     if (oldLeaderboard) {
