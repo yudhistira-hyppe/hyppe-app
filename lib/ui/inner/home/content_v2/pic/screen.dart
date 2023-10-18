@@ -882,7 +882,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 }
                               });
                               setState(() {
-                                Future.delayed(Duration(milliseconds: 400), () {
+                                Future.delayed(const Duration(milliseconds: 400), () {
                                   itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
                                 });
                               });
@@ -979,7 +979,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 ? Container(
                                                     height: 40,
                                                     width: 30,
-                                                    child: Align(
+                                                    child: const Align(
                                                       alignment: Alignment.bottomRight,
                                                       child: CustomLoading(),
                                                     ),
@@ -1070,7 +1070,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         }
 
                                         Future.delayed(const Duration(milliseconds: 100), () {
-                                          if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
+                                          if (mn?.tutorialData.isNotEmpty ?? [].isEmpty && !globalChallengePopUp) {
                                             indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
                                             indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
 

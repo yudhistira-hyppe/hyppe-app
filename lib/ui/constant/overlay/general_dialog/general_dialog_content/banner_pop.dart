@@ -1,3 +1,4 @@
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -53,65 +54,64 @@ class _BannerPopState extends State<BannerPop> {
                   //       )),
                   // );
                   return Container(
-                    padding: EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.only(bottom: 12),
                     width: size.width,
                     height: constraints.maxHeight,
-                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
-                      child: Container(
-                        child: CarouselSlider(
-                          options: CarouselOptions(
-                              // height: size.width,
-                              enlargeCenterPage: false,
-                              viewportFraction: 1.2,
-                              aspectRatio: 1 / 1,
-                              padEnds: true,
-                              enableInfiniteScroll: false,
-                              autoPlayInterval: Duration(seconds: 3),
-                              disableCenter: true,
-                              onPageChanged: (index, reason) {
-                                setState(() {
-                                  _current = index;
-                                });
-                              }),
-                          items: notifier.bannerData
-                              .map((item) => ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Routing().moveBack();
-                                        Routing().move(Routes.chalengeDetail, argument: GeneralArgument()..id = item.sId);
-                                      },
-                                      child: Center(
-                                          child: Image.network(
-                                        item.bannerLandingpage ?? '',
-                                        height: constraints.maxHeight,
-                                        fit: BoxFit.cover,
-                                        loadingBuilder: (context, child, loadingProgress) {
-                                          if (loadingProgress == null) return child;
-                                          return Center(
-                                            child: Container(
-                                              height: size.width - 20,
-                                              width: SizeConfig.screenWidth,
-                                              color: Colors.black,
-                                              child: UnconstrainedBox(
-                                                child: Container(
-                                                  height: 50,
-                                                  width: 50,
-                                                  child: CircularProgressIndicator(
-                                                      // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                      ),
-                                                ),
+                      child: CarouselSlider(
+                        options: CarouselOptions(
+                            // height: size.width,
+                            enlargeCenterPage: false,
+                            viewportFraction: 1.2,
+                            aspectRatio: 1 / 1,
+                            padEnds: true,
+                            enableInfiniteScroll: false,
+                            autoPlayInterval: Duration(seconds: 3),
+                            disableCenter: true,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                _current = index;
+                              });
+                            }),
+                        items: notifier.bannerData
+                            .map((item) => ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      globalChallengePopUp = false;
+                                      Routing().moveBack();
+                                      Routing().move(Routes.chalengeDetail, argument: GeneralArgument()..id = item.sId);
+                                    },
+                                    child: Center(
+                                        child: Image.network(
+                                      item.bannerLandingpage ?? '',
+                                      height: constraints.maxHeight,
+                                      fit: BoxFit.cover,
+                                      loadingBuilder: (context, child, loadingProgress) {
+                                        if (loadingProgress == null) return child;
+                                        return Center(
+                                          child: Container(
+                                            height: size.width - 20,
+                                            width: SizeConfig.screenWidth,
+                                            color: Colors.black,
+                                            child: const UnconstrainedBox(
+                                              child: SizedBox(
+                                                height: 50,
+                                                width: 50,
+                                                child: CircularProgressIndicator(
+                                                    // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                    ),
                                               ),
                                             ),
-                                          );
-                                        },
-                                      )),
-                                    ),
-                                  ))
-                              .toList(),
-                        ),
+                                          ),
+                                        );
+                                      },
+                                    )),
+                                  ),
+                                ))
+                            .toList(),
                       ),
                     ),
                   );
@@ -125,6 +125,7 @@ class _BannerPopState extends State<BannerPop> {
               child: GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
+                  globalChallengePopUp = false;
                 },
                 child: ClipOval(
                   child: Container(

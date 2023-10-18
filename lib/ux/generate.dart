@@ -296,7 +296,7 @@ class Generate {
       case Routes.verificationIDStep6:
         return MaterialPageRoute(builder: (_) => const VerificationIDStep6());
       case Routes.verificationIDStep7:
-        return MaterialPageRoute(builder: (_) => const VerificationIDStep7());
+        return MaterialPageRoute(builder: (_) => VerificationIDStep7(isFromBack: settings.arguments as bool));
       case Routes.verificationIDFailed:
         return MaterialPageRoute(builder: (_) => const VerificationIDFailed());
       case Routes.verificationIDSuccess:

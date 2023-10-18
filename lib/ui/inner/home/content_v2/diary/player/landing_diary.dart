@@ -966,7 +966,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                               }
                                             },
                                             child: data?.insight?.isloadingFollow ?? false
-                                                ? Container(
+                                                ? const SizedBox(
                                                     height: 40,
                                                     width: 30,
                                                     child: Align(
@@ -976,7 +976,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
                                                   )
                                                 : Text(
                                                     (data?.following ?? false) ? (lang?.following ?? '') : (lang?.follow ?? ''),
-                                                    style: TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
+                                                    style: const TextStyle(color: kHyppePrimary, fontSize: 12, fontWeight: FontWeight.w700, fontFamily: "Lato"),
                                                   ),
                                           ),
                                         ),

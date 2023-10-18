@@ -77,6 +77,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
         // Future.delayed(const Duration(milliseconds: 500), () {
         _tabController.index = 1;
         _current = 1;
+        cn.optionData = DetailSub();
         cn.getLeaderBoard(
           context,
           widget.arguments?.id ?? chllangeid,
@@ -84,6 +85,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
           isDetail: true,
           session: widget.arguments?.session,
         );
+
         if (widget.arguments?.isTrue ?? false) {
           Future.delayed(const Duration(milliseconds: 500), () {
             ShowGeneralDialog.winChallange(context, widget.arguments?.title ?? '', widget.arguments?.body ?? '');
@@ -116,6 +118,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                 chllangeid,
                 oldLeaderboard: false,
                 isDetail: true,
+                isWinner: true,
               );
             }
           }

@@ -68,7 +68,8 @@ class ChallangeNotifier with ChangeNotifier {
   UserBadgeModel? badgeUser;
 
   //list untuk option
-  DetailSub optionData = DetailSub();
+  DetailSub _optionData = DetailSub();
+  DetailSub get optionData => _optionData;
   int _selectOptionSession = 0;
   int get selectOptionSession => _selectOptionSession;
 
@@ -87,6 +88,11 @@ class ChallangeNotifier with ChangeNotifier {
   DateTime challangeOption = DateTime.now();
 
   ///////
+
+  set optionData(DetailSub val) {
+    _optionData = val;
+    notifyListeners();
+  }
 
   set newJoinChallenge(bool val) {
     _newJoinChallenge = val;
@@ -267,11 +273,17 @@ class ChallangeNotifier with ChangeNotifier {
 
         if (!oldLeaderboard) {
           getOption(getdata ?? LeaderboardChallangeModel());
+        } else {
+          // print("===========option detail ${optionData.detail}=========");
+          if (optionData.detail?.isEmpty ?? [].isEmpty) {
+            // print("===========option detail=========");
+            getOption(getdata ?? LeaderboardChallangeModel(), session: session ?? selectOptionSession);
+          }
         }
 
         if (getdata?.startDatetime != '' || getdata?.startDatetime != null) {
           var dateNote = await System().compareDate(getdata?.startDatetime ?? '', getdata?.endDatetime ?? '');
-          print("--===-=-=-=- date $dateNote");
+          // print("--===-=-=-=- date $dateNote");
           getdata?.onGoing = dateNote[0];
           if (dateNote[1].inDays == 0) {
             if (dateNote[1].inHours == 0) {
@@ -491,7 +503,6 @@ class ChallangeNotifier with ChangeNotifier {
   }
 
   Future getOption(LeaderboardChallangeModel data, {DateTime? dateTime, int? session}) async {
-    print(dateTime);
     if (dateTime == null) {
       data.subChallenges?.forEach((element) {
         element.detail?.forEach((e) {
@@ -503,14 +514,16 @@ class ChallangeNotifier with ChangeNotifier {
                 String monthYear = "${e.tahun}-$month-01 00:00:00";
                 challangeOption = DateTime.parse(monthYear);
                 selectOptionSession = session;
+                notifyListeners();
               }
             } else {
-              if (el.session == (data.session ?? 0) - 1) {
+              if (el.session == (data.session ?? 0)) {
                 optionData = e;
                 String month = (e.bulan ?? 0) < 10 ? "0${e.bulan}" : "${e.bulan}";
                 String monthYear = "${e.tahun}-$month-01 00:00:00";
                 challangeOption = DateTime.parse(monthYear);
-                selectOptionSession = (data.session ?? 0) - 1;
+                selectOptionSession = (data.session ?? 0);
+                notifyListeners();
               }
             }
           });
