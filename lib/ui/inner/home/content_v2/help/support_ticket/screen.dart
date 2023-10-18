@@ -96,26 +96,32 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                 ...List.generate(
                   supportNotifier.levelData.length,
                   (index) => Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: RadioListTile<String>(
-                        contentPadding: EdgeInsets.zero,
-                        groupValue: supportNotifier.nameLevel,
-                        value: supportNotifier.levelData[index].descLevel ?? '',
-                        onChanged: (val) {
-                          supportNotifier.nameLevel = val ?? '';
-                          supportNotifier.idLevelTicket = supportNotifier.levelData[index].sId ?? '';
-                        },
-                        toggleable: true,
-                        title: CustomTextWidget(
-                          textAlign: TextAlign.left,
-                          textToDisplay: supportNotifier.levelData[index].descLevel ?? '',
-                          textStyle: Theme.of(context).primaryTextTheme.bodyText2,
-                        ),
-                        subtitle: Text('The condition will appear if the users problem need technical that can’t be solved by Guideline and will most likely be an improvement or new feature.'),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        activeColor: Theme.of(context).colorScheme.primary,
-                        isThreeLine: true,
-                      )),
+                    padding: const EdgeInsets.all(2.0),
+                    child: RadioListTile<String>(
+                      contentPadding: EdgeInsets.zero,
+                      groupValue: supportNotifier.nameLevel,
+                      value: supportNotifier.levelData[index].descLevel ?? '',
+                      onChanged: (val) {
+                        supportNotifier.nameLevel = val ?? '';
+                        supportNotifier.idLevelTicket = supportNotifier.levelData[index].sId ?? '';
+                      },
+                      toggleable: true,
+                      title: CustomTextWidget(
+                        textAlign: TextAlign.left,
+                        textToDisplay:  "${notifier.translate.ticketLevel} ${supportNotifier.levelData[index].nameLevel}",
+                        textStyle: Theme.of(context).primaryTextTheme.bodyText2,
+                      ),
+                      subtitle: Text(
+                          supportNotifier.levelData[index].nameLevel == '1' ? notifier.translate.ticketLevel1 ?? '' :
+                          supportNotifier.levelData[index].nameLevel == '2' ? notifier.translate.ticketLevel2 ?? '' :
+                          supportNotifier.levelData[index].nameLevel == '3' ? notifier.translate.ticketLevel3 ?? '' :
+                          supportNotifier.levelData[index].nameLevel == '4' ? notifier.translate.ticketLevel4 ?? '' :
+                          'No Data'
+                      ),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      activeColor: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
                 ),
                 fortyTwoPx,
                 CustomTextWidget(
