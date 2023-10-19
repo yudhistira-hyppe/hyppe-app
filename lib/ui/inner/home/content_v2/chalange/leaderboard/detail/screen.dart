@@ -313,7 +313,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
             body: RefreshIndicator(
               color: kHyppePrimary,
               onRefresh: () async {
-                await cn.initLeaderboardDetail(context, mounted, widget.arguments?.id ?? '');
+                await cn.initLeaderboardDetail(context, mounted, widget.arguments?.id ?? '', isWinner: true);
               },
               child: SingleChildScrollView(
                 controller: scrollController,

@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/chalange/leaderboard_challange_model.dart';
+import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
@@ -93,24 +94,25 @@ class ItemLeader extends StatelessWidget {
                                 forStory: false,
                                 width: 43,
                                 height: 43,
+                                badge: UserBadgeModel(badgeOther: "${data?.winnerBadgeOther}"),
                                 // imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
                                 imageUrl: data?.avatar?.mediaEndpoint != null ? System().showUserPicture("${data?.avatar?.mediaEndpoint}") : '',
                               ),
                             ),
                           ),
-                          (data?.ranking == 1 || data?.ranking == 2 || data?.ranking == 3) && (dataStatusLead?.tampilBadge ?? false)
-                              ? Positioned.fill(
-                                  child: Center(
-                                    child: data?.winnerBadgeOther != null
-                                        ? Image.network(
-                                            "${data?.winnerBadgeOther}",
-                                            width: 50 * SizeConfig.scaleDiagonal,
-                                            height: 50 * SizeConfig.scaleDiagonal,
-                                          )
-                                        : Container(),
-                                  ),
-                                )
-                              : Container()
+                          // (data?.ranking == 1 || data?.ranking == 2 || data?.ranking == 3) && (dataStatusLead?.tampilBadge ?? false)
+                          //     ? Positioned.fill(
+                          //         child: Center(
+                          //           child: data?.winnerBadgeOther != null
+                          //               ? Image.network(
+                          //                   "${data?.winnerBadgeOther}",
+                          //                   width: 50 * SizeConfig.scaleDiagonal,
+                          //                   height: 50 * SizeConfig.scaleDiagonal,
+                          //                 )
+                          //               : Container(),
+                          //         ),
+                          //       )
+                          //     : Container()
                         ],
                       ),
                     ),

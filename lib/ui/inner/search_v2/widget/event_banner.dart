@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -90,8 +91,8 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                       .toList()
                   : notifier.bannerSearchData
                       .map((item) => GestureDetector(
-                            onTap: () => Routing().move(Routes.chalenge),
-                            // onTap: () => Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: item.sId)),
+                            // onTap: () => Routing().move(Routes.chalenge),
+                            onTap: () => Routing().move(Routes.chalengeDetail, argument: GeneralArgument(id: item.sId)),
                             child: Center(
                                 child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),

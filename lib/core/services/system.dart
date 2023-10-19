@@ -1521,7 +1521,7 @@ class System {
       // print("===============222222 ---- ${difference.inHours}");
       // print("===============222222 ---- ${difference.inMinutes}");
       // if (difference.inHours >= 24) {
-      if (difference.inMinutes <= -10) {
+      if (difference.inMinutes <= -00) {
         await challange.getBannerLanding(context, ispopUp: true);
         SharedPreference().writeStorage(SpKeys.datetimeLastShowChallange, DateTime.now().toString());
         globalChallengePopUp = true;

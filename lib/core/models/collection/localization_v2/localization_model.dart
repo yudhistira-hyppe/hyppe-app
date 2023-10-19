@@ -957,6 +957,8 @@ class LocalizationModelV2 {
   String? joinTheChallengeAndGetOther;
   String? followMostHyppeAccountsToWinTheCompetition;
   String? exploreAndFollowtheHyppeAccountsHere;
+  String? exploreAndLikeInterestingContentHere;
+  String? exploreAndWatchInterestingContentHere;
   String? uploadasmuchcontentaspossibletowinthechallenge;
   String? uploadInterestingContentHere;
   String? joinandinviteyourfriendstoHyppenow;
@@ -1962,6 +1964,8 @@ class LocalizationModelV2 {
     this.joinTheChallengeAndGetOther,
     this.followMostHyppeAccountsToWinTheCompetition,
     this.exploreAndFollowtheHyppeAccountsHere,
+    this.exploreAndLikeInterestingContentHere,
+    this.exploreAndWatchInterestingContentHere,
     this.uploadasmuchcontentaspossibletowinthechallenge,
     this.uploadInterestingContentHere,
     this.joinandinviteyourfriendstoHyppenow,
@@ -2995,6 +2999,8 @@ class LocalizationModelV2 {
     joinTheChallengeAndGetOther = json['joinTheChallengeAndGetOther'];
     followMostHyppeAccountsToWinTheCompetition = json['followMostHyppeAccountsToWinTheCompetition'];
     exploreAndFollowtheHyppeAccountsHere = json['exploreAndFollowtheHyppeAccountsHere'];
+    exploreAndLikeInterestingContentHere = json['exploreAndLikeInterestingContentHere'];
+    exploreAndWatchInterestingContentHere = json['exploreAndWatchInterestingContentHere'];
     uploadasmuchcontentaspossibletowinthechallenge = json['uploadasmuchcontentaspossibletowinthechallenge'];
     uploadInterestingContentHere = json['uploadInterestingContentHere'];
     joinandinviteyourfriendstoHyppenow = json['joinandinviteyourfriendstoHyppenow'];

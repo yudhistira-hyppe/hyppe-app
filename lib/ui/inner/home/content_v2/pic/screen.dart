@@ -1070,19 +1070,18 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                         }
 
                                         Future.delayed(const Duration(milliseconds: 100), () {
-                                          if (mn?.tutorialData.isNotEmpty ?? [].isEmpty && !globalChallengePopUp) {
+                                          if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
                                             indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
                                             indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
-
+                                            // print("==============global challehg $globalChallengePopUp");
+                                            // print("==============global challehg ${mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp}");
                                             if ((picData?.saleAmount ?? 0) > 0) {
-                                              if (mn?.tutorialData[indexKeySell].status == false) {
-                                                print("======sell");
+                                              if (mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp) {
                                                 ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalSell ?? GlobalKey()]);
                                               }
                                             }
                                             if (((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
-                                              if (mn?.tutorialData[indexKeyProtection].status == false) {
-                                                print("======ownser");
+                                              if (mn?.tutorialData[indexKeyProtection].status == false && !globalChallengePopUp) {
                                                 ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalOwn ?? GlobalKey()]);
                                               }
                                             }
