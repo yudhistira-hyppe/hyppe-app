@@ -384,7 +384,7 @@ class ShowBottomSheet {
   static onShowIDVerificationFailed(BuildContext ctx) {
     showModalBottomSheet(
       isScrollControlled: false,
-      context: ctx,
+      context: Routing.navigatorKey.currentContext ?? ctx,
       enableDrag: false,
       isDismissible: false,
       backgroundColor: Colors.transparent,
@@ -398,7 +398,7 @@ class ShowBottomSheet {
             child: Container(
                 height: 330,
                 decoration: BoxDecoration(
-                  color: Theme.of(ctx).colorScheme.surface,
+                  color: Theme.of(Routing.navigatorKey.currentContext ?? ctx).colorScheme.surface,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
