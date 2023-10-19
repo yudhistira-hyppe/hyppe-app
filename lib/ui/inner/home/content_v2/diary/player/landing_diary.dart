@@ -829,7 +829,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
 
   Widget itemDiary(BuildContext context, PreviewDiaryNotifier notifier, int index, HomeNotifier homeNotifier) {
     var data = notifier.diaryData?[index];
-    final isAds = data?.inBetweenAds != null;
+    final isAds = data?.inBetweenAds != null && data?.postID == null;
     return data?.isContentLoading ?? false
         ? Builder(builder: (context) {
             Future.delayed(const Duration(seconds: 1), () {

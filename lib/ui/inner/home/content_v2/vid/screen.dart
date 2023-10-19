@@ -461,7 +461,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
     };
 
-    final isAds = vidData.inBetweenAds != null;
+    final isAds = vidData.inBetweenAds != null && vidData.postID == null;
     return vidData.isContentLoading ?? false
         ? Builder(builder: (context) {
             Future.delayed(Duration(seconds: 1), () {

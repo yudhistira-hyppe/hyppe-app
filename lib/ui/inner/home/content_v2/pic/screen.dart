@@ -821,7 +821,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   Widget itemPict(BuildContext context, PreviewPicNotifier notifier, int index, HomeNotifier homeNotifier) {
     var picData = notifier.pic?[index];
-    final isAds = picData?.inBetweenAds != null;
+    final isAds = picData?.inBetweenAds != null && picData?.postID == null;
     return picData?.isContentLoading ?? false
         ? Builder(builder: (context) {
             Future.delayed(const Duration(seconds: 1), () {
