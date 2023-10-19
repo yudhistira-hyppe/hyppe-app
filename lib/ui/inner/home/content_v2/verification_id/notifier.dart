@@ -409,7 +409,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       print("CARDNAME => " + idCardName);
       print("CARDNUM => " + idCardNumber);
       if (idCardName == "" || idCardNumber == "") {
-        ShowBottomSheet.onShowIDVerificationFailed(context);
+        ShowBottomSheet.onShowIDVerificationFailed(Routing.navigatorKey.currentContext ?? context);
       }
       isLoading = false;
     });
@@ -473,9 +473,9 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         //   ),
         // );
         'verification ID failed: ${fetch.data}'.logger();
+        Routing().moveAndPop(Routes.verificationIDFailed);
         final UploadVerificationIDResult errorResponseData = UploadVerificationIDResult.fromJson(fetch.data);
         idVerificationResponse = errorResponseData.idMediaproofpicts;
-        Routing().moveAndPop(Routes.verificationIDFailed);
       }
     } catch (e) {
       isLoading = false;
@@ -691,7 +691,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     _errorPlaceBirth = "";
     _errorDateBirth = "";
     _errorGender = "";
-    notifyListeners();
+    // notifyListeners();
   }
 
   void continueSelfie(BuildContext context) {
