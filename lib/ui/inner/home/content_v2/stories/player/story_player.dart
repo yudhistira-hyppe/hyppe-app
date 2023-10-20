@@ -723,7 +723,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                                           fullscreen: true,
                                           width: double.infinity,
                                           height: MediaQuery.of(context).size.width * (16 / 9),
-                                          isPause: isPause,
+                                          isPause: isPause || _showLoading,
                                           canPause: true,
                                         ),
                                       ),
