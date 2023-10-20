@@ -128,17 +128,17 @@ class PreviewDiaryNotifier with ChangeNotifier {
   }
 
   double scaleDiary(BuildContext context) {
-    final _size = MediaQuery.of(context).size;
-    const _appBar = 50;
-    const _story = 72;
-    final _vid = (211 + _heightTitleFeature);
+    final size = MediaQuery.of(context).size;
+    const appBar = 50;
+    const story = 72;
+    final vid = (211 + _heightTitleFeature);
     // final _pic = 115;
-    const _bottomBar = 56;
-    const _spacer = 48;
-    final _sum = (_appBar + _bottomBar + _story + _vid + _spacer);
-    double _result = _size.height - _sum;
+    const bottomBar = 56;
+    const spacer = 48;
+    final sum = (appBar + bottomBar + story + vid + spacer);
+    double result = size.height - sum;
 
-    return _result;
+    return result;
   }
 
   Future<void> initialDiary(BuildContext context, {bool reload = false, List<ContentData>? list}) async {
@@ -235,7 +235,7 @@ class PreviewDiaryNotifier with ChangeNotifier {
         ),
       );
     } else {
-      ShowBottomSheet.onNoInternetConnection(context);
+      ShowBottomSheet.onNoInternetConnection(Routing.navigatorKey.currentContext ?? context);
     }
   }
 
@@ -244,7 +244,7 @@ class PreviewDiaryNotifier with ChangeNotifier {
     if (connect) {
       _routing.move(Routes.diarySeeAllScreen);
     } else {
-      ShowBottomSheet.onNoInternetConnection(context);
+      ShowBottomSheet.onNoInternetConnection(Routing.navigatorKey.currentContext ?? context);
     }
   }
 
@@ -257,7 +257,7 @@ class PreviewDiaryNotifier with ChangeNotifier {
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
         // print('data : ${fetch.data.toString()}');
         adsData = fetch.data;
-        context.read<VidDetailNotifier>().getAuth(context, videoId: adsData?.data?.videoId ?? '').then((value) => adsData?.data?.apsaraAuth = value);
+        context.read<VidDetailNotifier>().getAuth(Routing.navigatorKey.currentContext ?? context, videoId: adsData?.data?.videoId ?? '').then((value) => adsData?.data?.apsaraAuth = value);
 
         // await getAdsVideoApsara(_newClipData?.data?.videoId ?? '');
       }

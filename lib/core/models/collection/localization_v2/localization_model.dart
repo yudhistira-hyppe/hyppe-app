@@ -760,6 +760,11 @@ class LocalizationModelV2 {
   String? submitTicketIssue;
   String? doesThisHelpsyou;
   String? newTicketIssue;
+  String? ticketLevel;
+  String? ticketLevel1;
+  String? ticketLevel2;
+  String? ticketLevel3;
+  String? ticketLevel4;
   String? insertAnyAdditionalInfo;
   String? chooseCategoryIssue;
   String? thisHyppeVidisSubjectToModeration;
@@ -952,6 +957,8 @@ class LocalizationModelV2 {
   String? joinTheChallengeAndGetOther;
   String? followMostHyppeAccountsToWinTheCompetition;
   String? exploreAndFollowtheHyppeAccountsHere;
+  String? exploreAndLikeInterestingContentHere;
+  String? exploreAndWatchInterestingContentHere;
   String? uploadasmuchcontentaspossibletowinthechallenge;
   String? uploadInterestingContentHere;
   String? joinandinviteyourfriendstoHyppenow;
@@ -1760,6 +1767,11 @@ class LocalizationModelV2 {
     this.submitTicketIssue,
     this.doesThisHelpsyou,
     this.newTicketIssue,
+    this.ticketLevel,
+    this.ticketLevel1,
+    this.ticketLevel2,
+    this.ticketLevel3,
+    this.ticketLevel4,
     this.insertAnyAdditionalInfo,
     this.chooseCategoryIssue,
     this.thisHyppeVidisSubjectToModeration,
@@ -1952,6 +1964,8 @@ class LocalizationModelV2 {
     this.joinTheChallengeAndGetOther,
     this.followMostHyppeAccountsToWinTheCompetition,
     this.exploreAndFollowtheHyppeAccountsHere,
+    this.exploreAndLikeInterestingContentHere,
+    this.exploreAndWatchInterestingContentHere,
     this.uploadasmuchcontentaspossibletowinthechallenge,
     this.uploadInterestingContentHere,
     this.joinandinviteyourfriendstoHyppenow,
@@ -2778,6 +2792,11 @@ class LocalizationModelV2 {
     submitTicketIssue = json["submitTicketIssue"];
     doesThisHelpsyou = json["doesThisHelpsyou"];
     newTicketIssue = json["newTicketIssue"];
+    ticketLevel = json["ticketLevel"];
+    ticketLevel1 = json["ticketLevel1"];
+    ticketLevel2 = json["ticketLevel2"];
+    ticketLevel3 = json["ticketLevel3"];
+    ticketLevel4 = json["ticketLevel4"];
     insertAnyAdditionalInfo = json["insertAnyAdditionalInfo"];
     chooseCategoryIssue = json["chooseCategoryIssue"];
     thisHyppeVidisSubjectToModeration = json["thisHyppeVidisSubjectToModeration"];
@@ -2980,6 +2999,8 @@ class LocalizationModelV2 {
     joinTheChallengeAndGetOther = json['joinTheChallengeAndGetOther'];
     followMostHyppeAccountsToWinTheCompetition = json['followMostHyppeAccountsToWinTheCompetition'];
     exploreAndFollowtheHyppeAccountsHere = json['exploreAndFollowtheHyppeAccountsHere'];
+    exploreAndLikeInterestingContentHere = json['exploreAndLikeInterestingContentHere'];
+    exploreAndWatchInterestingContentHere = json['exploreAndWatchInterestingContentHere'];
     uploadasmuchcontentaspossibletowinthechallenge = json['uploadasmuchcontentaspossibletowinthechallenge'];
     uploadInterestingContentHere = json['uploadInterestingContentHere'];
     joinandinviteyourfriendstoHyppenow = json['joinandinviteyourfriendstoHyppenow'];

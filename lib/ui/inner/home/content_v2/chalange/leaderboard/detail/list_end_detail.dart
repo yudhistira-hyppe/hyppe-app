@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_empty_page.dart';
@@ -143,7 +144,8 @@ class _ListEndDetailState extends State<ListEndDetail> {
                                                 } else {
                                                   return GestureDetector(
                                                       onTap: () {
-                                                        Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardDetaiEndlData?.getlastrank?[index].email));
+                                                        System().navigateToProfile(context, cn.leaderBoardDetaiEndlData?.getlastrank?[index].email ?? '');
+                                                        // Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: cn.leaderBoardDetaiEndlData?.getlastrank?[index].email));
                                                       },
                                                       child: ItemLeader(
                                                         data: cn.leaderBoardDetaiEndlData?.getlastrank?[index],

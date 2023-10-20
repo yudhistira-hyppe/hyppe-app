@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/progress_upload_argument.dart';
@@ -376,6 +377,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     // } else {
     //   cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     // }
+    final cameraDirection = cameraNotifier.cameraController?.description.lensDirection;
     cameraNotifier.takePicture().then((filePath) async {
       if (filePath != null) {
         selfiePath = filePath.path;
@@ -387,10 +389,11 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
           print("Camera Path => " + imagePath);
         }
 
+
         if (selfieOnSupportDocs) {
           // onPickSupportedDocument(context, true);
           // pickedSupportingDocs!.add(filePath);
-          Routing().moveAndPop(Routes.verificationIDStep7);
+          Routing().moveAndPop(Routes.verificationIDStep7, argument:(cameraDirection == CameraLensDirection.back));
         } else {
           await postVerificationData(context);
         }
@@ -406,7 +409,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       print("CARDNAME => " + idCardName);
       print("CARDNUM => " + idCardNumber);
       if (idCardName == "" || idCardNumber == "") {
-        ShowBottomSheet.onShowIDVerificationFailed(context);
+        ShowBottomSheet.onShowIDVerificationFailed(Routing.navigatorKey.currentContext ?? context);
       }
       isLoading = false;
     });
@@ -470,9 +473,9 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         //   ),
         // );
         'verification ID failed: ${fetch.data}'.logger();
+        Routing().moveAndPop(Routes.verificationIDFailed);
         final UploadVerificationIDResult errorResponseData = UploadVerificationIDResult.fromJson(fetch.data);
         idVerificationResponse = errorResponseData.idMediaproofpicts;
-        Routing().moveAndPop(Routes.verificationIDFailed);
       }
     } catch (e) {
       isLoading = false;
@@ -688,7 +691,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     _errorPlaceBirth = "";
     _errorDateBirth = "";
     _errorGender = "";
-    notifyListeners();
+    // notifyListeners();
   }
 
   void continueSelfie(BuildContext context) {

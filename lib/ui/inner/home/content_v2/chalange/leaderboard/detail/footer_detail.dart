@@ -91,8 +91,28 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
       if (challengeData?.metrik?[0].interaksiKonten?.isNotEmpty ?? [].isEmpty) {
         if (((challengeData?.metrik?[0].interaksiKonten?[0].suka?.isNotEmpty ?? [].isEmpty) || (challengeData?.metrik?[0].interaksiKonten?[0].tonton?.isNotEmpty ?? [].isEmpty)) &&
             (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty)) {
-          titleText = "${tn.translate.uploadasmuchcontentaspossibletowinthechallenge}"; //Unggah konten sebanyak mungkin untuk menangin challenge nya!";
-          buttonText = "${tn.translate.uploadInterestingContentHere}"; //Unggah Konten - Konten Menarik Disini!";
+          // titleText = "${tn.translate.uploadasmuchcontentaspossibletowinthechallenge}"; //Unggah konten sebanyak mungkin untuk menangin challenge nya!";
+          // buttonText = "${tn.translate.uploadInterestingContentHere}"; //Unggah Konten - Konten Menarik Disini!";
+          var list = challengeData?.metrik?[0].interaksiKonten?[0].buatKonten;
+          var hyppeDiary = list?[0].hyppeDiary ?? 0;
+          var hyppePic = list?[0].hyppePic ?? 0;
+          var hyppeVid = list?[0].hyppeVid ?? 0;
+          var tot = hyppeDiary + hyppePic + hyppeVid;
+          if (tot > 1) {
+            titleText = "${tn.translate.joinanduploadyourbestideastoHyppenow}"; // Gabung dan unggah  ide terbaikmu ke Hyppe sekarang!";
+            buttonText = "${tn.translate.postNow}"; // "Posting Sekarang";
+          } else {
+            titleText = "${tn.translate.joinanduploadyourbestideastoHyppenow}"; //Gabung dan unggah  ide terbaikmu ke Hyppe sekarang!";
+            if (hyppePic >= 1) {
+              buttonText = "${tn.translate.postYourHyppePicNow}"; // ]Posting HyppePic Kamu Sekarang";
+            }
+            if (hyppeVid >= 1) {
+              buttonText = "${tn.translate.postYourHyppeVidNow}"; // "Posting HyppeVid Kamu Sekarang";
+            }
+            if (hyppeDiary >= 1) {
+              buttonText = "${tn.translate.postYourHyppeDiaryNow}"; // "Posting HyppeDiary Kamu Sekarang";
+            }
+          }
         }
       }
     } else {
@@ -112,25 +132,39 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
         if (challengeData?.metrik?[0].interaksiKonten?.isNotEmpty ?? [].isEmpty) {
           if (((challengeData?.metrik?[0].interaksiKonten?[0].suka?.isNotEmpty ?? [].isEmpty) || (challengeData?.metrik?[0].interaksiKonten?[0].tonton?.isNotEmpty ?? [].isEmpty)) &&
               (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty)) {
-            titleText =
-                "${tn.translate.comeonLikeandwatchasmuchinterestingcontentaspossibletowinthechallenge}"; //Yuk!! Like dan Tonton konten-konten menarik sebanyak mungkin untuk menangin challenge nya!";
-            buttonText = "${tn.translate.exploreInterestingContentHere}"; //Jelajahi Konten - Konten Menarik Disini!";
-            bgColor = kHyppeLightButtonText;
-            textColors = kHyppePrimary;
-          } else {
-            if (challengeData?.metrik?[0].interaksiKonten?[0].suka?.isNotEmpty ?? [].isEmpty) {
-              titleText = "${tn.translate.watchinterestingcontenthere}"; //Tonton konten-konten menarik disini!";
-              buttonText = "${tn.translate.watchinterestingcontenthere}"; //"Tonton konten-konten menarik disini!";
+            var interaksiData = challengeData?.metrik?[0].interaksiKonten?[0];
+
+            int sukaVid = interaksiData?.suka?[0].hyppeVid ?? 0;
+            int sukaDiary = interaksiData?.suka?[0].hyppeDiary ?? 0;
+            int sukaPict = interaksiData?.suka?[0].hyppePic ?? 0;
+            int buatKontenVid = interaksiData?.buatKonten?[0].hyppeVid ?? 0;
+            int buatKontenDiary = interaksiData?.buatKonten?[0].hyppeDiary ?? 0;
+            int buatKontenPict = interaksiData?.buatKonten?[0].hyppePic ?? 0;
+            int tontonVid = interaksiData?.tonton?[0].hyppeVid ?? 0;
+            int tontonDiary = interaksiData?.tonton?[0].hyppeDiary ?? 0;
+
+            int suka = sukaVid > 0 || sukaDiary > 0 || sukaPict > 0 ? 1 : 0;
+            int tonton = tontonVid > 0 || tontonDiary > 0 ? 1 : 0;
+            int buatKonten = buatKontenVid > 0 || buatKontenDiary > 0 || buatKontenPict > 0 ? 1 : 0;
+
+            // int tot = suka + tonton + buatKonten;
+            if ((tonton > 0 && suka > 0 && buatKonten > 0) || (tonton > 0 && suka > 0)) {
+              titleText =
+                  "${tn.translate.comeonLikeandwatchasmuchinterestingcontentaspossibletowinthechallenge}"; //Yuk!! Like dan Tonton konten-konten menarik sebanyak mungkin untuk menangin challenge nya!";
+              buttonText = "${tn.translate.exploreInterestingContentHere}"; //Jelajahi Konten - Konten Menarik Disini!";
               bgColor = kHyppeLightButtonText;
               textColors = kHyppePrimary;
-            }
-            if (challengeData?.metrik?[0].interaksiKonten?[0].tonton?.isNotEmpty ?? [].isEmpty) {
+            } else if (tonton > 0) {
+              titleText = "${tn.translate.exploreAndWatchInterestingContentHere}"; //Tonton konten-konten menarik disini!";
+              buttonText = "${tn.translate.exploreAndWatchInterestingContentHere}"; //"Tonton konten-konten menarik disini!";
+              bgColor = kHyppeLightButtonText;
+              textColors = kHyppePrimary;
+            } else if (suka > 0) {
               titleText = "${tn.translate.likeHyppecontenthere}"; //Like konten-konten Hyppe disini!";
-              buttonText = "${tn.translate.exploreInterestingContentHere}"; //"Jelajahi Konten - Konten Menarik Disini!";
+              buttonText = "${tn.translate.exploreAndLikeInterestingContentHere}"; //"Jelajahi Konten - Konten Menarik Disini!";
               bgColor = kHyppeLightButtonText;
               textColors = kHyppePrimary;
-            }
-            if (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty) {
+            } else if (buatKonten > 0) {
               var list = challengeData?.metrik?[0].interaksiKonten?[0].buatKonten;
               var hyppeDiary = list?[0].hyppeDiary ?? 0;
               var hyppePic = list?[0].hyppePic ?? 0;
@@ -153,6 +187,50 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
               }
             }
           }
+
+          // if (((challengeData?.metrik?[0].interaksiKonten?[0].suka?.isNotEmpty ?? [].isEmpty) || (challengeData?.metrik?[0].interaksiKonten?[0].tonton?.isNotEmpty ?? [].isEmpty)) &&
+          //     (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty)) {
+          //   titleText =
+          //       "${tn.translate.comeonLikeandwatchasmuchinterestingcontentaspossibletowinthechallenge}"; //Yuk!! Like dan Tonton konten-konten menarik sebanyak mungkin untuk menangin challenge nya!";
+          //   buttonText = "${tn.translate.exploreInterestingContentHere}"; //Jelajahi Konten - Konten Menarik Disini!";
+          //   bgColor = kHyppeLightButtonText;
+          //   textColors = kHyppePrimary;
+          // } else {
+          //   if (challengeData?.metrik?[0].interaksiKonten?[0].suka?.isNotEmpty ?? [].isEmpty) {
+          //     titleText = "${tn.translate.watchinterestingcontenthere}"; //Tonton konten-konten menarik disini!";
+          //     buttonText = "${tn.translate.watchinterestingcontenthere}"; //"Tonton konten-konten menarik disini!";
+          //     bgColor = kHyppeLightButtonText;
+          //     textColors = kHyppePrimary;
+          //   }
+          //   if (challengeData?.metrik?[0].interaksiKonten?[0].tonton?.isNotEmpty ?? [].isEmpty) {
+          //     titleText = "${tn.translate.likeHyppecontenthere}"; //Like konten-konten Hyppe disini!";
+          //     buttonText = "${tn.translate.exploreInterestingContentHere}"; //"Jelajahi Konten - Konten Menarik Disini!";
+          //     bgColor = kHyppeLightButtonText;
+          //     textColors = kHyppePrimary;
+          //   }
+          //   if (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty) {
+          //     var list = challengeData?.metrik?[0].interaksiKonten?[0].buatKonten;
+          //     var hyppeDiary = list?[0].hyppeDiary ?? 0;
+          //     var hyppePic = list?[0].hyppePic ?? 0;
+          //     var hyppeVid = list?[0].hyppeVid ?? 0;
+          //     var tot = hyppeDiary + hyppePic + hyppeVid;
+          //     if (tot > 1) {
+          //       titleText = "${tn.translate.joinanduploadyourbestideastoHyppenow}"; // Gabung dan unggah  ide terbaikmu ke Hyppe sekarang!";
+          //       buttonText = "${tn.translate.postNow}"; // "Posting Sekarang";
+          //     } else {
+          //       titleText = "${tn.translate.joinanduploadyourbestideastoHyppenow}"; //Gabung dan unggah  ide terbaikmu ke Hyppe sekarang!";
+          //       if (hyppePic >= 1) {
+          //         buttonText = "${tn.translate.postYourHyppePicNow}"; // ]Posting HyppePic Kamu Sekarang";
+          //       }
+          //       if (hyppeVid >= 1) {
+          //         buttonText = "${tn.translate.postYourHyppeVidNow}"; // "Posting HyppeVid Kamu Sekarang";
+          //       }
+          //       if (hyppeDiary >= 1) {
+          //         buttonText = "${tn.translate.postYourHyppeDiaryNow}"; // "Posting HyppeDiary Kamu Sekarang";
+          //       }
+          //     }
+          //   }
+          // }
         }
       } else {
         var list = challengeData?.metrik?[0].interaksiKonten?[0];
@@ -278,7 +356,7 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
                 (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty)) {
               var interaksiData = challengeData?.metrik?[0].interaksiKonten?[0];
               if ((interaksiData?.buatKonten?[0].hyppeVid ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppePic ?? 0) > 0) {
-                onTapbuatKonten(interaksiKonten: challengeData?.metrik?[0].interaksiKonten?[0] ?? InteraksiKonten());
+                onTapbuatKonten(contentD: challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?[0] ?? BuatKonten());
               }
             }
           }
@@ -324,7 +402,7 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
               return;
             } else if ((interaksiData?.buatKonten?[0].hyppeVid ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppePic ?? 0) > 0) {
-              onTapbuatKonten(interaksiKonten: challengeData?.metrik?[0].interaksiKonten?[0] ?? InteraksiKonten());
+              onTapbuatKonten(contentD: challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?[0] ?? BuatKonten());
               return;
             }
           }
@@ -352,10 +430,10 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
     var tot = contentVid + contentDiary + contentPict;
     PreUploadContentNotifier pn = context.read<PreUploadContentNotifier>();
     pn.hastagChallange = interaksiKonten?.tagar ?? '';
-    print("====== pn.hastagChallange ${contentD}");
+    print("====== pn.hastagChallange ${tot}");
     print("====== pn.hastagChallange ${interaksiKonten}");
     print("====== pn.hastagChallange ${interaksiKonten?.tagar}");
-    print("====== pn.hastagChallange ${pn.hastagChallange}");
+    print("====== pn.hastagChallange $contentDiary  $contentPict $contentVid");
     if (tot > 1) {
       ShowBottomSheet.onUploadContent(
         context,

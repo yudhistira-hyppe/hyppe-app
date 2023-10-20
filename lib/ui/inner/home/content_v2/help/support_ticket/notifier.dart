@@ -121,9 +121,8 @@ class SupportTicketNotifier with ChangeNotifier {
       if (fetch.postsState == SupportTicketState.getLevelSuccess) {
         levelData = [];
         fetch.data.forEach((v) => levelData.add(LevelTicketModel.fromJson(v)));
-      }
-
-      if (fetch.postsState == SupportTicketState.getLevelError) {
+        levelData.sort((a, b) => (a.nameLevel ?? '0').compareTo(b.nameLevel ?? '0'));
+      }else if (fetch.postsState == SupportTicketState.getLevelError) {
         levelData = [];
       }
       _isLoadingLevel = false;

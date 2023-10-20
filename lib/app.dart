@@ -45,6 +45,7 @@ bool globalInternetConnection = true;
 bool globalAfterReport = false;
 bool homeClick = false;
 bool globalTultipShow = false;
+bool globalChallengePopUp = true; //untuk menahan tutorial muncul sebelum challange
 
 void disposeGlobalAudio() async {
   try {

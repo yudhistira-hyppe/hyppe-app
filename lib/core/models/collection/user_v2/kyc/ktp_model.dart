@@ -14,7 +14,13 @@ class KTPModel {
     persetaseCardNumber = json['persetaseCardNumber'];
     cardNumber = json['CardNumber'];
     cardPictName = json['cardPictName'];
-    persetaseCardName = json['persetaseCardName'];
+    final percentage = json['persetaseCardName'];
+    if(percentage is double){
+      persetaseCardName = percentage.toInt();
+    }else{
+      persetaseCardName = percentage;
+    }
+
     cardName = json['CardName'];
     statusKYC = json['StatusKYC'];
   }

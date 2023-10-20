@@ -1517,13 +1517,14 @@ class System {
       var startDay = DateTime.utc(startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute, startDate.second);
 
       final difference = startDay.difference(d1);
-      print("===============222222 ---- ${difference.inDays}");
-      print("===============222222 ---- ${difference.inHours}");
-      print("===============222222 ---- ${difference.inMinutes}");
+      // print("===============222222 ---- ${difference.inDays}");
+      // print("===============222222 ---- ${difference.inHours}");
+      // print("===============222222 ---- ${difference.inMinutes}");
       // if (difference.inHours >= 24) {
-      if (difference.inMinutes <= -10) {
+      if (difference.inMinutes <= -00) {
         await challange.getBannerLanding(context, ispopUp: true);
         SharedPreference().writeStorage(SpKeys.datetimeLastShowChallange, DateTime.now().toString());
+        globalChallengePopUp = true;
         return ShowGeneralDialog.showBannerPop(context);
       }
     }

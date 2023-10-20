@@ -42,7 +42,7 @@ class _PicTopItemState extends State<PicTopItem> {
     final newUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
     mn = Provider.of<MainNotifier>(context, listen: false);
     lang = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
-    if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
+    if (mn?.tutorialData.isNotEmpty ?? [].isEmpty && !globalChallengePopUp) {
       indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
       indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
     }

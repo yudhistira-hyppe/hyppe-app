@@ -821,7 +821,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   Widget itemPict(BuildContext context, PreviewPicNotifier notifier, int index, HomeNotifier homeNotifier) {
     var picData = notifier.pic?[index];
-    final isAds = picData?.inBetweenAds != null;
+    final isAds = picData?.inBetweenAds != null && picData?.postID == null;
     return picData?.isContentLoading ?? false
         ? Builder(builder: (context) {
             Future.delayed(const Duration(seconds: 1), () {
@@ -882,7 +882,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                 }
                               });
                               setState(() {
-                                Future.delayed(Duration(milliseconds: 400), () {
+                                Future.delayed(const Duration(milliseconds: 400), () {
                                   itemHeight = notifier.pic?[indexList ?? 0].height ?? 0;
                                 });
                               });
@@ -979,7 +979,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                 ? Container(
                                                     height: 40,
                                                     width: 30,
-                                                    child: Align(
+                                                    child: const Align(
                                                       alignment: Alignment.bottomRight,
                                                       child: CustomLoading(),
                                                     ),
@@ -1073,16 +1073,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                           if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
                                             indexKeySell = mn?.tutorialData.indexWhere((element) => element.key == 'sell') ?? 0;
                                             indexKeyProtection = mn?.tutorialData.indexWhere((element) => element.key == 'protection') ?? 0;
-
+                                            // print("==============global challehg $globalChallengePopUp");
+                                            // print("==============global challehg ${mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp}");
                                             if ((picData?.saleAmount ?? 0) > 0) {
-                                              if (mn?.tutorialData[indexKeySell].status == false) {
-                                                print("======sell");
+                                              if (mn?.tutorialData[indexKeySell].status == false && !globalChallengePopUp) {
                                                 ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalSell ?? GlobalKey()]);
                                               }
                                             }
                                             if (((picData?.certified ?? false) && (picData?.saleAmount ?? 0) == 0)) {
-                                              if (mn?.tutorialData[indexKeyProtection].status == false) {
-                                                print("======ownser");
+                                              if (mn?.tutorialData[indexKeyProtection].status == false && !globalChallengePopUp) {
                                                 ShowCaseWidget.of(context).startShowCase([picData?.keyGlobalOwn ?? GlobalKey()]);
                                               }
                                             }

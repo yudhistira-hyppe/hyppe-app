@@ -191,6 +191,8 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
           argument: GeneralArgument(
             id: data.subChallengeData?[0].challengeId,
             session: data.subChallengeData?[0].session,
+            index: 1,
+            isTrue: false,
           ),
         );
       },
