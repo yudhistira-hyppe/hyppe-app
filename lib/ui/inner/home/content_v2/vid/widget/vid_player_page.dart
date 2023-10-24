@@ -1196,6 +1196,19 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                           // padding: EdgeInsets.only(bottom: 25.0),
                           child: Offstage(offstage: _isLock, child: _buildContentWidget(Routing.navigatorKey.currentContext ?? context, widget.orientation, notifier)),
                         ),
+                      if (widget.fromFullScreen && Platform.isIOS)
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: InkWell(
+                            onTap: () {
+                              Routing().moveBack();
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
+                            ),
+                          ),
+                        ),
                       if (!isPlay)
                         SizedBox(
                           height: widget.height,

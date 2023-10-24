@@ -26,9 +26,9 @@ class Env {
     appStoreID: appStoreID,
     debugShowMaterialGrid: false,
     debugShowCheckedModeBanner: false,
-    baseUrl: UrlConstants.stagingBaseApi,
-    deeplinkBaseUrl: UrlConstants.devDeeplinkUrl,
-    apiBaseUrl: UrlConstants.stagingBaseApi,
+    baseUrl: "https://s1.hyppe.cloud",
+    deeplinkBaseUrl: "https://share.hyppe.app",
+    apiBaseUrl: "https://s1.hyppe.cloud",
     versionApi: UrlConstants.apiV0,
   );
 
@@ -39,9 +39,9 @@ class Env {
     appStoreID: appStoreID,
     debugShowMaterialGrid: false,
     debugShowCheckedModeBanner: false,
-    baseUrl: UrlConstants.productionBaseApi,
-    deeplinkBaseUrl: UrlConstants.prodDeeplinkUrl,
-    apiBaseUrl: UrlConstants.productionBaseApi,
+    baseUrl: "https://p1.hyppe.cloud",
+    deeplinkBaseUrl: "https://share.hyppe.app",
+    apiBaseUrl: "https://p1.hyppe.cloud",
     versionApi: UrlConstants.apiV0,
   );
 }

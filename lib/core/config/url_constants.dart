@@ -24,33 +24,6 @@ class UrlConstants {
 
   static const String apiV7 = '/v7/';
 
-  /// Production Base url
-  static const String productionBaseApi = "https://p1.hyppe.cloud";
-  static const String productionUploadBaseApi = "https://p1.hyppe.cloud";
-  // static const String productionBaseApi = "https://p1-5003.hyppe.cloud";
-  // static const String productionUploadBaseApi = "https://p1-5003.hyppe.cloud";
-
-  // static const String productionBaseApi = "https://prod.hyppe.app"; //lama
-  // static const String productionUploadBaseApi = "https://upload.hyppe.app"; //lama
-  // static const String productionBaseApi = "https://s1.hyppe.cloud";
-  // static const String productionUploadBaseApi = "https://s1.hyppe.cloud";
-
-  /// Staging v2 Base url
-  static const String stagingBaseApi = "https://s1.hyppe.cloud";
-  static const String stagingUploadBaseApi = "https://s1.hyppe.cloud";
-  // static const String productionBaseApi = "https://p1.hyppe.cloud";
-  // static const String productionUploadBaseApi = "https://p1.hyppe.cloud";
-  // static const String stagingBaseApi = "https://p1-5003.hyppe.cloud";
-  // static const String stagingUploadBaseApi = "https://p1-5003.hyppe.cloud";
-  // static const String stagingBaseApi = "https://p1-5003.hyppe.cloud";
-  // static const String stagingUploadBaseApi = "https://p1-5003.hyppe.cloud";
-
-  /// Prod Deeplink Base url
-  static const String prodDeeplinkUrl = "https://share.hyppe.app";
-
-  /// Staging Deeplink Base url
-  static const String devDeeplinkUrl = "https://share.hyppe.app";
-
   static const String urlPing = "s1.hyppe.cloud";
 
   /// APIs end point

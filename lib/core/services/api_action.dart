@@ -113,10 +113,10 @@ class ApiAction {
         if (sessionEndPoint != null) {
           _dio.options.baseUrl = sessionEndPoint;
         }
-        url = UrlConstants.stagingUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
+        url = Env.dev.apiBaseUrl + Env.data.versionApi + UrlConstants.createuserposts;
       } else {
         // url = UrlConstants.stagingUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
-        url = UrlConstants.productionUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
+        url = Env.prod.apiBaseUrl + Env.data.versionApi + UrlConstants.createuserposts;
       }
     }
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -543,6 +544,26 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                                   SizeConfig.screenHeight ?? 0,
                                 ),
                               ),
+                              if (Platform.isIOS)
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: InkWell(
+                                    onTap: () {
+                                      int changevalue;
+                                      changevalue = _currentPosition + 1000;
+                                      if (changevalue > _videoDuration) {
+                                        changevalue = _videoDuration;
+                                      }
+                                      widget.data.isLoading = true;
+                                      setState(() {});
+                                      Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
+                                    },
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
+                                    ),
+                                  ),
+                                ),
                               if(isLoadingVid)
                                 Container(width: context.getWidth(), height: SizeConfig.screenHeight,
                                   padding: EdgeInsets.only(bottom: 20),
