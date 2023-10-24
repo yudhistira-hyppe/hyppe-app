@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class ButtonChallangeWidget extends StatelessWidget {
   final Function? function;
@@ -38,7 +39,7 @@ class ButtonChallangeWidget extends StatelessWidget {
                     height: 12 + 12 + 14,
                     child: CustomLoading(),
                   )
-                : Text(
+                : AutoSizeText(
                     text ?? '',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -46,6 +47,7 @@ class ButtonChallangeWidget extends StatelessWidget {
                       color: textColors,
                       fontWeight: FontWeight.w700,
                     ),
+                    maxLines: 1,
                   ),
           ),
         ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -10,8 +9,6 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/conte
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/litem_leader.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/shimmer_list_end.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
-import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class ListEndDetail extends StatefulWidget {

@@ -1,19 +1,15 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
-
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
-
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/content/my_frame_stories/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/content/people_frame_story/screen.dart';
-
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/error_service.dart';
 
@@ -21,7 +17,7 @@ class HyppePreviewStories extends StatefulWidget {
   const HyppePreviewStories({Key? key}) : super(key: key);
 
   @override
-  _HyppePreviewStoriesState createState() => _HyppePreviewStoriesState();
+  State<HyppePreviewStories> createState() => _HyppePreviewStoriesState();
 }
 
 class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
@@ -80,15 +76,15 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
                 data: notifier.storiesGroups?[itemIndex],
               );
             } else {
-              if (context.read<ErrorService>().isInitialError(error, notifier.storiesGroups)) {
+              if (context.read<ErrorService>().isInitialError(error, notifier.storiesGroups) || (notifier.storiesGroups?.isNotEmpty ?? [].isEmpty)) {
                 return Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     MyFrameStory(),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.75,
-                      child: CustomErrorWidget(
-                        padding: const EdgeInsets.only(left: 20, top: 16, bottom: 16),
+                      child: const CustomErrorWidget(
+                        padding: EdgeInsets.only(left: 20, top: 16, bottom: 16),
                         errorType: ErrorType.peopleStory,
                         isVertical: false,
                         iconSize: 40,

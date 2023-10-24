@@ -36,29 +36,29 @@ class ProfileComponent extends StatelessWidget {
   final bool isUserVerified;
   final UserBadgeModel? badge;
 
-  const ProfileComponent(
-      {Key? key,
-      required this.show,
-      required this.onTapOnProfileImage,
-      required this.imageUrl,
-      required this.username,
-      required this.isCelebrity,
-      required this.createdAt,
-      required this.following,
-      this.isDetail = false,
-      this.widthText = 150,
-      this.showNameAndTimeStamp = true,
-      this.spaceProfileAndId = eightPx,
-      this.widthCircle = SizeWidget.circleDiameterImageProfileInLongVideoView,
-      this.heightCircle = SizeWidget.circleDiameterImageProfileInLongVideoView,
-      required this.onFollow,
-      this.textColor,
-      this.cacheKey,
-      this.haveStory = false,
-      required this.featureType,
-      required this.isUserVerified,
-      this.badge,  
-    }) : super(key: key);
+  const ProfileComponent({
+    Key? key,
+    required this.show,
+    required this.onTapOnProfileImage,
+    required this.imageUrl,
+    required this.username,
+    required this.isCelebrity,
+    required this.createdAt,
+    required this.following,
+    this.isDetail = false,
+    this.widthText = 150,
+    this.showNameAndTimeStamp = true,
+    this.spaceProfileAndId = eightPx,
+    this.widthCircle = SizeWidget.circleDiameterImageProfileInLongVideoView,
+    this.heightCircle = SizeWidget.circleDiameterImageProfileInLongVideoView,
+    required this.onFollow,
+    this.textColor,
+    this.cacheKey,
+    this.haveStory = false,
+    required this.featureType,
+    required this.isUserVerified,
+    this.badge,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -110,15 +110,14 @@ class ProfileComponent extends StatelessWidget {
                                     textAlign: TextAlign.left,
                                   ),
                           ),
-                          if(isUserVerified)
-                          twoPx,
-                          if(isUserVerified)
-                          const CustomIconWidget(
-                            iconData: '${AssetPath.vectorPath}ic_verified.svg',
-                            defaultColor: false,
-                            width: 16,
-                            height: 16,
-                          ),
+                          if (isUserVerified) twoPx,
+                          if (isUserVerified)
+                            const CustomIconWidget(
+                              iconData: '${AssetPath.vectorPath}ic_verified.svg',
+                              defaultColor: false,
+                              width: 16,
+                              height: 16,
+                            ),
                           tenPx,
                           CustomVerifiedWidget(verified: isCelebrity)
                         ],

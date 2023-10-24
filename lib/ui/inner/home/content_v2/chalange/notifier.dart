@@ -26,6 +26,9 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dar
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_slider.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -421,6 +424,14 @@ class ChallangeNotifier with ChangeNotifier {
       collectionBadgeData = [];
       achievementFatch.data.forEach((v) => collectionBadgeData?.add(BadgeCollectionModel.fromJson(v)));
       isLoadingCollection = false;
+
+      var badgeProfile = context.read<SelfProfileNotifier>().user.profile?.urluserBadge;
+      badgeUser = UserBadgeModel(
+        id: badgeProfile?.idUserBadge,
+        badgeProfile: badgeProfile?.badgeProfile,
+        badgeOther: badgeProfile?.badgeOther,
+      );
+
       notifyListeners();
       return true;
     } else {
@@ -522,7 +533,7 @@ class ChallangeNotifier with ChangeNotifier {
                 String month = (e.bulan ?? 0) < 10 ? "0${e.bulan}" : "${e.bulan}";
                 String monthYear = "${e.tahun}-$month-01 00:00:00";
                 challangeOption = DateTime.parse(monthYear);
-                selectOptionSession = (data.session ?? 0);
+                selectOptionSession = (data.session ?? 0) - 1;
                 notifyListeners();
               }
             }

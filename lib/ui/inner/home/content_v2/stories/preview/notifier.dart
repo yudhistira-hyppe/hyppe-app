@@ -68,6 +68,8 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   StoryController storyController = StoryController();
 
+  bool isloading = false;
+
   changeBorderColor(ContentData contentData) {
     contentData.isViewed = true;
     notifyListeners();
@@ -126,11 +128,16 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   Future initialStories(BuildContext context /*, {List<ContentData>? list}*/) async {
     // initialMyStories(context);
+    isloading = true;
+    notifyListeners();
     "story initialStories".loggerV2();
     initialMyStoryGroup(context);
     print('initialStories');
     // initialPeopleStories(context, reload: true, list: list);
-    initialStoriesGroup(context);
+    await initialStoriesGroup(context);
+    isloading = false;
+
+    notifyListeners();
   }
 
   Future<void> initialMyStories(BuildContext context) async {
@@ -156,7 +163,9 @@ class PreviewStoriesNotifier with ChangeNotifier {
     try {
       final email = SharedPreference().readStorage(SpKeys.email);
       final res = await myContentsQuery.reload(context);
+      print("============= story ${res[0].urluserBadge?.badgeProfile} ");
       myStoryGroup[email] = res;
+
       notifyListeners();
     } catch (e) {
       'load my story list: ERROR: $e'.logger();
@@ -355,8 +364,8 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
-  setViewed(int index, int indexItem){
-    if(storiesGroups?.isNotEmpty ?? false){
+  setViewed(int index, int indexItem) {
+    if (storiesGroups?.isNotEmpty ?? false) {
       storiesGroups?[index].story?[indexItem].isViewed = true;
     }
     notifyListeners();

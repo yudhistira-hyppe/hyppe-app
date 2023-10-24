@@ -237,11 +237,15 @@ class HomeNotifier with ChangeNotifier {
     if (isLoadingLoadmore) return;
     if (isConnected) {
       if (!mounted) return;
+
       final profile = Provider.of<MainNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
       final vid = Provider.of<PreviewVidNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
       final diary = Provider.of<PreviewDiaryNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
       final pic = Provider.of<PreviewPicNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
       final stories = Provider.of<PreviewStoriesNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+      stories.myStoryGroup = {};
+      stories.storiesGroups = [];
+      notifyListeners();
 
       print("data pic ${(pic.pic?.isNotEmpty ?? [].isNotEmpty) && (diary.diaryData?.isNotEmpty ?? [].isNotEmpty)}");
       if ((!isreload && !isgetMore) && ((pic.pic?.isNotEmpty ?? [].isNotEmpty) && (diary.diaryData?.isNotEmpty ?? [].isNotEmpty) && (vid.vidData?.isNotEmpty ?? [].isNotEmpty))) {
@@ -294,7 +298,8 @@ class HomeNotifier with ChangeNotifier {
           break;
       }
       if (!isgetMore && stories.peopleStoriesData == null) {
-        stories.initialStories(Routing.navigatorKey.currentContext ?? context);
+        await stories.initialStories(Routing.navigatorKey.currentContext ?? context);
+        notifyListeners();
       }
       // if (isreload) {
       //   await stories.initialStories(context);
@@ -302,13 +307,13 @@ class HomeNotifier with ChangeNotifier {
 
       final allContents = await reload(Routing.navigatorKey.currentContext ?? context, data);
 
-      if (profileImage == '') {
-        try {
-          await profile.initMain(Routing.navigatorKey.currentContext ?? context, onUpdateProfile: true);
-        } catch (e) {
-          'profile.initMain error $e'.logger();
-        }
-      }
+      // if (profileImage == '') {
+      //   try {
+      await profile.initMain(Routing.navigatorKey.currentContext ?? context, onUpdateProfile: true);
+      //   } catch (e) {
+      //     'profile.initMain error $e'.logger();
+      //   }
+      // }
 
       _isLoadingPict = false;
       _isLoadingDiary = false;
@@ -976,8 +981,6 @@ class HomeNotifier with ChangeNotifier {
   //   }
   //   return data;
   // }
-
-
 
   void updateFollowing(BuildContext context, {required String email, bool? statusFollowing}) {
     List<ContentData>? listDataVid = [];

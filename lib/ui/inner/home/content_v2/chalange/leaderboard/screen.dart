@@ -81,6 +81,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                 context,
                 chllangeid,
                 oldLeaderboard: true,
+                session: (cn.leaderBoardData?.session ?? 0) - 1,
               );
             }
             // homneNotifier.initNewHome(context, mounted, isreload: false, isNew: true);
@@ -98,8 +99,8 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
   void afterFirstLayout(BuildContext context) {}
 
   void toHideTab(ChallangeNotifier cn) {
-    // print("!!!@@@@ hide ${((cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1) || cn.leaderBoardData?.session == 1)}");
-    // print("${cn.leaderBoardData?.session}");
+    print("!!!@@@@ hide ${((cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1) || cn.leaderBoardData?.session == 1)}");
+    print("${cn.leaderBoardData?.session}");
     if ((cn.leaderBoardData?.onGoing == true && cn.leaderBoardData?.session == 1) || cn.leaderBoardData?.session == 1) {
       hideTab = true;
     } else {
@@ -182,8 +183,9 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
         body: RefreshIndicator(
           color: kHyppePrimary,
           onRefresh: () async {
-            await cn.initLeaderboard(context);
             _currentTab = 0;
+            _tabController.index = 0;
+            await cn.initLeaderboard(context);
           },
           child: cn.isLoadingLeaderboard
               ? const ShimmerLeaderboard()
@@ -265,7 +267,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                                   child: Container(
                                                     height: 50,
                                                     width: 50,
-                                                    child: CircularProgressIndicator(
+                                                    child: const CircularProgressIndicator(
                                                         // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
                                                         ),
                                                   ),
@@ -324,7 +326,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                               ),
                             ),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: _tabs![_currentTab],
                       ),
                       cn.listChallangeData.isEmpty

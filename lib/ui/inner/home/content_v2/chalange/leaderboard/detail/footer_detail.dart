@@ -14,7 +14,6 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/butto
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
-import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
@@ -356,7 +355,10 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
                 (challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?.isNotEmpty ?? [].isEmpty)) {
               var interaksiData = challengeData?.metrik?[0].interaksiKonten?[0];
               if ((interaksiData?.buatKonten?[0].hyppeVid ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppePic ?? 0) > 0) {
-                onTapbuatKonten(contentD: challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?[0] ?? BuatKonten());
+                onTapbuatKonten(
+                  contentD: challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?[0] ?? BuatKonten(),
+                  tagar: challengeData?.metrik?[0].interaksiKonten?[0].tagar,
+                );
               }
             }
           }
@@ -402,7 +404,10 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
               return;
             } else if ((interaksiData?.buatKonten?[0].hyppeVid ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppeDiary ?? 0) > 0 || (interaksiData?.buatKonten?[0].hyppePic ?? 0) > 0) {
-              onTapbuatKonten(contentD: challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?[0] ?? BuatKonten());
+              onTapbuatKonten(
+                contentD: challengeData?.metrik?[0].interaksiKonten?[0].buatKonten?[0] ?? BuatKonten(),
+                tagar: challengeData?.metrik?[0].interaksiKonten?[0].tagar,
+              );
               return;
             }
           }
@@ -413,11 +418,10 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
     }
   }
 
-  void onTapbuatKonten({BuatKonten? contentD, InteraksiKonten? interaksiKonten}) {
+  void onTapbuatKonten({BuatKonten? contentD, InteraksiKonten? interaksiKonten, String? tagar}) {
     int contentVid = 0;
     int contentDiary = 0;
     int contentPict = 0;
-    String tagar = "";
     if (contentD != null) {
       contentVid = (contentD.hyppeVid ?? 0) > 0 ? 1 : 0;
       contentDiary = (contentD.hyppeDiary ?? 0) > 0 ? 1 : 0;
@@ -429,7 +433,8 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
     }
     var tot = contentVid + contentDiary + contentPict;
     PreUploadContentNotifier pn = context.read<PreUploadContentNotifier>();
-    pn.hastagChallange = interaksiKonten?.tagar ?? '';
+    pn.hastagChallange = contentD != null ? (tagar ?? "") : (interaksiKonten?.tagar ?? '');
+
     print("====== pn.hastagChallange ${tot}");
     print("====== pn.hastagChallange ${interaksiKonten}");
     print("====== pn.hastagChallange ${interaksiKonten?.tagar}");

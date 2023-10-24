@@ -24,21 +24,22 @@ class MyFrameStory extends StatelessWidget {
     SizeConfig().init(context);
     final notifier = Provider.of<PreviewStoriesNotifier>(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.peopleStory));
-    final home = Provider.of<HomeNotifier>(context);
+    final home = context.watch<HomeNotifier>();
     final email = SharedPreference().readStorage(SpKeys.email);
     return Row(
       children: [
         sixteenPx,
+        // Text("${notifier.isloading}"),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            context.read<ErrorService>().isInitialError(error, notifier.myStoryGroup) || notifier.myStoryGroup != null
+            !notifier.isloading
                 ? BuildCircleProfile(
                     listStory: notifier.myStoryGroup[email],
                     imageUrlKey: home.profileImageKey,
                     imageUrl: System().showUserPicture(home.profileImage),
-                    badge: home.profileBadge,
+                    badge: notifier.myStoryGroup.isEmpty ? home.profileBadge : notifier.myStoryGroup[email]?[0].urluserBadge,
                   )
                 : const CustomShimmer(
                     radius: 50,
@@ -46,7 +47,7 @@ class MyFrameStory extends StatelessWidget {
                     height: SizeWidget.circleDiameterOutside,
                   ),
             fourPx,
-            context.read<ErrorService>().isInitialError(error, notifier.myStoryGroup) || notifier.myStoryGroup != null
+            !notifier.isloading
                 ? SizedBox(
                     width: 43,
                     child: CustomTextWidget(

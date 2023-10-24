@@ -110,6 +110,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
               chllangeid,
               oldLeaderboard: true,
               isDetail: true,
+              session: (cn.leaderBoardDetailData?.session ?? 1) - 1,
             );
           } else if (_current == 0) {
             if (cn.leaderBoardDetailData?.sId == null) {

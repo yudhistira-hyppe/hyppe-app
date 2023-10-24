@@ -223,6 +223,7 @@ class UserBloc {
         "latitude": longtitude ?? "${double.parse("0.0")}",
       },
       "lang": lang ?? 'id',
+      "devicetype": platForm,
     };
     'Login payload => $payload'.logger();
     print('payload');

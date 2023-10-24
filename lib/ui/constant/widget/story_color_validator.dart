@@ -45,7 +45,7 @@ class StoryColorValidator extends StatelessWidget {
                     : kHyppeBorderTab
                 : isMy
                     ? kHyppeBorderTab
-                    : kHyppeLightBackground),
+                    : Colors.transparent),
       ),
       child: child,
     );

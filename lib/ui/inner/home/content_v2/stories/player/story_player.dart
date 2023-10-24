@@ -680,14 +680,14 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                       //     height: MediaQuery.of(context).size.height,
                       //   )
                       ? FutureBuilder(
-                        future: Future.wait([
-                          for (StickerModel sticker in _groupUserStories?[index].story?[_curChildIdx].stickers ?? []) precacheImage(NetworkImage(sticker.image ?? ''), context),
-                        ]),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            Container();
-                          }
-                          return Center(
+                          future: Future.wait([
+                            for (StickerModel sticker in _groupUserStories?[index].story?[_curChildIdx].stickers ?? []) precacheImage(NetworkImage(sticker.image ?? ''), context),
+                          ]),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              Container();
+                            }
+                            return Center(
                               child: Stack(
                                 children: [
                                   Center(
@@ -732,8 +732,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                                 ],
                               ),
                             );
-                        }
-                      )
+                          })
                       : Container(
                           color: Colors.black,
                           alignment: Alignment.center,

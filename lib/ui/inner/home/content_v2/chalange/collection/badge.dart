@@ -54,6 +54,7 @@ class BadgeWidget extends StatelessWidget {
               children: [
                 Column(
                   children: [
+                    // Text("${cn.badgeUser?.id}"),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Stack(

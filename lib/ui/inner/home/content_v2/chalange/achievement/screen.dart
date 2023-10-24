@@ -64,7 +64,7 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
           ),
           title: Text(
             lang?.achievementsPage ?? '',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               fontFamily: 'Lato',
               fontWeight: FontWeight.w700,

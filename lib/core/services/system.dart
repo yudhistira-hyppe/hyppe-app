@@ -1512,16 +1512,18 @@ class System {
     } else {
       var temp = DateTime.now();
       // var temp = DateTime.parse("2023-07-29 08:02:10");
+      // print(lastTime);
       var startDate = DateTime.parse(lastTime);
+      // var startDate = DateTime.parse("2023-10-19 02:31:44.014886");
       var d1 = DateTime.utc(temp.year, temp.month, temp.day, temp.hour, temp.minute, temp.second);
       var startDay = DateTime.utc(startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute, startDate.second);
 
       final difference = startDay.difference(d1);
-      // print("===============222222 ---- ${difference.inDays}");
-      // print("===============222222 ---- ${difference.inHours}");
-      // print("===============222222 ---- ${difference.inMinutes}");
+      print("===============222222 ---- ${difference.inDays}");
+      print("===============222222 ---- ${difference.inHours}");
+      print("===============222222 ---- ${difference.inMinutes}");
       // if (difference.inHours >= 24) {
-      if (difference.inMinutes <= -00) {
+      if (difference.inHours <= -24) {
         await challange.getBannerLanding(context, ispopUp: true);
         SharedPreference().writeStorage(SpKeys.datetimeLastShowChallange, DateTime.now().toString());
         globalChallengePopUp = true;

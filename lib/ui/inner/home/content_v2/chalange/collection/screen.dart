@@ -130,6 +130,7 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
                                     ),
                                   ),
                                   twentyFourPx,
+                                  // Text("${cn.badgeUser?.badgeProfile}"),
                                   BadgeWidget(
                                     badgeData: cn.collectionBadgeData?[0].badgeAktif,
                                     avatar: hn.profileImage,
