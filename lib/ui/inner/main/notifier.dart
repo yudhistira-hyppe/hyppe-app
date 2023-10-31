@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,11 +11,12 @@ import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/google_map_place/location_model.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
 import 'package:hyppe/core/services/event_service.dart';
-import 'package:hyppe/core/services/fcm_service.dart';
+import 'package:hyppe/core/services/locations.dart';
 import 'package:hyppe/core/services/notification_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/socket_service.dart';
@@ -22,7 +24,6 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/home/screen.dart';
 import 'package:hyppe/ui/inner/notification/screen.dart';
@@ -33,6 +34,9 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
+import 'package:hyppe/core/bloc/google_map_place/state.dart';
+import 'package:hyppe/core/models/collection/google_map_place/google_geocoding_model.dart';
 
 import '../../../app.dart';
 
@@ -92,6 +96,13 @@ class MainNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  GoogleGeocodingModel? _googleGeocodingModel;
+  GoogleGeocodingModel? get googleGeocodingModel => _googleGeocodingModel;
+  set googleGeocodingModel(val) {
+    _googleGeocodingModel = val;
+    notifyListeners();
+  }
+
   Future initMain(BuildContext context, {bool onUpdateProfile = false, bool isInitSocket = false, bool updateProfilePict = false}) async {
     // Connect to socket
     if (isInitSocket) {
@@ -126,6 +137,10 @@ class MainNotifier with ChangeNotifier {
       selfProfile.user.profile = usersFetch.data;
       selfProfile.user.profile?.avatar?.imageKey = keyImageCache;
 
+      if (selfProfile.user.profile?.area == null) {
+        getProvinceName(context);
+      }
+
       selfProfile.onUpdate();
       print(selfProfile.user.profile?.bio);
       print("profile?.avatar ${selfProfile.user.profile?.avatar?.imageKey}");
@@ -151,6 +166,29 @@ class MainNotifier with ChangeNotifier {
       if (_openValidationIDCamera) {
         takeSelfie(context);
       }
+    });
+  }
+
+  Future getProvinceName(BuildContext context) async {
+    Locations().permissionLocation().then((result) {
+      Locations().getLocation().then((value) async {
+        final notifier = GoogleMapPlaceBloc();
+        await notifier.getGoogleMapGeocodingBloc(
+          context,
+          latitude: value['latitude'] ?? 0.0,
+          longitude: value['longitude'] ?? 0.0,
+        );
+        final fetch = notifier.googleMapPlaceFetch;
+        if (fetch.googleMapPlaceState == GoogleMapPlaceState.getGoogleMapPlaceBlocSuccess) {
+          googleGeocodingModel = GoogleGeocodingModel.fromJson(fetch.data);
+          AddressComponents? addressComponents = googleGeocodingModel?.results?.first.addressComponents?.firstWhere((element) => (element.types ?? []).contains('administrative_area_level_1'));
+          final usersNotifier = userV2.UserBloc();
+          final data = <String, dynamic>{};
+          data["area"] = addressComponents?.longName;
+          // ignore: use_build_context_synchronously
+          usersNotifier.updateProfileBlocV2(context, data: data);
+        }
+      });
     });
   }
 

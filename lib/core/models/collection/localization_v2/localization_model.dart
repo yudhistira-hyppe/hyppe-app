@@ -422,6 +422,8 @@ class LocalizationModelV2 {
   String? tryAgain;
   String? somethingWentWrong;
   String? ourSystemIsCurrentlyExperiencingTechnicalIssues;
+  String? hyppeServerErrorMessageTitle;
+  String? hyppeServerErrorMessageContent;
   String? idVerification;
   String? pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures;
   String? yesCompleteProfile;
@@ -1429,6 +1431,8 @@ class LocalizationModelV2 {
     this.tryAgain,
     this.somethingWentWrong,
     this.ourSystemIsCurrentlyExperiencingTechnicalIssues,
+    this.hyppeServerErrorMessageTitle,
+    this.hyppeServerErrorMessageContent,
     this.idVerification,
     this.pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures,
     this.yesCompleteProfile,
@@ -2438,6 +2442,8 @@ class LocalizationModelV2 {
     tryAgain = json['tryAgain'];
     somethingWentWrong = json['somethingWentWrong'];
     ourSystemIsCurrentlyExperiencingTechnicalIssues = json['ourSystemIsCurrentlyExperiencingTechnicalIssues'];
+    hyppeServerErrorMessageTitle = json['hyppeServerErrorMessageTitle'];
+    hyppeServerErrorMessageContent = json['hyppeServerErrorMessageContent'];
     idVerification = json['idVerification'];
     pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures = json['pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures'];
     yesCompleteProfile = json['yesCompleteProfile'];

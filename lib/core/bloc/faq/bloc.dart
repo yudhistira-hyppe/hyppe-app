@@ -32,7 +32,7 @@ class FAQBloc{
         }
       },
           (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setFAQFetch(FAQFetch(FAQState.faqError, data: '$errorData'));
       },
       data: arg.toJson(),

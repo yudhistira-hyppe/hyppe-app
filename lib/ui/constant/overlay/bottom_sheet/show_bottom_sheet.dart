@@ -199,7 +199,10 @@ class ShowBottomSheet {
     );
   }
 
-  static onInternalServerError(BuildContext context) {
+  static onInternalServerError(
+    BuildContext context, {
+    required int? statusCode,
+  }) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -219,7 +222,7 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnInternalServerErrorBottomSheet(),
+            child: OnInternalServerErrorBottomSheet(statusCode: statusCode),
           ),
         );
       },

@@ -119,9 +119,6 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
       fetch.data.forEach((v) => _interest.add(Interest.fromJson(v)));
       notifyListeners();
     }
-    if (fetch.utilsState == UtilsState.getInterestsError) {
-      ShowBottomSheet.onInternalServerError(context);
-    }
   }
 
   initUserInterest(BuildContext context, UserInterestScreenArgument arguments) async {

@@ -17,6 +17,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/database/local_thumbnail.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart' as v2;
+import 'package:hyppe/core/models/collection/google_map_place/location_model.dart';
 
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/core/services/locations.dart';

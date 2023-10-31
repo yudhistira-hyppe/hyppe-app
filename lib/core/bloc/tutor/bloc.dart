@@ -35,7 +35,7 @@ class TutorBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setTutorFetch(TutorFetch(TutorState.getPostError));
         Dio().close(force: true);
       },

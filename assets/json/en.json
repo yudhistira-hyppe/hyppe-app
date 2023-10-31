@@ -425,6 +425,8 @@
   "tryAgain": "Try Again",
   "somethingWentWrong": "Something Went Wrong",
   "ourSystemIsCurrentlyExperiencingTechnicalIssues": "Our system is currently experiencing technical issues,",
+  "hyppeServerErrorMessageTitle": "Hyppe pergi healing dulu ya!",
+  "hyppeServerErrorMessageContent": "Kami akan segera kembali dalam waktu singkat. Terima kasih atas pengertiannya.",
   "idVerification": "ID Verification",
   "pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures": "Please capture self image with ID card to use Hyppe Features",
   "yesCompleteProfile": "Yes, Complete Profile",

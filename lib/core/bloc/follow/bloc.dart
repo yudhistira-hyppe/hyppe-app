@@ -37,7 +37,7 @@ class FollowBloc {
         setFollowFetch(FollowFetch(FollowState.checkFollowingToUserError));
       },
       errorServiceType: ErrorType.checkFollow,
-      host: UrlConstants.isFollowing + "?userID=$userID",
+      host: "${UrlConstants.isFollowing}?userID=$userID",
       withAlertMessage: false,
       methodType: MethodType.get,
       withCheckConnection: false,
@@ -56,7 +56,7 @@ class FollowBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setFollowFetch(FollowFetch(FollowState.followUserError));
       },
       data: data.toMap(),
@@ -83,7 +83,7 @@ class FollowBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setFollowFetch(FollowFetch(FollowState.followUserError));
       },
       headers: {

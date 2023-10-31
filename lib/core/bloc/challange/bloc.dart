@@ -35,7 +35,7 @@ class ChallangeBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setChallangeFetch(ChallangeFetch(ChallengeState.getPostError));
         Dio().close(force: true);
       },
@@ -64,7 +64,7 @@ class ChallangeBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setChallangeFetch(ChallangeFetch(ChallengeState.getPostError));
         Dio().close(force: true);
       },
@@ -89,7 +89,7 @@ class ChallangeBloc {
         setChallangeFetch(ChallangeFetch(ChallengeState.getPostSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
       }
     }, (errorData) {
-      ShowBottomSheet.onInternalServerError(context);
+      ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
       setChallangeFetch(ChallangeFetch(ChallengeState.getPostError));
       Dio().close(force: true);
     }, host: UrlConstants.checkChallengeStatus, data: {'idUser': userId}, withAlertMessage: false, methodType: MethodType.post, withCheckConnection: false);

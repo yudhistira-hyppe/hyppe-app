@@ -38,7 +38,7 @@ class ReactionBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setReactionFetch(ReactionFetch(ReactionState.addPostReactionBlocError));
       },
       host: UrlConstants.addPostReaction,
@@ -71,7 +71,7 @@ class ReactionBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setReactionFetch(ReactionFetch(ReactionState.addPostReactionBlocErrorV2));
       },
       headers: {
@@ -97,7 +97,7 @@ class ReactionBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setReactionFetch(ReactionFetch(ReactionState.addReactOnCommentBlocError));
       },
       host: UrlConstants.addReactOnComment,
@@ -125,7 +125,7 @@ class ReactionBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setReactionFetch(ReactionFetch(ReactionState.getCommentReactionsBlocSuccess));
       },
       host: UrlConstants.getCommentReactions + "?postID=$postID&commentID=$commentID",
