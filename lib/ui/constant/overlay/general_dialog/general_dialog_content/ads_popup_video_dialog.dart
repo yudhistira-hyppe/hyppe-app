@@ -13,7 +13,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../app.dart';
 import '../../../../../core/arguments/other_profile_argument.dart';
@@ -198,7 +198,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       try{
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-            Wakelock.enable();
+            WakelockPlus.enable();
             setState(() {
               _showTipsWidget = false;
               _showLoading = false;
@@ -208,10 +208,10 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
           case FlutterAvpdef.AVPStatus_AVPStatusPaused:
             isPause = true;
             setState(() {});
-            Wakelock.disable();
+            WakelockPlus.disable();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
-            Wakelock.disable();
+            WakelockPlus.disable();
             if (mounted) {
               setState(() {
                 _showLoading = false;
@@ -219,10 +219,10 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
             }
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
-            Wakelock.disable();
+            WakelockPlus.disable();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusError:
-            Wakelock.disable();
+            WakelockPlus.disable();
             break;
           default:
         }
@@ -406,7 +406,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
 
   @override
   void dispose() {
-    Wakelock.disable();
+    WakelockPlus.disable();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);

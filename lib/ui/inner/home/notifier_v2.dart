@@ -44,7 +44,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../core/bloc/posts_v2/bloc.dart';
 import '../search_v2/notifier.dart';
@@ -1212,14 +1212,14 @@ class HomeNotifier with ChangeNotifier {
     "=================== remove wakelock".logger();
     _inactivityTimer?.cancel();
     _inactivityTimer = null;
-    Wakelock.disable();
+    WakelockPlus.disable();
   }
 
   void initWakelockTimer({required Function() onShowInactivityWarning}) async {
     // adding delay to prevent if there's another that not disposed yet
     Future.delayed(const Duration(milliseconds: 2000), () {
       "=================== init wakelock".logger();
-      Wakelock.enable();
+      WakelockPlus.enable();
       if (_inactivityTimer != null) _inactivityTimer?.cancel();
       _inactivityTimer = Timer(const Duration(seconds: 300), () => onShowInactivityWarning());
     });

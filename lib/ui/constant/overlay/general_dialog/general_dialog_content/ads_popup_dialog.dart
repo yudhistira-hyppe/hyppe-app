@@ -20,7 +20,7 @@ import 'package:provider/provider.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../core/arguments/other_profile_argument.dart';
 import '../../../../../core/bloc/ads_video/bloc.dart';
@@ -264,7 +264,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       try {
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-            Wakelock.enable();
+            WakelockPlus.enable();
             setState(() {
               _showTipsWidget = false;
               _showLoading = false;
@@ -275,20 +275,20 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
           case FlutterAvpdef.AVPStatus_AVPStatusPaused:
             isPause = true;
             setState(() {});
-            Wakelock.disable();
+            WakelockPlus.disable();
             "================ disable wakelock 92".logger();
             _animationController?.stop();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
-            Wakelock.disable();
+            WakelockPlus.disable();
             "================ disable wakelock 75".logger();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
-            Wakelock.disable();
+            WakelockPlus.disable();
             "================ disable wakelock 63".logger();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusError:
-            Wakelock.disable();
+            WakelockPlus.disable();
             "================ disable wakelock 53".logger();
             break;
           default:
@@ -490,7 +490,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
 
   @override
   void dispose() {
-    Wakelock.disable();
+    WakelockPlus.disable();
     "================ disable wakelock 434".logger();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     _animationController?.dispose();

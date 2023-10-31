@@ -6,18 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
-import 'package:hyppe/core/bloc/ads_video/bloc.dart';
-import 'package:hyppe/core/bloc/ads_video/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
-import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -29,7 +25,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../../../app.dart';
 import '../../../../core/arguments/other_profile_argument.dart';
@@ -256,7 +252,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
         print("aliyun : onStateChanged $newState");
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-            Wakelock.enable();
+            WakelockPlus.enable();
             try {
               setState(() {
                 _showTipsWidget = false;
@@ -270,14 +266,14 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusPaused:
             isPause = true;
-            Wakelock.disable();
+            WakelockPlus.disable();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             isPlay = false;
             _showLoading = false;
             //
             try {
-              Wakelock.disable();
+              WakelockPlus.disable();
             } catch (e) {
               e.logger();
             }
@@ -285,10 +281,10 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
             setState(() {});
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
-            Wakelock.disable();
+            WakelockPlus.disable();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusError:
-            Wakelock.disable();
+            WakelockPlus.disable();
             break;
           default:
         }
@@ -588,7 +584,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
 
   @override
   void dispose() {
-    Wakelock.disable();
+    WakelockPlus.disable();
     globalAliPlayer = null;
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);

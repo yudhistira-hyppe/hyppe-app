@@ -31,7 +31,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../../app.dart';
 import '../../../../../../core/models/collection/advertising/ads_video_data.dart';
@@ -311,7 +311,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-          Wakelock.enable();
+          WakelockPlus.enable();
           setState(() {
             _showTipsWidget = false;
             _showLoading = false;
@@ -322,20 +322,20 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
           setState(() {});
-          Wakelock.disable();
+          WakelockPlus.disable();
           "================ disable wakelock 12".logger();
           _animationController?.stop();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
-          Wakelock.disable();
+          WakelockPlus.disable();
           "================ disable wakelock 11".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
-          Wakelock.disable();
+          WakelockPlus.disable();
           "================ disable wakelock 10".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusError:
-          Wakelock.disable();
+          WakelockPlus.disable();
           "================ disable wakelock 13".logger();
           break;
         default:
@@ -534,7 +534,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   @override
   void dispose() {
     globalAliPlayer = null;
-    Wakelock.disable();
+    WakelockPlus.disable();
     "================ disable wakelock 9".logger();
     _animationController?.dispose();
     if (Platform.isIOS) {

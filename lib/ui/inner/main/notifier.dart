@@ -32,7 +32,7 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../app.dart';
 
@@ -423,14 +423,14 @@ class MainNotifier with ChangeNotifier {
     "=================== remove wakelock".logger();
     _inactivityTimer?.cancel();
     _inactivityTimer = null;
-    Wakelock.disable();
+    WakelockPlus.disable();
   }
 
   void initWakelockTimer({required Function() onShowInactivityWarning}) async {
     // adding delay to prevent if there's another that not disposed yet
     Future.delayed(const Duration(seconds: 2), () {
       "=================== init wakelock".logger();
-      Wakelock.enable();
+      WakelockPlus.enable();
       if (_inactivityTimer != null) _inactivityTimer?.cancel();
       _inactivityTimer = Timer(const Duration(seconds: 300), () => onShowInactivityWarning());
     });

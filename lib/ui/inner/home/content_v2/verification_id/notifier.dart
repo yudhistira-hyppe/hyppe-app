@@ -27,7 +27,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../app.dart';
 
@@ -752,8 +752,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
 
   @override
   void onPauseRecordedVideo(BuildContext context) async {
-    if (!(await Wakelock.enabled)) {
-      Wakelock.enable();
+    if (!(await WakelockPlus.enabled)) {
+      WakelockPlus.enable();
     }
     // TODO: implement onPauseRecordedVideo
   }
@@ -761,23 +761,23 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   @override
   void onRecordedVideo(BuildContext context) async {
     // TODO: implement onRecordedVideo
-    if (!(await Wakelock.enabled)) {
-      Wakelock.enable();
+    if (!(await WakelockPlus.enabled)) {
+      WakelockPlus.enable();
     }
   }
 
   @override
   void onResumeRecordedVideo(BuildContext context) async {
     // TODO: implement onResumeRecordedVideo
-    if (!(await Wakelock.enabled)) {
-      Wakelock.enable();
+    if (!(await WakelockPlus.enabled)) {
+      WakelockPlus.enable();
     }
   }
 
   @override
   void onStopRecordedVideo(BuildContext context) {
     // TODO: implement onStopRecordedVideo
-    Wakelock.disable();
+    WakelockPlus.disable();
 "================ disable wakelock 7".logger();
   }
 

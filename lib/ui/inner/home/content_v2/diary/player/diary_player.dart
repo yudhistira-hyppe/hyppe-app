@@ -31,7 +31,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/title_playl
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../../app.dart';
 import '../../../../../constant/entities/like/notifier.dart';
@@ -297,7 +297,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-          Wakelock.enable();
+          WakelockPlus.enable();
           setState(() {
             _showTipsWidget = false;
             _showLoading = false;
@@ -308,20 +308,20 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
           setState(() {});
-          Wakelock.disable();
+          WakelockPlus.disable();
 "================ disable wakelock 53".logger();
           _animationController?.stop();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
-          Wakelock.disable();
+          WakelockPlus.disable();
 "================ disable wakelock 85".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
-          Wakelock.disable();
+          WakelockPlus.disable();
 "================ disable wakelock 96".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusError:
-          Wakelock.disable();
+          WakelockPlus.disable();
 "================ disable wakelock 00".logger();
           break;
         default:
@@ -472,7 +472,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   @override
   void dispose() {
     globalAliPlayer = null;
-    Wakelock.disable();
+    WakelockPlus.disable();
 "================ disable wakelock 63".logger();
     _animationController?.dispose();
     if (Platform.isIOS) {

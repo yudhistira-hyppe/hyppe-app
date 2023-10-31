@@ -1,4 +1,3 @@
-import 'package:hyppe/core/bloc/challange/state.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/bloc/tutor/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';

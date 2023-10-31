@@ -20,9 +20,8 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../app.dart';
 
@@ -322,7 +321,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   //////////////////////////////////////////////////////////////// Camera function
 
   void cancelVideoRecordingWhenAppIsPausedOrInactive() {
-    Wakelock.disable();
+    WakelockPlus.disable();
     "================ disable wakelock 7".logger();
     cancelTimer();
     _progressDev = 0.0;
@@ -335,7 +334,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     try {
       dynamic cameraNotifier;
 
-      Wakelock.disable();
+      WakelockPlus.disable();
       "================ disable wakelock 6".logger();
       final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
       if (canDeppAr == 'true') {
@@ -385,8 +384,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     }
     _startTimer(context);
     cameraNotifier.startVideoRecording();
-    if (!(await Wakelock.enabled)) {
-      Wakelock.enable();
+    if (!(await WakelockPlus.enabled)) {
+      WakelockPlus.enable();
     }
   }
 
@@ -400,7 +399,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     }
-    Wakelock.enable();
+    WakelockPlus.enable();
     print('pause execute');
     cameraNotifier.pauseVideoRecording();
   }
@@ -418,8 +417,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       cancelTimer();
       _startTimer(context);
     });
-    if (!(await Wakelock.enabled)) {
-      Wakelock.enable();
+    if (!(await WakelockPlus.enabled)) {
+      WakelockPlus.enable();
     }
   }
 

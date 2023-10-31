@@ -18,7 +18,7 @@ dependencies:
   firebase_dynamic_links: ^5.0.11 # For using dynamic link feature
   firebase_messaging: ^14.2.1 # A Flutter plugin to use the Firebase Cloud Messaging (FCM) API
   google_sign_in: ^5.2.4 # A secure authentication system for signing in with a Google account on Android and iOS.
-  firebase_auth: 4.2.5
+  firebase_auth: ^4.12.0
   firebase_crashlytics: ^3.0.10
 
   cached_network_image: ^3.2.3 # Untuk keperluan cache image
@@ -44,10 +44,10 @@ dependencies:
   tuple: ^2.0.0 # Tuple data structure
   visibility_detector: ^0.3.3 # A widget that detects the visibility of its child and notifies a callback
   video_thumbnail: ^0.5.3
-  device_info_plus: ^3.2.1 # providing detailed information about the device (make, model, etc.)
+  device_info_plus: ^9.1.0 # providing detailed information about the device (make, model, etc.)
   collection: ^1.16.0 # Collections and utilities functions and classes related to collections.
   computer: ^3.2.0 # Easy to use pool of concurrent workers with compute() like API.
-  package_info_plus: 1.3.0 # For querying information about the application package
+  package_info_plus: ^4.2.0 # For querying information about the application package
   flutter_inappwebview: ^5.7.2+3 # To add an inline webview, to use an headless webview, and to open an in-app browser window
   pin_code_fields: ^7.4.0 # Help to generate pin code fields.
   flutter_markdown: ^0.6.8 # A markdown viewer for flutter
@@ -73,7 +73,7 @@ dependencies:
   sqflite: ^2.2.3
   # secure_application: ^3.8.0
   screen_protector: ^1.2.0
-  wakelock: any
+  wakelock_plus: ^1.1.3
   exif: ^3.1.2
   flutter_image_compress: ^1.1.3
   flutter_aliplayer: 5.4.10
