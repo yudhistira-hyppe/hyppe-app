@@ -27,7 +27,7 @@ class ReportBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setReportFetch(ReportFetch(ReportState.getReportOptionsError));
       },
       data: {"type": "content"},
@@ -52,7 +52,7 @@ class ReportBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setReportFetch(ReportFetch(ReportState.reportsError));
       },
       host: UrlConstants.insertReport,
@@ -75,7 +75,7 @@ class ReportBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setReportFetch(ReportFetch(ReportState.appealError));
       },
       host: UrlConstants.appealPost,
@@ -98,7 +98,7 @@ class ReportBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setReportFetch(ReportFetch(ReportState.appealError));
       },
       host: UrlConstants.detailTypeAppeal,

@@ -425,6 +425,8 @@
   "tryAgain": "Coba Lagi",
   "somethingWentWrong": "Ada Sesuatu Yang Salah",
   "ourSystemIsCurrentlyExperiencingTechnicalIssues": "Sistem kami saat ini dalam masalah teknikal,",
+  "hyppeServerErrorMessageTitle": "Hyppe pergi healing dulu ya!",
+  "hyppeServerErrorMessageContent": "Kami akan segera kembali dalam waktu singkat. Terima kasih atas pengertiannya.",
   "idVerification": "Verifikasi ID",
   "pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures": "Mohon ambil foto selfie dengan kartu identitas untuk menggunakan fitur hyppe",
   "yesCompleteProfile": "Ya, Lengkapi Profil",

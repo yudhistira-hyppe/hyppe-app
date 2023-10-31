@@ -1207,10 +1207,6 @@ class PreUploadContentNotifier with ChangeNotifier {
         });
 
         notifyListeners();
-      } else if (fetch.utilsState == UtilsState.getInterestsError) {
-        ShowBottomSheet.onInternalServerError(
-          context,
-        );
       }
     }
   }
