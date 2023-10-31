@@ -16,7 +16,7 @@ dependencies:
 #  pausable_timer: ^1.0.0+6
 
   better_player: # Better player
-    path: ../../../hyppe-better-player
+    path: ../better-player
 
 dev_dependencies:
   flutter_test:

@@ -100,7 +100,7 @@ dependencies:
       ref: 93fb01345de507f0ed523c3ec1f8bbc12dbf79c0
 
   better_player: # Better player
-    path: ../hyppe-better-player
+    path: packages/better-player
 
   story_view: # Story viewer
     path: packages/story_view
