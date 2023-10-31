@@ -7,6 +7,7 @@ import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/google_map_place/model_google_map_place.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/sign_up/sign_up_response.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
@@ -21,6 +22,10 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../../core/bloc/google_map_place/bloc.dart';
+import '../../../../../core/bloc/google_map_place/state.dart';
+import '../../../../../core/services/locations.dart';
 
 class RegisterNotifier with ChangeNotifier {
   final _system = System();
@@ -162,6 +167,7 @@ class RegisterNotifier with ChangeNotifier {
   }
 
   Function? nextButton(BuildContext context) {
+    getLocationDetails(context);
     if (_validationRegister()) {
       return () async {
         if (!_system.validateEmail(email)) {
@@ -217,6 +223,7 @@ class RegisterNotifier with ChangeNotifier {
                 Routing.navigatorKey.currentContext ?? context,
                 data: SignUpDataArgument(email: email, password: password, deviceId: deviceId, imei: realDeviceId != "" ? realDeviceId : deviceId, platForm: platForm, lang: lang),
               );
+
               final fetch = notifier.userFetch;
               if (fetch.userState == UserState.signUpSuccess) {
                 final SignUpResponse _result = SignUpResponse.fromJson(fetch.data);
@@ -313,6 +320,39 @@ class RegisterNotifier with ChangeNotifier {
       };
     } else {
       return null;
+    }
+  }
+  
+  LocationResponse? _location;
+  LocationResponse? get location => _location;
+  set location(LocationResponse? val){
+    _location = val;
+    notifyListeners();
+  }
+
+  getLocationDetails(BuildContext context) async{
+    await Locations().getLocation().then((value) async {
+      final double? latitude = value['latitude'];
+      final double? longitude = value['longitude'];
+      if (latitude != null && longitude != null) {
+        getLocation(context, '$latitude,%20$longitude');
+      }
+    });
+  }
+
+  Future getLocation(BuildContext context, String coordinate) async {
+
+    final notifier = GoogleMapPlaceBloc();
+    await notifier.getResults(
+      context,
+      latlng: coordinate,
+    );
+    final fetch = notifier.googleMapPlaceFetch;
+    if (fetch.googleMapPlaceState == GoogleMapPlaceState.getGoogleMapPlaceBlocSuccess) {
+      if(fetch.data is LocationResponse){
+        location = location;
+        print('Location response: ${location?.toJson()}');
+      }
     }
   }
 }

@@ -122,3 +122,53 @@ class Term {
         "value": value,
       };
 }
+
+class LocationResponse{
+  List<MapResults>? results;
+  LocationResponse({this.results});
+
+  factory LocationResponse.fromJson(Map<String, dynamic> json) => LocationResponse(
+    results: List<MapResults>.from(json["results"].map((x) => MapResults.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "results": List<dynamic>.from(results?.map((x) => x.toJson()) ?? []),
+  };
+}
+
+class MapResults{
+  List<AddressComponent>? addressComponents;
+  String? formattedAddress;
+
+  MapResults({this.addressComponents, this.formattedAddress});
+
+  factory MapResults.fromJson(Map<String, dynamic> json) => MapResults(
+    addressComponents: List<AddressComponent>.from(json["address_components"].map((x) => AddressComponent.fromJson(x))),
+    formattedAddress: json['formatted_address']
+  );
+
+  Map<String, dynamic> toJson() => {
+    "address_components": List<dynamic>.from(addressComponents?.map((x) => x.toJson()) ?? []),
+    "formatted_address": formattedAddress
+  };
+}
+
+class AddressComponent{
+  String? longName;
+  String? shortName;
+  List<String>? types;
+
+  AddressComponent({this.longName, this.shortName, this.types});
+
+  factory AddressComponent.fromJson(Map<String, dynamic> json) => AddressComponent(
+      longName: json["long_name"],
+      shortName: json["short_name"],
+      types: List<String>.from(json["types"].map((x) => x))
+  );
+
+  Map<String, dynamic> toJson() => {
+    "address_components": List<dynamic>.from(types?.map((x) => x) ?? []),
+    "long_name": longName,
+    "short_name": shortName
+  };
+}

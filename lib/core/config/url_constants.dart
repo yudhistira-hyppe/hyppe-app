@@ -290,6 +290,7 @@ class UrlConstants {
 
   //apis goole plcae
   static const String getGoogleMapApis = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+  static const String getGeocode = "https://maps.googleapis.com/maps/api/geocode/json";
 
   //get search people
   static const String getSearchPeople = "$profileRoute/search";
