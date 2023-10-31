@@ -412,7 +412,7 @@ class Generate {
       case Routes.chalengeDetail:
         return MaterialPageRoute(builder: (_) => ChalangeDetailScreen(arguments: settings.arguments as GeneralArgument));
       case Routes.chalengeCollectionBadge:
-        return MaterialPageRoute(builder: (_) => const CollectionBadgeScreen());
+        return MaterialPageRoute(builder: (_) => CollectionBadgeScreen(arguments: settings.arguments as GeneralArgument));
       case Routes.chalengeAchievement:
         return MaterialPageRoute(builder: (_) => const AchievementScreen());
       case Routes.shimmerSlider:

@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -15,11 +16,13 @@ import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/widget/butto
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class CollectionBadgeScreen extends StatefulWidget {
-  const CollectionBadgeScreen({Key? key}) : super(key: key);
+  final GeneralArgument? arguments;
+  const CollectionBadgeScreen({Key? key, this.arguments}) : super(key: key);
 
   @override
   State<CollectionBadgeScreen> createState() => _CollectionBadgeScreenState();
@@ -227,8 +230,12 @@ class _CollectionBadgeScreenState extends State<CollectionBadgeScreen> with Rout
             bgColor: kHyppePrimary,
             text: "${lang?.joinTheChallengeNow}",
             function: () {
-              Routing().moveBack();
-              Routing().moveBack();
+              if (widget.arguments?.isTrue ?? false) {
+                Routing().move(Routes.chalenge);
+              } else {
+                Routing().moveBack();
+                Routing().moveBack();
+              }
             },
           ),
         ],

@@ -4,7 +4,9 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_check_button.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_switch_button.dart';
@@ -82,10 +84,41 @@ class OwnershipSellingScreen extends StatelessWidget {
                                 CustomSwitchButton(
                                   value: notifier.toSell,
                                   onChanged: (value) {
-                                    notifier.toSell = value;
-                                    notifier.includeTotalViews = false;
-                                    notifier.includeTotalLikes = false;
-                                    notifier.priceController.clear();
+                                    final enable = !notifier.checkChallenge;
+                                    if (enable) {
+                                      notifier.toSell = value;
+                                      notifier.includeTotalViews = false;
+                                      notifier.includeTotalLikes = false;
+                                      notifier.priceController.clear();
+                                    } else {
+                                      // ShowGeneralDialog.showToastAlert(
+                                      //   context,
+                                      //   'asdasdasdasd',
+                                      //   () async {},
+                                      // );
+                                      ShowBottomSheet().onShowColouredSheet(
+                                        context,
+                                        'Tidak dapat menjual konten ini',
+                                        subCaption: 'Kamu tidak dapat menjual konten ini karena konten ini sedang terdaftar di challenge',
+                                        maxLines: 3,
+                                        borderRadius: 8,
+                                        color: kHyppeBorderDanger,
+                                        iconSvg: "${AssetPath.vectorPath}info-moderate.svg",
+                                        iconColor: Colors.white,
+                                        padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
+                                        margin: EdgeInsets.only(left: 10, right: 10, bottom: SizeConfig.scaleDiagonal * 60),
+                                        closeWidget: GestureDetector(
+                                          onTap: () => Routing().moveBack(),
+                                          child: const CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}close_ads.svg",
+                                            defaultColor: false,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        sizeIcon: 20,
+                                        barrierColor: Colors.transparent,
+                                      );
+                                    }
                                   },
                                 ),
                               ],

@@ -10,6 +10,8 @@ import 'package:showcaseview/showcaseview.dart';
 import '../../app.dart';
 
 class Hyppe extends StatefulWidget {
+  const Hyppe({super.key});
+
   @override
   State<Hyppe> createState() => _HyppeState();
 }
@@ -20,7 +22,6 @@ class _HyppeState extends State<Hyppe> {
   @override
   void initState() {
     hyppeNotifier.setInitialTheme();
-
     super.initState();
   }
 

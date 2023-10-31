@@ -47,6 +47,7 @@ class DynamicLinkService {
   static bool isOpening = false; // the local bool
 
   static Future handleDynamicLinks() async {
+    print("======= masuk sini lagi dong");
     if (_linkProcessed) {
       // Do not process the link if it has been processed already.
       return;
@@ -66,7 +67,7 @@ class DynamicLinkService {
     // using a dynamic link.
     FirebaseDynamicLinks.instance.onLink.listen(
       (event) {
-        print("ini event $event");
+        print("ini event handledeeplink 202020202 $event");
         // handle link that has been retrieved
         _handleDeepLink(event);
       },
@@ -82,10 +83,11 @@ class DynamicLinkService {
     if (deepLink != null) {
       // Set [pendingDynamicLinkData] to the initial dynamic link
       _pendingDynamicLinkData ??= data;
+      print("====--- $_pendingDynamicLinkData");
       _sharedPrefs.writeStorage(SpKeys.referralFrom, _pendingDynamicLinkData?.link.queryParameters['sender_email']);
-      final _userToken = _sharedPrefs.readStorage(SpKeys.userToken);
+      final userToken = _sharedPrefs.readStorage(SpKeys.userToken);
       // final email = _sharedPrefs.readStorage(SpKeys.email);
-      if (_userToken != null) {
+      if (userToken != null) {
         // Auto follow user if app is install from a dynamic link
 
         if (isOpening == false) {
@@ -99,6 +101,7 @@ class DynamicLinkService {
               'Error in followSender $e'.logger();
             }
           }
+
           deepLink.path.logger();
           final path = deepLink.path;
           isHomeScreen = false;
@@ -219,21 +222,29 @@ class DynamicLinkService {
               break;
             // TO DO: If register from referral link, then hit to backend
             case Routes.otherProfile:
-              '_handleDeepLink otherProfile'.logger();
-              _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
-              Future.delayed(const Duration(milliseconds: 1000), () {
-                if (deepLink.queryParameters['referral'] == '1') {
-                  hitReferralBackend(Routing.navigatorKey.currentContext!);
-                }
-                _routing.move(
-                  path,
-                  argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
-                );
-                _routing.moveReplacement(
-                  path,
-                  argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
-                );
-              });
+              if (deepLink.queryParameters['referral'] == '1') {
+                print("-=-=-=-=-=-=-==-= masuk referral");
+                hitReferralBackend(Routing.navigatorKey.currentContext!, data: data);
+                followSender(Routing.navigatorKey.currentContext!);
+              }
+              if (isFromSplash) {
+                _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+                Future.delayed(const Duration(seconds: 2), () async {
+                  await _routing.move(
+                    path,
+                    argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
+                  );
+                });
+              } else {
+                _routing.moveAndRemoveUntil(Routes.lobby, Routes.root, argument: MainArgument(canShowAds: false));
+                Future.delayed(const Duration(milliseconds: 1000), () {
+                  _routing.move(
+                    path,
+                    argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
+                  );
+                });
+              }
+
               break;
 
             case Routes.chalengeDetail:
@@ -283,24 +294,22 @@ class DynamicLinkService {
   }
 
   static Future followSender(BuildContext context) async {
-    final _receiverParty = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
-    print(_sharedPrefs.readStorage(SpKeys.email));
-    print(_receiverParty);
-    if (_sharedPrefs.readStorage(SpKeys.email) != _receiverParty) {
+    final receiverParty = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+    if (_sharedPrefs.readStorage(SpKeys.email) != receiverParty) {
       try {
-        if (_pendingDynamicLinkData?.link.queryParameters['referral'] == '1') {
-          return;
-        }
+        // if (_pendingDynamicLinkData?.link.queryParameters['referral'] == '1') {
+        //   return;
+        // }
 
-        'Link | followSender | receiverParty: $_receiverParty'.logger();
+        'Link | followSender | receiverParty: $receiverParty'.logger();
 
-        if (_receiverParty != null) {
+        if (receiverParty != null) {
           final notifier = FollowBloc();
           await notifier.followUserBlocV2(
             context,
             withAlertConnection: false,
             data: FollowUserArgument(
-              receiverParty: _receiverParty,
+              receiverParty: receiverParty,
               eventType: InteractiveEventType.following,
             ),
           );
@@ -320,24 +329,28 @@ class DynamicLinkService {
     }
   }
 
-  static Future hitReferralBackend(BuildContext context) async {
+  static Future hitReferralBackend(BuildContext context, {PendingDynamicLinkData? data}) async {
     try {
-      if (_pendingDynamicLinkData?.link.queryParameters['referral'] != '1') {
+      if (data != null) {
+        _pendingDynamicLinkData = data;
+      }
+      print('ini apa ya $_pendingDynamicLinkData');
+      if (_pendingDynamicLinkData?.link.queryParameters != null && _pendingDynamicLinkData?.link.queryParameters['referral'] != '1') {
         return;
       }
 
-      final _referralEmail = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
-      print('ini apa ya $_referralEmail');
+      final referralEmail = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+      print('ini apa ya $referralEmail');
 
-      'Link | referralSender | receiverParty: $_referralEmail'.logger();
+      'Link | referralSender | receiverParty: $referralEmail'.logger();
       String realDeviceID = await System().getDeviceIdentifier();
 
-      if (_referralEmail != null) {
+      if (referralEmail != null) {
         final notifier = ReferralBloc();
         await notifier.referralUserBloc(
           context,
           withAlertConnection: false,
-          data: ReferralUserArgument(email: _referralEmail, imei: realDeviceID != "" ? realDeviceID : _sharedPrefs.readStorage(SpKeys.fcmToken)),
+          data: ReferralUserArgument(email: referralEmail, imei: realDeviceID != "" ? realDeviceID : _sharedPrefs.readStorage(SpKeys.fcmToken)),
         );
         final fetch = notifier.referralFetch;
         if (fetch.referralState == ReferralState.referralUserSuccess) {
@@ -361,13 +374,13 @@ class DynamicLinkService {
       }
 
       // final _referralEmail = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
-      final _referralEmail = SharedPreference().readStorage(SpKeys.referralFrom);
+      final referralEmail = SharedPreference().readStorage(SpKeys.referralFrom);
 
-      'Link | referralSender | _referralEmail: $_referralEmail'.logger();
+      'Link | referralSender | _referralEmail: $referralEmail'.logger();
 
-      if (_referralEmail != null) {
+      if (referralEmail != null) {
         _pendingDynamicLinkData = null;
-        return _referralEmail;
+        return referralEmail;
       } else {
         'referralUser | _referralEmail is null'.logger();
       }

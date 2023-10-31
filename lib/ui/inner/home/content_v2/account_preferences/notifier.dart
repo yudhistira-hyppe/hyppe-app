@@ -525,7 +525,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     }
   }
 
-  Future onClickSaveInterests(BuildContext context, List<String> interests) async {
+  Future onClickSaveInterests(BuildContext context, List<String> interests, {bool fromSetting = true}) async {
     bool connect = await System().checkConnections();
     if (connect) {
       try {
@@ -550,7 +550,10 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           progress = "${language.finishingUp}...";
           await Provider.of<MainNotifier>(context, listen: false).initMain(context, onUpdateProfile: true);
           hold = false;
-          ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation ?? '').whenComplete(() => Routing().moveBack());
+          // uploadProgress?.remove();
+          if (fromSetting) {
+            ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation ?? '').whenComplete(() => Routing().moveBack());
+          }
           notifyListeners();
         }
       } catch (e) {

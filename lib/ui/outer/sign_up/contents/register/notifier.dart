@@ -58,7 +58,7 @@ class RegisterNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set invalidEmail(String? val){
+  set invalidEmail(String? val) {
     _invalidEmail = val;
     notifyListeners();
   }
@@ -220,10 +220,8 @@ class RegisterNotifier with ChangeNotifier {
               final fetch = notifier.userFetch;
               if (fetch.userState == UserState.signUpSuccess) {
                 final SignUpResponse _result = SignUpResponse.fromJson(fetch.data);
-                if(_result.insight == null && _result.isEmailVerified == "false"){
-                  await ShowBottomSheet().onShowColouredSheet(
-                      Routing.navigatorKey.currentContext ?? context,
-                      language.emailVerification ?? '',
+                if (_result.insight == null && _result.isEmailVerified == "false") {
+                  await ShowBottomSheet().onShowColouredSheet(Routing.navigatorKey.currentContext ?? context, language.emailVerification ?? '',
                       subCaption: language.emailHasRegistered,
                       maxLines: 3,
                       borderRadius: 8,
@@ -233,29 +231,27 @@ class RegisterNotifier with ChangeNotifier {
                       iconColor: kHyppeBorder,
                       padding: const EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
                       margin: const EdgeInsets.only(left: 16, right: 16, bottom: 25),
-                      iconSvg: "${AssetPath.vectorPath}info_white.svg",
-                      function: (){
-                        SharedPreference().writeStorage(SpKeys.email, _result.email);
-                        SharedPreference().writeStorage(SpKeys.isUserInOTP, true);
-                        // signUpPinNotifier.userToken = fetch.data['token'];
-                        // signUpPinNotifier.userID = _result.userID; >>>>> Backend tidak memberikan key userID
-                        signUpPinNotifier.username = _result.userName ?? "";
-                        signUpPinNotifier.email = _result.email ?? "";
-                        // signUpEulaNotifier.fullName = _result.fullName ?? "";
-                        // signUpEulaNotifier.userName = _result.userName ?? "";
-                        // signUpEulaNotifier.email = _result.email ?? "";
+                      iconSvg: "${AssetPath.vectorPath}info_white.svg", function: () {
+                    SharedPreference().writeStorage(SpKeys.email, _result.email);
+                    SharedPreference().writeStorage(SpKeys.isUserInOTP, true);
+                    // signUpPinNotifier.userToken = fetch.data['token'];
+                    // signUpPinNotifier.userID = _result.userID; >>>>> Backend tidak memberikan key userID
+                    signUpPinNotifier.username = _result.userName ?? "";
+                    signUpPinNotifier.email = _result.email ?? "";
+                    // signUpEulaNotifier.fullName = _result.fullName ?? "";
+                    // signUpEulaNotifier.userName = _result.userName ?? "";
+                    // signUpEulaNotifier.email = _result.email ?? "";
 
-                        _hidePassword = true;
-                        final tempEmail = email;
-                        onReset();
-                        notifyListeners();
-                        Routing().move(
-                          Routes.signUpPin,
-                          argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: tempEmail),
-                        );
-                      }
-                  );
-                }else if(_result.insight != null && _result.isEmailVerified == "false"){
+                    _hidePassword = true;
+                    final tempEmail = email;
+                    onReset();
+                    notifyListeners();
+                    Routing().move(
+                      Routes.signUpPin,
+                      argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: tempEmail),
+                    );
+                  });
+                } else if (_result.insight != null && _result.isEmailVerified == "false") {
                   SharedPreference().writeStorage(SpKeys.email, _result.email);
                   SharedPreference().writeStorage(SpKeys.isUserInOTP, true);
                   // signUpPinNotifier.userToken = fetch.data['token'];
@@ -275,17 +271,17 @@ class RegisterNotifier with ChangeNotifier {
                     Routes.signUpPin,
                     argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: tempEmail),
                   );
-                }else{
+                } else {
                   await ShowBottomSheet().onShowColouredSheet(
                     Routing.navigatorKey.currentContext ?? context,
-                      fetch.message?.info[0] ?? '',
-                      maxLines: 3,
-                      borderRadius: 8,
-                      sizeIcon: 20,
-                      color: kHyppeTextLightPrimary,
-                      iconColor: kHyppeBorder,
-                      padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
-                      margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
+                    fetch.message?.info[0] ?? '',
+                    maxLines: 3,
+                    borderRadius: 8,
+                    sizeIcon: 20,
+                    color: kHyppeTextLightPrimary,
+                    iconColor: kHyppeBorder,
+                    padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
+                    margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
                   );
                 }
 
@@ -301,14 +297,12 @@ class RegisterNotifier with ChangeNotifier {
                 // );
               }
             } else {
-
               ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
                 Routing().moveBack();
                 nextButton(context);
               });
             }
           }
-
         }
       };
     } else {

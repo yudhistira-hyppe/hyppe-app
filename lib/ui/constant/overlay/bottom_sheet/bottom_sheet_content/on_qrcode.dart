@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -30,7 +32,7 @@ class _OnQRCodeState extends State<OnQRCode> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+            padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: Platform.isIOS ? 50 : 0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -50,7 +52,7 @@ class _OnQRCodeState extends State<OnQRCode> {
                   textToDisplay: 'QR Code',
                   textStyle: Theme.of(context).textTheme.headline6,
                 ),
-                Text(
+                const Text(
                   'Undang temanmu ke Hyppe sekarang!',
                   textAlign: TextAlign.center,
                   style: TextStyle(

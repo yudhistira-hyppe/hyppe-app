@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -58,7 +57,6 @@ import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart' as intl;
 
 import '../../app.dart';
-import '../arguments/ads_argument.dart';
 import '../arguments/general_argument.dart';
 import '../bloc/ads_video/bloc.dart';
 import '../bloc/ads_video/state.dart';
@@ -172,12 +170,12 @@ class System {
   }
 
   Future openSetting() async {
-    openAppSettings().then((bool hasOpened) => debugPrint('App Settings opened: ' + hasOpened.toString()));
+    openAppSettings().then((bool hasOpened) => debugPrint('App Settings opened: $hasOpened'));
   }
 
   Future<PermissionStatus> checkPermission({required Permission permission}) async {
-    PermissionStatus _status = await permission.status;
-    return _status;
+    PermissionStatus status = await permission.status;
+    return status;
   }
 
   removeSpecialChar(String str) {
@@ -264,12 +262,12 @@ class System {
   }
 
   validateType(String? type) {
-    String _contentType = '';
+    String contentType = '';
     if (type == 'image') {
-      _contentType = 'pic,$_contentType';
+      contentType = 'pic,$contentType';
     }
-    _contentType = 'vid,$_contentType';
-    return _contentType;
+    contentType = 'vid,$contentType';
+    return contentType;
   }
 
   OverlayEntry createPopupDialog(Widget widgetToOverlay) {
@@ -307,10 +305,10 @@ class System {
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceIdentifier = androidInfo.id ?? deviceID;
+      deviceIdentifier = "${androidInfo.id}-${androidInfo.hardware}-${androidInfo.androidId}-${androidInfo.board}";
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      deviceIdentifier = iosInfo.identifierForVendor ?? deviceID;
+      deviceIdentifier = "${iosInfo.identifierForVendor}";
     } else if (kIsWeb) {
       // The web doesnt have a device UID, so use a combination fingerprint as an example
       WebBrowserInfo webInfo = await deviceInfo.webBrowserInfo;
@@ -565,16 +563,16 @@ class System {
     bool isVideo = false,
     int maxFile = 3,
   }) async {
-    final ImagePicker _imagePicker = ImagePicker();
+    final ImagePicker imagePicker = ImagePicker();
 
     final notifier = context.read<TranslateNotifierV2>().translate;
-    Duration _duration;
-    String _errorMsg = '';
-    List<File>? _filePickerResult;
+    Duration duration;
+    String errorMsg = '';
+    List<File>? filePickerResult;
 
     bool _validateCountPost(int count) {
       if (count > 10) {
-        _errorMsg = notifier.pleaseSelectMax10Items ?? '';
+        errorMsg = notifier.pleaseSelectMax10Items ?? '';
         return true;
       }
       return false;
@@ -582,10 +580,10 @@ class System {
 
     if (featureType == null) {
       // used for change profile picture only
-      final _pickerResult = await _imagePicker.pickImage(source: ImageSource.gallery);
+      final pickerResult0 = await imagePicker.pickImage(source: ImageSource.gallery);
 
-      if (_pickerResult != null) {
-        _filePickerResult = [File(_pickerResult.path)];
+      if (pickerResult0 != null) {
+        filePickerResult = [File(pickerResult0.path)];
       }
     } else {
       // used for KYC pick multi image
@@ -593,49 +591,49 @@ class System {
         debugPrint("Masuk KYC");
         List<File>? imageFileList = [];
         if (pdf) {
-          final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.custom, allowedExtensions: ['pdf', 'doc']);
+          final pickerResult0 = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.custom, allowedExtensions: ['pdf', 'doc']);
           // validasi durasi
-          if (_pickerResult != null) {
+          if (pickerResult0 != null) {
             // untuk menampung file yang failed di validasi
-            String _failFile = '';
+            String failFile = '';
 
             // validasi count post
-            if (_validateCountPost(_pickerResult.files.length) == false) {
-              for (int element = 0; element < _pickerResult.files.length; element++) {
+            if (_validateCountPost(pickerResult0.files.length) == false) {
+              for (int element = 0; element < pickerResult0.files.length; element++) {
                 // validasi content type
-                if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
-                  await getVideoMetadata(_pickerResult.files[element].path ?? '').then((value) {
-                    _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
+                if (pickerResult0.files[element].extension?.toLowerCase() == MP4 || pickerResult0.files[element].extension?.toLowerCase() == MOV) {
+                  await getVideoMetadata(pickerResult0.files[element].path ?? '').then((value) {
+                    duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
                     // hapus file yang durasinya lebih dari 15 detik
-                    if (_duration.inSeconds > 15) {
-                      _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
-                      _pickerResult.files.removeAt(element);
+                    if (duration.inSeconds > 15) {
+                      failFile = '$failFile, ${pickerResult0.files[element].name}\n';
+                      pickerResult0.files.removeAt(element);
                     }
                   });
                 }
               }
 
               // show toast if there is fail file
-              if (_failFile.isNotEmpty) {
-                _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
+              if (failFile.isNotEmpty) {
+                errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$failFile';
               }
 
-              if (_pickerResult.files.isNotEmpty) {
-                _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
+              if (pickerResult0.files.isNotEmpty) {
+                filePickerResult = pickerResult0.files.map((file) => File(file.path ?? '')).toList();
               }
             }
           }
         } else {
-          final List<XFile>? selectedImages = await _imagePicker.pickMultiImage(imageQuality: 90);
-          if ((selectedImages?.isNotEmpty ?? false) && (selectedImages?.length ?? 0) <= maxFile) {
+          final List<XFile> selectedImages = await imagePicker.pickMultiImage(imageQuality: 90);
+          if ((selectedImages.isNotEmpty ?? false) && (selectedImages.length ?? 0) <= maxFile) {
             for (XFile file in selectedImages ?? []) {
               debugPrint(file.path);
               imageFileList.add(File(file.path));
             }
-            _filePickerResult = imageFileList;
+            filePickerResult = imageFileList;
           } else {
-            _errorMsg = "${notifier.pleaseSelectOneortheMaxFileis} $maxFile";
+            errorMsg = "${notifier.pleaseSelectOneortheMaxFileis} $maxFile";
           }
         }
       }
@@ -666,9 +664,9 @@ class System {
         await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false).then((result) {
           if (result != null) {
             if (result.files.single.extension?.toLowerCase() == MP4 || result.files.single.extension?.toLowerCase() == MOV) {
-              _filePickerResult = [File(result.files.single.path ?? '')];
+              filePickerResult = [File(result.files.single.path ?? '')];
             } else {
-              _errorMsg = '${notifier.weCurrentlySupportOnlyMP4andMOVformat} ${result.names.single}';
+              errorMsg = '${notifier.weCurrentlySupportOnlyMP4andMOVformat} ${result.names.single}';
             }
           }
         });
@@ -681,44 +679,44 @@ class System {
         //   }
         // });
 
-        final pickerResult = await _imagePicker.pickImage(source: ImageSource.gallery);
+        final pickerResult = await imagePicker.pickImage(source: ImageSource.gallery);
 
         if (pickerResult != null) {
-          _filePickerResult = [File(pickerResult.path)];
+          filePickerResult = [File(pickerResult.path)];
         }
       }
 
       if (featureType == FeatureType.diary) {
-        final _pickerResult = await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false);
+        final pickerResult0 = await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false);
 
         // validasi durasi
-        if (_pickerResult != null) {
+        if (pickerResult0 != null) {
           // untuk menampung file yang failed di validasi
-          String _failFile = '';
+          String failFile = '';
 
           // validasi count post
-          if (_validateCountPost(_pickerResult.files.length) == false) {
-            for (int element = 0; element < _pickerResult.files.length; element++) {
-              if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
-                await getVideoMetadata(_pickerResult.files[element].path ?? '').then((value) {
-                  _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
+          if (_validateCountPost(pickerResult0.files.length) == false) {
+            for (int element = 0; element < pickerResult0.files.length; element++) {
+              if (pickerResult0.files[element].extension?.toLowerCase() == MP4 || pickerResult0.files[element].extension?.toLowerCase() == MOV) {
+                await getVideoMetadata(pickerResult0.files[element].path ?? '').then((value) {
+                  duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
                   // hapus file yang durasinya lebih dari 60 detik
-                  if (_duration.inSeconds > 60) {
-                    _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
-                    _pickerResult.files.removeAt(element);
+                  if (duration.inSeconds > 60) {
+                    failFile = '$failFile, ${pickerResult0.files[element].name}\n';
+                    pickerResult0.files.removeAt(element);
                   }
                 });
               }
             }
 
             // show toast if there is fail file
-            if (_failFile.isNotEmpty) {
-              _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
+            if (failFile.isNotEmpty) {
+              errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$failFile';
             }
 
-            if (_pickerResult.files.isNotEmpty) {
-              _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
+            if (pickerResult0.files.isNotEmpty) {
+              filePickerResult = pickerResult0.files.map((file) => File(file.path ?? '')).toList();
             }
           }
         }
@@ -726,43 +724,43 @@ class System {
 
       if (featureType == FeatureType.story) {
         if (isVideo) {
-          final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.video, allowCompression: false);
-          if (_pickerResult != null) {
+          final pickerResult0 = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.video, allowCompression: false);
+          if (pickerResult0 != null) {
             // untuk menampung file yang failed di validasi
-            String _failFile = '';
+            String failFile = '';
 
             // validasi count post
-            if (_validateCountPost(_pickerResult.files.length) == false) {
-              for (int element = 0; element < _pickerResult.files.length; element++) {
+            if (_validateCountPost(pickerResult0.files.length) == false) {
+              for (int element = 0; element < pickerResult0.files.length; element++) {
                 // validasi content type
-                if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
-                  await getVideoMetadata(_pickerResult.files[element].path ?? '').then((value) {
-                    _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
+                if (pickerResult0.files[element].extension?.toLowerCase() == MP4 || pickerResult0.files[element].extension?.toLowerCase() == MOV) {
+                  await getVideoMetadata(pickerResult0.files[element].path ?? '').then((value) {
+                    duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
                     // hapus file yang durasinya lebih dari 15 detik
-                    if (_duration.inSeconds > 15) {
-                      _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
-                      _pickerResult.files.removeAt(element);
+                    if (duration.inSeconds > 15) {
+                      failFile = '$failFile, ${pickerResult0.files[element].name}\n';
+                      pickerResult0.files.removeAt(element);
                     }
                   });
                 }
               }
 
               // show toast if there is fail file
-              if (_failFile.isNotEmpty) {
-                _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
+              if (failFile.isNotEmpty) {
+                errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$failFile';
               }
 
-              if (_pickerResult.files.isNotEmpty) {
-                _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
+              if (pickerResult0.files.isNotEmpty) {
+                filePickerResult = pickerResult0.files.map((file) => File(file.path ?? '')).toList();
               }
             }
           }
         } else {
-          final _pickerResult = await _imagePicker.pickImage(source: ImageSource.gallery);
+          final pickerResult0 = await imagePicker.pickImage(source: ImageSource.gallery);
 
-          if (_pickerResult != null) {
-            _filePickerResult = [File(_pickerResult.path)];
+          if (pickerResult0 != null) {
+            filePickerResult = [File(pickerResult0.path)];
           }
         }
 
@@ -770,7 +768,7 @@ class System {
       }
     }
 
-    return {_errorMsg: _filePickerResult};
+    return {errorMsg: filePickerResult};
   }
 
   saveThumbnail(String url, String id, {bool isCheck = false}) async {
@@ -834,9 +832,9 @@ class System {
     final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
 
     if (notifier.user.profile != null) {
-      final _status = SharedPreference().readStorage(SpKeys.statusVerificationId);
+      final status = SharedPreference().readStorage(SpKeys.statusVerificationId);
 
-      if (_status == REVIEW) {
+      if (status == REVIEW) {
         ShowBottomSheet().onShowColouredSheet(
           context,
           'Harap Menunggu Sedang Proses Pemeriksaan',
@@ -846,7 +844,7 @@ class System {
           color: Theme.of(context).colorScheme.error,
           iconSvg: "${AssetPath.vectorPath}close.svg",
         );
-      } else if (_status == UNVERIFIED) {
+      } else if (status == UNVERIFIED) {
         ShowBottomSheet.onShowIDVerification(context);
       } else {
         action();
@@ -1090,17 +1088,17 @@ class System {
       ),
     );
 
-    var _linkResult = await FirebaseDynamicLinks.instance.buildShortLink(parameters);
+    var linkResult = await FirebaseDynamicLinks.instance.buildShortLink(parameters);
 
     if (copiedToClipboard) {
-      copyToClipboard(_linkResult.shortUrl.toString());
+      copyToClipboard(linkResult.shortUrl.toString());
     }
 
     if (shareImmediately && !copiedToClipboard) {
-      await shareText(dynamicLink: _linkResult.shortUrl.toString(), context: context);
+      await shareText(dynamicLink: linkResult.shortUrl.toString(), context: context);
     }
 
-    return _linkResult.shortUrl;
+    return linkResult.shortUrl;
   }
 
   Future<Uri> createdReferralLink(BuildContext context) async {
@@ -1125,9 +1123,9 @@ class System {
       ),
     );
 
-    var _linkResult = await FirebaseDynamicLinks.instance.buildShortLink(parameters);
+    var linkResult = await FirebaseDynamicLinks.instance.buildShortLink(parameters);
 
-    return _linkResult.shortUrl;
+    return linkResult.shortUrl;
   }
 
   Future copyToClipboard(String data) async => await Clipboard.setData(ClipboardData(text: data));
@@ -1167,8 +1165,8 @@ class System {
     ui.Image boxImage = await repaintBoundary.toImage(pixelRatio: 3);
     ByteData? byteData = await boxImage.toByteData(format: ui.ImageByteFormat.png);
     var uint8list = byteData?.buffer.asUint8List();
-    final String _pathFile = path.join(await getSystemPath(params: 'editedImg'), '${DateTime.now().toIso8601String()}.png');
-    File imgFile = File(_pathFile);
+    final String pathFile = path.join(await getSystemPath(params: 'editedImg'), '${DateTime.now().toIso8601String()}.png');
+    File imgFile = File(pathFile);
     if (uint8list != null) {
       await imgFile.writeAsBytes(uint8list);
     }
@@ -1176,9 +1174,9 @@ class System {
   }
 
   Future<String> getSystemPath({String params = ''}) async {
-    var _directory = await getTemporaryDirectory();
-    var _result = await Directory('${_directory.path}/$params').create(recursive: true);
-    return _result.absolute.path;
+    var directory = await getTemporaryDirectory();
+    var result = await Directory('${directory.path}/$params').create(recursive: true);
+    return result.absolute.path;
   }
 
   Future<PackageInfo> getPackageInfo() async {
@@ -1358,8 +1356,8 @@ class System {
   }
 
   String? bodyMultiLang({required String? bodyEn, required String? bodyId}) {
-    final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
-    if (_isoCodeCache == "id") {
+    final isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
+    if (isoCodeCache == "id") {
       return bodyId ?? bodyEn;
     }
     return bodyEn;
@@ -1631,7 +1629,7 @@ class System {
   }
 
   static String getFileSizeDescription(int size) {
-    StringBuffer bytes = new StringBuffer();
+    StringBuffer bytes = StringBuffer();
     if (size >= 1024 * 1024 * 1024) {
       double i = (size / (1024.00 * 1024.00 * 1024.00));
       bytes
@@ -1701,7 +1699,7 @@ class System {
     }
 
     if (finalSec > 9) {
-      msBuilder..write(finalSec);
+      msBuilder.write(finalSec);
     } else if (finalSec > 0) {
       msBuilder
         ..write("0")

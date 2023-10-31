@@ -1,6 +1,8 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/account_preferences/widget/proof_picture.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/ux/routing.dart';
@@ -22,7 +24,7 @@ class HyppeAccountPreferences extends StatefulWidget {
   const HyppeAccountPreferences({Key? key, required this.argument}) : super(key: key);
 
   @override
-  _HyppeAccountPreferencesState createState() => _HyppeAccountPreferencesState();
+  State<HyppeAccountPreferences> createState() => _HyppeAccountPreferencesState();
 }
 
 class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences> with TickerProviderStateMixin {
@@ -118,7 +120,14 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences> with 
               ),
               bottomNavigationBar: Padding(
                 padding: const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 10),
-                child: ButtonAccountPreferences(index: _currentIndex),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // ProofPicture(),
+                    // sixPx,
+                    ButtonAccountPreferences(index: _currentIndex),
+                  ],
+                ),
               ),
             ),
           ),

@@ -41,7 +41,7 @@ class _SignUpPinTopState extends State<SignUpPinTop> {
   }
 
   void resetTime() {
-    setState((){
+    setState(() {
       timeout = 600;
     });
   }
@@ -52,7 +52,7 @@ class _SignUpPinTopState extends State<SignUpPinTop> {
     }
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
-        if(pleaseWait > 0){
+        if (pleaseWait > 0) {
           pleaseWait--;
         }
         if (timeout > 0) {
@@ -65,8 +65,8 @@ class _SignUpPinTopState extends State<SignUpPinTop> {
     });
   }
 
-  stopTime({isReset = false}){
-    if(isReset){
+  stopTime({isReset = false}) {
+    if (isReset) {
       resetTime();
     }
     setState(() {
@@ -94,64 +94,90 @@ class _SignUpPinTopState extends State<SignUpPinTop> {
             ),
             fortyTwoPx,
             CustomTextWidget(
-              textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.w700),
+              textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
               textToDisplay: "${notifier.language.pinTopText1}",
             ),
             eightPx,
             CustomTextWidget(
-              textStyle: Theme.of(context).textTheme.bodyText2,
+              textStyle: Theme.of(context).textTheme.bodyMedium,
               maxLines: 3,
               textToDisplay: "${notifier.language.pinTopText2} ${notifier.argument.email}",
             ),
             twentyFourPx,
-            CustomRectangleInput(afterSuccess: (){
+            CustomRectangleInput(afterSuccess: () {
               stopTime(isReset: true);
             }),
-            (!notifier.loadingForObject(notifier.resendLoadKey)) ? Column(children: [
-              fortyPx,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomTextWidget(
-                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
-                    textToDisplay: notifier.language.didntReceiveTheCode ?? '',
-                  ),
-                  fourPx,
-                  pleaseWait == 0 ?
-                  InkWell(
-                    onTap: (){
-
-                      notifier.resend(context, (){
-                        setState((){
-                          pleaseWait = 60;
-                          timeout = 600;
-                        });
-                      });
-                    },
-                    child: CustomTextWidget(
-                      textOverflow: TextOverflow.visible,
-                      textToDisplay: notifier.resendString(),
-                      textStyle: notifier.resendStyle(context),
-                    ),
-                  ): Row(
+            (!notifier.loadingForObject(notifier.resendLoadKey))
+                ? Column(
                     children: [
-                      CustomTextWidget(textToDisplay: '${notifier.language.pleaseWaitFor} ', textStyle: theme.textTheme.caption,),
-                      CustomTextWidget(textToDisplay: System().getFullTime(pleaseWait), textStyle: theme.textTheme.caption?.copyWith(color:  context.isDarkMode() ? Colors.white : Colors.black))
+                      fortyPx,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomTextWidget(
+                            textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
+                            textToDisplay: notifier.language.didntReceiveTheCode ?? '',
+                          ),
+                          fourPx,
+                          pleaseWait == 0
+                              ? InkWell(
+                                  onTap: () {
+                                    notifier.resend(context, () {
+                                      setState(() {
+                                        pleaseWait = 60;
+                                        timeout = 600;
+                                      });
+                                    });
+                                  },
+                                  child: CustomTextWidget(
+                                    textOverflow: TextOverflow.visible,
+                                    textToDisplay: notifier.resendString(),
+                                    textStyle: notifier.resendStyle(context),
+                                  ),
+                                )
+                              : Row(
+                                  children: [
+                                    CustomTextWidget(
+                                      textToDisplay: '${notifier.language.pleaseWaitFor} ',
+                                      textStyle: theme.textTheme.bodySmall,
+                                    ),
+                                    CustomTextWidget(
+                                        textToDisplay: System().getFullTime(pleaseWait), textStyle: theme.textTheme.bodySmall?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black))
+                                  ],
+                                ),
+                        ],
+                      )
                     ],
-                  ),
-                ],
-              )
-            ],): const SizedBox(width: 15, height: 15, child: CircularProgressIndicator(strokeWidth: 1, color: kHyppePrimary,)),
+                  )
+                : const SizedBox(
+                    width: 15,
+                    height: 15,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1,
+                      color: kHyppePrimary,
+                    )),
             twentyFourPx,
-            CustomTextWidget(textToDisplay: notifier.language.messageTimeoutPin ?? '', textStyle: theme.textTheme.caption,),
+            CustomTextWidget(
+              textToDisplay: notifier.language.messageTimeoutPin ?? '',
+              textStyle: theme.textTheme.bodySmall,
+            ),
             onePx,
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CustomTextWidget(textToDisplay: '${notifier.language.inWord?.toLowerCase()} ', textStyle: theme.textTheme.caption,),
-                CustomTextWidget(textToDisplay: '${System().getFullTime(timeout)} ', textStyle: theme.textTheme.caption?.copyWith(color: theme.colorScheme.primary),),
-                CustomTextWidget(textToDisplay: '${notifier.language.minutes?.toLowerCase()}', textStyle: theme.textTheme.caption,)
+                CustomTextWidget(
+                  textToDisplay: '${notifier.language.inWord?.toLowerCase()} ',
+                  textStyle: theme.textTheme.bodySmall,
+                ),
+                CustomTextWidget(
+                  textToDisplay: '${System().getFullTime(timeout)} ',
+                  textStyle: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.primary),
+                ),
+                CustomTextWidget(
+                  textToDisplay: '${notifier.language.minutes?.toLowerCase()}',
+                  textStyle: theme.textTheme.bodySmall,
+                )
               ],
             )
           ],
@@ -160,6 +186,3 @@ class _SignUpPinTopState extends State<SignUpPinTop> {
     );
   }
 }
-
-
-

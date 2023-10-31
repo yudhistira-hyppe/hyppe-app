@@ -164,9 +164,9 @@ class OtherProfileNotifier with ChangeNotifier {
   void onUpdate() => notifyListeners();
 
   String displayUserName() => user.profile != null
-      ? "@" + (user.profile?.username ?? '')
+      ? "@${user.profile?.username ?? ''}"
       : username != null
-          ? "@" + (username ?? '')
+          ? "@${username ?? ''}"
           : "";
 
   String? displayPhotoProfile() {
@@ -198,10 +198,10 @@ class OtherProfileNotifier with ChangeNotifier {
       : "";
 
   String? displayPlace() {
-    String? _area = user.profile?.area;
-    String? _country = user.profile?.country;
-    if (_area != null && _country != null) {
-      return " $_area - $_country";
+    String? area = user.profile?.area;
+    String? country = user.profile?.country;
+    if (area != null && country != null) {
+      return " $area - $country";
     } else {
       return null;
     }
@@ -218,12 +218,12 @@ class OtherProfileNotifier with ChangeNotifier {
         case 0:
           {
             print("===== hahaha ${picContentsQuery.loading} ");
-            print("===== hahaha ${picHasNext} ");
+            print("===== hahaha $picHasNext ");
             if (!picContentsQuery.loading && picHasNext) {
-              List<ContentData> _res = await picContentsQuery.loadNext(context, otherContent: true);
-              if (_res.isNotEmpty) {
-                user.pics = [...(user.pics ?? []), ..._res];
-                manyUser.last.pics = [...(manyUser.last.pics ?? []), ..._res];
+              List<ContentData> res = await picContentsQuery.loadNext(context, otherContent: true);
+              if (res.isNotEmpty) {
+                user.pics = [...(user.pics ?? []), ...res];
+                manyUser.last.pics = [...(manyUser.last.pics ?? []), ...res];
               } else {
                 print("Post Pic Dah Mentok");
               }
@@ -234,10 +234,10 @@ class OtherProfileNotifier with ChangeNotifier {
         case 1:
           {
             if (!diaryContentsQuery.loading && diaryHasNext) {
-              List<ContentData> _res = await diaryContentsQuery.loadNext(context, otherContent: true);
-              if (_res.isNotEmpty) {
-                user.diaries = [...(user.diaries ?? []), ..._res];
-                manyUser.last.diaries = [...(manyUser.last.diaries ?? []), ..._res];
+              List<ContentData> res = await diaryContentsQuery.loadNext(context, otherContent: true);
+              if (res.isNotEmpty) {
+                user.diaries = [...(user.diaries ?? []), ...res];
+                manyUser.last.diaries = [...(manyUser.last.diaries ?? []), ...res];
               } else {
                 print("Post Diary Dah Mentok");
               }
@@ -248,10 +248,10 @@ class OtherProfileNotifier with ChangeNotifier {
         case 2:
           {
             if (!vidContentsQuery.loading && vidHasNext) {
-              List<ContentData> _res = await vidContentsQuery.loadNext(context, otherContent: true);
-              if (_res.isNotEmpty) {
-                user.vids = [...(user.vids ?? []), ..._res];
-                manyUser.last.vids = [...(manyUser.last.vids ?? []), ..._res];
+              List<ContentData> res = await vidContentsQuery.loadNext(context, otherContent: true);
+              if (res.isNotEmpty) {
+                user.vids = [...(user.vids ?? []), ...res];
+                manyUser.last.vids = [...(manyUser.last.vids ?? []), ...res];
               } else {
                 print("Post Vid Dah Mentok");
               }
@@ -306,9 +306,9 @@ class OtherProfileNotifier with ChangeNotifier {
 
     if (isConnect) {
       if (argument?.profile != null) {
-        manyUser.forEach((element) {
+        for (var element in manyUser) {
           print(element.profile?.username);
-        });
+        }
 
         if (!refresh) {
           UserInfoModel user2 = UserInfoModel();
@@ -319,9 +319,9 @@ class OtherProfileNotifier with ChangeNotifier {
           golbalToOther = manyUser.length;
         }
         print("========== many user $manyUser");
-        manyUser.forEach((element) {
+        for (var element in manyUser) {
           print(element.profile?.username);
-        });
+        }
         notifyListeners();
       } else {
         final usersNotifier = UserBloc();
@@ -341,15 +341,15 @@ class OtherProfileNotifier with ChangeNotifier {
             golbalToOther = manyUser.length;
           }
           print("========== many user 2 ${manyUser.length}");
-          manyUser.forEach((element) {
+          for (var element in manyUser) {
             print(element.profile?.username);
-          });
+          }
           notifyListeners();
         }
       }
     }
 
-    if (refresh && isConnect) {
+    if (isConnect) {
       checkFollowingToUser(context, userEmail ?? '');
     }
     // user.vids ??= await vidContentsQuery.reload(context, otherContent: true);
@@ -420,9 +420,9 @@ class OtherProfileNotifier with ChangeNotifier {
           print(manyUser.last.diaries);
           print(user2.diaries);
           print(manyUser.length);
-          manyUser.forEach((element) {
+          for (var element in manyUser) {
             print(element.diaries);
-          });
+          }
 
           // context.read<ScrollDiaryNotifier>().diaryData = manyUser.last.diaries;
           Future.delayed(const Duration(milliseconds: 1000), () {
@@ -626,19 +626,19 @@ class OtherProfileNotifier with ChangeNotifier {
       final emailSender = SharedPreference().readStorage(SpKeys.email);
 
       // get self profile data
-      final _selfProfile = Provider.of<SelfProfileNotifier>(context, listen: false);
+      final selfProfile = Provider.of<SelfProfileNotifier>(context, listen: false);
       Routing()
           .move(Routes.messageDetail,
               argument: MessageDetailArgument(
                 mate: Mate(
                   email: emailSender,
-                  fullName: _selfProfile.user.profile?.fullName,
-                  username: _selfProfile.user.profile?.username,
+                  fullName: selfProfile.user.profile?.fullName,
+                  username: selfProfile.user.profile?.username,
                   avatar: Avatar(
-                    mediaUri: _selfProfile.user.profile?.avatar?.mediaUri,
-                    mediaType: _selfProfile.user.profile?.avatar?.mediaType,
-                    mediaEndpoint: _selfProfile.user.profile?.avatar?.mediaEndpoint,
-                    mediaBasePath: _selfProfile.user.profile?.avatar?.mediaBasePath,
+                    mediaUri: selfProfile.user.profile?.avatar?.mediaUri,
+                    mediaType: selfProfile.user.profile?.avatar?.mediaType,
+                    mediaEndpoint: selfProfile.user.profile?.avatar?.mediaEndpoint,
+                    mediaBasePath: selfProfile.user.profile?.avatar?.mediaBasePath,
                   ),
                 ),
                 emailReceiver: userEmail ?? '',
@@ -667,13 +667,13 @@ class OtherProfileNotifier with ChangeNotifier {
       _usersFollowingQuery.senderOrReceiver = email;
       _usersFollowingQuery.limit = 200;
       print('reload contentsQuery : 11');
-      final _resFuture = _usersFollowingQuery.reload(context);
-      final _resRequest = await _resFuture;
+      final resFuture = _usersFollowingQuery.reload(context);
+      final resRequest = await resFuture;
 
-      if (_resRequest.isNotEmpty) {
-        if (_resRequest.any((element) => element.event == InteractiveEvent.accept)) {
+      if (resRequest.isNotEmpty) {
+        if (resRequest.any((element) => element.event == InteractiveEvent.accept)) {
           statusFollowing = StatusFollowing.following;
-        } else if (_resRequest.any((element) => element.event == InteractiveEvent.initial)) {
+        } else if (resRequest.any((element) => element.event == InteractiveEvent.initial)) {
           statusFollowing = StatusFollowing.requested;
         }
       }
@@ -686,18 +686,18 @@ class OtherProfileNotifier with ChangeNotifier {
   }
 
   void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
-    ContentData? _updatedData;
-    ContentData? _updatedData2;
+    ContentData? updatedData;
+    ContentData? updatedData2;
 
     switch (content) {
       case hyppeVid:
-        if (user.vids!.isNotEmpty) _updatedData = user.vids?.firstWhere((element) => element.postID == postID);
+        if (user.vids!.isNotEmpty) updatedData = user.vids?.firstWhere((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        if (user.diaries!.isNotEmpty) _updatedData = user.diaries?.firstWhere((element) => element.postID == postID);
+        if (user.diaries!.isNotEmpty) updatedData = user.diaries?.firstWhere((element) => element.postID == postID);
         break;
       case hyppePic:
-        if (user.pics!.isNotEmpty) _updatedData = user.pics?.firstWhere((element) => element.postID == postID);
+        if (user.pics!.isNotEmpty) updatedData = user.pics?.firstWhere((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
@@ -705,13 +705,13 @@ class OtherProfileNotifier with ChangeNotifier {
     }
 
     print('show other profil');
-    print(_updatedData);
+    print(updatedData);
 
-    if (_updatedData != null) {
-      _updatedData.reportedStatus = '';
+    if (updatedData != null) {
+      updatedData.reportedStatus = '';
     }
-    if (_updatedData2 != null) {
-      _updatedData2.reportedStatus = '';
+    if (updatedData2 != null) {
+      updatedData2.reportedStatus = '';
     }
 
     notifyListeners();

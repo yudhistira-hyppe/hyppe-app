@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/device/state.dart';
@@ -27,7 +26,6 @@ import '../../core/bloc/ads_video/bloc.dart';
 import '../../core/bloc/ads_video/state.dart';
 import '../../core/bloc/posts_v2/bloc.dart';
 import '../../core/bloc/posts_v2/state.dart';
-import '../../core/constants/enum.dart';
 import '../../core/models/collection/advertising/ads_video_data.dart';
 import '../../ui/inner/upload/preview_content/notifier.dart';
 import '../../ui/outer/opening_logo/screen.dart';
@@ -84,6 +82,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     _timerLink = Timer(const Duration(seconds: 2), () {
       FirebaseCrashlytics.instance.log('Log: from init');
       // SharedPreference().writeStorage(SpKeys.isPreventRoute, true);
+      debugPrint("==-=-=-=-=-=-=-=-=-=-= init handle depplink");
       DynamicLinkService.handleDynamicLinks();
     });
     // _isolateService.turnOnWorkers();
@@ -136,8 +135,8 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         }
 
         "App Inactive".logger();
-        final _userToken = SharedPreference().readStorage(SpKeys.userToken);
-        if (_userToken != null) {
+        final userToken = SharedPreference().readStorage(SpKeys.userToken);
+        if (userToken != null) {
           try {
             await activity.activitySleep(context);
           } catch (e) {
@@ -159,9 +158,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           globalAdsInContent?.play();
         }
 
-        final _userToken = SharedPreference().readStorage(SpKeys.userToken);
+        final userToken = SharedPreference().readStorage(SpKeys.userToken);
 
-        if (_userToken != null) {
+        if (userToken != null) {
           print('hahahahahahahaha');
           try {
             await activity.activityAwake(context);
@@ -200,7 +199,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         }
         _timerLink = Timer(const Duration(milliseconds: 1000), () {
           FirebaseCrashlytics.instance.log('Log: from resume');
-          DynamicLinkService.handleDynamicLinks();
+          // DynamicLinkService.handleDynamicLinks();
         });
       }
     } catch (e, s) {
@@ -317,7 +316,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
         }
       } catch (e) {
-        'Failed to fetch ads data ${e}'.logger();
+        'Failed to fetch ads data $e'.logger();
       }
     }
   }

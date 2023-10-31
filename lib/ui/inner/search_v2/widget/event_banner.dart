@@ -28,7 +28,7 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
 
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 0), () {
+    Future.delayed(const Duration(seconds: 0), () {
       var cn = context.read<ChallangeNotifier>();
       cn.getBannerLanding(context, isSearch: true);
     });
@@ -39,11 +39,10 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print("asdasdasdasdasdasdasdasd");
     TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
     return Consumer<ChallangeNotifier>(
       builder: (_, notifier, __) => Padding(
-        padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
         child: Column(
           children: [
             Row(
@@ -51,15 +50,19 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
               children: [
                 Text(
                   tn.translate.comeOnJoinTheInterestingCompetition ?? '',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
                 ),
                 GestureDetector(
                   onTap: () {
                     Routing().move(Routes.chalenge);
                   },
-                  child: CustomTextWidget(
-                    textToDisplay: tn.translate.otherCompetitions ?? '',
-                    textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: kHyppePrimary),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    color: Colors.transparent,
+                    child: CustomTextWidget(
+                      textToDisplay: tn.translate.otherCompetitions ?? '',
+                      textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: kHyppePrimary),
+                    ),
                   ),
                 ),
               ],
@@ -107,11 +110,11 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                                       height: SizeConfig.screenHeight,
                                       width: SizeConfig.screenWidth,
                                       color: Colors.black,
-                                      child: UnconstrainedBox(
-                                        child: Container(
+                                      child: const UnconstrainedBox(
+                                        child: SizedBox(
                                           height: 50,
                                           width: 50,
-                                          child: const CircularProgressIndicator(
+                                          child: CircularProgressIndicator(
                                               // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
                                               ),
                                         ),
@@ -133,7 +136,7 @@ class _EventBannerWidgetState extends State<EventBannerWidget> {
                     width: _current == entry.key ? 12 : 6.0,
                     height: 6.0,
                     margin: const EdgeInsets.only(top: 12, left: 4, right: 4),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: (_current == entry.key ? kHyppePrimary : Color(0xffcecece))),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: (_current == entry.key ? kHyppePrimary : const Color(0xffcecece))),
                   ),
                 );
               }).toList(),

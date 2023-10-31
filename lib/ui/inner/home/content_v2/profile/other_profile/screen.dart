@@ -191,9 +191,9 @@ class OtherProfileScreenState extends State<OtherProfileScreen> with RouteAware 
                               textToDisplay: notifier.manyUser.last.profile?.username ?? '',
                               //  userData?.profile?.username == null ? '' : "@${userData?.profile?.username}",
                               textAlign: TextAlign.start,
-                              textStyle: Theme.of(context).textTheme.subtitle1,
+                              textStyle: Theme.of(context).textTheme.titleMedium,
                             )
-                          : Text(""),
+                          : const Text(""),
                     ],
                   ),
                   IconButton(

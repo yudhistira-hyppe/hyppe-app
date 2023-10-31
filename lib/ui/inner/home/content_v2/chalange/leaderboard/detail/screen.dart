@@ -195,11 +195,6 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     var cn = context.watch<ChallangeNotifier>();
     var tn = context.read<TranslateNotifierV2>();
@@ -280,9 +275,9 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                                   PageRouteBuilder(
                                     pageBuilder: (_, __, ___) => WillPopScope(
                                       onWillPop: () async => false,
-                                      child: Scaffold(
+                                      child: const Scaffold(
                                         backgroundColor: Colors.transparent,
-                                        body: const Center(
+                                        body: Center(
                                           child: CircularProgressIndicator.adaptive(),
                                         ),
                                       ),
@@ -318,7 +313,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
               },
               child: SingleChildScrollView(
                 controller: scrollController,
-                physics: AlwaysScrollableScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 child: Container(
                   color: bgColor,
                   child: Column(
@@ -340,7 +335,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                         emptyWidget: GestureDetector(
                           onTap: () {},
                           child: Container(
-                              decoration: BoxDecoration(color: kHyppeNotConnect),
+                              decoration: const BoxDecoration(color: kHyppeNotConnect),
                               width: SizeConfig.screenWidth,
                               height: 250,
                               alignment: Alignment.center,
@@ -350,7 +345,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                           return GestureDetector(
                             onTap: () {},
                             child: Container(
-                                decoration: BoxDecoration(color: kHyppeNotConnect),
+                                decoration: const BoxDecoration(color: kHyppeNotConnect),
                                 width: SizeConfig.screenWidth,
                                 height: 250,
                                 alignment: Alignment.center,
@@ -359,6 +354,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                         },
                       ),
                       twelvePx,
+                      sixPx,
                       Center(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -381,7 +377,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                           ],
                         ),
                       ),
-                      sixPx,
+
                       cn.leaderBoardDetailData?.onGoing == false
                           ? Container()
                           : Container(
@@ -442,10 +438,10 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                                                 ...List.generate(
                                                   nameTab.length,
                                                   (index) => Padding(
-                                                    padding: EdgeInsets.all(9),
+                                                    padding: const EdgeInsets.all(9),
                                                     child: Text(
                                                       nameTab[index],
-                                                      style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                                      style: const TextStyle(fontFamily: 'Lato', fontSize: 14),
                                                     ),
                                                   ),
                                                 ),
@@ -454,7 +450,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
                                           ),
                                         ),
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                     child: _tabs?[_current],
                                   ),
                                 ],

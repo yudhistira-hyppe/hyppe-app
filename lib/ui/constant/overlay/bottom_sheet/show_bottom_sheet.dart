@@ -518,6 +518,7 @@ class ShowBottomSheet {
     String? iconSvg,
     double? sizeIcon,
     Color? iconColor,
+    Color? barrierColor,
     Function? function,
     bool enableDrag = true,
     bool dismissible = true,
@@ -530,6 +531,7 @@ class ShowBottomSheet {
     final String? subCaptionButton,
     final int? milisecond,
     Function()? onClose,
+    final Widget? closeWidget,
   }) async {
     final _result = await showModalBottomSheet<bool>(
       isScrollControlled: enableDrag,
@@ -537,6 +539,7 @@ class ShowBottomSheet {
       enableDrag: enableDrag,
       isDismissible: dismissible,
       backgroundColor: Colors.transparent,
+      barrierColor: barrierColor,
       builder: (builder) {
         return SafeArea(
           child: Container(
@@ -560,6 +563,7 @@ class ShowBottomSheet {
                 textButton: textButton,
                 textButtonColor: textButtonColor,
                 textColor: textColor,
+                closeWidget: closeWidget,
               )),
         );
       },

@@ -5,7 +5,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
-import 'package:gif_view/gif_view.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -34,7 +33,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wakelock/wakelock.dart';
 
 import '../../../../../../app.dart';
-import '../../../../../../core/models/collection/advertising/ads_video_data.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
 
 class StoryPlayerPage extends StatefulWidget {
@@ -66,13 +64,13 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   bool isPlay = false;
   bool onTapCtrl = false;
   //是否允许后台播放
-  bool _mEnablePlayBack = false;
+  final bool _mEnablePlayBack = false;
 
   //当前播放进度
   int _currentPosition = 0;
 
   //当前播放时间，用于Text展示
-  int _currentPositionText = 0;
+  final int _currentPositionText = 0;
 
   //当前buffer进度
   int _bufferPosition = 0;
@@ -96,7 +94,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   bool _showTipsWidget = false;
 
   //是否有缩略图
-  bool _thumbnailSuccess = false;
+  final bool _thumbnailSuccess = false;
 
   //缩略图
   // Uint8List _thumbnailBitmap;
@@ -108,10 +106,10 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   ///seek中
   bool _inSeek = false;
 
-  bool _isLock = false;
+  final bool _isLock = false;
 
   //网络状态
-  bool _isShowMobileNetWork = false;
+  final bool _isShowMobileNetWork = false;
 
   //当前播放器状态
   int _currentPlayerState = 0;
@@ -126,7 +124,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   // PageController? _pageController;
 
-  RefreshController _videoListRefreshController = RefreshController(initialRefresh: false);
+  final RefreshController _videoListRefreshController = RefreshController(initialRefresh: false);
 
   List<StoriesGroup>? _groupUserStories;
 
@@ -136,9 +134,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   int _curChildIdx = 0;
   int _lastCurIndex = -1;
   bool _isPause = false;
-  double _playerY = 0;
+  final double _playerY = 0;
   bool _isFirstRenderShow = false;
-  bool _isBackgroundMode = false;
+  final bool _isBackgroundMode = false;
   int loadImage = 0;
 
   bool isOnPageTurning = false;
@@ -153,15 +151,15 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     context.read<StoriesPlaylistNotifier>().setLoadReaction(false);
     _pageController = PageController(initialPage: widget.argument.peopleIndex);
     _pageController.addListener(() {
-      final _notifier = context.read<StoriesPlaylistNotifier>();
+      final notifier = context.read<StoriesPlaylistNotifier>();
       if (isOnPageTurning && _pageController.page == _pageController.page?.roundToDouble()) {
-        _notifier.pageIndex = _pageController.page?.toInt() ?? 0;
+        notifier.pageIndex = _pageController.page?.toInt() ?? 0;
         setState(() {
           // current = _controller.page.toInt();
           isOnPageTurning = false;
         });
-      } else if (!isOnPageTurning && _notifier.currentPage?.toDouble() != _pageController.page) {
-        if (((_notifier.pageIndex.toDouble()) - (_pageController.page ?? 0)).abs() > 0.1) {
+      } else if (!isOnPageTurning && notifier.currentPage?.toDouble() != _pageController.page) {
+        if (((notifier.pageIndex.toDouble()) - (_pageController.page ?? 0)).abs() > 0.1) {
           setState(() {
             isOnPageTurning = true;
           });
@@ -278,11 +276,11 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   _initListener() {
     fAliplayer?.setOnEventReportParams((params, playerId) {
-      print("EventReportParams=${params}");
+      print("EventReportParams=$params");
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==$value"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
         if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
@@ -424,7 +422,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
       AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-      if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
+      if ((info.trackDefinition?.length ?? 0) > 0) {
         // trackFragmentKey.currentState.onTrackChanged(info);
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
@@ -996,7 +994,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                                   height: 40,
                                   width: 40,
                                   child: Column(
-                                    children: [
+                                    children: const [
                                       CircularProgressIndicator(
                                         backgroundColor: Colors.white,
                                         strokeWidth: 3.0,
@@ -1036,8 +1034,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                           ),
                         );
                       })
-                  : Center(
-                      child: const CircularProgressIndicator(
+                  : const Center(
+                      child: CircularProgressIndicator(
                         backgroundColor: Colors.white,
                         strokeWidth: 3.0,
                       ),
@@ -1065,7 +1063,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     emojiController.reset();
     System().increaseViewCount(fixContext ?? context, _groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()).whenComplete(() {
       // _showAds(Routing.navigatorKey.currentContext ?? context);
-      storyRef.setViewed(_curIdx, _curChildIdx);
+      if (widget.argument.groupStories != null) storyRef.setViewed(_curIdx, _curChildIdx);
     });
     fAliplayer?.stop();
     isPlay = false;

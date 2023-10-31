@@ -33,7 +33,6 @@ class ProofPicture extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    twelvePx,
                     CustomTextWidget(
                       textToDisplay: notifier.language.idVerification ?? 'Verification ID',
                       textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),

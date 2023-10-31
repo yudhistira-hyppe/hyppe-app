@@ -89,8 +89,13 @@ class HyppeNotifier with ChangeNotifier {
             await SharedPreference().logOutStorage();
             _routing.moveReplacement(Routes.welcomeLogin);
           } else {
-            print('tidak ada eror 2');
-            _routing.moveReplacement(Routes.lobby);
+            String? newUser = SharedPreference().readStorage(SpKeys.newUser);
+            if (newUser == "TRUE") {
+              _routing.moveReplacement(Routes.homeTutor);
+            } else {
+              print('tidak ada eror 2');
+              _routing.moveReplacement(Routes.lobby);
+            }
           }
           // }
         },

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/rendering.dart';
@@ -230,7 +229,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                     _currentSlidder = index;
                                     _tabController.index = 0;
 
-                                    Future.delayed(Duration(milliseconds: 500), () {
+                                    Future.delayed(const Duration(milliseconds: 500), () {
                                       chllangeid = cn.bannerLeaderboardData[index].sId ?? '';
                                       if (lastchallangeid == chllangeid && !isDidpop) {
                                         cn.getLeaderBoard(context, cn.bannerLeaderboardData[index].sId ?? '');
@@ -241,12 +240,12 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                 }),
                             items: cn.bannerLeaderboardData
                                 .map((item) => Container(
-                                      margin: EdgeInsets.only(bottom: 10),
+                                      margin: const EdgeInsets.only(bottom: 10),
                                       decoration: BoxDecoration(boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withOpacity(0.8),
-                                          offset: Offset(5, 8),
-                                          blurRadius: 5,
+                                          color: Colors.black.withOpacity(0.3),
+                                          offset: const Offset(1, 5),
+                                          blurRadius: 10,
                                           spreadRadius: -5,
                                         ),
                                       ]),
@@ -263,11 +262,11 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                                 height: SizeConfig.screenHeight,
                                                 width: SizeConfig.screenWidth,
                                                 color: Colors.black,
-                                                child: UnconstrainedBox(
-                                                  child: Container(
+                                                child: const UnconstrainedBox(
+                                                  child: SizedBox(
                                                     height: 50,
                                                     width: 50,
-                                                    child: const CircularProgressIndicator(
+                                                    child: CircularProgressIndicator(
                                                         // value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
                                                         ),
                                                   ),
@@ -314,10 +313,10 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                                     ...List.generate(
                                       nameTab.length,
                                       (index) => Padding(
-                                        padding: EdgeInsets.all(9),
+                                        padding: const EdgeInsets.all(9),
                                         child: Text(
                                           nameTab[index],
-                                          style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                          style: const TextStyle(fontFamily: 'Lato', fontSize: 14),
                                         ),
                                       ),
                                     ),

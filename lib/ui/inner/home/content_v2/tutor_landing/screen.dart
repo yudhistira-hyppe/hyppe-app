@@ -1,31 +1,23 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/app.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
-import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/widget/diary.dart';
 import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/widget/pic.dart';
 import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/widget/story.dart';
 import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/widget/vid.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 // v2 view
@@ -33,7 +25,6 @@ import 'package:showcaseview/showcaseview.dart';
 import '../../../../../core/services/route_observer_service.dart';
 import '../../../../constant/widget/after_first_layout_mixin.dart';
 import 'package:move_to_background/move_to_background.dart';
-import 'package:flutter/services.dart';
 
 class TutorLandingScreen extends StatefulWidget {
   final bool canShowAds;
@@ -138,9 +129,8 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                   }
                 },
                 onRefresh: () async {
-                  print(isZoom);
                   if (!isZoom) {
-                    Future.delayed(Duration(milliseconds: 400), () async {
+                    Future.delayed(const Duration(milliseconds: 400), () async {
                       imageCache.clear();
                       imageCache.clearLiveImages();
                       await notifier.initNewHome(context, mounted, isreload: true);
@@ -219,7 +209,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                                             break;
                                         }
                                         return Padding(
-                                          padding: EdgeInsets.all(9),
+                                          padding: const EdgeInsets.all(9),
                                           child: Showcase(
                                             key: index == 0
                                                 ? keyButton
@@ -231,11 +221,11 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                                             targetPadding: const EdgeInsets.all(0),
                                             tooltipPosition: TooltipPosition.bottom,
                                             title: titleCase,
-                                            titleTextStyle: TextStyle(fontSize: 12, color: kHyppeNotConnect),
-                                            titlePadding: EdgeInsets.all(6),
+                                            titleTextStyle: const TextStyle(fontSize: 12, color: kHyppeNotConnect),
+                                            titlePadding: const EdgeInsets.all(6),
                                             description: descCase,
-                                            descTextStyle: TextStyle(fontSize: 10, color: kHyppeNotConnect),
-                                            descriptionPadding: EdgeInsets.all(6),
+                                            descTextStyle: const TextStyle(fontSize: 10, color: kHyppeNotConnect),
+                                            descriptionPadding: const EdgeInsets.all(6),
                                             textColor: Colors.white,
                                             targetShapeBorder: const CircleBorder(),
                                             disableDefaultTargetGestures: true,
@@ -247,7 +237,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                                                 children: [
                                                   Text(
                                                     stepTitle,
-                                                    style: TextStyle(color: kHyppeBurem, fontSize: 10),
+                                                    style: const TextStyle(color: kHyppeBurem, fontSize: 10),
                                                   ),
                                                   GestureDetector(
                                                       onTap: () {
@@ -270,7 +260,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                                                             break;
                                                         }
                                                       },
-                                                      child: Text(
+                                                      child: const Text(
                                                         "Selanjutnya",
                                                         style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
                                                       ))
@@ -279,7 +269,7 @@ class _TutorLandingScreenState extends State<TutorLandingScreen> with RouteAware
                                             ),
                                             child: Text(
                                               filterList[index]['name'],
-                                              style: TextStyle(fontFamily: 'Lato', fontSize: 14),
+                                              style: const TextStyle(fontFamily: 'Lato', fontSize: 14),
                                             ),
                                           ),
                                         );

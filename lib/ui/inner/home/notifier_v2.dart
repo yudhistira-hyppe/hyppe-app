@@ -3,9 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
-import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
 import 'package:hyppe/core/bloc/ads_video/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -24,10 +22,6 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_diaries.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_pics.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_vids.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_vids.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -638,8 +632,8 @@ class HomeNotifier with ChangeNotifier {
     bool? saleLike,
     bool? saleView,
   }) {
-    ContentData? _updatedData;
-    ContentData? _updatedData2;
+    ContentData? updatedData;
+    ContentData? updatedData2;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final vid2 = Provider.of<VidDetailNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
@@ -649,45 +643,45 @@ class HomeNotifier with ChangeNotifier {
 
     switch (content) {
       case hyppeVid:
-        _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
-        _updatedData2 = vid2.data;
+        updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
+        updatedData2 = vid2.data;
         break;
       case hyppeDiary:
-        _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
+        updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
-        _updatedData2 = pic2.data;
+        updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+        updatedData2 = pic2.data;
         break;
       case hyppeStory:
-        _updatedData = stories.myStoriesData?.firstWhereOrNull((element) => element.postID == postID);
+        updatedData = stories.myStoriesData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
         break;
     }
 
-    if (_updatedData != null) {
-      _updatedData.tags = tags;
-      _updatedData.description = description;
-      _updatedData.allowComments = allowComment;
-      _updatedData.visibility = visibility;
-      _updatedData.location = location;
-      _updatedData.saleAmount = num.parse(saleAmount != null
+    if (updatedData != null) {
+      updatedData.tags = tags;
+      updatedData.description = description;
+      updatedData.allowComments = allowComment;
+      updatedData.visibility = visibility;
+      updatedData.location = location;
+      updatedData.saleAmount = num.parse(saleAmount != null
           ? saleAmount != ''
               ? saleAmount
               : '0'
           : '0');
-      _updatedData.saleLike = saleLike;
-      _updatedData.saleView = saleView;
-      _updatedData.cats = [];
-      _updatedData.tagPeople = [];
-      _updatedData.isShared = isShared;
+      updatedData.saleLike = saleLike;
+      updatedData.saleView = saleView;
+      updatedData.cats = [];
+      updatedData.tagPeople = [];
+      updatedData.isShared = isShared;
       // _updatedData.tagPeople = tagPeople;
-      _updatedData.tagPeople?.addAll(tagPeople ?? []);
+      updatedData.tagPeople?.addAll(tagPeople ?? []);
       if (cats != null) {
         for (var v in cats) {
-          _updatedData.cats?.add(
+          updatedData.cats?.add(
             Cats(
               id: v,
               // interestName: v,
@@ -695,26 +689,26 @@ class HomeNotifier with ChangeNotifier {
           );
         }
       }
-      if (_updatedData2 != null) {
-        _updatedData2.tags = tags;
-        _updatedData2.description = description;
-        _updatedData2.allowComments = allowComment;
-        _updatedData2.visibility = visibility;
-        _updatedData2.location = location;
-        _updatedData2.saleAmount = num.parse(saleAmount != null
+      if (updatedData2 != null) {
+        updatedData2.tags = tags;
+        updatedData2.description = description;
+        updatedData2.allowComments = allowComment;
+        updatedData2.visibility = visibility;
+        updatedData2.location = location;
+        updatedData2.saleAmount = num.parse(saleAmount != null
             ? saleAmount != ''
                 ? saleAmount
                 : '0'
             : '0');
-        _updatedData2.saleLike = saleLike;
-        _updatedData2.saleView = saleView;
-        _updatedData2.cats = [];
-        _updatedData2.tagPeople = [];
+        updatedData2.saleLike = saleLike;
+        updatedData2.saleView = saleView;
+        updatedData2.cats = [];
+        updatedData2.tagPeople = [];
         // _updatedData2.tagPeople = tagPeople;
-        _updatedData2.tagPeople!.addAll(tagPeople ?? []);
+        updatedData2.tagPeople!.addAll(tagPeople ?? []);
         if (cats != null) {
           for (var v in cats) {
-            _updatedData2.cats!.add(
+            updatedData2.cats!.add(
               Cats(
                 id: v,
                 // interestName: v,
@@ -723,15 +717,15 @@ class HomeNotifier with ChangeNotifier {
           }
         }
       }
-      '${_updatedData.cats?.length}'.logger();
+      '${updatedData.cats?.length}'.logger();
     }
 
     notifyListeners();
   }
 
   void onReport(BuildContext context, {required String postID, required String content, bool? isReport, String? key}) {
-    ContentData? _updatedData;
-    ContentData? _updatedData2;
+    ContentData? updatedData;
+    ContentData? updatedData2;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -765,8 +759,8 @@ class HomeNotifier with ChangeNotifier {
   }
 
   void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
-    ContentData? _updatedData;
-    ContentData? _updatedData2;
+    ContentData? updatedData;
+    ContentData? updatedData2;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -775,28 +769,28 @@ class HomeNotifier with ChangeNotifier {
 
     switch (content) {
       case hyppeVid:
-        _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
+        updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
+        updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppePic:
         // pic.pic?.removeWhere((element) => element.postID == postID);
-        _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+        updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
         // _updatedData = pic2.data;
         break;
       case hyppeStory:
-        _updatedData = stories.peopleStoriesData?.firstWhereOrNull((element) => element.postID == postID);
+        updatedData = stories.peopleStoriesData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
         break;
     }
 
-    if (_updatedData != null) {
-      print('buka dong ${_updatedData.description}');
-      print('${_updatedData.description}');
-      _updatedData.reportedStatus = 'ALL';
+    if (updatedData != null) {
+      print('buka dong ${updatedData.description}');
+      print('${updatedData.description}');
+      updatedData.reportedStatus = 'ALL';
     }
     // if (_updatedData2 != null) {
     //   print('buka dong2 ${_updatedData2.description}');
@@ -839,23 +833,23 @@ class HomeNotifier with ChangeNotifier {
   }
 
   void onDeleteSelfTagUserContent(BuildContext context, {required String postID, required String content, required String email}) {
-    ContentData? _updatedData;
+    ContentData? updatedData;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
     final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
     switch (content) {
       case hyppeVid:
-        _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
+        updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
+        updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+        updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeStory:
-        _updatedData = stories.myStoriesData?.firstWhereOrNull((element) => element.postID == postID);
+        updatedData = stories.myStoriesData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
@@ -868,7 +862,7 @@ class HomeNotifier with ChangeNotifier {
       vid.vidData?[index].description = 'asdaksdjha jsd';
 
       print(vid.vidData?[index].tagPeople?.length);
-      _updatedData?.tagPeople?.removeWhere((element) => element.email == email);
+      updatedData?.tagPeople?.removeWhere((element) => element.email == email);
     }
 
     notifyListeners();
@@ -905,7 +899,7 @@ class HomeNotifier with ChangeNotifier {
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
         }
       } catch (e) {
-        'Failed to fetch ads data ${e}'.logger();
+        'Failed to fetch ads data $e'.logger();
       }
     }
     //get banner Challange
@@ -1029,10 +1023,10 @@ class HomeNotifier with ChangeNotifier {
     ScrollDiaryNotifier diaryScroll = context.read<ScrollDiaryNotifier>();
     ScrollPicNotifier picScroll = context.read<ScrollPicNotifier>();
 
-    ContentData? _updatedData;
-    _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
-    _updatedData ??= diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
-    _updatedData ??= pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+    ContentData? updatedData;
+    updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
+    updatedData ??= diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
+    updatedData ??= pic.pic?.firstWhereOrNull((element) => element.postID == postID);
 
     // _updatedData ??= vidScroll.vidData?.firstWhereOrNull((element) => element.postID == postID);
     // _updatedData ??= diaryScroll.diaryData?.firstWhereOrNull((element) => element.postID == postID);
@@ -1040,7 +1034,7 @@ class HomeNotifier with ChangeNotifier {
 
     if (add) {
       Comment comment = Comment(txtMessages: txtMsg, userComment: UserComment(username: username));
-      print("===-=-=-=-=- parentID ${parentID}");
+      print("===-=-=-=-=- parentID $parentID");
 
       if (parentID == null) {
         if (pageDetail) {
@@ -1063,15 +1057,15 @@ class HomeNotifier with ChangeNotifier {
             }
           });
         } else {
-          if (_updatedData?.comment == null) {
-            _updatedData?.comment = [];
-            _updatedData?.comment = [comment];
+          if (updatedData?.comment == null) {
+            updatedData?.comment = [];
+            updatedData?.comment = [comment];
             notifyListeners();
           } else {
-            _updatedData?.comment?.insert(0, comment);
+            updatedData?.comment?.insert(0, comment);
             notifyListeners();
           }
-          _updatedData?.comments = (_updatedData.comments ?? 0) + 1;
+          updatedData?.comments = (updatedData.comments ?? 0) + 1;
         }
       }
 
@@ -1109,10 +1103,10 @@ class HomeNotifier with ChangeNotifier {
           }
         });
       } else {
-        _updatedData?.comments = (_updatedData.comments ?? 0) - (1 + totChild);
+        updatedData?.comments = (updatedData.comments ?? 0) - (1 + totChild);
         if (parentID == null) {
-          if (indexComment != null && _updatedData?.comment != null) {
-            _updatedData?.comment?.removeAt(indexComment);
+          if (indexComment != null && updatedData?.comment != null) {
+            updatedData?.comment?.removeAt(indexComment);
           }
         }
       }

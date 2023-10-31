@@ -44,14 +44,14 @@ class _UserInterestScreenState extends State<UserInterestScreen> {
                   width: SizeConfig.screenWidth,
                   child: InterestContent(fromSetting: widget.arguments.fromSetting, userInterested: widget.arguments.userInterested),
                 ),
-                if(widget.arguments.fromSetting)
-                Padding(
-                  padding: const EdgeInsets.only(top: 50, left: 16),
-                  child: GestureDetector(
-                    onTap: () => context.read<UserInterestNotifier>().onBackPress(widget.arguments.fromSetting),
-                    child: const CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
+                if (widget.arguments.fromSetting)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50, left: 16),
+                    child: GestureDetector(
+                      onTap: () => context.read<UserInterestNotifier>().onBackPress(widget.arguments.fromSetting),
+                      child: const CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
+                    ),
                   ),
-                ),
               ],
             ),
           ),

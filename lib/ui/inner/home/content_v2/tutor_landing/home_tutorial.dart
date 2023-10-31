@@ -33,7 +33,7 @@ class _HomeTutorScreenState extends State<HomeTutorScreen> with AfterFirstLayout
 
   @override
   void afterFirstLayout(BuildContext context) {
-    _mainNotifier.initMain(context, isInitSocket: true);
+    // _mainNotifier.initMain(context, isInitSocket: true);
   }
 
   @override

@@ -60,10 +60,10 @@ class OtherProfileTop extends StatelessWidget {
       : "";
 
   String? displayPlace() {
-    String? _area = profile?.area;
-    String? _country = profile?.country;
-    if (_area != null && _country != null) {
-      return " $_area - $_country";
+    String? area = profile?.area;
+    String? country = profile?.country;
+    if (area != null && country != null) {
+      return " $area - $country";
     } else {
       return null;
     }
@@ -134,12 +134,12 @@ class OtherProfileTop extends StatelessWidget {
                             CustomTextWidget(
                               // textToDisplay: notifier.displayPostsCount(),
                               textToDisplay: System().formatterNumber((profile?.insight?.posts ?? 0).toInt()),
-                              textStyle: Theme.of(context).textTheme.subtitle1,
+                              textStyle: Theme.of(context).textTheme.titleMedium,
                             ),
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
                               textToDisplay: notifier.language.posts ?? 'Posts',
-                              textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
+                              textStyle: Theme.of(context).textTheme.bodyMedium!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
                             )
                           ],
                         ),
@@ -148,12 +148,12 @@ class OtherProfileTop extends StatelessWidget {
                             CustomTextWidget(
                               // textToDisplay: notifier.displayFollowers(),
                               textToDisplay: System().formatterNumber((profile?.insight?.followers ?? 0).toInt()),
-                              textStyle: Theme.of(context).textTheme.subtitle1,
+                              textStyle: Theme.of(context).textTheme.titleMedium,
                             ),
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
                               textToDisplay: notifier.language.followers ?? 'Followers',
-                              textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
+                              textStyle: Theme.of(context).textTheme.bodyMedium!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
                             )
                           ],
                         ),
@@ -162,12 +162,12 @@ class OtherProfileTop extends StatelessWidget {
                             CustomTextWidget(
                               // textToDisplay: notifier.displayFollowing(),
                               textToDisplay: System().formatterNumber((profile?.insight?.followings ?? 0).toInt()),
-                              textStyle: Theme.of(context).textTheme.subtitle1,
+                              textStyle: Theme.of(context).textTheme.titleMedium,
                             ),
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
                               textToDisplay: notifier.language.following ?? 'Following',
-                              textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
+                              textStyle: Theme.of(context).textTheme.bodyMedium!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
                             )
                           ],
                         ),
@@ -182,7 +182,7 @@ class OtherProfileTop extends StatelessWidget {
               child: CustomTextWidget(
                 textToDisplay: profile?.fullName ?? '',
                 textAlign: TextAlign.start,
-                textStyle: Theme.of(context).textTheme.subtitle1,
+                textStyle: Theme.of(context).textTheme.titleMedium,
               ),
             ),
             Container(
@@ -198,9 +198,9 @@ class OtherProfileTop extends StatelessWidget {
                     textAlign: TextAlign.start,
                     seeLess: ' ${notifier.language.seeLess}',
                     seeMore: ' ${notifier.language.seeMoreContent}',
-                    normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
-                    hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
-                    expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
+                    normStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: kHyppeLightSecondary),
+                    hrefStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: kHyppePrimary),
+                    expandStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
                   ),
                 ],
               )),
@@ -217,7 +217,7 @@ class OtherProfileTop extends StatelessWidget {
                         ),
                         CustomTextWidget(
                           textToDisplay: displayPlace() ?? '',
-                          textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(),
+                          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(),
                         )
                       ],
                     ),
@@ -255,16 +255,12 @@ class OtherProfileTop extends StatelessWidget {
                                       : notifier.statusFollowing == StatusFollowing.requested
                                           ? notifier.language.requested ?? 'requested'
                                           : notifier.language.follow ?? 'follow',
-                                  textStyle: Theme.of(context).textTheme.button?.copyWith(
+                                  textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
                                         color: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? kHyppeGrey : kHyppeLightButtonText,
                                       ),
                                 ),
                         ),
                         CustomElevatedButton(
-                          child: CustomTextWidget(
-                            textToDisplay: notifier.language.message ?? 'message',
-                            textStyle: Theme.of(context).textTheme.button,
-                          ),
                           width: 167 * SizeConfig.scaleDiagonal,
                           height: 42 * SizeConfig.scaleDiagonal,
                           buttonStyle: Theme.of(context).elevatedButtonTheme.style,
@@ -279,6 +275,10 @@ class OtherProfileTop extends StatelessWidget {
                               ShowBottomSheet.onInternalServerError(context);
                             }
                           },
+                          child: CustomTextWidget(
+                            textToDisplay: notifier.language.message ?? 'message',
+                            textStyle: Theme.of(context).textTheme.labelLarge,
+                          ),
                         ),
                       ],
                     ),

@@ -15,8 +15,6 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
 import 'package:story_view/controller/story_controller.dart';
-import 'package:story_view/widgets/story_view.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 
 import '../../../../../../core/bloc/posts_v2/bloc.dart';
 import '../../../../../../core/bloc/posts_v2/state.dart';
@@ -42,7 +40,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   int page = 0;
 
-  List<StoriesGroup>? _storiesGroups = null;
+  List<StoriesGroup>? _storiesGroups;
 
   List<ContentData>? _myStoriesData;
 
@@ -141,12 +139,12 @@ class PreviewStoriesNotifier with ChangeNotifier {
   }
 
   Future<void> initialMyStories(BuildContext context) async {
-    Future<List<ContentData>> _resFuture;
+    Future<List<ContentData>> resFuture;
 
     try {
       print('reload contentsQuery : 13');
-      _resFuture = myContentsQuery.reload(context);
-      final res = await _resFuture;
+      resFuture = myContentsQuery.reload(context);
+      final res = await resFuture;
       myStoriesData = res;
       if (myStoriesData != null) {
         totalViews = 0;
@@ -305,7 +303,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
         return MusicUrl(playUrl: jsonMap['PlayUrl'], duration: duration);
       }
     } catch (e) {
-      'Failed to fetch ads data ${e}'.logger();
+      'Failed to fetch ads data $e'.logger();
     }
     return null;
   }
@@ -322,7 +320,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
         return jsonMap['PlayUrl'].toString();
       }
     } catch (e) {
-      'Failed to fetch ads data ${e}'.logger();
+      'Failed to fetch ads data $e'.logger();
       return '';
     }
   }
@@ -364,13 +362,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
-  setViewed(int index, int indexItem) {
-    if (storiesGroups?.isNotEmpty ?? false) {
-      storiesGroups?[index].story?[indexItem].isViewed = true;
-    }
-    notifyListeners();
-  }
-
   void navigateToPeopleStoryGroup(BuildContext context, int index) {
     print('navigateToStoryGroup: ${myStoryGroup.isNotEmpty} : $myStoryGroup');
     _routing.move(Routes.showStories,
@@ -378,6 +369,13 @@ class PreviewStoriesNotifier with ChangeNotifier {
           groupStories: storiesGroups,
           peopleIndex: index,
         ));
+  }
+
+  setViewed(int index, int indexItem) {
+    if ((storiesGroups?.isNotEmpty ?? false)) {
+      storiesGroups?[index].story?[indexItem].isViewed = true;
+    }
+    notifyListeners();
   }
 
   void uploadStories(BuildContext context) {

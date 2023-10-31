@@ -71,7 +71,7 @@ class _OnChallangePeriodeBottomSheetState extends State<OnChallangePeriodeBottom
                     ShowBottomSheet.onDatePickerMonth(context, widget.isDetail ?? false);
                   },
                   child: Container(
-                    padding: EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.only(bottom: 12),
                     decoration: BoxDecoration(
                       border: Border(bottom: BorderSide(color: kHyppeBorderTab, width: 2.0)),
                     ),

@@ -79,7 +79,7 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Routing().move(Routes.chalengeCollectionBadge);
+                        Routing().move(Routes.chalengeCollectionBadge, argument: GeneralArgument(isTrue: false));
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -87,7 +87,7 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                           decoration: ShapeDecoration(
-                            gradient: LinearGradient(
+                            gradient: const LinearGradient(
                               begin: Alignment(1.00, 0.00),
                               end: Alignment(-1, 0),
                               colors: [Color(0xFF7551C0), Color(0xFFAB22AF)],
@@ -103,7 +103,7 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
                               twelvePx,
                               Text(
                                 "${lang?.seeMyBadgeCollection}",
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white,
@@ -133,7 +133,7 @@ class _AchievementScreenState extends State<AchievementScreen> with RouteAware, 
                                 twentyFourPx,
                                 ListView.builder(
                                   shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   itemCount: cn.achievementData?.length,
                                   itemBuilder: (context, index) {
                                     return item(cn.achievementData?[index] ?? AcievementModel());

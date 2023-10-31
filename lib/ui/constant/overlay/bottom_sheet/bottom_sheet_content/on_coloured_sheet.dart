@@ -29,26 +29,28 @@ class OnColouredSheet extends StatefulWidget {
   final int? milisecond;
   final bool isArrow;
   final bool isMargin;
-  const OnColouredSheet(
-      {Key? key,
-      required this.caption,
-      this.subCaption,
-      this.subCaptionButton,
-      this.iconSvg,
-      this.sizeIcon,
-      this.maxLines,
-      this.fromSnackBar = false,
-      this.iconColor,
-      this.textColor = kHyppeLightButtonText,
-      this.textButtonColor = kHyppeLightButtonText,
-      this.textButton,
-      this.function,
-      this.textOverflow,
-      this.functionSubCaption,
-      this.milisecond,
-      this.isArrow = false,
-      this.isMargin = false})
-      : super(key: key);
+  final Widget? closeWidget;
+  const OnColouredSheet({
+    Key? key,
+    required this.caption,
+    this.subCaption,
+    this.subCaptionButton,
+    this.iconSvg,
+    this.sizeIcon,
+    this.maxLines,
+    this.fromSnackBar = false,
+    this.iconColor,
+    this.textColor = kHyppeLightButtonText,
+    this.textButtonColor = kHyppeLightButtonText,
+    this.textButton,
+    this.function,
+    this.textOverflow,
+    this.functionSubCaption,
+    this.milisecond,
+    this.isArrow = false,
+    this.isMargin = false,
+    this.closeWidget,
+  }) : super(key: key);
 
   @override
   _OnColouredSheetState createState() => _OnColouredSheetState();
@@ -171,13 +173,13 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                             ),
                           ],
                         )
-                      : Container()
+                      : Container(),
                 ],
               ),
               widget.subCaption != null
                   ? const SizedBox.shrink()
                   : Container(
-                      padding:  EdgeInsets.only(right: (widget.textButton?.length ?? 0) <= 2 ? 0 : 10),
+                      padding: EdgeInsets.only(right: (widget.textButton?.length ?? 0) <= 2 ? 0 : 10),
                       width: (widget.textButton?.length ?? 0) <= 2 ? 50 : null,
                       height: 50,
                       child: CustomTextButton(
@@ -188,7 +190,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                             if (value) {
                               return const SizedBox(height: 40, width: 40, child: CustomLoading());
                             }
-                  
+
                             return CustomTextWidget(
                               maxLines: 1,
                               textToDisplay: widget.textButton ?? 'Ok',
@@ -223,14 +225,14 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if(widget.caption != null)
-              CustomTextWidget(
-                maxLines: widget.maxLines,
-                textOverflow: widget.textOverflow,
-                textToDisplay: widget.caption!,
-                textAlign: TextAlign.left,
-                textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: widget.textColor, fontSize: 10, fontWeight: FontWeight.w700),
-              ),
+              if (widget.caption != null)
+                CustomTextWidget(
+                  maxLines: widget.maxLines,
+                  textOverflow: widget.textOverflow,
+                  textToDisplay: widget.caption!,
+                  textAlign: TextAlign.left,
+                  textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: widget.textColor, fontSize: 10, fontWeight: FontWeight.w700),
+                ),
               if (widget.subCaption != null)
                 CustomTextWidget(
                   maxLines: widget.maxLines,
@@ -238,10 +240,11 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                   textToDisplay: widget.subCaption!,
                   textAlign: TextAlign.left,
                   textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: widget.textColor, fontSize: 12, fontWeight: FontWeight.w400),
-                )
+                ),
             ],
           ),
         ),
+        widget.closeWidget ?? const SizedBox(height: 0, width: 0),
         if (widget.isArrow)
           InkWell(
             onTap: () {

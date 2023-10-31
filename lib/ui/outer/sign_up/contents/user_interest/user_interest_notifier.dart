@@ -62,7 +62,7 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
       } else {
         print('bukan dari setting');
         final notifier = Provider.of<AccountPreferencesNotifier>(context, listen: false);
-        await notifier.onClickSaveInterests(context, _interestData);
+        await notifier.onClickSaveInterests(context, _interestData, fromSetting: false);
         _routing.move(Routes.signUpWelcome);
       }
     }
@@ -99,9 +99,9 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   bool onBackPress(bool fromSetting) {
-    if(fromSetting){
+    if (fromSetting) {
       return true;
-    }else{
+    } else {
       return false;
     }
     fromSetting ? _routing.moveBack() : _routing.moveAndPop(Routes.login);
