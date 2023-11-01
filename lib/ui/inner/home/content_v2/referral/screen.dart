@@ -12,7 +12,6 @@ import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/widget/qr_block.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/widget/share_block.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/widget/shimmer_referral.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/widget/shimmer_all_transaction_history.dart';
 import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
