@@ -1236,7 +1236,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                                           widthPlaceHolder: 80,
                                                           heightPlaceHolder: 80,
                                                           imageUrl: (picData?.isApsara ?? false)
-                                                              ? ("${picData?.mediaThumbEndPoint}?key=${picData?.valueCache}")
+                                                              ? ("${picData?.mediaEndpoint}?key=${picData?.valueCache}")
                                                               : ("${picData?.fullThumbPath}&key=${picData?.valueCache}"),
                                                           imageBuilder: (context, imageProvider) {
                                                             return ClipRRect(
