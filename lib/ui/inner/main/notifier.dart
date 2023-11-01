@@ -15,6 +15,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/google_map_place/location_model.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
 import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/core/services/locations.dart';
@@ -139,7 +140,7 @@ class MainNotifier with ChangeNotifier {
       selfProfile.user.profile?.avatar?.imageKey = keyImageCache;
 
       if (selfProfile.user.profile?.area == null) {
-        getProvinceName(context);
+        getProvinceName(context, profile: selfProfile.user.profile);
       }
 
       selfProfile.onUpdate();
@@ -170,7 +171,7 @@ class MainNotifier with ChangeNotifier {
     });
   }
 
-  Future getProvinceName(BuildContext context) async {
+  Future getProvinceName(BuildContext context, {required UserProfileModel? profile}) async {
     Locations().permissionLocation().then((result) {
       Locations().getLocation().then((value) async {
         final notifier = GoogleMapPlaceBloc();
@@ -188,7 +189,9 @@ class MainNotifier with ChangeNotifier {
           final data = <String, dynamic>{};
           data["country"] = country?.longName;
           data["area"] = province?.longName;
-          data["gender"] = 'Perempuan'.getGenderByLanguage();
+          if (profile?.gender == null) {
+            data["gender"] = 'Perempuan'.getGenderByLanguage();
+          }
           // ignore: use_build_context_synchronously
           usersNotifier.updateProfileBlocV2(context, data: data);
         }
