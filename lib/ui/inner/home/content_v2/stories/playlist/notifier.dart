@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
@@ -43,7 +42,6 @@ import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/item.dart';
-import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
 
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';

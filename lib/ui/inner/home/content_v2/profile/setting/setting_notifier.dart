@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -13,7 +12,6 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
-import 'package:hyppe/ui/outer/login/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_interest/user_interest_notifier.dart';
 import 'package:hyppe/ui/outer/welcome_login/notifier.dart';
 import 'package:hyppe/ux/path.dart';

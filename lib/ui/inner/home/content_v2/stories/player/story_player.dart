@@ -5,7 +5,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
-import 'package:gif_view/gif_view.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -34,7 +33,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../../app.dart';
-import '../../../../../../core/models/collection/advertising/ads_video_data.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
 
 class StoryPlayerPage extends StatefulWidget {

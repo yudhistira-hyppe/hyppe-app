@@ -6,7 +6,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/screen.dart';
 import 'package:provider/provider.dart';
 
 class OtherProfileBottom extends StatefulWidget {
