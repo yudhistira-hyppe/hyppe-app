@@ -11,6 +11,7 @@ import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/google_map_place/location_model.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -181,10 +182,13 @@ class MainNotifier with ChangeNotifier {
         final fetch = notifier.googleMapPlaceFetch;
         if (fetch.googleMapPlaceState == GoogleMapPlaceState.getGoogleMapPlaceBlocSuccess) {
           googleGeocodingModel = GoogleGeocodingModel.fromJson(fetch.data);
-          AddressComponents? addressComponents = googleGeocodingModel?.results?.first.addressComponents?.firstWhere((element) => (element.types ?? []).contains('administrative_area_level_1'));
+          AddressComponents? country = googleGeocodingModel?.results?.first.addressComponents?.firstWhere((element) => (element.types ?? []).contains('country'));
+          AddressComponents? province = googleGeocodingModel?.results?.first.addressComponents?.firstWhere((element) => (element.types ?? []).contains('administrative_area_level_1'));
           final usersNotifier = userV2.UserBloc();
           final data = <String, dynamic>{};
-          data["area"] = addressComponents?.longName;
+          data["country"] = country?.longName;
+          data["area"] = province?.longName;
+          data["gender"] = 'Perempuan'.getGenderByLanguage();
           // ignore: use_build_context_synchronously
           usersNotifier.updateProfileBlocV2(context, data: data);
         }
