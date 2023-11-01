@@ -331,15 +331,16 @@ class OtherProfileNotifier with ChangeNotifier {
         if (usersFetch.userState == UserState.getUserProfilesSuccess) {
           // user.profile = usersFetch.data;
 
-          if (!refresh) {
-            UserInfoModel user2 = UserInfoModel();
-            user2.profile = usersFetch.data;
-            user2.pics = [];
-            // user.profile = argument?.profile;
-            manyUser.add(user2);
-            // manyUser.add(user);
-            golbalToOther = manyUser.length;
-          }
+          if (manyUser.isNotEmpty && refresh) manyUser.removeLast();
+
+          UserInfoModel user2 = UserInfoModel();
+          user2.profile = usersFetch.data;
+          user2.pics = [];
+          // user.profile = argument?.profile;
+          manyUser.add(user2);
+          // manyUser.add(user);
+          golbalToOther = manyUser.length;
+
           print("========== many user 2 ${manyUser.length}");
           for (var element in manyUser) {
             print(element.profile?.username);

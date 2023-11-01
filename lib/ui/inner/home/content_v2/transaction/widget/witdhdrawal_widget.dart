@@ -29,8 +29,10 @@ class WithdrawalWidget extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            context.read<TransactionNotifier>().getDetailTransactionHistory(context, id: data?.id ?? '', type: System().convertTransactionTypeToString(data?.type), jenis: data?.jenis);
-            context.read<TransactionNotifier>().navigateToDetailTransaction();
+            if (data?.description != 'FAILED TRANSACTION') {
+              context.read<TransactionNotifier>().getDetailTransactionHistory(context, id: data?.id ?? '', type: System().convertTransactionTypeToString(data?.type), jenis: data?.jenis);
+              context.read<TransactionNotifier>().navigateToDetailTransaction();
+            }
           },
           child: Container(
             padding: const EdgeInsets.all(11),
@@ -71,7 +73,7 @@ class WithdrawalWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: '- ${System().currencyFormat(amount: data?.totalamount)}',
+                      textToDisplay: '${data?.debetKredit} ${System().currencyFormat(amount: data?.totalamount)}',
                       textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.bold),
                     ),
                     CustomTextWidget(

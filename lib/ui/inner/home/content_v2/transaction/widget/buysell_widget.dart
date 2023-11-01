@@ -83,14 +83,15 @@ class BuySellWidget extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            context.read<TransactionNotifier>().getDetailTransactionHistory(context, id: data?.id ?? '', type: System().convertTransactionTypeToString(data?.type), jenis: data?.jenis);
-            context.read<TransactionNotifier>().navigateToDetailTransaction();
+            if (data?.description != 'FAILED TRANSACTION') {
+              context.read<TransactionNotifier>().getDetailTransactionHistory(context, id: data?.id ?? '', type: System().convertTransactionTypeToString(data?.type), jenis: data?.jenis);
+              context.read<TransactionNotifier>().navigateToDetailTransaction();
+            }
           },
           child: Container(
             padding: const EdgeInsets.all(11),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
