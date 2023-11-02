@@ -1006,5 +1006,8 @@
   "competitionends": "Competition ends",
   "successfulChallengeParticipation": "Successful Challenge Participation",
   "getfirstplacebyentering": "Get first place by entering this \nexciting competition!",
-  "increaseYourPointsNow": "Increase Your Points Now"
+  "increaseYourPointsNow": "Increase Your Points Now",
+  "moneyRefund": "Money Refund",
+  "refundAmount": "Refund Amount",
+  "adminRefundAmount": "Admin Refund Amount"
 }

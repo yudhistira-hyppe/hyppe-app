@@ -1006,5 +1006,8 @@
   "thecompetitionhasended": "Kompetisi telah berakhir",
   "successfulChallengeParticipation": "Berhasil Mengikuti Challenge",
   "getfirstplacebyentering": "Raih peringkat pertama dengan mengikuti\nkompetisi yang seru ini, yuk!",
-  "increaseYourPointsNow": "Tingkatkan Poinmu Sekarang"
+  "increaseYourPointsNow": "Tingkatkan Poinmu Sekarang",
+  "moneyRefund": "Pengembalian Uang",
+  "refundAmount": "Jumlah Pengembalian",
+  "adminRefundAmount": "Jumlah Pengembalian Admin"
 }

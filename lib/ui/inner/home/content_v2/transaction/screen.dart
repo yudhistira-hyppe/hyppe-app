@@ -190,6 +190,8 @@ class _TransactionState extends State<Transaction> {
                                             data: notifier.dataTransaction?[index],
                                             language: notifier2.translate,
                                           );
+                                        } else if (notifier.dataTransaction?[index].jenis == "Disbursement") {
+                                          return WithdrawalWidget(title: title, language: notifier2.translate, data: notifier.dataTransaction?[index]);
                                         } else {
                                           return BuySellWidget(
                                             data: notifier.dataTransaction?[index],

@@ -18,6 +18,20 @@ class WithdrawalWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'WithdrawalWidget');
+    var titleText = '';
+    var descText = '';
+    var descStatus = '';
+
+    titleText = title ?? '';
+    descText = language?.withdrawalMoney ?? '';
+    descStatus = language?.withdrawalAmount ?? '';
+
+    if (data?.description == 'FAILED TRANSACTION') {
+      titleText = language?.moneyRefund ?? 'Pengembalian Uang';
+      descText = language?.moneyRefund ?? 'Pengembalian Uang';
+      descStatus = data?.jenis == 'Disbursement' ? (language?.adminRefundAmount ?? '') : (language?.refundAmount ?? '');
+    }
+
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
@@ -45,17 +59,17 @@ class WithdrawalWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: kHyppeCyanLight,
                     borderRadius: BorderRadius.circular(5),
-                    boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                    boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
                   ),
                   child: CustomTextWidget(
-                    textToDisplay: title ?? '',
+                    textToDisplay: titleText,
                     textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeCyan),
                   ),
                 ),
                 const Divider(height: 0.2, thickness: 1, color: Color(0xffF7F7F7)),
                 twelvePx,
                 CustomTextWidget(
-                  textToDisplay: language?.withdrawalMoney ?? '',
+                  textToDisplay: descText,
                   textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                 ),
                 fourPx,
@@ -65,7 +79,7 @@ class WithdrawalWidget extends StatelessWidget {
                 ),
                 tenPx,
                 CustomTextWidget(
-                  textToDisplay: language?.withdrawalAmount ?? '',
+                  textToDisplay: descStatus,
                   textStyle: Theme.of(context).textTheme.caption,
                 ),
                 fourPx,

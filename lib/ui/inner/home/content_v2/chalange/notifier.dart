@@ -252,7 +252,11 @@ class ChallangeNotifier with ChangeNotifier {
       isLoadingLeaderboard = true;
     }
     if (oldLeaderboard) {
-      param["session"] = session ?? selectOptionSession;
+      if (session != null) {
+        param["session"] = session == 0 ? 1 : session;
+      } else {
+        param["session"] = selectOptionSession;
+      }
     }
     isLoading = true;
     notifyListeners();

@@ -991,7 +991,10 @@ class LocalizationModelV2 {
   String? youDontHaveaBadge;
   String? winachallengetoreceiveabadge;
   String? successfulChallengeParticipation;
+  String? refundAmount;
+  String? moneyRefund;
   String? thecompetitionhasended;
+  String? adminRefundAmount;
   String? increaseYourPointsNow;
   String? getfirstplacebyentering;
   String? joinTheChallenge;
@@ -2000,7 +2003,10 @@ class LocalizationModelV2 {
     this.youDontHaveaBadge,
     this.winachallengetoreceiveabadge,
     this.successfulChallengeParticipation,
+    this.refundAmount,
+    this.moneyRefund,
     this.thecompetitionhasended,
+    this.adminRefundAmount,
     this.increaseYourPointsNow,
     this.getfirstplacebyentering,
     this.joinTheChallenge,
@@ -3037,7 +3043,10 @@ class LocalizationModelV2 {
     youDontHaveaBadge = json['youDontHaveaBadge'];
     winachallengetoreceiveabadge = json['winachallengetoreceiveabadge'];
     successfulChallengeParticipation = json['successfulChallengeParticipation'];
+    refundAmount = json['refundAmount'];
+    moneyRefund = json['moneyRefund'];
     thecompetitionhasended = json['thecompetitionhasended'];
+    adminRefundAmount = json['adminRefundAmount'];
     increaseYourPointsNow = json['increaseYourPointsNow'];
     getfirstplacebyentering = json['getfirstplacebyentering'];
     joinTheChallenge = json['joinTheChallenge'];
