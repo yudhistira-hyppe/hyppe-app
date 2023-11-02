@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
@@ -35,7 +37,7 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
-import 'package:socket_io_client/socket_io_client.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 
@@ -196,6 +198,46 @@ class SelfProfileNotifier with ChangeNotifier {
   }
 
   navigateToEditProfile() => Routing().move(Routes.accountPreferences).whenComplete(() => notifyListeners());
+
+  deleteCacheDir() async {
+    final cacheDir = await getTemporaryDirectory();
+    if (cacheDir.existsSync()) {
+      cacheDir.deleteSync(recursive: true);
+    }
+  }
+
+  deleteAppDir() async {
+    final appDir = await getApplicationSupportDirectory();
+    if(appDir.existsSync()){
+      appDir.deleteSync(recursive: true);
+    }
+  }
+
+  Future<int> getCacheDirSize() async {
+    Directory tempDir = await getTemporaryDirectory();
+    int tempDirSize = _getSize(tempDir);
+    return tempDirSize;
+  }
+
+  Future<int> getAppDirSize() async {
+    Directory tempDir = await getApplicationSupportDirectory();
+    int tempDirSize = _getSize(tempDir);
+    return tempDirSize;
+  }
+
+  int _getSize(FileSystemEntity file) {
+    if (file is File) {
+      return file.lengthSync();
+    } else if (file is Directory) {
+      int sum = 0;
+      List<FileSystemEntity> children = file.listSync();
+      for (FileSystemEntity child in children) {
+        sum += _getSize(child);
+      }
+      return sum;
+    }
+    return 0;
+  }
 
   onScrollListener(BuildContext context, ScrollController scrollController, {bool isLoad = false}) async {
     var connection = await System().checkConnections();

@@ -153,7 +153,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> setDeepAREffect(BuildContext context, EffectModel effectModel) async {
-    Directory directory = await path.getApplicationDocumentsDirectory();
+    Directory directory = await path.getApplicationSupportDirectory();
     var filePath = '${directory.path}${Platform.pathSeparator}${effectModel.fileAssetName}';
 
     if (await File(filePath).exists()) {
