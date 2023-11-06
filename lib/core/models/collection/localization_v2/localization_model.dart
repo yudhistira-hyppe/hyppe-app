@@ -230,6 +230,14 @@ class LocalizationModelV2 {
   String? normal;
   String? finishingUp;
   String? permissionStorage;
+  String? cache;
+  String? download;
+  String? storage;
+  String? cacheAndDownload;
+  String? clear;
+  String? clearAll;
+  String? cacheDescription;
+  String? downloadDescription;
   String? failedUpdatedYourProfilePicture;
   String? successfullyUpdatedYourProfilePicture;
   String? failedUpdatePersonalInformation;
@@ -1239,6 +1247,14 @@ class LocalizationModelV2 {
     this.normal,
     this.finishingUp,
     this.permissionStorage,
+    this.cache,
+    this.download,
+    this.storage,
+    this.cacheAndDownload,
+    this.clear,
+    this.clearAll,
+    this.cacheDescription,
+    this.downloadDescription,
     this.failedUpdatedYourProfilePicture,
     this.successfullyUpdatedYourProfilePicture,
     this.failedUpdatePersonalInformation,
@@ -2249,6 +2265,14 @@ class LocalizationModelV2 {
     normal = json['normal'];
     finishingUp = json['finishingUp'];
     permissionStorage = json['permissionStorage'];
+    cache = json['cache'];
+    download = json['download'];
+    storage = json['storage'];
+    cacheAndDownload = json['cacheAndDownload'];
+    clear = json['clear'];
+    clearAll = json['clearAll'];
+    cacheDescription = json['cacheDescription'];
+    downloadDescription = json['downloadDescription'];
     failedUpdatedYourProfilePicture = json['failedUpdatedYourProfilePicture'];
     successfullyUpdatedYourProfilePicture = json['successfullyUpdatedYourProfilePicture'];
     failedUpdatePersonalInformation = json['failedUpdatePersonalInformation'];

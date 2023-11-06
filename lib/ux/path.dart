@@ -146,4 +146,7 @@ class Routes {
   static const String chalengeCollectionBadge = '/chalenge-collection-badge';
   static const String chalengeAchievement = '/chalenge-achievement';
   static const String shimmerSlider = '/shimmer-slider';
+
+  static const String cacheAndDownload = '/cache-and-download';
+
 }

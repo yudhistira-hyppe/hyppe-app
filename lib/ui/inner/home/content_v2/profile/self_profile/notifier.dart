@@ -1,16 +1,10 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
-import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_vid_detail_screen_argument.dart';
-import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -20,24 +14,18 @@ import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_diaries.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_pics.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_vids.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 
@@ -198,46 +186,6 @@ class SelfProfileNotifier with ChangeNotifier {
   }
 
   navigateToEditProfile() => Routing().move(Routes.accountPreferences).whenComplete(() => notifyListeners());
-
-  deleteCacheDir() async {
-    final cacheDir = await getTemporaryDirectory();
-    if (cacheDir.existsSync()) {
-      cacheDir.deleteSync(recursive: true);
-    }
-  }
-
-  deleteAppDir() async {
-    final appDir = await getApplicationSupportDirectory();
-    if(appDir.existsSync()){
-      appDir.deleteSync(recursive: true);
-    }
-  }
-
-  Future<int> getCacheDirSize() async {
-    Directory tempDir = await getTemporaryDirectory();
-    int tempDirSize = _getSize(tempDir);
-    return tempDirSize;
-  }
-
-  Future<int> getAppDirSize() async {
-    Directory tempDir = await getApplicationSupportDirectory();
-    int tempDirSize = _getSize(tempDir);
-    return tempDirSize;
-  }
-
-  int _getSize(FileSystemEntity file) {
-    if (file is File) {
-      return file.lengthSync();
-    } else if (file is Directory) {
-      int sum = 0;
-      List<FileSystemEntity> children = file.listSync();
-      for (FileSystemEntity child in children) {
-        sum += _getSize(child);
-      }
-      return sum;
-    }
-    return 0;
-  }
 
   onScrollListener(BuildContext context, ScrollController scrollController, {bool isLoad = false}) async {
     var connection = await System().checkConnections();
