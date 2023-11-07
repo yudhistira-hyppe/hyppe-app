@@ -96,6 +96,7 @@ import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/upload/make_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/payment/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/boost/screen.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/editing/photo/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/ownerhip_selling/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
@@ -150,7 +151,7 @@ class Generate {
       case Routes.root:
         return MaterialPageRoute(builder: (_) => OpeningLogo());
       case Routes.welcomeLogin:
-        return MaterialPageRoute(builder: (_) => WelcomeLoginScreen());
+        return MaterialPageRoute(builder: (_) => const WelcomeLoginScreen());
       case Routes.login:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case Routes.lobby:
@@ -163,9 +164,11 @@ class Generate {
       case Routes.homePageSignInSecurity:
         return MaterialPageRoute(builder: (_) => HyppeHomeSignAndSecurity());
       case Routes.makeContent:
-        return MaterialPageRoute(builder: (_) => MakeContentScreen());
+        return MaterialPageRoute(builder: (_) => const MakeContentScreen());
       case Routes.previewContent:
         return MaterialPageRoute(builder: (_) => const PreviewContentScreen());
+      case Routes.editPhoto:
+        return MaterialPageRoute(builder: (_) => const EditPhotoScreen());
       case Routes.preUploadContent:
         return MaterialPageRoute(builder: (_) => PreUploadContentScreen(arguments: settings.arguments as UpdateContentsArgument));
       case Routes.ownershipSelling:

@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:gif_view/gif_view.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:provider/provider.dart';
 
@@ -28,11 +29,6 @@ class PreviewImageContent extends StatefulWidget {
 }
 
 class _PreviewImageContentState extends State<PreviewImageContent> with AfterFirstLayoutMixin {
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,6 +138,32 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                           await ShowBottomSheet.onChooseMusic(context, isPic: true, isInit: false);
                           notifier.fixSelectedMusic ??= tempMusic;
                           // notifier.audioPreviewPlayer.resume();
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const CustomIconWidget(
+                              defaultColor: false,
+                              iconData: "${AssetPath.vectorPath}circle_music.svg",
+                            ),
+                            fourPx,
+                            CustomTextWidget(
+                              maxLines: 1,
+                              textToDisplay: notifier.language.music ?? '',
+                              textAlign: TextAlign.left,
+                              textStyle: const TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      twentyFourPx,
+                      InkWell(
+                        onTap: () async {
+                          Routing().move(Routes.editPhoto);
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
