@@ -280,34 +280,32 @@ class TrimSliderPainter extends CustomPainter {
     final halfIconSize = Offset(style.iconSize / 2, style.iconSize / 2);
 
     // LEFT ICON
-    if (style.leftIcon != null) {
-      TextPainter leftArrow = TextPainter(textDirection: TextDirection.rtl);
-      leftArrow.text = TextSpan(
-        text: String.fromCharCode(style.leftIcon!.codePoint),
-        style: TextStyle(
-          fontSize: style.iconSize,
-          fontFamily: style.leftIcon!.fontFamily,
-          color: style.iconColor,
-        ),
-      );
-      leftArrow.layout();
-      leftArrow.paint(canvas, centerLeft - halfIconSize);
-    }
+    TextPainter leftArrow = TextPainter(textDirection: TextDirection.rtl);
+    leftArrow.text = TextSpan(
+      text: style.leftIcon != null ? String.fromCharCode(style.leftIcon!.codePoint) : ' | ',
+      style: TextStyle(
+        fontSize: style.leftIcon == null ? 20 :style.iconSize,
+        fontFamily: style.leftIcon?.fontFamily,
+        fontWeight: style.leftIcon == null ? FontWeight.w900 : null,
+        color: style.iconColor,
+      ),
+    );
+    leftArrow.layout();
+    leftArrow.paint(canvas, centerLeft - halfIconSize);
 
     // RIGHT ICON
-    if (style.rightIcon != null) {
-      TextPainter rightArrow = TextPainter(textDirection: TextDirection.rtl);
-      rightArrow.text = TextSpan(
-        text: String.fromCharCode(style.rightIcon!.codePoint),
-        style: TextStyle(
-          fontSize: style.iconSize,
-          fontFamily: style.rightIcon!.fontFamily,
-          color: style.iconColor,
-        ),
-      );
-      rightArrow.layout();
-      rightArrow.paint(canvas, centerRight - halfIconSize);
-    }
+    TextPainter rightArrow = TextPainter(textDirection: TextDirection.rtl);
+    rightArrow.text = TextSpan(
+      text: style.rightIcon != null ? String.fromCharCode(style.rightIcon!.codePoint) : ' | ',
+      style: TextStyle(
+        fontSize: style.leftIcon == null ? 20 :style.iconSize,
+        fontFamily: style.rightIcon?.fontFamily,
+        fontWeight: style.rightIcon == null ? FontWeight.w900 : null,
+        color: style.iconColor,
+      ),
+    );
+    rightArrow.layout();
+    rightArrow.paint(canvas, centerRight - halfIconSize);
   }
 
   @override

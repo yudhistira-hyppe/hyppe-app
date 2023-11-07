@@ -121,18 +121,19 @@ class UploadContent extends StatelessWidget {
                     //       ],
                     //     ),
                     //   ),
-                    if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: Platform.isIOS ? 2 : 2, child: const CameraDevicesSwitchButton())
+                    // if (!(notifier?.isRecordingVideo ?? true))
+                      Expanded(flex: Platform.isIOS ? 2 : 2, child: const CameraDevicesSwitchButton())
                   ],
                 ),
               ),
               // Ok button
-              Visibility(
-                visible: notifier?.conditionalShowingOkButton() ?? false,
-                child: Align(
-                  alignment: const Alignment(0.77, 0.705),
-                  child: BuildOkButton(mounted: mounted ?? false),
-                ),
-              ),
+              // Visibility(
+              //   visible: notifier?.conditionalShowingOkButton() ?? false,
+              //   child: Align(
+              //     alignment: const Alignment(0.77, 0.705),
+              //     child: BuildOkButton(mounted: mounted ?? false),
+              //   ),
+              // ),
               // Widget modal, this is widget appear, if loading state is true
               (notifier?.isLoading ?? false)
                   ? Container(color: Colors.black54, width: SizeConfig.screenWidth, height: SizeConfig.screenHeight, child: const UnconstrainedBox(child: CustomLoading()))
@@ -208,7 +209,7 @@ class UploadContent extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 2, child: BuildStorage(mounted: mounted)),
+                    Expanded(flex: 2, child: !(notifier?.isRecordingVideo ?? true) ? BuildStorage(mounted: mounted) : const SizedBox.shrink()),
                     // if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 1, child: BuildEffect(mounted: mounted, isRecord: notifier?.isRecordingVideo ?? false)),
                     Expanded(flex: 2, child: BuildCaptureIcon(mounted: mounted)),
                     if (Platform.isIOS && !(notifier?.isRecordingVideo ?? true))
@@ -225,18 +226,19 @@ class UploadContent extends StatelessWidget {
                           ],
                         ),
                       ),
-                    if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: Platform.isIOS ? 2 : 2, child: const CameraSwitchButton())
+                    // if (!(notifier?.isRecordingVideo ?? true))
+                      Expanded(flex: Platform.isIOS ? 2 : 2, child: const CameraSwitchButton())
                   ],
                 ),
               ),
               // Ok button
-              Visibility(
-                visible: notifier?.conditionalShowingOkButton() ?? false,
-                child: Align(
-                  alignment: const Alignment(0.77, 0.705),
-                  child: BuildOkButton(mounted: mounted ?? false),
-                ),
-              ),
+              // Visibility(
+              //   visible: notifier?.conditionalShowingOkButton() ?? false,
+              //   child: Align(
+              //     alignment: const Alignment(0.77, 0.705),
+              //     child: BuildOkButton(mounted: mounted ?? false),
+              //   ),
+              // ),
               // Widget modal, this is widget appear, if loading state is true
               (notifier?.isLoading ?? false)
                   ? Container(color: Colors.black54, width: SizeConfig.screenWidth, height: SizeConfig.screenHeight, child: const UnconstrainedBox(child: CustomLoading()))

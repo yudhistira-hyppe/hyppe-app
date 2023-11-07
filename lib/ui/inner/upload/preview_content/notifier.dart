@@ -1580,8 +1580,10 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void goToVideoEditor(BuildContext context) async{
+
     final path = fileContent?[0];
     if(path != null){
+      isLoadVideo = true;
       betterPlayerController?.pause();
       final seconds = betterPlayerController?.value.duration ?? const Duration(seconds: 10);
       fileContent?[0] = await Navigator.push(
@@ -1591,8 +1593,12 @@ class PreviewContentNotifier with ChangeNotifier {
         ),
       );
     }
-    notifyListeners();
-    initVideoPlayer(context);
+
+    isLoadVideo = false;
+    Future.delayed(const Duration(milliseconds: 500), (){
+
+      initVideoPlayer(context);
+    });
   }
 
   void applyFilters({GlobalKey? globalKey}) async {
