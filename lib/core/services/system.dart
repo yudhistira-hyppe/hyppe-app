@@ -46,15 +46,15 @@ import 'package:flutter_video_info/flutter_video_info.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:screen_protector/screen_protector.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:story_view/story_view.dart';
+// import 'package:story_view/controller/story_controller.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart' as intl;
 
@@ -151,6 +151,7 @@ class System {
   }
 
   validateEmail(String email) {
+
     return email.contains(RegExp(r"^(([^<>()[\]\\.,;:\s@\”]+(\.[^<>()[\]\\.,;:\s@\”]+)*)|(\”.+\”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$"))
         ? true
         : false;
@@ -1288,44 +1289,67 @@ class System {
     }
   }
 
-  Future<void> navigateToProfile(BuildContext context, String email, {StoryController? storyController}) async {
+  Future<void> navigateToProfile(BuildContext context, String email) async {
     final connect = await checkConnections();
     // if (connect) {
     String myEmail = SharedPreference().readStorage(SpKeys.email) ?? "";
     if (email != myEmail) {
       context.read<OtherProfileNotifier>().checkFollowingToUser(context, email);
-      if (storyController != null) {
-        storyController.pause();
-        Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
-      } else {
-        if (globalAliPlayer != null) {
-          globalAliPlayer?.pause();
-        }
-        if (globalAudioPlayer != null) {
-          globalAudioPlayer?.pause();
-        }
-        await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-        if (globalAliPlayer != null) {
-          // globalAliPlayer?.play();
-        }
-        if (globalAudioPlayer != null) {
-          globalAudioPlayer?.resume();
-        }
+      // if (storyController != null) {
+      //   storyController.pause();
+      //   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
+      // } else {
+      //   if (globalAliPlayer != null) {
+      //     globalAliPlayer?.pause();
+      //   }
+      //   if (globalAudioPlayer != null) {
+      //     globalAudioPlayer?.pause();
+      //   }
+      //   await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+      //   if (globalAliPlayer != null) {
+      //     // globalAliPlayer?.play();
+      //   }
+      //   if (globalAudioPlayer != null) {
+      //     globalAudioPlayer?.resume();
+      //   }
+      // }
+      if (globalAliPlayer != null) {
+        globalAliPlayer?.pause();
+      }
+      if (globalAudioPlayer != null) {
+        globalAudioPlayer?.pause();
+      }
+      await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+      if (globalAliPlayer != null) {
+        // globalAliPlayer?.play();
+      }
+      if (globalAudioPlayer != null) {
+        globalAudioPlayer?.resume();
       }
     } else {
-      if (storyController != null) {
-        context.read<HomeNotifier>().navigateToProfilePage(context, whenComplete: true, onWhenComplete: () => storyController.play());
-      } else {
-        if (globalAliPlayer != null) {
-          globalAliPlayer?.pause();
-        }
-        if (globalAudioPlayer != null) {
-          globalAudioPlayer?.pause();
-        }
-        await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
-        if (globalAudioPlayer != null) {
-          globalAudioPlayer?.resume();
-        }
+      // if (storyController != null) {
+      //   context.read<HomeNotifier>().navigateToProfilePage(context, whenComplete: true, onWhenComplete: () => storyController.play());
+      // } else {
+      //   if (globalAliPlayer != null) {
+      //     globalAliPlayer?.pause();
+      //   }
+      //   if (globalAudioPlayer != null) {
+      //     globalAudioPlayer?.pause();
+      //   }
+      //   await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
+      //   if (globalAudioPlayer != null) {
+      //     globalAudioPlayer?.resume();
+      //   }
+      // }
+      if (globalAliPlayer != null) {
+        globalAliPlayer?.pause();
+      }
+      if (globalAudioPlayer != null) {
+        globalAudioPlayer?.pause();
+      }
+      await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
+      if (globalAudioPlayer != null) {
+        globalAudioPlayer?.resume();
       }
     }
     // } else {

@@ -21,18 +21,18 @@ import 'package:hyppe/ui/constant/widget/profile_component.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
-import 'package:story_view/story_view.dart';
+// import 'package:story_view/story_view.dart';
 
 import '../../../../../../../app.dart';
 
 class TitlePlaylistDiaries extends StatefulWidget {
   final ContentData? data;
-  final StoryController? storyController;
+  // final StoryController? storyController;
 
   const TitlePlaylistDiaries({
     Key? key,
     this.data,
-    this.storyController,
+    // this.storyController,
   }) : super(key: key);
 
   @override
@@ -80,7 +80,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                       onFollow: () {},
                       following: true,
                       haveStory: false,
-                      onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? '', storyController: widget.storyController),
+                      onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
                       username: "${data?.username}",
                       spaceProfileAndId: fourteenPx,
                       featureType: FeatureType.diary,
@@ -128,7 +128,6 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                 context,
                                 contentData: data!,
                                 captionTitle: hyppeDiary,
-                                storyController: widget.storyController,
                                 isShare: data.isShared,
                                 onUpdate: () => context.read<DiariesPlaylistNotifier>().onUpdate(),
                               );
@@ -158,7 +157,6 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> with AfterF
                                 postData: data,
                                 type: hyppeDiary,
                                 adsData: null,
-                                storyController: widget.storyController,
                                 onUpdate: () {
                                   context.read<DiariesPlaylistNotifier>().onUpdate();
                                   // widget.storyController.pause();

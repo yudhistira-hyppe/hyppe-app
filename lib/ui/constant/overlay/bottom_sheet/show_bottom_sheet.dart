@@ -57,7 +57,7 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
-import 'package:story_view/story_view.dart';
+// import 'package:story_view/story_view.dart';
 import 'bottom_sheet_content/on_show_success_ownership_content.dart';
 import 'bottom_sheet_content/on_sign_out.dart';
 import 'bottom_sheet_content/on_something_when_wrong.dart';
@@ -638,7 +638,7 @@ class ShowBottomSheet {
     required ContentData contentData,
     required String captionTitle,
     bool onDetail = true,
-    StoryController? storyController,
+    // StoryController? storyController,
     Function? onUpdate,
     bool? isShare,
     FlutterAliplayer? fAliplayer,
@@ -671,7 +671,7 @@ class ShowBottomSheet {
         );
       },
     ).whenComplete(() {
-      if (storyController != null) storyController.play();
+      // if (storyController != null) storyController.play();
       if (fAliplayer != null) {
         fAliplayer.play();
         fAliplayer.setMuted(false);
@@ -754,7 +754,7 @@ class ShowBottomSheet {
     ContentData? postData,
     AdsData? adsData,
     String? type,
-    StoryController? storyController,
+    // StoryController? storyController,
     Function? onUpdate,
     bool? inDetail,
     FlutterAliplayer? fAliplayer,
@@ -795,7 +795,7 @@ class ShowBottomSheet {
     });
   }
 
-  static onReportFormContent(_, {StoryController? storyController}) {
+  static onReportFormContent(_,) {
     showModalBottomSheet(
       context: _,
       isScrollControlled: true,
@@ -821,7 +821,7 @@ class ShowBottomSheet {
     });
   }
 
-  static onReportSpamContent(_, {StoryController? storyController, ContentData? postData, AdsData? adsData, String? type, Function? onUpdate, bool? inDetail, String? key, Function()? onComplete}) {
+  static onReportSpamContent(_, { ContentData? postData, AdsData? adsData, String? type, Function? onUpdate, bool? inDetail, String? key, Function()? onComplete}) {
     showModalBottomSheet(
       context: _,
       isScrollControlled: true,
@@ -858,7 +858,7 @@ class ShowBottomSheet {
 
   static onReportAccountContent(
     _, {
-    StoryController? storyController,
+    // StoryController? storyController,
     ContentData? postData,
     AdsData? adsData,
     String? type,
@@ -1064,7 +1064,7 @@ class ShowBottomSheet {
     required List<TagPeople> value,
     required Function() function,
     required postId,
-    StoryController? storyController,
+    // StoryController? storyController,
     FlutterAliplayer? fAliplayer,
   }) {
     showModalBottomSheet<dynamic>(
@@ -1075,9 +1075,9 @@ class ShowBottomSheet {
             WillPopScope(
               onWillPop: () async {
                 Routing().moveBack();
-                if (storyController != null) {
-                  storyController.play();
-                }
+                // if (storyController != null) {
+                //   storyController.play();
+                // }
                 return false;
               },
               child: Container(
@@ -1108,7 +1108,7 @@ class ShowBottomSheet {
     required postId,
     required eventType,
     required title,
-    StoryController? storyController,
+    // StoryController? storyController,
   }) {
     showModalBottomSheet<dynamic>(
         isScrollControlled: true,

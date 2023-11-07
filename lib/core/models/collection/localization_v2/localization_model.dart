@@ -118,6 +118,7 @@ class LocalizationModelV2 {
   String? imageOrVideoMax60secondsOnlyFor24Hours;
   String? onlyImage;
   String? flash;
+  String? effect;
   String? filters;
   String? text;
   String? stickers;
@@ -167,6 +168,7 @@ class LocalizationModelV2 {
   String? music;
   String? searchMusic;
   String? addMusic;
+  String? tapOnTrackToTrim;
   String? loading;
   String? popular;
   String? explore;
@@ -1135,6 +1137,7 @@ class LocalizationModelV2 {
     this.imageOrVideoMax60secondsOnlyFor24Hours,
     this.onlyImage,
     this.flash,
+    this.effect,
     this.filters,
     this.text,
     this.stickers,
@@ -1184,6 +1187,7 @@ class LocalizationModelV2 {
     this.music,
     this.searchMusic,
     this.addMusic,
+    this.tapOnTrackToTrim,
     this.loading,
     this.popular,
     this.explore,
@@ -2153,6 +2157,7 @@ class LocalizationModelV2 {
     imageOrVideoMax60secondsOnlyFor24Hours = json['imageOrVideoMax60secondsOnlyFor24Hours'];
     onlyImage = json['onlyImage'];
     flash = json['flash'];
+    effect = json['effect'];
     filters = json['filters'];
     text = json['text'];
     stickers = json['stickers'];
@@ -2202,6 +2207,7 @@ class LocalizationModelV2 {
     music = json['music'];
     searchMusic = json['search_music'];
     addMusic = json['add_music'];
+    tapOnTrackToTrim = json['tap_on_track_to_trim'];
     loading = json['loading'];
     popular = json['popular'];
     explore = json['explore'];

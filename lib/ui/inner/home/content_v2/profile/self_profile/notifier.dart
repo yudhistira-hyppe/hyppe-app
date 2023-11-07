@@ -411,9 +411,9 @@ class SelfProfileNotifier with ChangeNotifier {
 
   navigateToSeeAllScreen(BuildContext context, int index, Widget title, {scrollController, double? heightProfile}) async {
     context.read<ReportNotifier>().inPosition = contentPosition.myprofile;
-    final connect = await _system.checkConnections();
+    // final connect = await _system.checkConnections();
     // if (connect) {
-    var result;
+    // var result;
     if (pageIndex == 0) {
       _routing.move(Routes.scrollPic,
           argument: SlidedPicDetailScreenArgument(
@@ -623,9 +623,7 @@ class SelfProfileNotifier with ChangeNotifier {
     if (_updatedData != null) {
       _updatedData.reportedStatus = '';
     }
-    if (_updatedData2 != null) {
-      _updatedData2.reportedStatus = '';
-    }
+    _updatedData2?.reportedStatus = '';
 
     print(_updatedData?.reportedStatus);
 

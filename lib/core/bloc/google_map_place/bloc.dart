@@ -57,4 +57,27 @@ class GoogleMapPlaceBloc {
       withCheckConnection: false,
     );
   }
+
+  Future getResults(BuildContext context, {required String latlng}) async {
+    setGoogleMapPlaceFetch(GoogleMapPlaceFetch(GoogleMapPlaceState.loading));
+    await Repos().reposPost(
+      context,
+          (onResult) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
+          setGoogleMapPlaceFetch(GoogleMapPlaceFetch(GoogleMapPlaceState.getGoogleMapPlaceBlocError));
+        } else {
+          final LocationResponse _result = LocationResponse.fromJson(onResult.data);
+          setGoogleMapPlaceFetch(GoogleMapPlaceFetch(GoogleMapPlaceState.getGoogleMapPlaceBlocSuccess, data: _result));
+        }
+      },
+          (errorData) {
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
+        setGoogleMapPlaceFetch(GoogleMapPlaceFetch(GoogleMapPlaceState.getGoogleMapPlaceBlocError));
+      },
+      host:  "${UrlConstants.getGoogleGeocodingApis}?latlng=$latlng&language=ID&key=$googleMapApiKey",
+      withAlertMessage: false,
+      methodType: MethodType.get,
+      withCheckConnection: false,
+    );
+  }
 }

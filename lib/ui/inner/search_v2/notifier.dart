@@ -30,7 +30,7 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:story_view/controller/story_controller.dart';
+// import 'package:story_view/controller/story_controller.dart';
 
 import '../../../core/arguments/contents/slided_diary_detail_screen_argument.dart';
 import '../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
@@ -1689,10 +1689,9 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  void navigateToOtherProfile(BuildContext context, ContentData data, StoryController storyController) {
+  void navigateToOtherProfile(BuildContext context, ContentData data) {
     Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email;
-    storyController.pause();
-    _routing.move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data.email)).whenComplete(() => storyController.play());
+    _routing.move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data.email));
   }
 
   void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {

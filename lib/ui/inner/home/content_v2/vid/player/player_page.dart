@@ -28,12 +28,11 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../../app.dart';
 import '../../../../../constant/entities/like/notifier.dart';
@@ -253,7 +252,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-          Wakelock.enable();
+          WakelockPlus.enable();
           setState(() {
             _showTipsWidget = false;
             _showLoading = false;
@@ -262,20 +261,20 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
-          Wakelock.disable();
+          WakelockPlus.disable();
 "================ disable wakelock 1".logger();
           setState(() {});
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
-          Wakelock.disable();
+          WakelockPlus.disable();
 "================ disable wakelock 2".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
-          Wakelock.disable();
+          WakelockPlus.disable();
 "================ disable wakelock 3".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusError:
-          Wakelock.disable();
+          WakelockPlus.disable();
 "================ disable wakelock 4".logger();
           break;
         default:
@@ -682,7 +681,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    Wakelock.disable();
+    WakelockPlus.disable();
 "================ disable wakelock 5".logger();
     globalAliPlayer = null;
     if (Platform.isIOS) {

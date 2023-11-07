@@ -201,13 +201,14 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   String flashIcon() {
-    if (flashMode == FlashMode.off) {
-      return "${AssetPath.vectorPath}flash-off.svg";
-    } else if (flashMode == FlashMode.auto) {
-      return "${AssetPath.vectorPath}flash-auto.svg";
-    } else {
-      return "${AssetPath.vectorPath}flash.svg";
-    }
+    return "${AssetPath.vectorPath}ic_flash.svg";
+    // if (flashMode == FlashMode.off) {
+    //   return "${AssetPath.vectorPath}flash-off.svg";
+    // } else if (flashMode == FlashMode.auto) {
+    //   return "${AssetPath.vectorPath}flash-auto.svg";
+    // } else {
+    //   return "${AssetPath.vectorPath}flash.svg";
+    // }
   }
 
   Future<XFile?> takePicture() async {

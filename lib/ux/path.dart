@@ -26,7 +26,7 @@ class Routes {
   static const String referralScreen = '/referral-screen';
   static const String listReferral = '/list-referral';
   static const String insertReferral = '/insert-referral';
-  static const String showAds = '/show-ads';
+  // static const String showAds = '/show-ads';
   static const String contentPreferences = '/content-preferences';
   static const String commentsDetail = '/comments-detail';
 
@@ -55,7 +55,7 @@ class Routes {
   static const String diaryDetail = '/diary-detail';
   static const String diarySeeAllScreen = '/diary-see-all-screen';
 
-  static const String storyDetail = '/story-detail';
+  // static const String storyDetail = '/story-detail';
   static const String showStories = '/show-stories';
 
   static const String appSettings = '/app-settings';

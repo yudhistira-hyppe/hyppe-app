@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
@@ -43,7 +42,6 @@ import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/item.dart';
-import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
 
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -52,7 +50,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'dart:async';
-import 'package:story_view/story_view.dart';
+// import 'package:story_view/story_view.dart';
 
 class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   ContentsDataQuery myContentsQuery = ContentsDataQuery()
@@ -70,8 +68,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   // bool _fadeReaction = false;
   String? _reaction;
   List<Item> _items = <Item>[];
-  List<StoryItem> _result = [];
-  List<StoryItem> get result => _result;
+  // List<StoryItem> _result = [];
+  // List<StoryItem> get result => _result;
 
   int _currentStory = 0;
   int _storyParentIndex = 0;
@@ -118,10 +116,10 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   List<Future<void>> emojiActions = [];
 
-  set result(List<StoryItem> val) {
-    _result = val;
-    notifyListeners();
-  }
+  // set result(List<StoryItem> val) {
+  //   _result = val;
+  //   notifyListeners();
+  // }
 
   set reaction(String? val) {
     _reaction = val;
@@ -293,153 +291,153 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     return null;
   }
 
-  Future initializeUserStories(BuildContext context, StoryController storyController, List<ContentData> stories) async {
-    _result = [];
-    for (final story in stories) {
-      if (story.mediaType?.translateType() == ContentType.image) {
-        if (story.music?.apsaraMusic != null) {
-          story.music?.apsaraMusicUrl = await getMusicApsara(context, story.music!.apsaraMusic!);
-          final duration = story.music?.apsaraMusicUrl?.duration?.toInt();
-          _result.add(
-            StoryItem.pageImage(
-              url: (story.isApsara ?? false) ? (story.media?.imageInfo?[0].url ?? (story.mediaEndpoint ?? '')) : story.fullThumbPath ?? '',
-              controller: storyController,
-              imageFit: BoxFit.contain,
-              isImages: true,
-              id: story.postID ?? ' ',
-              duration: Duration(seconds: (duration ?? 3) > 5 ? 5 : 3),
-              requestHeaders: {
-                'post-id': story.postID ?? '',
-                'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
-                'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
-              },
-            ),
-          );
-        } else {
-          _result.add(
-            StoryItem.pageImage(
-              url: (story.isApsara ?? false) ? (story.media?.imageInfo?[0].url ?? (story.mediaEndpoint ?? '')) : story.fullThumbPath ?? '',
-              controller: storyController,
-              imageFit: BoxFit.contain,
-              isImages: true,
-              id: story.postID ?? '',
-              requestHeaders: {
-                'post-id': story.postID ?? '',
-                'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
-                'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
-              },
-            ),
-          );
-        }
-      }
-      if (story.mediaType?.translateType() == ContentType.video) {
-        String urlApsara = '';
-        if (story.isApsara ?? false) {
-          await getVideoApsara(context, story.apsaraId ?? '').then((value) {
-            urlApsara = value;
-          });
-        }
-        Size? videoSize;
-        final width = story.metadata?.width?.toDouble();
-        final height = story.metadata?.height?.toDouble();
-        if (width != null && height != null) {
-          videoSize = Size(width, height);
-          videoSize = videoSize.getFixSize(context);
-        }
-        print('StoryItem.pageVideo ${story.postID} : $urlApsara, ${story.fullContentPath}, ${story.metadata?.duration}');
-        _result.add(
-          StoryItem.pageVideo(
-            urlApsara != '' ? urlApsara : story.fullContentPath ?? '',
-            controller: storyController,
-            id: story.postID ?? '',
-            size: videoSize,
-            requestHeaders: {
-              'post-id': story.postID ?? '',
-              'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
-              'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
-            },
-            duration: Duration(seconds: story.metadata?.duration ?? 15),
-          ),
-        );
-      }
-    }
-
-    notifyListeners();
-  }
+  // Future initializeUserStories(BuildContext context, StoryController storyController, List<ContentData> stories) async {
+  //   _result = [];
+  //   for (final story in stories) {
+  //     if (story.mediaType?.translateType() == ContentType.image) {
+  //       if (story.music?.apsaraMusic != null) {
+  //         story.music?.apsaraMusicUrl = await getMusicApsara(context, story.music!.apsaraMusic!);
+  //         final duration = story.music?.apsaraMusicUrl?.duration?.toInt();
+  //         _result.add(
+  //           StoryItem.pageImage(
+  //             url: (story.isApsara ?? false) ? (story.media?.imageInfo?[0].url ?? (story.mediaEndpoint ?? '')) : story.fullThumbPath ?? '',
+  //             controller: storyController,
+  //             imageFit: BoxFit.contain,
+  //             isImages: true,
+  //             id: story.postID ?? ' ',
+  //             duration: Duration(seconds: (duration ?? 3) > 5 ? 5 : 3),
+  //             requestHeaders: {
+  //               'post-id': story.postID ?? '',
+  //               'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+  //               'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+  //             },
+  //           ),
+  //         );
+  //       } else {
+  //         _result.add(
+  //           StoryItem.pageImage(
+  //             url: (story.isApsara ?? false) ? (story.media?.imageInfo?[0].url ?? (story.mediaEndpoint ?? '')) : story.fullThumbPath ?? '',
+  //             controller: storyController,
+  //             imageFit: BoxFit.contain,
+  //             isImages: true,
+  //             id: story.postID ?? '',
+  //             requestHeaders: {
+  //               'post-id': story.postID ?? '',
+  //               'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+  //               'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+  //             },
+  //           ),
+  //         );
+  //       }
+  //     }
+  //     if (story.mediaType?.translateType() == ContentType.video) {
+  //       String urlApsara = '';
+  //       if (story.isApsara ?? false) {
+  //         await getVideoApsara(context, story.apsaraId ?? '').then((value) {
+  //           urlApsara = value;
+  //         });
+  //       }
+  //       Size? videoSize;
+  //       final width = story.metadata?.width?.toDouble();
+  //       final height = story.metadata?.height?.toDouble();
+  //       if (width != null && height != null) {
+  //         videoSize = Size(width, height);
+  //         videoSize = videoSize.getFixSize(context);
+  //       }
+  //       print('StoryItem.pageVideo ${story.postID} : $urlApsara, ${story.fullContentPath}, ${story.metadata?.duration}');
+  //       _result.add(
+  //         StoryItem.pageVideo(
+  //           urlApsara != '' ? urlApsara : story.fullContentPath ?? '',
+  //           controller: storyController,
+  //           id: story.postID ?? '',
+  //           size: videoSize,
+  //           requestHeaders: {
+  //             'post-id': story.postID ?? '',
+  //             'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+  //             'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+  //           },
+  //           duration: Duration(seconds: story.metadata?.duration ?? 15),
+  //         ),
+  //       );
+  //     }
+  //   }
+  //
+  //   notifyListeners();
+  // }
 
   // List<StoryItem> initializeData(BuildContext context, StoryController storyController, ContentData data) {
-  Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
-    // List<StoryItem> _result = [];
-    print('pageImage ${data.postID} : ${data.isApsara}, ${data.mediaEndpoint}, ${data.fullThumbPath}');
-    _result = [];
-    if (data.mediaType?.translateType() == ContentType.image) {
-      if (data.music?.apsaraMusic != null) {
-        data.music?.apsaraMusicUrl = await getMusicApsara(context, data.music!.apsaraMusic!);
-        final duration = data.music?.apsaraMusicUrl?.duration?.toInt();
-        _result.add(
-          StoryItem.pageImage(
-            url: (data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? (data.mediaEndpoint ?? '')) : data.fullThumbPath ?? '',
-            controller: storyController,
-            imageFit: BoxFit.contain,
-            isImages: true,
-            id: data.postID ?? '',
-            duration: Duration(seconds: (duration ?? 3) > 5 ? 5 : 3),
-            requestHeaders: {
-              'post-id': data.postID ?? '',
-              'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
-              'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
-            },
-          ),
-        );
-      } else {
-        _result.add(
-          StoryItem.pageImage(
-            url: (data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? (data.mediaEndpoint ?? '')) : data.fullThumbPath ?? '',
-            controller: storyController,
-            imageFit: BoxFit.contain,
-            isImages: true,
-            id: data.postID ?? '',
-            requestHeaders: {
-              'post-id': data.postID ?? '',
-              'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
-              'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
-            },
-          ),
-        );
-      }
-    }
-    if (data.mediaType?.translateType() == ContentType.video) {
-      String urlApsara = '';
-      if (data.isApsara ?? false) {
-        await getVideoApsara(context, data.apsaraId ?? '').then((value) {
-          urlApsara = value;
-        });
-      }
-      Size? videoSize;
-      final width = data.metadata?.width?.toDouble();
-      final height = data.metadata?.height?.toDouble();
-      if (width != null && height != null) {
-        videoSize = Size(width, height);
-        videoSize = videoSize.getFixSize(context);
-      }
-      print('StoryItem.pageVideo ${data.postID} : $urlApsara, ${data.fullContentPath}, ${data.metadata?.duration}');
-      _result.add(
-        StoryItem.pageVideo(
-          urlApsara != '' ? urlApsara : data.fullContentPath ?? '',
-          controller: storyController,
-          id: data.postID ?? '',
-          requestHeaders: {
-            'post-id': data.postID ?? '',
-            'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
-            'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
-          },
-          size: videoSize,
-          duration: Duration(seconds: data.metadata?.duration ?? 15),
-        ),
-      );
-    }
-    notifyListeners();
-  }
+  // Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
+  //   // List<StoryItem> _result = [];
+  //   print('pageImage ${data.postID} : ${data.isApsara}, ${data.mediaEndpoint}, ${data.fullThumbPath}');
+  //   _result = [];
+  //   if (data.mediaType?.translateType() == ContentType.image) {
+  //     if (data.music?.apsaraMusic != null) {
+  //       data.music?.apsaraMusicUrl = await getMusicApsara(context, data.music!.apsaraMusic!);
+  //       final duration = data.music?.apsaraMusicUrl?.duration?.toInt();
+  //       _result.add(
+  //         StoryItem.pageImage(
+  //           url: (data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? (data.mediaEndpoint ?? '')) : data.fullThumbPath ?? '',
+  //           controller: storyController,
+  //           imageFit: BoxFit.contain,
+  //           isImages: true,
+  //           id: data.postID ?? '',
+  //           duration: Duration(seconds: (duration ?? 3) > 5 ? 5 : 3),
+  //           requestHeaders: {
+  //             'post-id': data.postID ?? '',
+  //             'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+  //             'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+  //           },
+  //         ),
+  //       );
+  //     } else {
+  //       _result.add(
+  //         StoryItem.pageImage(
+  //           url: (data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? (data.mediaEndpoint ?? '')) : data.fullThumbPath ?? '',
+  //           controller: storyController,
+  //           imageFit: BoxFit.contain,
+  //           isImages: true,
+  //           id: data.postID ?? '',
+  //           requestHeaders: {
+  //             'post-id': data.postID ?? '',
+  //             'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+  //             'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+  //           },
+  //         ),
+  //       );
+  //     }
+  //   }
+  //   if (data.mediaType?.translateType() == ContentType.video) {
+  //     String urlApsara = '';
+  //     if (data.isApsara ?? false) {
+  //       await getVideoApsara(context, data.apsaraId ?? '').then((value) {
+  //         urlApsara = value;
+  //       });
+  //     }
+  //     Size? videoSize;
+  //     final width = data.metadata?.width?.toDouble();
+  //     final height = data.metadata?.height?.toDouble();
+  //     if (width != null && height != null) {
+  //       videoSize = Size(width, height);
+  //       videoSize = videoSize.getFixSize(context);
+  //     }
+  //     print('StoryItem.pageVideo ${data.postID} : $urlApsara, ${data.fullContentPath}, ${data.metadata?.duration}');
+  //     _result.add(
+  //       StoryItem.pageVideo(
+  //         urlApsara != '' ? urlApsara : data.fullContentPath ?? '',
+  //         controller: storyController,
+  //         id: data.postID ?? '',
+  //         requestHeaders: {
+  //           'post-id': data.postID ?? '',
+  //           'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+  //           'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+  //         },
+  //         size: videoSize,
+  //         duration: Duration(seconds: data.metadata?.duration ?? 15),
+  //       ),
+  //     );
+  //   }
+  //   notifyListeners();
+  // }
 
   Future getVideoApsara(BuildContext context, String apsaraId) async {
     try {
@@ -458,10 +456,9 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void navigateToOtherProfile(BuildContext context, ContentData data, StoryController storyController) {
+  void navigateToOtherProfile(BuildContext context, ContentData data) {
     Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email;
-    storyController.pause();
-    _routing.move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data.email)).whenComplete(() => storyController.play());
+    _routing.move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data.email));
   }
 
   void initState(BuildContext context, StoryDetailScreenArgument routeArgument) {
@@ -523,7 +520,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     BuildContext context,
     bool mounted,
     ContentData? data,
-    StoryController? storyController,
+    // StoryController? storyController,
     AnimationController? animationController,
     Function play,
   ) async {
@@ -655,16 +652,13 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> createdDynamicLink(
     context,
-    ContentData? data, {
-    StoryController? storyController,
-  }) async {
+    ContentData? data,) async {
     _isShareAction = true;
-    storyController?.pause();
 
     await createdDynamicLinkMixin(
       context,
       data: DynamicLinkData(
-        routes: Routes.storyDetail,
+        routes: Routes.vidDetail,
         postID: data?.postID,
         fullName: data?.username,
         description: 'Hyppe Story',
@@ -864,8 +858,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void reportContent(BuildContext context, ContentData data, {StoryController? storyController}) {
-    storyController?.pause();
+  void reportContent(BuildContext context, ContentData data) {
     ShowBottomSheet().onReportContent(context, postData: data, type: hyppeStory);
   }
 }
