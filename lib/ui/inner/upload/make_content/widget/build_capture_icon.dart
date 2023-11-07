@@ -48,7 +48,7 @@ class BuildCaptureIcon extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Positioned.fill(child: child)
+                        Positioned.fill(child: CircularProgressIndicator())
                       ],
                     ),
                   )
