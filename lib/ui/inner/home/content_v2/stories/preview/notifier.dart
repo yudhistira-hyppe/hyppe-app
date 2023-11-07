@@ -14,8 +14,8 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
-import 'package:story_view/controller/story_controller.dart';
-import 'package:story_view/widgets/story_view.dart';
+// import 'package:story_view/controller/story_controller.dart';
+// import 'package:story_view/widgets/story_view.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 
 import '../../../../../../core/bloc/posts_v2/bloc.dart';
@@ -66,7 +66,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   int get totalViews => _totalViews;
 
-  StoryController storyController = StoryController();
+  // StoryController storyController = StoryController();
 
   bool isloading = false;
 
@@ -338,7 +338,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
   void onTapHandler(BuildContext context) {
     if (myStoriesData != null && (myStoriesData?.isNotEmpty ?? false)) {
       _routing.move(
-        Routes.storyDetail,
+        Routes.vidDetail,
         argument: StoryDetailScreenArgument(
           storyData: myStoriesData,
         ),
@@ -391,7 +391,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   void navigateToShortVideoPlayer(BuildContext context, int index) {
     _routing.move(
-      Routes.storyDetail,
+      Routes.vidDetail,
       argument: StoryDetailScreenArgument(
         storyData: peopleStoriesData,
         index: index.toDouble(),

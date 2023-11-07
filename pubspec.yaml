@@ -93,17 +93,17 @@ dependencies:
   gif_view: ^0.3.1
   gif: ^2.2.0
   auto_size_text: ^3.0.0
+  fraction: ^4.1.4
+  video_player: ^2.8.1
 
   dynamic_widget: # Dynamic widget builder
     git:
       url: https://github.com/dengyin2000/dynamic_widget.git
       ref: 93fb01345de507f0ed523c3ec1f8bbc12dbf79c0
 
-  better_player: # Better player
-    path: packages/better-player
 
-  story_view: # Story viewer
-    path: packages/story_view
+  video_editor:
+    path: packages/video_editor
 
   showcaseview: # Story viewer
     path: packages/showcaseview

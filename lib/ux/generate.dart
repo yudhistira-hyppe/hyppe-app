@@ -99,7 +99,7 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/ownerhip_selling/screen
 import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/screen.dart';
-import 'package:hyppe/ui/outer/ads/screen.dart';
+// import 'package:hyppe/ui/outer/ads/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/forgot_password_screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/set_new_password/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_screen.dart';
@@ -129,7 +129,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail.da
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/sign_in_security/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/change_password/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/screen.dart';
+// import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/screen.dart';
 
 import '../core/arguments/detail_ticket_argument.dart';
 import '../core/arguments/main_argument.dart';
@@ -219,8 +219,8 @@ class Generate {
       case Routes.diaryDetail:
         return MaterialPageRoute(builder: (_) => DiaryPlayerPage(argument: settings.arguments as DiaryDetailScreenArgument));
 
-      case Routes.storyDetail:
-        return MaterialPageRoute(builder: (_) => HyppePlaylistStories(argument: settings.arguments as StoryDetailScreenArgument));
+      // case Routes.storyDetail:
+      //   return MaterialPageRoute(builder: (_) => HyppePlaylistStories(argument: settings.arguments as StoryDetailScreenArgument));
       // case Routes.showStories:
       //   return MaterialPageRoute(builder: (_) => StoryGroupScreen(argument: settings.arguments as StoryDetailScreenArgument));
       case Routes.showStories:
@@ -270,11 +270,11 @@ class Generate {
         return MaterialPageRoute(builder: (_) => ListReferralUser(arguments: settings.arguments as ReferralListUserArgument));
       case Routes.insertReferral:
         return MaterialPageRoute(builder: (_) => InsertReferral());
-      case Routes.showAds:
-        return MaterialPageRoute(
-            builder: (_) => AdsScreen(
-                  argument: settings.arguments as AdsArgument,
-                ));
+      // case Routes.showAds:
+      //   return MaterialPageRoute(
+      //       builder: (_) => AdsScreen(
+      //             argument: settings.arguments as AdsArgument,
+      //           ));
 
       case Routes.searcMore:
         return MaterialPageRoute(builder: (_) => const SearchMoreScreen());

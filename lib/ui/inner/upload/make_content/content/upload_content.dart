@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/entities/camera/screen.dart';
 import 'package:hyppe/ui/constant/entities/camera/widgets/camera_flash_button.dart';
 import 'package:hyppe/ui/constant/entities/camera/widgets/camera_switch_button.dart';
@@ -13,10 +14,10 @@ import 'package:hyppe/ui/constant/entities/camera_devices/widgets/camera_flash_b
 import 'package:hyppe/ui/constant/entities/camera_devices/widgets/camera_switch_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
-import 'package:hyppe/ui/inner/upload/make_content/widget/build_effect.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_ok_button.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_timer.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_capture_icon.dart';
@@ -55,6 +56,20 @@ class UploadContent extends StatelessWidget {
                             textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
                             textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
                           ),
+                          tenPx,
+                          GestureDetector(
+                            onTap: (){
+                              context.read<CameraNotifier>().showEffect();
+                            },
+                            child: const CustomIconWidget(
+                              defaultColor: false,
+                              iconData: "${AssetPath.vectorPath}ic_effect.svg",
+                            ),
+                          ),
+                          CustomTextWidget(
+                            textToDisplay: context.watch<TranslateNotifierV2>().translate.effect!,
+                            textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+                          ),
                         ],
                       ),
                     ),
@@ -70,20 +85,20 @@ class UploadContent extends StatelessWidget {
                     child: CustomTextButton(
                       onPressed: (notifier?.conditionalOnClose() ?? false) ? () async => await notifier?.onClose(context) : null,
                       child: const UnconstrainedBox(
-                        child: CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
+                        child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg", defaultColor: false),
                       ),
                     ),
                   ),
                 ),
               ),
               // Timer
-              Visibility(
-                visible: !(notifier?.isRecordingVideo ?? true),
-                child: Align(
-                  alignment: const Alignment(0.0, 0.63),
-                  child: BuildTimer(),
-                ),
-              ),
+              // Visibility(
+              //   visible: !(notifier?.isRecordingVideo ?? true),
+              //   child: Align(
+              //     alignment: const Alignment(0.0, 0.63),
+              //     child: BuildTimer(),
+              //   ),
+              // ),
               // Action
               Align(
                 alignment: const Alignment(0.0, 0.75),
@@ -144,6 +159,20 @@ class UploadContent extends StatelessWidget {
                             textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
                             textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
                           ),
+                          tenPx,
+                          GestureDetector(
+                            onTap: (){
+                              context.read<CameraNotifier>().showEffect();
+                            },
+                            child: const CustomIconWidget(
+                              defaultColor: false,
+                              iconData: "${AssetPath.vectorPath}ic_effect.svg",
+                            ),
+                          ),
+                          CustomTextWidget(
+                            textToDisplay: context.watch<TranslateNotifierV2>().translate.effect!,
+                            textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+                          ),
                         ],
                       ),
                     ),
@@ -159,28 +188,28 @@ class UploadContent extends StatelessWidget {
                     child: CustomTextButton(
                       onPressed: (notifier?.conditionalOnClose() ?? false) ? () async => await notifier?.onClose(context) : null,
                       child: const UnconstrainedBox(
-                        child: CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
+                        child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg", defaultColor: false),
                       ),
                     ),
                   ),
                 ),
               ),
               // Timer
-              Visibility(
-                visible: !(notifier?.isRecordingVideo ?? true),
-                child: Align(
-                  alignment: const Alignment(0.0, 0.63),
-                  child: BuildTimer(),
-                ),
-              ),
+              // Visibility(
+              //   visible: !(notifier?.isRecordingVideo ?? true),
+              //   child: Align(
+              //     alignment: const Alignment(0.0, 0.63),
+              //     child: BuildTimer(),
+              //   ),
+              // ),
               // Action
               Align(
                 alignment: const Alignment(0.0, 0.75),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 1, child: BuildStorage(mounted: mounted)),
-                    if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 1, child: BuildEffect(mounted: mounted, isRecord: notifier?.isRecordingVideo ?? false)),
+                    if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 2, child: BuildStorage(mounted: mounted)),
+                    // if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 1, child: BuildEffect(mounted: mounted, isRecord: notifier?.isRecordingVideo ?? false)),
                     Expanded(flex: 2, child: BuildCaptureIcon(mounted: mounted)),
                     if (Platform.isIOS && !(notifier?.isRecordingVideo ?? true))
                       Expanded(

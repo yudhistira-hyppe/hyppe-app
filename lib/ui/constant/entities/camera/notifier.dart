@@ -277,6 +277,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   String flashIcon() {
     print('flashMode $flashMode : ${deepArController!.flashState}');
+    return "${AssetPath.vectorPath}ic_flash.svg";
     if(isFlash){
       return "${AssetPath.vectorPath}flash-off.svg";
     }else{

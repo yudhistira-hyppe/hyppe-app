@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:better_player/better_player.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
@@ -16,7 +15,6 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/file_extension.dart';
 import 'package:hyppe/core/constants/filter_matrix.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -33,7 +31,6 @@ import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_field_for_overlay.dart';
-import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/build_sticker_widget.dart';
@@ -43,6 +40,7 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../../app.dart';
@@ -52,6 +50,7 @@ import '../../../../core/config/url_constants.dart';
 import '../../../../core/models/collection/music/music.dart';
 import '../../../../core/models/collection/music/music_type.dart';
 import '../../../../core/services/event_service.dart';
+import '../video_editor/video_editor.dart';
 
 class PreviewContentNotifier with ChangeNotifier {
   final eventService = EventService();
@@ -127,7 +126,7 @@ class PreviewContentNotifier with ChangeNotifier {
   String _errorMessage = '';
   String get errorMessage => _errorMessage;
 
-  BetterPlayerController? _betterPlayerController;
+  VideoPlayerController? _betterPlayerController;
   PersistentBottomSheetController? _persistentBottomSheetController;
   final TransformationController _transformationController =
       TransformationController();
@@ -138,7 +137,7 @@ class PreviewContentNotifier with ChangeNotifier {
   var scrollExpController = ScrollController();
   final focusNode = FocusNode();
 
-  BetterPlayerController? get betterPlayerController => _betterPlayerController;
+  VideoPlayerController? get betterPlayerController => _betterPlayerController;
   TransformationController get transformationController =>
       _transformationController;
   PersistentBottomSheetController? get persistentBottomSheetController =>
@@ -868,7 +867,7 @@ class PreviewContentNotifier with ChangeNotifier {
     _fileContent?[_indexView] = outputPath;
     _url = fileContent?[_indexView];
     _sourceFile = SourceFile.local;
-    _betterPlayerController = null;
+    // _betterPlayerController = null;
     notifyListeners();
     if (isInit) {
       initVideoPlayer(context);
@@ -1101,17 +1100,17 @@ class PreviewContentNotifier with ChangeNotifier {
     _isLoadingBetterPlayer = true;
     _errorMessage = '';
 
-    BetterPlayerConfiguration betterPlayerConfiguration =
-        const BetterPlayerConfiguration(
-      autoPlay: false,
-      fit: BoxFit.contain,
-      showPlaceholderUntilPlay: true,
-      controlsConfiguration: BetterPlayerControlsConfiguration(
-        showControls: false,
-        enableFullscreen: false,
-        controlBarColor: Colors.black26,
-      ),
-    );
+    // BetterPlayerConfiguration betterPlayerConfiguration =
+    //     const BetterPlayerConfiguration(
+    //   autoPlay: false,
+    //   fit: BoxFit.contain,
+    //   showPlaceholderUntilPlay: true,
+    //   controlsConfiguration: BetterPlayerControlsConfiguration(
+    //     showControls: false,
+    //     enableFullscreen: false,
+    //     controlBarColor: Colors.black26,
+    //   ),
+    // );
     print('_url : $_url');
     if (isSaveDefault) {
       _fixSelectedMusic = null;
@@ -1124,53 +1123,61 @@ class PreviewContentNotifier with ChangeNotifier {
         _defaultPath = _url;
       }
     }
-    BetterPlayerDataSource dataSource = BetterPlayerDataSource(
-      BetterPlayerDataSourceType.file,
-      _url != null
-          ? Platform.isIOS
-              ? _url!.replaceAll(" ", "%20")
-              : _url!
-          : '',
-      bufferingConfiguration: const BetterPlayerBufferingConfiguration(
-        minBufferMs: BetterPlayerBufferingConfiguration.defaultMinBufferMs,
-        maxBufferMs: BetterPlayerBufferingConfiguration.defaultMaxBufferMs,
-        bufferForPlaybackMs:
-            BetterPlayerBufferingConfiguration.defaultBufferForPlaybackMs,
-        bufferForPlaybackAfterRebufferMs: BetterPlayerBufferingConfiguration
-            .defaultBufferForPlaybackAfterRebufferMs,
-      ),
-    );
 
-    _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
+    // VideoPlayerController dataSource = BetterPlayerDataSource(
+    //   BetterPlayerDataSourceType.file,
+    //   _url != null
+    //       ? Platform.isIOS
+    //           ? _url!.replaceAll(" ", "%20")
+    //           : _url!
+    //       : '',
+    //   bufferingConfiguration: const BetterPlayerBufferingConfiguration(
+    //     minBufferMs: BetterPlayerBufferingConfiguration.defaultMinBufferMs,
+    //     maxBufferMs: BetterPlayerBufferingConfiguration.defaultMaxBufferMs,
+    //     bufferForPlaybackMs:
+    //         BetterPlayerBufferingConfiguration.defaultBufferForPlaybackMs,
+    //     bufferForPlaybackAfterRebufferMs: BetterPlayerBufferingConfiguration
+    //         .defaultBufferForPlaybackAfterRebufferMs,
+    //   ),
+    // );
+
+    _betterPlayerController = VideoPlayerController.file(File(_url ?? '',),);
     try {
       _isLoadVideo = true;
       notifyListeners();
-      await _betterPlayerController?.setupDataSource(dataSource).then((_) {
-        _betterPlayerController?.play();
-        _betterPlayerController?.setLooping(true);
-        _betterPlayerController?.setOverriddenAspectRatio(
-            _betterPlayerController?.videoPlayerController?.value.aspectRatio ??
-                0.0);
+      // await _betterPlayerController?.setupDataSource(dataSource).then((_) {
+      //   _betterPlayerController?.play();
+      //   _betterPlayerController?.setLooping(true);
+      //   _betterPlayerController?.setOverriddenAspectRatio(
+      //       _betterPlayerController?.videoPlayerController?.value.aspectRatio ??
+      //           0.0);
+      //   notifyListeners();
+      // });
+      _betterPlayerController?.addListener(() {
         notifyListeners();
       });
-
-      _betterPlayerController?.addEventsListener(
-        (_) {
-          _totalDuration = _.parameters?['duration'];
-
-          if (_totalDuration != null) {
-            if (_betterPlayerController?.isVideoInitialized() ??
-                false) if ((_betterPlayerController
-                        ?.videoPlayerController?.value.position ??
-                    Duration.zero) >=
-                (_betterPlayerController
-                        ?.videoPlayerController?.value.duration ??
-                    Duration.zero)) {
-              _nextVideo = true;
-            }
-          }
-        },
-      );
+      _betterPlayerController?.setLooping(true);
+      await _betterPlayerController?.initialize().then((_){
+        notifyListeners();
+      });
+      await _betterPlayerController?.play();
+      // _betterPlayerController?.addEventsListener(
+      //   (_) {
+      //     _totalDuration = _.parameters?['duration'];
+      //
+      //     if (_totalDuration != null) {
+      //       if (_betterPlayerController?.isVideoInitialized() ??
+      //           false) if ((_betterPlayerController
+      //                   ?.videoPlayerController?.value.position ??
+      //               Duration.zero) >=
+      //           (_betterPlayerController
+      //                   ?.videoPlayerController?.value.duration ??
+      //               Duration.zero)) {
+      //         _nextVideo = true;
+      //       }
+      //     }
+      //   },
+      // );
       _isLoadingBetterPlayer = false;
       notifyListeners();
 
@@ -1234,7 +1241,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void setVideoPlayerController(BetterPlayerController? val) =>
+  void setVideoPlayerController(VideoPlayerController? val) =>
       _betterPlayerController = val;
 
   void clearAdditionalItem() {
@@ -1570,6 +1577,22 @@ class PreviewContentNotifier with ChangeNotifier {
         betterPlayerController!.dispose();
       }
     }
+  }
+
+  void goToVideoEditor(BuildContext context) async{
+    final path = fileContent?[0];
+    if(path != null){
+      betterPlayerController?.pause();
+      final seconds = betterPlayerController?.value.duration ?? const Duration(seconds: 10);
+      fileContent?[0] = await Navigator.push(
+        context,
+        MaterialPageRoute<String>(
+          builder: (BuildContext context) => VideoEditor(file: File(path), videoSeconds: seconds,),
+        ),
+      );
+    }
+    notifyListeners();
+    initVideoPlayer(context);
   }
 
   void applyFilters({GlobalKey? globalKey}) async {

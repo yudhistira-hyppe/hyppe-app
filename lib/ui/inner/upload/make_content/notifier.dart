@@ -90,18 +90,29 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   onInitialUploadContent() {
     _selectedDuration = 15;
-    if (_featureType == FeatureType.vid) {
-      _durationOptions = {15: "15${language.timerSecond}", 30: "30${language.timerSecond}", 60: "60${language.timerSecond}", 0: "1m>"}; // ignore this
-    } else if (_featureType == FeatureType.diary) {
-      _durationOptions = {
-        15: "15${language.timerSecond}",
-        30: "30${language.timerSecond}",
-        60: "60${language.timerSecond}",
-      };
-    } else {
-      _durationOptions = {
-        15: "15${language.timerSecond}",
-      };
+    // if (_featureType == FeatureType.vid) {
+    //   _durationOptions = {
+    //     15: "15${language.timerSecond}",
+    //     30: "30${language.timerSecond}",
+    //     60: "60${language.timerSecond}",
+    //     0: "1m>"}; // ignore this
+    // } else if (_featureType == FeatureType.diary) {
+    //   _durationOptions = {
+    //     15: "15${language.timerSecond}",
+    //     30: "30${language.timerSecond}",
+    //     60: "60${language.timerSecond}",
+    //   };
+    // } else {
+    //   _durationOptions = {
+    //     15: "15${language.timerSecond}",
+    //   };
+    // }
+    if(featureType == FeatureType.diary){
+      _selectedDuration = 60;
+    }else if(featureType == FeatureType.vid){
+      _selectedDuration = 3600;
+    }else if(featureType == FeatureType.story){
+      _selectedDuration = 15;
     }
     notifyListeners();
   }
@@ -171,6 +182,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   void _startTimer(BuildContext context) {
     _validateTimerWithFeature();
+
     _timer = Timer.periodic(
       const Duration(seconds: 1),
       (Timer timerIn) {
@@ -183,6 +195,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         if (_timer != null && (_timer?.isActive ?? false) && timerIn.isActive) {
           _elapsedProgress++;
           if (featureType != FeatureType.pic && selectedDuration != 0) {
+
             _progressDev = _elapsedProgress / _selectedDuration;
           } else {
             _progressDev = 1.0;

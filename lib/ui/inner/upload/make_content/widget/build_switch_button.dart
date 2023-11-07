@@ -29,38 +29,40 @@ class _BuildSwitchButtonState extends State<BuildSwitchButton> {
             topRight: Radius.circular(8),
           ),
         ),
-        child: notifier.isRecordingVideo
-            ? Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16 * SizeConfig.scaleDiagonal),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 12,
-                      child: IgnorePointer(
-                        ignoring: true,
-                        child: Slider(
-                          max: 1.0,
-                          value: notifier.progressDev,
-                          onChanged: (double value) {},
-                          inactiveColor: kHyppeTextPrimary.withOpacity(0.5),
-                          activeColor: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                    fourPx,
-                    Expanded(
-                      flex: 2,
-                      child: CustomTextWidget(
-                        textToDisplay: System().formatDuration(Duration(seconds: notifier.progressHuman).inMilliseconds),
-                        textStyle: Theme.of(context).textTheme.caption,
-                      ),
-                    )
-                  ],
-                ),
-              )
-            : Row(
+        child:
+        // notifier.isRecordingVideo
+        //     ? Padding(
+        //         padding: EdgeInsets.symmetric(horizontal: 16 * SizeConfig.scaleDiagonal),
+        //         child: Row(
+        //           crossAxisAlignment: CrossAxisAlignment.center,
+        //           mainAxisAlignment: MainAxisAlignment.center,
+        //           children: [
+        //             Expanded(
+        //               flex: 12,
+        //               child: IgnorePointer(
+        //                 ignoring: true,
+        //                 child: Slider(
+        //                   max: 1.0,
+        //                   value: notifier.progressDev,
+        //                   onChanged: (double value) {},
+        //                   inactiveColor: kHyppeTextPrimary.withOpacity(0.5),
+        //                   activeColor: Theme.of(context).colorScheme.primary,
+        //                 ),
+        //               ),
+        //             ),
+        //             fourPx,
+        //             Expanded(
+        //               flex: 2,
+        //               child: CustomTextWidget(
+        //                 textToDisplay: System().formatDuration(Duration(seconds: notifier.progressHuman).inMilliseconds),
+        //                 textStyle: Theme.of(context).textTheme.caption,
+        //               ),
+        //             )
+        //           ],
+        //         ),
+        //       )
+        //     :
+        Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

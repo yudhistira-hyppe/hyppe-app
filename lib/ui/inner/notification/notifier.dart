@@ -239,7 +239,8 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
         await onGetContentData(context, featureType, (v) => Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v)), postID);
         break;
       case FeatureType.story:
-        await onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)), postID);
+        // await onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)), postID);
+        await onGetContentData(context, featureType, (v) => Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v)), postID);
         break;
       case FeatureType.txtMsg:
         return;
