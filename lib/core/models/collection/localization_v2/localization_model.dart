@@ -219,6 +219,11 @@ class LocalizationModelV2 {
   String? saturation;
   String? level;
   String? exposure;
+  String? perspective;
+  String? tint;
+  String? warmth;
+  String? discardEdit;
+  String? discardEditDesc;
   String? addLocation;
   String? type;
   String? free;
@@ -1238,6 +1243,11 @@ class LocalizationModelV2 {
     this.saturation,
     this.level,
     this.exposure,
+    this.perspective,
+    this.tint,
+    this.warmth,
+    this.discardEdit,
+    this.discardEditDesc,
     this.addLocation,
     this.type,
     this.free,
@@ -2258,6 +2268,11 @@ class LocalizationModelV2 {
     saturation = json['saturation'];
     level = json['level'];
     exposure = json['exposure'];
+    perspective = json['perspective'];
+    tint = json['tint'];
+    warmth = json['warmth'];
+    discardEdit = json['discardEdit'];
+    discardEditDesc = json['discardEditDesc'];
     addLocation = json['addLocation'];
     type = json['type'];
     free = json['free'];

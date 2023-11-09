@@ -58,7 +58,7 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
           ),
           twelvePx,
           Visibility(
-            visible: widget.bodyText == null || widget.bodyText == '',
+            visible: widget.bodyText != null || widget.bodyText != '',
             child: CustomTextWidget(
               maxLines: widget.maxLineBody,
               textOverflow: TextOverflow.visible,

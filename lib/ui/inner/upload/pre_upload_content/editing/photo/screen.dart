@@ -1,21 +1,23 @@
 import 'dart:io';
 
+import 'package:colorfilter_generator/addons.dart';
+import 'package:colorfilter_generator/colorfilter_generator.dart';
+import 'package:colorfilter_generator/presets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/models/collection/filter/layer_model.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/general_dialog.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/editing/photo/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/editing/photo/widget/custom_slider_widget.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
-import 'package:image/image.dart' as img;
-import 'dart:ui' as ui;
-import 'package:flutter/rendering.dart';
-import 'package:fhoto_editor/fhoto_editor.dart';
 
 class EditPhotoScreen extends StatefulWidget {
   const EditPhotoScreen({super.key});
@@ -25,13 +27,15 @@ class EditPhotoScreen extends StatefulWidget {
 }
 
 class _EditPhotoScreenState extends State<EditPhotoScreen> {
-  final colorGen = ColorFilterGenerator.getInstance();
   late EditPhotoNotifier provider;
+  final GlobalKey paintKey = GlobalKey();
 
   @override
   void initState() {
     provider = EditPhotoNotifier();
-    provider.activeFilter = 1;
+    provider.translate(context.read<TranslateNotifierV2>().translate);
+    provider.copyFile(context);
+    provider.initFilterCollection();
     super.initState();
   }
 
@@ -44,58 +48,133 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
   }
 
   Widget buildPage(BuildContext context) {
-    return Consumer2<EditPhotoNotifier, PreviewContentNotifier>(
-      builder: (_, notifier, previewContentNotifier, __) {
-        ColorMultiFilterGenerator myFilter =
-            ColorMultiFilterGenerator(filters: [
-          colorGen.getHueMatrix(
-              value: notifier.filters[0].value / notifier.filters[0].max),
-          colorGen.getContrastMatrix(
-              value: notifier.filters[1].value / notifier.filters[1].max),
-          // colorGen.getBrightnessMatrix(
-          //     value: notifier.filters[2].value / notifier.filters[2].max),
-          // colorGen.getSaturationMatrix(
-          //     value: notifier.filters[3].value / notifier.filters[3].max),
-          // colorGen.getExposureMatrix(
-          //     value: notifier.filters[4].value / notifier.filters[4].max),
-          // colorGen.getShadowMatrix(
-          //     value: notifier.filters[5].value / notifier.filters[5].max),
-          // colorGen.getHighlightedMatrix(
-          //     value: notifier.filters[6].value / notifier.filters[6].max),
-          // colorGen.getFadedMatrix(
-          //     value: notifier.filters[7].value / notifier.filters[7].max),
-          // colorGen.getVibrancyMatrix(
-          //     value: notifier.filters[8].value / notifier.filters[8].max),
-          // colorGen.getTemperatureMatrix(
-          //     value: notifier.filters[9].value / notifier.filters[9].max),
-        ]);
-        return Scaffold(
-          backgroundColor: kHyppeBackground,
-          body: Stack(
-            children: [
-              Center(
-                child: Column(
-                  children: [
-                    sixteenPx,
-                    CustomTextWidget(
+    return Consumer<EditPhotoNotifier>(
+      builder: (_, notifier, __) {
+        return WillPopScope(
+          onWillPop: () async {
+            ShowGeneralDialog.generalDialog(
+              context,
+              titleText: "${notifier.language.discardEdit}?",
+              bodyText: "${notifier.language.discardEditDesc}",
+              maxLineTitle: 1,
+              maxLineBody: 4,
+              functionPrimary: () async {
+                Routing().moveBack();
+                Routing().moveBack();
+              },
+              functionSecondary: () {
+                Routing().moveBack();
+              },
+              titleButtonPrimary: "${notifier.language.delete}",
+              titleButtonSecondary: "${notifier.language.cancel}",
+              barrierDismissible: true,
+            );
+            return true;
+          },
+          child: Scaffold(
+            backgroundColor: kHyppeBackground,
+            body: Stack(
+              children: [
+                FilterBodyWidget(notifier: notifier, paintKey: paintKey),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: notifier.activeFilter != null
+                      ? FilterSliderWidget(notifier: notifier)
+                      : FilterCollectionWidget(notifier: notifier),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class FilterBodyWidget extends StatelessWidget {
+  final EditPhotoNotifier notifier;
+  final GlobalKey paintKey;
+
+  const FilterBodyWidget({
+    super.key,
+    required this.notifier,
+    required this.paintKey,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    ColorFilterGenerator myFilter = ColorFilterGenerator(
+      name: "CustomFilter",
+      filters: [
+        ColorFilterAddons.brightness(
+            notifier.filters[0].value / notifier.filters[0].max),
+        ColorFilterAddons.contrast(
+            notifier.filters[1].value / notifier.filters[1].max),
+        ColorFilterAddons.saturation(
+            notifier.filters[2].value / notifier.filters[2].max),
+        ColorFilterAddons.hue(
+            notifier.filters[3].value / notifier.filters[3].max),
+        ColorFilterAddons.sepia(
+            notifier.filters[4].value / notifier.filters[4].max),
+      ],
+    );
+
+    return Center(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (notifier.activeFilter == null)
+                  const BackButton(color: kHyppeLightButtonText),
+                if (notifier.activeFilter != null)
+                  Expanded(
+                    child: CustomTextWidget(
                       textToDisplay: notifier.activeFilter == null
                           ? ''
                           : notifier.filters[notifier.activeFilter ?? 0].name,
                       textStyle: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         color: kHyppeTextPrimary,
                         // fontWeight: FontWeight.bold,
                       ),
                     ),
-                    sixteenPx,
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.7,
+                  ),
+                if (notifier.activeFilter == null)
+                  TextButton(
+                    onPressed: () async {
+                      ShowGeneralDialog.loadingDialog(context);
+                      await notifier.saveImage(context, paintKey);
+                      Routing().moveBack();
+                      Routing().moveBack();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Text(
+                        '${notifier.language.done}',
+                        style: const TextStyle(color: kHyppeTextPrimary),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.7,
+            child: notifier.tempFilePath!.isEmpty
+                ? const CustomLoading()
+                : Center(
+                    child: RepaintBoundary(
+                      key: paintKey,
                       child: ColorFiltered(
                         colorFilter: ColorFilter.matrix(myFilter.matrix),
                         child: Image.file(
-                          File(
-                            previewContentNotifier.fileContent?[0] ?? '',
-                          ),
+                          File(notifier.tempFilePath ?? ''),
                           filterQuality: FilterQuality.high,
                           frameBuilder:
                               (context, child, frame, wasSynchronouslyLoaded) {
@@ -111,129 +190,179 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: notifier.activeFilter != null
-                    ? Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            CustomSliderWidget(
-                              value: notifier
-                                  .filters[notifier.activeFilter ?? 0].value,
-                              min: notifier
-                                  .filters[notifier.activeFilter ?? 0].min,
-                              max: notifier
-                                  .filters[notifier.activeFilter ?? 0].max,
-                              onChanged: (double value) {
-                                notifier.setFilterValue(
-                                  index: notifier.activeFilter ?? 0,
-                                  value: value,
-                                );
-                              },
-                            ),
-                            sixteenPx,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    notifier.activeFilter = null;
-                                  },
-                                  child: const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 24.0),
-                                    child: Text(
-                                      'Batal',
-                                      style:
-                                          TextStyle(color: kHyppeTextPrimary),
-                                    ),
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    // notifier.activeFilter = null;
-                                    final image = img.decodeImage(File(previewContentNotifier.fileContent?[0] ?? '').readAsBytesSync());
-                                    final result = img.adjustColor(image!, hue: 1, brightness: 1);
-                                    // final thumbnail = img.copyResize(image!, width: 120);
-                                    // encodeToJpgFile('/storage/emulated/0/Download/thumbnail-test.png', thumbnail);
-                                    // final directory = Directory('/storage/emulated/0/Download');
-                                    // final File file = File('${directory.path}/filtered_image.png');
-                                    // await file.writeAsBytes(result.getBytes());
-                                    img.encodeJpg(image);
-                                  },
-                                  child: const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 24.0),
-                                    child: Text(
-                                      'Selesai',
-                                      style:
-                                          TextStyle(color: kHyppeTextPrimary),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FilterCollectionWidget extends StatelessWidget {
+  final EditPhotoNotifier notifier;
+
+  const FilterCollectionWidget({super.key, required this.notifier});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      margin: const EdgeInsets.only(bottom: 32),
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        scrollDirection: Axis.horizontal,
+        itemCount: notifier.filters.length,
+        itemBuilder: (context, index) {
+          return Row(
+            children: [
+              if (index == 0)
+                InkWell(
+                  onTap: () {
+                    notifier.cropImage(context);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          '${notifier.language.perspective}',
+                          style: const TextStyle(
+                            color: kHyppeTextPrimary,
+                          ),
                         ),
-                      )
-                    : Container(
-                        height: 100,
-                        margin: const EdgeInsets.only(bottom: 32),
-                        child: ListView.builder(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: notifier.filters.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                notifier.activeFilter = index;
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      notifier.filters[index].name,
-                                      style: const TextStyle(
-                                          color: kHyppeTextPrimary),
-                                    ),
-                                    eightPx,
-                                    Container(
-                                      width: 72,
-                                      height: 72,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(36),
-                                        border: Border.all(
-                                          width: 1,
-                                          color: kHyppeDividerColor,
-                                        ),
-                                      ),
-                                      child: CustomIconWidget(
-                                        height: 32,
-                                        iconData:
-                                            "${AssetPath.vectorPath}${notifier.filters[index].icon}",
-                                        defaultColor: false,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
+                        eightPx,
+                        Container(
+                          width: 72,
+                          height: 72,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(36),
+                            border: Border.all(
+                              width: 1,
+                              color: kHyppeDividerColor,
+                            ),
+                          ),
+                          child: const CustomIconWidget(
+                            height: 32,
+                            iconData: "${AssetPath.vectorPath}perspective.svg",
+                            defaultColor: false,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              InkWell(
+                onTap: () {
+                  notifier.activeFilter = index;
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        notifier.filters[index].name,
+                        style: const TextStyle(
+                          color: kHyppeTextPrimary,
                         ),
                       ),
+                      eightPx,
+                      Container(
+                        width: 72,
+                        height: 72,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(36),
+                          border: Border.all(
+                            width: 1,
+                            color: kHyppeDividerColor,
+                          ),
+                        ),
+                        child: CustomIconWidget(
+                          height: 32,
+                          iconData:
+                              "${AssetPath.vectorPath}${notifier.filters[index].icon}",
+                          defaultColor: false,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class FilterSliderWidget extends StatelessWidget {
+  final EditPhotoNotifier notifier;
+
+  const FilterSliderWidget({super.key, required this.notifier});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          CustomSliderWidget(
+            value: notifier.filters[notifier.activeFilter ?? 0].value,
+            min: notifier.filters[notifier.activeFilter ?? 0].min,
+            max: notifier.filters[notifier.activeFilter ?? 0].max,
+            onChanged: (double value) {
+              if (notifier.activeFilter != null) {
+                notifier.setFilterValue(
+                    index: notifier.activeFilter!, value: value);
+              }
+            },
+          ),
+          sixteenPx,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: () async {
+                  if (notifier.activeFilter != null) {
+                    notifier.filters[notifier.activeFilter!].value =
+                        notifier.filters[notifier.activeFilter!].previousValue;
+                  }
+                  notifier.activeFilter = null;
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Text(
+                    '${notifier.language.cancel}',
+                    style: const TextStyle(color: kHyppeTextPrimary),
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  if (notifier.activeFilter != null) {
+                    notifier.filters[notifier.activeFilter!].previousValue =
+                        notifier.filters[notifier.activeFilter!].value;
+                  }
+                  notifier.activeFilter = null;
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0,
+                  ),
+                  child: Text(
+                    '${notifier.language.done}',
+                    style: const TextStyle(
+                      color: kHyppeTextPrimary,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }

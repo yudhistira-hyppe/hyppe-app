@@ -42,19 +42,20 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
               top: 0,
               right: 0,
               bottom: 0,
-              child: Image.file(
-                  File(notifier.fileContent?[widget.currIndex] ?? ''),
-                  filterQuality: FilterQuality.high,
-                  frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                    return wasSynchronouslyLoaded
-                        ? child
-                        : AnimatedOpacity(
-                            opacity: frame == null ? 0 : 1,
-                            duration: const Duration(seconds: 1),
-                            curve: Curves.easeOut,
-                            child: child,
-                          );
-                  },
+              child: Image.memory(
+                  File(notifier.fileContent?[widget.currIndex] ?? '').readAsBytesSync(),
+                  // File(notifier.fileContent?[widget.currIndex] ?? ''),
+                  // filterQuality: FilterQuality.high,
+                  // frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  //   return wasSynchronouslyLoaded
+                  //       ? child
+                  //       : AnimatedOpacity(
+                  //           opacity: frame == null ? 0 : 1,
+                  //           duration: const Duration(seconds: 1),
+                  //           curve: Curves.easeOut,
+                  //           child: child,
+                  //         );
+                  // },
                 ),
             ),
             if (notifier.fixSelectedMusic != null)
@@ -105,31 +106,31 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                   bottom: context.getHeight() * 0.4,
                   child: Column(
                     children: [
-                      Column(
-                        children: [
-                          Container(
-                            height: 48,
-                            width: 48,
-                            decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(24)), color: Colors.black.withOpacity(0.5)),
-                            child: CustomIconButtonWidget(
-                              onPressed: () async {
-                                notifier.openImageCropper(context, widget.currIndex);
-                              },
-                              iconData: "${AssetPath.vectorPath}edit.svg",
-                            ),
-                          ),
-                          eightPx,
-                          CustomTextWidget(
-                            textToDisplay: notifier.language.edit ?? 'Rotate',
-                            textStyle: const TextStyle(
-                              fontWeight: FontWeight.normal,
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                      twentyFourPx,
+                      // Column(
+                      //   children: [
+                      //     Container(
+                      //       height: 48,
+                      //       width: 48,
+                      //       decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(24)), color: Colors.black.withOpacity(0.5)),
+                      //       child: CustomIconButtonWidget(
+                      //         onPressed: () async {
+                      //           notifier.openImageCropper(context, widget.currIndex);
+                      //         },
+                      //         iconData: "${AssetPath.vectorPath}edit.svg",
+                      //       ),
+                      //     ),
+                      //     eightPx,
+                      //     CustomTextWidget(
+                      //       textToDisplay: notifier.language.edit ?? 'Rotate',
+                      //       textStyle: const TextStyle(
+                      //         fontWeight: FontWeight.normal,
+                      //         color: Colors.white,
+                      //         fontSize: 14,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // twentyFourPx,
                       InkWell(
                         onTap: () async {
                           notifier.audioPreviewPlayer.pause();
@@ -170,12 +171,12 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                           children: [
                             const CustomIconWidget(
                               defaultColor: false,
-                              iconData: "${AssetPath.vectorPath}circle_music.svg",
+                              iconData: "${AssetPath.vectorPath}edit-v2.svg",
                             ),
                             fourPx,
                             CustomTextWidget(
                               maxLines: 1,
-                              textToDisplay: notifier.language.music ?? '',
+                              textToDisplay: notifier.language.edit ?? '',
                               textAlign: TextAlign.left,
                               textStyle: const TextStyle(
                                 fontWeight: FontWeight.normal,

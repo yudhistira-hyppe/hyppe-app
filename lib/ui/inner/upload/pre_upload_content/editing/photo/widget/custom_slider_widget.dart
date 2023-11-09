@@ -24,13 +24,16 @@ class CustomSliderWidget extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
-              Expanded(
-                flex: min.abs().round(),
-                child: LinearProgressIndicator(
-                  minHeight: 2,
-                  value: 1 - value / min,
-                  color: kHyppeDividerColor,
-                  backgroundColor: kHyppeTextPrimary,
+              Visibility(
+                visible: min < 0,
+                child: Expanded(
+                  flex: min.abs().round(),
+                  child: LinearProgressIndicator(
+                    minHeight: 2,
+                    value: 1 - value / min,
+                    color: kHyppeDividerColor,
+                    backgroundColor: kHyppeTextPrimary,
+                  ),
                 ),
               ),
               Expanded(
