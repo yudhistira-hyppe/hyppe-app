@@ -32,7 +32,6 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dar
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/outer/welcome_login/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -54,12 +53,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:screen_protector/screen_protector.dart';
 import 'package:share_plus/share_plus.dart';
-// import 'package:story_view/controller/story_controller.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart' as intl;
 
 import '../../app.dart';
-import '../arguments/ads_argument.dart';
 import '../arguments/general_argument.dart';
 import '../bloc/ads_video/bloc.dart';
 import '../bloc/ads_video/state.dart';
@@ -309,7 +306,7 @@ class System {
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceIdentifier = androidInfo.id ?? deviceID;
+      deviceIdentifier = androidInfo.id;
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       deviceIdentifier = iosInfo.identifierForVendor ?? deviceID;
@@ -531,7 +528,7 @@ class System {
     DeviceInfoPlugin plugin = DeviceInfoPlugin();
     if (Platform.isAndroid) {
       AndroidDeviceInfo android = await plugin.androidInfo;
-      if (android.version.sdkInt! < 33) {
+      if (android.version.sdkInt < 33) {
         if (await Permission.storage.request().isGranted) {
           // permissionGranted = true;
         } else if (await Permission.storage.request().isPermanentlyDenied) {
@@ -1290,7 +1287,7 @@ class System {
   }
 
   Future<void> navigateToProfile(BuildContext context, String email) async {
-    final connect = await checkConnections();
+    // final connect = await checkConnections();
     // if (connect) {
     String myEmail = SharedPreference().readStorage(SpKeys.email) ?? "";
     if (email != myEmail) {

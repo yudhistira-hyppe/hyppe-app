@@ -13,8 +13,8 @@ import 'custom_text_widget.dart';
 
 class MusicStatusDetail extends StatefulWidget {
   final Music music;
-  String? urlMusic;
-  MusicStatusDetail({
+  final String? urlMusic;
+  const MusicStatusDetail({
     Key? key,
     required this.music,
     this.urlMusic,}) : super(key: key);

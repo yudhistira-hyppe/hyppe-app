@@ -1,5 +1,4 @@
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
-import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';

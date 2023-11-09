@@ -10,8 +10,8 @@ import 'package:hyppe/ux/routing.dart';
 import '../../../../../../../core/constants/asset_path.dart';
 
 class ShowImageProfile extends StatefulWidget {
-  String imageUrl;
-  ShowImageProfile({Key? key, required this.imageUrl}) : super(key: key);
+  final String imageUrl;
+  const ShowImageProfile({Key? key, required this.imageUrl}) : super(key: key);
 
   @override
   State<ShowImageProfile> createState() => _ShowImageProfileState();
@@ -19,12 +19,12 @@ class ShowImageProfile extends StatefulWidget {
 
 class _ShowImageProfileState extends State<ShowImageProfile> {
   var index = 0;
-  late PageController _pageController;
+  // late PageController _pageController;
 
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ShowImages');
-    _pageController = PageController(initialPage: index);
+    // _pageController = PageController(initialPage: index);
     super.initState();
   }
 

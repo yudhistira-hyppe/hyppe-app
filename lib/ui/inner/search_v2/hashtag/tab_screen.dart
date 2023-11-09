@@ -54,7 +54,7 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
       //   print('searchHashtag data is null');
       // }
 
-      final keyword = notifier.searchController.text;
+      // final keyword = notifier.searchController.text;
 
       return !notifier.isLoading ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -66,7 +66,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
   int _currentPositionText = 0;
 
   //当前buffer进度
-  int _bufferPosition = 0;
+  // int _bufferPosition = 0;
 
   //是否展示loading
   bool _showLoading = false;
@@ -83,31 +83,31 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
   String _snapShotPath = '';
 
   //提示内容
-  String _tipsContent = '';
+  // String _tipsContent = '';
 
   //是否展示提示内容
-  bool _showTipsWidget = false;
+  // bool _showTipsWidget = false;
 
   //是否有缩略图
-  bool _thumbnailSuccess = false;
+  // bool _thumbnailSuccess = false;
 
   //缩略图
   // Uint8List _thumbnailBitmap;
-  ImageProvider? _imageProvider;
+  // ImageProvider? _imageProvider;
 
   //当前网络状态
   // ConnectivityResult? _currentConnectivityResult;
 
   ///seek中
-  bool _inSeek = false;
+  // bool _inSeek = false;
 
-  bool _isLock = false;
+  // bool _isLock = false;
 
   //网络状态
-  bool _isShowMobileNetWork = false;
+  // bool _isShowMobileNetWork = false;
 
   //当前播放器状态
-  int _currentPlayerState = 0;
+  // int _currentPlayerState = 0;
 
   String extSubTitleText = '';
 
@@ -194,13 +194,13 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
-      _currentPlayerState = newState;
+      // _currentPlayerState = newState;
       try{
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
             WakelockPlus.enable();
             setState(() {
-              _showTipsWidget = false;
+              // _showTipsWidget = false;
               _showLoading = false;
               isPause = false;
             });
@@ -266,7 +266,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       }
     });
     fAliplayer?.setOnSeekComplete((playerId) {
-      _inSeek = false;
+      // _inSeek = false;
     });
     var lastDetik = 0;
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
@@ -297,7 +297,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
           print('error setOnInfo: $e');
         }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-        _bufferPosition = extraValue ?? 0;
+        // _bufferPosition = extraValue ?? 0;
         if (mounted) {
           setState(() {});
         }
@@ -315,9 +315,9 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       }
     });
     fAliplayer?.setOnCompletion((playerId) {
-      _showTipsWidget = true;
+      // _showTipsWidget = true;
       _showLoading = false;
-      _tipsContent = "Play Again";
+      // _tipsContent = "Play Again";
       isPause = true;
       // adsView(widget.data, secondsVideo);
       setState(() {
@@ -330,24 +330,24 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
       // Fluttertoast.showToast(msg: "SnapShot Save : $path");
     });
     fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-      _showTipsWidget = true;
+      // _showTipsWidget = true;
       _showLoading = false;
-      _tipsContent = "$errorCode \n $errorMsg";
+      // _tipsContent = "$errorCode \n $errorMsg";
       setState(() {});
     });
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
       AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-      if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
+      if ((info.trackDefinition?.length ?? 0) > 0) {
         // trackFragmentKey.currentState.onTrackChanged(info);
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
     });
 
     fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {
-      _thumbnailSuccess = true;
+      // _thumbnailSuccess = true;
     }, preparedFail: (playerId) {
-      _thumbnailSuccess = false;
+      // _thumbnailSuccess = false;
     });
 
     fAliplayer?.setOnThumbnailGetListener(
@@ -356,7 +356,7 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
           var provider = MemoryImage(bitmap);
           precacheImage(provider, context).then((_) {
             setState(() {
-              _imageProvider = provider;
+              // _imageProvider = provider;
             });
           });
         },
@@ -401,6 +401,8 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
         break;
       case AppLifecycleState.detached:
         break;
+      default:
+        break;
     }
   }
 
@@ -422,12 +424,12 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
     }
   }
 
-  int _curIdx = 0;
-  int _lastCurIndex = -1;
-  bool _isPause = false;
-  double _playerY = 0;
-  bool _isFirstRenderShow = false;
-  bool _isBackgroundMode = false;
+  // int _curIdx = 0;
+  // int _lastCurIndex = -1;
+  // bool _isPause = false;
+  // double _playerY = 0;
+  // bool _isFirstRenderShow = false;
+  // bool _isBackgroundMode = false;
 
   void onViewPlayerCreated(viewId) async {
     fAliplayer?.setPlayerView(viewId);
@@ -793,10 +795,10 @@ class _AdsPopupVideoDialogState extends State<AdsPopupVideoDialog> with WidgetsB
     fAliplayer?.stop();
     isPlay = false;
 
-    setState(() {
-      _isPause = false;
-      _isFirstRenderShow = false;
-    });
+    // setState(() {
+    //   _isPause = false;
+    //   _isFirstRenderShow = false;
+    // });
 
     fAliplayer?.prepare();
     // fAliplayer?.play();

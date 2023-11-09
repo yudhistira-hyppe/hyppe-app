@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -44,7 +43,7 @@ class _ChalangeDetailScreenState extends State<ChalangeDetailScreen> with RouteA
   int _current = 0;
   int _lastCurrent = -1;
   String chllangeid = "";
-  final CarouselController _controller = CarouselController();
+  // final CarouselController _controller = CarouselController();
   bool hideTab = false;
   String dateText = '';
   Color bgColor = kHyppeLightSurface;

@@ -18,8 +18,8 @@ import '../../../constant/widget/custom_text_widget.dart';
 import '../widget/search_no_result.dart';
 
 class InterestScreen extends StatefulWidget {
-  Function(Interest)? onClick;
-  InterestScreen({Key? key, this.onClick}) : super(key: key);
+  final Function(Interest)? onClick;
+  const InterestScreen({Key? key, this.onClick}) : super(key: key);
 
   @override
   State<InterestScreen> createState() => _InterestScreenState();

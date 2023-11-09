@@ -4,8 +4,8 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 
 class EmptyBankAccount extends StatelessWidget {
-  Widget? textWidget;
-  EmptyBankAccount({Key? key, this.textWidget}) : super(key: key);
+  final Widget? textWidget;
+  const EmptyBankAccount({Key? key, this.textWidget}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

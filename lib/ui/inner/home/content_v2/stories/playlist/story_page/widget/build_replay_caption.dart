@@ -2,7 +2,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 

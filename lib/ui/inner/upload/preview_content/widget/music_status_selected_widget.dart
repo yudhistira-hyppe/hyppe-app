@@ -8,7 +8,6 @@ import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/constants/asset_path.dart';
-import '../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../core/models/collection/music/music.dart';
 import '../../../../../core/services/route_observer_service.dart';
 import '../../../../constant/widget/after_first_layout_mixin.dart';
@@ -20,8 +19,8 @@ class MusicStatusSelected extends StatefulWidget {
   final Music music;
   final bool isDrag;
   final bool isPlay;
-  Function? onClose;
-  MusicStatusSelected({Key? key, required this.music, this.onClose, this.isPlay = true, this.isDrag = false}) : super(key: key);
+  final Function? onClose;
+  const MusicStatusSelected({Key? key, required this.music, this.onClose, this.isPlay = true, this.isDrag = false}) : super(key: key);
 
   @override
   State<MusicStatusSelected> createState() => _MusicStatusSelectedState();

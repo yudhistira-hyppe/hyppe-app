@@ -23,7 +23,7 @@ class MyFrameStory extends StatelessWidget {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'MyFrameStory');
     SizeConfig().init(context);
     final notifier = Provider.of<PreviewStoriesNotifier>(context);
-    final error = context.select((ErrorService value) => value.getError(ErrorType.peopleStory));
+    context.select((ErrorService value) => value.getError(ErrorType.peopleStory));
     final home = context.watch<HomeNotifier>();
     final email = SharedPreference().readStorage(SpKeys.email);
     return Row(

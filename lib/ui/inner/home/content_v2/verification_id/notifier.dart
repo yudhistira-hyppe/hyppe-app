@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -348,7 +347,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   @override
   Future<void> onTakePicture(BuildContext context) async {
     dynamic cameraNotifier;
-    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    // final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
     cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
 
     // if (canDeppAr == 'true' || Platform.isIOS) {
@@ -370,7 +369,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
 
   void onTakeSelfie(BuildContext context) {
     dynamic cameraNotifier;
-    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    // final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
     cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
     // if (canDeppAr == 'true') {
     //   cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);

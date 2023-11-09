@@ -6,11 +6,11 @@ import 'dart:ui' as ui;
 import 'custom_loading.dart';
 
 class CustomImageAssets extends StatelessWidget {
-  double? width;
-  double? height;
-  String assetPath;
-  BorderRadius? borderRadius;
-  CustomImageAssets({Key? key, required this.assetPath, this.width, this.height, this.borderRadius}) : super(key: key);
+  final double? width;
+  final double? height;
+  final String assetPath;
+  final BorderRadius? borderRadius;
+  const CustomImageAssets({Key? key, required this.assetPath, this.width, this.height, this.borderRadius}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

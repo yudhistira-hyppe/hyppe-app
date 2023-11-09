@@ -19,7 +19,6 @@ import '../../../../../../../core/services/system.dart';
 import '../../../../../../../initial/hyppe/translate_v2.dart';
 import '../../../../../../../ux/routing.dart';
 import '../../../../../../constant/entities/like/notifier.dart';
-import '../../../../../../constant/entities/report/notifier.dart';
 import '../../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../../../../../constant/widget/button_boost.dart';
 import '../../../../../../constant/widget/custom_background_layer.dart';
@@ -39,11 +38,11 @@ import 'loading_music_screen.dart';
 import 'notifier.dart';
 
 class SlidePicScreen extends StatefulWidget {
-  ContentData data;
+  final ContentData data;
   // Function resetZooming;
-  int rootIndex;
-  bool isOnPageTurning;
-  SlidePicScreen({Key? key, required this.data, required this.rootIndex, required this.isOnPageTurning}) : super(key: key);
+  final int rootIndex;
+  final bool isOnPageTurning;
+  const SlidePicScreen({Key? key, required this.data, required this.rootIndex, required this.isOnPageTurning}) : super(key: key);
 
   @override
   State<SlidePicScreen> createState() => _SlidePicScreenState();
@@ -73,7 +72,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
 
   @override
   void afterFirstLayout(BuildContext context) {
-    final notifier = context.read<SlidedPicDetailNotifier>();
+    // final notifier = context.read<SlidedPicDetailNotifier>();
     // print('isOnPageTurning: ${widget.isOnPageTurning}');
     // if(!widget.isOnPageTurning){
     //   notifier.initDetailPost(context, widget.data.postID ?? '');

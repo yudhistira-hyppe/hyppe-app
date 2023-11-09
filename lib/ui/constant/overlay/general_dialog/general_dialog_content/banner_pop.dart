@@ -24,7 +24,6 @@ class _BannerPopState extends State<BannerPop> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
     return Consumer<ChallangeNotifier>(
       builder: (_, notifier, __) => Stack(

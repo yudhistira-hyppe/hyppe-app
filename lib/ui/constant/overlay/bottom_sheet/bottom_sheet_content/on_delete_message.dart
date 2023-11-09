@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class OnDeleteMessageBottomSheet extends StatelessWidget {
-  MessageDataV2? data;
+  final MessageDataV2? data;
   final Function() function;
   OnDeleteMessageBottomSheet({
     Key? key,

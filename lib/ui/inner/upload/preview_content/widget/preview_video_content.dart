@@ -31,7 +31,7 @@ class PreviewVideoContent extends StatefulWidget {
 }
 
 class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAware, AfterFirstLayoutMixin {
-  VideoPlayerController? _videoPlayerController;
+  // VideoPlayerController? _videoPlayerController;
 
   @override
   void didChangeDependencies() {
@@ -44,7 +44,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
     print('initState PreviewVideoContent');
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
     notifier.initVideoPlayer(context, isSaveDefault: true);
-    _videoPlayerController = notifier.betterPlayerController;
+    // _videoPlayerController = notifier.betterPlayerController;
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
   }
 

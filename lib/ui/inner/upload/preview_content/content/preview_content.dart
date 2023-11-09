@@ -1,12 +1,7 @@
-import 'dart:convert';
-
-import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/models/collection/sticker/sticker_model.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/build_any_content_preview.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/build_bottom_left_widget.dart';
-import 'package:hyppe/ui/inner/upload/preview_content/widget/build_filters_widget.dart';
-import 'package:hyppe/ui/inner/upload/preview_content/widget/build_sticker_widget.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/build_top_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -65,12 +60,13 @@ class _PreviewContentState extends State<PreviewContent> {
         ),
         Center(
           child: Container(
-            color: Colors.white,
+            color: Colors.transparent,
             width: double.infinity,
-            height: notifier.featureType == FeatureType.story ||
-                    notifier.featureType == FeatureType.diary
-                ? MediaQuery.of(context).size.width * (16 / 9)
-                : null,
+            height: context.getHeight(),
+            // height: notifier.featureType == FeatureType.story ||
+            //         notifier.featureType == FeatureType.diary
+            //     ? MediaQuery.of(context).size.width * (16 / 9)
+            //     : null,
             child: BuildAnyContentPreviewer(
               globalKey: widget.globalKey,
               pageController: widget.pageController,

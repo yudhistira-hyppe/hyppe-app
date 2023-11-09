@@ -14,27 +14,24 @@ class BuildCaptureIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<MakeContentNotifier>(
-      builder: (context, notifier, child) => SizedBox(
-        height: 105 * SizeConfig.scaleDiagonal,
-        child: notifier.isVideo
-            ? notifier.conditionalCaptureVideoIcon()
-                ? GestureDetector(
-                    onTap: () {
-                      submitContent(context, notifier);
-                    },
+      builder: (context, notifier, child) => notifier.isVideo
+          ? notifier.conditionalCaptureVideoIcon()
+              ? GestureDetector(
+                  onTap: () {
+                    submitContent(context, notifier);
+                  },
+                  child: SizedBox(
+                    width: 130,
+                    height: 130,
                     child: Stack(
                       children: [
-                        Positioned.fill(
-                          child: SizedBox(
+                        Align(alignment: Alignment.center,
+                          child: Container(
                             width: 130,
                             height: 130,
-                            child: Container(
-                              width: double.infinity,
-                              height: double.infinity,
-                              decoration: BoxDecoration(
-                                  color: const Color(0xffCECECE),
-                                  borderRadius: BorderRadius.circular(65)),
-                            ),
+                            decoration: BoxDecoration(
+                                color: const Color(0xffCECECE),
+                                borderRadius: BorderRadius.circular(65)),
                           ),
                         ),
                         Align(
@@ -48,11 +45,25 @@ class BuildCaptureIcon extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Positioned.fill(child: CircularProgressIndicator())
+                        Align(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            width: 125,
+                            height: 125,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 6,
+                              value: notifier.progressDev,
+                              color: const Color(0xffE6094B),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  )
-                : CustomIconButtonWidget(
+                  ),
+                )
+              : SizedBox(
+                  height: 105 * SizeConfig.scaleDiagonal,
+                  child: CustomIconButtonWidget(
                     onPressed: () {
                       // context.read<CameraNotifier>().showEffect(isClose: true);
                       submitContent(context, notifier);
@@ -62,8 +73,11 @@ class BuildCaptureIcon extends StatelessWidget {
                             ? "${AssetPath.vectorPath}recording.svg"
                             : "${AssetPath.vectorPath}video.svg"
                         : "${AssetPath.vectorPath}photo.svg",
-                  )
-            : CustomIconButtonWidget(
+                  ),
+                )
+          : SizedBox(
+              height: 105 * SizeConfig.scaleDiagonal,
+              child: CustomIconButtonWidget(
                 onPressed: () {
                   // context.read<CameraNotifier>().showEffect(isClose: true);
                   submitContent(context, notifier);
@@ -74,7 +88,7 @@ class BuildCaptureIcon extends StatelessWidget {
                         : "${AssetPath.vectorPath}video.svg"
                     : "${AssetPath.vectorPath}photo.svg",
               ),
-      ),
+            ),
     );
   }
 

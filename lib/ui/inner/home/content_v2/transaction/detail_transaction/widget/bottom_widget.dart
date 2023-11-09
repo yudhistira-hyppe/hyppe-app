@@ -9,10 +9,10 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/widget/two_column_widget.dart';
 
 class BottomDetailWidget extends StatelessWidget {
-  TransactionHistoryModel? data;
-  LocalizationModelV2? language;
+  final TransactionHistoryModel? data;
+  final LocalizationModelV2? language;
 
-  BottomDetailWidget({Key? key, this.data, this.language}) : super(key: key);
+  const BottomDetailWidget({Key? key, this.data, this.language}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

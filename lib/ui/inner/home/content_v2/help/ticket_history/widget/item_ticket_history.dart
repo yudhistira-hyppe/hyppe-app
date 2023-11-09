@@ -15,10 +15,10 @@ import '../../../../../../../core/constants/enum.dart';
 import '../../../../../../../core/models/collection/support_ticket/ticket_model.dart';
 
 class ItemTicketHistory extends StatelessWidget {
-  TicketModel data;
-  LocalizationModelV2 model;
-  bool isFirst;
-  ItemTicketHistory({Key? key, required this.data, required this.model, required this.isFirst}) : super(key: key);
+  final TicketModel data;
+  final LocalizationModelV2 model;
+  final bool isFirst;
+  const ItemTicketHistory({Key? key, required this.data, required this.model, required this.isFirst}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

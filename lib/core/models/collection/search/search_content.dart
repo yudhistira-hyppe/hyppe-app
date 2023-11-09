@@ -271,18 +271,16 @@ class Avatar {
   String? mediaEndpoint;
 
   factory Avatar.fromJson(Map<String, dynamic> json) => Avatar(
-        mediaBasePath:
-            json["mediaBasePath"] == null ? null : json["mediaBasePath"],
-        mediaUri: json["mediaUri"] == null ? null : json["mediaUri"],
-        mediaType: json["mediaType"] == null ? null : json["mediaType"],
-        mediaEndpoint:
-            json["mediaEndpoint"] == null ? null : json["mediaEndpoint"],
+        mediaBasePath: json["mediaBasePath"],
+        mediaUri: json["mediaUri"],
+        mediaType: json["mediaType"],
+        mediaEndpoint: json["mediaEndpoint"],
       );
 
   Map<String, dynamic> toJson() => {
-        "mediaBasePath": mediaBasePath == null ? null : mediaBasePath,
-        "mediaUri": mediaUri == null ? null : mediaUri,
-        "mediaType": mediaType == null ? null : mediaType,
-        "mediaEndpoint": mediaEndpoint == null ? null : mediaEndpoint,
+        "mediaBasePath": mediaBasePath,
+        "mediaUri": mediaUri,
+        "mediaType": mediaType,
+        "mediaEndpoint": mediaEndpoint,
       };
 }

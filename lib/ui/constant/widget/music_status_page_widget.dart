@@ -16,10 +16,10 @@ import 'custom_base_cache_image.dart';
 
 class MusicStatusPage extends StatefulWidget {
   final Music music;
-  double vertical;
-  String? urlMusic;
-  bool isPlay;
-  MusicStatusPage({Key? key, required this.music, this.urlMusic, this.vertical = 10, this.isPlay = true}) : super(key: key);
+  final double vertical;
+  final String? urlMusic;
+  final bool isPlay;
+  const MusicStatusPage({Key? key, required this.music, this.urlMusic, this.vertical = 10, this.isPlay = true}) : super(key: key);
 
   @override
   State<MusicStatusPage> createState() => _MusicStatusPageState();

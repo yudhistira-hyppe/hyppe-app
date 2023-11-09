@@ -28,8 +28,7 @@ class _AutoCompleteUserTagCommentState extends State<AutoCompleteUserTagComment>
           child: Container(
             height: 200,
             color: Theme.of(context).colorScheme.background,
-            child: notifier.searchPeolpleData != null
-                ? notifier.isLoading
+            child: notifier.isLoading
                     ? Row(
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -95,8 +94,7 @@ class _AutoCompleteUserTagCommentState extends State<AutoCompleteUserTagComment>
                                 )
                               ],
                             ),
-                          )
-                : Container(),
+                          ),
           ),
         ),
       ),

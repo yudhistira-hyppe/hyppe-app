@@ -6,8 +6,8 @@ import '../../../core/constants/themes/hyppe_colors.dart';
 import '../../constant/widget/custom_icon_widget.dart';
 
 class WebviewScreen extends StatefulWidget {
-  String url;
-  WebviewScreen({Key? key, required this.url}) : super(key: key);
+  final String url;
+  const WebviewScreen({Key? key, required this.url}) : super(key: key);
 
   @override
   State<WebviewScreen> createState() => _WebviewScreenState();

@@ -20,9 +20,9 @@ import '../../../../widget/custom_text_widget.dart';
 import '../../../../widget/icon_button_widget.dart';
 
 class OnChooseMusicBottomSheet extends StatefulWidget {
-  bool isPic;
-  bool isInit;
-  OnChooseMusicBottomSheet({Key? key, required this.isPic, this.isInit = true}) : super(key: key);
+  final bool isPic;
+  final bool isInit;
+  const OnChooseMusicBottomSheet({Key? key, required this.isPic, this.isInit = true}) : super(key: key);
 
   @override
   State<OnChooseMusicBottomSheet> createState() => _OnChooseMusicBottomSheetState();

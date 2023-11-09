@@ -874,7 +874,7 @@ class SearchNotifier with ChangeNotifier {
             detailHashTag = mapDetailHashtag[keys];
             if (pics.isNotNullAndEmpty()) {
               final data = pics[0];
-              final url = data != null ? ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
+              final url = ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '');
               _tagImageMain = url;
             } else {
               _tagImageMain = '';
@@ -918,7 +918,7 @@ class SearchNotifier with ChangeNotifier {
               detailHashTag = mapDetailHashtag[keys];
               if (pics.isNotNullAndEmpty()) {
                 final data = pics[0];
-                final url = data != null ? ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
+                final url = ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '');
                 _tagImageMain = url;
               } else {
                 _tagImageMain = '';
@@ -945,7 +945,7 @@ class SearchNotifier with ChangeNotifier {
             }
             if (pics.isNotNullAndEmpty()) {
               final data = pics[0];
-              final url = data != null ? ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
+              final url = ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '');
               _tagImageMain = url;
             } else {
               _tagImageMain = '';
@@ -1720,9 +1720,7 @@ class SearchNotifier with ChangeNotifier {
     if (_updatedData != null) {
       _updatedData.reportedStatus = '';
     }
-    if (_updatedData2 != null) {
-      _updatedData2.reportedStatus = '';
-    }
+    _updatedData2?.reportedStatus = '';
 
     notifyListeners();
   }

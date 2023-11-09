@@ -4,8 +4,8 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/system.dart';
 
 class HashtagContentsScreen extends StatefulWidget {
-  HyppeType type;
-  HashtagContentsScreen({Key? key, required this.type}) : super(key: key);
+  final HyppeType type;
+  const HashtagContentsScreen({Key? key, required this.type}) : super(key: key);
 
   @override
   State<HashtagContentsScreen> createState() => _HashtagContentsScreenState();

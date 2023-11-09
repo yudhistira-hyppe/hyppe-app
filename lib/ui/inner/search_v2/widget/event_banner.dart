@@ -23,7 +23,7 @@ class EventBannerWidget extends StatefulWidget {
 }
 
 class _EventBannerWidgetState extends State<EventBannerWidget> {
-  final CarouselController _controller = CarouselController();
+  // final CarouselController _controller = CarouselController();
   int _current = 0;
 
   @override

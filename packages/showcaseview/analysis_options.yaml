@@ -1,15 +1,15 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
-  strong-mode:
-    implicit-casts: false
-    implicit-dynamic: false
   errors:
     argument_type_not_assignable: error
     invalid_assignment: error
     dead_code: warning
     overridden_fields: ignore
     use_key_in_widget_constructors: ignore
+  language:
+    strict-casts: true
+    strict-raw-types: true
 
 linter:
   rules:

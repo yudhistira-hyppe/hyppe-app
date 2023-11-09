@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -31,7 +32,7 @@ class _VideoEditorState extends State<VideoEditor> {
 
   late final VideoEditorController _controller = VideoEditorController.file(
       widget.file,
-      minDuration: const Duration(seconds: 15),
+      minDuration: const Duration(seconds: 1),
       maxDuration: widget.videoSeconds,
       trimStyle: TrimSliderStyle(
           onTrimmedColor: Colors.white,
@@ -105,8 +106,10 @@ class _VideoEditorState extends State<VideoEditor> {
       },
       onError: (e, s) => _showErrorSnackBar("Error on export video :("),
       onCompleted: (file) {
+        print('Trimming Successful');
         _isExporting.value = false;
         if (!mounted) return;
+        print('Trimming Successful');
         Navigator.pop(context, file.path);
         // showDialog(
         //   context: context,
@@ -190,18 +193,20 @@ class _VideoEditorState extends State<VideoEditor> {
                                   tenPx,
                                   _controller.video.value.isPlaying
                                       ? IconButton(
-                                          icon: const CustomIconWidget(
-                                              iconData:
-                                                  "${AssetPath.vectorPath}circle_pause.svg"),
+                                          icon: CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}ic_pause.svg",
+                                            defaultColor: false,
+                                            color: context.getColorScheme().background,),
                                           splashRadius: 1,
                                           onPressed: () {
                                             _controller.video.pause();
                                           },
                                         )
                                       : IconButton(
-                                          icon: const CustomIconWidget(
-                                              iconData:
-                                                  "${AssetPath.vectorPath}circle_play.svg"),
+                                          icon: CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}ic_play.svg",
+                                            defaultColor: false,
+                                            color: context.getColorScheme().background,),
                                           splashRadius: 1,
                                           onPressed: () {
                                             _controller.video.play();
@@ -283,52 +288,6 @@ class _VideoEditorState extends State<VideoEditor> {
               tooltip: 'Leave editor',
               color: Colors.white,
             ),
-            // const VerticalDivider(endIndent: 22, indent: 22),
-            // Expanded(
-            //   child: IconButton(
-            //     onPressed: () =>
-            //         _controller.rotate90Degrees(RotateDirection.left),
-            //     icon: const Icon(Icons.rotate_left),
-            //     tooltip: 'Rotate unclockwise',
-            //   ),
-            // ),
-            // Expanded(
-            //   child: IconButton(
-            //     onPressed: () =>
-            //         _controller.rotate90Degrees(RotateDirection.right),
-            //     icon: const Icon(Icons.rotate_right),
-            //     tooltip: 'Rotate clockwise',
-            //   ),
-            // ),
-            // Expanded(
-            //   child: IconButton(
-            //     onPressed: () => Navigator.push(
-            //       context,
-            //       MaterialPageRoute<void>(
-            //         builder: (context) => CropPage(controller: _controller),
-            //       ),
-            //     ),
-            //     icon: const Icon(Icons.crop),
-            //     tooltip: 'Open crop screen',
-            //   ),
-            // ),
-            // const VerticalDivider(endIndent: 22, indent: 22),
-            // Expanded(
-            //   child: PopupMenuButton(
-            //     tooltip: 'Open export menu',
-            //     icon: const Icon(Icons.save),
-            //     itemBuilder: (context) => [
-            //       PopupMenuItem(
-            //         onTap: _exportCover,
-            //         child: const Text('Export cover'),
-            //       ),
-            //       PopupMenuItem(
-            //         onTap: _exportVideo,
-            //         child: const Text('Export video'),
-            //       ),
-            //     ],
-            //   ),
-            // ),
             ElevatedButton(
                 onPressed: _exportVideo,
                 style: ElevatedButton.styleFrom(
@@ -336,7 +295,7 @@ class _VideoEditorState extends State<VideoEditor> {
                 child: CustomTextWidget(
                   textToDisplay: language.save ?? 'Save',
                   textStyle: const TextStyle(color: Colors.white, fontSize: 14),
-                ))
+                ),),
           ],
         ),
       ),
@@ -350,33 +309,6 @@ class _VideoEditorState extends State<VideoEditor> {
 
   List<Widget> _trimSlider() {
     return [
-      // AnimatedBuilder(
-      //   animation: Listenable.merge([
-      //     _controller,
-      //     _controller.video,
-      //   ]),
-      //   builder: (_, __) {
-      //     final int duration = _controller.videoDuration.inSeconds;
-      //     final double pos = _controller.trimPosition * duration;
-      //
-      //     return Padding(
-      //       padding: EdgeInsets.symmetric(horizontal: height / 4),
-      //       child: Row(children: [
-      //         Text(formatter(Duration(seconds: pos.toInt()))),
-      //         const Expanded(child: SizedBox()),
-      //         AnimatedOpacity(
-      //           opacity: _controller.isTrimming ? 1 : 0,
-      //           duration: kThemeAnimationDuration,
-      //           child: Row(mainAxisSize: MainAxisSize.min, children: [
-      //             Text(formatter(_controller.startTrim)),
-      //             const SizedBox(width: 10),
-      //             Text(formatter(_controller.endTrim)),
-      //           ]),
-      //         ),
-      //       ]),
-      //     );
-      //   },
-      // ),
       Container(
         width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.symmetric(vertical: height / 4),
@@ -399,7 +331,8 @@ class _VideoEditorState extends State<VideoEditor> {
           textStyle: const TextStyle(
               fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),
         ),
-      )
+      ),
+      eightPx,
     ];
   }
 

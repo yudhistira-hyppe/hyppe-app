@@ -18,9 +18,9 @@ import 'package:provider/provider.dart';
 import '../../../constant/widget/custom_loading.dart';
 
 class SearchContent extends StatefulWidget {
-  int index;
+  final int index;
   final FeatureType? featureType;
-  SearchContent({Key? key, this.featureType, this.index = 0}) : super(key: key);
+  const SearchContent({Key? key, this.featureType, this.index = 0}) : super(key: key);
 
   @override
   State<SearchContent> createState() => _SearchContentState();
@@ -61,13 +61,13 @@ class _SearchContentState extends State<SearchContent> {
                   : widget.featureType == FeatureType.pic
                       ? notifier.picCount
                       : 18;
-          final hasNext = widget.featureType == FeatureType.vid
-              ? notifier.vidHasNext
-              : widget.featureType == FeatureType.diary
-                  ? notifier.diaryHasNext
-                  : widget.featureType == FeatureType.pic
-                      ? notifier.picHasNext
-                      : false;
+          // final hasNext = widget.featureType == FeatureType.vid
+          //     ? notifier.vidHasNext
+          //     : widget.featureType == FeatureType.diary
+          //         ? notifier.diaryHasNext
+          //         : widget.featureType == FeatureType.pic
+          //             ? notifier.picHasNext
+          //             : false;
           return !notifier.isLoading
               ? RefreshIndicator(
                   strokeWidth: 2.0,

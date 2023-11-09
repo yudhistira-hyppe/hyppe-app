@@ -10,7 +10,6 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_bo
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_slider.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_shimmer.dart';
 
-import '../../../../../../app.dart';
 
 class PicDetailScreen extends StatefulWidget {
   final PicDetailScreenArgument arguments;
@@ -48,7 +47,6 @@ class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayout
 
   @override
   Widget build(BuildContext context) {
-    final tempAllow = widget.isOnPageTurning;
 
     return ChangeNotifierProvider<PicDetailNotifier>(
       create: (context) => _notifier,

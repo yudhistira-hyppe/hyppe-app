@@ -6,14 +6,14 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
 class infoMaxAccount extends StatelessWidget {
-  String title;
-  infoMaxAccount({Key? key, required this.title}) : super(key: key);
+  final String title;
+  const infoMaxAccount({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'infoMaxAccount');
     return Container(
-      padding: EdgeInsets.all(11),
+      padding: const EdgeInsets.all(11),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(5),

@@ -19,9 +19,9 @@ import '../../../../../../constant/widget/custom_spacer.dart';
 
 class ItemContentAppeal extends StatelessWidget {
   final AppealModel data;
-  LocalizationModelV2 model;
-  bool isFirst;
-  ItemContentAppeal({Key? key, required this.data, required this.model, required this.isFirst}) : super(key: key);
+  final LocalizationModelV2 model;
+  final bool isFirst;
+  const ItemContentAppeal({Key? key, required this.data, required this.model, required this.isFirst}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

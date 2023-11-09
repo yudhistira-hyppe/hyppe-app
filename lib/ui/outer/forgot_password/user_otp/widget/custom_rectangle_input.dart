@@ -9,8 +9,8 @@ import 'package:hyppe/ui/constant/widget/custom_otp_field_widget.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_notifier.dart';
 
 class CustomRectangleInput extends StatelessWidget {
-  Function afterSuccess;
-  CustomRectangleInput({required this.afterSuccess});
+  final Function afterSuccess;
+  const CustomRectangleInput({required this.afterSuccess});
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'CustomRectangleInput');

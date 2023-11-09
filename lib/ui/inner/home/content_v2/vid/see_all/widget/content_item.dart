@@ -6,7 +6,6 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
@@ -39,7 +38,7 @@ class ContentItem extends StatelessWidget {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ContentItem');
     final size = MediaQuery.of(context).size;
     final notifier = context.watch<VidSeeAllNotifier>();
-    final transnot = context.read<TranslateNotifierV2>().translate;
+    // final transnot = context.read<TranslateNotifierV2>().translate;
     final error = context.select((ErrorService value) => value.getError(ErrorType.vid));
 
     return context.read<ErrorService>().isInitialError(error, notifier.vidData)

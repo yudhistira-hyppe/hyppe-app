@@ -973,11 +973,7 @@ class PreviewContentNotifier with ChangeNotifier {
         }
       } else {
         await audioPlayer.stop();
-        if (url != null) {
-          await audioPlayer.play(UrlSource(url));
-        } else {
-          throw 'url music is null';
-        }
+        await audioPlayer.play(UrlSource(url));
         _currentMusic = music;
         currentMusic?.isPlay = true;
         _listExpMusics[index].isPlay = true;
@@ -1012,11 +1008,7 @@ class PreviewContentNotifier with ChangeNotifier {
           notifyListeners();
         } else {
           await audioPlayer.stop();
-          if (url != null) {
-            await audioPlayer.play(UrlSource(url));
-          } else {
-            throw 'url music is null';
-          }
+          await audioPlayer.play(UrlSource(url));
 
           _currentMusic = music;
           currentMusic?.isPlay = true;
@@ -1029,11 +1021,7 @@ class PreviewContentNotifier with ChangeNotifier {
       } else {
         print('playMusic : down');
         await audioPlayer.stop();
-        if (url != null) {
-          await audioPlayer.play(UrlSource(url));
-        } else {
-          throw 'url music is null';
-        }
+        await audioPlayer.play(UrlSource(url));
         _currentMusic = music;
         currentMusic?.isPlay = true;
         _listMusics[index].isPlay = true;
@@ -1580,19 +1568,29 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void goToVideoEditor(BuildContext context) async{
+
     final path = fileContent?[0];
     if(path != null){
+      isLoadVideo = true;
       betterPlayerController?.pause();
       final seconds = betterPlayerController?.value.duration ?? const Duration(seconds: 10);
-      fileContent?[0] = await Navigator.push(
+      final newPath = await Navigator.push(
         context,
-        MaterialPageRoute<String>(
+        MaterialPageRoute<String?>(
           builder: (BuildContext context) => VideoEditor(file: File(path), videoSeconds: seconds,),
         ),
       );
+      if(newPath != null){
+        fileContent?[0] = newPath;
+      }
+
     }
-    notifyListeners();
-    initVideoPlayer(context);
+
+    isLoadVideo = false;
+    Future.delayed(const Duration(milliseconds: 500), (){
+
+      initVideoPlayer(context);
+    });
   }
 
   void applyFilters({GlobalKey? globalKey}) async {

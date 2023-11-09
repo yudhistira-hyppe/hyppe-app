@@ -4,11 +4,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
-import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/ui/constant/entities/camera//widgets/camera_flash_button.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/screen.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/widgets/camera_flash_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -49,7 +46,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    // final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {

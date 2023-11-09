@@ -10,7 +10,6 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 
 class OnDatepickerMonth extends StatefulWidget {
@@ -38,7 +37,7 @@ class _OnDatepickerMonthState extends State<OnDatepickerMonth> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle hintTextStyle = Theme.of(context).textTheme.subtitle1!.apply(color: Color(0xFF999999));
+    // TextStyle hintTextStyle = Theme.of(context).textTheme.subtitle1!.apply(color: Color(0xFF999999));
     TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
     return Consumer<ChallangeNotifier>(
       builder: (_, notifier, __) => Column(

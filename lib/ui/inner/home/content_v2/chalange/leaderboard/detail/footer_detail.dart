@@ -78,7 +78,7 @@ class _FooterChallangeDetailState extends State<FooterChallangeDetail> {
     bool referral = false;
     Color bgColor = kHyppePrimary;
     Color textColors = kHyppeLightButtonText;
-    String referralLink = '';
+    // String referralLink = '';
     var challengeData = cn.leaderBoardDetailData?.challengeData?[0];
     if (widgetTwo) {
       if (challengeData?.objectChallenge == "AKUN") {

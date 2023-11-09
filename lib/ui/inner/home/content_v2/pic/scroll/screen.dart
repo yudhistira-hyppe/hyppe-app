@@ -1,9 +1,6 @@
-// ignore_for_file: no_logic_in_create_state
-
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
@@ -17,7 +14,6 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
@@ -40,7 +36,6 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_vio
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
@@ -51,8 +46,6 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/constants/size_widget.dart';
-import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
@@ -60,7 +53,6 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:flutter/gestures.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:zoom_pinch_overlay/zoom_pinch_overlay.dart';
 
 class ScrollPic extends StatefulWidget {
   final SlidedPicDetailScreenArgument? arguments;
@@ -80,7 +72,6 @@ class ScrollPic extends StatefulWidget {
 class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   FlutterAliplayer? fAliplayer;
   List<ContentData>? pics = [];
-  TransformationController _transformationController = TransformationController();
   final scrollGlobal = GlobalKey<SelfProfileScreenState>();
   final a = SelfProfileScreenState();
 
@@ -88,31 +79,31 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
-  bool _showLoading = false;
-  bool _inSeek = false;
+  // bool _showLoading = false;
+  // bool _inSeek = false;
   bool isloading = false;
 
-  int _loadingPercent = 0;
-  int _currentPlayerState = 0;
+  // int _loadingPercent = 0;
+  // int _currentPlayerState = 0;
   int _videoDuration = 1;
-  int _currentPosition = 0;
-  int _bufferPosition = 0;
-  int _currentPositionText = 0;
+  // int _currentPosition = 0;
+  // int _bufferPosition = 0;
+  // int _currentPositionText = 0;
   int _curIdx = 0;
   int _lastCurIndex = -1;
   int scrollIndex = 0;
 
   String auth = '';
   String url = '';
-  final Map _dataSourceMap = {};
-  ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
+  // final Map _dataSourceMap = {};
+  // ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
   LocalizationModelV2? lang;
   ContentData? dataSelected;
   bool isMute = false;
   String email = '';
   // String statusKyc = '';
   bool isInPage = true;
-  bool _scroolEnabled = true;
+  // bool _scroolEnabled = true;
   bool toComment = false;
 
   final ItemScrollController itemScrollController = ItemScrollController();
@@ -166,29 +157,6 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     var lastIndex = 0;
     final pageSrc = widget.arguments?.pageSrc ?? PageSrc.otherProfile;
 
-    bool isScroll = false;
-    // scrollOffsetListener.changes.listen((event) {
-    //   if (event.isNegative == false) {
-    //     scrollIndex++;
-    //   } else {
-    //     scrollIndex--;
-    //     // itemScrollController.scrollTo(
-    //     //   index: scrollIndex,
-    //     //   // alignment:
-    //     //   duration: Duration(milliseconds: 300),
-    //     // );
-    //   }
-    //   print("-=-=-event=-=-=");
-    //   print(event);
-    //   print(event.sign);
-    //   print(event.isNegative);
-    //   print(event.isInfinite);
-    //   // itemScrollController.scrollTo(
-    //   //   index: scrollIndex,
-    //   //   // alignment:
-    //   //   duration: Duration(milliseconds: 300),
-    //   // );
-    // });
 
     itemPositionsListener.itemPositions.addListener(() async {
       print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
@@ -275,12 +243,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
-      _currentPlayerState = newState;
+      // _currentPlayerState = newState;
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
           setState(() {
-            _showLoading = false;
+            // _showLoading = false;
             isPause = false;
           });
           break;
@@ -293,27 +261,27 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
       setState(() {
-        _loadingPercent = 0;
-        _showLoading = true;
+        // _loadingPercent = 0;
+        // _showLoading = true;
       });
     }, loadingProgress: (percent, netSpeed, playerId) {
-      _loadingPercent = percent;
+      // _loadingPercent = percent;
       if (percent == 100) {
-        _showLoading = false;
+        // _showLoading = false;
       }
       setState(() {});
     }, loadingEnd: (playerId) {
       setState(() {
-        _showLoading = false;
+        // _showLoading = false;
       });
     });
     fAliplayer?.setOnSeekComplete((playerId) {
-      _inSeek = false;
+      // _inSeek = false;
     });
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
-          _currentPosition = extraValue ?? 0;
+          // _currentPosition = extraValue ?? 0;
         }
         // if (!_inSeek) {
         //   setState(() {
@@ -321,7 +289,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
         //   });
         // }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-        _bufferPosition = extraValue ?? 0;
+        // _bufferPosition = extraValue ?? 0;
         if (mounted) {
           setState(() {});
         }
@@ -337,12 +305,12 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       }
     });
     fAliplayer?.setOnCompletion((playerId) {
-      _showLoading = false;
+      // _showLoading = false;
 
       isPause = true;
 
       setState(() {
-        _currentPosition = _videoDuration;
+        // _currentPosition = _videoDuration;
       });
     });
 
@@ -351,13 +319,13 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       // Fluttertoast.showToast(msg: "SnapShot Save : $path");
     });
     fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-      _showLoading = false;
+      // _showLoading = false;
       setState(() {});
     });
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
       AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-      if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
+      if ((info.trackDefinition?.length ?? 0) > 0) {
         // trackFragmentKey.currentState.onTrackChanged(info);
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
@@ -403,7 +371,7 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     // );
     // await getAuth(data.music?.apsaraMusic ?? '');
 
-    _playMode = ModeTypeAliPLayer.auth;
+    // _playMode = ModeTypeAliPLayer.auth;
     await getAuth(data.music?.apsaraMusic ?? '');
 
     setState(() {
@@ -594,6 +562,8 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
       case AppLifecycleState.detached:
         print("========= detached");
         break;
+      default:
+        break;
     }
   }
 
@@ -603,27 +573,27 @@ class _ScrollPicState extends State<ScrollPic> with WidgetsBindingObserver, Tick
     });
   }
 
-  int _currentItem = 0;
+  // int _currentItem = 0;
   ValueNotifier<int> _networklHasErrorNotifier = ValueNotifier(0);
 
-  _onStartScroll(ScrollMetrics metrics) {
-    print("Scroll Start");
-  }
-
-  _onUpdateScroll(ScrollMetrics metrics) {
-    print("Scroll Update");
-  }
-
-  _onEndScroll(ScrollMetrics metrics) {
-    print("Scroll End");
-  }
+  // _onStartScroll(ScrollMetrics metrics) {
+  //   print("Scroll Start");
+  // }
+  //
+  // _onUpdateScroll(ScrollMetrics metrics) {
+  //   print("Scroll Update");
+  // }
+  //
+  // _onEndScroll(ScrollMetrics metrics) {
+  //   print("Scroll End");
+  // }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
-    AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
+    // final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
+    // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
     return ShowCaseWidget(
       onStart: (index, key) {
         print('onStart: $index, $key');

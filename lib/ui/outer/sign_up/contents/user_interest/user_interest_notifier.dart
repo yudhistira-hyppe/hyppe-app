@@ -104,8 +104,8 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
     }else{
       return false;
     }
-    fromSetting ? _routing.moveBack() : _routing.moveAndPop(Routes.login);
-    return true;
+    // fromSetting ? _routing.moveBack() : _routing.moveAndPop(Routes.login);
+    // return true;
   }
 
   bool pickedInterest(String? tile) => _interestData.contains(tile) ? true : false;

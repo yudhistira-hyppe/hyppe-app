@@ -35,7 +35,6 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/models/collection/advertising/ads_video_data.dart';
-import 'general_dialog_content/ads_popup_video_dialog.dart';
 
 class ShowGeneralDialog {
   ShowGeneralDialog._private();

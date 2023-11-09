@@ -26,7 +26,6 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
-import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 
 class DynamicLinkService {

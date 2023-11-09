@@ -43,7 +43,6 @@ import '../../../../constant/widget/custom_newdesc_content_widget.dart';
 import '../../../../constant/widget/custom_shimmer.dart';
 import '../../../../constant/widget/custom_spacer.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
-import '../../../../constant/widget/no_result_found.dart';
 import '../../../../constant/widget/profile_landingpage.dart';
 import '../../../home/content_v2/diary/playlist/notifier.dart';
 import '../../../home/content_v2/diary/playlist/widget/content_violation.dart';
@@ -54,7 +53,6 @@ import '../../../home/content_v2/pic/widget/pic_top_item.dart';
 import '../../../home/content_v2/vid/notifier.dart';
 import '../../../home/content_v2/vid/playlist/comments_detail/screen.dart';
 import '../../../home/notifier_v2.dart';
-import '../../search_more_complete/widget/all_search_shimmer.dart';
 
 class DiaryScrollScreen extends StatefulWidget {
   final String interestKey;
@@ -70,24 +68,24 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
   bool isPlay = false;
   bool isPause = false;
   bool _showLoading = false;
-  bool _inSeek = false;
+  // bool _inSeek = false;
   bool isloading = false;
   bool isMute = false;
   bool toComment = false;
 
-  int _loadingPercent = 0;
-  int _currentPlayerState = 0;
+  // int _loadingPercent = 0;
+  // int _currentPlayerState = 0;
   int _videoDuration = 1;
-  int _currentPosition = 0;
-  int _bufferPosition = 0;
-  int _currentPositionText = 0;
+  // int _currentPosition = 0;
+  // int _bufferPosition = 0;
+  // int _currentPositionText = 0;
   int _curIdx = 0;
   int _lastCurIndex = -1;
 
   String auth = '';
   String url = '';
-  final Map _dataSourceMap = {};
-  ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
+  // final Map _dataSourceMap = {};
+  // ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
   String email = '';
   String statusKyc = '';
 
@@ -122,8 +120,6 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
       fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
       _initListener();
     });
-    var index = 0;
-    var lastIndex = 0;
     checkInet(notifier);
 
     super.initState();
@@ -164,7 +160,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
-      _currentPlayerState = newState;
+      // _currentPlayerState = newState;
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
@@ -182,11 +178,11 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
       setState(() {
-        _loadingPercent = 0;
+        // _loadingPercent = 0;
         _showLoading = true;
       });
     }, loadingProgress: (percent, netSpeed, playerId) {
-      _loadingPercent = percent;
+      // _loadingPercent = percent;
       if (percent == 100) {
         _showLoading = false;
       }
@@ -197,12 +193,12 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
       });
     });
     fAliplayer?.setOnSeekComplete((playerId) {
-      _inSeek = false;
+      // _inSeek = false;
     });
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
-          _currentPosition = extraValue ?? 0;
+          // _currentPosition = extraValue ?? 0;
         }
         // if (!_inSeek) {
         //   setState(() {
@@ -210,7 +206,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
         //   });
         // }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-        _bufferPosition = extraValue ?? 0;
+        // _bufferPosition = extraValue ?? 0;
         // if (mounted) {
         //   setState(() {});
         // }
@@ -231,7 +227,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
       isPause = true;
 
       setState(() {
-        _currentPosition = _videoDuration;
+        // _currentPosition = _videoDuration;
       });
     });
 
@@ -247,7 +243,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
       AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-      if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
+      if ((info.trackDefinition?.length ?? 0) > 0) {
         // trackFragmentKey.currentState.onTrackChanged(info);
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
@@ -293,10 +289,10 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
     // );
     if (data.reportedStatus != 'BLURRED') {
       if (data.isApsara ?? false) {
-        _playMode = ModeTypeAliPLayer.auth;
+        // _playMode = ModeTypeAliPLayer.auth;
         await getAuth(data.apsaraId ?? '');
       } else {
-        _playMode = ModeTypeAliPLayer.url;
+        // _playMode = ModeTypeAliPLayer.url;
         await getOldVideoUrl(data.postID ?? '');
       }
     }
@@ -410,23 +406,19 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
     // getCountVid();
     // await _newInitAds(true);
     context.incrementAdsCount();
-    if (context.getAdsCount() == null) {
-      context.setAdsCount(0);
-    } else {
-      final adsNotifier = context.read<PreviewDiaryNotifier>();
-      if (context.getAdsCount() == 2) {
-        try {
-          context.read<PreviewDiaryNotifier>().getAdsVideo(context, false);
-        } catch (e) {
-          'Failed to fetch ads data 0 : $e'.logger();
-        }
+    final adsNotifier = context.read<PreviewDiaryNotifier>();
+    if (context.getAdsCount() == 2) {
+      try {
+        context.read<PreviewDiaryNotifier>().getAdsVideo(context, false);
+      } catch (e) {
+        'Failed to fetch ads data 0 : $e'.logger();
       }
-      if (context.getAdsCount() == 3 && adsNotifier.adsData != null) {
-        fAliplayer?.pause();
-        System().adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(), adsNotifier.adsData?.data?.apsaraAuth ?? '', isInAppAds: false).whenComplete(() {
-          fAliplayer?.play();
-        });
-      }
+    }
+    if (context.getAdsCount() == 3 && adsNotifier.adsData != null) {
+      fAliplayer?.pause();
+      System().adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(), adsNotifier.adsData?.data?.apsaraAuth ?? '', isInAppAds: false).whenComplete(() {
+        fAliplayer?.play();
+      });
     }
   }
 
@@ -503,6 +495,8 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
         break;
       case AppLifecycleState.detached:
         fAliplayer?.pause();
+        break;
+      default:
         break;
     }
   }
@@ -900,9 +894,7 @@ class _DiaryScrollScreenState extends State<DiaryScrollScreen> with WidgetsBindi
                                     height: 28,
                                   ),
                                   onTap: () {
-                                    if (diaryData[index] != null) {
-                                      likeNotifier.likePost(context, diaryData[index]);
-                                    }
+                                    likeNotifier.likePost(context, diaryData[index]);
                                   },
                                 ),
                         ),

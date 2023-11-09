@@ -9,10 +9,10 @@ import '../../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../../constant/widget/custom_text_widget.dart';
 
 class UserTemplate extends StatelessWidget {
-  String username;
-  bool isVerified;
-  String? date;
-  UserTemplate(
+  final String username;
+  final bool isVerified;
+  final String? date;
+  const UserTemplate(
       {Key? key, required this.username, required this.isVerified, this.date})
       : super(key: key);
 

@@ -2,10 +2,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/app.dart';
-import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
-import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -39,7 +37,7 @@ class _PicTopItemState extends State<PicTopItem> {
   @override
   void initState() {
     super.initState();
-    final newUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
+    // final newUser = SharedPreference().readStorage(SpKeys.newUser) ?? '';
     mn = Provider.of<MainNotifier>(context, listen: false);
     lang = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     if (mn?.tutorialData.isNotEmpty ?? [].isEmpty && !globalChallengePopUp) {
