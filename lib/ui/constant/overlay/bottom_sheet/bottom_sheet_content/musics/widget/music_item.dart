@@ -16,8 +16,8 @@ import '../../../../../widget/custom_base_cache_image.dart';
 class MusicItemScreen extends StatefulWidget {
   final Music music;
   final int index;
-  bool isExplored;
-  MusicItemScreen({Key? key, required this.music, required this.index, this.isExplored = false }) : super(key: key);
+  final bool isExplored;
+  const MusicItemScreen({Key? key, required this.music, required this.index, this.isExplored = false }) : super(key: key);
 
   @override
   State<MusicItemScreen> createState() => _MusicItemScreenState();

@@ -22,9 +22,9 @@ class ButtonBoost extends StatefulWidget {
   final ContentData? contentData;
   final bool marginBool;
   final bool onDetail;
-  Function? startState;
-  Function? afterState;
-  ButtonBoost({Key? key, this.contentData, this.marginBool = false, this.startState, this.afterState, this.onDetail = true}) : super(key: key);
+  final Function? startState;
+  final Function? afterState;
+  const ButtonBoost({Key? key, this.contentData, this.marginBool = false, this.startState, this.afterState, this.onDetail = true}) : super(key: key);
   @override
   State<ButtonBoost> createState() => _ButtonBoostState();
 }

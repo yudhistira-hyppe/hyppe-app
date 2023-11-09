@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -192,18 +193,20 @@ class _VideoEditorState extends State<VideoEditor> {
                                   tenPx,
                                   _controller.video.value.isPlaying
                                       ? IconButton(
-                                          icon: const CustomIconWidget(
-                                              iconData:
-                                                  "${AssetPath.vectorPath}circle_pause.svg"),
+                                          icon: CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}ic_pause.svg",
+                                            defaultColor: false,
+                                            color: context.getColorScheme().background,),
                                           splashRadius: 1,
                                           onPressed: () {
                                             _controller.video.pause();
                                           },
                                         )
                                       : IconButton(
-                                          icon: const CustomIconWidget(
-                                              iconData:
-                                                  "${AssetPath.vectorPath}circle_play.svg"),
+                                          icon: CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}ic_play.svg",
+                                            defaultColor: false,
+                                            color: context.getColorScheme().background,),
                                           splashRadius: 1,
                                           onPressed: () {
                                             _controller.video.play();

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/challange/bloc.dart';
 import 'package:hyppe/core/bloc/challange/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
@@ -24,14 +23,10 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_slider.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/notifier_v2.dart';
-import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:provider/provider.dart';
 

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:gif_view/gif_view.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';

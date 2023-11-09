@@ -10,8 +10,8 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:provider/provider.dart';
 
 class ButtonWithdrawalWidget extends StatelessWidget {
-  LocalizationModelV2? translate;
-  ButtonWithdrawalWidget({Key? key, this.translate}) : super(key: key);
+  final LocalizationModelV2? translate;
+  const ButtonWithdrawalWidget({Key? key, this.translate}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

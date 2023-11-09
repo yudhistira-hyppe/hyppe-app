@@ -48,9 +48,9 @@ class PicCenterItem extends StatelessWidget {
     SizeConfig().init(context);
     final _scaling = (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2;
     // 'mediaThumbEndPoint : ${data?.mediaThumbEndPoint} , ${data?.mediaEndpoint}. ${data?.postID}'.logger();
-    var statusFollowing = (data?.following ?? false) ? StatusFollowing.following : StatusFollowing.none;
+    // var statusFollowing = (data?.following ?? false) ? StatusFollowing.following : StatusFollowing.none;
     var email = SharedPreference().readStorage(SpKeys.email);
-    int followTriger = 0;
+    // int followTriger = 0;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),

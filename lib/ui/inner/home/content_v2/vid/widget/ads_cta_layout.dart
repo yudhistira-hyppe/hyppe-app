@@ -147,64 +147,39 @@ class _AdsCTALayoutState extends State<AdsCTALayout> {
                         final data = widget.adsData;
                         final secondsVideo = widget.adsData.duration?.round() ?? 10;
                         if(!loadLaunch){
-                          if(data != null){
-                            if (data.adsUrlLink?.isEmail() ?? false) {
-                              final email = data.adsUrlLink!.replaceAll('email:', '');
+                          if (data.adsUrlLink?.isEmail() ?? false) {
+                            final email = data.adsUrlLink!.replaceAll('email:', '');
+                            setState(() {
+                              loadLaunch = true;
+                            });
+                            print('second close ads: $secondsVideo');
+                            System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                              notifier.adsAliplayer?.stop();
+                              notifier.adsCurrentPosition = 0;
+                              notifier.adsCurrentPositionText = 0;
+                              notifier.hasShowedAds = true;
+                              notifier.tempAdsData = null;
+                              notifier.isShowingAds = false;
+                              notifier.setMapAdsContent(widget.postId, null);
+                              widget.onClose();
+                              Future.delayed(const Duration(milliseconds: 800), () {
+                                Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                              });
                               setState(() {
-                                loadLaunch = true;
+                                loadLaunch = false;
                               });
-                              print('second close ads: $secondsVideo');
-                              System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
-                                notifier.adsAliplayer?.stop();
-                                notifier.adsCurrentPosition = 0;
-                                notifier.adsCurrentPositionText = 0;
-                                notifier.hasShowedAds = true;
-                                notifier.tempAdsData = null;
-                                notifier.isShowingAds = false;
-                                notifier.setMapAdsContent(widget.postId, null);
-                                widget.onClose();
-                                Future.delayed(const Duration(milliseconds: 800), () {
-                                  Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                                });
-                                setState(() {
-                                  loadLaunch = false;
-                                });
-                              });
-                            } else {
-                              if((data.adsUrlLink ?? '').withHttp()){
-                                try {
-                                  final uri = Uri.parse(data.adsUrlLink ?? '');
-                                  print('bottomAdsLayout ${data.adsUrlLink}');
-                                  if (await canLaunchUrl(uri)) {
-                                    setState(() {
-                                      loadLaunch = true;
-                                    });
-                                    print('second close ads: $secondsVideo');
-                                    System().adsView(data, secondsVideo, isClick: true).whenComplete(() async {
-                                      notifier.adsAliplayer?.stop();
-                                      notifier.adsCurrentPosition = 0;
-                                      notifier.adsCurrentPositionText = 0;
-                                      notifier.hasShowedAds = true;
-                                      notifier.tempAdsData = null;
-                                      notifier.isShowingAds = false;
-                                      notifier.setMapAdsContent(widget.postId, null);
-                                      widget.onClose();
-                                      await launchUrl(
-                                        uri,
-                                        mode: LaunchMode.externalApplication,
-                                      );
-                                    });
-                                  } else {
-                                    throw "Could not launch $uri";
-                                  }
-                                  // can't launch url, there is some error
-                                } catch (e) {
+                            });
+                          } else {
+                            if((data.adsUrlLink ?? '').withHttp()){
+                              try {
+                                final uri = Uri.parse(data.adsUrlLink ?? '');
+                                print('bottomAdsLayout ${data.adsUrlLink}');
+                                if (await canLaunchUrl(uri)) {
                                   setState(() {
                                     loadLaunch = true;
                                   });
                                   print('second close ads: $secondsVideo');
-                                  // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                  System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                  System().adsView(data, secondsVideo, isClick: true).whenComplete(() async {
                                     notifier.adsAliplayer?.stop();
                                     notifier.adsCurrentPosition = 0;
                                     notifier.adsCurrentPositionText = 0;
@@ -212,22 +187,41 @@ class _AdsCTALayoutState extends State<AdsCTALayout> {
                                     notifier.tempAdsData = null;
                                     notifier.isShowingAds = false;
                                     notifier.setMapAdsContent(widget.postId, null);
-                                    notifier.isPlay = true;
                                     widget.onClose();
-                                    System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                    await launchUrl(
+                                      uri,
+                                      mode: LaunchMode.externalApplication,
+                                    );
                                   });
-                                }finally{
-                                  setState(() {
-                                    loadLaunch = false;
-                                  });
+                                } else {
+                                  throw "Could not launch $uri";
                                 }
+                                // can't launch url, there is some error
+                              } catch (e) {
+                                setState(() {
+                                  loadLaunch = true;
+                                });
+                                print('second close ads: $secondsVideo');
+                                // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                  notifier.adsAliplayer?.stop();
+                                  notifier.adsCurrentPosition = 0;
+                                  notifier.adsCurrentPositionText = 0;
+                                  notifier.hasShowedAds = true;
+                                  notifier.tempAdsData = null;
+                                  notifier.isShowingAds = false;
+                                  notifier.setMapAdsContent(widget.postId, null);
+                                  notifier.isPlay = true;
+                                  widget.onClose();
+                                  System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                });
+                              }finally{
+                                setState(() {
+                                  loadLaunch = false;
+                                });
                               }
-
                             }
-                          }else{
-                            setState(() {
-                              loadLaunch = false;
-                            });
+
                           }
                         }
                       }

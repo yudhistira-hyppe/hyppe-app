@@ -108,14 +108,10 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     final count = context.getAdsCount();
     String? urlAds;
 
-    if (count == null) {
-      context.setAdsCount(0);
-    } else {
-      if (count == 2) {
-        'type ads : Sponsored Ads'.logger();
-        _isSponsored = true;
-        urlAds = await getAdsVideo(context, false);
-      }
+    if (count == 2) {
+      'type ads : Sponsored Ads'.logger();
+      _isSponsored = true;
+      urlAds = await getAdsVideo(context, false);
     }
     if (urlAds != null) {
       _adsUrl = urlAds;
@@ -189,6 +185,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     } finally {
       // loadPic = false;
     }
+    return null;
   }
 
   Future<String?> getAdsVideo(BuildContext context, bool isContent) async {

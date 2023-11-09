@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/chalange/leaderboard_challange_model.dart';
 import 'package:hyppe/core/models/collection/common/user_badge_model.dart';

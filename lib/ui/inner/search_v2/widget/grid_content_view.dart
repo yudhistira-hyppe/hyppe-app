@@ -17,14 +17,14 @@ import '../../../constant/widget/custom_icon_widget.dart';
 import '../../home/content_v2/profile/self_profile/widget/sensitive_content.dart';
 
 class GridContentView extends StatefulWidget {
-  HyppeType type;
-  List<ContentData> data;
-  bool isLoading;
-  double heightTab;
-  String keyword;
-  TypeApiSearch api;
-  ScrollController controller;
-  GridContentView({Key? key, required this.type, required this.data, required this.isLoading, required this.heightTab, required this.keyword, required this.api, required this.controller}) : super(key: key);
+  final HyppeType type;
+  final List<ContentData> data;
+  final bool isLoading;
+  final double heightTab;
+  final String keyword;
+  final TypeApiSearch api;
+  final ScrollController controller;
+  const GridContentView({Key? key, required this.type, required this.data, required this.isLoading, required this.heightTab, required this.keyword, required this.api, required this.controller}) : super(key: key);
 
   @override
   State<GridContentView> createState() => _GridContentViewState();

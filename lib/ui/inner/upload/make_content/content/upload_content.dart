@@ -18,8 +18,6 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
-import 'package:hyppe/ui/inner/upload/make_content/widget/build_ok_button.dart';
-import 'package:hyppe/ui/inner/upload/make_content/widget/build_timer.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_capture_icon.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_storage.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_switch_button.dart';

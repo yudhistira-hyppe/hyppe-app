@@ -18,7 +18,6 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
-import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/utils/zoom_pic/zoom_pic.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -37,13 +36,10 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/profile_landingpage.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/player/landing_diary.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
-import 'package:hyppe/ui/inner/home/content_v2/tutor_landing/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/screen.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -59,8 +55,6 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../ux/path.dart';
 import '../../../../constant/entities/report/notifier.dart';
-// import 'package:snappy_list_view/snappy_list_view.dart';
-// import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 class HyppePreviewPic extends StatefulWidget {
   final ScrollController? scrollController;
@@ -82,22 +76,22 @@ class HyppePreviewPic extends StatefulWidget {
 
 class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware {
   FlutterAliplayer? fAliplayer;
-  TransformationController _transformationController = TransformationController();
+  // TransformationController _transformationController = TransformationController();
   ScrollController innerScrollController = ScrollController();
 
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
-  bool _showLoading = false;
-  bool _inSeek = false;
+  // bool _showLoading = false;
+  // bool _inSeek = false;
   bool isloading = false;
 
-  int _loadingPercent = 0;
-  int _currentPlayerState = 0;
+  // int _loadingPercent = 0;
+  // int _currentPlayerState = 0;
   int _videoDuration = 1;
-  int _currentPosition = 0;
-  int _bufferPosition = 0;
-  int _currentPositionText = 0;
+  // int _currentPosition = 0;
+  // int _bufferPosition = 0;
+  // int _currentPositionText = 0;
   int _curIdx = 0;
   int _lastCurIndex = -1;
   String _curPostId = '';
@@ -105,15 +99,15 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
 
   String auth = '';
   String url = '';
-  final Map _dataSourceMap = {};
-  ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
+  // final Map _dataSourceMap = {};
+  // ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
   LocalizationModelV2? lang;
   ContentData? dataSelected;
   bool isMute = true;
   String email = '';
   // String statusKyc = '';
   bool isInPage = true;
-  bool _scroolEnabled = true;
+  // bool _scroolEnabled = true;
   double itemHeight = 0;
   ScrollController controller = ScrollController();
   ScrollPhysics scrollPhysic = const NeverScrollableScrollPhysics();
@@ -199,12 +193,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
-      _currentPlayerState = newState;
+      // _currentPlayerState = newState;
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
           setState(() {
-            _showLoading = false;
+            // _showLoading = false;
             isPause = false;
           });
           break;
@@ -217,27 +211,27 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
       setState(() {
-        _loadingPercent = 0;
-        _showLoading = true;
+        // _loadingPercent = 0;
+        // _showLoading = true;
       });
     }, loadingProgress: (percent, netSpeed, playerId) {
-      _loadingPercent = percent;
+      // _loadingPercent = percent;
       if (percent == 100) {
-        _showLoading = false;
+        // _showLoading = false;
       }
       setState(() {});
     }, loadingEnd: (playerId) {
       setState(() {
-        _showLoading = false;
+        // _showLoading = false;
       });
     });
     fAliplayer?.setOnSeekComplete((playerId) {
-      _inSeek = false;
+      // _inSeek = false;
     });
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
-          _currentPosition = extraValue ?? 0;
+          // _currentPosition = extraValue ?? 0;
         }
         // if (!_inSeek) {
         //   setState(() {
@@ -245,7 +239,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
         //   });
         // }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-        _bufferPosition = extraValue ?? 0;
+        // _bufferPosition = extraValue ?? 0;
         if (mounted) {
           setState(() {});
         }
@@ -261,12 +255,12 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       }
     });
     fAliplayer?.setOnCompletion((playerId) {
-      _showLoading = false;
+      // _showLoading = false;
 
       isPause = true;
 
       setState(() {
-        _currentPosition = _videoDuration;
+        // _currentPosition = _videoDuration;
       });
     });
 
@@ -275,14 +269,14 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       // Fluttertoast.showToast(msg: "SnapShot Save : $path");
     });
     fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-      _showLoading = false;
+      // _showLoading = false;
 
       setState(() {});
     });
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
       AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-      if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
+      if ((info.trackDefinition?.length ?? 0) > 0) {
         // trackFragmentKey.currentState.onTrackChanged(info);
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
@@ -448,10 +442,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     //       "eyJTZWN1cml0eVRva2VuIjoiQ0FJU2lBTjFxNkZ0NUIyeWZTaklyNURISnUvWnJvZFIrb1d2VlY2SmdHa0RPdFZjaDZMRG96ejJJSDFLZlhadEJPQWN0ZlF3bFdwVDdQNGJsckl1RjhJWkdoR2ZONU10dE1RUHJGL3dKb0hidk5ldTBic0hoWnY5bGNNTHJaaWpqcUhvZU96Y1lJNzMwWjdQQWdtMlEwWVJySkwrY1RLOUphYk1VL21nZ29KbWFkSTZSeFN4YVNFOGF2NWRPZ3BscnIwSVZ4elBNdnIvSFJQMnVtN1pIV3R1dEEwZTgzMTQ1ZmFRejlHaTZ4YlRpM2I5ek9FVXFPYVhKNFMvUGZGb05ZWnlTZjZvd093VUVxL2R5M3hvN3hGYjFhRjRpODRpL0N2YzdQMlFDRU5BK3dtbFB2dTJpOE5vSUYxV2E3UVdJWXRncmZQeGsrWjEySmJOa0lpbDVCdFJFZHR3ZUNuRldLR216c3krYjRIUEROc2ljcXZoTUhuZ3k4MkdNb0tQMHprcGVuVUdMZ2hIQ2JGRFF6MVNjVUZ3RjIyRmQvVDlvQTJRTWwvK0YvbS92ZnRvZ2NvbC9UTEI1c0dYSWxXRGViS2QzQnNETjRVMEIwRlNiRU5JaERPOEwvOWNLRndUSWdrOFhlN01WL2xhYUJGUHRLWFdtaUgrV3lOcDAzVkxoZnI2YXVOcGJnUHIxVVFwTlJxQUFaT3kybE5GdndoVlFObjZmbmhsWFpsWVA0V3paN24wTnVCbjlILzdWZHJMOGR5dHhEdCtZWEtKNWI4SVh2c0lGdGw1cmFCQkF3ZC9kakhYTjJqZkZNVFJTekc0T3pMS1dKWXVzTXQycXcwMSt4SmNHeE9iMGtKZjRTcnFpQ1RLWVR6UHhwakg0eDhvQTV6Z0cvZjVIQ3lFV3pISmdDYjhEeW9EM3NwRUh4RGciLCJBdXRoSW5mbyI6IntcIkNJXCI6XCJmOUc0eExxaHg2Tkk3YThaY1Q2N3hObmYrNlhsM05abmJXR1VjRmxTelljS0VKVTN1aVRjQ29Hd3BrcitqL2phVVRXclB2L2xxdCs3MEkrQTJkb3prd0IvKzc5ZlFyT2dLUzN4VmtFWUt6TT1cIixcIkNhbGxlclwiOlwiV2NKTEpvUWJHOXR5UmM2ZXg3LzNpQXlEcS9ya3NvSldhcXJvTnlhTWs0Yz1cIixcIkV4cGlyZVRpbWVcIjpcIjIwMjMtMDMtMTZUMDk6NDE6MzdaXCIsXCJNZWRpYUlkXCI6XCJjMWIyNGQzMGIyYzY3MWVkYmZjYjU0MjI4MGU5MDEwMlwiLFwiUGxheURvbWFpblwiOlwidm9kLmh5cHBlLmNsb3VkXCIsXCJTaWduYXR1cmVcIjpcIk9pbHhxelNyaVVhOGlRZFhaVEVZZEJpbUhJUT1cIn0iLCJWaWRlb01ldGEiOnsiU3RhdHVzIjoiTm9ybWFsIiwiVmlkZW9JZCI6ImMxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyIiwiVGl0bGUiOiIyODg4MTdkYi1jNzdjLWM0ZTQtNjdmYi0zYjk1MTlmNTc0ZWIiLCJDb3ZlclVSTCI6Imh0dHBzOi8vdm9kLmh5cHBlLmNsb3VkL2MxYjI0ZDMwYjJjNjcxZWRiZmNiNTQyMjgwZTkwMTAyL3NuYXBzaG90cy9jYzM0MjVkNzJiYjM0YTE3OWU5NmMzZTA3NTViZjJjNi0wMDAwNC5qcGciLCJEdXJhdGlvbiI6NTkuMDQ5fSwiQWNjZXNzS2V5SWQiOiJTVFMuTlNybVVtQ1hwTUdEV3g4ZGlWNlpwaGdoQSIsIlBsYXlEb21haW4iOiJ2b2QuaHlwcGUuY2xvdWQiLCJBY2Nlc3NLZXlTZWNyZXQiOiIzU1NRUkdkOThGMU04TkZ0b00xa2NlU01IZlRLNkJvZm93VXlnS1Y5aEpQdyIsIlJlZ2lvbiI6ImFwLXNvdXRoZWFzdC01IiwiQ3VzdG9tZXJJZCI6NTQ1NDc1MzIwNTI4MDU0OX0=",
     // );
 
-    _playMode = ModeTypeAliPLayer.auth;
+    // _playMode = ModeTypeAliPLayer.auth;
     // await getAuth(data.music?.apsaraMusic ?? '');
     if (data.reportedStatus != 'BLURRED') {
-      _playMode = ModeTypeAliPLayer.auth;
+      // _playMode = ModeTypeAliPLayer.auth;
       await getAuth(context, data.music?.apsaraMusic ?? '');
     }
 
@@ -637,6 +631,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
       case AppLifecycleState.detached:
         print("========= detached");
         break;
+      default:
+        break;
     }
   }
 
@@ -654,15 +650,13 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
     super.didUpdateWidget(oldWidget);
   }
 
-  int _currentItem = 0;
-
   List heightItem = [600, 400, 400];
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
-    AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
+    context.select((ErrorService value) => value.getError(ErrorType.pic));
+    // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
     return Consumer2<PreviewPicNotifier, HomeNotifier>(
       builder: (_, notifier, home, __) => Container(
         width: SizeConfig.screenWidth,
@@ -847,11 +841,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                             _curPostId = picData?.inBetweenAds?.adsId ?? index.toString();
                             if (_lastCurIndex > _curIdx) {
                               // fAliplayer?.destroy();
-                              double position = 0.0;
-                              for (var i = 0; i < _curIdx; i++) {
-                                position += notifier.pic?[i].height ?? 0.0;
-                                // position = position - (notifier.pic?[_curIdx].height);
-                              }
+                              // double position = 0.0;
+                              // for (var i = 0; i < _curIdx; i++) {
+                              //   position += notifier.pic?[i].height ?? 0.0;
+                              //   // position = position - (notifier.pic?[_curIdx].height);
+                              // }
                               // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
                             }
 
@@ -1039,11 +1033,11 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                       _curPostId = picData?.postID ?? index.toString();
                                       if (_lastCurIndex > _curIdx) {
                                         // fAliplayer?.destroy();
-                                        double position = 0.0;
-                                        for (var i = 0; i < _curIdx; i++) {
-                                          position += notifier.pic?[i].height ?? 0.0;
-                                          // position = position - (notifier.pic?[_curIdx].height);
-                                        }
+                                        // double position = 0.0;
+                                        // for (var i = 0; i < _curIdx; i++) {
+                                        //   position += notifier.pic?[i].height ?? 0.0;
+                                        //   // position = position - (notifier.pic?[_curIdx].height);
+                                        // }
                                         // context.read<MainNotifier>().globalKey.currentState?.innerController.jumpTo(position);
                                       }
 
@@ -1055,7 +1049,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> with WidgetsBindingOb
                                           });
                                         }
                                         final indexList = notifier.pic?.indexWhere((element) => element.postID == _curPostId);
-                                        final latIndexList = notifier.pic?.indexWhere((element) => element.postID == _lastCurPostId);
+                                        // final latIndexList = notifier.pic?.indexWhere((element) => element.postID == _lastCurPostId);
 
                                         if (indexList == (notifier.pic?.length ?? 0) - 1) {
                                           context.read<HomeNotifier>().initNewHome(context, mounted, isreload: false, isgetMore: true).then((value) {});

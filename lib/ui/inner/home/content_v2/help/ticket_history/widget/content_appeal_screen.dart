@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../../../../../../constant/widget/after_first_layout_mixin.dart';
 import '../../../../../../constant/widget/custom_loading.dart';
 import '../../../../../../constant/widget/custom_shimmer.dart';
-import '../../../../../../constant/widget/custom_text_widget.dart';
 import '../../../../../../constant/widget/no_result_found.dart';
 
 class ContentAppealScreen extends StatefulWidget {

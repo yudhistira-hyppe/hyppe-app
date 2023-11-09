@@ -1,5 +1,4 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:hyppe/core/extension/custom_extension.dart';
 import 'package:hyppe/core/models/collection/notification_v2/notification.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/notification/widget/component.dart';

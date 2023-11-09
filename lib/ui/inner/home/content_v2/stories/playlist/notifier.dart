@@ -20,7 +20,6 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
 
 import 'package:hyppe/core/extension/log_extension.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/music/music.dart';
 
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
@@ -584,7 +583,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
                           //   contentData: data,
                           //   reaction: _data?.data[index],
                           // ));
-                          final tempLength = emojiActions.length;
+                          // final tempLength = emojiActions.length;
                           Future.delayed(const Duration(seconds: 3), () {
                             try {
                               sendMessageReaction(

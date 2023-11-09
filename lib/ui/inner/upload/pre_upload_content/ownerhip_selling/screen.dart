@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_check_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -13,8 +12,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
-import 'package:intl/intl.dart';
-import 'package:pattern_formatter/numeric_formatter.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../constant/widget/custom_currency_input_formatter.dart';

@@ -10,10 +10,10 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:provider/provider.dart';
 
 class WithdrawalWidget extends StatelessWidget {
-  String? title;
-  TransactionHistoryModel? data;
-  LocalizationModelV2? language;
-  WithdrawalWidget({Key? key, this.title, this.data, this.language}) : super(key: key);
+  final String? title;
+  final TransactionHistoryModel? data;
+  final LocalizationModelV2? language;
+  const WithdrawalWidget({Key? key, this.title, this.data, this.language}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,6 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
@@ -17,8 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:provider/provider.dart';
-// import 'package:story_view/controller/story_controller.dart';
-// import 'package:story_view/widgets/story_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -31,20 +28,15 @@ import '../../../../../core/services/shared_preference.dart';
 import '../../../../../core/services/system.dart';
 import '../../../../../ux/path.dart';
 import '../../../../../ux/routing.dart';
-import '../../../widget/custom_background_layer.dart';
 import '../../../widget/custom_base_cache_image.dart';
-import '../../../widget/custom_cache_image.dart';
 
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/core/config/ali_config.dart';
-import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-// import 'package:connectivity_plus/connectivity_plus.dart';
 
 class AdsPopUpDialog extends StatefulWidget {
   final AdsData data;
@@ -68,7 +60,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
   bool isPause = false;
   int? bottomIndex;
   List<Widget>? mFramePage;
-  ModeTypeAliPLayer? _playMode;
+  // ModeTypeAliPLayer? _playMode;
   Map<String, dynamic>? _dataSourceMap;
   String auth = '';
 
@@ -81,16 +73,16 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
   int _currentPosition = 0;
 
   //当前播放时间，用于Text展示
-  int _currentPositionText = 0;
+  // int _currentPositionText = 0;
 
   //当前buffer进度
-  int _bufferPosition = 0;
+  // int _bufferPosition = 0;
 
   //是否展示loading
-  bool _showLoading = false;
+  // bool _showLoading = false;
 
   //loading进度
-  int _loadingPercent = 0;
+  // int _loadingPercent = 0;
 
   //视频时长
   int _videoDuration = 1;
@@ -99,31 +91,31 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
   String _snapShotPath = '';
 
   //提示内容
-  String _tipsContent = '';
+  // String _tipsContent = '';
 
   //是否展示提示内容
-  bool _showTipsWidget = false;
+  // bool _showTipsWidget = false;
 
   //是否有缩略图
-  bool _thumbnailSuccess = false;
+  // bool _thumbnailSuccess = false;
 
   //缩略图
   // Uint8List _thumbnailBitmap;
-  ImageProvider? _imageProvider;
+  // ImageProvider? _imageProvider;
 
   //当前网络状态
   // ConnectivityResult? _currentConnectivityResult;
 
   ///seek中
-  bool _inSeek = false;
+  // bool _inSeek = false;
 
-  bool _isLock = false;
+  // bool _isLock = false;
 
   //网络状态
-  bool _isShowMobileNetWork = false;
+  // bool _isShowMobileNetWork = false;
 
   //当前播放器状态
-  int _currentPlayerState = 0;
+  // int _currentPlayerState = 0;
 
   String extSubTitleText = '';
 
@@ -135,11 +127,11 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
 
   // PageController? _pageController;
 
-  RefreshController _videoListRefreshController = RefreshController(initialRefresh: false);
-
-  List<ContentData>? _listData;
-
-  late PageController _pageController;
+  // RefreshController _videoListRefreshController = RefreshController(initialRefresh: false);
+  //
+  // List<ContentData>? _listData;
+  //
+  // late PageController _pageController;
 
   var loadLaunch = false;
 
@@ -177,7 +169,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
           setState(() {});
         });
 
-      _playMode = ModeTypeAliPLayer.auth;
+      // _playMode = ModeTypeAliPLayer.auth;
       // if (widget.data?.apsaraId != '') {
       // } else {
       //   _playMode = ModeTypeAliPLayer.url;
@@ -260,14 +252,14 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
-      _currentPlayerState = newState;
+      // _currentPlayerState = newState;
       try {
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
             WakelockPlus.enable();
             setState(() {
-              _showTipsWidget = false;
-              _showLoading = false;
+              // _showTipsWidget = false;
+              // _showLoading = false;
               isPause = false;
             });
             _animationController?.forward();
@@ -300,23 +292,23 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
       _animationController?.stop();
       setState(() {
-        _loadingPercent = 0;
-        _showLoading = true;
+        // _loadingPercent = 0;
+        // _showLoading = true;
       });
     }, loadingProgress: (percent, netSpeed, playerId) {
-      _loadingPercent = percent;
+      // _loadingPercent = percent;
       if (percent == 100) {
-        _showLoading = false;
+        // _showLoading = false;
       }
       setState(() {});
     }, loadingEnd: (playerId) {
       _animationController?.forward();
       setState(() {
-        _showLoading = false;
+        // _showLoading = false;
       });
     });
     fAliplayer?.setOnSeekComplete((playerId) {
-      _inSeek = false;
+      // _inSeek = false;
     });
     var lastDetik = 0;
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
@@ -341,7 +333,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
         //   });
         // }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-        _bufferPosition = extraValue ?? 0;
+        // _bufferPosition = extraValue ?? 0;
         if (mounted) {
           setState(() {});
         }
@@ -359,9 +351,9 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       }
     });
     fAliplayer?.setOnCompletion((playerId) {
-      _showTipsWidget = true;
-      _showLoading = false;
-      _tipsContent = "Play Again";
+      // _showTipsWidget = true;
+      // _showLoading = false;
+      // _tipsContent = "Play Again";
       isPause = true;
       // adsView(widget.data, secondsVideo);
       setState(() {
@@ -374,24 +366,24 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       // Fluttertoast.showToast(msg: "SnapShot Save : $path");
     });
     fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-      _showTipsWidget = true;
-      _showLoading = false;
-      _tipsContent = "$errorCode \n $errorMsg";
+      // _showTipsWidget = true;
+      // _showLoading = false;
+      // _tipsContent = "$errorCode \n $errorMsg";
       setState(() {});
     });
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
       AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-      if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
+      if ((info.trackDefinition?.length ?? 0) > 0) {
         // trackFragmentKey.currentState.onTrackChanged(info);
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
     });
 
     fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {
-      _thumbnailSuccess = true;
+      // _thumbnailSuccess = true;
     }, preparedFail: (playerId) {
-      _thumbnailSuccess = false;
+      // _thumbnailSuccess = false;
     });
 
     fAliplayer?.setOnThumbnailGetListener(
@@ -400,7 +392,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
           var provider = MemoryImage(bitmap);
           precacheImage(provider, context).then((_) {
             setState(() {
-              _imageProvider = provider;
+              // _imageProvider = provider;
             });
           });
         },
@@ -442,6 +434,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
         }
         break;
       case AppLifecycleState.detached:
+        break;
+      default:
         break;
     }
   }
@@ -508,12 +502,12 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
     }
   }
 
-  int _curIdx = 0;
-  int _lastCurIndex = -1;
-  bool _isPause = false;
+  // int _curIdx = 0;
+  // int _lastCurIndex = -1;
+  // bool _isPause = false;
   double _playerY = 0;
-  bool _isFirstRenderShow = false;
-  bool _isBackgroundMode = false;
+  // bool _isFirstRenderShow = false;
+  // bool _isBackgroundMode = false;
 
   void onViewPlayerCreated(viewId) async {
     fAliplayer?.setPlayerView(viewId);
@@ -990,47 +984,47 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
     fAliplayer?.stop();
     isPlay = false;
 
-    setState(() {
-      _isPause = false;
-      _isFirstRenderShow = false;
-    });
+    // setState(() {
+    //   _isPause = false;
+    //   _isFirstRenderShow = false;
+    // });
 
     fAliplayer?.prepare();
     // fAliplayer?.play();
   }
 
-  void _onPlayerHide() {
-    Future.delayed(const Duration(seconds: 4), () {
-      onTapCtrl = false;
-      setState(() {});
-    });
-  }
-
-  ///Loading
-  _buildProgressBar(double width, double height) {
-    if (_showLoading) {
-      return Positioned(
-        left: width / 2 - 20,
-        top: height / 2 - 20,
-        child: Column(
-          children: [
-            const CircularProgressIndicator(
-              backgroundColor: Colors.white,
-              strokeWidth: 3.0,
-            ),
-            const SizedBox(
-              height: 10.0,
-            ),
-            Text(
-              "$_loadingPercent%",
-              style: const TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
-      );
-    } else {
-      return const SizedBox();
-    }
-  }
+  // void _onPlayerHide() {
+  //   Future.delayed(const Duration(seconds: 4), () {
+  //     onTapCtrl = false;
+  //     setState(() {});
+  //   });
+  // }
+  //
+  // ///Loading
+  // _buildProgressBar(double width, double height) {
+  //   if (_showLoading) {
+  //     return Positioned(
+  //       left: width / 2 - 20,
+  //       top: height / 2 - 20,
+  //       child: Column(
+  //         children: [
+  //           const CircularProgressIndicator(
+  //             backgroundColor: Colors.white,
+  //             strokeWidth: 3.0,
+  //           ),
+  //           const SizedBox(
+  //             height: 10.0,
+  //           ),
+  //           Text(
+  //             "$_loadingPercent%",
+  //             style: const TextStyle(color: Colors.white),
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   } else {
+  //     return const SizedBox();
+  //   }
+  // }
 }
 

@@ -234,7 +234,7 @@ class NotificationService {
         final Map<String, dynamic> jsonNotif = message.data;
         jsonNotif['isBackground'] = isBackground;
         // final Map<String, dynamic> map = json.decode(message.notification?.body ?? '{}');
-        var body;
+        // var body;
         // Platform.isIOS ? body = json.decode(message.notification?.body ?? '') : '';
         await flutterLocalNotificationsPlugin.show(
           message.hashCode,

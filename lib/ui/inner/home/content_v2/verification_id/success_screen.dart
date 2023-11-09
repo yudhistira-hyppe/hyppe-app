@@ -29,7 +29,7 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    bool keyboardIsOpen = MediaQuery.of(context).viewInsets.bottom != 0;
+    // bool keyboardIsOpen = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => WillPopScope(

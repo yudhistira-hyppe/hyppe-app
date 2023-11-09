@@ -4,8 +4,8 @@ import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 
 class CustomLikeAnimation extends StatefulWidget {
-  Function() onEnd;
-  CustomLikeAnimation({Key? key, required this.onEnd}) : super(key: key);
+  final Function() onEnd;
+  const CustomLikeAnimation({Key? key, required this.onEnd}) : super(key: key);
 
   @override
   State<CustomLikeAnimation> createState() => _CustomLikeAnimationState();

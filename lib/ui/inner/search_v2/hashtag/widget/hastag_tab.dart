@@ -5,13 +5,12 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
 import '../../../../../core/constants/enum.dart';
-import '../../../../../core/constants/themes/hyppe_colors.dart';
 
 class HashtagTab extends StatelessWidget {
-  bool isActive;
-  HyppeType type;
-  Function(HyppeType)? onTap;
-  HashtagTab({Key? key, required this.isActive, required this.type, this.onTap})
+  final bool isActive;
+  final HyppeType type;
+  final Function(HyppeType)? onTap;
+  const HashtagTab({Key? key, required this.isActive, required this.type, this.onTap})
       : super(key: key);
 
   @override

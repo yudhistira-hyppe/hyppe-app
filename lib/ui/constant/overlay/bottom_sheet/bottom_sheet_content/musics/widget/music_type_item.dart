@@ -9,9 +9,9 @@ import '../../../../../../inner/upload/preview_content/notifier.dart';
 import '../../../../../widget/custom_text_button.dart';
 
 class MusicTypeItem extends StatefulWidget {
-  MusicGroupType group;
-  int index;
-  MusicTypeItem({Key? key, required this.group, required this.index}) : super(key: key);
+  final MusicGroupType group;
+  final int index;
+  const MusicTypeItem({Key? key, required this.group, required this.index}) : super(key: key);
 
   @override
   State<MusicTypeItem> createState() => _MusicTypeItemState();

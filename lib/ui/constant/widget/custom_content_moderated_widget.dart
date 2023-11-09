@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 import 'dart:ui';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -10,7 +8,6 @@ import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import '../../../app.dart';
 import 'custom_base_cache_image.dart';
 import 'custom_icon_widget.dart';
-import 'custom_loading.dart';
 import 'custom_spacer.dart';
 import 'custom_text_widget.dart';
 

@@ -39,8 +39,8 @@ import '../custom_cache_image.dart';
 class AdsPlayerPage extends StatefulWidget {
   final Map<String, dynamic> dataSourceMap;
   final AdsData? data;
-  double? height;
-  double? width;
+  final double? height;
+  final double? width;
   final Function functionFullTriger;
   final Function(FlutterAliplayer)? getPlayer;
   final Function(AdsData)? onPlay;
@@ -51,7 +51,7 @@ class AdsPlayerPage extends StatefulWidget {
   final String thumbnail;
   final bool fromFullScreen;
 
-  AdsPlayerPage({
+  const AdsPlayerPage({
     Key? key,
     required this.dataSourceMap,
     required this.data,
@@ -81,7 +81,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
   int? bottomIndex;
   List<Widget>? mFramePage;
   Map<String, dynamic>? _dataSourceMap;
-  Map<String, dynamic>? _dataSourceAdsMap;
+  // Map<String, dynamic>? _dataSourceAdsMap;
   String urlVid = '';
   String _savePath = '';
   bool isMute = false;
@@ -93,10 +93,10 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
 
   // int _currentPosition = 0;
   // int _currentPositionText = 0;
-  int _currentAdsPositionText = 0;
+  // int _currentAdsPositionText = 0;
 
   //当前buffer进度
-  int _bufferPosition = 0;
+  // int _bufferPosition = 0;
 
   //是否展示loading
   bool _showLoading = false;
@@ -111,17 +111,17 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
   String _snapShotPath = '';
 
   //提示内容
-  String _tipsContent = '';
+  // String _tipsContent = '';
 
   //是否展示提示内容
-  bool _showTipsWidget = false;
+  // bool _showTipsWidget = false;
 
   //是否有缩略图
-  bool _thumbnailSuccess = false;
+  // bool _thumbnailSuccess = false;
 
   //缩略图
   // Uint8List _thumbnailBitmap;
-  ImageProvider? _imageProvider;
+  // ImageProvider? _imageProvider;
 
   //当前网络状态
   // ConnectivityResult? _currentConnectivityResult;
@@ -132,10 +132,10 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
   bool _isLock = false;
 
   //网络状态
-  bool _isShowMobileNetWork = false;
+  // bool _isShowMobileNetWork = false;
 
   //当前播放器状态
-  int _currentPlayerState = 0;
+  // int _currentPlayerState = 0;
 
   String extSubTitleText = '';
 
@@ -173,7 +173,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
         bottomIndex = 0;
 
         _dataSourceMap = widget.dataSourceMap;
-        _dataSourceAdsMap = {};
+        // _dataSourceAdsMap = {};
         setState(() {});
 
         //Turn on mix mode
@@ -248,14 +248,14 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
         print('video size changed');
       });
       notifier.adsAliplayer?.setOnStateChanged((newState, playerId) {
-        _currentPlayerState = newState;
+        // _currentPlayerState = newState;
         print("aliyun : onStateChanged $newState");
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
             WakelockPlus.enable();
             try {
               setState(() {
-                _showTipsWidget = false;
+                // _showTipsWidget = false;
                 _showLoading = false;
                 isPause = false;
               });
@@ -359,7 +359,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
             }
           }
         } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-          _bufferPosition = extraValue ?? 0;
+          // _bufferPosition = extraValue ?? 0;
           try{
             if (mounted) {
               setState(() {});
@@ -382,9 +382,9 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
         }
       });
       notifier.adsAliplayer?.setOnCompletion((playerId) {
-        _showTipsWidget = true;
+        // _showTipsWidget = true;
         _showLoading = false;
-        _tipsContent = "Play Again";
+        // _tipsContent = "Play Again";
         isPause = true;
         setState(() {
           notifier.adsCurrentPosition = notifier.adsVideoDuration;
@@ -396,21 +396,21 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
         // Fluttertoast.showToast(msg: "SnapShot Save : $path");
       });
       notifier.adsAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-        _showTipsWidget = true;
+        // _showTipsWidget = true;
         _showLoading = false;
-        _tipsContent = "$errorCode \n $errorMsg";
+        // _tipsContent = "$errorCode \n $errorMsg";
         setState(() {});
       });
 
       notifier.adsAliplayer?.setOnTrackChanged((value, playerId) {
         AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-        if (info != null && (info.trackDefinition?.length ?? 0) > 0) {}
+        if ((info.trackDefinition?.length ?? 0) > 0) {}
       });
 
       notifier.adsAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {
-        _thumbnailSuccess = true;
+        // _thumbnailSuccess = true;
       }, preparedFail: (playerId) {
-        _thumbnailSuccess = false;
+        // _thumbnailSuccess = false;
       });
 
       notifier.adsAliplayer?.setOnThumbnailGetListener(
@@ -419,7 +419,7 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
             var provider = MemoryImage(bitmap);
             precacheImage(provider, context).then((_) {
               setState(() {
-                _imageProvider = provider;
+                // _imageProvider = provider;
               });
             });
           },
@@ -579,6 +579,8 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
         break;
       case AppLifecycleState.detached:
         break;
+      default:
+        break;
     }
   }
 
@@ -604,9 +606,9 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
 
   @override
   Widget build(BuildContext context) {
-    var x = 0.0;
-    var y = 0.0;
-    var width = MediaQuery.of(context).size.width;
+    // var x = 0.0;
+    // var y = 0.0;
+    // var width = MediaQuery.of(context).size.width;
 
     if (widget.data?.isLoading ?? false) {
       Future.delayed(const Duration(milliseconds: 50), () {
@@ -802,62 +804,38 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                           if(notifier.secondsSkip <= 0){
                             final secondsVideo = data.duration?.round() ?? 10;
                             if(!loadLaunch){
-                              if(data != null){
-                                if (data.adsUrlLink?.isEmail() ?? false) {
-                                  final email = data.adsUrlLink!.replaceAll('email:', '');
+                              if (data.adsUrlLink?.isEmail() ?? false) {
+                                final email = data.adsUrlLink!.replaceAll('email:', '');
+                                setState(() {
+                                  loadLaunch = true;
+                                });
+                                print('second close ads: $secondsVideo');
+                                System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                  notifier.adsAliplayer?.stop();
+                                  notifier.adsCurrentPosition = 0;
+                                  notifier.adsCurrentPositionText = 0;
+                                  notifier.hasShowedAds = true;
+                                  notifier.tempAdsData = null;
+                                  notifier.isShowingAds = false;
+                                  widget.onClose();
+                                  Future.delayed(const Duration(milliseconds: 800), () {
+                                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                  });
                                   setState(() {
-                                    loadLaunch = true;
+                                    loadLaunch = false;
                                   });
-                                  print('second close ads: $secondsVideo');
-                                  System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
-                                    notifier.adsAliplayer?.stop();
-                                    notifier.adsCurrentPosition = 0;
-                                    notifier.adsCurrentPositionText = 0;
-                                    notifier.hasShowedAds = true;
-                                    notifier.tempAdsData = null;
-                                    notifier.isShowingAds = false;
-                                    widget.onClose();
-                                    Future.delayed(const Duration(milliseconds: 800), () {
-                                      Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                                    });
-                                    setState(() {
-                                      loadLaunch = false;
-                                    });
-                                  });
-                                } else {
-                                  if((data.adsUrlLink ?? '').withHttp()){
-                                    try {
-                                      final uri = Uri.parse(data.adsUrlLink ?? '');
-                                      print('bottomAdsLayout ${data.adsUrlLink}');
-                                      if (await canLaunchUrl(uri)) {
-                                        setState(() {
-                                          loadLaunch = true;
-                                        });
-                                        print('second close ads: $secondsVideo');
-                                        System().adsView(data, secondsVideo, isClick: true).whenComplete(() async {
-                                          notifier.adsAliplayer?.stop();
-                                          notifier.adsCurrentPosition = 0;
-                                          notifier.adsCurrentPositionText = 0;
-                                          notifier.hasShowedAds = true;
-                                          notifier.tempAdsData = null;
-                                          notifier.isShowingAds = false;
-                                          widget.onClose();
-                                          await launchUrl(
-                                            uri,
-                                            mode: LaunchMode.externalApplication,
-                                          );
-                                        });
-                                      } else {
-                                        throw "Could not launch $uri";
-                                      }
-                                      // can't launch url, there is some error
-                                    } catch (e) {
+                                });
+                              } else {
+                                if((data.adsUrlLink ?? '').withHttp()){
+                                  try {
+                                    final uri = Uri.parse(data.adsUrlLink ?? '');
+                                    print('bottomAdsLayout ${data.adsUrlLink}');
+                                    if (await canLaunchUrl(uri)) {
                                       setState(() {
                                         loadLaunch = true;
                                       });
                                       print('second close ads: $secondsVideo');
-                                      // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                                      System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                      System().adsView(data, secondsVideo, isClick: true).whenComplete(() async {
                                         notifier.adsAliplayer?.stop();
                                         notifier.adsCurrentPosition = 0;
                                         notifier.adsCurrentPositionText = 0;
@@ -865,20 +843,38 @@ class _AdsPlayerPageState extends State<AdsPlayerPage> with WidgetsBindingObserv
                                         notifier.tempAdsData = null;
                                         notifier.isShowingAds = false;
                                         widget.onClose();
-                                        System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                        await launchUrl(
+                                          uri,
+                                          mode: LaunchMode.externalApplication,
+                                        );
                                       });
-                                    }finally{
-                                      setState(() {
-                                        loadLaunch = false;
-                                      });
+                                    } else {
+                                      throw "Could not launch $uri";
                                     }
+                                    // can't launch url, there is some error
+                                  } catch (e) {
+                                    setState(() {
+                                      loadLaunch = true;
+                                    });
+                                    print('second close ads: $secondsVideo');
+                                    // System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                    System().adsView(data, secondsVideo, isClick: true).whenComplete(() {
+                                      notifier.adsAliplayer?.stop();
+                                      notifier.adsCurrentPosition = 0;
+                                      notifier.adsCurrentPositionText = 0;
+                                      notifier.hasShowedAds = true;
+                                      notifier.tempAdsData = null;
+                                      notifier.isShowingAds = false;
+                                      widget.onClose();
+                                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
+                                    });
+                                  }finally{
+                                    setState(() {
+                                      loadLaunch = false;
+                                    });
                                   }
-
                                 }
-                              }else{
-                                setState(() {
-                                  loadLaunch = false;
-                                });
+
                               }
                             }
                           }

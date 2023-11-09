@@ -6,7 +6,6 @@ import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/thumbnail_content_search.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -31,12 +30,12 @@ class VidSearchContent extends StatefulWidget {
 }
 
 class _VidSearchContentState extends State<VidSearchContent> {
-  final ScrollController _scrollController = ScrollController();
+  // final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VidSearchContent');
-    final notifier = Provider.of<SearchNotifier>(context, listen: false);
+    // final notifier = Provider.of<SearchNotifier>(context, listen: false);
     super.initState();
   }
 
@@ -108,36 +107,7 @@ class _VidSearchContentState extends State<VidSearchContent> {
                                   onTap: () {
                                     context.read<ReportNotifier>().inPosition = contentPosition.search;
                                     notifier.navigateToSeeAllScreen2(context, widget.content ?? [], index, widget.selecIndex ?? 0);
-                                    final _routing = Routing();
-                                    // switch (widget.featureType) {
-                                    //   case FeatureType.vid:
-                                    //     _routing.move(Routes.vidDetail,
-                                    //         argument: VidDetailScreenArgument(vidData: widget.content?[index])
-                                    //           ..postID = widget.content?[index].postID
-                                    //           ..backPage = true);
-                                    //     break;
 
-                                    //   case FeatureType.diary:
-                                    //     _routing.move(Routes.diaryDetail,
-                                    //         argument: DiaryDetailScreenArgument(
-                                    //             diaryData: widget.content, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search));
-
-                                    //     _routing.move(Routes.diaryDetail,
-                                    //         argument: DiaryDetailScreenArgument(diaryData: widget.content, index: index.toDouble(), type: TypePlaylist.none)
-                                    //           ..postID = widget.content?[index].postID
-                                    //           ..backPage = true);
-                                    //     break;
-                                    //   case FeatureType.pic:
-                                    //     _routing.move(Routes.picDetail,
-                                    //         argument: PicDetailScreenArgument(picData: widget.content?[index])
-                                    //           ..postID = widget.content?[index].postID
-                                    //           ..backPage = true);
-                                    //     break;
-                                    //   default:
-                                    // }
-
-                                    // print(widget.content[index].username);
-                                    // context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, widget.content[index]);
                                   },
                                   margin: EdgeInsets.only(right: 11),
                                 );

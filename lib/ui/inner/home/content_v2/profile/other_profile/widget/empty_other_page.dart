@@ -2,9 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 

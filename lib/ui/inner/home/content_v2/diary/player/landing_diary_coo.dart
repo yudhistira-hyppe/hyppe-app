@@ -11,7 +11,6 @@ import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
-import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -72,25 +71,25 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
   bool isPlay = false;
   bool isPause = false;
   bool _showLoading = false;
-  bool _inSeek = false;
+  // bool _inSeek = false;
   bool isloading = false;
   bool isMute = false;
 
   int _loadingPercent = 0;
-  int _currentPlayerState = 0;
-  int _videoDuration = 1;
-  int _currentPosition = 0;
-  int _bufferPosition = 0;
-  int _currentPositionText = 0;
+  // int _currentPlayerState = 0;
+  // int _videoDuration = 1;
+  // int _currentPosition = 0;
+  // int _bufferPosition = 0;
+  // int _currentPositionText = 0;
   int _curIdx = 0;
-  int _lastCurIndex = -1;
+  // int _lastCurIndex = -1;
   String _curPostId = '';
   String _lastCurPostId = '';
 
   String auth = '';
   String url = '';
-  final Map _dataSourceMap = {};
-  ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
+  // final Map _dataSourceMap = {};
+  // ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
   LocalizationModelV2? lang;
   ContentData? dataSelected;
   String email = '';
@@ -264,7 +263,7 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
     });
 
     fAliListPlayer?.setOnStateChanged((newState, playerId) {
-      _currentPlayerState = newState;
+      // _currentPlayerState = newState;
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
@@ -569,33 +568,33 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
   }
 
   void vidConfig() {
-    var configMap = {
-      'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
-      'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
-      'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
-      'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
-      'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
-      'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
-      'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
-      'mLocalCacheDir': GlobalSettings.mDirController,
-      'mClearFrameWhenStop': true
-    };
+    // var configMap = {
+    //   'mStartBufferDuration': GlobalSettings.mStartBufferDuration, // The buffer duration before playback. Unit: milliseconds.
+    //   'mHighBufferDuration': GlobalSettings.mHighBufferDuration, // The duration of high buffer. Unit: milliseconds.
+    //   'mMaxBufferDuration': GlobalSettings.mMaxBufferDuration, // The maximum buffer duration. Unit: milliseconds.
+    //   'mMaxDelayTime': GlobalSettings.mMaxDelayTime, // The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+    //   'mNetworkTimeout': GlobalSettings.mNetworkTimeout, // The network timeout period. Unit: milliseconds.
+    //   'mNetworkRetryCount': GlobalSettings.mNetworkRetryCount, // The number of retires after a network timeout. Unit: milliseconds.
+    //   'mEnableLocalCache': GlobalSettings.mEnableCacheConfig,
+    //   'mLocalCacheDir': GlobalSettings.mDirController,
+    //   'mClearFrameWhenStop': true
+    // };
     // Configure the application.
     // fAliplayer?.setConfig(configMap);
-    var map = {
-      "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
-
-      /// The maximum space that can be occupied by the cache directory.
-      "mMaxDurationS": GlobalSettings.mMaxDurationSController,
-
-      /// The maximum cache duration of a single file.
-      "mDir": GlobalSettings.mDirController,
-
-      /// The cache directory.
-      "mEnable": GlobalSettings.mEnableCacheConfig
-
-      /// Specify whether to enable the cache feature.
-    };
+    // var map = {
+    //   "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,
+    //
+    //   /// The maximum space that can be occupied by the cache directory.
+    //   "mMaxDurationS": GlobalSettings.mMaxDurationSController,
+    //
+    //   /// The maximum cache duration of a single file.
+    //   "mDir": GlobalSettings.mDirController,
+    //
+    //   /// The cache directory.
+    //   "mEnable": GlobalSettings.mEnableCacheConfig
+    //
+    //   /// Specify whether to enable the cache feature.
+    // };
     // fAliplayer?.setCacheConfig(map);
   }
 
@@ -799,25 +798,21 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
     // getCountVid();
     // await _newInitAds(true);
     context.incrementAdsCount();
-    if (context.getAdsCount() == null) {
-      context.setAdsCount(0);
-    } else {
-      final adsNotifier = context.read<PreviewDiaryNotifier>();
-      if (context.getAdsCount() == 2) {
-        try {
-          context.read<PreviewDiaryNotifier>().getAdsVideo(context, false);
-        } catch (e) {
-          'Failed to fetch ads data 0 : $e'.logger();
-        }
+    final adsNotifier = context.read<PreviewDiaryNotifier>();
+    if (context.getAdsCount() == 2) {
+      try {
+        context.read<PreviewDiaryNotifier>().getAdsVideo(context, false);
+      } catch (e) {
+        'Failed to fetch ads data 0 : $e'.logger();
       }
-      if (context.getAdsCount() == 3 && adsNotifier.adsData != null) {
-        // fAliplayer?.pause();
-        _pauseScreen();
-        System().adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(), adsNotifier.adsData?.data?.apsaraAuth ?? '', isInAppAds: false).whenComplete(() {
-          // fAliplayer?.play();
-          _initializeTimer();
-        });
-      }
+    }
+    if (context.getAdsCount() == 3 && adsNotifier.adsData != null) {
+      // fAliplayer?.pause();
+      _pauseScreen();
+      System().adsPopUp(context, adsNotifier.adsData?.data ?? AdsData(), adsNotifier.adsData?.data?.apsaraAuth ?? '', isInAppAds: false).whenComplete(() {
+        // fAliplayer?.play();
+        _initializeTimer();
+      });
     }
   }
 
@@ -938,16 +933,16 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
         fAliListPlayer?.pause();
         _pauseScreen();
         break;
+      default:
+        break;
     }
   }
-
-  int _currentItem = 0;
 
   @override
   Widget build(BuildContext context) {
     if (isEmptyData) _getData();
     SizeConfig().init(context);
-    final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
+    context.select((ErrorService value) => value.getError(ErrorType.pic));
     // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: 100, height: 200);
     return Consumer2<PreviewDiaryNotifier, HomeNotifier>(builder: (_, notifier, home, __) {
       return Container(
@@ -1153,7 +1148,7 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                       _curPostId = data?.postID ?? index.toString();
                       // if (_lastCurIndex != _curIdx) {
                       final indexList = notifier.diaryData?.indexWhere((element) => element.postID == _curPostId);
-                      final latIndexList = notifier.diaryData?.indexWhere((element) => element.postID == _lastCurPostId);
+                      // final latIndexList = notifier.diaryData?.indexWhere((element) => element.postID == _lastCurPostId);
                       if (_lastCurPostId != _curPostId) {
                         if (mounted) {
                           setState(() {
@@ -1184,7 +1179,7 @@ class _LandingDiaryPageTestState extends State<LandingDiaryPageTest> with Widget
                           });
                         }
                       }
-                      _lastCurIndex = _curIdx;
+                      // _lastCurIndex = _curIdx;
                       _lastCurPostId = _curPostId;
                     }
                   },

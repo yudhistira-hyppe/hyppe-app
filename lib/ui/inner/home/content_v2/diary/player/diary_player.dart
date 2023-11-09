@@ -19,7 +19,6 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
@@ -30,7 +29,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/title_playlist_diaries.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+// import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../../app.dart';
@@ -67,19 +66,19 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   bool _mEnablePlayBack = false;
 
   //当前播放进度
-  int _currentPosition = 0;
+  // int _currentPosition = 0;
 
   //当前播放时间，用于Text展示
-  int _currentPositionText = 0;
+  // int _currentPositionText = 0;
 
   //当前buffer进度
-  int _bufferPosition = 0;
+  // int _bufferPosition = 0;
 
   //是否展示loading
   bool _showLoading = false;
 
   //loading进度
-  int _loadingPercent = 0;
+  // int _loadingPercent = 0;
 
   //视频时长
   int _videoDuration = 1;
@@ -88,31 +87,31 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   String _snapShotPath = '';
 
   //提示内容
-  String _tipsContent = '';
+  // String _tipsContent = '';
 
   //是否展示提示内容
-  bool _showTipsWidget = false;
+  // bool _showTipsWidget = false;
 
   //是否有缩略图
-  bool _thumbnailSuccess = false;
+  // bool _thumbnailSuccess = false;
 
   //缩略图
   // Uint8List _thumbnailBitmap;
-  ImageProvider? _imageProvider;
+  // ImageProvider? _imageProvider;
 
   //当前网络状态
   // ConnectivityResult? _currentConnectivityResult;
 
   ///seek中
-  bool _inSeek = false;
+  // bool _inSeek = false;
 
-  bool _isLock = false;
+  // bool _isLock = false;
 
   //网络状态
-  bool _isShowMobileNetWork = false;
+  // bool _isShowMobileNetWork = false;
 
   //当前播放器状态
-  int _currentPlayerState = 0;
+  // int _currentPlayerState = 0;
 
   String extSubTitleText = '';
   Stopwatch stopwatch = new Stopwatch()..start();
@@ -124,7 +123,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
 
   // PageController? _pageController;
 
-  RefreshController _videoListRefreshController = RefreshController(initialRefresh: false);
+  // RefreshController _videoListRefreshController = RefreshController(initialRefresh: false);
 
   List<ContentData>? _listData;
 
@@ -293,13 +292,13 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
-      _currentPlayerState = newState;
+      // _currentPlayerState = newState;
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
           WakelockPlus.enable();
           setState(() {
-            _showTipsWidget = false;
+            // _showTipsWidget = false;
             _showLoading = false;
             isPause = false;
           });
@@ -331,11 +330,11 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       print("[DIARY_PLAYER] setOnLoadingStatusListener() started. " + stopwatch.elapsed.toString());
       _animationController?.stop();
       setState(() {
-        _loadingPercent = 0;
+        // _loadingPercent = 0;
         _showLoading = true;
       });
     }, loadingProgress: (percent, netSpeed, playerId) {
-      _loadingPercent = percent;
+      // _loadingPercent = percent;
       if (percent == 100) {
         _showLoading = false;
       }
@@ -348,12 +347,12 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       print("[DIARY_PLAYER] setOnLoadingStatusListener() ended. " + stopwatch.elapsed.toString());
     });
     fAliplayer?.setOnSeekComplete((playerId) {
-      _inSeek = false;
+      // _inSeek = false;
     });
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
-          _currentPosition = extraValue ?? 0;
+          // _currentPosition = extraValue ?? 0;
         }
         // if (!_inSeek) {
         //   setState(() {
@@ -361,7 +360,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
         //   });
         // }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-        _bufferPosition = extraValue ?? 0;
+        // _bufferPosition = extraValue ?? 0;
         if (mounted) {
           setState(() {});
         }
@@ -381,13 +380,13 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       }
     });
     fAliplayer?.setOnCompletion((playerId) {
-      _showTipsWidget = true;
+      // _showTipsWidget = true;
       _showLoading = false;
-      _tipsContent = "Play Again";
+      // _tipsContent = "Play Again";
       isPause = true;
       _animationController?.reset();
       setState(() {
-        _currentPosition = _videoDuration;
+        // _currentPosition = _videoDuration;
       });
     });
 
@@ -396,24 +395,24 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       // Fluttertoast.showToast(msg: "SnapShot Save : $path");
     });
     fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-      _showTipsWidget = true;
+      // _showTipsWidget = true;
       _showLoading = false;
-      _tipsContent = "$errorCode \n $errorMsg";
+      // _tipsContent = "$errorCode \n $errorMsg";
       setState(() {});
     });
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
       AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-      if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
+      if ((info.trackDefinition?.length ?? 0) > 0) {
         // trackFragmentKey.currentState.onTrackChanged(info);
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
     });
 
     fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {
-      _thumbnailSuccess = true;
+      // _thumbnailSuccess = true;
     }, preparedFail: (playerId) {
-      _thumbnailSuccess = false;
+      // _thumbnailSuccess = false;
     });
 
     fAliplayer?.setOnThumbnailGetListener(
@@ -422,7 +421,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
           var provider = MemoryImage(bitmap);
           precacheImage(provider, context).then((_) {
             setState(() {
-              _imageProvider = provider;
+              // _imageProvider = provider;
             });
           });
         },
@@ -466,6 +465,8 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
         break;
       case AppLifecycleState.detached:
         break;
+      default:
+        break;
     }
   }
 
@@ -493,8 +494,8 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   int _lastCurIndex = -1;
   bool _isPause = false;
   double _playerY = 0;
-  bool _isFirstRenderShow = false;
-  bool _isBackgroundMode = false;
+  // bool _isFirstRenderShow = false;
+  // bool _isBackgroundMode = false;
 
   void onViewPlayerCreated(viewId) async {
     print('onViewPlayerCreated===');
@@ -719,89 +720,89 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     );
   }
 
-  Widget _buildSingleScreen(int index) {
-    // print("[DIARY_PLAYER] _buildSingleScreen() started. "+stopwatch.elapsed.toString());
-    // VideoModel model = _dataList[index];
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _isPause = !_isPause;
-        });
-        if (_isPause) {
-          fAliplayer?.pause();
-        } else {
-          fAliplayer?.play();
-        }
-      },
-      onDoubleTap: () {
-        final _likeNotifier = context.read<LikeNotifier>();
-        final data = _listData?[_curIdx];
-        if (data != null) {
-          _likeNotifier.likePost(context, data);
-        }
-      },
-      child: !isPlay
-          ? Stack(
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),
-                ),
-                // Container(
-                //   color: Colors.black,
-                //   child: CustomBaseCacheImage(
-                //     widthPlaceHolder: 112,
-                //     heightPlaceHolder: 40,
-                //     imageUrl: (_listData?[index].isApsara ?? false) ? "${_listData?[index].mediaThumbEndPoint}" : "${_listData?[index].fullThumbPath}",
-                //     imageBuilder: (context, imageProvider) => Container(
-                //       clipBehavior: Clip.hardEdge,
-                //       width: double.infinity,
-                //       height: double.infinity,
-                //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                //       decoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(8.0),
-                //         image: DecorationImage(
-                //           image: imageProvider,
-                //           fit: BoxFit.contain,
-                //         ),
-                //       ),
-                //       // child: _buildBody(index),
-                //     ),
-                //     errorWidget: (context, url, error) => Container(
-                //       width: double.infinity,
-                //       height: double.infinity,
-                //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                //       decoration: BoxDecoration(
-                //         image: const DecorationImage(
-                //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                //           fit: BoxFit.cover,
-                //         ),
-                //         borderRadius: BorderRadius.circular(8.0),
-                //       ),
-                //       // child: _buildBody(index),
-                //     ),
-                //     emptyWidget: Container(
-                //       width: double.infinity,
-                //       height: double.infinity,
-                //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                //       decoration: BoxDecoration(
-                //         image: const DecorationImage(
-                //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                //           fit: BoxFit.cover,
-                //         ),
-                //         borderRadius: BorderRadius.circular(8.0),
-                //       ),
-                //       // child: _buildBody(index),
-                //     ),
-                //   ),
-                // ),
-                _buildFillDiary()
-              ],
-            )
-          : Container(),
-    );
-  }
+  // Widget _buildSingleScreen(int index) {
+  //   // print("[DIARY_PLAYER] _buildSingleScreen() started. "+stopwatch.elapsed.toString());
+  //   // VideoModel model = _dataList[index];
+  //   return GestureDetector(
+  //     onTap: () {
+  //       setState(() {
+  //         _isPause = !_isPause;
+  //       });
+  //       if (_isPause) {
+  //         fAliplayer?.pause();
+  //       } else {
+  //         fAliplayer?.play();
+  //       }
+  //     },
+  //     onDoubleTap: () {
+  //       final _likeNotifier = context.read<LikeNotifier>();
+  //       final data = _listData?[_curIdx];
+  //       if (data != null) {
+  //         _likeNotifier.likePost(context, data);
+  //       }
+  //     },
+  //     child: !isPlay
+  //         ? Stack(
+  //             children: [
+  //               Container(
+  //                 width: double.infinity,
+  //                 height: double.infinity,
+  //                 child: Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),
+  //               ),
+  //               // Container(
+  //               //   color: Colors.black,
+  //               //   child: CustomBaseCacheImage(
+  //               //     widthPlaceHolder: 112,
+  //               //     heightPlaceHolder: 40,
+  //               //     imageUrl: (_listData?[index].isApsara ?? false) ? "${_listData?[index].mediaThumbEndPoint}" : "${_listData?[index].fullThumbPath}",
+  //               //     imageBuilder: (context, imageProvider) => Container(
+  //               //       clipBehavior: Clip.hardEdge,
+  //               //       width: double.infinity,
+  //               //       height: double.infinity,
+  //               //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
+  //               //       decoration: BoxDecoration(
+  //               //         borderRadius: BorderRadius.circular(8.0),
+  //               //         image: DecorationImage(
+  //               //           image: imageProvider,
+  //               //           fit: BoxFit.contain,
+  //               //         ),
+  //               //       ),
+  //               //       // child: _buildBody(index),
+  //               //     ),
+  //               //     errorWidget: (context, url, error) => Container(
+  //               //       width: double.infinity,
+  //               //       height: double.infinity,
+  //               //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
+  //               //       decoration: BoxDecoration(
+  //               //         image: const DecorationImage(
+  //               //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
+  //               //           fit: BoxFit.cover,
+  //               //         ),
+  //               //         borderRadius: BorderRadius.circular(8.0),
+  //               //       ),
+  //               //       // child: _buildBody(index),
+  //               //     ),
+  //               //     emptyWidget: Container(
+  //               //       width: double.infinity,
+  //               //       height: double.infinity,
+  //               //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
+  //               //       decoration: BoxDecoration(
+  //               //         image: const DecorationImage(
+  //               //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
+  //               //           fit: BoxFit.cover,
+  //               //         ),
+  //               //         borderRadius: BorderRadius.circular(8.0),
+  //               //       ),
+  //               //       // child: _buildBody(index),
+  //               //     ),
+  //               //   ),
+  //               // ),
+  //               _buildFillDiary()
+  //             ],
+  //           )
+  //         : Container(),
+  //   );
+  // }
 
   void initDiary() async {
     print("=-=-=-=-=-=-=-=-init diary");
@@ -832,7 +833,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
 
     setState(() {
       _isPause = false;
-      _isFirstRenderShow = false;
+      // _isFirstRenderShow = false;
       loadTitle = false;
     });
     var configMap = {
@@ -871,38 +872,38 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     print("[DIARY_PLAYER] start() ended. " + stopwatch.elapsed.toString());
   }
 
-  void _onPlayerHide() {
-    Future.delayed(const Duration(seconds: 4), () {
-      onTapCtrl = false;
-      setState(() {});
-    });
-  }
-
-  ///Loading
-  _buildProgressBar(double width, double height) {
-    print("[DIARY_PLAYER] _buildProgressBar() started. " + stopwatch.elapsed.toString());
-    if (_showLoading) {
-      return Positioned(
-        left: width / 2 - 20,
-        top: height / 2 - 20,
-        child: Column(
-          children: const [
-            CircularProgressIndicator(
-              backgroundColor: Colors.white,
-              strokeWidth: 3.0,
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            // Text(
-            //   "$_loadingPercent%",
-            //   style: const TextStyle(color: Colors.white),
-            // ),
-          ],
-        ),
-      );
-    } else {
-      return const SizedBox();
-    }
-  }
+  // void _onPlayerHide() {
+  //   Future.delayed(const Duration(seconds: 4), () {
+  //     onTapCtrl = false;
+  //     setState(() {});
+  //   });
+  // }
+  //
+  // ///Loading
+  // _buildProgressBar(double width, double height) {
+  //   print("[DIARY_PLAYER] _buildProgressBar() started. " + stopwatch.elapsed.toString());
+  //   if (_showLoading) {
+  //     return Positioned(
+  //       left: width / 2 - 20,
+  //       top: height / 2 - 20,
+  //       child: Column(
+  //         children: const [
+  //           CircularProgressIndicator(
+  //             backgroundColor: Colors.white,
+  //             strokeWidth: 3.0,
+  //           ),
+  //           SizedBox(
+  //             height: 10.0,
+  //           ),
+  //           // Text(
+  //           //   "$_loadingPercent%",
+  //           //   style: const TextStyle(color: Colors.white),
+  //           // ),
+  //         ],
+  //       ),
+  //     );
+  //   } else {
+  //     return const SizedBox();
+  //   }
+  // }
 }

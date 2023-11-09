@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../core/services/system.dart';
-import '../../../../../../initial/hyppe/translate_v2.dart';
 import '../../../../search_v2/notifier.dart';
 
 class ScrollVidNotifier with ChangeNotifier {
@@ -34,7 +32,7 @@ class ScrollVidNotifier with ChangeNotifier {
   Future loadMore(BuildContext context, ScrollController scrollController, PageSrc pageSrc, String key) async {
     isLoadingLoadmore = true;
     bool connect = await System().checkConnections();
-    final searchNotifier = context.read<SearchNotifier>();
+    // final searchNotifier = context.read<SearchNotifier>();
     connectionError = !connect;
     if (connect) {
       if (pageSrc == PageSrc.selfProfile) {

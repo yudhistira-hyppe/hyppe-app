@@ -27,7 +27,6 @@ import '../../core/bloc/ads_video/bloc.dart';
 import '../../core/bloc/ads_video/state.dart';
 import '../../core/bloc/posts_v2/bloc.dart';
 import '../../core/bloc/posts_v2/state.dart';
-import '../../core/constants/enum.dart';
 import '../../core/models/collection/advertising/ads_video_data.dart';
 import '../../ui/inner/upload/preview_content/notifier.dart';
 import '../../ui/outer/opening_logo/screen.dart';

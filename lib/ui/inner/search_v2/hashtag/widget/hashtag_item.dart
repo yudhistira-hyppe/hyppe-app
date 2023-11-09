@@ -9,12 +9,12 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import '../../../../../core/constants/themes/hyppe_colors.dart';
 
 class HashtagItem extends StatelessWidget {
-  String title;
-  int count;
-  String countContainer;
-  Function()? onTap;
-  EdgeInsetsGeometry? padding;
-  HashtagItem({Key? key, required this.title, required this.count, required this.countContainer, this.onTap, this.padding}) : super(key: key);
+  final String title;
+  final int count;
+  final String countContainer;
+  final Function()? onTap;
+  final EdgeInsetsGeometry? padding;
+  const HashtagItem({Key? key, required this.title, required this.count, required this.countContainer, this.onTap, this.padding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

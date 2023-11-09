@@ -13,8 +13,6 @@ class OldVersionDialog extends StatelessWidget {
 
   final _routing = Routing();
 
-  bool _isLoading = false;
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

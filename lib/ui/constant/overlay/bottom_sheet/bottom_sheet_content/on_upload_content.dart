@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -11,7 +9,6 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
-import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';

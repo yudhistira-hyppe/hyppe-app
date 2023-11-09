@@ -216,12 +216,8 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     String? urlAds;
     print('COUNTS ADS $count');
 
-    if (count == null) {
-      context.setAdsCount(0);
-    } else {
-      if (count == 2) {
-        urlAds = await getAdsVideo(context, false);
-      }
+    if (count == 2) {
+      urlAds = await getAdsVideo(context, false);
     }
     if (urlAds != null) {
       _adsUrl = urlAds;

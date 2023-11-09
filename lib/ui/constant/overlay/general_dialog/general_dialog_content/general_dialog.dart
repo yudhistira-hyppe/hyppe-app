@@ -1,23 +1,21 @@
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class GeneralAlertDialog extends StatefulWidget {
-  String? titleText;
-  String? bodyText;
-  int? maxLineTitle;
-  int? maxLineBody;
-  Function functionPrimary;
-  Function? functionSecondary;
-  String? titleButtonPrimary;
-  String? titleButtonSecondary;
-  bool? isLoading = false;
-  GeneralAlertDialog({
+  final String? titleText;
+  final String? bodyText;
+  final int? maxLineTitle;
+  final int? maxLineBody;
+  final Function functionPrimary;
+  final Function? functionSecondary;
+  final String? titleButtonPrimary;
+  final String? titleButtonSecondary;
+  final bool? isLoading;
+  const GeneralAlertDialog({
     Key? key,
     this.titleText,
     this.bodyText,
@@ -27,7 +25,7 @@ class GeneralAlertDialog extends StatefulWidget {
     this.functionSecondary,
     this.titleButtonPrimary,
     this.titleButtonSecondary,
-    this.isLoading,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
@@ -39,8 +37,8 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
-    final _language = context.watch<TranslateNotifierV2>().translate;
+    // final size = MediaQuery.of(context).size;
+    // final _language = context.watch<TranslateNotifierV2>().translate;
     return Container(
       decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(8.0)),
       child: Column(

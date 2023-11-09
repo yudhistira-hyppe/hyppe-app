@@ -3,9 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
-import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
 import 'package:hyppe/core/bloc/ads_video/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -24,10 +22,6 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_diaries.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_pics.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_vids.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_vids.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -730,12 +724,9 @@ class HomeNotifier with ChangeNotifier {
   }
 
   void onReport(BuildContext context, {required String postID, required String content, bool? isReport, String? key}) {
-    ContentData? _updatedData;
-    ContentData? _updatedData2;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
-    final pic2 = Provider.of<SlidedPicDetailNotifier>(context, listen: false);
     final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
 
     ScrollVidNotifier vidScroll = context.read<ScrollVidNotifier>();
@@ -766,11 +757,9 @@ class HomeNotifier with ChangeNotifier {
 
   void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
     ContentData? _updatedData;
-    ContentData? _updatedData2;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
-    final pic2 = Provider.of<SlidedPicDetailNotifier>(context, listen: false);
     final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
 
     switch (content) {
@@ -897,7 +886,6 @@ class HomeNotifier with ChangeNotifier {
           final auth = jsonMap['PlayAuth'];
           // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
           print('get Ads Video');
-          final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
           // if (!isShowAds) {
           await System().adsPopUpV2(context, ads, auth);
           // }

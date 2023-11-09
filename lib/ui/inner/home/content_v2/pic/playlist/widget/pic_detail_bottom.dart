@@ -40,7 +40,7 @@ class PicDetailBottom extends StatelessWidget {
 
   static final _system = System();
 
-  var email = SharedPreference().readStorage(SpKeys.email);
+  final email = SharedPreference().readStorage(SpKeys.email);
 
   @override
   Widget build(BuildContext context) {

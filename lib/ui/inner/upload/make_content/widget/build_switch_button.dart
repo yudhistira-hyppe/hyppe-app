@@ -1,10 +1,7 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:flutter/material.dart';

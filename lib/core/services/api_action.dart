@@ -8,7 +8,7 @@ import 'package:hyppe/core/constants/status_code.dart';
 import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'dart:io';
 import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/core/extension/log_extension.dart';
+// import 'package:hyppe/core/extension/log_extension.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override

@@ -12,11 +12,11 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:provider/provider.dart';
 
 class ListDataBankAccount extends StatelessWidget {
-  GlobalKey<RefreshIndicatorState> refreshIndicatorKey;
-  List<BankAccount>? dataAcccount;
-  String? textRemove;
-  String? textUpTo;
-  ListDataBankAccount({Key? key, required this.refreshIndicatorKey, this.dataAcccount, this.textRemove, this.textUpTo}) : super(key: key);
+  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey;
+  final List<BankAccount>? dataAcccount;
+  final String? textRemove;
+  final String? textUpTo;
+  const ListDataBankAccount({Key? key, required this.refreshIndicatorKey, this.dataAcccount, this.textRemove, this.textUpTo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';

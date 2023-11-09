@@ -175,6 +175,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     } finally {
       loadPic = false;
     }
+    return null;
   }
 
   Future initDetailPost(BuildContext context, String postID, String visibility) async {

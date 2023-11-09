@@ -32,9 +32,9 @@ import '../../../../notification/notifier.dart';
 import 'notifier.dart';
 
 class DetailTicketScreen extends StatefulWidget {
-  DetailTicketArgument data;
+  final DetailTicketArgument data;
 
-  DetailTicketScreen({Key? key, required this.data}) : super(key: key);
+  const DetailTicketScreen({Key? key, required this.data}) : super(key: key);
 
   @override
   State<DetailTicketScreen> createState() => _DetailTicketScreenState();
@@ -980,17 +980,16 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                                 decoration:
                                     BoxDecoration(color: kHyppeBgSensitive.withOpacity(0.4), borderRadius: const BorderRadius.all(Radius.circular(8)), border: Border.all(color: kHyppeLightSecondary)),
                                 child: isImage
-                                    ? e != null
-                                        ? ClipRRect(
-                                            child: Image.file(
-                                              e,
-                                              fit: BoxFit.cover,
-                                              width: 100,
-                                              height: 100,
-                                            ),
-                                            borderRadius: const BorderRadius.all(Radius.circular(8)),
-                                          )
-                                        : Text('${e.path.split('/').last}')
+                                    ? ClipRRect(
+                                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                  child: Image.file(
+                                    e,
+                                    fit: BoxFit.cover,
+                                    width: 100,
+                                    height: 100,
+                                  ),
+
+                                )
                                     : Text('${e.path.split('/').last}'),
                               ),
                               Positioned(
