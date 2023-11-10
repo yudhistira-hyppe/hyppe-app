@@ -27,16 +27,16 @@ class UtilsBlocV2 {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.welcomeNotesError));
         } else {
-          final _response = GenericResponse.fromJson(onResult.data).responseData;
-          final Welcome _result = Welcome.fromJSON(_response);
-          setUtilsFetch(UtilsFetch(UtilsState.welcomeNotesSuccess, data: _result));
+          final response = GenericResponse.fromJson(onResult.data).responseData;
+          final Welcome result = Welcome.fromJSON(response);
+          setUtilsFetch(UtilsFetch(UtilsState.welcomeNotesSuccess, data: result));
         }
       },
       (errorData) {
         ShowBottomSheet.onInternalServerError(context);
         setUtilsFetch(UtilsFetch(UtilsState.welcomeNotesError));
       },
-      host: UrlConstants.welcomeNotes + "?langIso=$_langIso&countryCode=ID&pageNumber=0&pageRow=100",
+      host:  "${UrlConstants.welcomeNotes}?langIso=$_langIso&countryCode=ID&pageNumber=0&pageRow=100",
       methodType: MethodType.get,
       withAlertMessage: true,
       withCheckConnection: false,
@@ -59,7 +59,7 @@ class UtilsBlocV2 {
         setUtilsFetch(UtilsFetch(UtilsState.getGenderError));
       },
       errorServiceType: ErrorType.getGender,
-      host: UrlConstants.gender + "?langIso=$_langIso",
+      host: "${UrlConstants.gender}?langIso=$_langIso",
       withAlertMessage: false,
       methodType: MethodType.get,
       withCheckConnection: false,
@@ -82,7 +82,7 @@ class UtilsBlocV2 {
         setUtilsFetch(UtilsFetch(UtilsState.getInterestsError));
       },
       errorServiceType: ErrorType.getGender,
-      host: UrlConstants.interest + "?langIso=$_langIso&pageNumber=0&pageRow=100",
+      host: "${UrlConstants.interest}?langIso=$_langIso&pageNumber=0&pageRow=100",
       withAlertMessage: false,
       methodType: MethodType.get,
       withCheckConnection: false,
@@ -98,16 +98,16 @@ class UtilsBlocV2 {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.getEulaError));
         } else {
-          final _response = GenericResponse.fromJson(onResult.data).responseData;
-          Eula _result = Eula.fromJSON(_response);
-          setUtilsFetch(UtilsFetch(UtilsState.getEulaSuccess, data: _result));
+          final response = GenericResponse.fromJson(onResult.data).responseData;
+          Eula result = Eula.fromJSON(response);
+          setUtilsFetch(UtilsFetch(UtilsState.getEulaSuccess, data: result));
         }
       },
       (errorData) {
         ShowBottomSheet.onInternalServerError(context);
         setUtilsFetch(UtilsFetch(UtilsState.getEulaError));
       },
-      host: UrlConstants.eula + "?langIso=$_langIso",
+      host: "${UrlConstants.eula}?langIso=$_langIso",
       methodType: MethodType.get,
       withAlertMessage: true,
       withCheckConnection: false,
@@ -128,7 +128,7 @@ class UtilsBlocV2 {
       (errorData) {
         setUtilsFetch(UtilsFetch(UtilsState.loadCountryError));
       },
-      host: UrlConstants.country + "${search != null ? "?search=$search&" : "?"}pageNumber=$pageNumber&pageRow=$pageRow",
+      host: "${UrlConstants.country}${search != null ? "?search=$search&" : "?"}pageNumber=$pageNumber&pageRow=$pageRow",
       withAlertMessage: false,
       methodType: MethodType.get,
       withCheckConnection: false,
@@ -151,7 +151,7 @@ class UtilsBlocV2 {
         setUtilsFetch(UtilsFetch(UtilsState.loadAreaError));
       },
       errorServiceType: ErrorType.getStates,
-      host: UrlConstants.area + "${search != null ? "?search=$search" : "?countryID=$countryID"}&pageNumber=$pageNumber&pageRow=$pageRow",
+      host: "${UrlConstants.area}${search != null ? "?search=$search" : "?countryID=$countryID"}&pageNumber=$pageNumber&pageRow=$pageRow",
       withAlertMessage: false,
       methodType: MethodType.get,
       withCheckConnection: false,
@@ -173,7 +173,7 @@ class UtilsBlocV2 {
         setUtilsFetch(UtilsFetch(UtilsState.loadCityError));
       },
       errorServiceType: ErrorType.getCities,
-      host: UrlConstants.city + "?stateID=$provinceID&pageNumber=$pageNumber&pageRow=$pageRow",
+      host: "${UrlConstants.city}?stateID=$provinceID&pageNumber=$pageNumber&pageRow=$pageRow",
       withAlertMessage: false,
       methodType: MethodType.get,
       withCheckConnection: false,
@@ -195,7 +195,7 @@ class UtilsBlocV2 {
         setUtilsFetch(UtilsFetch(UtilsState.languagesError));
       },
       errorServiceType: ErrorType.getLanguage,
-      host: UrlConstants.languages + "?pageNumber=$pageNumber&pageRow=$pageRow",
+      host: "${UrlConstants.languages}?pageNumber=$pageNumber&pageRow=$pageRow",
       withAlertMessage: false,
       methodType: MethodType.get,
       withCheckConnection: false,
@@ -237,9 +237,9 @@ class UtilsBlocV2 {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.getReactionError));
         } else {
-          final _response = GenericResponse.fromJson(onResult.data).responseData;
-          Reaction _result = Reaction.fromJson(_response);
-          setUtilsFetch(UtilsFetch(UtilsState.getReactionSuccess, data: _result));
+          final response = GenericResponse.fromJson(onResult.data).responseData;
+          Reaction result = Reaction.fromJson(response);
+          setUtilsFetch(UtilsFetch(UtilsState.getReactionSuccess, data: result));
         }
       },
       (errorData) {
