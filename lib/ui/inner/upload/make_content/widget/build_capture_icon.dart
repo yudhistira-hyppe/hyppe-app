@@ -2,7 +2,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,81 +14,113 @@ class BuildCaptureIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<MakeContentNotifier>(
-      builder: (context, notifier, child) => notifier.isVideo
-          ? notifier.conditionalCaptureVideoIcon()
-              ? GestureDetector(
-                  onTap: () {
-                    submitContent(context, notifier);
-                  },
-                  child: SizedBox(
-                    width: 130,
-                    height: 130,
-                    child: Stack(
-                      children: [
-                        Align(alignment: Alignment.center,
-                          child: Container(
-                            width: 130,
-                            height: 130,
-                            decoration: BoxDecoration(
-                                color: const Color(0xffCECECE),
-                                borderRadius: BorderRadius.circular(65)),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: SizedBox(
-                            width: 125,
-                            height: 125,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 6,
-                              value: notifier.progressDev,
-                              color: const Color(0xffE6094B),
-                            ),
-                          ),
-                        ),
-                      ],
+      builder: (context, notifier, child){
+        if(notifier.videoPreview){
+          return GestureDetector(
+            onTap: (){},
+            child: SizedBox(
+              width: 70,
+              height: 70,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: 55,
+                      height: 55,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                     ),
                   ),
-                )
-              : SizedBox(
-                  height: 105 * SizeConfig.scaleDiagonal,
-                  child: CustomIconButtonWidget(
-                    onPressed: () {
-                      // context.read<CameraNotifier>().showEffect(isClose: true);
-                      submitContent(context, notifier);
-                    },
-                    iconData: notifier.isVideo
-                        ? notifier.conditionalCaptureVideoIcon()
-                            ? "${AssetPath.vectorPath}recording.svg"
-                            : "${AssetPath.vectorPath}video.svg"
-                        : "${AssetPath.vectorPath}photo.svg",
+                  Align(
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      width: 65,
+                      height: 65,
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.white,
+                        strokeWidth: 4,
+                        value: notifier.progressDev,
+                        color: const Color(0xffE6094B),
+                      ),
+                    ),
                   ),
-                )
-          : SizedBox(
-              height: 105 * SizeConfig.scaleDiagonal,
-              child: CustomIconButtonWidget(
-                onPressed: () {
-                  // context.read<CameraNotifier>().showEffect(isClose: true);
-                  submitContent(context, notifier);
-                },
-                iconData: notifier.isVideo
-                    ? notifier.conditionalCaptureVideoIcon()
-                        ? "${AssetPath.vectorPath}recording.svg"
-                        : "${AssetPath.vectorPath}video.svg"
-                    : "${AssetPath.vectorPath}photo.svg",
+                ],
               ),
             ),
+          );
+        }
+        return GestureDetector(
+          onTap: () {
+            if (notifier.featureType == FeatureType.story) {
+              notifier.onTakePicture(context);
+            } else {
+              submitContent(context, notifier);
+            }
+          },
+          onLongPressStart: (detail) {
+            if (notifier.featureType == FeatureType.story) {
+              notifier.onRecordedVideo(context);
+            }
+          },
+          onLongPressEnd: (detail) {
+            if (notifier.featureType == FeatureType.story) {
+              submitContent(context, notifier);
+            }
+          },
+          child: notifier.conditionalCaptureVideoIcon()
+              ? SizedBox(
+            width: 130,
+            height: 130,
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 130,
+                    height: 130,
+                    decoration: BoxDecoration(
+                        color: const Color(0xffCECECE),
+                        borderRadius: BorderRadius.circular(65)),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: 125,
+                    height: 125,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 6,
+                      value: notifier.progressDev,
+                      color: const Color(0xffE6094B),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+              : SizedBox(
+            height: 105 * SizeConfig.scaleDiagonal,
+            child: const CustomIconWidget(
+              defaultColor: false,
+              iconData: "${AssetPath.vectorPath}make_content.svg",
+            ),
+          ),
+        );
+      },
     );
   }
 

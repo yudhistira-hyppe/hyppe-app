@@ -11,6 +11,7 @@ import 'package:tuple/tuple.dart';
 class CameraPage extends StatefulWidget {
   final Function(CameraNotifier cameraNotifier) onCameraNotifierUpdate;
   final Function? onChangeAppLifecycleState;
+  final Function()? onDoubleTap;
   final List<Widget> additionalViews;
   final bool backCamera;
 
@@ -18,6 +19,7 @@ class CameraPage extends StatefulWidget {
     Key? key,
     required this.additionalViews,
     this.onChangeAppLifecycleState,
+    this.onDoubleTap,
     required this.onCameraNotifierUpdate,
     this.backCamera = false,
   }) : super(key: key);
@@ -102,7 +104,9 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
                 // ?
                 : Stack(
                     children: [
-                      const CameraView(),
+                      GestureDetector(
+                        onDoubleTap: widget.onDoubleTap,
+                          child: const CameraView()),
                       ...widget.additionalViews,
                     ],
                   )

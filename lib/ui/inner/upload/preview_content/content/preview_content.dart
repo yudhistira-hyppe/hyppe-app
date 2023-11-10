@@ -73,7 +73,11 @@ class _PreviewContentState extends State<PreviewContent> {
             ),
           ),
         ),
-        BuildTopWidget(globalKey: widget.globalKey),
+        Positioned(
+          top: 10,
+            left: 0,
+            right: 0,
+            child: BuildTopWidget(globalKey: widget.globalKey)),
         // Build filters component
         // Align(
         //     alignment: const Alignment(0.95, -0.7),

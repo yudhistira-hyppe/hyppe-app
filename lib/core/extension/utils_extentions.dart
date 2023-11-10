@@ -406,3 +406,10 @@ extension DateHelpers on DateTime {
     return yesterday.day == day && yesterday.month == month && yesterday.year == year;
   }
 }
+
+extension DurationExt on Duration{
+  String formatter() => [
+    inMinutes.remainder(60).toString().padLeft(2, '0'),
+    inSeconds.remainder(60).toString().padLeft(2, '0')
+  ].join(":");
+}

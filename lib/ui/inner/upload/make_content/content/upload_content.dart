@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
@@ -19,10 +20,12 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_capture_icon.dart';
+import 'package:hyppe/ui/inner/upload/make_content/widget/build_next_step.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_storage.dart';
-import 'package:hyppe/ui/inner/upload/make_content/widget/build_switch_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../constant/entities/camera_devices/notifier.dart';
 
 class UploadContent extends StatelessWidget {
   final MakeContentNotifier? notifier;
@@ -35,13 +38,18 @@ class UploadContent extends StatelessWidget {
     print("===== candepp $canDeppAr");
     return canDeppAr == 'true'
         ? CameraDevicesPage(
+        onDoubleTap: (){
+          final camera = context.read<CameraDevicesNotifier>();
+          camera.setLoading(true, loadingObject: CameraDevicesNotifier.loadingForSwitching);
+          Future.delayed(const Duration(milliseconds: 1000), () => camera.onNewCameraSelected());
+        },
             onCameraNotifierUpdate: (cameraNotifier) => notifier?.cameraDevicesNotifier = cameraNotifier,
             onChangeAppLifecycleState: () => notifier?.cancelVideoRecordingWhenAppIsPausedOrInactive(),
             additionalViews: <Widget>[
-              // Camera / Video
-              Align(alignment: Alignment.bottomCenter, child: BuildSwitchButton()),
-              // Flash button
-              if (Platform.isAndroid)
+              /// Camera / Video
+              // Align(alignment: Alignment.bottomCenter, child: BuildSwitchButton()),
+              /// Flash button
+              if (Platform.isAndroid && !(notifier?.conditionalCaptureVideoIcon() ?? true))
                 SafeArea(
                   child: Visibility(
                     visible: !(notifier?.isRecordingVideo ?? true),
@@ -74,6 +82,7 @@ class UploadContent extends StatelessWidget {
                   ),
                 ),
               // Close button
+              if(!(notifier?.conditionalCaptureVideoIcon() ?? true))
               SafeArea(
                 top: Platform.isIOS,
                 child: Visibility(
@@ -81,7 +90,14 @@ class UploadContent extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: CustomTextButton(
-                      onPressed: (notifier?.conditionalOnClose() ?? false) ? () async => await notifier?.onClose(context) : null,
+                      onPressed: (notifier?.conditionalOnClose() ?? false) ? () async{
+                        if(notifier?.videoPreview ?? false){
+                          notifier?.clearPreviewVideo();
+                        }else{
+                          await notifier?.onClose(context);
+                        }
+
+                      } : null,
                       child: const UnconstrainedBox(
                         child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg", defaultColor: false),
                       ),
@@ -98,13 +114,31 @@ class UploadContent extends StatelessWidget {
               //   ),
               // ),
               // Action
+              if(notifier?.conditionalCaptureVideoIcon() ?? false)
+                Builder(
+                  builder: (context) {
+                    final tempDuration = Duration(seconds: notifier?.elapsedProgress ?? 0);
+                    return Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          child: CustomTextWidget(textToDisplay: tempDuration.formatter(), textStyle: const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),)),
+                    );
+                  }
+                ),
               Align(
-                alignment: const Alignment(0.0, 0.75),
+                alignment: const Alignment(0.0, 0.9),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 2, child: BuildStorage(mounted: mounted)),
-                    Expanded(flex: 4, child: BuildCaptureIcon(mounted: mounted)),
+                    Expanded(flex: 2, child: !(notifier?.videoPreview ?? true) ? (!(notifier?.isRecordingVideo ?? true)) ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        BuildStorage(mounted: mounted),
+                        fortyPx
+                      ],
+                    ) : const SizedBox.shrink() : const SizedBox.shrink()),
+                    BuildCaptureIcon(mounted: mounted),
                     // if (Platform.isIOS && !(notifier?.isRecordingVideo ?? true))
                     //   Expanded(
                     //     flex: 1,
@@ -120,7 +154,14 @@ class UploadContent extends StatelessWidget {
                     //     ),
                     //   ),
                     // if (!(notifier?.isRecordingVideo ?? true))
-                      Expanded(flex: Platform.isIOS ? 2 : 2, child: const CameraDevicesSwitchButton())
+                    Expanded(flex: 2, child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          (!(notifier?.videoPreview ?? false)) ? fortyPx : sixteenPx,
+                          (notifier?.videoPreview ?? false) ?
+                          BuildNextStep(notifier: notifier,) : const CameraDevicesSwitchButton(),
+                        ],
+                      ))
                   ],
                 ),
               ),
@@ -139,13 +180,19 @@ class UploadContent extends StatelessWidget {
             ],
           )
         : CameraPage(
+      onDoubleTap: (){
+        print('Tap Double Camera');
+        final camera = context.read<CameraDevicesNotifier>();
+        camera.setLoading(true, loadingObject: CameraDevicesNotifier.loadingForSwitching);
+        Future.delayed(const Duration(milliseconds: 1000), () => camera.onNewCameraSelected());
+      },
             onCameraNotifierUpdate: (cameraNotifier) => notifier?.cameraNotifier = cameraNotifier,
             onChangeAppLifecycleState: () => notifier?.cancelVideoRecordingWhenAppIsPausedOrInactive(),
             additionalViews: <Widget>[
               // Camera / Video
-              Align(alignment: Alignment.bottomCenter, child: BuildSwitchButton()),
+              // Align(alignment: Alignment.bottomCenter, child: BuildSwitchButton()),
               // Flash button
-              if (Platform.isAndroid)
+              if (Platform.isAndroid && !(notifier?.conditionalCaptureVideoIcon() ?? true))
                 SafeArea(
                   child: Visibility(
                     visible: !(notifier?.isRecordingVideo ?? true),
@@ -178,6 +225,7 @@ class UploadContent extends StatelessWidget {
                   ),
                 ),
               // Close button
+              if(!(notifier?.conditionalCaptureVideoIcon() ?? true))
               SafeArea(
                 top: Platform.isIOS,
                 child: Visibility(
@@ -185,7 +233,13 @@ class UploadContent extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: CustomTextButton(
-                      onPressed: (notifier?.conditionalOnClose() ?? false) ? () async => await notifier?.onClose(context) : null,
+                      onPressed: (notifier?.conditionalOnClose() ?? false) ? () async{
+                        if(notifier?.videoPreview ?? false){
+                          notifier?.clearPreviewVideo();
+                        }else{
+                          await notifier?.onClose(context);
+                        }
+                      } : null,
                       child: const UnconstrainedBox(
                         child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg", defaultColor: false),
                       ),
@@ -202,14 +256,32 @@ class UploadContent extends StatelessWidget {
               //   ),
               // ),
               // Action
+              if(notifier?.conditionalCaptureVideoIcon() ?? false)
+                Builder(
+                    builder: (context) {
+                      final tempDuration = Duration(seconds: notifier?.elapsedProgress ?? 0);
+                      return Align(
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            child: CustomTextWidget(textToDisplay: tempDuration.formatter(), textStyle: const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),)),
+                      );
+                    }
+                ),
               Align(
-                alignment: const Alignment(0.0, 0.75),
+                alignment: const Alignment(0.0, 0.9),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(flex: 2, child: !(notifier?.isRecordingVideo ?? true) ? BuildStorage(mounted: mounted) : const SizedBox.shrink()),
+                    Expanded(flex: 2, child: !(notifier?.videoPreview ?? true) ? (!(notifier?.isRecordingVideo ?? true)) ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        BuildStorage(mounted: mounted),
+                        fortyPx
+                      ],
+                    ) : const SizedBox.shrink() : const SizedBox.shrink()),
                     // if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 1, child: BuildEffect(mounted: mounted, isRecord: notifier?.isRecordingVideo ?? false)),
-                    Expanded(flex: 2, child: BuildCaptureIcon(mounted: mounted)),
+                    BuildCaptureIcon(mounted: mounted),
                     if (Platform.isIOS && !(notifier?.isRecordingVideo ?? true))
                       Expanded(
                         flex: 1,
@@ -225,7 +297,13 @@ class UploadContent extends StatelessWidget {
                         ),
                       ),
                     // if (!(notifier?.isRecordingVideo ?? true))
-                      Expanded(flex: Platform.isIOS ? 2 : 2, child: const CameraSwitchButton())
+                      Expanded(flex: 2, child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          (!(notifier?.videoPreview ?? false)) ? fortyPx : sixteenPx,
+                          (notifier?.videoPreview ?? false) ? BuildNextStep(notifier: notifier,): CameraSwitchButton(),
+                        ],
+                      ))
                   ],
                 ),
               ),
