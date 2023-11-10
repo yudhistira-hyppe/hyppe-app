@@ -4,7 +4,7 @@ homepage: https://www.hyppe.id
 
 publish_to: "none"
 
-version: 1.4.2+102 #26-06-2023
+version: 1.5.1+151 #26-06-2023
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
