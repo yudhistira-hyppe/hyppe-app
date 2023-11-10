@@ -4,7 +4,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 
 class CustomBackButton extends StatelessWidget {
-  final Function? onBack;
+  final Function()? onBack;
 
   const CustomBackButton({Key? key, this.onBack}) : super(key: key);
 

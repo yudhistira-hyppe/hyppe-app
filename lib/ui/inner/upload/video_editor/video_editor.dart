@@ -9,6 +9,7 @@ import 'package:hyppe/ui/inner/upload/video_editor/widget/export_result.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:video_editor/video_editor.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../core/constants/asset_path.dart';
 import '../../../../core/models/collection/localization_v2/localization_model.dart';
@@ -44,6 +45,7 @@ class _VideoEditorState extends State<VideoEditor> {
   @override
   void initState() {
     super.initState();
+    WakelockPlus.enable();
     _controller
         .initialize(aspectRatio: 9 / 16)
         .then((_) => setState(() {}))
@@ -73,6 +75,7 @@ class _VideoEditorState extends State<VideoEditor> {
     _isExporting.dispose();
     _controller.dispose();
     ExportService.dispose();
+    WakelockPlus.disable();
     super.dispose();
   }
 
@@ -222,15 +225,14 @@ class _VideoEditorState extends State<VideoEditor> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         CustomTextWidget(
-                                          textToDisplay:
-                                              '${currentTime.inMinutes > 9 ? currentTime.inMinutes : '0${currentTime.inMinutes}'}:${currentTime.inSeconds > 9 ? currentTime.inSeconds : '0${currentTime.inSeconds}'}',
+                                          textToDisplay: formatter(currentTime),
                                           textStyle: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 12),
                                         ),
                                         CustomTextWidget(
                                           textToDisplay:
-                                              ' / ${_controller.videoDuration.inMinutes > 9 ? _controller.videoDuration.inMinutes : '0${_controller.videoDuration.inMinutes}'}:${_controller.videoDuration.inSeconds > 9 ? _controller.videoDuration.inSeconds : '0${_controller.videoDuration.inSeconds}'}',
+                                              ' / ${formatter(_controller.videoDuration)}',
                                           textStyle: const TextStyle(
                                               color: Color(0xffD9DDE3),
                                               fontSize: 12),
@@ -316,10 +318,10 @@ class _VideoEditorState extends State<VideoEditor> {
           controller: _controller,
           height: height,
           horizontalMargin: height / 4,
-          child: TrimTimeline(
-            controller: _controller,
-            padding: const EdgeInsets.only(top: 10),
-          ),
+          // child: TrimTimeline(
+          //   controller: _controller,
+          //   padding: const EdgeInsets.only(top: 10),
+          // ),
         ),
       ),
       twentyPx,

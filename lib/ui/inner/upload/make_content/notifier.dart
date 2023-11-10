@@ -55,6 +55,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   CreatePostResponse? _postModel;
 
   double get progressDev => _progressDev;
+  int get elapsedProgress => _elapsedProgress;
   int get progressHuman => _progressHuman;
   bool get isVideo => _isVideo;
   double get slider => _slider;
@@ -90,6 +91,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   onInitialUploadContent() {
     _selectedDuration = 15;
+    _videoPreview = false;
     // if (_featureType == FeatureType.vid) {
     //   _durationOptions = {
     //     15: "15${language.timerSecond}",
@@ -342,11 +344,29 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     _elapsedProgress = 0;
   }
 
+  bool _videoPreview = false;
+  bool get videoPreview => _videoPreview;
+  set videoPreview(bool state){
+    _videoPreview = state;
+    notifyListeners();
+  }
+
+  clearPreviewVideo({bool goView = false}){
+    _progressDev = 0.0;
+    _progressHuman = 0;
+    _elapsedProgress = 0;
+    videoPreview = false;
+    if(goView){
+      _routing.move(Routes.previewContent);
+    }
+
+  }
+
   @override
   void onStopRecordedVideo(BuildContext context) {
     try {
       dynamic cameraNotifier;
-
+      final isPreviewVideo = featureType == FeatureType.diary || featureType == FeatureType.vid;
       WakelockPlus.disable();
       "================ disable wakelock 6".logger();
       final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
@@ -357,9 +377,12 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       }
 
       cancelTimer();
-      _progressDev = 0.0;
-      _progressHuman = 0;
-      _elapsedProgress = 0;
+      if(!isPreviewVideo){
+        _progressDev = 0.0;
+        _progressHuman = 0;
+        _elapsedProgress = 0;
+      }
+
 
       cameraNotifier.stopVideoRecording().then((file) async {
         final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
@@ -378,7 +401,12 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         notifier.aspectRation = cameraNotifier.cameraAspectRatio;
 
         notifyListeners();
-        await _routing.move(Routes.previewContent);
+        if(!isPreviewVideo){
+          await _routing.move(Routes.previewContent);
+        }else{
+          videoPreview = true;
+        }
+
       });
     } catch (e) {
       e.logger();

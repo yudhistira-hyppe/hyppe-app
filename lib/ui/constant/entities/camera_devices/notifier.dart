@@ -111,6 +111,9 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
       await disposeCamera();
       notifyListeners();
     }
+    if(camera.isEmpty){
+      camera = await availableCameras();
+    }
 
     final CameraController _controller = CameraController(
       _currentLensDirection == CameraLensDirection.back ? camera[1] : camera[0],
