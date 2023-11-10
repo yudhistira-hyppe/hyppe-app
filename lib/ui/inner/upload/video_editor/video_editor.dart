@@ -36,6 +36,7 @@ class _VideoEditorState extends State<VideoEditor> {
       minDuration: const Duration(seconds: 1),
       maxDuration: widget.videoSeconds,
       trimStyle: TrimSliderStyle(
+          background: const Color(0xff151617),
           onTrimmedColor: Colors.white,
           onTrimmingColor: Colors.white,
           leftIcon: null,
@@ -44,11 +45,16 @@ class _VideoEditorState extends State<VideoEditor> {
   late final LocalizationModelV2 language;
   @override
   void initState() {
+    currentTime = const Duration();
     super.initState();
     WakelockPlus.enable();
     _controller
         .initialize(aspectRatio: 9 / 16)
-        .then((_) => setState(() {}))
+        .then((_){
+          if(mounted){
+            setState(() {});
+          }
+    })
         .catchError((error) {
       // handle minumum duration bigger than video duration error
       Navigator.pop(context);
