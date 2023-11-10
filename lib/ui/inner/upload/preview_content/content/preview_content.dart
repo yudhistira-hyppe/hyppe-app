@@ -40,25 +40,25 @@ class _PreviewContentState extends State<PreviewContent> {
     return Stack(
       children: [
         // Build content component
-        // Align(
-        //   alignment: Alignment.center,
-        //   child: notifier.isLoadVideo
-        //       ?
-        //   Container(
-        //           width: 80.0 * SizeConfig.scaleDiagonal,
-        //           height: 80.0 * SizeConfig.scaleDiagonal,
-        //           margin: const EdgeInsets.symmetric(horizontal: 5.0),
-        //           decoration: BoxDecoration(
-        //             borderRadius: BorderRadius.circular(5.0),
-        //             border:
-        //                 Border.all(color: const Color(0xff822E6E), width: 2.0),
-        //             color: Theme.of(context).backgroundColor,
-        //           ),
-        //           alignment: Alignment.center,
-        //           child: const CustomLoading(),
-        //         )
-        //       : BuildBottomLeftWidget(pageController: widget.pageController),
-        // ),
+        Align(
+          alignment: Alignment.center,
+          child: notifier.isLoadVideo
+              ?
+          Container(
+                  width: 80.0 * SizeConfig.scaleDiagonal,
+                  height: 80.0 * SizeConfig.scaleDiagonal,
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    border:
+                        Border.all(color: const Color(0xff822E6E), width: 2.0),
+                    color: Theme.of(context).backgroundColor,
+                  ),
+                  alignment: Alignment.center,
+                  child: const CustomLoading(),
+                )
+              : BuildBottomLeftWidget(pageController: widget.pageController),
+        ),
         Center(
           child: Container(
             color: Colors.transparent,
