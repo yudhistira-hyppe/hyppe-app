@@ -27,6 +27,7 @@ import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/page_not_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/delete_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/cache_and_download/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/achievement/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/collection/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/screen.dart';
@@ -94,6 +95,7 @@ import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/upload/make_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/payment/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/boost/screen.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/editing/photo/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/ownerhip_selling/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
@@ -148,7 +150,7 @@ class Generate {
       case Routes.root:
         return MaterialPageRoute(builder: (_) => OpeningLogo());
       case Routes.welcomeLogin:
-        return MaterialPageRoute(builder: (_) => WelcomeLoginScreen());
+        return MaterialPageRoute(builder: (_) => const WelcomeLoginScreen());
       case Routes.login:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case Routes.lobby:
@@ -161,9 +163,11 @@ class Generate {
       case Routes.homePageSignInSecurity:
         return MaterialPageRoute(builder: (_) => HyppeHomeSignAndSecurity());
       case Routes.makeContent:
-        return MaterialPageRoute(builder: (_) => MakeContentScreen());
+        return MaterialPageRoute(builder: (_) => const MakeContentScreen());
       case Routes.previewContent:
         return MaterialPageRoute(builder: (_) => const PreviewContentScreen());
+      case Routes.editPhoto:
+        return MaterialPageRoute(builder: (_) => const EditPhotoScreen());
       case Routes.preUploadContent:
         return MaterialPageRoute(builder: (_) => PreUploadContentScreen(arguments: settings.arguments as UpdateContentsArgument));
       case Routes.ownershipSelling:
@@ -367,6 +371,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const VerificationIDStepSupportDocsEula());
       case Routes.help:
         return MaterialPageRoute(builder: (_) => const HelpScreen());
+      case Routes.cacheAndDownload:
+        return MaterialPageRoute(builder: (_) => const CacheAndDownloadScreen());
       case Routes.faqDetail:
         return MaterialPageRoute(
             builder: (_) => FAQDetailScreen(

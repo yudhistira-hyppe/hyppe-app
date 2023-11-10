@@ -34,7 +34,7 @@ class DeleteCommentBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setDeleteCommentFetch(
             DeleteCommentPost(DeleteCommentState.deleteCommentError));
       },

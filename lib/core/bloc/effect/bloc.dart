@@ -31,7 +31,7 @@ class EffectBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setEffectFetch(EffectFetch(EffectState.getEffectError));
       },
       errorServiceType: ErrorType.getEffect,

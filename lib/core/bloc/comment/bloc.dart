@@ -61,7 +61,7 @@ class CommentBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setCommentFetch(CommentFetch(CommentState.commentsBlocError));
       },
       data: formData,

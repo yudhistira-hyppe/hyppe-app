@@ -1,3 +1,4 @@
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
@@ -33,10 +34,10 @@ class UtilsBlocV2 {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context,statusCode: errorData.response?.statusCode);
         setUtilsFetch(UtilsFetch(UtilsState.welcomeNotesError));
       },
-      host:  "${UrlConstants.welcomeNotes}?langIso=$_langIso&countryCode=ID&pageNumber=0&pageRow=100",
+      host: "${UrlConstants.welcomeNotes}?langIso=$_langIso&countryCode=ID&pageNumber=0&pageRow=100",
       methodType: MethodType.get,
       withAlertMessage: true,
       withCheckConnection: false,
@@ -79,6 +80,7 @@ class UtilsBlocV2 {
         }
       },
       (errorData) {
+        ShowBottomSheet.onInternalServerError(context,statusCode: errorData.response?.statusCode);
         setUtilsFetch(UtilsFetch(UtilsState.getInterestsError));
       },
       errorServiceType: ErrorType.getGender,
@@ -104,7 +106,7 @@ class UtilsBlocV2 {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUtilsFetch(UtilsFetch(UtilsState.getEulaError));
       },
       host: "${UrlConstants.eula}?langIso=$_langIso",
@@ -126,6 +128,7 @@ class UtilsBlocV2 {
         }
       },
       (errorData) {
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUtilsFetch(UtilsFetch(UtilsState.loadCountryError));
       },
       host: "${UrlConstants.country}${search != null ? "?search=$search&" : "?"}pageNumber=$pageNumber&pageRow=$pageRow",
@@ -148,6 +151,7 @@ class UtilsBlocV2 {
         }
       },
       (errorData) {
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUtilsFetch(UtilsFetch(UtilsState.loadAreaError));
       },
       errorServiceType: ErrorType.getStates,
@@ -170,6 +174,7 @@ class UtilsBlocV2 {
         }
       },
       (errorData) {
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUtilsFetch(UtilsFetch(UtilsState.loadCityError));
       },
       errorServiceType: ErrorType.getCities,

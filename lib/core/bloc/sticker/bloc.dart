@@ -33,7 +33,7 @@ class StickerBloc {
         );
       }
     }, (errorData) {
-      ShowBottomSheet.onInternalServerError(context);
+      ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
       setStickerFetch(StickerFetch(StickerState.getStickerError));
     },
         errorServiceType: ErrorType.getSticker,

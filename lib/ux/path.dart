@@ -10,6 +10,7 @@ class Routes {
   static const String otherProfile = '/other-profile';
   static const String makeContent = '/make-content';
   static const String previewContent = '/preview-content';
+  static const String editPhoto = '/edit-photo';
   static const String preUploadContent = '/pre-upload-content';
   static const String ownershipSelling = '/ownership-selling';
   static const String homePageSignInSecurity = '/home-page-sign-in-security';
@@ -146,4 +147,7 @@ class Routes {
   static const String chalengeCollectionBadge = '/chalenge-collection-badge';
   static const String chalengeAchievement = '/chalenge-achievement';
   static const String shimmerSlider = '/shimmer-slider';
+
+  static const String cacheAndDownload = '/cache-and-download';
+
 }

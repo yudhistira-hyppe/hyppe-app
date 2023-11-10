@@ -40,7 +40,9 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
     // final size = MediaQuery.of(context).size;
     // final _language = context.watch<TranslateNotifierV2>().translate;
     return Container(
-      decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(8.0)),
+      decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(8.0)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,19 +51,27 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
           CustomTextWidget(
             textToDisplay: '${widget.titleText}',
             maxLines: widget.maxLineTitle,
-            textStyle: theme.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
+            textStyle: theme.textTheme.subtitle1
+                ?.copyWith(fontWeight: FontWeight.w600),
           ),
           twelvePx,
-          CustomTextWidget(
-            maxLines: widget.maxLineBody,
-            textOverflow: TextOverflow.visible,
-            textToDisplay: '${widget.bodyText}',
-            textStyle: theme.textTheme.bodyText2,
+          Visibility(
+            visible: widget.bodyText != null || widget.bodyText != '',
+            child: CustomTextWidget(
+              maxLines: widget.maxLineBody,
+              textOverflow: TextOverflow.visible,
+              textToDisplay: '${widget.bodyText}',
+              textStyle: theme.textTheme.bodyText2,
+            ),
           ),
-          twelvePx,
-          twelvePx,
+          widget.bodyText == null || widget.bodyText == ''
+              ? const SizedBox.shrink()
+              : twelvePx,
+          widget.bodyText == null || widget.bodyText == ''
+              ? const SizedBox.shrink()
+              : twelvePx,
           _isLoading
-              ? CustomLoading()
+              ? const CustomLoading()
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -71,7 +81,7 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
                             child: _buildButton(
                               caption: '${widget.titleButtonSecondary}',
                               color: Colors.transparent,
-                              function: widget.functionSecondary ?? (){},
+                              function: widget.functionSecondary ?? () {},
                               // function: () => _routing.moveBack(),
                               theme: theme,
                             ),
@@ -93,7 +103,12 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
     );
   }
 
-  Widget _buildButton({required ThemeData theme, required String caption, required Function function, required Color color, Color? textColor}) {
+  Widget _buildButton(
+      {required ThemeData theme,
+      required String caption,
+      required Function function,
+      required Color color,
+      Color? textColor}) {
     return CustomTextButton(
       onPressed: () async {
         try {
@@ -109,7 +124,10 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
           setState(() => _isLoading = false);
         }
       },
-      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor, fontSize: 10)),
+      child: CustomTextWidget(
+          textToDisplay: caption,
+          textStyle:
+              theme.textTheme.button?.copyWith(color: textColor, fontSize: 10)),
       style: theme.elevatedButtonTheme.style?.copyWith(
         backgroundColor: MaterialStateProperty.all(color),
       ),

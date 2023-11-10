@@ -56,7 +56,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUserFetch(UserFetch(UserState.RecoverError));
         Dio().close(force: true);
       },
@@ -86,7 +86,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUserFetch(UserFetch(UserState.RecoverError));
         Dio().close(force: true);
       },
@@ -145,7 +145,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUserFetch(UserFetch(UserState.LoginError));
       },
       methodType: MethodType.post,
@@ -192,7 +192,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUserFetch(UserFetch(UserState.LoginError));
       },
       methodType: MethodType.post,
@@ -241,7 +241,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUserFetch(UserFetch(UserState.LoginError));
       },
       errorServiceType: ErrorType.login,
@@ -263,13 +263,14 @@ class UserBloc {
         setUserFetch(UserFetch(UserState.signUpSuccess, data: GenericResponse.fromJson(onResult.data).responseData, message: GenericResponse.fromJson(onResult.data).messages));
       }
     }, (errorData) {
-      ShowBottomSheet.onInternalServerError(context);
+      ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
       setUserFetch(UserFetch(UserState.signUpError));
       Dio().close(force: true);
     }, host: UrlConstants.signUp, data: data.toJson(), methodType: MethodType.post, withAlertMessage: true, withCheckConnection: false, errorServiceType: ErrorType.register, verbose: true);
   }
 
   Future updateProfileBlocV2(BuildContext context, {required Map<String, dynamic> data}) async {
+    final email = SharedPreference().readStorage(SpKeys.email);
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(
       context,
@@ -282,13 +283,14 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUserFetch(UserFetch(UserState.completeProfileError));
         Dio().close(force: true);
       },
       data: data,
       headers: {
-        "x-auth-user": "${data["email"]}",
+        // "x-auth-user": "${data["email"]}",
+        "x-auth-user": email,
       },
       host: UrlConstants.updateProfile,
       methodType: MethodType.post,
@@ -309,7 +311,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUserFetch(UserFetch(UserState.updateInterestError));
         Dio().close(force: true);
       },
@@ -380,7 +382,7 @@ class UserBloc {
         if (errorData.type == DioErrorType.cancel) {
           print("You canceled change picture photo");
         } else {
-          ShowBottomSheet.onInternalServerError(context);
+          ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         }
       },
       data: formData,
@@ -410,7 +412,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUserFetch(UserFetch(UserState.changePasswordError));
         Dio().close(force: true);
       },
@@ -435,8 +437,6 @@ class UserBloc {
     setUserFetch(UserFetch(UserState.loading));
     var formData = FormData();
     formData.fields.add(MapEntry('search', search ?? (SharedPreference().readStorage(SpKeys.email) ?? '')));
-    print('formData.fields');
-    print(formData.fields);
     await Repos().reposPost(
       context,
       (onResult) {
@@ -547,7 +547,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUserFetch(UserFetch(UserState.verifyAccountError));
         Dio().close(force: true);
       },
@@ -591,8 +591,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        print(errorData);
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUserFetch(UserFetch(UserState.resendOTPError));
         Dio().close(force: true);
       },
@@ -619,7 +618,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUserFetch(UserFetch(UserState.LoginGoogleError));
       },
       methodType: MethodType.post,
@@ -658,7 +657,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context);
+        ShowBottomSheet.onInternalServerError(context, statusCode: errorData.response?.statusCode);
         setUserFetch(UserFetch(UserState.deleteAccountError));
         Dio().close(force: true);
       },

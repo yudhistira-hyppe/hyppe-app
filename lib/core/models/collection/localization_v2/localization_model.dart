@@ -219,6 +219,11 @@ class LocalizationModelV2 {
   String? saturation;
   String? level;
   String? exposure;
+  String? perspective;
+  String? tint;
+  String? warmth;
+  String? discardEdit;
+  String? discardEditDesc;
   String? addLocation;
   String? type;
   String? free;
@@ -232,6 +237,14 @@ class LocalizationModelV2 {
   String? normal;
   String? finishingUp;
   String? permissionStorage;
+  String? cache;
+  String? download;
+  String? storage;
+  String? cacheAndDownload;
+  String? clear;
+  String? clearAll;
+  String? cacheDescription;
+  String? downloadDescription;
   String? failedUpdatedYourProfilePicture;
   String? successfullyUpdatedYourProfilePicture;
   String? failedUpdatePersonalInformation;
@@ -424,6 +437,8 @@ class LocalizationModelV2 {
   String? tryAgain;
   String? somethingWentWrong;
   String? ourSystemIsCurrentlyExperiencingTechnicalIssues;
+  String? hyppeServerErrorMessageTitle;
+  String? hyppeServerErrorMessageContent;
   String? idVerification;
   String? pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures;
   String? yesCompleteProfile;
@@ -1228,6 +1243,11 @@ class LocalizationModelV2 {
     this.saturation,
     this.level,
     this.exposure,
+    this.perspective,
+    this.tint,
+    this.warmth,
+    this.discardEdit,
+    this.discardEditDesc,
     this.addLocation,
     this.type,
     this.free,
@@ -1241,6 +1261,14 @@ class LocalizationModelV2 {
     this.normal,
     this.finishingUp,
     this.permissionStorage,
+    this.cache,
+    this.download,
+    this.storage,
+    this.cacheAndDownload,
+    this.clear,
+    this.clearAll,
+    this.cacheDescription,
+    this.downloadDescription,
     this.failedUpdatedYourProfilePicture,
     this.successfullyUpdatedYourProfilePicture,
     this.failedUpdatePersonalInformation,
@@ -1433,6 +1461,8 @@ class LocalizationModelV2 {
     this.tryAgain,
     this.somethingWentWrong,
     this.ourSystemIsCurrentlyExperiencingTechnicalIssues,
+    this.hyppeServerErrorMessageTitle,
+    this.hyppeServerErrorMessageContent,
     this.idVerification,
     this.pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures,
     this.yesCompleteProfile,
@@ -2238,6 +2268,11 @@ class LocalizationModelV2 {
     saturation = json['saturation'];
     level = json['level'];
     exposure = json['exposure'];
+    perspective = json['perspective'];
+    tint = json['tint'];
+    warmth = json['warmth'];
+    discardEdit = json['discardEdit'];
+    discardEditDesc = json['discardEditDesc'];
     addLocation = json['addLocation'];
     type = json['type'];
     free = json['free'];
@@ -2251,6 +2286,14 @@ class LocalizationModelV2 {
     normal = json['normal'];
     finishingUp = json['finishingUp'];
     permissionStorage = json['permissionStorage'];
+    cache = json['cache'];
+    download = json['download'];
+    storage = json['storage'];
+    cacheAndDownload = json['cacheAndDownload'];
+    clear = json['clear'];
+    clearAll = json['clearAll'];
+    cacheDescription = json['cacheDescription'];
+    downloadDescription = json['downloadDescription'];
     failedUpdatedYourProfilePicture = json['failedUpdatedYourProfilePicture'];
     successfullyUpdatedYourProfilePicture = json['successfullyUpdatedYourProfilePicture'];
     failedUpdatePersonalInformation = json['failedUpdatePersonalInformation'];
@@ -2444,6 +2487,8 @@ class LocalizationModelV2 {
     tryAgain = json['tryAgain'];
     somethingWentWrong = json['somethingWentWrong'];
     ourSystemIsCurrentlyExperiencingTechnicalIssues = json['ourSystemIsCurrentlyExperiencingTechnicalIssues'];
+    hyppeServerErrorMessageTitle = json['hyppeServerErrorMessageTitle'];
+    hyppeServerErrorMessageContent = json['hyppeServerErrorMessageContent'];
     idVerification = json['idVerification'];
     pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures = json['pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures'];
     yesCompleteProfile = json['yesCompleteProfile'];

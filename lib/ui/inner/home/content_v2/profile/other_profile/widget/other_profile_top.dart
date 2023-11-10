@@ -276,7 +276,7 @@ class OtherProfileTop extends StatelessWidget {
                                 e.logger();
                               }
                             } else {
-                              ShowBottomSheet.onInternalServerError(context);
+                              // ShowBottomSheet.onInternalServerError(context, statusCode: 500, onReload: await notifier.createDiscussion(context));
                             }
                           },
                         ),

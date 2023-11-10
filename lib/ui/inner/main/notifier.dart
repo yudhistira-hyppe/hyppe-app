@@ -10,10 +10,13 @@ import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
 import 'package:hyppe/core/services/event_service.dart';
+import 'package:hyppe/core/services/locations.dart';
 import 'package:hyppe/core/services/notification_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/socket_service.dart';
@@ -30,6 +33,9 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
+import 'package:hyppe/core/bloc/google_map_place/state.dart';
+import 'package:hyppe/core/models/collection/google_map_place/google_geocoding_model.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../app.dart';
@@ -90,6 +96,13 @@ class MainNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  GoogleGeocodingModel? _googleGeocodingModel;
+  GoogleGeocodingModel? get googleGeocodingModel => _googleGeocodingModel;
+  set googleGeocodingModel(val) {
+    _googleGeocodingModel = val;
+    notifyListeners();
+  }
+
   Future initMain(BuildContext context, {bool onUpdateProfile = false, bool isInitSocket = false, bool updateProfilePict = false}) async {
     // Connect to socket
     if (isInitSocket) {
@@ -124,6 +137,10 @@ class MainNotifier with ChangeNotifier {
       selfProfile.user.profile = usersFetch.data;
       selfProfile.user.profile?.avatar?.imageKey = keyImageCache;
 
+      if (selfProfile.user.profile?.area == null) {
+        getProvinceName(context, profile: selfProfile.user.profile);
+      }
+
       selfProfile.onUpdate();
       print(selfProfile.user.profile?.bio);
       print("profile?.avatar ${selfProfile.user.profile?.avatar?.imageKey}");
@@ -149,6 +166,34 @@ class MainNotifier with ChangeNotifier {
       if (_openValidationIDCamera) {
         takeSelfie(context);
       }
+    });
+  }
+
+  Future getProvinceName(BuildContext context, {required UserProfileModel? profile}) async {
+    Locations().permissionLocation().then((result) {
+      Locations().getLocation().then((value) async {
+        final notifier = GoogleMapPlaceBloc();
+        await notifier.getGoogleMapGeocodingBloc(
+          context,
+          latitude: value['latitude'] ?? 0.0,
+          longitude: value['longitude'] ?? 0.0,
+        );
+        final fetch = notifier.googleMapPlaceFetch;
+        if (fetch.googleMapPlaceState == GoogleMapPlaceState.getGoogleMapPlaceBlocSuccess) {
+          googleGeocodingModel = GoogleGeocodingModel.fromJson(fetch.data);
+          AddressComponents? country = googleGeocodingModel?.results?.first.addressComponents?.firstWhere((element) => (element.types ?? []).contains('country'));
+          AddressComponents? province = googleGeocodingModel?.results?.first.addressComponents?.firstWhere((element) => (element.types ?? []).contains('administrative_area_level_1'));
+          final usersNotifier = userV2.UserBloc();
+          final data = <String, dynamic>{};
+          data["country"] = country?.longName;
+          data["area"] = province?.longName;
+          if (profile?.gender == null) {
+            data["gender"] = 'Perempuan'.getGenderByLanguage();
+          }
+          // ignore: use_build_context_synchronously
+          usersNotifier.updateProfileBlocV2(context, data: data);
+        }
+      });
     });
   }
 
