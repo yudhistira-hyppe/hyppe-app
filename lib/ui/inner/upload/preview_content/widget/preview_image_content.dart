@@ -80,7 +80,7 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     height: 86,
-                    // margin: const EdgeInsets.only(bottom: 76),
+                    margin: const EdgeInsets.only(bottom: 76),
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,

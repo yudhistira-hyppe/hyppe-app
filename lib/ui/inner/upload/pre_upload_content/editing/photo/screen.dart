@@ -2,12 +2,10 @@ import 'dart:io';
 
 import 'package:colorfilter_generator/addons.dart';
 import 'package:colorfilter_generator/colorfilter_generator.dart';
-import 'package:colorfilter_generator/presets.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/general_dialog.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -15,7 +13,6 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/editing/photo/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/editing/photo/widget/custom_slider_widget.dart';
-import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -73,8 +70,9 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
           },
           child: Scaffold(
             backgroundColor: kHyppeBackground,
-            body: Stack(
+            body: Column(
               children: [
+                FilterTopWidget(notifier: notifier, paintKey: paintKey),
                 FilterBodyWidget(notifier: notifier, paintKey: paintKey),
                 Positioned(
                   bottom: 0,
@@ -89,6 +87,61 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
           ),
         );
       },
+    );
+  }
+}
+
+class FilterTopWidget extends StatelessWidget {
+  final EditPhotoNotifier notifier;
+  final GlobalKey paintKey;
+
+  const FilterTopWidget({
+    super.key,
+    required this.notifier,
+    required this.paintKey,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (notifier.activeFilter == null)
+            const BackButton(color: kHyppeLightButtonText),
+          if (notifier.activeFilter != null)
+            Expanded(
+              child: CustomTextWidget(
+                textToDisplay: notifier.activeFilter == null
+                    ? ''
+                    : notifier.filters[notifier.activeFilter ?? 0].name,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  color: kHyppeTextPrimary,
+                  // fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          if (notifier.activeFilter == null)
+            TextButton(
+              onPressed: () async {
+                ShowGeneralDialog.loadingDialog(context);
+                await notifier.saveImage(context, paintKey);
+                Routing().moveBack();
+                Routing().moveBack();
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Text(
+                  '${notifier.language.done}',
+                  style: const TextStyle(color: kHyppeTextPrimary),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
@@ -121,79 +174,32 @@ class FilterBodyWidget extends StatelessWidget {
       ],
     );
 
-    return Center(
-      child: Column(
-        children: [
-          SizedBox(
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (notifier.activeFilter == null)
-                  const BackButton(color: kHyppeLightButtonText),
-                if (notifier.activeFilter != null)
-                  Expanded(
-                    child: CustomTextWidget(
-                      textToDisplay: notifier.activeFilter == null
-                          ? ''
-                          : notifier.filters[notifier.activeFilter ?? 0].name,
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        color: kHyppeTextPrimary,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                if (notifier.activeFilter == null)
-                  TextButton(
-                    onPressed: () async {
-                      ShowGeneralDialog.loadingDialog(context);
-                      await notifier.saveImage(context, paintKey);
-                      Routing().moveBack();
-                      Routing().moveBack();
+    return Expanded(
+      child: notifier.tempFilePath!.isEmpty
+          ? const CustomLoading()
+          : Center(
+              child: RepaintBoundary(
+                key: paintKey,
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.matrix(myFilter.matrix),
+                  child: Image.file(
+                    File(notifier.tempFilePath ?? ''),
+                    filterQuality: FilterQuality.high,
+                    frameBuilder:
+                        (context, child, frame, wasSynchronouslyLoaded) {
+                      return wasSynchronouslyLoaded
+                          ? child
+                          : AnimatedOpacity(
+                              opacity: frame == null ? 0 : 1,
+                              duration: const Duration(seconds: 1),
+                              curve: Curves.easeOut,
+                              child: child,
+                            );
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Text(
-                        '${notifier.language.done}',
-                        style: const TextStyle(color: kHyppeTextPrimary),
-                      ),
-                    ),
                   ),
-              ],
+                ),
+              ),
             ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.7,
-            child: notifier.tempFilePath!.isEmpty
-                ? const CustomLoading()
-                : Center(
-                    child: RepaintBoundary(
-                      key: paintKey,
-                      child: ColorFiltered(
-                        colorFilter: ColorFilter.matrix(myFilter.matrix),
-                        child: Image.file(
-                          File(notifier.tempFilePath ?? ''),
-                          filterQuality: FilterQuality.high,
-                          frameBuilder:
-                              (context, child, frame, wasSynchronouslyLoaded) {
-                            return wasSynchronouslyLoaded
-                                ? child
-                                : AnimatedOpacity(
-                                    opacity: frame == null ? 0 : 1,
-                                    duration: const Duration(seconds: 1),
-                                    curve: Curves.easeOut,
-                                    child: child,
-                                  );
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -207,7 +213,7 @@ class FilterCollectionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 100,
-      margin: const EdgeInsets.only(bottom: 32),
+      margin: const EdgeInsets.symmetric(vertical: 32),
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
@@ -304,9 +310,11 @@ class FilterSliderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Container(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      height: 164,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           CustomSliderWidget(
             value: notifier.filters[notifier.activeFilter ?? 0].value,

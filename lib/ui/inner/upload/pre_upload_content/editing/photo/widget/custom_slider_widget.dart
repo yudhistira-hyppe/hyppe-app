@@ -20,6 +20,20 @@ class CustomSliderWidget extends StatelessWidget {
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
+        Visibility(
+          visible: min < 0,
+          child: Positioned(
+            top: 16,
+            child: Container(
+              height: 4,
+              width: 4,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(

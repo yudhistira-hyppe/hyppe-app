@@ -6,13 +6,9 @@ import 'package:flutter/rendering.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/filter/layer_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
-import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
-import 'package:hyppe/ux/routing.dart';
-import 'package:image/image.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'dart:ui' as ui;
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class EditPhotoNotifier extends ChangeNotifier {
@@ -47,9 +43,9 @@ class EditPhotoNotifier extends ChangeNotifier {
     filters.addAll([
       LayerModel(name: '${language.brightness}', icon: 'brightness.svg'),
       LayerModel(name: '${language.contrast}', icon: 'contrast.svg'),
+      LayerModel(name: '${language.warmth}', icon: 'warmness.svg'),
       LayerModel(name: '${language.saturation}', icon: 'saturation.svg'),
       LayerModel(name: '${language.tint}', icon: 'airdrop.svg'),
-      LayerModel(name: '${language.warmth}', icon: 'warmness.svg'),
     ]);
   }
 

@@ -180,6 +180,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                     alignment: Alignment.bottomCenter,
                     child: Container(
                       height: 86,
+                      margin: const EdgeInsets.only(bottom: 76),
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -249,9 +250,9 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                             });
                             notifier.getSticker(context, index: notifier.stickerTabIndex);
                           },
-                          child: Column(
+                          child: const Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
+                            children: [
                               CustomIconWidget(
                                 defaultColor: false,
                                 iconData: "${AssetPath.vectorPath}circle_sticker.svg",
@@ -278,9 +279,9 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                               notifier.goToVideoEditor(context);
                             }
                           },
-                          child: Column(
+                          child:const Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
+                            children: [
                               CustomIconWidget(
                                 defaultColor: false,
                                 iconData: "${AssetPath.vectorPath}ic_trim.svg",
@@ -328,7 +329,6 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
 
   @override
   void dispose() {
-    print('PreviewVideoContent is disposed');
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     if (notifier.betterPlayerController != null) {
       notifier.betterPlayerController!.dispose();
