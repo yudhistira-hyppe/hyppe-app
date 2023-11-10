@@ -42,20 +42,23 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
               top: 0,
               right: 0,
               bottom: 0,
-              child: Image.memory(
+              child: notifier.featureType == FeatureType.pic
+              ? Image.memory(
                   File(notifier.fileContent?[widget.currIndex] ?? '').readAsBytesSync(),
-                  // File(notifier.fileContent?[widget.currIndex] ?? ''),
-                  // filterQuality: FilterQuality.high,
-                  // frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  //   return wasSynchronouslyLoaded
-                  //       ? child
-                  //       : AnimatedOpacity(
-                  //           opacity: frame == null ? 0 : 1,
-                  //           duration: const Duration(seconds: 1),
-                  //           curve: Curves.easeOut,
-                  //           child: child,
-                  //         );
-                  // },
+                )
+              : Image.file(
+                 File(notifier.fileContent?[widget.currIndex] ?? ''),
+                  filterQuality: FilterQuality.high,
+                  frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                    return wasSynchronouslyLoaded
+                        ? child
+                        : AnimatedOpacity(
+                            opacity: frame == null ? 0 : 1,
+                            duration: const Duration(seconds: 1),
+                            curve: Curves.easeOut,
+                            child: child,
+                          );
+                  },
                 ),
             ),
             if (notifier.fixSelectedMusic != null)
@@ -77,6 +80,7 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     height: 86,
+                    // margin: const EdgeInsets.only(bottom: 76),
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
