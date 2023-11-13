@@ -75,10 +75,6 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
     return Consumer<MakeContentNotifier>(
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {
-          if(notifier.videoPreview){
-            notifier.videoPreview = false;
-            return false;
-          }
           if (notifier.conditionalOnClose()) {
             // context.read<CameraNotifier>().showEffect(isClose: true);
             context.read<PreviewVidNotifier>().canPlayOpenApps = true; //biar play kembali di landingpage

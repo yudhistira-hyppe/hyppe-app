@@ -29,8 +29,7 @@ class BuildTopWidget extends StatelessWidget {
                 child: SizedBox(
                   width: 81,
                   height: 30,
-                  child: notifier.showNext
-                      ? CustomTextButton(
+                  child: CustomTextButton(
                           child: CustomTextWidget(
                             textToDisplay: notifier.addTextItemMode ? (notifier.language.save ?? 'save') : notifier.featureType == FeatureType.story ? (notifier.language.post  ?? 'post') : (notifier.language.next ?? 'next'),
                             textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
@@ -49,8 +48,7 @@ class BuildTopWidget extends StatelessWidget {
                               notifier.forceResetPlayer(true);
                               notifier.navigateToPreUploaded(context);
                             }
-                          },)
-                      : const SizedBox.shrink(),
+                          },),
                 ),
               ),
             ],
