@@ -57,7 +57,9 @@ class _VideoEditorState extends State<VideoEditor> {
         .initialize(aspectRatio: 9 / 16)
         .then((_){
           if(mounted){
-            setState(() {});
+            Future.delayed(const Duration(seconds: 1), (){
+              setState(() {});
+            });
           }
     })
         .catchError((error) {
