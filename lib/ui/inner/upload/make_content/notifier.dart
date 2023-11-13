@@ -53,6 +53,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   double _slider = 0;
   bool _isVideo = false;
   CreatePostResponse? _postModel;
+  bool _showToast = false;
 
   double get progressDev => _progressDev;
   int get elapsedProgress => _elapsedProgress;
@@ -63,6 +64,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   CreatePostResponse? get postModel => _postModel;
   Map<int, String>? get durationOptions => _durationOptions;
   int get selectedDuration => _selectedDuration;
+  bool get showToast => _showToast;
 
   set featureType(FeatureType? val) {
     _featureType = val;
@@ -89,9 +91,22 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     notifyListeners();
   }
 
+  set showToast(bool state){
+    _showToast = state;
+    notifyListeners();
+  }
+
+  showVideoToast(Duration duration){
+    if(!showToast){
+      showToast = true;
+      Future.delayed(duration, (){
+        showToast = false;
+      });
+    }
+  }
+
   onInitialUploadContent() {
     _selectedDuration = 15;
-    _videoPreview = false;
     // if (_featureType == FeatureType.vid) {
     //   _durationOptions = {
     //     15: "15${language.timerSecond}",
@@ -212,7 +227,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         }
         notifyListeners();
         if (_progressHuman == _selectedDuration && (featureType != FeatureType.vid || _selectedDuration != 0)) {
-          Future.delayed(Duration(milliseconds: _selectedDuration == 15 ? 1000 : 1300), () {
+          Future.delayed(const Duration(milliseconds: 500), () {
             onStopRecordedVideo(materialAppKey.currentContext ?? context);
           });
         }
@@ -344,70 +359,51 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     _elapsedProgress = 0;
   }
 
-  bool _videoPreview = false;
-  bool get videoPreview => _videoPreview;
-  set videoPreview(bool state){
-    _videoPreview = state;
-    notifyListeners();
-  }
-
-  clearPreviewVideo({bool goView = false}){
-    _progressDev = 0.0;
-    _progressHuman = 0;
-    _elapsedProgress = 0;
-    videoPreview = false;
-    if(goView){
-      _routing.move(Routes.previewContent);
-    }
-
-  }
-
   @override
   void onStopRecordedVideo(BuildContext context) {
     try {
-      dynamic cameraNotifier;
-      final isPreviewVideo = featureType == FeatureType.diary || featureType == FeatureType.vid;
-      WakelockPlus.disable();
-      "================ disable wakelock 6".logger();
-      final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
-      if (canDeppAr == 'true') {
-        cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
-      } else {
-        cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
-      }
+      final tempDuration = Duration(seconds: elapsedProgress);
+      if(tempDuration.inSeconds >= 15){
+        dynamic cameraNotifier;
 
-      cancelTimer();
-      if(!isPreviewVideo){
+        WakelockPlus.disable();
+        "================ disable wakelock 6".logger();
+        final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+        if (canDeppAr == 'true') {
+          cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+        } else {
+          cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+        }
+
+        cancelTimer();
         _progressDev = 0.0;
         _progressHuman = 0;
         _elapsedProgress = 0;
+        cameraNotifier.stopVideoRecording().then((file) async {
+          final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
+          if (file?.path != null) {
+            notifier.fileContent = [file?.path ?? ''];
+          } else {
+            if (canDeppAr == 'true') {
+              final newFile = await Provider.of<CameraDevicesNotifier>(context, listen: false).cameraController?.stopVideoRecording();
+              notifier.fileContent = [newFile?.path ?? ''];
+            } else {
+              final newFile = await Provider.of<CameraNotifier>(context, listen: false).deepArController?.stopVideoRecording();
+              notifier.fileContent = [newFile?.path ?? ''];
+            }
+          }
+          notifier.featureType = featureType;
+          notifier.aspectRation = cameraNotifier.cameraAspectRatio;
+
+          notifyListeners();
+          if(tempDuration.inSeconds >= 15){
+            await _routing.move(Routes.previewContent);
+          }else{
+            showVideoToast(const Duration(seconds: 3));
+          }
+        });
       }
 
-
-      cameraNotifier.stopVideoRecording().then((file) async {
-        final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-        if (file?.path != null) {
-          notifier.fileContent = [file?.path ?? ''];
-        } else {
-          if (canDeppAr == 'true') {
-            final newFile = await Provider.of<CameraDevicesNotifier>(context, listen: false).cameraController?.stopVideoRecording();
-            notifier.fileContent = [newFile?.path ?? ''];
-          } else {
-            final newFile = await Provider.of<CameraNotifier>(context, listen: false).deepArController?.stopVideoRecording();
-            notifier.fileContent = [newFile?.path ?? ''];
-          }
-        }
-        notifier.featureType = featureType;
-        notifier.aspectRation = cameraNotifier.cameraAspectRatio;
-
-        notifyListeners();
-        if(!isPreviewVideo){
-          await _routing.move(Routes.previewContent);
-        }else{
-          videoPreview = true;
-        }
-
-      });
     } catch (e) {
       e.logger();
     }

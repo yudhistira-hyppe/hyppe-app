@@ -20,7 +20,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_capture_icon.dart';
-import 'package:hyppe/ui/inner/upload/make_content/widget/build_next_step.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -90,14 +89,7 @@ class UploadContent extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: CustomTextButton(
-                      onPressed: (notifier?.conditionalOnClose() ?? false) ? () async{
-                        if(notifier?.videoPreview ?? false){
-                          notifier?.clearPreviewVideo();
-                        }else{
-                          await notifier?.onClose(context);
-                        }
-
-                      } : null,
+                      onPressed: (notifier?.conditionalOnClose() ?? false) ? () async => await notifier?.onClose(context) : null,
                       child: const UnconstrainedBox(
                         child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg", defaultColor: false),
                       ),
@@ -105,6 +97,18 @@ class UploadContent extends StatelessWidget {
                   ),
                 ),
               ),
+              if(notifier?.showToast ?? false)
+                Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 16),
+                      width: context.getWidth() * 0.7,
+                  height: 60,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: kHyppeTextLightPrimary),
+                  child: CustomTextWidget(textToDisplay: notifier?.language.recordAtLeast15Seconds ?? 'Error', textStyle: const TextStyle(color: Colors.white),),
+                )),
               // Timer
               // Visibility(
               //   visible: !(notifier?.isRecordingVideo ?? true),
@@ -131,13 +135,13 @@ class UploadContent extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(flex: 2, child: !(notifier?.videoPreview ?? true) ? (!(notifier?.isRecordingVideo ?? true)) ? Row(
+                    if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 2, child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         BuildStorage(mounted: mounted),
                         fortyPx
                       ],
-                    ) : const SizedBox.shrink() : const SizedBox.shrink()),
+                    )),
                     BuildCaptureIcon(mounted: mounted),
                     // if (Platform.isIOS && !(notifier?.isRecordingVideo ?? true))
                     //   Expanded(
@@ -157,9 +161,8 @@ class UploadContent extends StatelessWidget {
                     Expanded(flex: 2, child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          (!(notifier?.videoPreview ?? false)) ? fortyPx : sixteenPx,
-                          (notifier?.videoPreview ?? false) ?
-                          BuildNextStep(notifier: notifier,) : const CameraDevicesSwitchButton(),
+                          fortyPx,
+                          CameraDevicesSwitchButton(),
                         ],
                       ))
                   ],
@@ -233,13 +236,7 @@ class UploadContent extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: CustomTextButton(
-                      onPressed: (notifier?.conditionalOnClose() ?? false) ? () async{
-                        if(notifier?.videoPreview ?? false){
-                          notifier?.clearPreviewVideo();
-                        }else{
-                          await notifier?.onClose(context);
-                        }
-                      } : null,
+                      onPressed: (notifier?.conditionalOnClose() ?? false) ? () async => await notifier?.onClose(context) : null,
                       child: const UnconstrainedBox(
                         child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg", defaultColor: false),
                       ),
@@ -247,6 +244,18 @@ class UploadContent extends StatelessWidget {
                   ),
                 ),
               ),
+              if(notifier?.showToast ?? false)
+                Align(
+                  alignment: Alignment.topCenter,
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 16),
+                      width: context.getWidth() * 0.7,
+                      height: 60,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: kHyppeTextLightPrimary),
+                  child: CustomTextWidget(textToDisplay: notifier?.language.recordAtLeast15Seconds ?? 'Error', textStyle: const TextStyle(color: Colors.white),),
+                )),
               // Timer
               // Visibility(
               //   visible: !(notifier?.isRecordingVideo ?? true),
@@ -273,35 +282,35 @@ class UploadContent extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(flex: 2, child: !(notifier?.videoPreview ?? true) ? (!(notifier?.isRecordingVideo ?? true)) ? Row(
+                    Expanded(flex: 2, child: !(notifier?.isRecordingVideo ?? true) ? Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         BuildStorage(mounted: mounted),
                         fortyPx
                       ],
-                    ) : const SizedBox.shrink() : const SizedBox.shrink()),
+                    ) : const SizedBox.shrink()),
                     // if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 1, child: BuildEffect(mounted: mounted, isRecord: notifier?.isRecordingVideo ?? false)),
                     BuildCaptureIcon(mounted: mounted),
-                    if (Platform.isIOS && !(notifier?.isRecordingVideo ?? true))
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const CameraFlashButton(),
-                            CustomTextWidget(
-                              textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
-                              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
-                            ),
-                          ],
-                        ),
-                      ),
+                    // if (Platform.isIOS && !(notifier?.isRecordingVideo ?? true))
+                    //   Expanded(
+                    //     flex: 1,
+                    //     child: Column(
+                    //       mainAxisSize: MainAxisSize.min,
+                    //       children: [
+                    //         const CameraFlashButton(),
+                    //         CustomTextWidget(
+                    //           textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
+                    //           textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
                     // if (!(notifier?.isRecordingVideo ?? true))
                       Expanded(flex: 2, child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          (!(notifier?.videoPreview ?? false)) ? fortyPx : sixteenPx,
-                          (notifier?.videoPreview ?? false) ? BuildNextStep(notifier: notifier,): CameraSwitchButton(),
+                          fortyPx,
+                          CameraSwitchButton(),
                         ],
                       ))
                   ],
