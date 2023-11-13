@@ -22,31 +22,31 @@ class VoucherWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VoucherWidget');
-    String title = '';
-    String titleContent = '';
-    String keterangan = '';
-    String fullname = '';
-    String email = '';
-    switch (data?.postType) {
-      case FeatureType.pic:
-        titleContent = 'HyppePict';
-        break;
-      case FeatureType.vid:
-        titleContent = 'HyppeVid';
-        break;
-      case FeatureType.diary:
-        titleContent = 'HyppeDiary';
-        break;
-      case FeatureType.story:
-        titleContent = 'HyppeStory';
-        break;
-      default:
-    }
+    // String title = '';
+    // String titleContent = '';
+    // String keterangan = '';
+    // String fullname = '';
+    // String email = '';
+    // switch (data?.postType) {
+    //   case FeatureType.pic:
+    //     titleContent = 'HyppePict';
+    //     break;
+    //   case FeatureType.vid:
+    //     titleContent = 'HyppeVid';
+    //     break;
+    //   case FeatureType.diary:
+    //     titleContent = 'HyppeDiary';
+    //     break;
+    //   case FeatureType.story:
+    //     titleContent = 'HyppeStory';
+    //     break;
+    //   default:
+    // }
 
     Color? titleColor = kHyppeTextLightPrimary;
     Color? blockColor = kHyppeSoftYellow;
 
-    final desc = '$titleContent $keterangan $fullname ( $email )';
+    // final desc = '$titleContent $keterangan $fullname ( $email )';
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(

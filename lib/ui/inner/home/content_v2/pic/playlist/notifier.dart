@@ -28,7 +28,7 @@ import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
-import 'package:story_view/controller/story_controller.dart';
+// import 'package:story_view/controller/story_controller.dart';
 
 import '../../../../../../core/bloc/posts_v2/bloc.dart';
 import '../../../../../../core/bloc/posts_v2/state.dart';
@@ -175,6 +175,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     } finally {
       loadPic = false;
     }
+    return null;
   }
 
   Future initDetailPost(BuildContext context, String postID, String visibility) async {
@@ -360,14 +361,14 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     return true;
   }
 
-  void showUserTag(BuildContext context, data, postId, {final StoryController? storyController, FlutterAliplayer? fAliplayer}) {
+  void showUserTag(BuildContext context, data, postId, {FlutterAliplayer? fAliplayer}) {
     fAliplayer?.pause();
     ShowBottomSheet.onShowUserTag(
       context,
       value: data,
       function: () {},
       postId: postId,
-      storyController: storyController,
+      // storyController: storyController,
       fAliplayer: fAliplayer,
     );
   }

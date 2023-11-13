@@ -4,7 +4,6 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -12,7 +11,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/all_search_shimmer.dart';
-import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/vid_search_content.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/search_no_result.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/search_no_result_image.dart';
 import 'package:provider/provider.dart';
@@ -24,9 +22,9 @@ import '../../hashtag/widget/hashtag_item.dart';
 import '../../widget/grid_content_view.dart';
 
 class AllSearchContent extends StatefulWidget {
-  String keyword;
-  TabController tabController;
-  AllSearchContent({Key? key, required this.tabController, required this.keyword}) : super(key: key);
+  final String keyword;
+  final TabController tabController;
+  const AllSearchContent({Key? key, required this.tabController, required this.keyword}) : super(key: key);
 
   @override
   State<AllSearchContent> createState() => _AllSearchContentState();
@@ -34,7 +32,6 @@ class AllSearchContent extends StatefulWidget {
 
 class _AllSearchContentState extends State<AllSearchContent> {
   final ScrollController _scrollController = ScrollController();
-  TranslateNotifierV2? _translate;
   static final _system = System();
 
   final listTab = [
@@ -46,9 +43,6 @@ class _AllSearchContentState extends State<AllSearchContent> {
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'AllSearchContent');
-    // _translate = Provider.of<TranslateNotifierV2>(context, listen: false);
-    // final notifier = Provider.of<SearchNotifier>(context, listen: false);
-    // _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
     super.initState();
   }
 

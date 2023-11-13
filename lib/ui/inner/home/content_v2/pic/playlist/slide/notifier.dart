@@ -29,7 +29,7 @@ import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:provider/provider.dart';
-import 'package:story_view/controller/story_controller.dart';
+// import 'package:story_view/controller/story_controller.dart';
 
 import '../../../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import '../../../../../../../core/bloc/ads_video/bloc.dart';
@@ -216,12 +216,8 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     String? urlAds;
     print('COUNTS ADS $count');
 
-    if (count == null) {
-      context.setAdsCount(0);
-    } else {
-      if (count == 2) {
-        urlAds = await getAdsVideo(context, false);
-      }
+    if (count == 2) {
+      urlAds = await getAdsVideo(context, false);
     }
     if (urlAds != null) {
       _adsUrl = urlAds;
@@ -530,7 +526,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     return true;
   }
 
-  void showUserTag(BuildContext context, data, postId, {final StoryController? storyController}) {
-    ShowBottomSheet.onShowUserTag(context, value: data, function: () {}, postId: postId, storyController: storyController);
+  void showUserTag(BuildContext context, data, postId) {
+    ShowBottomSheet.onShowUserTag(context, value: data, function: () {}, postId: postId);
   }
 }

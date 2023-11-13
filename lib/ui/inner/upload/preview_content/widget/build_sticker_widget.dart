@@ -1,7 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
 import 'package:flutter/material.dart';
-import 'package:optimized_cached_image/optimized_cached_image.dart';
 
 class BuildStickerWidget extends StatefulWidget {
   final String image;
@@ -70,7 +70,7 @@ class _BuildStickerWidgetState extends State<BuildStickerWidget> {
                 child: SizedBox.expand(
                   child: FittedBox(
                     fit: BoxFit.contain,
-                    child: OptimizedCacheImage(
+                    child: CachedNetworkImage(
                       imageUrl: widget.image,
                       fadeInDuration: const Duration(milliseconds: 100),
                     ),

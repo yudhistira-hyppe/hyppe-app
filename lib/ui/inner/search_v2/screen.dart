@@ -6,7 +6,6 @@ import 'package:hyppe/core/arguments/hashtag_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
@@ -29,7 +28,6 @@ import '../../../app.dart';
 import '../../../core/constants/shared_preference_keys.dart';
 import '../../../core/services/shared_preference.dart';
 import '../../../ux/routing.dart';
-import '../../constant/widget/custom_spacer.dart';
 import '../home/content_v2/profile/self_profile/widget/offline_mode.dart';
 import 'interest/detail_screen.dart';
 
@@ -39,7 +37,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final CarouselController _controllerSlider = CarouselController();
 
   late TabController _tabController;
@@ -149,7 +147,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final error = context.select((ErrorService value) => value.getError(ErrorType.getPost));
+    // final error = context.select((ErrorService value) => value.getError(ErrorType.getPost));
     return Consumer<SearchNotifier>(
       builder: (context, notifier, child) {
         return WillPopScope(

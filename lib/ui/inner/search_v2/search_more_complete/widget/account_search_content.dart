@@ -6,7 +6,6 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -29,13 +28,11 @@ class AccountSearchContent extends StatefulWidget {
 
 class _AccountSearchContentState extends State<AccountSearchContent> {
   final ScrollController _scrollController = ScrollController();
-  TranslateNotifierV2? _translate;
   static final _system = System();
 
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'AccountSearchContent');
-    _translate = Provider.of<TranslateNotifierV2>(context, listen: false);
 
     _scrollController.addListener(() {
       if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {

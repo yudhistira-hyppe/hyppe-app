@@ -2,10 +2,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:provider/provider.dart';
 
 class CustomCommingSoon extends StatelessWidget {
   final String? title;
@@ -14,7 +12,7 @@ class CustomCommingSoon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
+    // TranslateNotifierV2 tn = context.read<TranslateNotifierV2>();
     FirebaseCrashlytics.instance.setCustomKey('layout', 'CustomCommingSoon');
     return Column(
       children: <Widget>[

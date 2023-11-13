@@ -3,13 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:provider/provider.dart';
 
-import 'package:better_player/better_player.dart';
 
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -18,6 +16,7 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../../../core/services/route_observer_service.dart';
 import '../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -32,7 +31,7 @@ class PreviewVideoContent extends StatefulWidget {
 }
 
 class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAware, AfterFirstLayoutMixin {
-  BetterPlayerController? _videoPlayerController;
+  // VideoPlayerController? _videoPlayerController;
 
   @override
   void didChangeDependencies() {
@@ -45,7 +44,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
     print('initState PreviewVideoContent');
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
     notifier.initVideoPlayer(context, isSaveDefault: true);
-    _videoPlayerController = notifier.betterPlayerController;
+    // _videoPlayerController = notifier.betterPlayerController;
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
   }
 
@@ -117,8 +116,8 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
         //   );
         // }
         if (!notifier.isLoadingBetterPlayer) {
-          final height = notifier.betterPlayerController?.videoPlayerController?.value.size?.height;
-          final width = notifier.betterPlayerController?.videoPlayerController?.value.size?.width;
+          final height = notifier.betterPlayerController?.value.size.height;
+          final width = notifier.betterPlayerController?.value.size.width;
           print('PreviewVideoContent size video: $height : $width');
           notifier.setWidth(width?.toInt());
           notifier.setHeight(height?.toInt());
@@ -132,11 +131,11 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                 ? Center(child: Container())
                 : notifier.errorMessage != ''
                     ? Center(child: Text(notifier.errorMessage))
-                    : notifier.betterPlayerController?.isVideoInitialized() ?? false
+                    : notifier.betterPlayerController?.value.isInitialized ?? false
                         ? GestureDetector(
                             onTap: () {
                               setState(() {
-                                if (notifier.betterPlayerController?.isPlaying() ?? false) {
+                                if (notifier.betterPlayerController?.value.isPlaying ?? false) {
                                   notifier.betterPlayerController?.pause();
                                 } else {
                                   notifier.betterPlayerController?.play();
@@ -148,10 +147,10 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                                   ? Center(
                                       child: Platform.isAndroid
                                           ? AspectRatio(
-                                              aspectRatio: notifier.betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 1,
-                                              child: BetterPlayer(controller: notifier.betterPlayerController!),
+                                              aspectRatio: notifier.betterPlayerController?.value.aspectRatio ?? 1,
+                                              child: VideoPlayer(notifier.betterPlayerController!),
                                             )
-                                          : BetterPlayer(controller: notifier.betterPlayerController!),
+                                          : VideoPlayer(notifier.betterPlayerController!),
                                     )
                                   : const Center(
                                       child: CustomLoading(),
@@ -181,6 +180,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                     alignment: Alignment.bottomCenter,
                     child: Container(
                       height: 86,
+                      margin: const EdgeInsets.only(bottom: 76),
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -250,9 +250,9 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                             });
                             notifier.getSticker(context, index: notifier.stickerTabIndex);
                           },
-                          child: Column(
+                          child: const Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
+                            children: [
                               CustomIconWidget(
                                 defaultColor: false,
                                 iconData: "${AssetPath.vectorPath}circle_sticker.svg",
@@ -271,10 +271,39 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                             ],
                           ),
                         ),
+                        twentyFourPx,
+                        if(notifier.featureType == FeatureType.diary || notifier.featureType == FeatureType.vid)
+                        InkWell(
+                          onTap: () async {
+                            if(mounted){
+                              notifier.goToVideoEditor(context);
+                            }
+                          },
+                          child:const Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CustomIconWidget(
+                                defaultColor: false,
+                                iconData: "${AssetPath.vectorPath}ic_trim.svg",
+                              ),
+                              fourPx,
+                              CustomTextWidget(
+                                maxLines: 1,
+                                textToDisplay: 'Trim',
+                                textAlign: TextAlign.left,
+                                textStyle:  TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  if (!(notifier.betterPlayerController?.isPlaying() ?? false))
+                  if (!(notifier.betterPlayerController?.value.isPlaying ?? false))
                     const IgnorePointer(
                       child: Center(
                         child: CustomIconWidget(
@@ -283,7 +312,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                         ),
                       ),
                     ),
-                  if (notifier.isLoadVideo || notifier.isLoadingBetterPlayer || !(notifier.betterPlayerController?.isVideoInitialized() ?? false))
+                  if (notifier.isLoadVideo || notifier.isLoadingBetterPlayer || !(notifier.betterPlayerController?.value.isInitialized ?? false))
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
@@ -300,7 +329,6 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
 
   @override
   void dispose() {
-    print('PreviewVideoContent is disposed');
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     if (notifier.betterPlayerController != null) {
       notifier.betterPlayerController!.dispose();

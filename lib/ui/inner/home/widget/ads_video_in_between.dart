@@ -350,22 +350,22 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
 
   int _loadingPercent = 0;
   bool _showLoading = false;
-  bool _inSeek = false;
+  // bool _inSeek = false;
   bool isloading = false;
   bool isMute = false;
   bool toComment = false;
 
-  int _currentPlayerState = 0;
-  int _videoDuration = 1;
-  int _currentPosition = 0;
-  int _bufferPosition = 0;
+  // int _currentPlayerState = 0;
+  // int _videoDuration = 1;
+  // int _currentPosition = 0;
+  // int _bufferPosition = 0;
   int _currentPositionText = 0;
-  int _curIdx = 0;
-  int _lastCurIndex = -1;
+  // int _curIdx = 0;
+  // int _lastCurIndex = -1;
 
   String auth = '';
   String url = '';
-  final Map _dataSourceMap = {};
+  // final Map _dataSourceMap = {};
   String email = '';
   String statusKyc = '';
 
@@ -423,7 +423,7 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
-      _currentPlayerState = newState;
+      // _currentPlayerState = newState;
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
@@ -490,7 +490,7 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
       }
     });
     fAliplayer?.setOnSeekComplete((playerId) {
-      _inSeek = false;
+      // _inSeek = false;
     });
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
@@ -506,7 +506,7 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
           print('error setOnInfo: $e');
         }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-        _bufferPosition = extraValue ?? 0;
+        // _bufferPosition = extraValue ?? 0;
         // if (mounted) {
         //   setState(() {});
         // }
@@ -527,7 +527,7 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
       isPause = true;
 
       setState(() {
-        _currentPosition = _videoDuration;
+        // _currentPosition = _videoDuration;
       });
     });
 
@@ -543,7 +543,7 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
       AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-      if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
+      if ((info.trackDefinition?.length ?? 0) > 0) {
         // trackFragmentKey.currentState.onTrackChanged(info);
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }

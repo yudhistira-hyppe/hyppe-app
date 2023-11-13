@@ -14,8 +14,8 @@ import 'package:pattern_formatter/numeric_formatter.dart';
 import 'package:provider/provider.dart';
 
 class TopWithdrawalWodget extends StatelessWidget {
-  LocalizationModelV2 translate;
-  TopWithdrawalWodget({Key? key, required this.translate}) : super(key: key);
+  final LocalizationModelV2 translate;
+  const TopWithdrawalWodget({Key? key, required this.translate}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -76,13 +76,6 @@ class TopWithdrawalWodget extends StatelessWidget {
                   ),
                   child: TextFormField(
                     maxLines: 1,
-                    validator: (String? input) {
-                      // if (input?.isEmpty ?? true) {
-                      //   return notifier.language.pleaseSetPrice;
-                      // } else {
-                      //   return null;
-                      // }
-                    },
                     // enabled: notifier.isSavedPrice ? false : true,
                     controller: notifier.amountWithdrawalController,
                     onChanged: (val) {

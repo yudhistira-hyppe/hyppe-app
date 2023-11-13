@@ -17,7 +17,6 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/database/local_thumbnail.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart' as v2;
-import 'package:hyppe/core/models/collection/google_map_place/location_model.dart';
 
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/core/services/locations.dart';
@@ -31,7 +30,6 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dar
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/outer/welcome_login/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -45,15 +43,14 @@ import 'package:flutter_video_info/flutter_video_info.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:screen_protector/screen_protector.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:story_view/story_view.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart' as intl;
 
@@ -528,7 +525,7 @@ class System {
     DeviceInfoPlugin plugin = DeviceInfoPlugin();
     if (Platform.isAndroid) {
       AndroidDeviceInfo android = await plugin.androidInfo;
-      if (android.version.sdkInt! < 33) {
+      if ((android.version.sdkInt ?? 0) < 33) {
         if (await Permission.storage.request().isGranted) {
           // permissionGranted = true;
         } else if (await Permission.storage.request().isPermanentlyDenied) {
@@ -1286,44 +1283,67 @@ class System {
     }
   }
 
-  Future<void> navigateToProfile(BuildContext context, String email, {StoryController? storyController}) async {
-    final connect = await checkConnections();
+  Future<void> navigateToProfile(BuildContext context, String email) async {
+    // final connect = await checkConnections();
     // if (connect) {
     String myEmail = SharedPreference().readStorage(SpKeys.email) ?? "";
     if (email != myEmail) {
       context.read<OtherProfileNotifier>().checkFollowingToUser(context, email);
-      if (storyController != null) {
-        storyController.pause();
-        Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
-      } else {
-        if (globalAliPlayer != null) {
-          globalAliPlayer?.pause();
-        }
-        if (globalAudioPlayer != null) {
-          globalAudioPlayer?.pause();
-        }
-        await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-        if (globalAliPlayer != null) {
-          // globalAliPlayer?.play();
-        }
-        if (globalAudioPlayer != null) {
-          globalAudioPlayer?.resume();
-        }
+      // if (storyController != null) {
+      //   storyController.pause();
+      //   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
+      // } else {
+      //   if (globalAliPlayer != null) {
+      //     globalAliPlayer?.pause();
+      //   }
+      //   if (globalAudioPlayer != null) {
+      //     globalAudioPlayer?.pause();
+      //   }
+      //   await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+      //   if (globalAliPlayer != null) {
+      //     // globalAliPlayer?.play();
+      //   }
+      //   if (globalAudioPlayer != null) {
+      //     globalAudioPlayer?.resume();
+      //   }
+      // }
+      if (globalAliPlayer != null) {
+        globalAliPlayer?.pause();
+      }
+      if (globalAudioPlayer != null) {
+        globalAudioPlayer?.pause();
+      }
+      await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+      if (globalAliPlayer != null) {
+        // globalAliPlayer?.play();
+      }
+      if (globalAudioPlayer != null) {
+        globalAudioPlayer?.resume();
       }
     } else {
-      if (storyController != null) {
-        context.read<HomeNotifier>().navigateToProfilePage(context, whenComplete: true, onWhenComplete: () => storyController.play());
-      } else {
-        if (globalAliPlayer != null) {
-          globalAliPlayer?.pause();
-        }
-        if (globalAudioPlayer != null) {
-          globalAudioPlayer?.pause();
-        }
-        await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
-        if (globalAudioPlayer != null) {
-          globalAudioPlayer?.resume();
-        }
+      // if (storyController != null) {
+      //   context.read<HomeNotifier>().navigateToProfilePage(context, whenComplete: true, onWhenComplete: () => storyController.play());
+      // } else {
+      //   if (globalAliPlayer != null) {
+      //     globalAliPlayer?.pause();
+      //   }
+      //   if (globalAudioPlayer != null) {
+      //     globalAudioPlayer?.pause();
+      //   }
+      //   await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
+      //   if (globalAudioPlayer != null) {
+      //     globalAudioPlayer?.resume();
+      //   }
+      // }
+      if (globalAliPlayer != null) {
+        globalAliPlayer?.pause();
+      }
+      if (globalAudioPlayer != null) {
+        globalAudioPlayer?.pause();
+      }
+      await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
+      if (globalAudioPlayer != null) {
+        globalAudioPlayer?.resume();
       }
     }
     // } else {

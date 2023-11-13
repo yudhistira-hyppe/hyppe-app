@@ -1,6 +1,3 @@
-import 'dart:developer';
-import 'dart:ffi';
-
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/models/collection/common/user_badge_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';

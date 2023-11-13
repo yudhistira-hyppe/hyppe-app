@@ -43,10 +43,8 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../../app.dart';
-import '../../../../../core/arguments/other_profile_argument.dart';
 import '../../../../../core/config/ali_config.dart';
 import '../../../../../core/services/route_observer_service.dart';
 import '../../../../../ux/path.dart';
@@ -54,7 +52,6 @@ import '../../../../../ux/routing.dart';
 import '../../../../constant/entities/like/notifier.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../../../../constant/widget/custom_background_layer.dart';
-import '../../../../constant/widget/custom_base_cache_image.dart';
 
 class HyppePreviewVid extends StatefulWidget {
   final ScrollController? scrollController;
@@ -75,7 +72,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   bool isPause = false;
   bool isloading = false;
   int _curIdx = -1;
-  int _lastCurIndex = -1;
+  // int _lastCurIndex = -1;
 
   String auth = '';
   String email = '';
@@ -83,7 +80,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
   String postIdVisibilityTemp = '';
   LocalizationModelV2? lang;
   ContentData? dataSelected;
-  ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
+  // ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
   String _curPostId = '';
   String _lastCurPostId = '';
   double lastOffset = 0;
@@ -298,6 +295,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
       case AppLifecycleState.detached:
         _pauseScreen();
         break;
+      default:
+        break;
     }
   }
 
@@ -417,7 +416,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                 if (vidNotifier.vidData == null || homeNotifier.isLoadingVid) {
                                   "=============== pause 8".logger();
                                   vidNotifier.vidData?[index].fAliplayer?.pause();
-                                  _lastCurIndex = -1;
+                                  // _lastCurIndex = -1;
                                   return CustomShimmer(
                                     margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
                                     height: context.getHeight() / 8,
@@ -535,7 +534,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                 notifier.getTemp(indexList, latIndexList, indexList);
                               });
                             }
-                            _lastCurIndex = _curIdx;
+                            // _lastCurIndex = _curIdx;
                             _lastCurPostId = _curPostId;
                           }
                         },
@@ -671,7 +670,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                 //   }
                                 //   // notifier.vidData?[_curIdx].fAliplayerAds?.stop();
                                 // }
-                                _lastCurIndex = _curIdx;
+                                // _lastCurIndex = _curIdx;
                                 _lastCurPostId = _curPostId;
                               }
                             },
@@ -900,7 +899,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                             _curIdx = index;
                                                           });
                                                         }
-                                                        _lastCurIndex = _curIdx;
+                                                        // _lastCurIndex = _curIdx;
                                                       },
                                                       getPlayer: (main, id) {
                                                         print('Vid Player1: screen ${main}');
@@ -1025,9 +1024,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
                                                           height: 28,
                                                         ),
                                                         onTap: () {
-                                                          if (vidData != null) {
-                                                            likeNotifier.likePost(context, vidData);
-                                                          }
+                                                          likeNotifier.likePost(context, vidData);
                                                         },
                                                       ),
                                               ),
@@ -1349,65 +1346,65 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> with WidgetsBindingOb
         ),
       ),
     );
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Spacer(),
-          const CustomIconWidget(
-            iconData: "${AssetPath.vectorPath}eye-off.svg",
-            defaultColor: false,
-            height: 30,
-          ),
-          Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-          Text("HyppeVid ${transnot.translate.contentContainsSensitiveMaterial}",
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 13,
-              )),
-          // data.email == SharedPreference().readStorage(SpKeys.email)
-          //     ? GestureDetector(
-          //         onTap: () => Routing().move(Routes.appeal, argument: data),
-          //         child: Container(
-          //             padding: const EdgeInsets.all(8),
-          //             margin: const EdgeInsets.all(18),
-          //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-          //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
-          //       )
-          //     : const SizedBox(),
-          const Spacer(),
-          GestureDetector(
-            onTap: () {
-              data.reportedStatus = '';
-              // start(data);
-              // context.read<ReportNotifier>().seeContent(context, data, hyppeVid);
-              data.fAliplayer?.prepare();
-              data.fAliplayer?.play();
-            },
-            child: Container(
-              padding: const EdgeInsets.only(top: 8),
-              margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
-              width: SizeConfig.screenWidth,
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.white,
-                    width: 1,
-                  ),
-                ),
-              ),
-              child: Text(
-                "${transnot.translate.see} HyppeVid",
-                style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    // return Padding(
+    //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    //   child: Column(
+    //     mainAxisSize: MainAxisSize.min,
+    //     children: [
+    //       Spacer(),
+    //       const CustomIconWidget(
+    //         iconData: "${AssetPath.vectorPath}eye-off.svg",
+    //         defaultColor: false,
+    //         height: 30,
+    //       ),
+    //       Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+    //       Text("HyppeVid ${transnot.translate.contentContainsSensitiveMaterial}",
+    //           textAlign: TextAlign.center,
+    //           style: const TextStyle(
+    //             color: Colors.white,
+    //             fontSize: 13,
+    //           )),
+    //       // data.email == SharedPreference().readStorage(SpKeys.email)
+    //       //     ? GestureDetector(
+    //       //         onTap: () => Routing().move(Routes.appeal, argument: data),
+    //       //         child: Container(
+    //       //             padding: const EdgeInsets.all(8),
+    //       //             margin: const EdgeInsets.all(18),
+    //       //             decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+    //       //             child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+    //       //       )
+    //       //     : const SizedBox(),
+    //       const Spacer(),
+    //       GestureDetector(
+    //         onTap: () {
+    //           data.reportedStatus = '';
+    //           // start(data);
+    //           // context.read<ReportNotifier>().seeContent(context, data, hyppeVid);
+    //           data.fAliplayer?.prepare();
+    //           data.fAliplayer?.play();
+    //         },
+    //         child: Container(
+    //           padding: const EdgeInsets.only(top: 8),
+    //           margin: const EdgeInsets.only(bottom: 20, right: 8, left: 8),
+    //           width: SizeConfig.screenWidth,
+    //           decoration: const BoxDecoration(
+    //             border: Border(
+    //               top: BorderSide(
+    //                 color: Colors.white,
+    //                 width: 1,
+    //               ),
+    //             ),
+    //           ),
+    //           child: Text(
+    //             "${transnot.translate.see} HyppeVid",
+    //             style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+    //             textAlign: TextAlign.center,
+    //           ),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   var loadingAction = false;

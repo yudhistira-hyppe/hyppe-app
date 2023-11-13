@@ -9,9 +9,9 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import '../../../../core/models/collection/localization_v2/localization_model.dart';
 
 class SearchNoResultImage extends StatelessWidget {
-  LocalizationModelV2 locale;
-  String keyword;
-  SearchNoResultImage({Key? key, required this.locale, required this.keyword})
+  final LocalizationModelV2 locale;
+  final String keyword;
+  const SearchNoResultImage({Key? key, required this.locale, required this.keyword})
       : super(key: key);
 
   @override

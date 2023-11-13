@@ -15,8 +15,6 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../initial/hyppe/translate_v2.dart';
 import '../../ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import '../../ui/inner/home/widget/ads_in_between.dart';
-import '../../ui/inner/home/widget/ads_video_in_between.dart';
 import '../bloc/ads_video/bloc.dart';
 import '../bloc/ads_video/state.dart';
 import '../bloc/posts_v2/bloc.dart';
@@ -407,4 +405,11 @@ extension DateHelpers on DateTime {
     final yesterday = DateTime.now().subtract(Duration(days: 1));
     return yesterday.day == day && yesterday.month == month && yesterday.year == year;
   }
+}
+
+extension DurationExt on Duration{
+  String formatter() => [
+    inMinutes.remainder(60).toString().padLeft(2, '0'),
+    inSeconds.remainder(60).toString().padLeft(2, '0')
+  ].join(":");
 }

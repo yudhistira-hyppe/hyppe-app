@@ -110,7 +110,7 @@ class _ImageComponentState extends State<ImageComponent> {
               case FeatureType.story:
                 onGetContentData(context, featureType, (v) async {
                   if (v != null) {
-                    Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v));
+                    Routing().move(Routes.vidDetail, argument: StoryDetailScreenArgument(storyData: v));
                   } else {
                     ShowBottomSheet().onShowColouredSheet(context, language.contentNotAvailable ?? '', color: kHyppeLightDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
                   }

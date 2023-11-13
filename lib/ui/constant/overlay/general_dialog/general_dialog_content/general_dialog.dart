@@ -1,23 +1,21 @@
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class GeneralAlertDialog extends StatefulWidget {
-  String? titleText;
-  String? bodyText;
-  int? maxLineTitle;
-  int? maxLineBody;
-  Function functionPrimary;
-  Function? functionSecondary;
-  String? titleButtonPrimary;
-  String? titleButtonSecondary;
-  bool? isLoading = false;
-  GeneralAlertDialog({
+  final String? titleText;
+  final String? bodyText;
+  final int? maxLineTitle;
+  final int? maxLineBody;
+  final Function functionPrimary;
+  final Function? functionSecondary;
+  final String? titleButtonPrimary;
+  final String? titleButtonSecondary;
+  final bool? isLoading;
+  const GeneralAlertDialog({
     Key? key,
     this.titleText,
     this.bodyText,
@@ -27,7 +25,7 @@ class GeneralAlertDialog extends StatefulWidget {
     this.functionSecondary,
     this.titleButtonPrimary,
     this.titleButtonSecondary,
-    this.isLoading,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
@@ -39,10 +37,12 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
-    final _language = context.watch<TranslateNotifierV2>().translate;
+    // final size = MediaQuery.of(context).size;
+    // final _language = context.watch<TranslateNotifierV2>().translate;
     return Container(
-      decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(8.0)),
+      decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(8.0)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -51,19 +51,27 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
           CustomTextWidget(
             textToDisplay: '${widget.titleText}',
             maxLines: widget.maxLineTitle,
-            textStyle: theme.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
+            textStyle: theme.textTheme.subtitle1
+                ?.copyWith(fontWeight: FontWeight.w600),
           ),
           twelvePx,
-          CustomTextWidget(
-            maxLines: widget.maxLineBody,
-            textOverflow: TextOverflow.visible,
-            textToDisplay: '${widget.bodyText}',
-            textStyle: theme.textTheme.bodyText2,
+          Visibility(
+            visible: widget.bodyText != null || widget.bodyText != '',
+            child: CustomTextWidget(
+              maxLines: widget.maxLineBody,
+              textOverflow: TextOverflow.visible,
+              textToDisplay: '${widget.bodyText}',
+              textStyle: theme.textTheme.bodyText2,
+            ),
           ),
-          twelvePx,
-          twelvePx,
+          widget.bodyText == null || widget.bodyText == ''
+              ? const SizedBox.shrink()
+              : twelvePx,
+          widget.bodyText == null || widget.bodyText == ''
+              ? const SizedBox.shrink()
+              : twelvePx,
           _isLoading
-              ? CustomLoading()
+              ? const CustomLoading()
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -73,7 +81,8 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
                             child: _buildButton(
                               caption: '${widget.titleButtonSecondary}',
                               color: Colors.transparent,
-                              function: widget.functionSecondary ?? (){},
+                              function: widget.functionSecondary ?? () {},
+                              textColor: theme.colorScheme.primary,
                               // function: () => _routing.moveBack(),
                               theme: theme,
                             ),
@@ -95,23 +104,26 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
     );
   }
 
-  Widget _buildButton({required ThemeData theme, required String caption, required Function function, required Color color, Color? textColor}) {
+  Widget _buildButton(
+      {required ThemeData theme,
+      required String caption,
+      required Function function,
+      required Color color,
+      Color? textColor}) {
     return CustomTextButton(
       onPressed: () async {
         try {
-          print('_isLoading');
-          print(_isLoading);
           setState(() => _isLoading = true);
-          print('_isLoading');
-          print(_isLoading);
-          print('hahahahahahahahahaha');
           await function();
           setState(() => _isLoading = false);
         } catch (_) {
           setState(() => _isLoading = false);
         }
       },
-      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor, fontSize: 10)),
+      child: CustomTextWidget(
+          textToDisplay: caption,
+          textStyle:
+              theme.textTheme.button?.copyWith(color: textColor, fontSize: 14)),
       style: theme.elevatedButtonTheme.style?.copyWith(
         backgroundColor: MaterialStateProperty.all(color),
       ),

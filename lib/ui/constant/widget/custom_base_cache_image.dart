@@ -1,10 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:optimized_cached_image/optimized_cached_image.dart';
 
 class CustomCacheManager {
   static const key = customCacheKey;
@@ -77,7 +77,7 @@ class CustomBaseCacheImage extends StatelessWidget {
 
     if ((imageUrl ?? '').isNotEmpty || (imageUrl ?? '').isUrlLink()) {
       return (imageUrl ?? '').isNotEmpty
-          ? OptimizedCacheImage(
+          ? CachedNetworkImage(
               imageUrl: imageUrl ?? '',
               memCacheHeight: 60,
               memCacheWidth: 45,

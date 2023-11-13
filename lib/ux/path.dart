@@ -10,6 +10,7 @@ class Routes {
   static const String otherProfile = '/other-profile';
   static const String makeContent = '/make-content';
   static const String previewContent = '/preview-content';
+  static const String editPhoto = '/edit-photo';
   static const String preUploadContent = '/pre-upload-content';
   static const String ownershipSelling = '/ownership-selling';
   static const String homePageSignInSecurity = '/home-page-sign-in-security';
@@ -25,7 +26,7 @@ class Routes {
   static const String referralScreen = '/referral-screen';
   static const String listReferral = '/list-referral';
   static const String insertReferral = '/insert-referral';
-  static const String showAds = '/show-ads';
+  // static const String showAds = '/show-ads';
   static const String contentPreferences = '/content-preferences';
   static const String commentsDetail = '/comments-detail';
 
@@ -54,7 +55,7 @@ class Routes {
   static const String diaryDetail = '/diary-detail';
   static const String diarySeeAllScreen = '/diary-see-all-screen';
 
-  static const String storyDetail = '/story-detail';
+  // static const String storyDetail = '/story-detail';
   static const String showStories = '/show-stories';
 
   static const String appSettings = '/app-settings';
@@ -146,4 +147,7 @@ class Routes {
   static const String chalengeCollectionBadge = '/chalenge-collection-badge';
   static const String chalengeAchievement = '/chalenge-achievement';
   static const String shimmerSlider = '/shimmer-slider';
+
+  static const String cacheAndDownload = '/cache-and-download';
+
 }

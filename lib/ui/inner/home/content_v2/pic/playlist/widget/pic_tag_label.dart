@@ -8,11 +8,11 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:provider/provider.dart';
 
 class PicTagLabel extends StatelessWidget {
-  String icon;
-  String label;
-  double? width;
+  final String icon;
+  final String label;
+  final double? width;
   final Function() function;
-  PicTagLabel({Key? key, required this.icon, required this.label, required this.function, this.width}) : super(key: key);
+  const PicTagLabel({Key? key, required this.icon, required this.label, required this.function, this.width}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

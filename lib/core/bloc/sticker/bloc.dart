@@ -1,4 +1,3 @@
-import 'package:hyppe/core/bloc/effect/state.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/bloc/sticker/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gif/gif.dart' as gif;
 import 'package:gif_view/gif_view.dart' as gif_view;
 
 class CustomGifWidget extends StatefulWidget {

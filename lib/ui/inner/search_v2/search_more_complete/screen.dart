@@ -28,7 +28,6 @@ class SearchMoreCompleteScreenV2 extends StatefulWidget {
 class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   late TabController _tabController;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  int _selectedIndex = 0;
 
   @override
   void deactivate() {
@@ -45,11 +44,6 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
       notifier.tabIndex = _tabController.index;
-      setState(() {
-        _selectedIndex = _tabController.index;
-        // notifier.limit = 20;
-        // notifier.onSearchPost(context);
-      });
     });
 
     super.initState();

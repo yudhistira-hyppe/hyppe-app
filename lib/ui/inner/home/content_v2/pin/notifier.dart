@@ -10,7 +10,6 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +33,6 @@ class PinAccountNotifier extends ChangeNotifier {
   String _timer = "";
   String _timer2 = "";
   Timer? _myTimer;
-  Timer? _myTimer2;
   bool _loading = false;
   bool pinCreate = false;
   bool checkPin = false;
@@ -213,7 +211,7 @@ class PinAccountNotifier extends ChangeNotifier {
     print("check otp ==================");
     bool connect = await System().checkConnections();
     if (connect) {
-      final havePin = SharedPreference().readStorage(SpKeys.setPin);
+      // final havePin = SharedPreference().readStorage(SpKeys.setPin);
       resetTimer();
       startTimer();
       String type = '';

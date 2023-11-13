@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
-import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
@@ -239,7 +238,8 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
         await onGetContentData(context, featureType, (v) => Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v)), postID);
         break;
       case FeatureType.story:
-        await onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)), postID);
+        // await onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)), postID);
+        await onGetContentData(context, featureType, (v) => Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v)), postID);
         break;
       case FeatureType.txtMsg:
         return;

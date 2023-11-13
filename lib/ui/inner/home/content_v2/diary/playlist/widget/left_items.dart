@@ -14,7 +14,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label
 
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:story_view/controller/story_controller.dart';
+// import 'package:story_view/controller/story_controller.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../../core/models/collection/music/music.dart';
@@ -26,7 +26,7 @@ class LeftItems extends StatefulWidget {
   final String? tags;
   final Music? music;
   final String? authorName;
-  final StoryController? storyController;
+  // final StoryController? storyController;
   final String? postID;
   final String? location;
   final List<TagPeople>? tagPeople;
@@ -40,7 +40,7 @@ class LeftItems extends StatefulWidget {
     this.tags,
     this.music,
     this.authorName,
-    this.storyController,
+    // this.storyController,
     this.postID,
     this.location,
     this.tagPeople,
@@ -101,8 +101,8 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                               icon: 'tag_people',
                               label: '${widget.tagPeople?.length} people',
                               function: () {
-                                widget.storyController?.pause();
-                                context.read<PicDetailNotifier>().showUserTag(context, widget.tagPeople, widget.postID, storyController: widget.storyController);
+                                // widget.storyController?.pause();
+                                context.read<PicDetailNotifier>().showUserTag(context, widget.tagPeople, widget.postID);
                               },
                             )
                           : const SizedBox(),

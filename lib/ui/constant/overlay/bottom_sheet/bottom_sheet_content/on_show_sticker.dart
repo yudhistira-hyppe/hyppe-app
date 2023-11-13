@@ -13,7 +13,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
-import 'package:optimized_cached_image/optimized_cached_image.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -309,7 +308,7 @@ class OnShowSticker extends StatelessWidget {
                 ),
                 margin: const EdgeInsets.all(8),
                 padding: const EdgeInsets.all(8),
-                child: SizedBox(height: 24, width: 24, child: OptimizedCacheImage(imageUrl: cat.kategoriicon ?? '',)),
+                child: SizedBox(height: 24, width: 24, child: CachedNetworkImage(imageUrl: cat.kategoriicon ?? '',)),
               ),
             );
           },

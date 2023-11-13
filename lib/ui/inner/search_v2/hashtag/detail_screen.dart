@@ -21,8 +21,8 @@ import '../../../constant/widget/custom_spacer.dart';
 import '../../../constant/widget/icon_button_widget.dart';
 
 class DetailHashtagScreen extends StatefulWidget {
-  HashtagArgument argument;
-  DetailHashtagScreen({Key? key, required this.argument}) : super(key: key);
+  final HashtagArgument argument;
+  const DetailHashtagScreen({Key? key, required this.argument}) : super(key: key);
 
   @override
   State<DetailHashtagScreen> createState() => _DetailHashtagScreenState();
@@ -54,7 +54,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen> with RouteAwa
   @override
   void didPopNext() {
     'DetailHashtagScreen didPopNext'.logger();
-    final notifier = context.read<SearchNotifier>();
+    // final notifier = context.read<SearchNotifier>();
     // Future.delayed(Duration(milliseconds: 500), () {
     //   var jumpTo = heightTab + notifier.heightIndex - 10;
     //   print("jumpt ====== ${jumpTo}");

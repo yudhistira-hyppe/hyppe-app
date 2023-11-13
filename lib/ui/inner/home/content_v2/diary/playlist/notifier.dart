@@ -22,7 +22,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:provider/provider.dart';
 
-import 'package:story_view/story_view.dart';
+// import 'package:story_view/story_view.dart';
 
 import '../../../../../../core/bloc/ads_video/bloc.dart';
 import '../../../../../../core/bloc/ads_video/state.dart';
@@ -63,8 +63,8 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   double? get currentPage => _currentPage;
   bool get forcePause => _forcePause;
 
-  List<StoryItem> _result = [];
-  List<StoryItem> get result => _result;
+  // List<StoryItem> _result = [];
+  // List<StoryItem> get result => _result;
 
   bool _isLoadMine = false;
   bool _isLoadOther = false;
@@ -95,10 +95,10 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  set result(List<StoryItem> val) {
-    _result = val;
-    notifyListeners();
-  }
+  // set result(List<StoryItem> val) {
+  //   _result = val;
+  //   notifyListeners();
+  // }
 
   ////////////////////////////////////////////////////////
   void onUpdate() => notifyListeners();
@@ -108,58 +108,14 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     final count = context.getAdsCount();
     String? urlAds;
 
-    if (count == null) {
-      context.setAdsCount(0);
-    } else {
-      if (count == 2) {
-        'type ads : Sponsored Ads'.logger();
-        _isSponsored = true;
-        urlAds = await getAdsVideo(context, false);
-      }
+    if (count == 2) {
+      'type ads : Sponsored Ads'.logger();
+      _isSponsored = true;
+      urlAds = await getAdsVideo(context, false);
     }
     if (urlAds != null) {
       _adsUrl = urlAds;
     }
-  }
-
-  Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
-    _result = [];
-    String urlApsara = '';
-
-    initAdsData(context);
-
-    if (data.isApsara ?? false) {
-      await getVideoApsara(context, data.apsaraId ?? '').then((value) {
-        if (value != null) {
-          urlApsara = value;
-        }
-      });
-    }
-    Size? videoSize;
-    final width = data.metadata?.width?.toDouble();
-    final height = data.metadata?.height?.toDouble();
-    if (width != null && height != null) {
-      videoSize = Size(width, height);
-      videoSize = videoSize.getFixSize(context);
-    }
-    print('url diary ${urlApsara}');
-    print('url diary ${data.fullContentPath}');
-    _result.add(
-      StoryItem.pageVideo(
-        urlApsara != '' ? urlApsara : data.fullContentPath ?? '',
-        // 'https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8',
-        requestHeaders: {
-          'post-id': data.postID ?? '',
-          'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
-          'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
-        },
-        size: videoSize,
-        id: data.postID ?? '',
-        controller: storyController,
-        duration: Duration(seconds: data.metadata?.duration ?? 15),
-      ),
-    );
-    notifyListeners();
   }
 
   Future getVideoApsara(BuildContext context, String apsaraId) async {
@@ -229,6 +185,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     } finally {
       // loadPic = false;
     }
+    return null;
   }
 
   Future<String?> getAdsVideo(BuildContext context, bool isContent) async {

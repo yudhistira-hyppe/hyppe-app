@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/services/system.dart';
@@ -23,7 +22,6 @@ import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 
 import 'package:hyppe/ui/inner/message_v2/notifier.dart';
 import 'package:hyppe/ui/inner/notification/widget/component_shimmer.dart';
-import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 
 class MessageScreen extends StatefulWidget {
   const MessageScreen({Key? key}) : super(key: key);

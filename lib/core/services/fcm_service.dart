@@ -98,7 +98,7 @@ class FcmService {
 
       // foreground incoming message
       FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-        RemoteNotification? notification = message.notification;
+        // RemoteNotification? notification = message.notification;
         """ 
             Foreground incoming message data 1 => ${message.data},
             Foreground incoming message category => ${message.category},
@@ -131,7 +131,7 @@ class FcmService {
 
       // when app opened from tapping message
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-        RemoteNotification? notification = message.notification;
+        // RemoteNotification? notification = message.notification;
         """ 
             When app opened from tapping message data => ${message.data},
             When app opened from tapping message category => ${message.category},

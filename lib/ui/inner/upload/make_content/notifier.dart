@@ -20,9 +20,8 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../app.dart';
 
@@ -56,6 +55,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   CreatePostResponse? _postModel;
 
   double get progressDev => _progressDev;
+  int get elapsedProgress => _elapsedProgress;
   int get progressHuman => _progressHuman;
   bool get isVideo => _isVideo;
   double get slider => _slider;
@@ -91,18 +91,30 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   onInitialUploadContent() {
     _selectedDuration = 15;
-    if (_featureType == FeatureType.vid) {
-      _durationOptions = {15: "15${language.timerSecond}", 30: "30${language.timerSecond}", 60: "60${language.timerSecond}", 0: "1m>"}; // ignore this
-    } else if (_featureType == FeatureType.diary) {
-      _durationOptions = {
-        15: "15${language.timerSecond}",
-        30: "30${language.timerSecond}",
-        60: "60${language.timerSecond}",
-      };
-    } else {
-      _durationOptions = {
-        15: "15${language.timerSecond}",
-      };
+    _videoPreview = false;
+    // if (_featureType == FeatureType.vid) {
+    //   _durationOptions = {
+    //     15: "15${language.timerSecond}",
+    //     30: "30${language.timerSecond}",
+    //     60: "60${language.timerSecond}",
+    //     0: "1m>"}; // ignore this
+    // } else if (_featureType == FeatureType.diary) {
+    //   _durationOptions = {
+    //     15: "15${language.timerSecond}",
+    //     30: "30${language.timerSecond}",
+    //     60: "60${language.timerSecond}",
+    //   };
+    // } else {
+    //   _durationOptions = {
+    //     15: "15${language.timerSecond}",
+    //   };
+    // }
+    if(featureType == FeatureType.diary){
+      _selectedDuration = 60;
+    }else if(featureType == FeatureType.vid){
+      _selectedDuration = 3600;
+    }else if(featureType == FeatureType.story){
+      _selectedDuration = 15;
     }
     notifyListeners();
   }
@@ -172,6 +184,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   void _startTimer(BuildContext context) {
     _validateTimerWithFeature();
+
     _timer = Timer.periodic(
       const Duration(seconds: 1),
       (Timer timerIn) {
@@ -184,6 +197,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         if (_timer != null && (_timer?.isActive ?? false) && timerIn.isActive) {
           _elapsedProgress++;
           if (featureType != FeatureType.pic && selectedDuration != 0) {
+
             _progressDev = _elapsedProgress / _selectedDuration;
           } else {
             _progressDev = 1.0;
@@ -322,7 +336,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   //////////////////////////////////////////////////////////////// Camera function
 
   void cancelVideoRecordingWhenAppIsPausedOrInactive() {
-    Wakelock.disable();
+    WakelockPlus.disable();
     "================ disable wakelock 7".logger();
     cancelTimer();
     _progressDev = 0.0;
@@ -330,12 +344,30 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     _elapsedProgress = 0;
   }
 
+  bool _videoPreview = false;
+  bool get videoPreview => _videoPreview;
+  set videoPreview(bool state){
+    _videoPreview = state;
+    notifyListeners();
+  }
+
+  clearPreviewVideo({bool goView = false}){
+    _progressDev = 0.0;
+    _progressHuman = 0;
+    _elapsedProgress = 0;
+    videoPreview = false;
+    if(goView){
+      _routing.move(Routes.previewContent);
+    }
+
+  }
+
   @override
   void onStopRecordedVideo(BuildContext context) {
     try {
       dynamic cameraNotifier;
-
-      Wakelock.disable();
+      final isPreviewVideo = featureType == FeatureType.diary || featureType == FeatureType.vid;
+      WakelockPlus.disable();
       "================ disable wakelock 6".logger();
       final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
       if (canDeppAr == 'true') {
@@ -345,9 +377,12 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       }
 
       cancelTimer();
-      _progressDev = 0.0;
-      _progressHuman = 0;
-      _elapsedProgress = 0;
+      if(!isPreviewVideo){
+        _progressDev = 0.0;
+        _progressHuman = 0;
+        _elapsedProgress = 0;
+      }
+
 
       cameraNotifier.stopVideoRecording().then((file) async {
         final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
@@ -366,7 +401,12 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         notifier.aspectRation = cameraNotifier.cameraAspectRatio;
 
         notifyListeners();
-        await _routing.move(Routes.previewContent);
+        if(!isPreviewVideo){
+          await _routing.move(Routes.previewContent);
+        }else{
+          videoPreview = true;
+        }
+
       });
     } catch (e) {
       e.logger();
@@ -385,8 +425,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     }
     _startTimer(context);
     cameraNotifier.startVideoRecording();
-    if (!(await Wakelock.enabled)) {
-      Wakelock.enable();
+    if (!(await WakelockPlus.enabled)) {
+      WakelockPlus.enable();
     }
   }
 
@@ -400,7 +440,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     }
-    Wakelock.enable();
+    WakelockPlus.enable();
     print('pause execute');
     cameraNotifier.pauseVideoRecording();
   }
@@ -418,8 +458,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       cancelTimer();
       _startTimer(context);
     });
-    if (!(await Wakelock.enabled)) {
-      Wakelock.enable();
+    if (!(await WakelockPlus.enabled)) {
+      WakelockPlus.enable();
     }
   }
 

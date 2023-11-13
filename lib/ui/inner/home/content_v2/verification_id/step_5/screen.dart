@@ -44,7 +44,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final textTheme = Theme.of(context).textTheme;
-    bool keyboardIsOpen = MediaQuery.of(context).viewInsets.bottom != 0;
+    // bool keyboardIsOpen = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => WillPopScope(

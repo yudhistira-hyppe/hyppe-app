@@ -9,8 +9,8 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
 class TotalBalance extends StatelessWidget {
-  String? accountBalance;
-  TotalBalance({Key? key, this.accountBalance}) : super(key: key);
+  final String? accountBalance;
+  const TotalBalance({Key? key, this.accountBalance}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

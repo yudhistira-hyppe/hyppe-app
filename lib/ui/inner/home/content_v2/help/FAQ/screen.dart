@@ -18,9 +18,9 @@ import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../constant/widget/custom_search_bar.dart';
 
 class FAQDetailScreen extends StatefulWidget {
-  FAQArgument data;
+  final FAQArgument data;
 
-  FAQDetailScreen({Key? key, required this.data}) : super(key: key);
+  const FAQDetailScreen({Key? key, required this.data}) : super(key: key);
 
   @override
   State<FAQDetailScreen> createState() => _FAQDetailScreenState();

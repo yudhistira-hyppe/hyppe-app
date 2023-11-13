@@ -4,14 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/effect/bloc.dart';
 import 'package:hyppe/core/bloc/effect/state.dart';
-import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
-import 'package:hyppe/core/models/collection/database/efect_model.dart';
 import 'package:hyppe/core/models/collection/effect/effect_model.dart';
-import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:camera/camera.dart';
@@ -153,7 +149,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> setDeepAREffect(BuildContext context, EffectModel effectModel) async {
-    Directory directory = await path.getApplicationDocumentsDirectory();
+    Directory directory = await path.getApplicationSupportDirectory();
     var filePath = '${directory.path}${Platform.pathSeparator}${effectModel.fileAssetName}';
 
     if (await File(filePath).exists()) {
@@ -277,11 +273,12 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   String flashIcon() {
     print('flashMode $flashMode : ${deepArController!.flashState}');
-    if(isFlash){
-      return "${AssetPath.vectorPath}flash-off.svg";
-    }else{
-      return "${AssetPath.vectorPath}flash.svg";
-    }
+    return "${AssetPath.vectorPath}ic_flash.svg";
+    // if(isFlash){
+    //   return "${AssetPath.vectorPath}flash-off.svg";
+    // }else{
+    //   return "${AssetPath.vectorPath}flash.svg";
+    // }
     // if (deepArController != null && deepArController!.flashState) {
     //   return "${AssetPath.vectorPath}flash-off.svg";
     // } else if (flashMode == FlashMode.auto) {

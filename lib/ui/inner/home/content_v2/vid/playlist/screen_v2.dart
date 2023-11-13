@@ -196,10 +196,6 @@ class _NewVideoDetailScreenState extends State<NewVideoDetailScreen> with AfterF
         ),
       );
 
-      if (data != null) {
-      } else {
-        return SafeArea(child: _contentDetailShimmer(context));
-      }
     });
   }
 

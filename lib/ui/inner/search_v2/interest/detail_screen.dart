@@ -14,8 +14,8 @@ import '../../../constant/widget/icon_button_widget.dart';
 import '../notifier.dart';
 
 class InterestDetailScreen extends StatefulWidget {
-  Interest data;
-  InterestDetailScreen({Key? key, required this.data}) : super(key: key);
+  final Interest data;
+  const InterestDetailScreen({Key? key, required this.data}) : super(key: key);
 
   @override
   State<InterestDetailScreen> createState() => _InterestDetailScreenState();
@@ -23,7 +23,7 @@ class InterestDetailScreen extends StatefulWidget {
 
 class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteAware, SingleTickerProviderStateMixin, AfterFirstLayoutMixin{
   late TabController _tabController;
-  int _selectedIndex = 0;
+  // int _selectedIndex = 0;
   // final ScrollController _scrollController = ScrollController();
   // final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   int heightTab = 0;
@@ -85,7 +85,7 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with RouteA
     _tabController.addListener(() {
       notifier.tabIndex = _tabController.index;
       setState(() {
-        _selectedIndex = _tabController.index;
+        // _selectedIndex = _tabController.index;
         // notifier.limit = 20;
         // notifier.onSearchPost(context);
       });

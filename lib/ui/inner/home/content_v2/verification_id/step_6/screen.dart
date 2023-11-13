@@ -4,13 +4,9 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
-import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/ui/constant/entities/camera/widgets/camera_flash_button.dart';
-import 'package:hyppe/ui/constant/entities/camera/widgets/camera_switch_button.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/screen.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/widgets/camera_flash_button.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/widgets/camera_switch_button.dart';
@@ -37,9 +33,6 @@ class _VerificationIDStep6State extends State<VerificationIDStep6> with RouteAwa
   }
 
   @override
-  void afterFirstLayout(BuildContext context) {}
-
-  @override
   void dispose() {
     CustomRouteObserver.routeObserver.unsubscribe(this);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
@@ -54,8 +47,8 @@ class _VerificationIDStep6State extends State<VerificationIDStep6> with RouteAwa
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    // final textTheme = Theme.of(context).textTheme;
+    // final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {

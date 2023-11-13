@@ -20,18 +20,18 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:provider/provider.dart';
-import 'package:story_view/controller/story_controller.dart';
+// import 'package:story_view/controller/story_controller.dart';
 
 class ViewerStoriesButton extends StatelessWidget {
   final int? currentStory;
   final ContentData? data;
-  final StoryController? storyController;
+  // final StoryController? storyController;
   final Function? pause;
   const ViewerStoriesButton({
     Key? key,
     required this.data,
     required this.currentStory,
-    this.storyController,
+    // this.storyController,
     this.pause,
   }) : super(key: key);
 
@@ -56,7 +56,7 @@ class ViewerStoriesButton extends StatelessWidget {
                 pause!();
               }
 
-              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID, 'VIEW', 'Viewer', data?.email, storyController: storyController);
+              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID, 'VIEW', 'Viewer', data?.email);
               // context.read<StoriesPlaylistNotifier>().forceStop = true;
               // ShowBottomSheet.onShowViewers(context, storyID: data?.story[currentStory].storyID);
             },

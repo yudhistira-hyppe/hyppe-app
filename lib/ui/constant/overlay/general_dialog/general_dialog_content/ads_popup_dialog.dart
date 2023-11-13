@@ -7,7 +7,6 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
@@ -17,10 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:provider/provider.dart';
-import 'package:story_view/controller/story_controller.dart';
-import 'package:story_view/widgets/story_view.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../core/arguments/other_profile_argument.dart';
 import '../../../../../core/bloc/ads_video/bloc.dart';
@@ -31,20 +28,15 @@ import '../../../../../core/services/shared_preference.dart';
 import '../../../../../core/services/system.dart';
 import '../../../../../ux/path.dart';
 import '../../../../../ux/routing.dart';
-import '../../../widget/custom_background_layer.dart';
 import '../../../widget/custom_base_cache_image.dart';
-import '../../../widget/custom_cache_image.dart';
 
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:hyppe/core/config/ali_config.dart';
-import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-// import 'package:connectivity_plus/connectivity_plus.dart';
 
 class AdsPopUpDialog extends StatefulWidget {
   final AdsData data;
@@ -68,7 +60,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
   bool isPause = false;
   int? bottomIndex;
   List<Widget>? mFramePage;
-  ModeTypeAliPLayer? _playMode;
+  // ModeTypeAliPLayer? _playMode;
   Map<String, dynamic>? _dataSourceMap;
   String auth = '';
 
@@ -81,16 +73,16 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
   int _currentPosition = 0;
 
   //当前播放时间，用于Text展示
-  int _currentPositionText = 0;
+  // int _currentPositionText = 0;
 
   //当前buffer进度
-  int _bufferPosition = 0;
+  // int _bufferPosition = 0;
 
   //是否展示loading
-  bool _showLoading = false;
+  // bool _showLoading = false;
 
   //loading进度
-  int _loadingPercent = 0;
+  // int _loadingPercent = 0;
 
   //视频时长
   int _videoDuration = 1;
@@ -99,31 +91,31 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
   String _snapShotPath = '';
 
   //提示内容
-  String _tipsContent = '';
+  // String _tipsContent = '';
 
   //是否展示提示内容
-  bool _showTipsWidget = false;
+  // bool _showTipsWidget = false;
 
   //是否有缩略图
-  bool _thumbnailSuccess = false;
+  // bool _thumbnailSuccess = false;
 
   //缩略图
   // Uint8List _thumbnailBitmap;
-  ImageProvider? _imageProvider;
+  // ImageProvider? _imageProvider;
 
   //当前网络状态
   // ConnectivityResult? _currentConnectivityResult;
 
   ///seek中
-  bool _inSeek = false;
+  // bool _inSeek = false;
 
-  bool _isLock = false;
+  // bool _isLock = false;
 
   //网络状态
-  bool _isShowMobileNetWork = false;
+  // bool _isShowMobileNetWork = false;
 
   //当前播放器状态
-  int _currentPlayerState = 0;
+  // int _currentPlayerState = 0;
 
   String extSubTitleText = '';
 
@@ -135,11 +127,11 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
 
   // PageController? _pageController;
 
-  RefreshController _videoListRefreshController = RefreshController(initialRefresh: false);
-
-  List<ContentData>? _listData;
-
-  late PageController _pageController;
+  // RefreshController _videoListRefreshController = RefreshController(initialRefresh: false);
+  //
+  // List<ContentData>? _listData;
+  //
+  // late PageController _pageController;
 
   var loadLaunch = false;
 
@@ -177,7 +169,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
           setState(() {});
         });
 
-      _playMode = ModeTypeAliPLayer.auth;
+      // _playMode = ModeTypeAliPLayer.auth;
       // if (widget.data?.apsaraId != '') {
       // } else {
       //   _playMode = ModeTypeAliPLayer.url;
@@ -260,14 +252,14 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
-      _currentPlayerState = newState;
+      // _currentPlayerState = newState;
       try {
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-            Wakelock.enable();
+            WakelockPlus.enable();
             setState(() {
-              _showTipsWidget = false;
-              _showLoading = false;
+              // _showTipsWidget = false;
+              // _showLoading = false;
               isPause = false;
             });
             _animationController?.forward();
@@ -275,20 +267,20 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
           case FlutterAvpdef.AVPStatus_AVPStatusPaused:
             isPause = true;
             setState(() {});
-            Wakelock.disable();
+            WakelockPlus.disable();
             "================ disable wakelock 92".logger();
             _animationController?.stop();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
-            Wakelock.disable();
+            WakelockPlus.disable();
             "================ disable wakelock 75".logger();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
-            Wakelock.disable();
+            WakelockPlus.disable();
             "================ disable wakelock 63".logger();
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusError:
-            Wakelock.disable();
+            WakelockPlus.disable();
             "================ disable wakelock 53".logger();
             break;
           default:
@@ -300,23 +292,23 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
       _animationController?.stop();
       setState(() {
-        _loadingPercent = 0;
-        _showLoading = true;
+        // _loadingPercent = 0;
+        // _showLoading = true;
       });
     }, loadingProgress: (percent, netSpeed, playerId) {
-      _loadingPercent = percent;
+      // _loadingPercent = percent;
       if (percent == 100) {
-        _showLoading = false;
+        // _showLoading = false;
       }
       setState(() {});
     }, loadingEnd: (playerId) {
       _animationController?.forward();
       setState(() {
-        _showLoading = false;
+        // _showLoading = false;
       });
     });
     fAliplayer?.setOnSeekComplete((playerId) {
-      _inSeek = false;
+      // _inSeek = false;
     });
     var lastDetik = 0;
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
@@ -341,7 +333,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
         //   });
         // }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-        _bufferPosition = extraValue ?? 0;
+        // _bufferPosition = extraValue ?? 0;
         if (mounted) {
           setState(() {});
         }
@@ -359,9 +351,9 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       }
     });
     fAliplayer?.setOnCompletion((playerId) {
-      _showTipsWidget = true;
-      _showLoading = false;
-      _tipsContent = "Play Again";
+      // _showTipsWidget = true;
+      // _showLoading = false;
+      // _tipsContent = "Play Again";
       isPause = true;
       // adsView(widget.data, secondsVideo);
       setState(() {
@@ -374,24 +366,24 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
       // Fluttertoast.showToast(msg: "SnapShot Save : $path");
     });
     fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-      _showTipsWidget = true;
-      _showLoading = false;
-      _tipsContent = "$errorCode \n $errorMsg";
+      // _showTipsWidget = true;
+      // _showLoading = false;
+      // _tipsContent = "$errorCode \n $errorMsg";
       setState(() {});
     });
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
       AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-      if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
+      if ((info.trackDefinition?.length ?? 0) > 0) {
         // trackFragmentKey.currentState.onTrackChanged(info);
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
     });
 
     fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {
-      _thumbnailSuccess = true;
+      // _thumbnailSuccess = true;
     }, preparedFail: (playerId) {
-      _thumbnailSuccess = false;
+      // _thumbnailSuccess = false;
     });
 
     fAliplayer?.setOnThumbnailGetListener(
@@ -400,7 +392,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
           var provider = MemoryImage(bitmap);
           precacheImage(provider, context).then((_) {
             setState(() {
-              _imageProvider = provider;
+              // _imageProvider = provider;
             });
           });
         },
@@ -442,6 +434,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
         }
         break;
       case AppLifecycleState.detached:
+        break;
+      default:
         break;
     }
   }
@@ -490,7 +484,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
 
   @override
   void dispose() {
-    Wakelock.disable();
+    WakelockPlus.disable();
     "================ disable wakelock 434".logger();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     _animationController?.dispose();
@@ -508,12 +502,12 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
     }
   }
 
-  int _curIdx = 0;
-  int _lastCurIndex = -1;
-  bool _isPause = false;
+  // int _curIdx = 0;
+  // int _lastCurIndex = -1;
+  // bool _isPause = false;
   double _playerY = 0;
-  bool _isFirstRenderShow = false;
-  bool _isBackgroundMode = false;
+  // bool _isFirstRenderShow = false;
+  // bool _isBackgroundMode = false;
 
   void onViewPlayerCreated(viewId) async {
     fAliplayer?.setPlayerView(viewId);
@@ -990,529 +984,47 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> with WidgetsBindingObse
     fAliplayer?.stop();
     isPlay = false;
 
-    setState(() {
-      _isPause = false;
-      _isFirstRenderShow = false;
-    });
+    // setState(() {
+    //   _isPause = false;
+    //   _isFirstRenderShow = false;
+    // });
 
     fAliplayer?.prepare();
     // fAliplayer?.play();
   }
 
-  void _onPlayerHide() {
-    Future.delayed(const Duration(seconds: 4), () {
-      onTapCtrl = false;
-      setState(() {});
-    });
-  }
-
-  ///Loading
-  _buildProgressBar(double width, double height) {
-    if (_showLoading) {
-      return Positioned(
-        left: width / 2 - 20,
-        top: height / 2 - 20,
-        child: Column(
-          children: [
-            const CircularProgressIndicator(
-              backgroundColor: Colors.white,
-              strokeWidth: 3.0,
-            ),
-            const SizedBox(
-              height: 10.0,
-            ),
-            Text(
-              "$_loadingPercent%",
-              style: const TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
-      );
-    } else {
-      return const SizedBox();
-    }
-  }
+  // void _onPlayerHide() {
+  //   Future.delayed(const Duration(seconds: 4), () {
+  //     onTapCtrl = false;
+  //     setState(() {});
+  //   });
+  // }
+  //
+  // ///Loading
+  // _buildProgressBar(double width, double height) {
+  //   if (_showLoading) {
+  //     return Positioned(
+  //       left: width / 2 - 20,
+  //       top: height / 2 - 20,
+  //       child: Column(
+  //         children: [
+  //           const CircularProgressIndicator(
+  //             backgroundColor: Colors.white,
+  //             strokeWidth: 3.0,
+  //           ),
+  //           const SizedBox(
+  //             height: 10.0,
+  //           ),
+  //           Text(
+  //             "$_loadingPercent%",
+  //             style: const TextStyle(color: Colors.white),
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   } else {
+  //     return const SizedBox();
+  //   }
+  // }
 }
 
-class AdsPopUpDialog2 extends StatefulWidget {
-  final AdsData data;
-  final String urlAds;
-  final bool isSponsored;
-
-  const AdsPopUpDialog2({Key? key, required this.data, required this.urlAds, required this.isSponsored}) : super(key: key);
-
-  @override
-  State<AdsPopUpDialog2> createState() => _AdsPopUpDialog2State();
-}
-
-class _AdsPopUpDialog2State extends State<AdsPopUpDialog2> {
-  final List<StoryItem> _storyItems = [];
-  final StoryController _storyController = StoryController();
-
-  final _sharedPrefs = SharedPreference();
-  var secondsSkip = 0;
-  var secondsVideo = 0;
-  bool loadingAction = false;
-  // List<ContentData>? _vidData;
-
-  @override
-  void initState() {
-    _storyItems.add(StoryItem.pageVideo(widget.urlAds,
-        controller: _storyController,
-        requestHeaders: {
-          'x-auth-user': _sharedPrefs.readStorage(SpKeys.email) ?? '',
-          'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
-        },
-        id: widget.data.adsId ?? '',
-        duration: Duration(milliseconds: ((widget.data.duration ?? 15) * 1000).toInt())));
-    print('isShowPopAds true');
-    SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-
-    secondsSkip = widget.data.adsSkip ?? 0;
-    super.initState();
-  }
-
-  Future adsView(AdsData data, int time, {bool isClick = false}) async {
-    try {
-      setState(() {
-        loadingAction = true;
-      });
-
-      final notifier = AdsDataBloc();
-      final request = ViewAdsRequest(
-        watchingTime: time,
-        adsId: data.adsId,
-        useradsId: data.useradsId,
-      );
-      //
-      // await Future.delayed(const Duration(seconds: 1));
-      await notifier.viewAdsBloc(context, request, isClick: isClick);
-
-      final fetch = notifier.adsDataFetch;
-      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {}
-    } catch (e) {
-      'Failed hit view ads $e'.logger();
-      setState(() {
-        loadingAction = false;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Scaffold(
-      body: Container(
-          decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(8.0)),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              (widget.data.mediaType ?? '').translateType() == ContentType.image
-                  ? Stack(
-                      children: [
-                        // Background
-                        CustomBackgroundLayer(
-                          sigmaX: 30,
-                          sigmaY: 30,
-                          thumbnail: widget.urlAds,
-                        ),
-                        // Content
-                        InteractiveViewer(
-                          child: InkWell(
-                            child: CustomCacheImage(
-                              imageUrl: widget.urlAds,
-                              imageBuilder: (ctx, imageProvider) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-                                  ),
-                                );
-                              },
-                              errorWidget: (_, __, ___) {
-                                return Container(
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      fit: BoxFit.contain,
-                                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                    ),
-                                  ),
-                                );
-                              },
-                              emptyWidget: Container(
-                                decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.contain,
-                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Stack(
-                      children: [
-                        StoryView(
-                          inline: false,
-                          repeat: false,
-                          progressColor: kHyppeLightButtonText,
-                          durationColor: kHyppeLightButtonText,
-                          storyItems: _storyItems,
-                          controller: _storyController,
-                          progressPosition: ProgressPosition.top,
-                          isAds: true,
-                          onStoryShow: (storyItem) {},
-                          onEverySecond: (dur) {
-                            'second of video $dur'.logger();
-                            setState(() {
-                              secondsSkip -= 1;
-                              secondsVideo += 1;
-                            });
-                          },
-                          nextDebouncer: false,
-                          onComplete: () async {
-                            _storyController.pause();
-                            // await adsView(widget.data, secondsVideo);
-                            // Navigator.pop(context);
-                          },
-                        ),
-                        widget.data.isReport ?? false
-                            ? BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                child: Container(
-                                  color: Colors.black.withOpacity(0),
-                                ),
-                              )
-                            : Container()
-                      ],
-                    ),
-              (widget.data.isReport ?? false)
-                  ? SafeArea(
-                      child: SizedBox(
-                      width: SizeConfig.screenWidth,
-                      child: Consumer<TranslateNotifierV2>(
-                        builder: (context, transnot, child) => Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            const Spacer(),
-                            const CustomIconWidget(
-                              iconData: "${AssetPath.vectorPath}valid-invert.svg",
-                              defaultColor: false,
-                              height: 30,
-                            ),
-                            Text(transnot.translate.reportReceived ?? '', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                            Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                )),
-                            const Spacer(),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  widget.data.isReport = false;
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.only(top: 8),
-                                margin: const EdgeInsets.all(8),
-                                width: SizeConfig.screenWidth,
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    top: BorderSide(
-                                      color: Colors.white,
-                                      width: 1,
-                                    ),
-                                  ),
-                                ),
-                                child: Text(
-                                  "See Ads",
-                                  style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                            thirtyTwoPx,
-                          ],
-                        ),
-                      ),
-                    ))
-                  : Container(),
-              Positioned(left: 0, top: 50, right: 0, child: topAdsLayout(widget.data)),
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: (widget.data.isReport ?? false) ? Container() : bottomAdsLayout(widget.data),
-              )
-            ],
-          )),
-    );
-  }
-
-  Widget topAdsLayout(AdsData data) {
-    return Material(
-      color: Colors.transparent,
-      child: Container(
-        color: Colors.transparent,
-        margin: const EdgeInsets.only(left: 18, right: 18, top: 10),
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                data.isReport ?? false
-                    ? Container()
-                    : Expanded(
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: widget.data.email));
-                              },
-                              child: CustomBaseCacheImage(
-                                imageUrl: data.avatar?.fullLinkURL,
-                                memCacheWidth: 200,
-                                memCacheHeight: 200,
-                                imageBuilder: (_, imageProvider) {
-                                  return Container(
-                                    width: 36,
-                                    height: 36,
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: imageProvider,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                errorWidget: (_, url, ___) {
-                                  if (url.isNotEmpty && url.withHttp()) {
-                                    return ClipRRect(
-                                        borderRadius: BorderRadius.circular(18),
-                                        child: Image.network(url, width: 36, height: 36, fit: BoxFit.cover, loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                                          if (loadingProgress == null) return child;
-                                          return Center(
-                                            child: SizedBox(
-                                              width: 20,
-                                              height: 20,
-                                              child: CircularProgressIndicator(
-                                                value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                              ),
-                                            ),
-                                          );
-                                        }, errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                                          return Container(
-                                            width: 36,
-                                            height: 36,
-                                            decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.all(Radius.circular(18)),
-                                              image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                                              ),
-                                            ),
-                                          );
-                                        }));
-                                  }
-                                  return Container(
-                                    width: 36,
-                                    height: 36,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(18)),
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                                      ),
-                                    ),
-                                  );
-                                },
-                                emptyWidget: Container(
-                                  width: 36,
-                                  height: 36,
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(18)),
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: AssetImage('${AssetPath.pngPath}profile-error.jpg'),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            twelvePx,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    const CustomIconWidget(
-                                      defaultColor: false,
-                                      iconData: "${AssetPath.vectorPath}ad_yellow_icon.svg",
-                                    ),
-                                    fourPx,
-                                    Expanded(
-                                      child: CustomTextWidget(
-                                        textToDisplay: data.adsDescription ?? 'Nike',
-                                        maxLines: 3,
-                                        textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                sixPx,
-                                Text(
-                                  widget.isSponsored ? 'Sponsored' : '',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        ShowBottomSheet().onReportContent(
-                          context,
-                          adsData: widget.data,
-                          type: adsPopUp,
-                          postData: null,
-                          onUpdate: () {
-                            setState(() {
-                              data.isReport = true;
-                            });
-                          },
-                        );
-                      },
-                      child: const CustomIconWidget(
-                        defaultColor: false,
-                        iconData: "${AssetPath.vectorPath}more.svg",
-                        color: kHyppeLightButtonText,
-                      ),
-                    ),
-                    loadingAction
-                        ? Container(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            width: 24,
-                            height: 24,
-                            alignment: Alignment.center,
-                            child: CircularProgressIndicator(color: context.getColorScheme().primary, strokeWidth: 3.0))
-                        : InkWell(
-                            onTap: () async {
-                              print('second close ads: $secondsVideo');
-                              // await adsView(widget.data, secondsVideo);
-                              Navigator.pop(context);
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: CustomIconWidget(
-                                defaultColor: false,
-                                iconData: "${AssetPath.vectorPath}close_ads.svg",
-                              ),
-                            ),
-                          )
-                  ],
-                )
-              ],
-            ),
-            secondsSkip > 0 && widget.data.isReport != true
-                ? Container(
-                    height: 30,
-                    width: 30,
-                    margin: EdgeInsets.only(top: 0),
-                    child: Text(
-                      '$secondsSkip',
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Colors.grey),
-                  )
-                : Container()
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget bottomAdsLayout(AdsData data) {
-    return Material(
-      color: Colors.transparent,
-      child: Consumer<TranslateNotifierV2>(builder: (context, notifier, child) {
-        return Container(
-          margin: const EdgeInsets.only(left: 16, right: 16, bottom: 15),
-          child: InkWell(
-            onTap: () async {
-              if (!loadingAction) {
-                if (secondsSkip < 1) {
-                  if (data.adsUrlLink?.isEmail() ?? false) {
-                    final email = data.adsUrlLink!.replaceAll('email:', '');
-
-                    print('second close ads: $secondsVideo');
-                    await adsView(widget.data, secondsVideo, isClick: true);
-                    Future.delayed(const Duration(milliseconds: 500), () {
-                      Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-                    });
-                  } else {
-                    try {
-                      final uri = Uri.parse(data.adsUrlLink ?? '');
-                      print('bottomAdsLayout ${data.adsUrlLink}');
-                      if (await canLaunchUrl(uri)) {
-                        print('second close ads: $secondsVideo');
-                        await adsView(widget.data, secondsVideo, isClick: true);
-                        await launchUrl(
-                          uri,
-                          mode: LaunchMode.externalApplication,
-                        );
-                      } else {
-                        throw "Could not launch $uri";
-                      }
-                      // can't launch url, there is some error
-                    } catch (e) {
-                      print('second close ads: $secondsVideo');
-                      await adsView(widget.data, secondsVideo, isClick: true);
-                      System().goToWebScreen(data.adsUrlLink ?? '', isPop: true);
-                    }
-                  }
-                }
-              }
-            },
-            child: Builder(builder: (context) {
-              final learnMore = secondsSkip < 1 ? (notifier.translate.learnMore ?? 'Learn More') : "${notifier.translate.learnMore ?? 'Learn More'}($secondsSkip)";
-              return Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
-                child: Text(
-                  learnMore,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: secondsSkip < 1 ? KHyppeButtonAds : context.getColorScheme().secondary),
-              );
-            }),
-          ),
-        );
-      }),
-    );
-  }
-
-  @override
-  void dispose() {
-    print('isShowPopAds false');
-    SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
-    _storyController.dispose();
-    super.dispose();
-  }
-}

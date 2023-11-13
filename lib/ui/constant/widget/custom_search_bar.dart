@@ -8,8 +8,8 @@ import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 class CustomSearchBar extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final ValueChanged<String>? onChanged;
-  final Function? onPressedIcon;
-  final Function? onPressedRightIcon;
+  final Function()? onPressedIcon;
+  final Function()? onPressedRightIcon;
   final TextEditingController? controller;
   final Function()? onTap;
   final FocusNode? focusNode;

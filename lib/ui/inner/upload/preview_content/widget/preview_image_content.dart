@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:gif_view/gif_view.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:provider/provider.dart';
 
@@ -30,11 +31,6 @@ class PreviewImageContent extends StatefulWidget {
 class _PreviewImageContentState extends State<PreviewImageContent> with AfterFirstLayoutMixin {
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
 
@@ -46,8 +42,12 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
               top: 0,
               right: 0,
               bottom: 0,
-              child: Image.file(
-                  File(notifier.fileContent?[widget.currIndex] ?? ''),
+              child: notifier.featureType == FeatureType.pic
+              ? Image.memory(
+                  File(notifier.fileContent?[widget.currIndex] ?? '').readAsBytesSync(),
+                )
+              : Image.file(
+                 File(notifier.fileContent?[widget.currIndex] ?? ''),
                   filterQuality: FilterQuality.high,
                   frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                     return wasSynchronouslyLoaded
@@ -80,6 +80,7 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     height: 86,
+                    margin: const EdgeInsets.only(bottom: 76),
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -109,31 +110,31 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                   bottom: context.getHeight() * 0.4,
                   child: Column(
                     children: [
-                      Column(
-                        children: [
-                          Container(
-                            height: 48,
-                            width: 48,
-                            decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(24)), color: Colors.black.withOpacity(0.5)),
-                            child: CustomIconButtonWidget(
-                              onPressed: () async {
-                                notifier.openImageCropper(context, widget.currIndex);
-                              },
-                              iconData: "${AssetPath.vectorPath}edit.svg",
-                            ),
-                          ),
-                          eightPx,
-                          CustomTextWidget(
-                            textToDisplay: notifier.language.edit ?? 'Rotate',
-                            textStyle: const TextStyle(
-                              fontWeight: FontWeight.normal,
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                      twentyFourPx,
+                      // Column(
+                      //   children: [
+                      //     Container(
+                      //       height: 48,
+                      //       width: 48,
+                      //       decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(24)), color: Colors.black.withOpacity(0.5)),
+                      //       child: CustomIconButtonWidget(
+                      //         onPressed: () async {
+                      //           notifier.openImageCropper(context, widget.currIndex);
+                      //         },
+                      //         iconData: "${AssetPath.vectorPath}edit.svg",
+                      //       ),
+                      //     ),
+                      //     eightPx,
+                      //     CustomTextWidget(
+                      //       textToDisplay: notifier.language.edit ?? 'Rotate',
+                      //       textStyle: const TextStyle(
+                      //         fontWeight: FontWeight.normal,
+                      //         color: Colors.white,
+                      //         fontSize: 14,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // twentyFourPx,
                       InkWell(
                         onTap: () async {
                           notifier.audioPreviewPlayer.pause();
@@ -154,6 +155,32 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                             CustomTextWidget(
                               maxLines: 1,
                               textToDisplay: notifier.language.music ?? '',
+                              textAlign: TextAlign.left,
+                              textStyle: const TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      twentyFourPx,
+                      InkWell(
+                        onTap: () async {
+                          Routing().move(Routes.editPhoto);
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const CustomIconWidget(
+                              defaultColor: false,
+                              iconData: "${AssetPath.vectorPath}edit-v2.svg",
+                            ),
+                            fourPx,
+                            CustomTextWidget(
+                              maxLines: 1,
+                              textToDisplay: notifier.language.edit ?? '',
                               textAlign: TextAlign.left,
                               textStyle: const TextStyle(
                                 fontWeight: FontWeight.normal,

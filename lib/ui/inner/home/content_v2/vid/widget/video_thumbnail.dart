@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -7,7 +5,6 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
-import 'package:hyppe/ui/constant/widget/custom_thumb_image.dart';
 import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -32,7 +29,7 @@ class VideoThumbnail extends StatelessWidget {
     this.withMargin = false,
   }) : super(key: key);
 
-  static final _system = System();
+  // static final _system = System();
   static String email = SharedPreference().readStorage(SpKeys.email);
 
   @override

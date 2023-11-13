@@ -39,14 +39,13 @@ class VidDetailTop extends StatelessWidget {
 
   static final _system = System();
 
-  var email = SharedPreference().readStorage(SpKeys.email);
+  final email = SharedPreference().readStorage(SpKeys.email);
 
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'VidDetailTop');
     SizeConfig().init(context);
     final _themes = Theme.of(context);
-    final translate = context.read<TranslateNotifierV2>().translate;
 
     return Container(
       width: SizeConfig.screenWidth,

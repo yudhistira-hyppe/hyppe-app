@@ -10,7 +10,6 @@ import '../../../../../../../../core/constants/size_config.dart';
 import '../../../../../../../../core/services/shared_preference.dart';
 import '../../../../../../../../core/services/system.dart';
 import '../../../../../../../constant/entities/comment_v2/notifier.dart';
-import '../../../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../../../../../../constant/overlay/general_dialog/show_general_dialog.dart';
 import '../../../../../../../constant/widget/custom_desc_content_widget.dart';
 import '../../../../../../../constant/widget/custom_profile_image.dart';

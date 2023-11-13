@@ -241,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   Widget build(BuildContext context) {
-    final notifierMain = context.read<MainNotifier>();
+    // final notifierMain = context.read<MainNotifier>();
     // print("iszoom $isZoom");
     isFromSplash = false;
     return Consumer2<HomeNotifier, SelfProfileNotifier>(

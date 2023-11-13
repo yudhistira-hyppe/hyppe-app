@@ -187,7 +187,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
         print('$list');
         res.addAll(list);
         contentsQuery.hasNext = list.length == contentsQuery.limit;
-        if (list != null) contentsQuery.page++;
+        contentsQuery.page++;
       } else {
         if (reload) {
           'reload contentsQuery : 15'.logger();

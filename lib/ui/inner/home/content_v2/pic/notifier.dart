@@ -20,7 +20,6 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import '../../../../../app.dart';
 import '../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
-import '../../../../../core/models/collection/advertising/ads_video_data.dart';
 import '../../notifier_v2.dart';
 
 class PreviewPicNotifier with ChangeNotifier, GeneralMixin {

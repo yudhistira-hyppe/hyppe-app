@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 class HyppeHomeSignAndSecurity extends StatelessWidget {
-  var setPin = SharedPreference().readStorage(SpKeys.setPin);
+  final setPin = SharedPreference().readStorage(SpKeys.setPin);
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'HyppeHomeSignAndSecurity');

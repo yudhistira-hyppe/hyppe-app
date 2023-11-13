@@ -3,7 +3,6 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +10,8 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/empty_other_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/sensitive_content.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:tuple/tuple.dart';
 import '../../../../../../constant/widget/custom_loading.dart';
 
 class OtherProfileVids extends StatelessWidget {
