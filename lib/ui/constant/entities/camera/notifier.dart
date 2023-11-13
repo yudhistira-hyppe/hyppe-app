@@ -215,8 +215,14 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   Future<void> onNewCameraSelected() async {
     print('DeepAR: balik kamera');
-    isFlash = false;
+    // isFlash = false;
     deepArController!.flipCamera();
+    print('myFlash: $isFlash');
+    if(isFlash){
+      Future.delayed(const Duration(seconds: 1), () async{
+        await deepArController!.toggleFlash();
+      });
+    }
   }
 
   disposeCamera(BuildContext context) async {
