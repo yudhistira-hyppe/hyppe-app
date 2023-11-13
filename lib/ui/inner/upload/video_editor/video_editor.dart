@@ -224,34 +224,42 @@ class _VideoEditorState extends State<VideoEditor> {
                                   ],
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  tenPx,
-                                  _controller.video.value.isPlaying
-                                      ? IconButton(
-                                          icon: CustomIconWidget(
-                                            iconData: "${AssetPath.vectorPath}ic_pause.svg",
-                                            defaultColor: false,
-                                            color: context.getColorScheme().background,),
-                                          splashRadius: 1,
-                                          onPressed: () {
-                                            _controller.video.pause();
-                                          },
-                                        )
-                                      : IconButton(
-                                          icon: CustomIconWidget(
-                                            iconData: "${AssetPath.vectorPath}ic_play.svg",
-                                            defaultColor: false,
-                                            color: context.getColorScheme().background,),
-                                          splashRadius: 1,
-                                          onPressed: () {
-                                            _controller.video.play();
-                                          },
-                                        ),
-                                  Expanded(
+                              SizedBox(
+                                width: double.infinity,
+                                height: 50,
+                                child: Stack(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          margin: const EdgeInsets.only(left: 10),
+                                          child: _controller.video.value.isPlaying
+                                              ? IconButton(
+                                            icon: CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}ic_pause.svg",
+                                              defaultColor: false,
+                                              color: context.getColorScheme().background,),
+                                            splashRadius: 1,
+                                            onPressed: () {
+                                              _controller.video.pause();
+                                            },
+                                          )
+                                              : IconButton(
+                                            icon: CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}ic_play.svg",
+                                              defaultColor: false,
+                                              color: context.getColorScheme().background,),
+                                            splashRadius: 1,
+                                            onPressed: () {
+                                              _controller.video.play();
+                                            },
+                                          ),
+                                        )),
+                                    Align(
+                                      alignment: Alignment.center,
                                       child: Container(
-                                    alignment: Alignment.center,
-                                    child: Row(
+                                        alignment: Alignment.center,
+                                        child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       crossAxisAlignment:
@@ -271,9 +279,11 @@ class _VideoEditorState extends State<VideoEditor> {
                                               fontSize: 12),
                                         ),
                                       ],
+                                        ),
+                                      ),
                                     ),
-                                  )),
-                                ],
+                                  ],
+                                ),
                               ),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
