@@ -86,11 +86,11 @@ class _PreviewContentState extends State<PreviewContent> with AfterFirstLayoutMi
           child: Container(
             color: Colors.transparent,
             width: double.infinity,
-            height: context.getHeight(),
-            // height: notifier.featureType == FeatureType.story ||
-            //         notifier.featureType == FeatureType.diary
-            //     ? MediaQuery.of(context).size.width * (16 / 9)
-            //     : null,
+            // height: context.getHeight(),
+            height: notifier.featureType == FeatureType.story ||
+                    notifier.featureType == FeatureType.diary
+                ? MediaQuery.of(context).size.width * (16 / 9)
+                : null,
             child: BuildAnyContentPreviewer(
               globalKey: widget.globalKey,
               pageController: widget.pageController,
