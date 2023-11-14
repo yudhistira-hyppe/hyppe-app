@@ -106,7 +106,7 @@ class _PreviewContentState extends State<PreviewContent>
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(bottom: 16),
+                    margin: const EdgeInsets.only(bottom: 70),
                     width: context.getWidth() * 0.7,
                     // height: 100,
                     padding: const EdgeInsets.symmetric(
@@ -121,7 +121,8 @@ class _PreviewContentState extends State<PreviewContent>
                           : notifier.featureType == FeatureType.diary
                               ? (notifier.language.messageLimitDiary ?? 'Error')
                               : notifier.featureType == FeatureType.story ? (notifier.language.messageLimitStory ?? 'Error') :'Error',
-                      textStyle: const TextStyle(color: Colors.white),
+                      textAlign: TextAlign.left,
+                      textStyle: const TextStyle(color: Colors.white, fontSize: 12),
                       maxLines: 3,
                     ),
                   ),
