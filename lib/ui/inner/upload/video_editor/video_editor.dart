@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -21,8 +22,9 @@ import 'export_service.dart';
 class VideoEditor extends StatefulWidget {
   final File file;
   final Duration videoSeconds;
+  final FeatureType type;
   const VideoEditor(
-      {super.key, required this.file, required this.videoSeconds});
+      {super.key, required this.file, required this.videoSeconds, required this.type});
 
   @override
   State<VideoEditor> createState() => _VideoEditorState();
@@ -35,7 +37,7 @@ class _VideoEditorState extends State<VideoEditor> {
 
   late final VideoEditorController _controller = VideoEditorController.file(
       widget.file,
-      minDuration: const Duration(seconds: 1),
+      minDuration: widget.type == FeatureType.story ? const Duration(seconds: 4) : const Duration(seconds: 15),
       maxDuration: widget.videoSeconds,
       trimThumbnailsQuality: 1,
       trimStyle: TrimSliderStyle(
