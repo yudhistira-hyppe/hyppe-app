@@ -1623,7 +1623,7 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
-  void goToVideoEditor(BuildContext context) async{
+  void goToVideoEditor(BuildContext context, FeatureType type) async{
 
     final path = fileContent?[0];
     if(path != null){
@@ -1633,7 +1633,7 @@ class PreviewContentNotifier with ChangeNotifier {
       final newPath = await Navigator.push(
         context,
         MaterialPageRoute<String?>(
-          builder: (BuildContext context) => VideoEditor(file: File(path), videoSeconds: seconds,),
+          builder: (BuildContext context) => VideoEditor(file: File(path), videoSeconds: seconds, type: type,),
         ),
       );
       if(newPath != null){

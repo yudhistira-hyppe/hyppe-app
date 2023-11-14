@@ -378,6 +378,16 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+
+  initThumbnail() async{
+    final isImage = ((fileContent?[0] ?? '').isImageFormat());
+    print('My Thumbnail: $isImage');
+    if(!isImage){
+      thumbNail = await System().createThumbnail(fileContent?[0] ?? '');
+      print('My Thumbnail: $thumbNail');
+    }
+
+  }
   void setDefaultFileContent(BuildContext context) {
     final notifierPre = context.read<PreviewContentNotifier>();
     final isPic = _fileContent?[0]?.isImageFormat();

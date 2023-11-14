@@ -54,6 +54,7 @@ import 'package:screen_protector/screen_protector.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../app.dart';
 import '../arguments/general_argument.dart';
@@ -760,6 +761,16 @@ class System {
     }
 
     return {_errorMsg: _filePickerResult};
+  }
+
+  Future<Uint8List?> createThumbnail(String path) async{
+    return await VideoThumbnail.thumbnailData(
+      video: path,
+      imageFormat: ImageFormat.JPEG,
+      maxWidth:
+      128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+      quality: 25,
+    );
   }
 
   saveThumbnail(String url, String id, {bool isCheck = false}) async {

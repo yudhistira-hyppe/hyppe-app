@@ -68,6 +68,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       notifier.captionController.text = notifier.hastagChallange;
       notifier.captionController.selection = TextSelection.collapsed(offset: 0);
     }
+    // notifier.initThumbnail();
 
     // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
     if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {

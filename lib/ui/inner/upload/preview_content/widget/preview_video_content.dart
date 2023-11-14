@@ -271,11 +271,11 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                           ),
                         ),
                         twentyFourPx,
-                        if(notifier.featureType == FeatureType.diary || notifier.featureType == FeatureType.vid)
+                        if(notifier.featureType == FeatureType.diary || notifier.featureType == FeatureType.vid || notifier.featureType == FeatureType.story)
                         InkWell(
                           onTap: () async {
                             if(mounted){
-                              notifier.goToVideoEditor(context);
+                              notifier.goToVideoEditor(context, notifier.featureType ?? FeatureType.diary);
                             }
                           },
                           child:const Column(
