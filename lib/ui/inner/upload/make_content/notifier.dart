@@ -127,7 +127,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     if(featureType == FeatureType.diary){
       _selectedDuration = 60;
     }else if(featureType == FeatureType.vid){
-      _selectedDuration = 3600;
+      _selectedDuration = 1800;
     }else if(featureType == FeatureType.story){
       _selectedDuration = 15;
     }
@@ -363,46 +363,44 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   void onStopRecordedVideo(BuildContext context) {
     try {
       final tempDuration = Duration(seconds: elapsedProgress);
-      if(tempDuration.inSeconds >= 15){
-        dynamic cameraNotifier;
+      dynamic cameraNotifier;
 
-        WakelockPlus.disable();
-        "================ disable wakelock 6".logger();
-        final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
-        if (canDeppAr == 'true') {
-          cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
-        } else {
-          cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
-        }
-
-        cancelTimer();
-        _progressDev = 0.0;
-        _progressHuman = 0;
-        _elapsedProgress = 0;
-        cameraNotifier.stopVideoRecording().then((file) async {
-          final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-          if (file?.path != null) {
-            notifier.fileContent = [file?.path ?? ''];
-          } else {
-            if (canDeppAr == 'true') {
-              final newFile = await Provider.of<CameraDevicesNotifier>(context, listen: false).cameraController?.stopVideoRecording();
-              notifier.fileContent = [newFile?.path ?? ''];
-            } else {
-              final newFile = await Provider.of<CameraNotifier>(context, listen: false).deepArController?.stopVideoRecording();
-              notifier.fileContent = [newFile?.path ?? ''];
-            }
-          }
-          notifier.featureType = featureType;
-          notifier.aspectRation = cameraNotifier.cameraAspectRatio;
-
-          notifyListeners();
-          if(tempDuration.inSeconds >= 15){
-            await _routing.move(Routes.previewContent);
-          }else{
-            showVideoToast(const Duration(seconds: 3));
-          }
-        });
+      WakelockPlus.disable();
+      "================ disable wakelock 6".logger();
+      final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+      if (canDeppAr == 'true') {
+        cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+      } else {
+        cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
       }
+
+      cancelTimer();
+      _progressDev = 0.0;
+      _progressHuman = 0;
+      _elapsedProgress = 0;
+      cameraNotifier.stopVideoRecording().then((file) async {
+        final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
+        if (file?.path != null) {
+          notifier.fileContent = [file?.path ?? ''];
+        } else {
+          if (canDeppAr == 'true') {
+            final newFile = await Provider.of<CameraDevicesNotifier>(context, listen: false).cameraController?.stopVideoRecording();
+            notifier.fileContent = [newFile?.path ?? ''];
+          } else {
+            final newFile = await Provider.of<CameraNotifier>(context, listen: false).deepArController?.stopVideoRecording();
+            notifier.fileContent = [newFile?.path ?? ''];
+          }
+        }
+        notifier.featureType = featureType;
+        notifier.aspectRation = cameraNotifier.cameraAspectRatio;
+
+        notifyListeners();
+        if(tempDuration.inSeconds >= 15){
+          await _routing.move(Routes.previewContent);
+        }else{
+          showVideoToast(const Duration(seconds: 3));
+        }
+      });
 
     } catch (e) {
       e.logger();

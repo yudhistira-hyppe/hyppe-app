@@ -213,6 +213,21 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _showToastLimit = false;
+  bool get showToastLimit => _showToastLimit;
+  set showToastLimit(bool state){
+    _showToastLimit = state;
+    notifyListeners();
+  }
+  showToast(Duration duration){
+    if(!showToastLimit){
+      showToastLimit = true;
+      Future.delayed(duration, (){
+        showToastLimit = false;
+      });
+    }
+  }
+
   List<StickerTab> _stickerTab = [
     StickerTab(index: 0, name: 'Sticker', type: 'STICKER', column: 3, data: []),
     StickerTab(index: 1, name: 'Emoji', type: 'EMOJI', column: 5, data: []),
@@ -1141,11 +1156,18 @@ class PreviewContentNotifier with ChangeNotifier {
       //           0.0);
       //   notifyListeners();
       // });
+
       _betterPlayerController?.addListener(() {
         notifyListeners();
       });
       _betterPlayerController?.setLooping(true);
       await _betterPlayerController?.initialize().then((_){
+        final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
+        final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1) : featureType == FeatureType.vid ? const Duration(minutes: 30) : const Duration(seconds: 0);
+        print('State Preview Limit: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
+        if(videoDuration.inMinutes > limitDuration.inMinutes){
+        showToast(const Duration(seconds: 3));
+        }
         notifyListeners();
       });
       await _betterPlayerController?.play();

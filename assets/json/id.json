@@ -1022,5 +1022,7 @@
   "successfulChallengeParticipation": "Berhasil Mengikuti Challenge",
   "getfirstplacebyentering": "Raih peringkat pertama dengan mengikuti\nkompetisi yang seru ini, yuk!",
   "increaseYourPointsNow": "Tingkatkan Poinmu Sekarang",
-  "recordAtLeast15Seconds": "Record at least 15 seconds."
+  "recordAtLeast15Seconds": "Record at least 15 seconds.",
+  "messageLimitVideo": "Durasi video terlalu panjang. Potong video menjadi \n30 menit atau kurang untuk melanjutkan.",
+  "messageLimitDiary": "Durasi video terlalu panjang. Potong video menjadi \n60 detik atau kurang untuk melanjutkan."
 }

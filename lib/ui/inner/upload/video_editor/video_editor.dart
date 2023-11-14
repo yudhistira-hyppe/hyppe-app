@@ -39,7 +39,7 @@ class _VideoEditorState extends State<VideoEditor> {
       maxDuration: widget.videoSeconds,
       trimThumbnailsQuality: 1,
       trimStyle: TrimSliderStyle(
-          background: const Color(0xff151617),
+          background: Colors.transparent,
           onTrimmedColor: Colors.white,
           onTrimmingColor: Colors.white,
           leftIcon: null,

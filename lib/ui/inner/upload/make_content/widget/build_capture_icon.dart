@@ -16,7 +16,7 @@ class BuildCaptureIcon extends StatelessWidget {
       builder: (context, notifier, child){
         return GestureDetector(
           onTap: () {
-            if (notifier.featureType == FeatureType.story) {
+            if (notifier.featureType == FeatureType.story && !notifier.isVideo) {
               notifier.onTakePicture(context);
             } else {
               submitContent(context, notifier);
