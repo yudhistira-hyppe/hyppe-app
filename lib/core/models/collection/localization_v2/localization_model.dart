@@ -1024,6 +1024,7 @@ class LocalizationModelV2 {
   String? recordAtLeast15Seconds;
   String? messageLimitVideo;
   String? messageLimitDiary;
+  String? messageLimitStory;
 
   LocalizationModelV2({
     this.login,
@@ -2050,7 +2051,8 @@ class LocalizationModelV2 {
     this.end,
     this.recordAtLeast15Seconds,
     this.messageLimitVideo,
-    this.messageLimitDiary
+    this.messageLimitDiary,
+    this.messageLimitStory,
 
   });
 
@@ -3098,5 +3100,6 @@ class LocalizationModelV2 {
     recordAtLeast15Seconds = json['recordAtLeast15Seconds'];
     messageLimitVideo = json['messageLimitVideo'];
     messageLimitDiary = json['messageLimitDiary'];
+    messageLimitStory = json['messageLimitStory'];
   }
 }

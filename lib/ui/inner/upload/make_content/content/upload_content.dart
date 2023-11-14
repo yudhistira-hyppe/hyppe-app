@@ -100,15 +100,18 @@ class UploadContent extends StatelessWidget {
               if(notifier?.showToast ?? false)
                 Align(
                     alignment: Alignment.topCenter,
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 16),
-                      width: context.getWidth() * 0.7,
-                  height: 60,
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(top: 16),
+                          width: context.getWidth() * 0.7,
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   alignment: Alignment.centerLeft,
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: kHyppeTextLightPrimary),
                   child: CustomTextWidget(textToDisplay: notifier?.language.recordAtLeast15Seconds ?? 'Error', textStyle: const TextStyle(color: Colors.white),),
-                )),
+                ),
+                      ],
+                    )),
               // Timer
               // Visibility(
               //   visible: !(notifier?.isRecordingVideo ?? true),
@@ -246,15 +249,19 @@ class UploadContent extends StatelessWidget {
               if(notifier?.showToast ?? false)
                 Align(
                   alignment: Alignment.topCenter,
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 16),
-                      width: context.getWidth() * 0.7,
-                      height: 60,
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(top: 16),
+                          width: context.getWidth() * 0.7,
+                          // height: 60,
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   alignment: Alignment.centerLeft,
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: kHyppeTextLightPrimary),
                   child: CustomTextWidget(textToDisplay: notifier?.language.recordAtLeast15Seconds ?? 'Error', textStyle: const TextStyle(color: Colors.white),),
-                )),
+                ),
+                      ],
+                    )),
               // Timer
               // Visibility(
               //   visible: !(notifier?.isRecordingVideo ?? true),

@@ -1162,12 +1162,21 @@ class PreviewContentNotifier with ChangeNotifier {
       });
       _betterPlayerController?.setLooping(true);
       await _betterPlayerController?.initialize().then((_){
-        final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
-        final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1) : featureType == FeatureType.vid ? const Duration(minutes: 30) : const Duration(seconds: 0);
-        print('State Preview Limit: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
-        if(videoDuration.inMinutes > limitDuration.inMinutes){
-        showToast(const Duration(seconds: 3));
+        if(featureType == FeatureType.story){
+          final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
+          const limitDuration = Duration(seconds: 15);
+          if(videoDuration.inSeconds > limitDuration.inSeconds){
+            showToast(const Duration(seconds: 3));
+          }
+        }else{
+          final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
+          final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1) : featureType == FeatureType.vid ? const Duration(minutes: 30) : const Duration(seconds: 0);
+          print('State Preview Limit: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
+          if(videoDuration.inMinutes > limitDuration.inMinutes){
+            showToast(const Duration(seconds: 3));
+          }
         }
+
         notifyListeners();
       });
       await _betterPlayerController?.play();
@@ -1257,6 +1266,31 @@ class PreviewContentNotifier with ChangeNotifier {
   void clearAdditionalItem() {
     _additionalItem.clear();
     _positions.clear();
+  }
+
+  bool ableShare(){
+    if(featureType == FeatureType.pic){
+      return true;
+    }else if(featureType == FeatureType.diary || featureType == FeatureType.vid || featureType == FeatureType.story ){
+      final isImage = fileContent?[0]?.isImageFormat() ?? false;
+      if(isImage){
+        return true;
+      }
+      final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
+      final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1) : featureType == FeatureType.vid ? const Duration(minutes: 30) : featureType == FeatureType.story ? const Duration(seconds: 15) : const Duration(seconds: 0);
+      print('State Preview Limit Checking: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
+      if(videoDuration.inSeconds == 0){
+        return false;
+      }
+      if(featureType == FeatureType.diary || featureType == FeatureType.vid){
+        return videoDuration.inMinutes <= limitDuration.inMinutes;
+      }else{
+        return videoDuration.inSeconds <= limitDuration.inSeconds;
+      }
+
+    }else{
+      return true;
+    }
   }
 
   Future<bool> onWillPop(BuildContext context) async {
