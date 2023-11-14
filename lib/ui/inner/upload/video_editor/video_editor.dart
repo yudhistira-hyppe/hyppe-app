@@ -5,6 +5,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/video_editor/widget/export_result.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../core/constants/asset_path.dart';
 import '../../../../core/models/collection/localization_v2/localization_model.dart';
+import '../../../constant/overlay/general_dialog/show_general_dialog.dart';
 import '../../../constant/widget/custom_icon_widget.dart';
 import 'export_service.dart';
 
@@ -35,12 +37,15 @@ class _VideoEditorState extends State<VideoEditor> {
       widget.file,
       minDuration: const Duration(seconds: 1),
       maxDuration: widget.videoSeconds,
+      trimThumbnailsQuality: 1,
       trimStyle: TrimSliderStyle(
           background: const Color(0xff151617),
           onTrimmedColor: Colors.white,
           onTrimmingColor: Colors.white,
           leftIcon: null,
-          rightIcon: null));
+          rightIcon: null,
+          positionLineWidth: 1,
+          lineWidth: 10));
   late Duration currentTime;
   late final LocalizationModelV2 language;
   @override
@@ -52,7 +57,9 @@ class _VideoEditorState extends State<VideoEditor> {
         .initialize(aspectRatio: 9 / 16)
         .then((_){
           if(mounted){
-            setState(() {});
+            Future.delayed(const Duration(seconds: 1), (){
+              setState(() {});
+            });
           }
     })
         .catchError((error) {
@@ -153,7 +160,27 @@ class _VideoEditorState extends State<VideoEditor> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async {
+        final notifier = context.read<MakeContentNotifier>();
+        await ShowGeneralDialog.generalDialog(
+          context,
+          titleText: "${notifier.language.discardEdit}?",
+          bodyText: "${notifier.language.discardEditDesc}",
+          maxLineTitle: 1,
+          maxLineBody: 4,
+          functionPrimary: () async {
+            Routing().moveBack();
+            Routing().moveBack();
+          },
+          functionSecondary: () {
+            Routing().moveBack();
+          },
+          titleButtonPrimary: "${notifier.language.delete}",
+          titleButtonSecondary: "${notifier.language.cancel}",
+          barrierDismissible: true,
+        );
+        return false;
+      },
       child: Scaffold(
         backgroundColor: const Color(0xff151617),
         body: _controller.initialized
@@ -162,7 +189,7 @@ class _VideoEditorState extends State<VideoEditor> {
                   children: [
                     Column(
                       children: [
-                        _topNavBar(),
+                        _topNavBar(context),
                         Expanded(
                           child: Column(
                             children: [
@@ -197,34 +224,42 @@ class _VideoEditorState extends State<VideoEditor> {
                                   ],
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  tenPx,
-                                  _controller.video.value.isPlaying
-                                      ? IconButton(
-                                          icon: CustomIconWidget(
-                                            iconData: "${AssetPath.vectorPath}ic_pause.svg",
-                                            defaultColor: false,
-                                            color: context.getColorScheme().background,),
-                                          splashRadius: 1,
-                                          onPressed: () {
-                                            _controller.video.pause();
-                                          },
-                                        )
-                                      : IconButton(
-                                          icon: CustomIconWidget(
-                                            iconData: "${AssetPath.vectorPath}ic_play.svg",
-                                            defaultColor: false,
-                                            color: context.getColorScheme().background,),
-                                          splashRadius: 1,
-                                          onPressed: () {
-                                            _controller.video.play();
-                                          },
-                                        ),
-                                  Expanded(
+                              SizedBox(
+                                width: double.infinity,
+                                height: 50,
+                                child: Stack(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          margin: const EdgeInsets.only(left: 10),
+                                          child: _controller.video.value.isPlaying
+                                              ? IconButton(
+                                            icon: CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}ic_pause.svg",
+                                              defaultColor: false,
+                                              color: context.getColorScheme().background,),
+                                            splashRadius: 1,
+                                            onPressed: () {
+                                              _controller.video.pause();
+                                            },
+                                          )
+                                              : IconButton(
+                                            icon: CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}ic_play.svg",
+                                              defaultColor: false,
+                                              color: context.getColorScheme().background,),
+                                            splashRadius: 1,
+                                            onPressed: () {
+                                              _controller.video.play();
+                                            },
+                                          ),
+                                        )),
+                                    Align(
+                                      alignment: Alignment.center,
                                       child: Container(
-                                    alignment: Alignment.center,
-                                    child: Row(
+                                        alignment: Alignment.center,
+                                        child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       crossAxisAlignment:
@@ -244,9 +279,11 @@ class _VideoEditorState extends State<VideoEditor> {
                                               fontSize: 12),
                                         ),
                                       ],
+                                        ),
+                                      ),
                                     ),
-                                  )),
-                                ],
+                                  ],
+                                ),
                               ),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -282,7 +319,7 @@ class _VideoEditorState extends State<VideoEditor> {
     );
   }
 
-  Widget _topNavBar() {
+  Widget _topNavBar(BuildContext context) {
     return SafeArea(
       child: SizedBox(
         height: height,
@@ -291,7 +328,26 @@ class _VideoEditorState extends State<VideoEditor> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             IconButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: (){
+                final notifier = context.read<MakeContentNotifier>();
+                ShowGeneralDialog.generalDialog(
+                  context,
+                  titleText: "${notifier.language.discardEdit}?",
+                  bodyText: "${notifier.language.discardEditDesc}",
+                  maxLineTitle: 1,
+                  maxLineBody: 4,
+                  functionPrimary: () async {
+                    Routing().moveBack();
+                    Routing().moveBack();
+                  },
+                  functionSecondary: () {
+                    Routing().moveBack();
+                  },
+                  titleButtonPrimary: "${notifier.language.delete}",
+                  titleButtonSecondary: "${notifier.language.cancel}",
+                  barrierDismissible: true,
+                );
+              },
               icon: const Icon(Icons.arrow_back_ios),
               tooltip: 'Leave editor',
               color: Colors.white,
@@ -324,6 +380,7 @@ class _VideoEditorState extends State<VideoEditor> {
           controller: _controller,
           height: height,
           horizontalMargin: height / 4,
+          maxViewportRatio: 0.5,
           // child: TrimTimeline(
           //   controller: _controller,
           //   padding: const EdgeInsets.only(top: 10),

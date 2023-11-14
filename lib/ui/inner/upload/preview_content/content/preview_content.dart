@@ -1,12 +1,10 @@
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/build_any_content_preview.dart';
-import 'package:hyppe/ui/inner/upload/preview_content/widget/build_bottom_left_widget.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/build_top_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
-import '../../../../../core/constants/size_config.dart';
 import '../notifier.dart';
 
 class PreviewContent extends StatefulWidget {
@@ -30,12 +28,20 @@ class _PreviewContentState extends State<PreviewContent> {
   void initState() {
     context.read<PreviewContentNotifier>().stickers.clear();
     context.read<PreviewContentNotifier>().onScreenStickers.clear();
+    WakelockPlus.enable();
     super.initState();
   }
 
   @override
+  void dispose() {
+
+    WakelockPlus.disable();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final notifier = Provider.of<PreviewContentNotifier>(context);
+    // final notifier = Provider.of<PreviewContentNotifier>(context);
 
     return Stack(
       children: [

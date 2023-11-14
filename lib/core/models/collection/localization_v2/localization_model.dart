@@ -1021,6 +1021,7 @@ class LocalizationModelV2 {
   String? apply;
   String? selectDate;
   String? end;
+  String? recordAtLeast15Seconds;
 
   LocalizationModelV2({
     this.login,
@@ -2045,6 +2046,8 @@ class LocalizationModelV2 {
     this.apply,
     this.selectDate,
     this.end,
+    this.recordAtLeast15Seconds
+
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -3088,5 +3091,6 @@ class LocalizationModelV2 {
     joinTheChallenge = json['joinTheChallenge'];
     badgeCollection = json['badgeCollection'];
     understand = json['understand'];
+    recordAtLeast15Seconds = json['recordAtLeast15Seconds'];
   }
 }
