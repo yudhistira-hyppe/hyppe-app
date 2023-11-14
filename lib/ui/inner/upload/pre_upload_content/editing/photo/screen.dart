@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:colorfilter_generator/addons.dart';
 import 'package:colorfilter_generator/colorfilter_generator.dart';
 import 'package:flutter/material.dart';
@@ -72,16 +71,15 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
             backgroundColor: kHyppeBackground,
             body: Column(
               children: [
-                FilterTopWidget(notifier: notifier, paintKey: paintKey),
-                FilterBodyWidget(notifier: notifier, paintKey: paintKey),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: notifier.activeFilter != null
-                      ? FilterSliderWidget(notifier: notifier)
-                      : FilterCollectionWidget(notifier: notifier),
-                ),
+                EditPhotoTopWidget(notifier: notifier, paintKey: paintKey),
+                EditPhotoBodyWidget(notifier: notifier, paintKey: paintKey),
+                Stack(children: [
+                  EditPhotoCollectionWidget(notifier: notifier),
+                  Visibility(
+                    visible: notifier.activeFilter != null,
+                    child: EditPhotoSliderWidget(notifier: notifier),
+                  ),
+                ]),
               ],
             ),
           ),
@@ -91,11 +89,11 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
   }
 }
 
-class FilterTopWidget extends StatelessWidget {
+class EditPhotoTopWidget extends StatelessWidget {
   final EditPhotoNotifier notifier;
   final GlobalKey paintKey;
 
-  const FilterTopWidget({
+  const EditPhotoTopWidget({
     super.key,
     required this.notifier,
     required this.paintKey,
@@ -146,11 +144,11 @@ class FilterTopWidget extends StatelessWidget {
   }
 }
 
-class FilterBodyWidget extends StatelessWidget {
+class EditPhotoBodyWidget extends StatelessWidget {
   final EditPhotoNotifier notifier;
   final GlobalKey paintKey;
 
-  const FilterBodyWidget({
+  const EditPhotoBodyWidget({
     super.key,
     required this.notifier,
     required this.paintKey,
@@ -175,28 +173,31 @@ class FilterBodyWidget extends StatelessWidget {
     );
 
     return Expanded(
-      child: notifier.tempFilePath!.isEmpty
+      child: notifier.tempFilePath == null
           ? const CustomLoading()
           : Center(
               child: RepaintBoundary(
                 key: paintKey,
                 child: ColorFiltered(
                   colorFilter: ColorFilter.matrix(myFilter.matrix),
-                  child: Image.file(
-                    File(notifier.tempFilePath ?? ''),
-                    filterQuality: FilterQuality.high,
-                    frameBuilder:
-                        (context, child, frame, wasSynchronouslyLoaded) {
-                      return wasSynchronouslyLoaded
-                          ? child
-                          : AnimatedOpacity(
-                              opacity: frame == null ? 0 : 1,
-                              duration: const Duration(seconds: 1),
-                              curve: Curves.easeOut,
-                              child: child,
-                            );
-                    },
-                  ),
+                  child: notifier.tempFilePath == null ||
+                          notifier.tempFilePath == ''
+                      ? const CustomLoading()
+                      : Image.file(
+                          File(notifier.tempFilePath ?? ''),
+                          filterQuality: FilterQuality.high,
+                          frameBuilder:
+                              (context, child, frame, wasSynchronouslyLoaded) {
+                            return wasSynchronouslyLoaded
+                                ? child
+                                : AnimatedOpacity(
+                                    opacity: frame == null ? 0 : 1,
+                                    duration: const Duration(seconds: 1),
+                                    curve: Curves.easeOut,
+                                    child: child,
+                                  );
+                          },
+                        ),
                 ),
               ),
             ),
@@ -204,16 +205,16 @@ class FilterBodyWidget extends StatelessWidget {
   }
 }
 
-class FilterCollectionWidget extends StatelessWidget {
+class EditPhotoCollectionWidget extends StatelessWidget {
   final EditPhotoNotifier notifier;
 
-  const FilterCollectionWidget({super.key, required this.notifier});
+  const EditPhotoCollectionWidget({super.key, required this.notifier});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
-      margin: const EdgeInsets.symmetric(vertical: 32),
+      height: 164,
+      padding: const EdgeInsets.symmetric(vertical: 32),
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
@@ -303,15 +304,16 @@ class FilterCollectionWidget extends StatelessWidget {
   }
 }
 
-class FilterSliderWidget extends StatelessWidget {
+class EditPhotoSliderWidget extends StatelessWidget {
   final EditPhotoNotifier notifier;
 
-  const FilterSliderWidget({super.key, required this.notifier});
+  const EditPhotoSliderWidget({super.key, required this.notifier});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(bottom: 8.0),
+      color: kHyppeBackground,
       height: 164,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,

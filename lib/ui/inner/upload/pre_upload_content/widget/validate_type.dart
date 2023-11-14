@@ -23,7 +23,9 @@ class ValidateType extends StatelessWidget {
     final isEditingContent = editContent
         ? NetworkImage(notifier.thumbNail ?? '')
         : (_isImage ?? false) || _isImage == null
-            ? FileImage(File(notifier.fileContent?[0] ?? ''))
+            ? notifier.featureType == FeatureType.pic
+                ? MemoryImage(File(notifier.fileContent?[0] ?? '').readAsBytesSync())
+                : FileImage(File(notifier.fileContent?[0] ?? ''))
             : notifier.thumbNail != null
                 ? MemoryImage(notifier.thumbNail!)
                 : const AssetImage('${AssetPath.pngPath}content-error.png');
