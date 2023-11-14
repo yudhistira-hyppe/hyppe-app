@@ -82,6 +82,7 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
                               caption: '${widget.titleButtonSecondary}',
                               color: Colors.transparent,
                               function: widget.functionSecondary ?? () {},
+                              textColor: theme.colorScheme.primary,
                               // function: () => _routing.moveBack(),
                               theme: theme,
                             ),
@@ -112,12 +113,7 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
     return CustomTextButton(
       onPressed: () async {
         try {
-          print('_isLoading');
-          print(_isLoading);
           setState(() => _isLoading = true);
-          print('_isLoading');
-          print(_isLoading);
-          print('hahahahahahahahahaha');
           await function();
           setState(() => _isLoading = false);
         } catch (_) {
@@ -127,7 +123,7 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
       child: CustomTextWidget(
           textToDisplay: caption,
           textStyle:
-              theme.textTheme.button?.copyWith(color: textColor, fontSize: 10)),
+              theme.textTheme.button?.copyWith(color: textColor, fontSize: 14)),
       style: theme.elevatedButtonTheme.style?.copyWith(
         backgroundColor: MaterialStateProperty.all(color),
       ),

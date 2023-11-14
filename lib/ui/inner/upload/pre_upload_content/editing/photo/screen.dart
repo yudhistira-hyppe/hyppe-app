@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:colorfilter_generator/addons.dart';
 import 'package:colorfilter_generator/colorfilter_generator.dart';
 import 'package:flutter/material.dart';
@@ -70,17 +69,17 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
           },
           child: Scaffold(
             backgroundColor: kHyppeBackground,
-            body: Stack(
+            body: Column(
               children: [
-                FilterBodyWidget(notifier: notifier, paintKey: paintKey),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: notifier.activeFilter != null
-                      ? FilterSliderWidget(notifier: notifier)
-                      : FilterCollectionWidget(notifier: notifier),
-                ),
+                EditPhotoTopWidget(notifier: notifier, paintKey: paintKey),
+                EditPhotoBodyWidget(notifier: notifier, paintKey: paintKey),
+                Stack(children: [
+                  EditPhotoCollectionWidget(notifier: notifier),
+                  Visibility(
+                    visible: notifier.activeFilter != null,
+                    child: EditPhotoSliderWidget(notifier: notifier),
+                  ),
+                ]),
               ],
             ),
           ),
@@ -90,11 +89,66 @@ class _EditPhotoScreenState extends State<EditPhotoScreen> {
   }
 }
 
-class FilterBodyWidget extends StatelessWidget {
+class EditPhotoTopWidget extends StatelessWidget {
   final EditPhotoNotifier notifier;
   final GlobalKey paintKey;
 
-  const FilterBodyWidget({
+  const EditPhotoTopWidget({
+    super.key,
+    required this.notifier,
+    required this.paintKey,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (notifier.activeFilter == null)
+            const BackButton(color: kHyppeLightButtonText),
+          if (notifier.activeFilter != null)
+            Expanded(
+              child: CustomTextWidget(
+                textToDisplay: notifier.activeFilter == null
+                    ? ''
+                    : notifier.filters[notifier.activeFilter ?? 0].name,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  color: kHyppeTextPrimary,
+                  // fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          if (notifier.activeFilter == null)
+            TextButton(
+              onPressed: () async {
+                ShowGeneralDialog.loadingDialog(context);
+                await notifier.saveImage(context, paintKey);
+                Routing().moveBack();
+                Routing().moveBack();
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Text(
+                  '${notifier.language.done}',
+                  style: const TextStyle(color: kHyppeTextPrimary),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class EditPhotoBodyWidget extends StatelessWidget {
+  final EditPhotoNotifier notifier;
+  final GlobalKey paintKey;
+
+  const EditPhotoBodyWidget({
     super.key,
     required this.notifier,
     required this.paintKey,
@@ -118,59 +172,18 @@ class FilterBodyWidget extends StatelessWidget {
       ],
     );
 
-    return Center(
-      child: Column(
-        children: [
-          SizedBox(
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (notifier.activeFilter == null)
-                  const BackButton(color: kHyppeLightButtonText),
-                if (notifier.activeFilter != null)
-                  Expanded(
-                    child: CustomTextWidget(
-                      textToDisplay: notifier.activeFilter == null
-                          ? ''
-                          : notifier.filters[notifier.activeFilter ?? 0].name,
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        color: kHyppeTextPrimary,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                if (notifier.activeFilter == null)
-                  TextButton(
-                    onPressed: () async {
-                      ShowGeneralDialog.loadingDialog(context);
-                      await notifier.saveImage(context, paintKey);
-                      Routing().moveBack();
-                      Routing().moveBack();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Text(
-                        '${notifier.language.done}',
-                        style: const TextStyle(color: kHyppeTextPrimary),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.7,
-            child: notifier.tempFilePath!.isEmpty
-                ? const CustomLoading()
-                : Center(
-                    child: RepaintBoundary(
-                      key: paintKey,
-                      child: ColorFiltered(
-                        colorFilter: ColorFilter.matrix(myFilter.matrix),
-                        child: Image.file(
+    return Expanded(
+      child: notifier.tempFilePath == null
+          ? const CustomLoading()
+          : Center(
+              child: RepaintBoundary(
+                key: paintKey,
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.matrix(myFilter.matrix),
+                  child: notifier.tempFilePath == null ||
+                          notifier.tempFilePath == ''
+                      ? const CustomLoading()
+                      : Image.file(
                           File(notifier.tempFilePath ?? ''),
                           filterQuality: FilterQuality.high,
                           frameBuilder:
@@ -185,26 +198,23 @@ class FilterBodyWidget extends StatelessWidget {
                                   );
                           },
                         ),
-                      ),
-                    ),
-                  ),
-          ),
-        ],
-      ),
+                ),
+              ),
+            ),
     );
   }
 }
 
-class FilterCollectionWidget extends StatelessWidget {
+class EditPhotoCollectionWidget extends StatelessWidget {
   final EditPhotoNotifier notifier;
 
-  const FilterCollectionWidget({super.key, required this.notifier});
+  const EditPhotoCollectionWidget({super.key, required this.notifier});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
-      margin: const EdgeInsets.only(bottom: 32),
+      height: 164,
+      padding: const EdgeInsets.symmetric(vertical: 32),
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
@@ -294,16 +304,19 @@ class FilterCollectionWidget extends StatelessWidget {
   }
 }
 
-class FilterSliderWidget extends StatelessWidget {
+class EditPhotoSliderWidget extends StatelessWidget {
   final EditPhotoNotifier notifier;
 
-  const FilterSliderWidget({super.key, required this.notifier});
+  const EditPhotoSliderWidget({super.key, required this.notifier});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Container(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      color: kHyppeBackground,
+      height: 164,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           CustomSliderWidget(
             value: notifier.filters[notifier.activeFilter ?? 0].value,

@@ -80,7 +80,7 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     height: 86,
-                    // margin: const EdgeInsets.only(bottom: 76),
+                    margin: const EdgeInsets.only(bottom: 76),
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -165,32 +165,33 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                           ],
                         ),
                       ),
-                      twentyFourPx,
-                      InkWell(
-                        onTap: () async {
-                          Routing().move(Routes.editPhoto);
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const CustomIconWidget(
-                              defaultColor: false,
-                              iconData: "${AssetPath.vectorPath}edit-v2.svg",
-                            ),
-                            fourPx,
-                            CustomTextWidget(
-                              maxLines: 1,
-                              textToDisplay: notifier.language.edit ?? '',
-                              textAlign: TextAlign.left,
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.normal,
-                                color: Colors.white,
-                                fontSize: 14,
+                      if (notifier.featureType == FeatureType.pic) twentyFourPx,
+                      if (notifier.featureType == FeatureType.pic)
+                        InkWell(
+                          onTap: () async {
+                            Routing().move(Routes.editPhoto);
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const CustomIconWidget(
+                                defaultColor: false,
+                                iconData: "${AssetPath.vectorPath}edit-v2.svg",
                               ),
-                            ),
-                          ],
+                              fourPx,
+                              CustomTextWidget(
+                                maxLines: 1,
+                                textToDisplay: notifier.language.edit ?? '',
+                                textAlign: TextAlign.left,
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
                       twentyFourPx,
                       if (notifier.featureType == FeatureType.story || notifier.featureType == FeatureType.diary)
                       InkWell(
