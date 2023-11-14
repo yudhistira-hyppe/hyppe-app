@@ -158,7 +158,7 @@ class UploadContent extends StatelessWidget {
                     //     ),
                     //   ),
                     // if (!(notifier?.isRecordingVideo ?? true))
-                    Expanded(flex: 2, child: Row(
+                    const Expanded(flex: 2, child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           fortyPx,
@@ -184,7 +184,6 @@ class UploadContent extends StatelessWidget {
           )
         : CameraPage(
       onDoubleTap: (){
-        print('Tap Double Camera');
         final camera = context.read<CameraDevicesNotifier>();
         camera.setLoading(true, loadingObject: CameraDevicesNotifier.loadingForSwitching);
         Future.delayed(const Duration(milliseconds: 1000), () => camera.onNewCameraSelected());
@@ -306,7 +305,7 @@ class UploadContent extends StatelessWidget {
                     //     ),
                     //   ),
                     // if (!(notifier?.isRecordingVideo ?? true))
-                      Expanded(flex: 2, child: Row(
+                      const Expanded(flex: 2, child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           fortyPx,

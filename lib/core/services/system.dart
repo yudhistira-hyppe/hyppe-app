@@ -723,8 +723,7 @@ class System {
       }
 
       if (featureType == FeatureType.story) {
-        if (isVideo) {
-          final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.video, allowCompression: false);
+          final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.media, allowCompression: false);
           if (_pickerResult != null) {
             // untuk menampung file yang failed di validasi
             String _failFile = '';
@@ -756,14 +755,6 @@ class System {
               }
             }
           }
-        } else {
-          final _pickerResult = await _imagePicker.pickImage(source: ImageSource.gallery);
-
-          if (_pickerResult != null) {
-            _filePickerResult = [File(_pickerResult.path)];
-          }
-        }
-
         // validasi durasi
       }
     }
