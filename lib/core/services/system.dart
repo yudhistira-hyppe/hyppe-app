@@ -303,7 +303,7 @@ class System {
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceIdentifier = "${androidInfo.id}-${androidInfo.hardware}-${androidInfo.androidId}-${androidInfo.board}";
+      deviceIdentifier = "${androidInfo.id}-${androidInfo.hardware}-${androidInfo.serialNumber}-${androidInfo.board}";
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       deviceIdentifier = "${iosInfo.identifierForVendor}";
