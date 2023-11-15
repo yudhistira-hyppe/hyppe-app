@@ -1161,23 +1161,26 @@ class PreviewContentNotifier with ChangeNotifier {
         notifyListeners();
       });
       _betterPlayerController?.setLooping(true);
-      await _betterPlayerController?.initialize().then((_){
-        if(featureType == FeatureType.story){
-          final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
-          const limitDuration = Duration(seconds: 15);
-          if(videoDuration.inSeconds > limitDuration.inSeconds){
-            showToast(const Duration(seconds: 3));
+      await _betterPlayerController?.initialize().whenComplete((){
+        Future.delayed(const Duration(seconds: 1), (){
+          if(featureType == FeatureType.story){
+            final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
+            const limitDuration = Duration(seconds: 15);
+            if(videoDuration >= limitDuration){
+              showToast(const Duration(seconds: 3));
+            }
+          }else{
+            final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
+            final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1) : featureType == FeatureType.vid ? const Duration(minutes: 30) : const Duration(seconds: 0);
+            print('State Preview Limit: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
+            if(videoDuration >= limitDuration){
+              showToast(const Duration(seconds: 3));
+            }
           }
-        }else{
-          final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
-          final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1) : featureType == FeatureType.vid ? const Duration(minutes: 30) : const Duration(seconds: 0);
-          print('State Preview Limit: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
-          if(videoDuration.inMinutes > limitDuration.inMinutes){
-            showToast(const Duration(seconds: 3));
-          }
-        }
 
-        notifyListeners();
+          notifyListeners();
+        });
+
       });
       await _betterPlayerController?.play();
       // _betterPlayerController?.addEventsListener(

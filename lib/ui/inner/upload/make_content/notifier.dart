@@ -396,7 +396,11 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
         notifyListeners();
         if(featureType == FeatureType.story){
-          await _routing.move(Routes.previewContent);
+          if(tempDuration.inSeconds >= 4){
+            await _routing.move(Routes.previewContent);
+          }else{
+            showVideoToast(const Duration(seconds: 3));
+          }
         }else{
           if(tempDuration.inSeconds >= 15){
             await _routing.move(Routes.previewContent);
