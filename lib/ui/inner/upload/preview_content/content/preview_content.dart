@@ -1,4 +1,3 @@
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/build_any_content_preview.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/build_top_widget.dart';
@@ -116,11 +115,7 @@ class _PreviewContentState extends State<PreviewContent>
                         borderRadius: BorderRadius.circular(10),
                         color: kHyppeTextLightPrimary),
                     child: CustomTextWidget(
-                      textToDisplay: notifier.featureType == FeatureType.vid
-                          ? (notifier.language.messageLimitVideo ?? 'Error')
-                          : notifier.featureType == FeatureType.diary
-                              ? (notifier.language.messageLimitDiary ?? 'Error')
-                              : notifier.featureType == FeatureType.story ? (notifier.language.messageLimitStory ?? 'Error') :'Error',
+                      textToDisplay: notifier.messageLimit,
                       textAlign: TextAlign.left,
                       textStyle: const TextStyle(color: Colors.white, fontSize: 12),
                       maxLines: 3,
