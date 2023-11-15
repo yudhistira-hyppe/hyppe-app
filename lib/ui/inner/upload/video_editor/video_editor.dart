@@ -56,7 +56,7 @@ class _VideoEditorState extends State<VideoEditor> {
     super.initState();
     WakelockPlus.enable();
     _controller
-        .initialize(aspectRatio: 9 / 16)
+        .initialize(aspectRatio: _controller.videoWidth / _controller.videoHeight)
         .then((_){
           if(mounted){
             Future.delayed(const Duration(seconds: 1), (){
@@ -354,14 +354,22 @@ class _VideoEditorState extends State<VideoEditor> {
               tooltip: 'Leave editor',
               color: Colors.white,
             ),
-            ElevatedButton(
-                onPressed: _exportVideo,
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent),
-                child: CustomTextWidget(
-                  textToDisplay: language.save ?? 'Save',
-                  textStyle: const TextStyle(color: Colors.white, fontSize: 14),
-                ),),
+              ValueListenableBuilder(
+                valueListenable: _isExporting,
+                builder: (_, bool export, Widget? child) =>
+                    AnimatedSize(
+                      duration: kThemeAnimationDuration,
+                      child: export ? child : ElevatedButton(
+                        onPressed: _exportVideo,
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent),
+                        child: CustomTextWidget(
+                          textToDisplay: language.save ?? 'Save',
+                          textStyle: const TextStyle(color: Colors.white, fontSize: 14),
+                        ),),
+                    ),
+                child: const SizedBox.shrink(),
+              ),
           ],
         ),
       ),

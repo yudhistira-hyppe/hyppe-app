@@ -693,7 +693,7 @@ class System {
         // validasi durasi
         if (_pickerResult != null) {
           // untuk menampung file yang failed di validasi
-          String _failFile = '';
+          // String _failFile = '';
 
           // validasi count post
           if (_validateCountPost(_pickerResult.files.length) == false) {
@@ -703,10 +703,10 @@ class System {
                   _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
                   // hapus file yang durasinya lebih dari 60 detik
-                  if (_duration.inSeconds > 60) {
-                    _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
-                    _pickerResult.files.removeAt(element);
-                  }
+                  // if (_duration.inSeconds > 60) {
+                  //   _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
+                  //   _pickerResult.files.removeAt(element);
+                  // }
                 });
               }
             }
@@ -727,7 +727,7 @@ class System {
           final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.media, allowCompression: false);
           if (_pickerResult != null) {
             // untuk menampung file yang failed di validasi
-            String _failFile = '';
+            // String _failFile = '';
 
             // validasi count post
             if (_validateCountPost(_pickerResult.files.length) == false) {

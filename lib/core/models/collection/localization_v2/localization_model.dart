@@ -1022,6 +1022,7 @@ class LocalizationModelV2 {
   String? selectDate;
   String? end;
   String? recordAtLeast15Seconds;
+  String? recordAtLeast4Seconds;
   String? messageLimitVideo;
   String? messageLimitDiary;
   String? messageLimitStory;
@@ -2050,6 +2051,7 @@ class LocalizationModelV2 {
     this.selectDate,
     this.end,
     this.recordAtLeast15Seconds,
+    this.recordAtLeast4Seconds,
     this.messageLimitVideo,
     this.messageLimitDiary,
     this.messageLimitStory,
@@ -3098,6 +3100,7 @@ class LocalizationModelV2 {
     badgeCollection = json['badgeCollection'];
     understand = json['understand'];
     recordAtLeast15Seconds = json['recordAtLeast15Seconds'];
+    recordAtLeast4Seconds = json['recordAtLeast4Seconds'];
     messageLimitVideo = json['messageLimitVideo'];
     messageLimitDiary = json['messageLimitDiary'];
     messageLimitStory = json['messageLimitStory'];
