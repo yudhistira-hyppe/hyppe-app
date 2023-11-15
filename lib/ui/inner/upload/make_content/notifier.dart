@@ -105,6 +105,13 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     }
   }
 
+  String _messageToast = '';
+  String get messageToast => _messageToast;
+  set messageToast(String val){
+    _messageToast = val;
+    notifyListeners();
+  }
+
   onInitialUploadContent() {
     _selectedDuration = 15;
     // if (_featureType == FeatureType.vid) {
@@ -313,7 +320,10 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     try {
       print('isVideo $isVideo');
 
-      await System().getLocalMedia(featureType: featureType, context: context, isVideo: isVideo).then((value) async {
+      await System().getLocalMedia(featureType: featureType, context: context, isVideo: isVideo, onException: (){
+        messageToast = language.messageLessLimitVideo ?? 'Error';
+        showVideoToast(const Duration(seconds: 3));
+      }).then((value) async {
         Future.delayed(const Duration(milliseconds: 1000), () async {
           if (value.values.single != null) {
             Future.delayed(const Duration(milliseconds: 1000), () => setLoading(false));
@@ -395,6 +405,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         notifier.aspectRation = cameraNotifier.cameraAspectRatio;
 
         notifyListeners();
+        messageToast = notifier.featureType == FeatureType.story ? (notifier.language.recordAtLeast1Second ?? 'Error') : (notifier.language.recordAtLeast15Seconds ?? 'Error');
         if(featureType == FeatureType.story){
           if(tempDuration.inSeconds >= 4){
             await _routing.move(Routes.previewContent);

@@ -213,6 +213,13 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  String _messageLimit = '';
+  String get messageLimit => _messageLimit;
+  set messageLimit(String value){
+    _messageLimit = value;
+    notifyListeners();
+  }
+
   bool _showToastLimit = false;
   bool get showToastLimit => _showToastLimit;
   set showToastLimit(bool state){
@@ -1166,6 +1173,7 @@ class PreviewContentNotifier with ChangeNotifier {
           if(featureType == FeatureType.story){
             final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
             const limitDuration = Duration(seconds: 15);
+            messageLimit = (language.messageLimitStory ?? 'Error');
             if(videoDuration >= limitDuration){
               showToast(const Duration(seconds: 3));
             }
@@ -1173,7 +1181,15 @@ class PreviewContentNotifier with ChangeNotifier {
             final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
             final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1) : featureType == FeatureType.vid ? const Duration(minutes: 30) : const Duration(seconds: 0);
             print('State Preview Limit: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
+
             if(videoDuration >= limitDuration){
+              messageLimit = featureType == FeatureType.vid
+                  ? (language.messageLimitVideo ?? 'Error')
+                  : featureType == FeatureType.diary
+                  ? (language.messageLimitDiary ?? 'Error') : 'Error';
+              showToast(const Duration(seconds: 3));
+            }else if(videoDuration < const Duration(seconds: 15)){
+              messageLimit = language.messageLessLimitVideo ?? 'Error';
               showToast(const Duration(seconds: 3));
             }
           }

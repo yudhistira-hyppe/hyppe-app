@@ -563,6 +563,7 @@ class System {
     LocalizationModelV2? model,
     bool isVideo = false,
     int maxFile = 3,
+    Function()? onException,
   }) async {
     final ImagePicker _imagePicker = ImagePicker();
 
@@ -662,13 +663,27 @@ class System {
         }
         print(permsiion);
         await _getStoragePermission();
-        await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false).then((result) {
+        await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false).then((result) async {
           if (result != null) {
-            if (result.files.single.extension?.toLowerCase() == MP4 || result.files.single.extension?.toLowerCase() == MOV) {
-              _filePickerResult = [File(result.files.single.path ?? '')];
-            } else {
-              _errorMsg = '${notifier.weCurrentlySupportOnlyMP4andMOVformat} ${result.names.single}';
+            for (int element = 0; element < result.files.length; element++) {
+              if (result.files[element].extension?.toLowerCase() == MP4 || result.files[element].extension?.toLowerCase() == MOV) {
+                await getVideoMetadata(result.files[element].path ?? '').then((value) {
+                  _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
+
+                  // hapus file yang durasinya lebih dari 60 detik
+                  if (_duration.inSeconds < 15) {
+                    // _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
+                    if(onException != null){
+                      onException();
+                    }
+                    result.files.removeAt(element);
+                  }
+                });
+              } else {
+                _errorMsg = '${notifier.weCurrentlySupportOnlyMP4andMOVformat} ${result.names.single}';
+              }
             }
+
           }
         });
       }
@@ -703,10 +718,13 @@ class System {
                   _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
                   // hapus file yang durasinya lebih dari 60 detik
-                  // if (_duration.inSeconds > 60) {
-                  //   _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
-                  //   _pickerResult.files.removeAt(element);
-                  // }
+                  if (_duration.inSeconds < 15) {
+                    if(onException != null){
+                      onException();
+                    }
+                    // _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
+                    _pickerResult.files.removeAt(element);
+                  }
                 });
               }
             }
@@ -738,10 +756,10 @@ class System {
                     _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
                     // hapus file yang durasinya lebih dari 15 detik
-                    // if (_duration.inSeconds > 15) {
-                    //   _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
-                    //   _pickerResult.files.removeAt(element);
-                    // }
+                    if (_duration.inSeconds < 1) {
+                      // _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
+                      _pickerResult.files.removeAt(element);
+                    }
                   });
                 }
               }
