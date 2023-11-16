@@ -1,3 +1,4 @@
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/build_any_content_preview.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/build_top_widget.dart';

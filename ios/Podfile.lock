@@ -71,22 +71,22 @@ PODS:
   - Firebase/Messaging (9.6.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 9.6.0)
-  - firebase_auth (4.12.1):
+  - firebase_auth (4.14.0):
     - Firebase/Auth (= 9.6.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.21.0):
+  - firebase_core (2.22.0):
     - Firebase/CoreOnly (= 9.6.0)
     - Flutter
-  - firebase_crashlytics (3.4.3):
+  - firebase_crashlytics (3.4.4):
     - Firebase/Crashlytics (= 9.6.0)
     - firebase_core
     - Flutter
-  - firebase_dynamic_links (5.4.3):
+  - firebase_dynamic_links (5.4.4):
     - Firebase/DynamicLinks (= 9.6.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (14.7.3):
+  - firebase_messaging (14.7.4):
     - Firebase/Messaging (= 9.6.0)
     - firebase_core
     - Flutter
@@ -491,11 +491,11 @@ SPEC CHECKSUMS:
   fhoto_editor: 0f5fe41cafba38e8a6b6d9974d68e17ec9f5f693
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
   Firebase: 5ae8b7cf8efce559a653aef0ad95bab3f427c351
-  firebase_auth: f46612edd58db1d5d4fb082581c4fa2fb8b3518a
-  firebase_core: b6693d7034c62effa35af2f2f06fe5943014965d
-  firebase_crashlytics: 4d0a305bb60aa86ab18bfc7dd7e8d33fc272a2c7
-  firebase_dynamic_links: 3c4f918e2d349f58450330da75fceed80b953bd5
-  firebase_messaging: f85c71fd14925f5909adb5a608b9bd32fcb42a69
+  firebase_auth: 27ba0d0458eddcfc024f3abb803ae6fbeba62a6c
+  firebase_core: 2e1b363238897c9af07550da82fa2fcdd1f415f7
+  firebase_crashlytics: c6a0284388bed9552eb72f0708d4e7385b08c81a
+  firebase_dynamic_links: 15e6e0692433fef44e5109be5ed601ab79484d1e
+  firebase_messaging: dca6571c014aae6a1deaa012d3ffb67654442828
   FirebaseAuth: e4a5d3c36e778e41141b91cc861103a441d80bcc
   FirebaseCore: 2082fffcd855f95f883c0a1641133eb9bbe76d40
   FirebaseCoreDiagnostics: 99a495094b10a57eeb3ae8efa1665700ad0bdaa6
