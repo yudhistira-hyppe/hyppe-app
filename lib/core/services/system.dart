@@ -684,6 +684,9 @@ class System {
               }
             }
 
+            if (result.files.isNotEmpty) {
+              _filePickerResult = result.files.map((file) => File(file.path ?? '')).toList();
+            }
           }
         });
       }

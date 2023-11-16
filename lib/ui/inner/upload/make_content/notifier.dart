@@ -405,7 +405,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         notifier.aspectRation = cameraNotifier.cameraAspectRatio;
 
         notifyListeners();
-        messageToast = notifier.featureType == FeatureType.story ? (notifier.language.recordAtLeast1Second ?? 'Error') : (notifier.language.recordAtLeast15Seconds ?? 'Error');
+        messageToast = notifier.featureType == FeatureType.story ? (notifier.language.recordAtLeast4Seconds ?? 'Error') : (notifier.language.recordAtLeast15Seconds ?? 'Error');
         if(featureType == FeatureType.story){
           if(tempDuration.inSeconds >= 4){
             await _routing.move(Routes.previewContent);
