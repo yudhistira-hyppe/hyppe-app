@@ -27,6 +27,7 @@ class Env {
     debugShowMaterialGrid: false,
     debugShowCheckedModeBanner: false,
     baseUrl: "https://s1.hyppe.cloud",
+    baseUrl2: "https://s2.hyppe.cloud",
     deeplinkBaseUrl: "https://share.hyppe.app",
     apiBaseUrl: "https://s1.hyppe.cloud",
     versionApi: UrlConstants.apiV0,
@@ -40,6 +41,7 @@ class Env {
     debugShowMaterialGrid: false,
     debugShowCheckedModeBanner: false,
     baseUrl: "https://p1.hyppe.cloud",
+    baseUrl2: "https://p2.hyppe.cloud",
     deeplinkBaseUrl: "https://share.hyppe.app",
     apiBaseUrl: "https://p1.hyppe.cloud",
     versionApi: UrlConstants.apiV0,
@@ -56,6 +58,7 @@ class EnvData {
   final String appID;
   final String appStoreID;
   final String baseUrl;
+  final String baseUrl2;
   final String versionApi;
 
   EnvData({
@@ -68,6 +71,7 @@ class EnvData {
     required this.appID,
     required this.appStoreID,
     required this.baseUrl,
+    required this.baseUrl2,
     required this.versionApi,
   });
 }
