@@ -95,7 +95,7 @@ import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/upload/make_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/payment/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/boost/screen.dart';
-import 'package:hyppe/ui/inner/upload/pre_upload_content/editing/photo/screen.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/editor/photo/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/ownerhip_selling/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
@@ -167,7 +167,7 @@ class Generate {
       case Routes.previewContent:
         return MaterialPageRoute(builder: (_) => const PreviewContentScreen());
       case Routes.editPhoto:
-        return MaterialPageRoute(builder: (_) => const EditPhotoScreen());
+        return MaterialPageRoute(builder: (_) => const PhotoEditorScreen());
       case Routes.preUploadContent:
         return MaterialPageRoute(builder: (_) => PreUploadContentScreen(arguments: settings.arguments as UpdateContentsArgument));
       case Routes.ownershipSelling:
