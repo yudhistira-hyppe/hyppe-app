@@ -213,6 +213,28 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  String _messageLimit = '';
+  String get messageLimit => _messageLimit;
+  set messageLimit(String value){
+    _messageLimit = value;
+    notifyListeners();
+  }
+
+  bool _showToastLimit = false;
+  bool get showToastLimit => _showToastLimit;
+  set showToastLimit(bool state){
+    _showToastLimit = state;
+    notifyListeners();
+  }
+  showToast(Duration duration){
+    if(!showToastLimit){
+      showToastLimit = true;
+      Future.delayed(duration, (){
+        showToastLimit = false;
+      });
+    }
+  }
+
   List<StickerTab> _stickerTab = [
     StickerTab(index: 0, name: 'Sticker', type: 'STICKER', column: 3, data: []),
     StickerTab(index: 1, name: 'Emoji', type: 'EMOJI', column: 5, data: []),
@@ -1141,12 +1163,40 @@ class PreviewContentNotifier with ChangeNotifier {
       //           0.0);
       //   notifyListeners();
       // });
+
       _betterPlayerController?.addListener(() {
         notifyListeners();
       });
       _betterPlayerController?.setLooping(true);
-      await _betterPlayerController?.initialize().then((_){
-        notifyListeners();
+      await _betterPlayerController?.initialize().whenComplete((){
+        Future.delayed(const Duration(seconds: 1), (){
+          if(featureType == FeatureType.story){
+            final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
+            const limitDuration = Duration(seconds: 15);
+            messageLimit = (language.messageLimitStory ?? 'Error');
+            if(videoDuration >= limitDuration){
+              showToast(const Duration(seconds: 3));
+            }
+          }else{
+            final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
+            final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1) : featureType == FeatureType.vid ? const Duration(minutes: 30) : const Duration(seconds: 0);
+            print('State Preview Limit: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
+
+            if(videoDuration >= limitDuration){
+              messageLimit = featureType == FeatureType.vid
+                  ? (language.messageLimitVideo ?? 'Error')
+                  : featureType == FeatureType.diary
+                  ? (language.messageLimitDiary ?? 'Error') : 'Error';
+              showToast(const Duration(seconds: 3));
+            }else if(videoDuration < const Duration(seconds: 15)){
+              messageLimit = language.messageLessLimitVideo ?? 'Error';
+              showToast(const Duration(seconds: 3));
+            }
+          }
+
+          notifyListeners();
+        });
+
       });
       await _betterPlayerController?.play();
       // _betterPlayerController?.addEventsListener(
@@ -1235,6 +1285,31 @@ class PreviewContentNotifier with ChangeNotifier {
   void clearAdditionalItem() {
     _additionalItem.clear();
     _positions.clear();
+  }
+
+  bool ableShare(){
+    if(featureType == FeatureType.pic){
+      return true;
+    }else if(featureType == FeatureType.diary || featureType == FeatureType.vid || featureType == FeatureType.story ){
+      final isImage = fileContent?[0]?.isImageFormat() ?? false;
+      if(isImage){
+        return true;
+      }
+      final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
+      final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1) : featureType == FeatureType.vid ? const Duration(minutes: 30) : featureType == FeatureType.story ? const Duration(seconds: 15) : const Duration(seconds: 0);
+      print('State Preview Limit Checking: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
+      if(videoDuration.inSeconds == 0){
+        return false;
+      }
+      if(featureType == FeatureType.diary || featureType == FeatureType.vid){
+        return videoDuration.inMinutes <= limitDuration.inMinutes;
+      }else{
+        return videoDuration.inSeconds <= limitDuration.inSeconds;
+      }
+
+    }else{
+      return true;
+    }
   }
 
   Future<bool> onWillPop(BuildContext context) async {
@@ -1567,7 +1642,7 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
-  void goToVideoEditor(BuildContext context) async{
+  void goToVideoEditor(BuildContext context, FeatureType type) async{
 
     final path = fileContent?[0];
     if(path != null){
@@ -1577,7 +1652,7 @@ class PreviewContentNotifier with ChangeNotifier {
       final newPath = await Navigator.push(
         context,
         MaterialPageRoute<String?>(
-          builder: (BuildContext context) => VideoEditor(file: File(path), videoSeconds: seconds,),
+          builder: (BuildContext context) => VideoEditor(file: File(path), videoSeconds: seconds, type: type,),
         ),
       );
       if(newPath != null){

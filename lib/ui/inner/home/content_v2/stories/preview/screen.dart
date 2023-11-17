@@ -6,7 +6,6 @@ import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
-import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/content/my_frame_stories/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/content/people_frame_story/screen.dart';
@@ -81,16 +80,16 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     MyFrameStory(),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.75,
-                      child: const CustomErrorWidget(
-                        padding: EdgeInsets.only(left: 20, top: 16, bottom: 16),
-                        errorType: ErrorType.peopleStory,
-                        isVertical: false,
-                        iconSize: 40,
-                        // function: () => notifier.initialPeopleStories(context),
-                      ),
-                    ),
+                    // SizedBox(
+                    //   width: MediaQuery.of(context).size.width * 0.75,
+                    //   child: const CustomErrorWidget(
+                    //     padding: EdgeInsets.only(left: 20, top: 16, bottom: 16),
+                    //     errorType: ErrorType.peopleStory,
+                    //     isVertical: false,
+                    //     iconSize: 40,
+                    //     // function: () => notifier.initialPeopleStories(context),
+                    //   ),
+                    // ),
                   ],
                 );
               } else {

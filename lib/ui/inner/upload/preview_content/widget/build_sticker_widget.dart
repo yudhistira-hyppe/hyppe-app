@@ -31,7 +31,7 @@ class _BuildStickerWidgetState extends State<BuildStickerWidget> {
       0,
     )
   );
-  late Offset offset;
+  Offset offset = const Offset(0, 0);
 
   @override
   Widget build(BuildContext context) {

@@ -68,6 +68,8 @@ class ApiAction {
     //   }
     // }
 
+    _dio.options.baseUrl = Env.data.baseUrl2;
+
     try {
       final _response = await _dio.post(
         url,
@@ -106,6 +108,8 @@ class ApiAction {
     //     _dio.options.baseUrl = sessionEndPoint;
     //   }
     // }
+
+    _dio.options.baseUrl = Env.data.baseUrl2;
 
     if (url == UrlConstants.createuserposts) {
       if (Env.data.debug == true) {
@@ -165,6 +169,12 @@ class ApiAction {
     //     _dio.options.baseUrl = sessionEndPoint;
     //   }
     // }
+
+    if (Env.dataBaseUrl2.contains(url)) {
+      _dio.options.baseUrl = Env.data.baseUrl2;
+    } else {
+      _dio.options.baseUrl = Env.data.apiBaseUrl;
+    }
 
     try {
       final _response = await _dio

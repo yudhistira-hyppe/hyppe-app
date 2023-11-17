@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 
 class CustomIconButtonWidget extends StatelessWidget {
   final String iconData;
-  final Function()? onPressed;
-  final Function()? onHoldStart;
-  final Function()? onHoldEnd;
+  final Function? onPressed;
   final EdgeInsets padding;
   final AlignmentGeometry alignment;
   final bool defaultColor;
@@ -17,40 +15,28 @@ class CustomIconButtonWidget extends StatelessWidget {
       {Key? key,
       required this.iconData,
       required this.onPressed,
-      this.onHoldStart,
-        this.onHoldEnd,
       this.color,
       this.height,
       this.width,
       this.alignment = Alignment.center,
       this.defaultColor = false,
       this.padding = const EdgeInsets.all(8.0)})
-      : super(key: key);
+      :
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return IconButton(
       padding: padding,
+      onPressed: onPressed as void Function()?,
       alignment: alignment,
-      child: GestureDetector(
-        onTap: onPressed,
-        onLongPressStart: (detail){
-          if(onHoldStart!= null){
-            onHoldStart!();
-          }
-        },
-        onLongPressEnd: (detail){
-          if(onHoldEnd!= null){
-            onHoldEnd!();
-          }
-        },
-        child: CustomIconWidget(
-          iconData: iconData,
-          defaultColor: defaultColor,
-          color: color,
-          height: height,
-          width: width,
-        ),
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+      icon: CustomIconWidget(
+        iconData: iconData,
+        defaultColor: defaultColor,
+        color: color,
+        height: height,
+        width: width,
       ),
     );
   }

@@ -1,7 +1,6 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:flutter/material.dart';
@@ -15,46 +14,9 @@ class BuildCaptureIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<MakeContentNotifier>(
       builder: (context, notifier, child){
-        if(notifier.videoPreview){
-          return GestureDetector(
-            onTap: (){},
-            child: SizedBox(
-              width: 70,
-              height: 70,
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      width: 55,
-                      height: 55,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      width: 65,
-                      height: 65,
-                      child: CircularProgressIndicator(
-                        backgroundColor: Colors.white,
-                        strokeWidth: 4,
-                        value: notifier.progressDev,
-                        color: const Color(0xffE6094B),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
         return GestureDetector(
           onTap: () {
-            if (notifier.featureType == FeatureType.story) {
+            if (notifier.featureType == FeatureType.story && !notifier.isVideo) {
               notifier.onTakePicture(context);
             } else {
               submitContent(context, notifier);
@@ -136,12 +98,12 @@ class BuildCaptureIcon extends StatelessWidget {
           //   notifier.onResumeRecordedVideo(context);
           // }
         } else {
-          ShowBottomSheet()
-              .onShowColouredSheet(
-                  context, notifier.language.isThisOkayClickOkToContinue ?? '')
-              .then((value) {
-            if (value) notifier.onStopRecordedVideo(context);
-          });
+          // ShowBottomSheet()
+          //     .onShowColouredSheet(
+          //         context, notifier.language.isThisOkayClickOkToContinue ?? '')
+          //     .then((value) {
+          //   if (value) notifier.onStopRecordedVideo(context);
+          // });
         }
       } else {
         if (!notifier.isRecordingPaused) {

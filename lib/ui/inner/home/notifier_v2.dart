@@ -237,9 +237,6 @@ class HomeNotifier with ChangeNotifier {
       final diary = Provider.of<PreviewDiaryNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
       final pic = Provider.of<PreviewPicNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
       final stories = Provider.of<PreviewStoriesNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
-      stories.myStoryGroup = {};
-      stories.storiesGroups = [];
-      notifyListeners();
 
       print("data pic ${(pic.pic?.isNotEmpty ?? [].isNotEmpty) && (diary.diaryData?.isNotEmpty ?? [].isNotEmpty)}");
       if ((!isreload && !isgetMore) && ((pic.pic?.isNotEmpty ?? [].isNotEmpty) && (diary.diaryData?.isNotEmpty ?? [].isNotEmpty) && (vid.vidData?.isNotEmpty ?? [].isNotEmpty))) {
@@ -292,6 +289,9 @@ class HomeNotifier with ChangeNotifier {
           break;
       }
       if (!isgetMore && stories.peopleStoriesData == null) {
+        stories.myStoryGroup = {};
+        stories.storiesGroups = [];
+        notifyListeners();
         await stories.initialStories(Routing.navigatorKey.currentContext ?? context);
         notifyListeners();
       }

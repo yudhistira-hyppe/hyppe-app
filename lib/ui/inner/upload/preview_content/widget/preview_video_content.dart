@@ -17,6 +17,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:video_player/video_player.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../core/services/route_observer_service.dart';
 import '../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -43,6 +44,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
   void afterFirstLayout(BuildContext context) {
     print('initState PreviewVideoContent');
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
+    WakelockPlus.enable();
     notifier.initVideoPlayer(context, isSaveDefault: true);
     // _videoPlayerController = notifier.betterPlayerController;
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
@@ -180,7 +182,6 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                     alignment: Alignment.bottomCenter,
                     child: Container(
                       height: 86,
-                      margin: const EdgeInsets.only(bottom: 76),
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -272,11 +273,11 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                           ),
                         ),
                         twentyFourPx,
-                        if(notifier.featureType == FeatureType.diary || notifier.featureType == FeatureType.vid)
+                        if(notifier.featureType == FeatureType.diary || notifier.featureType == FeatureType.vid || notifier.featureType == FeatureType.story)
                         InkWell(
                           onTap: () async {
                             if(mounted){
-                              notifier.goToVideoEditor(context);
+                              notifier.goToVideoEditor(context, notifier.featureType ?? FeatureType.diary);
                             }
                           },
                           child:const Column(
@@ -337,6 +338,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
     notifier.disposeMusic();
 
     CustomRouteObserver.routeObserver.unsubscribe(this);
+    WakelockPlus.enable();
     super.dispose();
   }
 }

@@ -19,6 +19,20 @@ class Env {
     }
   }
 
+  static final List dataBaseUrl2 = [
+    UrlConstants.interactive,
+    UrlConstants.discuss,
+    UrlConstants.deleteDiscuss,
+    UrlConstants.deleteChat,
+    UrlConstants.updateProfile,
+    UrlConstants.joinChallange,
+    UrlConstants.verificationIDSupportingDocs,
+    UrlConstants.verificationIDWithSupportDocs,
+    UrlConstants.uploadProfilePictureV2,
+    UrlConstants.createuserposts,
+    UrlConstants.updatepost,
+  ];
+
   static final EnvData dev = EnvData(
     debug: true,
     appID: appID,

@@ -1024,5 +1024,11 @@
   "increaseYourPointsNow": "Increase Your Points Now",
   "moneyRefund": "Money Refund",
   "refundAmount": "Refund Amount",
-  "adminRefundAmount": "Admin Refund Amount"
+  "adminRefundAmount": "Admin Refund Amount",
+  "recordAtLeast15Seconds": "Record at least 15 seconds.",
+  "recordAtLeast1Second": "Record at least 1 second.",
+  "messageLessLimitVideo": "Oops: your video less than 15 seconds.",
+  "messageLimitVideo": "Your video is too long. Trim it to 30 minutes or less to proceed.",
+  "messageLimitDiary": "Your video is too long. Trim it to 60 seconds or less to proceed.",
+  "messageLimitStory": "Your video is too long. Trim it to 15 seconds or less to proceed."
 }

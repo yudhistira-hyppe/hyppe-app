@@ -53,6 +53,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   double _slider = 0;
   bool _isVideo = false;
   CreatePostResponse? _postModel;
+  bool _showToast = false;
 
   double get progressDev => _progressDev;
   int get elapsedProgress => _elapsedProgress;
@@ -63,6 +64,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   CreatePostResponse? get postModel => _postModel;
   Map<int, String>? get durationOptions => _durationOptions;
   int get selectedDuration => _selectedDuration;
+  bool get showToast => _showToast;
 
   set featureType(FeatureType? val) {
     _featureType = val;
@@ -89,9 +91,29 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     notifyListeners();
   }
 
+  set showToast(bool state){
+    _showToast = state;
+    notifyListeners();
+  }
+
+  showVideoToast(Duration duration){
+    if(!showToast){
+      showToast = true;
+      Future.delayed(duration, (){
+        showToast = false;
+      });
+    }
+  }
+
+  String _messageToast = '';
+  String get messageToast => _messageToast;
+  set messageToast(String val){
+    _messageToast = val;
+    notifyListeners();
+  }
+
   onInitialUploadContent() {
     _selectedDuration = 15;
-    _videoPreview = false;
     // if (_featureType == FeatureType.vid) {
     //   _durationOptions = {
     //     15: "15${language.timerSecond}",
@@ -112,7 +134,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     if(featureType == FeatureType.diary){
       _selectedDuration = 60;
     }else if(featureType == FeatureType.vid){
-      _selectedDuration = 3600;
+      _selectedDuration = 1800;
     }else if(featureType == FeatureType.story){
       _selectedDuration = 15;
     }
@@ -212,7 +234,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         }
         notifyListeners();
         if (_progressHuman == _selectedDuration && (featureType != FeatureType.vid || _selectedDuration != 0)) {
-          Future.delayed(Duration(milliseconds: _selectedDuration == 15 ? 1000 : 1300), () {
+          Future.delayed(const Duration(milliseconds: 500), () {
             onStopRecordedVideo(materialAppKey.currentContext ?? context);
           });
         }
@@ -298,7 +320,10 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     try {
       print('isVideo $isVideo');
 
-      await System().getLocalMedia(featureType: featureType, context: context, isVideo: isVideo).then((value) async {
+      await System().getLocalMedia(featureType: featureType, context: context, isVideo: isVideo, onException: (){
+        messageToast = language.messageLessLimitVideo ?? 'Error';
+        showVideoToast(const Duration(seconds: 3));
+      }).then((value) async {
         Future.delayed(const Duration(milliseconds: 1000), () async {
           if (value.values.single != null) {
             Future.delayed(const Duration(milliseconds: 1000), () => setLoading(false));
@@ -344,29 +369,12 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     _elapsedProgress = 0;
   }
 
-  bool _videoPreview = false;
-  bool get videoPreview => _videoPreview;
-  set videoPreview(bool state){
-    _videoPreview = state;
-    notifyListeners();
-  }
-
-  clearPreviewVideo({bool goView = false}){
-    _progressDev = 0.0;
-    _progressHuman = 0;
-    _elapsedProgress = 0;
-    videoPreview = false;
-    if(goView){
-      _routing.move(Routes.previewContent);
-    }
-
-  }
-
   @override
   void onStopRecordedVideo(BuildContext context) {
     try {
+      final tempDuration = Duration(seconds: elapsedProgress);
       dynamic cameraNotifier;
-      final isPreviewVideo = featureType == FeatureType.diary || featureType == FeatureType.vid;
+
       WakelockPlus.disable();
       "================ disable wakelock 6".logger();
       final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
@@ -377,13 +385,9 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       }
 
       cancelTimer();
-      if(!isPreviewVideo){
-        _progressDev = 0.0;
-        _progressHuman = 0;
-        _elapsedProgress = 0;
-      }
-
-
+      _progressDev = 0.0;
+      _progressHuman = 0;
+      _elapsedProgress = 0;
       cameraNotifier.stopVideoRecording().then((file) async {
         final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
         if (file?.path != null) {
@@ -401,13 +405,23 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         notifier.aspectRation = cameraNotifier.cameraAspectRatio;
 
         notifyListeners();
-        if(!isPreviewVideo){
-          await _routing.move(Routes.previewContent);
+        messageToast = notifier.featureType == FeatureType.story ? (notifier.language.recordAtLeast1Second ?? 'Error') : (notifier.language.recordAtLeast15Seconds ?? 'Error');
+        if(featureType == FeatureType.story){
+          if(tempDuration.inSeconds >= 4){
+            await _routing.move(Routes.previewContent);
+          }else{
+            showVideoToast(const Duration(seconds: 3));
+          }
         }else{
-          videoPreview = true;
+          if(tempDuration.inSeconds >= 15){
+            await _routing.move(Routes.previewContent);
+          }else{
+            showVideoToast(const Duration(seconds: 3));
+          }
         }
 
       });
+
     } catch (e) {
       e.logger();
     }

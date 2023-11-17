@@ -19,7 +19,7 @@ dependencies:
   firebase_messaging: ^14.2.1 # A Flutter plugin to use the Firebase Cloud Messaging (FCM) API
   google_sign_in: ^5.2.4 # A secure authentication system for signing in with a Google account on Android and iOS.
   firebase_auth: ^4.12.0
-  firebase_crashlytics: ^3.0.10
+  firebase_crashlytics: ^3.4.4
 
   cached_network_image: ^3.2.3 # Untuk keperluan cache image
   # camera: ^0.9.4+21 # Accessing camera feature
