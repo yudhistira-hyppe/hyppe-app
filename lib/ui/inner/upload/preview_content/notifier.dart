@@ -1155,6 +1155,8 @@ class PreviewContentNotifier with ChangeNotifier {
     //         .defaultBufferForPlaybackAfterRebufferMs,
     //   ),
     // );
+    await _betterPlayerController?.dispose();
+    _betterPlayerController = null;
 
     _betterPlayerController = VideoPlayerController.file(File(_url ?? '',),);
     try {
