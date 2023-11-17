@@ -65,7 +65,7 @@ dependencies:
 #  hive: ^2.2.3
 #  hive_flutter: ^1.1.0
   marquee: ^2.2.3
-  ffmpeg_kit_flutter: ^5.1.0
+  ffmpeg_kit_flutter: ^6.0.3
   audioplayers: ^2.0.0
   image_cropper: ^4.0.1
   move_to_background: ^1.0.2
@@ -96,7 +96,6 @@ dependencies:
   fhoto_editor: ^0.0.2
   colorfilter_generator: ^0.0.8
   fraction: ^4.1.4
-  video_player: ^2.8.1
   themed: ^4.0.0
 
   dynamic_widget: # Dynamic widget builder
@@ -107,6 +106,9 @@ dependencies:
 
   video_editor:
     path: packages/video_editor
+
+  video_player:
+    path: packages/video_player
 
   showcaseview: # Story viewer
     path: packages/showcaseview

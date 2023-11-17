@@ -225,6 +225,7 @@ class VideoEditorController extends ChangeNotifier {
     generateDefaultCoverThumbnail();
 
     notifyListeners();
+
   }
 
   @override

@@ -138,6 +138,10 @@ class PreviewContentNotifier with ChangeNotifier {
   final focusNode = FocusNode();
 
   VideoPlayerController? get betterPlayerController => _betterPlayerController;
+  set betterPlayerController(VideoPlayerController? val){
+    _betterPlayerController = val;
+    notifyListeners();
+  }
   TransformationController get transformationController =>
       _transformationController;
   PersistentBottomSheetController? get persistentBottomSheetController =>
@@ -1169,6 +1173,7 @@ class PreviewContentNotifier with ChangeNotifier {
         notifyListeners();
       });
       _betterPlayerController?.setLooping(true);
+      print('will initialize');
       await _betterPlayerController?.initialize().whenComplete((){
         Future.delayed(const Duration(seconds: 1), (){
 
@@ -1231,6 +1236,7 @@ class PreviewContentNotifier with ChangeNotifier {
         _errorHit = 0;
         _isLoadingBetterPlayer = false;
         _errorMessage = language.fileMayBeInErrorChooseAnotherFile ?? '';
+        _betterPlayerController?.dispose();
         notifyListeners();
       }
     } finally {
@@ -1640,17 +1646,26 @@ class PreviewContentNotifier with ChangeNotifier {
       defaultPath = null;
       if (betterPlayerController != null) {
         betterPlayerController!.dispose();
+        betterPlayerController = null;
       }
     }
   }
 
-  void goToVideoEditor(BuildContext context, FeatureType type) async{
+  bool _noRefresh = false;
+  bool get noRefresh => _noRefresh;
+  set noRefresh(bool state){
+    _noRefresh = state;
+    notifyListeners();
+  }
 
+  void goToVideoEditor(BuildContext context, FeatureType type) async{
+    noRefresh = true;
     final path = fileContent?[0];
     if(path != null){
       isLoadVideo = true;
       betterPlayerController?.pause();
       final seconds = betterPlayerController?.value.duration ?? const Duration(seconds: 10);
+
       final newPath = await Navigator.push(
         context,
         MaterialPageRoute<String?>(
@@ -1658,16 +1673,22 @@ class PreviewContentNotifier with ChangeNotifier {
         ),
       );
       if(newPath != null){
-        fileContent?[0] = newPath;
+        final controller = VideoPlayerController.file(File(newPath));
+        try{
+          controller.initialize();
+          fileContent?[0] = newPath;
+          isLoadVideo = false;
+          Future.delayed(const Duration(milliseconds: 500), (){
+
+            initVideoPlayer(context);
+            noRefresh = false;
+          });
+        }catch(e){
+          messageLimit = 'Error convert';
+          showToast(const Duration(seconds: 3));
+        }
       }
-
     }
-
-    isLoadVideo = false;
-    Future.delayed(const Duration(milliseconds: 500), (){
-
-      initVideoPlayer(context);
-    });
   }
 
   void applyFilters({GlobalKey? globalKey}) async {
