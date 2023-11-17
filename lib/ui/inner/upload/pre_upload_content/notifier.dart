@@ -595,7 +595,8 @@ class PreUploadContentNotifier with ChangeNotifier {
       musicSelected = null;
       notifier.defaultPath = null;
       if (notifier.betterPlayerController != null) {
-        notifier.betterPlayerController!.dispose();
+        // notifier.betterPlayerController!.dispose();
+        notifier.betterPlayerController!.pause();
       }
     } else {
       notifier.fixSelectedMusic = _musicSelected;

@@ -69,11 +69,15 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
   void didPopNext() {
     print('didPopNext PreviewVideoContent');
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-    if (notifier.defaultPath != notifier.fileContent?[notifier.indexView]) {
-      notifier.initVideoPlayer(context);
-    } else {
-      notifier.setDefaultVideo(context);
+    print('didPopNext PreviewVideoContent ${notifier.noRefresh}');
+    if(!notifier.noRefresh){
+      if (notifier.defaultPath != notifier.fileContent?[notifier.indexView]) {
+        notifier.initVideoPlayer(context);
+      } else {
+        notifier.setDefaultVideo(context);
+      }
     }
+
     super.didPopNext();
   }
 
@@ -334,6 +338,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     if (notifier.betterPlayerController != null) {
       notifier.betterPlayerController!.dispose();
+      notifier.betterPlayerController = null;
     }
     notifier.defaultPath = null;
     notifier.disposeMusic();
