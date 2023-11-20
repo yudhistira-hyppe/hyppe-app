@@ -41,7 +41,7 @@ class Env {
     debugShowMaterialGrid: false,
     debugShowCheckedModeBanner: false,
     baseUrl: "https://s1.hyppe.cloud",
-    baseUrl2: "https://s2.hyppe.cloud",
+    baseUrl2: "https://s1.hyppe.cloud",
     deeplinkBaseUrl: "https://share.hyppe.app",
     apiBaseUrl: "https://s1.hyppe.cloud",
     versionApi: UrlConstants.apiV0,

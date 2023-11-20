@@ -10,19 +10,19 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/inner/upload/pre_upload_content/editing/photo/notifier.dart';
-import 'package:hyppe/ui/inner/upload/pre_upload_content/editing/photo/widget/custom_slider_widget.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/editor/photo/notifier.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/editor/photo/widget/custom_slider_widget.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
-class EditPhotoScreen extends StatefulWidget {
-  const EditPhotoScreen({super.key});
+class PhotoEditorScreen extends StatefulWidget {
+  const PhotoEditorScreen({super.key});
 
   @override
-  State<EditPhotoScreen> createState() => _EditPhotoScreenState();
+  State<PhotoEditorScreen> createState() => _PhotoEditorScreenState();
 }
 
-class _EditPhotoScreenState extends State<EditPhotoScreen> {
+class _PhotoEditorScreenState extends State<PhotoEditorScreen> {
   late EditPhotoNotifier provider;
   final GlobalKey paintKey = GlobalKey();
 

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';

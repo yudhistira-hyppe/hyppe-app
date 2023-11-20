@@ -187,7 +187,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
             // final isOnHomeScreen = SharedPreference().readStorage(SpKeys.isOnHomeScreen);
             print('isOnHomeScreen: $isHomeScreen');
-            if (isHomeScreen) {
+            final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+            print("---------- $isShowAds");
+            if (isHomeScreen && !isShowAds) {
               print("isOnHomeScreen hit ads");
               await getAdsApsara();
             }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -75,7 +76,11 @@ class _VideoEditorState extends State<VideoEditor> {
     _controller.video.addListener(() async {
       if (mounted) {
         currentTime = await _controller.video.position ?? const Duration();
-        setState(() {});
+        Future.delayed(const Duration(seconds: 1), (){
+          if(mounted){
+            setState(() {});
+          }
+        });
       }
     });
 
@@ -102,7 +107,7 @@ class _VideoEditorState extends State<VideoEditor> {
         ),
       );
 
-  void _exportVideo() async {
+  void _exportVideo(BuildContext context) async {
     _exportingProgress.value = 0;
     _isExporting.value = true;
 
@@ -123,12 +128,12 @@ class _VideoEditorState extends State<VideoEditor> {
         _exportingProgress.value = config.getFFmpegProgress(stats.getTime());
       },
       onError: (e, s) => _showErrorSnackBar("Error on export video :("),
-      onCompleted: (file) {
+      onCompleted: (file) async {
         print('Trimming Successful');
         _isExporting.value = false;
-        if (!mounted) return;
-        print('Trimming Successful');
         Navigator.pop(context, file.path);
+
+
         // showDialog(
         //   context: context,
         //   builder: (_) => VideoResultPopup(video: file),
@@ -360,7 +365,9 @@ class _VideoEditorState extends State<VideoEditor> {
                     AnimatedSize(
                       duration: kThemeAnimationDuration,
                       child: export ? child : ElevatedButton(
-                        onPressed: _exportVideo,
+                        onPressed: (){
+                          _exportVideo(context);
+                        },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent),
                         child: CustomTextWidget(

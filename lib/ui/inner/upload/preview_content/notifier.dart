@@ -1107,6 +1107,7 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void initVideoPlayer(BuildContext context, {isSaveDefault = false}) async {
+
     _isLoadingBetterPlayer = true;
     _errorMessage = '';
 
@@ -1170,9 +1171,10 @@ class PreviewContentNotifier with ChangeNotifier {
       _betterPlayerController?.setLooping(true);
       await _betterPlayerController?.initialize().whenComplete((){
         Future.delayed(const Duration(seconds: 1), (){
+
           if(featureType == FeatureType.story){
             final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
-            const limitDuration = Duration(seconds: 15);
+            const limitDuration = Duration(seconds: 16);
             messageLimit = (language.messageLimitStory ?? 'Error');
             if(videoDuration >= limitDuration){
               showToast(const Duration(seconds: 3));
@@ -1193,12 +1195,12 @@ class PreviewContentNotifier with ChangeNotifier {
               showToast(const Duration(seconds: 3));
             }
           }
-
+          _betterPlayerController?.play();
           notifyListeners();
         });
 
       });
-      await _betterPlayerController?.play();
+
       // _betterPlayerController?.addEventsListener(
       //   (_) {
       //     _totalDuration = _.parameters?['duration'];

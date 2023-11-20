@@ -20,8 +20,8 @@ Size computeSizeWithRatio(Size layout, double r) {
     return Size(layout.width, layout.width / r);
   }
 
-  assert(false, 'An error occured while computing the aspectRatio');
-  return Size.zero;
+  // assert(false, 'An error occured while computing the aspectRatio');
+  return layout;
 }
 
 /// Returns a new crop [Rect] that respect [r] aspect ratio

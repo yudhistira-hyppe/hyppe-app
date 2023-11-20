@@ -682,6 +682,10 @@ class System {
                 _errorMsg = '${notifier.weCurrentlySupportOnlyMP4andMOVformat} ${result.names.single}';
               }
             }
+
+            if (result.files.isNotEmpty) {
+              _filePickerResult = result.files.map((file) => File(file.path ?? '')).toList();
+            }
           }
         });
       }
