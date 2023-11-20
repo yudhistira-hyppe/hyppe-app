@@ -321,8 +321,14 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       print('isVideo $isVideo');
 
       await System().getLocalMedia(featureType: featureType, context: context, isVideo: isVideo, onException: (){
-        messageToast = language.messageLessLimitVideo ?? 'Error';
-        showVideoToast(const Duration(seconds: 3));
+        if(featureType == FeatureType.story){
+          messageToast = language.messageLessLimitStory ?? 'Error';
+          showVideoToast(const Duration(seconds: 3));
+        }else{
+          messageToast = language.messageLessLimitVideo ?? 'Error';
+          showVideoToast(const Duration(seconds: 3));
+        }
+
       }).then((value) async {
         Future.delayed(const Duration(milliseconds: 1000), () async {
           if (value.values.single != null) {

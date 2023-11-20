@@ -1185,6 +1185,9 @@ class PreviewContentNotifier with ChangeNotifier {
             messageLimit = (language.messageLimitStory ?? 'Error');
             if(videoDuration >= limitDuration){
               showToast(const Duration(seconds: 3));
+            }else if(videoDuration < const Duration(seconds: 4)){
+              messageLimit = language.messageLessLimitStory ?? 'Error';
+              showToast(const Duration(seconds: 3));
             }
           }else{
             final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
@@ -1689,6 +1692,13 @@ class PreviewContentNotifier with ChangeNotifier {
           messageLimit = 'Error convert';
           showToast(const Duration(seconds: 3));
         }
+      }else{
+        isLoadVideo = false;
+        // Future.delayed(const Duration(milliseconds: 500), (){
+        //
+        //   initVideoPlayer(context);
+        //   noRefresh = false;
+        // });
       }
     }
   }

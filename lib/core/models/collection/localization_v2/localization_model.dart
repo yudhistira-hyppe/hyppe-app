@@ -1024,6 +1024,7 @@ class LocalizationModelV2 {
   String? recordAtLeast15Seconds;
   String? recordAtLeast4Seconds;
   String? messageLessLimitVideo;
+  String? messageLessLimitStory;
   String? messageLimitVideo;
   String? messageLimitDiary;
   String? messageLimitStory;
@@ -2054,6 +2055,7 @@ class LocalizationModelV2 {
     this.recordAtLeast15Seconds,
     this.recordAtLeast4Seconds,
     this.messageLessLimitVideo,
+    this.messageLessLimitStory,
     this.messageLimitVideo,
     this.messageLimitDiary,
     this.messageLimitStory,
@@ -3104,6 +3106,7 @@ class LocalizationModelV2 {
     recordAtLeast15Seconds = json['recordAtLeast15Seconds'];
     recordAtLeast4Seconds = json['recordAtLeast4Seconds'];
     messageLessLimitVideo = json['messageLessLimitVideo'];
+    messageLessLimitStory = json['messageLessLimitStory'];
     messageLimitVideo = json['messageLimitVideo'];
     messageLimitDiary = json['messageLimitDiary'];
     messageLimitStory = json['messageLimitStory'];
