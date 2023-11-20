@@ -186,7 +186,6 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                     alignment: Alignment.bottomCenter,
                     child: Container(
                       height: 86,
-                      margin: const EdgeInsets.only(bottom: 76),
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -278,14 +277,15 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                           ),
                         ),
                         twentyFourPx,
-                        if(notifier.featureType == FeatureType.diary || notifier.featureType == FeatureType.vid || notifier.featureType == FeatureType.story)
+                        if((notifier.featureType == FeatureType.diary || notifier.featureType == FeatureType.vid || notifier.featureType == FeatureType.story)
+                          && (notifier.betterPlayerController?.value.duration.inSeconds ?? 0) > 4)
                         InkWell(
                           onTap: () async {
                             if(mounted){
                               notifier.goToVideoEditor(context, notifier.featureType ?? FeatureType.diary);
                             }
                           },
-                          child:const Column(
+                          child: const Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               CustomIconWidget(
