@@ -1238,12 +1238,15 @@ class PreviewContentNotifier with ChangeNotifier {
     //         .defaultBufferForPlaybackAfterRebufferMs,
     //   ),
     // );
+
+    _isLoadVideo = true;
     await _betterPlayerController?.dispose();
     _betterPlayerController = null;
 
+    await Future.delayed(const Duration(milliseconds: 500));
+
     _betterPlayerController = VideoPlayerController.file(File(_url ?? '',),);
     try {
-      _isLoadVideo = true;
       notifyListeners();
       // await _betterPlayerController?.setupDataSource(dataSource).then((_) {
       //   _betterPlayerController?.play();

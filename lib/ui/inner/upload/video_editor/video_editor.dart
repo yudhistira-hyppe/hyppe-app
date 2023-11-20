@@ -61,7 +61,10 @@ class _VideoEditorState extends State<VideoEditor> {
         .then((_){
           if(mounted){
             Future.delayed(const Duration(seconds: 1), (){
-              setState(() {});
+              if(mounted){
+                setState(() {});
+              }
+
             });
           }
     })
