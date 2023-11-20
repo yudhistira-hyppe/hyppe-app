@@ -884,6 +884,89 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
+  Stream<String?> postVideos(BuildContext context, Duration totalDuration) async*{
+    final defaultFile = _fileContent?[0];
+    final seconds = totalDuration.inSeconds;
+    if(seconds > 15){
+      var start = const Duration(seconds: 0);
+      var end = const Duration(seconds: 15);
+      var temp = const Duration();
+
+      if(defaultFile != null){
+        for(int i = 0 ; i < (_fileContent ?? []).length ; i++){
+          if(i == 0){
+            if(seconds < 19){
+              end = Duration(seconds: seconds - 4);
+            }
+            temp = end;
+          }else if(i == 1){
+            start = temp;
+            end = totalDuration;
+          }
+          yield await videoSplit(context, defaultFile, start, end, i);
+          // if(path != null){
+          //   // await Future.delayed(const Duration(seconds: 1));
+          //   await postStoryContent(context, file: path ?? '');
+          // }
+
+        }
+      }
+    }else{
+      await postStoryContent(context,);
+    }
+
+  }
+
+  Future<String?> videoSplit(BuildContext context, String file, Duration start, Duration end, int index) async {
+    try {
+      _isLoadVideo = true;
+      notifyListeners();
+      String outputPath = await System().getSystemPath(params: 'postVideo');
+      outputPath =
+      '${outputPath + (Routing.navigatorKey.currentContext ?? context).getNameByDate()}.mp4';
+
+      final strStart = start.detail();
+      final strEnd = end.detail();
+      String command =
+          '-ss $strStart -to $strEnd -i $file -async 1 $outputPath';
+      final session = await FFmpegKit.executeAsync(
+        command, null,
+            (log) {
+          _isLoadVideo = false;
+          notifyListeners();
+          print('FFmpegKit ${log.getMessage()}');
+        },
+      );
+      final codeSession = await session.getReturnCode();
+      if (ReturnCode.isSuccess(codeSession)) {
+        print('ReturnCode = Success');
+        _isLoadVideo = false;
+        return outputPath;
+        // await restartVideoPlayer(outputPath, context, isInit: true);
+      } else if (ReturnCode.isCancel(codeSession)) {
+        print('ReturnCode = Cancel');
+        _isLoadVideo = false;
+        notifyListeners();
+        throw 'Merge video is canceled';
+        // Cancel
+      } else {
+        print('ReturnCode = Error');
+        _isLoadVideo = false;
+        notifyListeners();
+        throw 'Merge video is Error';
+        // Error
+      }
+    } catch (e) {
+      'videoMerger Error : $e'.logger();
+      ShowBottomSheet()
+          .onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
+    } finally {
+      _isLoadVideo = false;
+      notifyListeners();
+      return null;
+    }
+  }
+
 
 
   Future restartVideoPlayer(String outputPath, BuildContext context, {bool isInit = true}) async {
@@ -1185,13 +1268,13 @@ class PreviewContentNotifier with ChangeNotifier {
             messageLimit = (language.messageLimitStory ?? 'Error');
             if(videoDuration >= limitDuration){
               showToast(const Duration(seconds: 3));
-            }else if(videoDuration < const Duration(seconds: 4)){
+            }else if(videoDuration < Duration(seconds: storyMin)){
               messageLimit = language.messageLessLimitStory ?? 'Error';
               showToast(const Duration(seconds: 3));
             }
           }else{
             final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
-            final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1) : featureType == FeatureType.vid ? const Duration(minutes: 30) : const Duration(seconds: 0);
+            final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1, milliseconds: 900) : featureType == FeatureType.vid ? const Duration(minutes: 30, milliseconds: 900) : const Duration(seconds: 0);
             print('State Preview Limit: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
 
             if(videoDuration >= limitDuration){
@@ -1200,7 +1283,7 @@ class PreviewContentNotifier with ChangeNotifier {
                   : featureType == FeatureType.diary
                   ? (language.messageLimitDiary ?? 'Error') : 'Error';
               showToast(const Duration(seconds: 3));
-            }else if(videoDuration < const Duration(seconds: 15)){
+            }else if(videoDuration < Duration(seconds: vidMin)){
               messageLimit = language.messageLessLimitVideo ?? 'Error';
               showToast(const Duration(seconds: 3));
             }
@@ -1572,7 +1655,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future postStoryContent(BuildContext context) async {
+  Future<void> postStoryContent(BuildContext context, {String? file}) async {
     final _orientation = context.read<CameraNotifier>().orientation;
     final homeNotifier = context.read<HomeNotifier>();
     try {
@@ -1589,7 +1672,7 @@ class PreviewContentNotifier with ChangeNotifier {
         tagDescription: [],
         allowComment: true,
         certified: false,
-        fileContents: fileContent ?? [],
+        fileContents: file != null ? [file] : (fileContent ?? []),
         description: '',
         cats: [],
         tagPeople: [],

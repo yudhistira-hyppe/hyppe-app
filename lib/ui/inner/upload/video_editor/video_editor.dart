@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -37,9 +38,9 @@ class _VideoEditorState extends State<VideoEditor> {
 
   late final VideoEditorController _controller = VideoEditorController.file(
       widget.file,
-      minDuration: widget.type == FeatureType.story ? const Duration(seconds: 4) : const Duration(seconds: 15),
-      maxDuration: widget.videoSeconds,
-      trimThumbnailsQuality: 1,
+      minDuration: widget.type == FeatureType.story ? Duration(seconds: storyMin) : Duration(seconds: vidMin),
+      maxDuration: widget.type == FeatureType.story ? const Duration(seconds: 15) : widget.type == FeatureType.vid ? const Duration(minutes: 30) : widget.type == FeatureType.diary ?  const Duration(minutes: 1) : widget.videoSeconds,
+      trimThumbnailsQuality: 25,
       trimStyle: TrimSliderStyle(
           background: Colors.transparent,
           onTrimmedColor: Colors.white,

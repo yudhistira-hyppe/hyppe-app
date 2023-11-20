@@ -47,6 +47,9 @@ bool homeClick = false;
 bool globalTultipShow = false;
 bool globalChallengePopUp = true; //untuk menahan tutorial muncul sebelum challange
 
+int storyMin = 4;
+int vidMin = 15;
+
 void disposeGlobalAudio() async {
   try {
     await globalAudioPlayer!.stop();

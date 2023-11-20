@@ -412,4 +412,10 @@ extension DurationExt on Duration{
     inMinutes.remainder(60).toString().padLeft(2, '0'),
     inSeconds.remainder(60).toString().padLeft(2, '0')
   ].join(":");
+
+  String detail() => [
+    inHours.remainder(60).toString().padLeft(2, '0'),
+    inMinutes.remainder(60).toString().padLeft(2, '0'),
+    inSeconds.remainder(60).toString().padLeft(2, '0')
+  ].join(":");
 }
