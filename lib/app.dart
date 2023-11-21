@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import 'core/services/SqliteData.dart';
 import 'core/services/api_action.dart';
@@ -74,6 +75,22 @@ void mainApp(EnvType env) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // For sharing images coming from outside the app while the app is in the memory
+  // ReceiveSharingIntent.getMediaStream().listen((List<SharedMediaFile> value) {
+  //   print(value[0].path);
+  //   // Routing().move(Routes.lobby);
+  // }, onError: (err) {
+  //   debugPrint("$err");
+  // });
+
+  // // For sharing images coming from outside the app while the app is closed
+  // ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) {
+  //   print(value[0].path);
+  //   // Routing().move(Routes.lobby);
+  // }, onError: (err) {
+  //   debugPrint("$err");
+  // });
 
   // start the localhost server
   await localhostServer.start();

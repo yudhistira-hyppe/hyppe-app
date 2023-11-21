@@ -109,6 +109,21 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="flutter-twitter-login" /> <!-- host is option -->
             </intent-filter>
+
+            <!--TODO: Add this filter, if you want to support sharing images into your app-->
+            <!-- <intent-filter android:label="Pic">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter> -->
+
+            <!--TODO: Add this filter, if you want to support sharing videos into your app-->
+            <!-- <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="video/*" />
+            </intent-filter> -->
+
         </activity>
         <activity
             android:name="androidx.test.core.app.InstrumentationActivityInvoker$BootstrapActivity"
