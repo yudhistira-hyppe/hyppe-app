@@ -338,7 +338,6 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     if (notifier.betterPlayerController != null) {
       notifier.betterPlayerController!.dispose();
-      notifier.betterPlayerController = null;
     }
     notifier.defaultPath = null;
     notifier.disposeMusic();

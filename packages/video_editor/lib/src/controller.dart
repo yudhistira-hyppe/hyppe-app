@@ -201,30 +201,40 @@ class VideoEditorController extends ChangeNotifier {
   /// }, test: (e) => e is VideoMinDurationError);
   /// ```
   Future<void> initialize({double? aspectRatio}) async {
-    await _video.initialize();
+    try{
+      if(_video.value.isInitialized){
+        _video.dispose();
+      }
 
-    if (minDuration > videoDuration) {
-      throw VideoMinDurationError(minDuration, videoDuration);
+    }catch(e){
+      print('error dispose: $e');
+    }finally{
+      await _video.initialize();
+
+      if (minDuration > videoDuration) {
+        throw VideoMinDurationError(minDuration, videoDuration);
+      }
+
+      _video.addListener(_videoListener);
+      _video.setLooping(true);
+
+      // if no [maxDuration] param given, maxDuration is the videoDuration
+      maxDuration = maxDuration == Duration.zero ? videoDuration : maxDuration;
+
+      // Trim straight away when maxDuration is lower than video duration
+      if (maxDuration < videoDuration) {
+        updateTrim(
+            0.0, maxDuration.inMilliseconds / videoDuration.inMilliseconds);
+      } else {
+        _updateTrimRange();
+      }
+
+      cropAspectRatio(aspectRatio);
+      generateDefaultCoverThumbnail();
+
+      notifyListeners();
     }
 
-    _video.addListener(_videoListener);
-    _video.setLooping(true);
-
-    // if no [maxDuration] param given, maxDuration is the videoDuration
-    maxDuration = maxDuration == Duration.zero ? videoDuration : maxDuration;
-
-    // Trim straight away when maxDuration is lower than video duration
-    if (maxDuration < videoDuration) {
-      updateTrim(
-          0.0, maxDuration.inMilliseconds / videoDuration.inMilliseconds);
-    } else {
-      _updateTrimRange();
-    }
-
-    cropAspectRatio(aspectRatio);
-    generateDefaultCoverThumbnail();
-
-    notifyListeners();
 
   }
 
