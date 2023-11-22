@@ -237,6 +237,11 @@ class HomeNotifier with ChangeNotifier {
       final diary = Provider.of<PreviewDiaryNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
       final pic = Provider.of<PreviewPicNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
       final stories = Provider.of<PreviewStoriesNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
+      if (!isgetMore) {
+        stories.myStoryGroup = {};
+        stories.storiesGroups = [];
+        notifyListeners();
+      }
 
       print("data pic ${(pic.pic?.isNotEmpty ?? [].isNotEmpty) && (diary.diaryData?.isNotEmpty ?? [].isNotEmpty)}");
       if ((!isreload && !isgetMore) && ((pic.pic?.isNotEmpty ?? [].isNotEmpty) && (diary.diaryData?.isNotEmpty ?? [].isNotEmpty) && (vid.vidData?.isNotEmpty ?? [].isNotEmpty))) {

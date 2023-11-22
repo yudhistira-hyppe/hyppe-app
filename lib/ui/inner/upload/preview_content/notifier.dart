@@ -884,7 +884,16 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
-  Stream<String?> postVideos(BuildContext context, Duration totalDuration) async*{
+  /// split story videos ==Hariyanto Lukman==
+  Future postVideos(BuildContext context, Duration totalDuration) async{
+    await for(String? file in getSplitVideos(context, totalDuration)){
+      if(file != null){
+        postStoryContent(context, file: file);
+      }
+    }
+  }
+
+  Stream<String?> getSplitVideos(BuildContext context, Duration totalDuration) async*{
     final defaultFile = _fileContent?[0];
     final seconds = totalDuration.inSeconds;
     if(seconds > 15){
@@ -958,13 +967,9 @@ class PreviewContentNotifier with ChangeNotifier {
       }
     } catch (e) {
       'videoMerger Error : $e'.logger();
-      ShowBottomSheet()
-          .onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
-    } finally {
-      _isLoadVideo = false;
-      notifyListeners();
       return null;
     }
+
   }
 
 

@@ -399,7 +399,6 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
       }
       _initListener();
     });
-
     super.initState();
   }
 
@@ -692,27 +691,25 @@ class _InBetweenScreenState extends State<InBetweenScreen> with WidgetsBindingOb
           ),
         ),
         if(_showLoading)
-          Positioned.fill(
-            child: Align(
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    backgroundColor: Colors.white,
-                    strokeWidth: 3.0,
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Text(
-                    "$_loadingPercent%",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
+          Align(
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                  strokeWidth: 3.0,
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Text(
+                  "$_loadingPercent%",
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ],
             ),
           ),
         Positioned(
