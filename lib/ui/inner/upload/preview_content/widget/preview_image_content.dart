@@ -205,9 +205,9 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                           });
                           notifier.getSticker(context, index: notifier.stickerTabIndex);
                         },
-                        child: Column(
+                        child: const Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
+                          children: [
                             CustomIconWidget(
                               defaultColor: false,
                               iconData: "${AssetPath.vectorPath}circle_sticker.svg",
@@ -246,10 +246,10 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                     right: 0,
                     bottom: 0,
                     child: AnimatedOpacity(
-                      child: child,
                       opacity: frame == null ? 0 : 1,
                       duration: const Duration(seconds: 1),
                       curve: Curves.easeOut,
+                      child: child,
                     ),
                   ),
                   Positioned(
@@ -316,7 +316,6 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                                       throw 'file is null';
                                     }
                                   } catch (e) {
-                                    print('Error ImageCropper: $e');
                                     // ShowBottomSheet().onShowColouredSheet(context, e.toString(), color: kHyppeDanger, maxLines: 2);
                                   }
                                 },

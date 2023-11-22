@@ -138,6 +138,10 @@ class PreviewContentNotifier with ChangeNotifier {
   final focusNode = FocusNode();
 
   VideoPlayerController? get betterPlayerController => _betterPlayerController;
+  set betterPlayerController(VideoPlayerController? val){
+    _betterPlayerController = val;
+    notifyListeners();
+  }
   TransformationController get transformationController =>
       _transformationController;
   PersistentBottomSheetController? get persistentBottomSheetController =>
@@ -880,6 +884,89 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
+  Stream<String?> postVideos(BuildContext context, Duration totalDuration) async*{
+    final defaultFile = _fileContent?[0];
+    final seconds = totalDuration.inSeconds;
+    if(seconds > 15){
+      var start = const Duration(seconds: 0);
+      var end = const Duration(seconds: 15);
+      var temp = const Duration();
+
+      if(defaultFile != null){
+        for(int i = 0 ; i < (_fileContent ?? []).length ; i++){
+          if(i == 0){
+            if(seconds < 19){
+              end = Duration(seconds: seconds - 4);
+            }
+            temp = end;
+          }else if(i == 1){
+            start = temp;
+            end = totalDuration;
+          }
+          yield await videoSplit(context, defaultFile, start, end, i);
+          // if(path != null){
+          //   // await Future.delayed(const Duration(seconds: 1));
+          //   await postStoryContent(context, file: path ?? '');
+          // }
+
+        }
+      }
+    }else{
+      await postStoryContent(context,);
+    }
+
+  }
+
+  Future<String?> videoSplit(BuildContext context, String file, Duration start, Duration end, int index) async {
+    try {
+      _isLoadVideo = true;
+      notifyListeners();
+      String outputPath = await System().getSystemPath(params: 'postVideo');
+      outputPath =
+      '${outputPath + (Routing.navigatorKey.currentContext ?? context).getNameByDate()}.mp4';
+
+      final strStart = start.detail();
+      final strEnd = end.detail();
+      String command =
+          '-ss $strStart -to $strEnd -i $file -async 1 $outputPath';
+      final session = await FFmpegKit.executeAsync(
+        command, null,
+            (log) {
+          _isLoadVideo = false;
+          notifyListeners();
+          print('FFmpegKit ${log.getMessage()}');
+        },
+      );
+      final codeSession = await session.getReturnCode();
+      if (ReturnCode.isSuccess(codeSession)) {
+        print('ReturnCode = Success');
+        _isLoadVideo = false;
+        return outputPath;
+        // await restartVideoPlayer(outputPath, context, isInit: true);
+      } else if (ReturnCode.isCancel(codeSession)) {
+        print('ReturnCode = Cancel');
+        _isLoadVideo = false;
+        notifyListeners();
+        throw 'Merge video is canceled';
+        // Cancel
+      } else {
+        print('ReturnCode = Error');
+        _isLoadVideo = false;
+        notifyListeners();
+        throw 'Merge video is Error';
+        // Error
+      }
+    } catch (e) {
+      'videoMerger Error : $e'.logger();
+      ShowBottomSheet()
+          .onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
+    } finally {
+      _isLoadVideo = false;
+      notifyListeners();
+      return null;
+    }
+  }
+
 
 
   Future restartVideoPlayer(String outputPath, BuildContext context, {bool isInit = true}) async {
@@ -1152,9 +1239,14 @@ class PreviewContentNotifier with ChangeNotifier {
     //   ),
     // );
 
+    _isLoadVideo = true;
+    await _betterPlayerController?.dispose();
+    _betterPlayerController = null;
+
+    await Future.delayed(const Duration(milliseconds: 500));
+
     _betterPlayerController = VideoPlayerController.file(File(_url ?? '',),);
     try {
-      _isLoadVideo = true;
       notifyListeners();
       // await _betterPlayerController?.setupDataSource(dataSource).then((_) {
       //   _betterPlayerController?.play();
@@ -1169,6 +1261,7 @@ class PreviewContentNotifier with ChangeNotifier {
         notifyListeners();
       });
       _betterPlayerController?.setLooping(true);
+      print('will initialize');
       await _betterPlayerController?.initialize().whenComplete((){
         Future.delayed(const Duration(seconds: 1), (){
 
@@ -1178,10 +1271,13 @@ class PreviewContentNotifier with ChangeNotifier {
             messageLimit = (language.messageLimitStory ?? 'Error');
             if(videoDuration >= limitDuration){
               showToast(const Duration(seconds: 3));
+            }else if(videoDuration < Duration(seconds: storyMin)){
+              messageLimit = language.messageLessLimitStory ?? 'Error';
+              showToast(const Duration(seconds: 3));
             }
           }else{
             final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
-            final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1) : featureType == FeatureType.vid ? const Duration(minutes: 30) : const Duration(seconds: 0);
+            final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1, milliseconds: 900) : featureType == FeatureType.vid ? const Duration(minutes: 30, milliseconds: 900) : const Duration(seconds: 0);
             print('State Preview Limit: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
 
             if(videoDuration >= limitDuration){
@@ -1190,7 +1286,7 @@ class PreviewContentNotifier with ChangeNotifier {
                   : featureType == FeatureType.diary
                   ? (language.messageLimitDiary ?? 'Error') : 'Error';
               showToast(const Duration(seconds: 3));
-            }else if(videoDuration < const Duration(seconds: 15)){
+            }else if(videoDuration < Duration(seconds: vidMin)){
               messageLimit = language.messageLessLimitVideo ?? 'Error';
               showToast(const Duration(seconds: 3));
             }
@@ -1231,6 +1327,7 @@ class PreviewContentNotifier with ChangeNotifier {
         _errorHit = 0;
         _isLoadingBetterPlayer = false;
         _errorMessage = language.fileMayBeInErrorChooseAnotherFile ?? '';
+        _betterPlayerController?.dispose();
         notifyListeners();
       }
     } finally {
@@ -1561,7 +1658,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future postStoryContent(BuildContext context) async {
+  Future<void> postStoryContent(BuildContext context, {String? file}) async {
     final _orientation = context.read<CameraNotifier>().orientation;
     final homeNotifier = context.read<HomeNotifier>();
     try {
@@ -1578,7 +1675,7 @@ class PreviewContentNotifier with ChangeNotifier {
         tagDescription: [],
         allowComment: true,
         certified: false,
-        fileContents: fileContent ?? [],
+        fileContents: file != null ? [file] : (fileContent ?? []),
         description: '',
         cats: [],
         tagPeople: [],
@@ -1640,17 +1737,26 @@ class PreviewContentNotifier with ChangeNotifier {
       defaultPath = null;
       if (betterPlayerController != null) {
         betterPlayerController!.dispose();
+        betterPlayerController = null;
       }
     }
   }
 
-  void goToVideoEditor(BuildContext context, FeatureType type) async{
+  bool _noRefresh = false;
+  bool get noRefresh => _noRefresh;
+  set noRefresh(bool state){
+    _noRefresh = state;
+    notifyListeners();
+  }
 
+  void goToVideoEditor(BuildContext context, FeatureType type) async{
+    noRefresh = true;
     final path = fileContent?[0];
     if(path != null){
       isLoadVideo = true;
       betterPlayerController?.pause();
       final seconds = betterPlayerController?.value.duration ?? const Duration(seconds: 10);
+
       final newPath = await Navigator.push(
         context,
         MaterialPageRoute<String?>(
@@ -1658,16 +1764,29 @@ class PreviewContentNotifier with ChangeNotifier {
         ),
       );
       if(newPath != null){
-        fileContent?[0] = newPath;
+        final controller = VideoPlayerController.file(File(newPath));
+        try{
+          controller.initialize();
+          fileContent?[0] = newPath;
+          isLoadVideo = false;
+          Future.delayed(const Duration(milliseconds: 500), (){
+
+            initVideoPlayer(context);
+            noRefresh = false;
+          });
+        }catch(e){
+          messageLimit = 'Error convert';
+          showToast(const Duration(seconds: 3));
+        }
+      }else{
+        isLoadVideo = false;
+        // Future.delayed(const Duration(milliseconds: 500), (){
+        //
+        //   initVideoPlayer(context);
+        //   noRefresh = false;
+        // });
       }
-
     }
-
-    isLoadVideo = false;
-    Future.delayed(const Duration(milliseconds: 500), (){
-
-      initVideoPlayer(context);
-    });
   }
 
   void applyFilters({GlobalKey? globalKey}) async {

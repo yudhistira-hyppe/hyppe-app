@@ -19,8 +19,10 @@ import 'package:hyppe/core/services/dynamic_link_service.dart';
 
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import '../../core/bloc/ads_video/bloc.dart';
 import '../../core/bloc/ads_video/state.dart';
@@ -45,6 +47,8 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
   Timer? _timerLink;
   final _socketService = SocketService();
   // final _isolateService = IsolateService();
+
+  static final _routing = Routing();
 
   Future<void> _initializeFlutterFire() async {
     if (kDebugMode) {

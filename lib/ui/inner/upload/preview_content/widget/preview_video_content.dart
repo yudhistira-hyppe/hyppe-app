@@ -69,11 +69,15 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
   void didPopNext() {
     print('didPopNext PreviewVideoContent');
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-    if (notifier.defaultPath != notifier.fileContent?[notifier.indexView]) {
-      notifier.initVideoPlayer(context);
-    } else {
-      notifier.setDefaultVideo(context);
+    print('didPopNext PreviewVideoContent ${notifier.noRefresh}');
+    if(!notifier.noRefresh){
+      if (notifier.defaultPath != notifier.fileContent?[notifier.indexView]) {
+        notifier.initVideoPlayer(context);
+      } else {
+        notifier.setDefaultVideo(context);
+      }
     }
+
     super.didPopNext();
   }
 
@@ -273,14 +277,15 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                           ),
                         ),
                         twentyFourPx,
-                        if(notifier.featureType == FeatureType.diary || notifier.featureType == FeatureType.vid || notifier.featureType == FeatureType.story)
+                        if((notifier.featureType == FeatureType.diary || notifier.featureType == FeatureType.vid || notifier.featureType == FeatureType.story)
+                          && (notifier.betterPlayerController?.value.duration.inSeconds ?? 0) > 4)
                         InkWell(
                           onTap: () async {
                             if(mounted){
                               notifier.goToVideoEditor(context, notifier.featureType ?? FeatureType.diary);
                             }
                           },
-                          child:const Column(
+                          child: const Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               CustomIconWidget(

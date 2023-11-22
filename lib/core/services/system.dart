@@ -758,28 +758,39 @@ class System {
                   _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
                   // hapus file yang durasinya lebih dari 15 detik
-                  if (_duration.inSeconds < 1) {
+                  if (_duration.inSeconds < 4) {
+                    if (onException != null) {
+                      onException();
+                    }
                     // _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
                     _pickerResult.files.removeAt(element);
                   }
                 });
+
+                // show toast if there is fail file
+                // if (_failFile.isNotEmpty) {
+                //   _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
+                // }
+
+                if (_pickerResult.files.isNotEmpty) {
+                  _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
+                }
+              }
+
+              // show toast if there is fail file
+              // if (_failFile.isNotEmpty) {
+              //   _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
+              // }
+
+              if (_pickerResult.files.isNotEmpty) {
+                _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
               }
             }
-
-            // show toast if there is fail file
-            // if (_failFile.isNotEmpty) {
-            //   _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
-            // }
-
-            if (_pickerResult.files.isNotEmpty) {
-              _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
-            }
           }
+          // validasi durasi
         }
-        // validasi durasi
       }
     }
-
     return {_errorMsg: _filePickerResult};
   }
 
