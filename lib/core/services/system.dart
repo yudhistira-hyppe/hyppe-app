@@ -1513,6 +1513,27 @@ class System {
     }
   }
 
+  Future<bool> checkAdsTime() async {
+    bool check = false;
+    String lastTimeAds = SharedPreference().readStorage(SpKeys.datetimeLastShowAds) ?? '';
+    print("===-=-=-=-=-= $lastTimeAds");
+    print("===-=-=-=-=-= $isShowingDialog");
+    if (!isShowingDialog) {
+      if (lastTimeAds == '') {
+        check = true;
+      } else {
+        DateTime now = DateTime.now();
+        DateTime menitCache = DateTime.parse(lastTimeAds);
+        var jumlahMenit = System().menghitungJumlahMenit(menitCache, now);
+
+        if (jumlahMenit >= 14) {
+          check = true;
+        }
+      }
+    }
+    return check;
+  }
+
   Future adsView(AdsData data, int time, {bool isClick = false}) async {
     try {
       final notifier = AdsDataBloc();

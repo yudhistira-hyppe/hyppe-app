@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_vid_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
@@ -266,7 +267,18 @@ class SelfProfileNotifier with ChangeNotifier {
       isConnect = true;
       notifyListeners();
     }
-
+    // await FirebaseAnalytics.instance.setUserId(
+    //   id: SharedPreference().readStorage(SpKeys.userID),
+    // );
+    // await FirebaseAnalytics.instance.logEvent(
+    //   name: "view_my_profile",
+    //   parameters: {
+    //     "userId": SharedPreference().readStorage(SpKeys.userID),
+    //     "content_type": "image",
+    //   },
+    // ).whenComplete(() {
+    //   print("sudah kirim analitic");
+    // });
     _statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
     picContentsQuery.featureType = FeatureType.pic;
