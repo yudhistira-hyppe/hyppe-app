@@ -884,9 +884,12 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
+  /// split story videos ==Hariyanto Lukman==
   Future postVideos(BuildContext context, Duration totalDuration) async{
     await for(String? file in getSplitVideos(context, totalDuration)){
-      postStoryContent(context, file: file);
+      if(file != null){
+        postStoryContent(context, file: file);
+      }
     }
   }
 

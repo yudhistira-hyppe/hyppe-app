@@ -326,7 +326,7 @@ class _ChalangeScreenState extends State<ChalangeScreen> with RouteAware, AfterF
                             ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: _tabs![_currentTab],
+                        child: _tabs?[_currentTab],
                       ),
                       cn.listChallangeData.isEmpty
                           ? Container()
