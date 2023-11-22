@@ -18,6 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:receive_intent/receive_intent.dart';
 
 import 'core/services/SqliteData.dart';
 import 'core/services/api_action.dart';
@@ -51,6 +52,8 @@ bool globalChallengePopUp = true; //untuk menahan tutorial muncul sebelum challa
 int storyMin = 4;
 int vidMin = 15;
 
+const platform = MethodChannel('app.channel.shared.data');
+
 void disposeGlobalAudio() async {
   try {
     await globalAudioPlayer!.stop();
@@ -74,26 +77,47 @@ void mainApp(EnvType env) async {
   await FcmService().firebaseCloudMessagingListeners();
   System().systemUIOverlayTheme();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-//  FirebaseCrashlytics.instance.crash();
+  // FirebaseCrashlytics.instance.crash();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   // For sharing images coming from outside the app while the app is in the memory
-  // ReceiveSharingIntent.getMediaStream().listen((List<SharedMediaFile> value) {
-  //   print(value[0].path);
-  //   // Routing().move(Routes.lobby);
-  // }, onError: (err) {
-  //   debugPrint("$err");
-  // });
+  ReceiveSharingIntent.getMediaStream().listen((List<SharedMediaFile> value) {
+    debugPrint("ReceiveSharingIntent memory");
+    print(value[0].path);
+    // Routing().move(Routes.lobby);
+  }, onError: (err) {
+    debugPrint("ReceiveSharingIntent memory");
+    debugPrint("$err");
+  });
 
-  // // For sharing images coming from outside the app while the app is closed
-  // ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) {
-  //   print(value[0].path);
-  //   // Routing().move(Routes.lobby);
-  // }, onError: (err) {
-  //   debugPrint("$err");
-  // });
+  // For sharing images coming from outside the app while the app is closed
+  ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) async {
+    debugPrint("ReceiveSharingIntent closed 1");
+    print(value[0].path);
+    // Routing().move(Routes.lobby);
+  }, onError: (err) {
+    debugPrint("$err");
+  });
+
+  platform.invokeMethod('getFeatureType').then((value) {
+    debugPrint("ReceiveSharingIntent closed 2");
+    print(value);
+  }).catchError((onError) {
+    debugPrint("ReceiveSharingIntent closed 2 error");
+    print(onError);
+  });
+
+  try {
+    final receivedIntent = await ReceiveIntent.getInitialIntent();
+    if (receivedIntent != null) {
+      debugPrint("ReceivedIntent");
+      debugPrint(receivedIntent.data);
+    }
+  } on PlatformException {
+    // Handle exception
+  }
 
   // start the localhost server
   await localhostServer.start();

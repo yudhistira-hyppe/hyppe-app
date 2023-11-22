@@ -110,20 +110,6 @@
                 <data android:scheme="flutter-twitter-login" /> <!-- host is option -->
             </intent-filter>
 
-            <!--TODO: Add this filter, if you want to support sharing images into your app-->
-            <!-- <intent-filter android:label="Pic">
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="image/*" />
-            </intent-filter> -->
-
-            <!--TODO: Add this filter, if you want to support sharing videos into your app-->
-            <!-- <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="video/*" />
-            </intent-filter> -->
-
         </activity>
         <activity
             android:name="androidx.test.core.app.InstrumentationActivityInvoker$BootstrapActivity"
@@ -134,6 +120,60 @@
         <activity
             android:name="androidx.test.core.app.InstrumentationActivityInvoker$EmptyFloatingActivity"
             android:exported="false" />
+        <activity
+            android:name=".StoryActivity"
+            android:theme="@style/LaunchTheme"
+            android:launchMode="singleTask"
+            android:exported="true">
+            <intent-filter android:label="HyppeStory">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+            <intent-filter android:label="HyppeStory">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".PicActivity"
+            android:theme="@style/LaunchTheme"
+            android:launchMode="singleTask"
+            android:exported="true">
+            <intent-filter android:label="HyppePic">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".DiaryActivity"
+            android:theme="@style/LaunchTheme"
+            android:launchMode="singleTask"
+            android:exported="true">
+            <intent-filter android:label="HyppeDiary">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+            <intent-filter android:label="HyppeDiary">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".VidActivity"
+            android:theme="@style/LaunchTheme"
+            android:launchMode="singleTask"
+            android:exported="true">
+            <intent-filter android:label="HyppeVid">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+        </activity>
         <meta-data
         android:name="flutterEmbedding" android:value="2"/>
         <!-- A custom Android Notification Channel to deliver FCM notifications on a non-default channel -->

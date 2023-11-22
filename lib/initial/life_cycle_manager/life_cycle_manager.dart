@@ -88,21 +88,6 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       FirebaseCrashlytics.instance.log('Log: from init');
       // SharedPreference().writeStorage(SpKeys.isPreventRoute, true);
       DynamicLinkService.handleDynamicLinks();
-      // // For sharing images coming from outside the app while the app is in the memory
-      // ReceiveSharingIntent.getMediaStream().listen((List<SharedMediaFile> value) {
-      //   debugPrint(value[0].path);
-      //   _routing.move(Routes.lobby);
-      // }, onError: (err) {
-      //   debugPrint("$err");
-      // });
-
-      // // For sharing images coming from outside the app while the app is closed
-      // ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) {
-      //   debugPrint(value[0].path);
-      //   _routing.move(Routes.lobby);
-      // }, onError: (err) {
-      //   debugPrint("$err");
-      // });
     });
     // _isolateService.turnOnWorkers();
     super.initState();

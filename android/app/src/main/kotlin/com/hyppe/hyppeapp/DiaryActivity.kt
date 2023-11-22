@@ -6,11 +6,11 @@ import android.os.Bundle
 import io.flutter.embedding.android.FlutterActivity
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 
-class StoryActivity: FlutterActivity() {
+class DiaryActivity: FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra(Intent.EXTRA_TEXT, "story")
+        intent.putExtra(Intent.EXTRA_TEXT, "diary")
         startActivity(intent);
     }
 }
