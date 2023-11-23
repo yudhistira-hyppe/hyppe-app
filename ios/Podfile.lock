@@ -76,26 +76,26 @@ PODS:
   - Firebase/Messaging (9.6.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 9.6.0)
-  - firebase_analytics (10.7.1):
+  - firebase_analytics (10.5.1):
     - Firebase/Analytics (= 9.6.0)
     - firebase_core
     - Flutter
-  - firebase_auth (4.14.1):
+  - firebase_auth (4.2.5):
     - Firebase/Auth (= 9.6.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.23.0):
+  - firebase_core (2.17.0):
     - Firebase/CoreOnly (= 9.6.0)
     - Flutter
-  - firebase_crashlytics (3.4.5):
+  - firebase_crashlytics (3.3.7):
     - Firebase/Crashlytics (= 9.6.0)
     - firebase_core
     - Flutter
-  - firebase_dynamic_links (5.4.5):
+  - firebase_dynamic_links (5.3.7):
     - Firebase/DynamicLinks (= 9.6.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (14.7.5):
+  - firebase_messaging (14.6.9):
     - Firebase/Messaging (= 9.6.0)
     - firebase_core
     - Flutter
@@ -555,12 +555,12 @@ SPEC CHECKSUMS:
   fhoto_editor: 0f5fe41cafba38e8a6b6d9974d68e17ec9f5f693
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
   Firebase: 5ae8b7cf8efce559a653aef0ad95bab3f427c351
-  firebase_analytics: 57607ef8ddb578bcc07fc22b761daa6fb4a51fd7
-  firebase_auth: f81a84e0a542c04aee2daf8b986eccfc872e9190
-  firebase_core: 3e36d9506fe027324f76ed9689a13cd344c67848
-  firebase_crashlytics: 46001fae37e8fa472b391e273e3b01208b7c4fc3
-  firebase_dynamic_links: 146e74df316533385c0cf3fab877d39531589b71
-  firebase_messaging: c01f12b32f9e58d363da0adee95fe22391742c4e
+  firebase_analytics: 5b4e5b23c98cbcc83d2b14f94eed30dad1c78b87
+  firebase_auth: aa41092a9db430f98e655a8a34ca9d58a39b19de
+  firebase_core: 27bffa6b6c2e302223410f07c500b8e3a538952f
+  firebase_crashlytics: 04090d560b25235268be98b6835114b0b24ba28b
+  firebase_dynamic_links: aeb11b28b4aea27cacbe00836e49ae2c705787e7
+  firebase_messaging: 3efe8f5ffb62ddf16ee55fc4547d28ff4bec9f1a
   FirebaseAnalytics: 89ad762c6c3852a685794174757e2c60a36b6a82
   FirebaseAuth: e4a5d3c36e778e41141b91cc861103a441d80bcc
   FirebaseCore: 2082fffcd855f95f883c0a1641133eb9bbe76d40
@@ -621,7 +621,7 @@ SPEC CHECKSUMS:
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
-  url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
+  url_launcher_ios: 68d46cc9766d0c41dbdc884310529557e3cd7a86
   video_player_avfoundation: e9e6f9cae7d7a6d9b43519b0aab382bca60fcfd1
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47

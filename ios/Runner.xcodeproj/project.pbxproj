@@ -406,7 +406,7 @@
 				CURRENT_PROJECT_VERSION = 108;
 				DEVELOPMENT_TEAM = Z4489DNPPA;
 				ENABLE_BITCODE = NO;
-				FLUTTER_TARGET = "/Users/imammuhtadi/Documents/projects/Flutter-Frontend/lib/main_dev.dart";
+				FLUTTER_TARGET = "/Users/hyppe-it/Work/app/Flutter-Frontend/lib/main_dev.dart";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -552,7 +552,7 @@
 				CURRENT_PROJECT_VERSION = 108;
 				DEVELOPMENT_TEAM = Z4489DNPPA;
 				ENABLE_BITCODE = NO;
-				FLUTTER_TARGET = "/Users/imammuhtadi/Documents/projects/Flutter-Frontend/lib/main_dev.dart";
+				FLUTTER_TARGET = "/Users/hyppe-it/Work/app/Flutter-Frontend/lib/main_dev.dart";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -590,7 +590,7 @@
 				CURRENT_PROJECT_VERSION = 108;
 				DEVELOPMENT_TEAM = Z4489DNPPA;
 				ENABLE_BITCODE = NO;
-				FLUTTER_TARGET = "/Users/imammuhtadi/Documents/projects/Flutter-Frontend/lib/main_dev.dart";
+				FLUTTER_TARGET = "/Users/hyppe-it/Work/app/Flutter-Frontend/lib/main_dev.dart";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",

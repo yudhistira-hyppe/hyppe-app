@@ -85,7 +85,7 @@ void mainApp(EnvType env) async {
   // For sharing images coming from outside the app while the app is in the memory
   ReceiveSharingIntent.getMediaStream().listen((List<SharedMediaFile> value) {
     debugPrint("ReceiveSharingIntent memory");
-    print(value[0].path);
+
     // Routing().move(Routes.lobby);
   }, onError: (err) {
     debugPrint("ReceiveSharingIntent memory");
@@ -93,30 +93,31 @@ void mainApp(EnvType env) async {
   });
 
   // For sharing images coming from outside the app while the app is closed
-  ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) async {
-    debugPrint("ReceiveSharingIntent closed 1");
-    print(value[0].path);
-    // Routing().move(Routes.lobby);
-  }, onError: (err) {
-    debugPrint("$err");
-  });
 
-  platform.invokeMethod('getFeatureType').then((value) {
-    debugPrint("ReceiveSharingIntent closed 2");
-    print(value);
-  }).catchError((onError) {
-    debugPrint("ReceiveSharingIntent closed 2 error");
-    print(onError);
-  });
+  if (Platform.isAndroid) {
+    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) async {
+      debugPrint("ReceiveSharingIntent closed 1");
+      // Routing().move(Routes.lobby);
+    }, onError: (err) {
+      debugPrint("$err");
+    });
 
-  try {
-    final receivedIntent = await ReceiveIntent.getInitialIntent();
-    if (receivedIntent != null) {
-      debugPrint("ReceivedIntent");
-      debugPrint(receivedIntent.data);
+    platform.invokeMethod('getFeatureType').then((value) {
+      debugPrint("ReceiveSharingIntent closed 2");
+    }).catchError((onError) {
+      debugPrint("ReceiveSharingIntent closed 2 error");
+      print(onError);
+    });
+
+    try {
+      final receivedIntent = await ReceiveIntent.getInitialIntent();
+      if (receivedIntent != null) {
+        debugPrint("ReceivedIntent");
+        debugPrint(receivedIntent.data);
+      }
+    } on PlatformException {
+      // Handle exception
     }
-  } on PlatformException {
-    // Handle exception
   }
 
   // start the localhost server

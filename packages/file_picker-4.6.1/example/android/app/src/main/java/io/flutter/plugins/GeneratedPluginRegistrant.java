@@ -17,20 +17,12 @@ public final class GeneratedPluginRegistrant {
   public static void registerWith(@NonNull FlutterEngine flutterEngine) {
     try {
       flutterEngine.getPlugins().add(new com.mr.flutter.plugin.filepicker.FilePickerPlugin());
-<<<<<<< HEAD
-    } catch(Exception e) {
-=======
     } catch (Exception e) {
->>>>>>> 0171d151a46d01256b8d0c3fd2f0a7436045f928
       Log.e(TAG, "Error registering plugin file_picker, com.mr.flutter.plugin.filepicker.FilePickerPlugin", e);
     }
     try {
       flutterEngine.getPlugins().add(new io.flutter.plugins.flutter_plugin_android_lifecycle.FlutterAndroidLifecyclePlugin());
-<<<<<<< HEAD
-    } catch(Exception e) {
-=======
     } catch (Exception e) {
->>>>>>> 0171d151a46d01256b8d0c3fd2f0a7436045f928
       Log.e(TAG, "Error registering plugin flutter_plugin_android_lifecycle, io.flutter.plugins.flutter_plugin_android_lifecycle.FlutterAndroidLifecyclePlugin", e);
     }
   }
