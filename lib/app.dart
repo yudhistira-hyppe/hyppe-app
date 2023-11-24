@@ -17,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:receive_intent/receive_intent.dart';
 
@@ -82,32 +84,44 @@ void mainApp(EnvType env) async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // For sharing images coming from outside the app while the app is in the memory
-  ReceiveSharingIntent.getMediaStream().listen((List<SharedMediaFile> value) {
-    debugPrint("ReceiveSharingIntent memory");
-    print(value[0].path);
-    // Routing().move(Routes.lobby);
-  }, onError: (err) {
-    debugPrint("ReceiveSharingIntent memory");
-    debugPrint("$err");
-  });
-
-  // For sharing images coming from outside the app while the app is closed
-  ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) async {
-    debugPrint("ReceiveSharingIntent closed 1");
-    print(value[0].path);
-    // Routing().move(Routes.lobby);
-  }, onError: (err) {
-    debugPrint("$err");
-  });
-
-  platform.invokeMethod('getFeatureType').then((value) {
-    debugPrint("ReceiveSharingIntent closed 2");
-    print(value);
-  }).catchError((onError) {
-    debugPrint("ReceiveSharingIntent closed 2 error");
-    print(onError);
-  });
+  // // For sharing images coming from outside the app while the app is in the memory
+  // ReceiveSharingIntent.getMediaStream().listen((List<SharedMediaFile> value) {
+  //   debugPrint("ReceiveSharingIntent memory");
+  //   print(value[0].path);
+  //   // Routing().move(Routes.lobby);
+  // }, onError: (err) {
+  //   debugPrint("ReceiveSharingIntent memory");
+  //   debugPrint("$err");
+  // });
+  //
+  // // For sharing images coming from outside the app while the app is closed
+  // ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) async {
+  //   debugPrint("ReceiveSharingIntent closed 1");
+  //   if(value.isNotEmpty){
+  //     final file = value[0];
+  //     if(file.path.isNotEmpty){
+  //       print(value[0].path);
+  //       Future.delayed(const Duration(seconds: 5), (){
+  //         Routing().move(Routes.root);
+  //       });
+  //     }
+  //   }
+  //
+  //   // Routing().move(Routes.lobby);
+  // }, onError: (err) {
+  //   debugPrint("$err");
+  // });
+  //
+  // platform.invokeMethod('getFeatureType').then((value) {
+  //   debugPrint("ReceiveSharingIntent closed 2");
+  //   print(value);
+  //   // Future.delayed(const Duration(seconds: 3), (){
+  //   //   Routing().move(Routes.lobby);
+  //   // });
+  // }).catchError((onError) {
+  //   debugPrint("ReceiveSharingIntent closed 2 error");
+  //   print(onError);
+  // });
 
   try {
     final receivedIntent = await ReceiveIntent.getInitialIntent();

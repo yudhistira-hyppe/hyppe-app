@@ -55,7 +55,7 @@ dependencies:
   image_picker: ^0.8.4+9 # Picking images from the image library, and taking new pictures with the camera.
   # flutter_facebook_auth: ^4.3.0
   # twitter_login: ^4.2.2
-  location: ^4.4.0
+  location: ^5.0.3
   url_launcher: ^6.1.10
   sign_in_with_apple: ^4.0.0
   crypto: ^3.0.0

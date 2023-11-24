@@ -128,7 +128,7 @@ class UploadContent extends StatelessWidget {
                     return Align(
                       alignment: Alignment.topCenter,
                       child: Container(
-                          margin: const EdgeInsets.only(top: 10),
+                          margin: EdgeInsets.only(top: Platform.isIOS ? 60 : 10),
                           child: CustomTextWidget(textToDisplay: tempDuration.formatter(), textStyle: const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700),)),
                     );
                   }

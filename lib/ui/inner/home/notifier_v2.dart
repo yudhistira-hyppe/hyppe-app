@@ -323,8 +323,8 @@ class HomeNotifier with ChangeNotifier {
             if (pic.pic != null && isNew) {
               limit = pic.pic?.first.limitLandingpage ?? 2;
               if (mounted) {
-                if (context.read<MainNotifier>().tutorialData.isEmpty) {
-                  context.read<MainNotifier>().tutorialData = pic.pic?.first.tutorial ?? [];
+                if ((Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData.isEmpty) {
+                  (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData = pic.pic?.first.tutorial ?? [];
                 }
               }
             }
@@ -342,16 +342,16 @@ class HomeNotifier with ChangeNotifier {
           if (!mounted) return;
           if (!isreload && isNew && diary.diaryData != null) return;
           await diary.initialDiary(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
-          if (diary.diaryData != null && context.read<MainNotifier>().tutorialData.isEmpty) {
-            context.read<MainNotifier>().tutorialData = diary.diaryData?.first.tutorial ?? [];
+          if (diary.diaryData != null && (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData.isEmpty) {
+            (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData = diary.diaryData?.first.tutorial ?? [];
           }
           break;
         case 2:
           if (!mounted) return;
           if (!isreload && isNew && vid.vidData != null) return;
           await vid.initialVid(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
-          if (vid.vidData != null && context.read<MainNotifier>().tutorialData.isEmpty) {
-            context.read<MainNotifier>().tutorialData = vid.vidData?.first.tutorial ?? [];
+          if (vid.vidData != null && (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData.isEmpty) {
+            (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData = vid.vidData?.first.tutorial ?? [];
           }
           break;
       }
