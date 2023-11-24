@@ -184,11 +184,5 @@
             android:value="false" /> -->
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
-        <meta-data
-            android:name="com.aliyun.alivc_license.licensekey"
-            android:value="MoCTfuQ391Z01mNqG8f8786e23c8a457a8ff8d5faedc1040c" />
-        <meta-data
-            android:name="com.aliyun.alivc_license.licensefile"
-            android:value="assets/alivc_resource/AliVideoCert-com_alivc_live_pusher_flutterdemo-20230621171902.crt" />
     </application>
 </manifest>

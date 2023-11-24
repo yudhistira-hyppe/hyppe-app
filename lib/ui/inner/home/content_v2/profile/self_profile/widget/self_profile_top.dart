@@ -65,18 +65,6 @@ class SelfProfileTop extends StatelessWidget {
             // SelectableText("${notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}")}"),
             // SelectableText("${SharedPreference().readStorage(SpKeys.fcmToken)}"),
             // SelectableText("${System().getDeviceIdentifier().toString()}"),
-            InkWell(
-              onTap: () {
-                Routing().move(
-                  Routes.followerScreen,
-                  argument: FollowerScreenArgument(
-                    username: notifier.displayUserName(),
-                    eventType: InteractiveEventType.follower,
-                  ),
-                );
-              },
-              child: Text("streaming"),
-            ),
 
             Row(
               children: <Widget>[
