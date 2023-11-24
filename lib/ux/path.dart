@@ -150,4 +150,6 @@ class Routes {
 
   static const String cacheAndDownload = '/cache-and-download';
 
+  //======================== Streaming ============
+  static const String streamer = '/streamer';
 }

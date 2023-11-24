@@ -86,6 +86,8 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/scre
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/screen.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
 import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/screen.dart' as message_detail_v2;
@@ -424,6 +426,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => ShimmerSlider(arguments: settings.arguments as SlidedPicDetailScreenArgument));
       case Routes.homeTutor:
         return MaterialPageRoute(builder: (_) => const HomeTutorScreen());
+      case Routes.streamer:
+        return MaterialPageRoute(builder: (_) => const StreamerScreen());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }
