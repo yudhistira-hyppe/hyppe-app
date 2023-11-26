@@ -70,6 +70,13 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  String _effectPath = '';
+  String get effectPath => _effectPath;
+  set effectPath(val){
+    _effectPath = val;
+    notifyListeners();
+  }
+
   bool _isDownloadingEffect = false;
   bool get isDownloadingEffect => _isDownloadingEffect;
   set isDownloadingEffect(bool state){
@@ -138,6 +145,9 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> initEffect(BuildContext context) async {
+    Directory directory = await path.getApplicationDocumentsDirectory();
+    effectPath = directory.path;
+    notifyListeners();
     try {
       final notifier = EffectBloc();
       await notifier.getEffects(context);
