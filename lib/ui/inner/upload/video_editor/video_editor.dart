@@ -73,7 +73,9 @@ class _VideoEditorState extends State<VideoEditor> {
       Navigator.pop(context);
     }, test: (e) => e is VideoMinDurationError).whenComplete(() {
       Future.delayed(const Duration(seconds: 1), () {
-        _controller.video.play();
+        if(_controller.video.value.isInitialized){
+          _controller.video.play();
+        }
       });
     });
     _controller.video.addListener(() async {

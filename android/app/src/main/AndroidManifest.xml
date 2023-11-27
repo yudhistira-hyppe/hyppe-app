@@ -78,7 +78,7 @@
             android:exported="true"/>
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:windowSoftInputMode="adjustResize"
@@ -110,6 +110,17 @@
                 <data android:scheme="https"/>
                 <data android:host="https://share.hyppe.app/"/>
             </intent-filter>
+
+<!--            <intent-filter android:label="HyppeStory">-->
+<!--                <action android:name="android.intent.action.SEND" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <data android:mimeType="image/*" />-->
+<!--            </intent-filter>-->
+<!--            <intent-filter android:label="HyppeStory">-->
+<!--                <action android:name="android.intent.action.SEND" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <data android:mimeType="video/*" />-->
+<!--            </intent-filter>-->
 
         </activity>
         <activity
@@ -153,11 +164,6 @@
             android:theme="@style/LaunchTheme"
             android:launchMode="singleTask"
             android:exported="true">
-            <intent-filter android:label="HyppeDiary">
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="image/*" />
-            </intent-filter>
             <intent-filter android:label="HyppeDiary">
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />

@@ -1,3 +1,8 @@
+import 'dart:async';
+
+import 'package:flutter/services.dart';
+import 'package:flutter_sharing_intent/flutter_sharing_intent.dart';
+import 'package:flutter_sharing_intent/model/sharing_file.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/initial/hyppe/multi_provider.dart';
 import 'package:hyppe/initial/hyppe/notifier.dart';
@@ -6,7 +11,9 @@ import 'package:hyppe/ux/generate.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import '../../app.dart';
+import '../../ux/path.dart';
 
 class Hyppe extends StatefulWidget {
   const Hyppe({super.key});
@@ -17,11 +24,24 @@ class Hyppe extends StatefulWidget {
 
 class _HyppeState extends State<Hyppe> {
   final hyppeNotifier = HyppeNotifier();
-
+  late StreamSubscription _intentDataStreamSubscription;
   @override
   void initState() {
     hyppeNotifier.setInitialTheme();
     super.initState();
+    _intentDataStreamSubscription = FlutterSharingIntent.instance.getMediaStream()
+        .listen((List<SharedFile> value) {
+      print("Shared: getMediaStream ${value.map((f) => f.value).join(",")}");
+    }, onError: (err) {
+      print("getIntentDataStream error: $err");
+    });
+
+    // For sharing images coming from outside the app while the app is closed
+    FlutterSharingIntent.instance.getInitialSharing().then((List<SharedFile> value) {
+      print("Shared: getInitialMedia ${value.map((f) => f.value).join(",")}");
+    });
+
+
   }
 
   @override
