@@ -27,8 +27,7 @@ class PreviewContent extends StatefulWidget {
   State<PreviewContent> createState() => _PreviewContentState();
 }
 
-class _PreviewContentState extends State<PreviewContent>
-    with AfterFirstLayoutMixin {
+class _PreviewContentState extends State<PreviewContent> with AfterFirstLayoutMixin {
   @override
   void initState() {
     context.read<PreviewContentNotifier>().stickers.clear();
@@ -84,21 +83,14 @@ class _PreviewContentState extends State<PreviewContent>
             color: Colors.transparent,
             width: double.infinity,
             // height: context.getHeight(),
-            height: notifier.featureType == FeatureType.story ||
-                    notifier.featureType == FeatureType.diary
-                ? MediaQuery.of(context).size.width * (16 / 9)
-                : null,
+            height: notifier.featureType == FeatureType.story || notifier.featureType == FeatureType.diary ? MediaQuery.of(context).size.width * (16 / 9) : null,
             child: BuildAnyContentPreviewer(
               globalKey: widget.globalKey,
               pageController: widget.pageController,
             ),
           ),
         ),
-        Positioned(
-            top: 10,
-            left: 0,
-            right: 0,
-            child: BuildTopWidget(globalKey: widget.globalKey)),
+        Positioned(top: 10, left: 0, right: 0, child: BuildTopWidget(globalKey: widget.globalKey)),
         if (notifier.showToastLimit)
           Align(
               alignment: Alignment.bottomCenter,
@@ -109,12 +101,9 @@ class _PreviewContentState extends State<PreviewContent>
                     margin: const EdgeInsets.only(bottom: 70),
                     width: context.getWidth() * 0.7,
                     // height: 100,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: kHyppeTextLightPrimary),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: kHyppeTextLightPrimary),
                     child: CustomTextWidget(
                       textToDisplay: notifier.messageLimit,
                       textAlign: TextAlign.left,

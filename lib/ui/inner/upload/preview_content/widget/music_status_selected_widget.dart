@@ -26,8 +26,7 @@ class MusicStatusSelected extends StatefulWidget {
   State<MusicStatusSelected> createState() => _MusicStatusSelectedState();
 }
 
-class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAware, AfterFirstLayoutMixin{
-
+class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAware, AfterFirstLayoutMixin {
   @override
   Widget build(BuildContext context) {
     final titleMusic = '${widget.music.musicTitle} - ${widget.music.artistName}';
@@ -41,27 +40,29 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          widget.isDrag ? const CustomIconWidget(
-            height: 20,
-            width: 20,
-            defaultColor: false,
-            color: Colors.white,
-            iconData: "${AssetPath.vectorPath}close_ads.svg",
-          ): InkWell(
-            onTap: () {
-              if(widget.onClose != null){
-                widget.onClose!();
-              }
-              //
-            },
-            child: const CustomIconWidget(
-              height: 20,
-              width: 20,
-              defaultColor: false,
-              color: Colors.white,
-              iconData: "${AssetPath.vectorPath}close_ads.svg",
-            ),
-          ),
+          widget.isDrag
+              ? const CustomIconWidget(
+                  height: 20,
+                  width: 20,
+                  defaultColor: false,
+                  color: Colors.white,
+                  iconData: "${AssetPath.vectorPath}close_ads.svg",
+                )
+              : InkWell(
+                  onTap: () {
+                    if (widget.onClose != null) {
+                      widget.onClose!();
+                    }
+                    //
+                  },
+                  child: const CustomIconWidget(
+                    height: 20,
+                    width: 20,
+                    defaultColor: false,
+                    color: Colors.white,
+                    iconData: "${AssetPath.vectorPath}close_ads.svg",
+                  ),
+                ),
           fourPx,
           Container(
             width: 1,
@@ -70,23 +71,27 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
           ),
           sixPx,
           Expanded(
-            child: lengthTitle > 20 ? Material(
-              color: Colors.transparent,
-              child: SizedBox(
-                height: 25,
-                  child: Marquee(text: '$titleMusic  ', style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),)),
-            ) : CustomTextWidget(
-              textOverflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              textToDisplay: '${widget.music.musicTitle} - ${widget.music.artistName}',
-              textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
-            ),
+            child: lengthTitle > 20
+                ? Material(
+                    color: Colors.transparent,
+                    child: SizedBox(
+                        height: 25,
+                        child: Marquee(
+                          text: '$titleMusic  ',
+                          style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
+                        )),
+                  )
+                : CustomTextWidget(
+                    textOverflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    textToDisplay: '${widget.music.musicTitle} - ${widget.music.artistName}',
+                    textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
+                  ),
           )
         ],
       ),
     );
   }
-
 
   @override
   void dispose() {
@@ -99,22 +104,21 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
 
   @override
   void initState() {
-    if(widget.isPlay){
+    if (widget.isPlay) {
       settingAudio();
     }
     super.initState();
   }
 
-  void settingAudio() async{
+  void settingAudio() async {
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     notifier.audioPreviewPlayer = AudioPlayer();
     await notifier.audioPreviewPlayer.setReleaseMode(ReleaseMode.loop);
     final url = widget.music.apsaraMusicUrl?.playUrl;
-    if(url != null){
+    if (url != null) {
       notifier.audioPreviewPlayer.play(UrlSource(url));
     }
   }
-
 
   @override
   void deactivate() {
@@ -159,19 +163,18 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
   @override
   void afterFirstLayout(BuildContext context) {
     print('afterFirstLayout MusicStatusSelected');
-    try{
+    try {
       CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
-    }catch(e){
+    } catch (e) {
       e.logger();
     }
-
   }
 
   @override
   void didChangeDependencies() {
-    try{
+    try {
       CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
-    }catch(e){
+    } catch (e) {
       e.logger();
     }
 

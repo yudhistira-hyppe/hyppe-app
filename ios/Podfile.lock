@@ -1,4 +1,7 @@
 PODS:
+  - AlivcLivePusher_Interactive (6.1.0):
+    - AlivcLivePusher_Interactive/AlivcLivePusher (= 6.1.0)
+  - AlivcLivePusher_Interactive/AlivcLivePusher (6.1.0)
   - AppAuth (1.6.2):
     - AppAuth/Core (= 1.6.2)
     - AppAuth/ExternalUserAgent (= 1.6.2)
@@ -172,6 +175,9 @@ PODS:
   - flutter_inappwebview/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 5.0)
+  - flutter_livepush_plugin (6.1.0):
+    - AlivcLivePusher_Interactive (= 6.1.0)
+    - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
   - flutter_sharing_intent (0.0.1):
@@ -383,6 +389,7 @@ DEPENDENCIES:
   - flutter_aliplayer (from `.symlinks/plugins/flutter_aliplayer/ios`)
   - flutter_image_compress (from `.symlinks/plugins/flutter_image_compress/ios`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
+  - flutter_livepush_plugin (from `.symlinks/plugins/flutter_livepush_plugin/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_sharing_intent (from `.symlinks/plugins/flutter_sharing_intent/ios`)
   - flutter_video_info (from `.symlinks/plugins/flutter_video_info/ios`)
@@ -413,6 +420,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AlivcLivePusher_Interactive
     - AppAuth
     - DKImagePickerController
     - DKPhotoGallery
@@ -489,6 +497,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_image_compress/ios"
   flutter_inappwebview:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
+  flutter_livepush_plugin:
+    :path: ".symlinks/plugins/flutter_livepush_plugin/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_sharing_intent:
@@ -543,6 +553,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
+  AlivcLivePusher_Interactive: b692d3aab33c036654050a8ae1dd7ffffa0e5200
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   camera_avfoundation: 3125e8cd1a4387f6f31c6c63abb8a55892a9eeeb
@@ -574,6 +585,7 @@ SPEC CHECKSUMS:
   flutter_aliplayer: 8e16ca63a36208d76c3920498f81324fd2de19c9
   flutter_image_compress: 5a5e9aee05b6553048b8df1c3bc456d0afaac433
   flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
+  flutter_livepush_plugin: e076bd6c1d6f8f771d3f39e7e0bb979d509e9fef
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_sharing_intent: e35380d0e1501d7111dbb7e46d5ac6339da6da98
   flutter_video_info: a932e1b0da369bba95c3a14b7f61d5f8b0d03280
@@ -594,7 +606,7 @@ SPEC CHECKSUMS:
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   light_compressor: 789ed7df289f0cd43f1dae8a6eed5d932b214c59
-  location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
+  location: d5cf8598915965547c3f36761ae9cc4f4e87d22e
   Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
   MLImage: 489dfec109f21da8621b28d476401aaf7a0d4ff4
   MLKitCommon: f6da6c5659618c070b50a80db01248ebe2964175

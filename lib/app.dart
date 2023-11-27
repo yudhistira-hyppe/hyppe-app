@@ -123,23 +123,23 @@ void mainApp(EnvType env) async {
   //   print(onError);
   // });
 
-    platform.invokeMethod('getFeatureType').then((value) {
-      debugPrint("ReceiveSharingIntent closed 2");
-    }).catchError((onError) {
-      debugPrint("ReceiveSharingIntent closed 2 error");
-      print(onError);
-    });
+  //   platform.invokeMethod('getFeatureType').then((value) {
+  //     debugPrint("ReceiveSharingIntent closed 2");
+  //   }).catchError((onError) {
+  //     debugPrint("ReceiveSharingIntent closed 2 error");
+  //     print(onError);
+  //   });
 
-    try {
-      final receivedIntent = await ReceiveIntent.getInitialIntent();
-      if (receivedIntent != null) {
-        debugPrint("ReceivedIntent");
-        debugPrint(receivedIntent.data);
-      }
-    } on PlatformException {
-      // Handle exception
-    }
-  }
+  //   try {
+  //     final receivedIntent = await ReceiveIntent.getInitialIntent();
+  //     if (receivedIntent != null) {
+  //       debugPrint("ReceivedIntent");
+  //       debugPrint(receivedIntent.data);
+  //     }
+  //   } on PlatformException {
+  //     // Handle exception
+  //   }
+  // }
 
   // start the localhost server
   await localhostServer.start();

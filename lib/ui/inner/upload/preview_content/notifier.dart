@@ -128,8 +128,7 @@ class PreviewContentNotifier with ChangeNotifier {
 
   VideoPlayerController? _betterPlayerController;
   PersistentBottomSheetController? _persistentBottomSheetController;
-  final TransformationController _transformationController =
-      TransformationController();
+  final TransformationController _transformationController = TransformationController();
   var audioPlayer = AudioPlayer();
   var audioPreviewPlayer = AudioPlayer();
   final searchController = TextEditingController();
@@ -138,14 +137,13 @@ class PreviewContentNotifier with ChangeNotifier {
   final focusNode = FocusNode();
 
   VideoPlayerController? get betterPlayerController => _betterPlayerController;
-  set betterPlayerController(VideoPlayerController? val){
+  set betterPlayerController(VideoPlayerController? val) {
     _betterPlayerController = val;
     notifyListeners();
   }
-  TransformationController get transformationController =>
-      _transformationController;
-  PersistentBottomSheetController? get persistentBottomSheetController =>
-      _persistentBottomSheetController;
+
+  TransformationController get transformationController => _transformationController;
+  PersistentBottomSheetController? get persistentBottomSheetController => _persistentBottomSheetController;
   bool get showNext => _showNext;
   List<Uint8List?>? get thumbNails => _thumbNails;
   double get sizeDragTarget => _sizeDragTarget;
@@ -171,7 +169,7 @@ class PreviewContentNotifier with ChangeNotifier {
   FeatureType? get featureType => _featureType;
   List<String?>? get fileContent => _fileContent;
   List<double> filterMatrix(int index) => _filterMatrix[index];
-  
+
   TextEditingController stickerTextController = TextEditingController();
   ScrollController stickerScrollController = ScrollController();
 
@@ -219,21 +217,22 @@ class PreviewContentNotifier with ChangeNotifier {
 
   String _messageLimit = '';
   String get messageLimit => _messageLimit;
-  set messageLimit(String value){
+  set messageLimit(String value) {
     _messageLimit = value;
     notifyListeners();
   }
 
   bool _showToastLimit = false;
   bool get showToastLimit => _showToastLimit;
-  set showToastLimit(bool state){
+  set showToastLimit(bool state) {
     _showToastLimit = state;
     notifyListeners();
   }
-  showToast(Duration duration){
-    if(!showToastLimit){
+
+  showToast(Duration duration) {
+    if (!showToastLimit) {
       showToastLimit = true;
-      Future.delayed(duration, (){
+      Future.delayed(duration, () {
         showToastLimit = false;
       });
     }
@@ -259,21 +258,21 @@ class PreviewContentNotifier with ChangeNotifier {
 
   int _stickerTabIndex = 0;
   int get stickerTabIndex => _stickerTabIndex;
-  set stickerTabIndex(val){
+  set stickerTabIndex(val) {
     _stickerTabIndex = val;
     notifyListeners();
   }
-  
+
   int _stickerCategoryIndex = 0;
   int get stickerCategoryIndex => _stickerCategoryIndex;
-  set stickerCategoryIndex(val){
+  set stickerCategoryIndex(val) {
     _stickerCategoryIndex = val;
     notifyListeners();
   }
 
   List<Widget> _onScreenStickers = [];
   List<Widget> get onScreenStickers => _onScreenStickers;
-  set onScreenStickers(List<Widget> val){
+  set onScreenStickers(List<Widget> val) {
     _onScreenStickers = val;
     notifyListeners();
   }
@@ -528,9 +527,7 @@ class PreviewContentNotifier with ChangeNotifier {
   void onScrollExpMusics(
     BuildContext context,
   ) async {
-    if (scrollExpController.offset >=
-            scrollExpController.position.maxScrollExtent &&
-        !scrollExpController.position.outOfRange) {
+    if (scrollExpController.offset >= scrollExpController.position.maxScrollExtent && !scrollExpController.position.outOfRange) {
       if (!_isLoadNextExpMusic) {
         print('Test onScrollExpMusics');
         if (_isNextExpMusic) {
@@ -541,20 +538,11 @@ class PreviewContentNotifier with ChangeNotifier {
             final myId = _selectedType?.id;
             if (myId != null) {
               if (_selectedMusicEnum == MusicEnum.mood) {
-                res = await getMusics(context,
-                    keyword: searchController.text,
-                    idMood: myId,
-                    pageNumber: pageNumber);
+                res = await getMusics(context, keyword: searchController.text, idMood: myId, pageNumber: pageNumber);
               } else if (_selectedMusicEnum == MusicEnum.genre) {
-                res = await getMusics(context,
-                    keyword: searchController.text,
-                    idGenre: myId,
-                    pageNumber: pageNumber);
+                res = await getMusics(context, keyword: searchController.text, idGenre: myId, pageNumber: pageNumber);
               } else {
-                res = await getMusics(context,
-                    keyword: searchController.text,
-                    idTheme: myId,
-                    pageNumber: pageNumber);
+                res = await getMusics(context, keyword: searchController.text, idTheme: myId, pageNumber: pageNumber);
               }
               _isNextExpMusic = res.isEmpty ? false : res.length % 15 == 0;
               _listExpMusics.addAll(res);
@@ -571,15 +559,13 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void onScrollMusics(BuildContext context) async {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
       if (!_isLoadNextMusic) {
         if (_isNextMusic) {
           try {
             _isLoadNextMusic = true;
             final int pageNumber = _listMusics.length ~/ 15;
-            final res = await getMusics(context,
-                keyword: searchController.text, pageNumber: pageNumber);
+            final res = await getMusics(context, keyword: searchController.text, pageNumber: pageNumber);
             _isNextMusic = res.isEmpty ? false : res.length % 15 == 0;
             _listMusics.addAll(res);
             notifyListeners();
@@ -618,12 +604,9 @@ class PreviewContentNotifier with ChangeNotifier {
           notifyListeners();
           try {
             listMusics = await getMusics(context, keyword: value);
-            _listGenres = await getMusicCategories(context, MusicEnum.genre,
-                keyword: value);
-            _listThemes = await getMusicCategories(context, MusicEnum.theme,
-                keyword: value);
-            _listMoods = await getMusicCategories(context, MusicEnum.mood,
-                keyword: value);
+            _listGenres = await getMusicCategories(context, MusicEnum.genre, keyword: value);
+            _listThemes = await getMusicCategories(context, MusicEnum.theme, keyword: value);
+            _listMoods = await getMusicCategories(context, MusicEnum.mood, keyword: value);
           } catch (e) {
             'Error onChangeSearchMusic : $e'.logger();
           } finally {
@@ -717,39 +700,20 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
-  Future getMusicByType(BuildContext context,
-      {String keyword = '',
-      String idGenre = '',
-      String idTheme = '',
-      String idMood = ''}) async {
-    listExpMusics = await getMusics(context,
-        keyword: keyword, idGenre: idGenre, idTheme: idTheme, idMood: idMood);
+  Future getMusicByType(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood = ''}) async {
+    listExpMusics = await getMusics(context, keyword: keyword, idGenre: idGenre, idTheme: idTheme, idMood: idMood);
     notifyListeners();
   }
 
-  Future<List<Music>> getMusics(BuildContext context,
-      {String keyword = '',
-      String idGenre = '',
-      String idTheme = '',
-      String idMood = '',
-      int pageNumber = 0,
-      int pageRow = 15}) async {
+  Future<List<Music>> getMusics(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood = '', int pageNumber = 0, int pageRow = 15}) async {
     List<Music>? res = [];
     _isLoadingMusic = true;
     try {
       final bloc = MusicDataBloc();
-      await bloc.getMusics(context,
-          keyword: keyword,
-          idTheme: idTheme,
-          idGenre: idGenre,
-          idMood: idMood,
-          pageNumber: pageNumber,
-          pageRow: pageRow);
+      await bloc.getMusics(context, keyword: keyword, idTheme: idTheme, idGenre: idGenre, idMood: idMood, pageNumber: pageNumber, pageRow: pageRow);
       final fetch = bloc.musicDataFetch;
       if (fetch.musicDataState == MusicState.getMusicsBlocSuccess) {
-        res = (fetch.data as List<dynamic>?)
-            ?.map((item) => Music.fromJson(item as Map<String, dynamic>))
-            .toList();
+        res = (fetch.data as List<dynamic>?)?.map((item) => Music.fromJson(item as Map<String, dynamic>)).toList();
         print('res length = ${res?.length}');
         return res ?? [];
       } else if (fetch.musicDataState == MusicState.getMusicBlocError) {
@@ -763,18 +727,14 @@ class PreviewContentNotifier with ChangeNotifier {
     return [];
   }
 
-  Future<List<MusicType>> getMusicCategories(
-      BuildContext context, MusicEnum type,
-      {String keyword = ''}) async {
+  Future<List<MusicType>> getMusicCategories(BuildContext context, MusicEnum type, {String keyword = ''}) async {
     List<MusicType>? res = [];
     try {
       final bloc = MusicDataBloc();
       await bloc.getTypeMusic(context, type, keyword: keyword);
       final fetch = bloc.musicDataFetch;
       if (fetch.musicDataState == MusicState.getMusicsBlocSuccess) {
-        res = (fetch.data as List<dynamic>?)
-            ?.map((item) => MusicType.fromJson(item as Map<String, dynamic>))
-            .toList();
+        res = (fetch.data as List<dynamic>?)?.map((item) => MusicType.fromJson(item as Map<String, dynamic>)).toList();
       } else if (fetch.musicDataState == MusicState.getMusicBlocError) {
         throw '${(fetch.data as dio.DioError).message}';
       }
@@ -799,7 +759,7 @@ class PreviewContentNotifier with ChangeNotifier {
       print('encode video: $command');
       await FFmpegKit.executeAsync(
         command,
-            (session) async {
+        (session) async {
           final codeSession = await session.getReturnCode();
           if (ReturnCode.isSuccess(codeSession)) {
             print('ReturnCode = Success');
@@ -819,7 +779,7 @@ class PreviewContentNotifier with ChangeNotifier {
             // Error
           }
         },
-            (log) {
+        (log) {
           _isLoadVideo = false;
           notifyListeners();
           print('FFmpegKit ${log.getMessage()}');
@@ -837,11 +797,9 @@ class PreviewContentNotifier with ChangeNotifier {
         _isLoadVideo = true;
         notifyListeners();
         String outputPath = await System().getSystemPath(params: 'postVideo');
-        outputPath =
-            '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
+        outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
 
-        String command =
-            '-stream_loop -1 -i $urlAudio -i ${_fileContent?[_indexView]} -shortest -c copy $outputPath';
+        String command = '-stream_loop -1 -i $urlAudio -i ${_fileContent?[_indexView]} -shortest -c copy $outputPath';
         await FFmpegKit.executeAsync(
           command,
           (session) async {
@@ -876,8 +834,7 @@ class PreviewContentNotifier with ChangeNotifier {
       }
     } catch (e) {
       'videoMerger Error : $e'.logger();
-      ShowBottomSheet()
-          .onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
+      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
     } finally {
       _isLoadVideo = false;
       notifyListeners();
@@ -885,30 +842,30 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   /// split story videos ==Hariyanto Lukman==
-  Future postVideos(BuildContext context, Duration totalDuration) async{
-    await for(String? file in getSplitVideos(context, totalDuration)){
-      if(file != null){
+  Future postVideos(BuildContext context, Duration totalDuration) async {
+    await for (String? file in getSplitVideos(context, totalDuration)) {
+      if (file != null) {
         postStoryContent(context, file: file);
       }
     }
   }
 
-  Stream<String?> getSplitVideos(BuildContext context, Duration totalDuration) async*{
+  Stream<String?> getSplitVideos(BuildContext context, Duration totalDuration) async* {
     final defaultFile = _fileContent?[0];
     final seconds = totalDuration.inSeconds;
-    if(seconds > 15){
+    if (seconds > 15) {
       var start = const Duration(seconds: 0);
       var end = const Duration(seconds: 15);
       var temp = const Duration();
 
-      if(defaultFile != null){
-        for(int i = 0 ; i < (_fileContent ?? []).length ; i++){
-          if(i == 0){
-            if(seconds < 19){
+      if (defaultFile != null) {
+        for (int i = 0; i < (_fileContent ?? []).length; i++) {
+          if (i == 0) {
+            if (seconds < 19) {
               end = Duration(seconds: seconds - 4);
             }
             temp = end;
-          }else if(i == 1){
+          } else if (i == 1) {
             start = temp;
             end = totalDuration;
           }
@@ -917,13 +874,13 @@ class PreviewContentNotifier with ChangeNotifier {
           //   // await Future.delayed(const Duration(seconds: 1));
           //   await postStoryContent(context, file: path ?? '');
           // }
-
         }
       }
-    }else{
-      await postStoryContent(context,);
+    } else {
+      await postStoryContent(
+        context,
+      );
     }
-
   }
 
   Future<String?> videoSplit(BuildContext context, String file, Duration start, Duration end, int index) async {
@@ -931,16 +888,15 @@ class PreviewContentNotifier with ChangeNotifier {
       _isLoadVideo = true;
       notifyListeners();
       String outputPath = await System().getSystemPath(params: 'postVideo');
-      outputPath =
-      '${outputPath + (Routing.navigatorKey.currentContext ?? context).getNameByDate()}.mp4';
+      outputPath = '${outputPath + (Routing.navigatorKey.currentContext ?? context).getNameByDate()}.mp4';
 
       final strStart = start.detail();
       final strEnd = end.detail();
-      String command =
-          '-ss $strStart -to $strEnd -i $file -async 1 $outputPath';
+      String command = '-ss $strStart -to $strEnd -i $file -async 1 $outputPath';
       final session = await FFmpegKit.executeAsync(
-        command, null,
-            (log) {
+        command,
+        null,
+        (log) {
           _isLoadVideo = false;
           notifyListeners();
           print('FFmpegKit ${log.getMessage()}');
@@ -969,10 +925,7 @@ class PreviewContentNotifier with ChangeNotifier {
       'videoMerger Error : $e'.logger();
       return null;
     }
-
   }
-
-
 
   Future restartVideoPlayer(String outputPath, BuildContext context, {bool isInit = true}) async {
     final path = _fileContent?[_indexView] ?? '';
@@ -1028,8 +981,7 @@ class PreviewContentNotifier with ChangeNotifier {
       }
     } catch (e) {
       e.logger();
-      ShowBottomSheet()
-          .onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
+      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
     } finally {
       _isLoadVideo = false;
       notifyListeners();
@@ -1159,8 +1111,7 @@ class PreviewContentNotifier with ChangeNotifier {
         notifyListeners();
         _listExpMusics[index].isSelected = false;
       } else {
-        _listExpMusics[_listExpMusics.indexOf(_selectedMusic!)].isSelected =
-            false;
+        _listExpMusics[_listExpMusics.indexOf(_selectedMusic!)].isSelected = false;
         _listExpMusics[index].isSelected = true;
         _selectedMusic = music;
       }
@@ -1199,7 +1150,6 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void initVideoPlayer(BuildContext context, {isSaveDefault = false}) async {
-
     _isLoadingBetterPlayer = true;
     _errorMessage = '';
 
@@ -1250,7 +1200,11 @@ class PreviewContentNotifier with ChangeNotifier {
 
     await Future.delayed(const Duration(milliseconds: 500));
 
-    _betterPlayerController = VideoPlayerController.file(File(_url ?? '',),);
+    _betterPlayerController = VideoPlayerController.file(
+      File(
+        _url ?? '',
+      ),
+    );
     try {
       notifyListeners();
       // await _betterPlayerController?.setupDataSource(dataSource).then((_) {
@@ -1267,31 +1221,35 @@ class PreviewContentNotifier with ChangeNotifier {
       });
       _betterPlayerController?.setLooping(true);
       print('will initialize');
-      await _betterPlayerController?.initialize().whenComplete((){
-        Future.delayed(const Duration(seconds: 1), (){
-
-          if(featureType == FeatureType.story){
+      await _betterPlayerController?.initialize().whenComplete(() {
+        Future.delayed(const Duration(seconds: 1), () {
+          if (featureType == FeatureType.story) {
             final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
             const limitDuration = Duration(seconds: 16);
             messageLimit = (language.messageLimitStory ?? 'Error');
-            if(videoDuration >= limitDuration){
+            if (videoDuration >= limitDuration) {
               showToast(const Duration(seconds: 3));
-            }else if(videoDuration < Duration(seconds: storyMin)){
+            } else if (videoDuration < Duration(seconds: storyMin)) {
               messageLimit = language.messageLessLimitStory ?? 'Error';
               showToast(const Duration(seconds: 3));
             }
-          }else{
+          } else {
             final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
-            final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1, milliseconds: 900) : featureType == FeatureType.vid ? const Duration(minutes: 30, milliseconds: 900) : const Duration(seconds: 0);
+            final limitDuration = featureType == FeatureType.diary
+                ? const Duration(minutes: 1, milliseconds: 900)
+                : featureType == FeatureType.vid
+                    ? const Duration(minutes: 30, milliseconds: 900)
+                    : const Duration(seconds: 0);
             print('State Preview Limit: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
 
-            if(videoDuration >= limitDuration){
+            if (videoDuration >= limitDuration) {
               messageLimit = featureType == FeatureType.vid
                   ? (language.messageLimitVideo ?? 'Error')
                   : featureType == FeatureType.diary
-                  ? (language.messageLimitDiary ?? 'Error') : 'Error';
+                      ? (language.messageLimitDiary ?? 'Error')
+                      : 'Error';
               showToast(const Duration(seconds: 3));
-            }else if(videoDuration < Duration(seconds: vidMin)){
+            } else if (videoDuration < Duration(seconds: vidMin)) {
               messageLimit = language.messageLessLimitVideo ?? 'Error';
               showToast(const Duration(seconds: 3));
             }
@@ -1299,7 +1257,6 @@ class PreviewContentNotifier with ChangeNotifier {
           _betterPlayerController?.play();
           notifyListeners();
         });
-
       });
 
       // _betterPlayerController?.addEventsListener(
@@ -1355,8 +1312,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void addAdditionalItem(
-      {required Widget widgetItem, required Offset offsetItem}) {
+  void addAdditionalItem({required Widget widgetItem, required Offset offsetItem}) {
     _additionalItem.add(widgetItem);
     _positions.add(offsetItem);
     notifyListeners();
@@ -1383,40 +1339,45 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void setVideoPlayerController(VideoPlayerController? val) =>
-      _betterPlayerController = val;
+  void setVideoPlayerController(VideoPlayerController? val) => _betterPlayerController = val;
 
   void clearAdditionalItem() {
     _additionalItem.clear();
     _positions.clear();
   }
 
-  bool ableShare(){
-    if(featureType == FeatureType.pic){
+  bool ableShare() {
+    if (featureType == FeatureType.pic) {
       return true;
-    }else if(featureType == FeatureType.diary || featureType == FeatureType.vid || featureType == FeatureType.story ){
+    } else if (featureType == FeatureType.diary || featureType == FeatureType.vid || featureType == FeatureType.story) {
       final isImage = fileContent?[0]?.isImageFormat() ?? false;
-      if(isImage){
+      if (isImage) {
         return true;
       }
       final videoDuration = betterPlayerController?.value.duration ?? const Duration(seconds: 0);
-      final limitDuration = featureType == FeatureType.diary ? const Duration(minutes: 1) : featureType == FeatureType.vid ? const Duration(minutes: 30) : featureType == FeatureType.story ? const Duration(seconds: 15) : const Duration(seconds: 0);
+      final limitDuration = featureType == FeatureType.diary
+          ? const Duration(minutes: 1)
+          : featureType == FeatureType.vid
+              ? const Duration(minutes: 30)
+              : featureType == FeatureType.story
+                  ? const Duration(seconds: 15)
+                  : const Duration(seconds: 0);
       print('State Preview Limit Checking: ${videoDuration.inMinutes} ${limitDuration.inMinutes} $featureType');
-      if(videoDuration.inSeconds == 0){
+      if (videoDuration.inSeconds == 0) {
         return false;
       }
-      if(featureType == FeatureType.diary || featureType == FeatureType.vid){
+      if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
         return videoDuration.inMinutes <= limitDuration.inMinutes;
-      }else{
+      } else {
         return videoDuration.inSeconds <= limitDuration.inSeconds;
       }
-
-    }else{
+    } else {
       return true;
     }
   }
 
   Future<bool> onWillPop(BuildContext context) async {
+    print("hahahaha");
     _addTextItemMode = false;
     _fixSelectedMusic = null;
     _selectedMusic = null;
@@ -1437,8 +1398,7 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void animateToPage(int index, PageController pageController) {
-    pageController.animateToPage(index,
-        duration: const Duration(milliseconds: 200), curve: Curves.easeInCirc);
+    pageController.animateToPage(index, duration: const Duration(milliseconds: 200), curve: Curves.easeInCirc);
     indexView = index;
     notifyListeners();
   }
@@ -1469,8 +1429,7 @@ class PreviewContentNotifier with ChangeNotifier {
     );
   }
 
-  void navigateToPreUploaded(BuildContext context,
-      [GlobalKey? globalKey]) async {
+  void navigateToPreUploaded(BuildContext context, [GlobalKey? globalKey]) async {
     if (featureType == FeatureType.diary) {
       final ms = totalDuration?.inMilliseconds;
       if (ms != null) {
@@ -1487,8 +1446,7 @@ class PreviewContentNotifier with ChangeNotifier {
 
     if (_isSheetOpen) closeFilters();
     if (betterPlayerController != null) isForcePaused = true;
-    final notifier =
-        Provider.of<PreUploadContentNotifier>(context, listen: false);
+    final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
     notifier.isEdit = false;
     notifier.featureType = featureType;
     notifier.fileContent = fileContent;
@@ -1497,13 +1455,8 @@ class PreviewContentNotifier with ChangeNotifier {
             ? _thumbNails![0]
             : null
         : null;
-    notifier.privacyTitle == ''
-        ? notifier.privacyTitle = notifier.language.public ?? 'public'
-        : notifier.privacyTitle = notifier.privacyTitle;
-    notifier.locationName == ''
-        ? notifier.locationName =
-            notifier.language.addLocation ?? 'add location'
-        : notifier.locationName = notifier.locationName;
+    notifier.privacyTitle == '' ? notifier.privacyTitle = notifier.language.public ?? 'public' : notifier.privacyTitle = notifier.privacyTitle;
+    notifier.locationName == '' ? notifier.locationName = notifier.language.addLocation ?? 'add location' : notifier.locationName = notifier.locationName;
     notifier.musicSelected = _fixSelectedMusic;
     _fixSelectedMusic = null;
     notifier.checkForCompress();
@@ -1512,10 +1465,7 @@ class PreviewContentNotifier with ChangeNotifier {
 
   //Tag Hariyanto
   Future makeThumbnail(BuildContext context, int index) async {
-    if (System()
-            .lookupContentMimeType(fileContent?[index] ?? '')
-            ?.startsWith('image') ??
-        false) {
+    if (System().lookupContentMimeType(fileContent?[index] ?? '')?.startsWith('image') ?? false) {
       showNext = true;
     } else {
       _thumbNails = [];
@@ -1526,8 +1476,7 @@ class PreviewContentNotifier with ChangeNotifier {
           Uint8List? _thumbnail = await VideoThumbnail.thumbnailData(
             video: fileContent?[index] ?? '',
             imageFormat: ImageFormat.JPEG,
-            maxWidth:
-                128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+            maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
             quality: 25,
           );
           _thumbNails?.add(_thumbnail);
@@ -1550,22 +1499,17 @@ class PreviewContentNotifier with ChangeNotifier {
     _sourceFile = sourceFile;
   }
 
-  void showFilters(BuildContext context, GlobalKey<ScaffoldState> scaffoldState,
-      GlobalKey? globalKey) {
+  void showFilters(BuildContext context, GlobalKey<ScaffoldState> scaffoldState, GlobalKey? globalKey) {
     if (System().extensionFiles(_fileContent?[indexView] ?? '') == '.$PNG' ||
         System().extensionFiles(_fileContent?[indexView] ?? '') == '.$JPG' ||
         System().extensionFiles(_fileContent?[indexView] ?? '') == '.$JPEG') {
       isSheetOpen = true;
-      persistentBottomSheetController = ShowBottomSheet().onShowFilters(
-          context, scaffoldState, fileContent?[indexView] ?? '', globalKey);
+      persistentBottomSheetController = ShowBottomSheet().onShowFilters(context, scaffoldState, fileContent?[indexView] ?? '', globalKey);
 
       // listen to Scaffold status
-      persistentBottomSheetController?.closed
-          .whenComplete(() => isSheetOpen = false);
+      persistentBottomSheetController?.closed.whenComplete(() => isSheetOpen = false);
     } else {
-      ShowBottomSheet().onShowColouredSheet(
-          context, language.filterIsOnlySupportedForImage ?? '',
-          color: kHyppeTextWarning, maxLines: 2);
+      ShowBottomSheet().onShowColouredSheet(context, language.filterIsOnlySupportedForImage ?? '', color: kHyppeTextWarning, maxLines: 2);
     }
   }
 
@@ -1606,9 +1550,7 @@ class PreviewContentNotifier with ChangeNotifier {
       id: sticker?.id,
       type: sticker?.type,
       image: sticker?.image,
-      matrix: Matrix4
-        .identity()
-        .scaled(SizeWidget.stickerScale)
+      matrix: Matrix4.identity().scaled(SizeWidget.stickerScale)
         ..setTranslationRaw(
           (MediaQuery.of(context).size.width - (MediaQuery.of(context).size.width * SizeWidget.stickerScale)) / 2,
           MediaQuery.of(context).size.height / 5,
@@ -1629,24 +1571,20 @@ class PreviewContentNotifier with ChangeNotifier {
         isDeleteButtonActive = false;
         stickers.where((element) => element.key == key).first.matrix = matrix;
         notifyListeners();
-        if (
-          offset.dy > (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 160) &&
-          offset.dy < (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 80) &&
-          offset.dx > ((MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.width / 2) - 30) &&
-          offset.dx < ((MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.width / 2) + 30)
-        ) {
+        if (offset.dy > (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 160) &&
+            offset.dy < (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 80) &&
+            offset.dx > ((MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.width / 2) - 30) &&
+            offset.dx < ((MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.width / 2) + 30)) {
           stickers.removeWhere((element) => element.key == key);
           onScreenStickers.removeWhere((element) => element.key == key);
           notifyListeners();
         }
       },
       onDragUpdate: (matrix, offset, key) {
-        if (
-          offset.dy > (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 160) &&
-          offset.dy < (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 80) &&
-          offset.dx > ((MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.width / 2) - 30) &&
-          offset.dx < ((MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.width / 2) + 30)
-        ) {
+        if (offset.dy > (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 160) &&
+            offset.dy < (MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.height - 80) &&
+            offset.dx > ((MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.width / 2) - 30) &&
+            offset.dx < ((MediaQuery.of(Routing.navigatorKey.currentContext ?? context).size.width / 2) + 30)) {
           if (!isDeleteButtonActive) {
             isDeleteButtonActive = true;
             notifyListeners();
@@ -1692,12 +1630,10 @@ class PreviewContentNotifier with ChangeNotifier {
         location: '',
         stickers: _stickers,
         onReceiveProgress: (count, total) async {
-          await eventService.notifyUploadReceiveProgress(ProgressUploadArgument(
-              count: count.toDouble(), total: total.toDouble()));
+          await eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count.toDouble(), total: total.toDouble()));
         },
         onSendProgress: (received, total) async {
-          await eventService.notifyUploadSendProgress(ProgressUploadArgument(
-              count: received.toDouble(), total: total.toDouble()));
+          await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received.toDouble(), total: total.toDouble()));
         },
       ).then((value) {
         _uploadSuccess = value;
@@ -1708,10 +1644,7 @@ class PreviewContentNotifier with ChangeNotifier {
           dio.Response res = value;
           "return data ${jsonEncode(res.data['data'])}".loggerV2();
           ContentData uploadedData = ContentData.fromJson(res.data['data']);
-          (Routing.navigatorKey.currentContext ?? context)
-              .read<HomeNotifier>()
-              .onUploadedSelfUserContent(
-                  context: context, contentData: uploadedData);
+          (Routing.navigatorKey.currentContext ?? context).read<HomeNotifier>().onUploadedSelfUserContent(context: context, contentData: uploadedData);
         }
       });
 
@@ -1749,15 +1682,15 @@ class PreviewContentNotifier with ChangeNotifier {
 
   bool _noRefresh = false;
   bool get noRefresh => _noRefresh;
-  set noRefresh(bool state){
+  set noRefresh(bool state) {
     _noRefresh = state;
     notifyListeners();
   }
 
-  void goToVideoEditor(BuildContext context, FeatureType type) async{
+  void goToVideoEditor(BuildContext context, FeatureType type) async {
     noRefresh = true;
     final path = fileContent?[0];
-    if(path != null){
+    if (path != null) {
       isLoadVideo = true;
       betterPlayerController?.pause();
       final seconds = betterPlayerController?.value.duration ?? const Duration(seconds: 10);
@@ -1765,25 +1698,28 @@ class PreviewContentNotifier with ChangeNotifier {
       final newPath = await Navigator.push(
         context,
         MaterialPageRoute<String?>(
-          builder: (BuildContext context) => VideoEditor(file: File(path), videoSeconds: seconds, type: type,),
+          builder: (BuildContext context) => VideoEditor(
+            file: File(path),
+            videoSeconds: seconds,
+            type: type,
+          ),
         ),
       );
-      if(newPath != null){
+      if (newPath != null) {
         final controller = VideoPlayerController.file(File(newPath));
-        try{
+        try {
           controller.initialize();
           fileContent?[0] = newPath;
           isLoadVideo = false;
-          Future.delayed(const Duration(milliseconds: 500), (){
-
+          Future.delayed(const Duration(milliseconds: 500), () {
             initVideoPlayer(context);
             noRefresh = false;
           });
-        }catch(e){
+        } catch (e) {
           messageLimit = 'Error convert';
           showToast(const Duration(seconds: 3));
         }
-      }else{
+      } else {
         isLoadVideo = false;
         // Future.delayed(const Duration(milliseconds: 500), (){
         //
@@ -1822,12 +1758,9 @@ class PreviewContentNotifier with ChangeNotifier {
     if (System().extensionFiles(_fileContent?[indexView] ?? '') == '.$PNG' ||
         System().extensionFiles(_fileContent?[indexView] ?? '') == '.$JPG' ||
         System().extensionFiles(_fileContent?[indexView] ?? '') == '.$JPEG') {
-      OverlayService()
-          .addOverlayElement(context, const CustomTextFieldForOverlay());
+      OverlayService().addOverlayElement(context, const CustomTextFieldForOverlay());
     } else {
-      ShowBottomSheet().onShowColouredSheet(
-          context, language.filterIsOnlySupportedForImage ?? '',
-          color: kHyppeTextWarning, maxLines: 2);
+      ShowBottomSheet().onShowColouredSheet(context, language.filterIsOnlySupportedForImage ?? '', color: kHyppeTextWarning, maxLines: 2);
     }
   }
 
