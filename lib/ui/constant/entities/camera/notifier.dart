@@ -42,7 +42,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   bool _isFlash = false;
   bool get isFlash => _isFlash;
-  set isFlash(bool state){
+  set isFlash(bool state) {
     _isFlash = state;
     notifyListeners();
   }
@@ -54,21 +54,28 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   List<EffectModel> _effects = [];
   List<EffectModel> get effects => _effects;
-  set effects(val){
+  set effects(val) {
     _effects = val;
     notifyListeners();
   }
 
   EffectModel? _selectedEffect;
   EffectModel? get selectedEffect => _selectedEffect;
-  set selectedEffect(val){
+  set selectedEffect(val) {
     _selectedEffect = val;
+    notifyListeners();
+  }
+
+  String _effectPath = '';
+  String get effectPath => _effectPath;
+  set effectPath(val) {
+    _effectPath = val;
     notifyListeners();
   }
 
   bool _isDownloadingEffect = false;
   bool get isDownloadingEffect => _isDownloadingEffect;
-  set isDownloadingEffect(bool state){
+  set isDownloadingEffect(bool state) {
     _isDownloadingEffect = state;
     notifyListeners();
   }
@@ -89,7 +96,6 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       flashMode = FlashMode.torch;
       isFlash = false;
       deepArController ??= DeepArController();
-
 
       print('Initializing DeepAR');
       await deepArController!
@@ -134,6 +140,9 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> initEffect(BuildContext context) async {
+    Directory directory = await path.getApplicationSupportDirectory();
+    effectPath = directory.path;
+    notifyListeners();
     try {
       final notifier = EffectBloc();
       await notifier.getEffects(context);
@@ -165,12 +174,12 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
             context: context,
             effectID: effectModel.postID,
             savePath: saveFile.path,
-            whenComplete:  () {
+            whenComplete: () {
               deepArController?.switchEffect(filePath);
               isDownloadingEffect = false;
               notifyListeners();
             },
-          );  
+          );
         }
       } catch (err) {
         err.logger();
@@ -218,8 +227,8 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     // isFlash = false;
     deepArController!.flipCamera();
     print('myFlash: $isFlash');
-    if(isFlash){
-      Future.delayed(const Duration(seconds: 1), () async{
+    if (isFlash) {
+      Future.delayed(const Duration(seconds: 1), () async {
         await deepArController!.toggleFlash();
       });
     }
@@ -295,8 +304,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<File?> takePicture() async {
-
-    if(isFlash){
+    if (isFlash) {
       isFlash = (await deepArController?.toggleFlash() ?? false);
     }
     File _result;
@@ -350,7 +358,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       return null;
     }
 
-    if(isFlash){
+    if (isFlash) {
       isFlash = (await deepArController?.toggleFlash() ?? false);
     }
 

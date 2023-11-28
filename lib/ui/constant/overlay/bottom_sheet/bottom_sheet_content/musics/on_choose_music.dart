@@ -29,11 +29,10 @@ class OnChooseMusicBottomSheet extends StatefulWidget {
 }
 
 class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
-
   @override
   void initState() {
     final notifier = context.read<PreviewContentNotifier>();
-    Future.delayed(Duration.zero, () async{
+    Future.delayed(Duration.zero, () async {
       notifier.isLoadingMusic = true;
       await notifier.initListMusics(context);
     });
@@ -51,15 +50,14 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Consumer<PreviewContentNotifier>(builder: (context, notifier, _){
+    return Consumer<PreviewContentNotifier>(builder: (context, notifier, _) {
       final showListExp = notifier.selectedType != null;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           twelvePx,
-          const CustomIconWidget(
-              iconData: "${AssetPath.vectorPath}handler.svg"),
+          const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
           Container(
             margin: const EdgeInsets.only(left: 16, right: 16),
             child: CustomSearchBar(
@@ -67,76 +65,82 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
               contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
               focusNode: notifier.focusNode,
               controller: notifier.searchController,
-              onChanged: (value){
+              onChanged: (value) {
                 notifier.onChangeSearchMusic(context, value);
               },
-              onTap: (){
-
-              },
+              onTap: () {},
             ),
           ),
-          !showListExp ? const MusicTabsScreen() : Container(
-            margin: const EdgeInsets.only(left: 16, top: 10, bottom: 10, right: 10),
-            width: double.infinity,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CustomIconButtonWidget(
-                    onPressed: (){
-                      notifier.selectedType = null;
-                      notifier.selectedMusicEnum = null;
-                    },
-                    color: Colors.black,
-                    iconData: '${AssetPath.vectorPath}back-arrow.svg',
-                    padding: const EdgeInsets.only(right: 16, left: 16),
+          !showListExp
+              ? const MusicTabsScreen()
+              : Container(
+                  margin: const EdgeInsets.only(left: 16, top: 10, bottom: 10, right: 10),
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CustomIconButtonWidget(
+                        onPressed: () {
+                          notifier.selectedType = null;
+                          notifier.selectedMusicEnum = null;
+                        },
+                        color: Colors.black,
+                        iconData: '${AssetPath.vectorPath}back-arrow.svg',
+                        padding: const EdgeInsets.only(right: 16, left: 16),
+                      ),
+                      sixteenPx,
+                      Expanded(
+                          child: CustomTextWidget(
+                        textAlign: TextAlign.left,
+                        textToDisplay: notifier.selectedType?.name ?? '',
+                        textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                      ))
+                    ],
+                  ),
                 ),
-                sixteenPx,
-                Expanded(
-                    child: CustomTextWidget(
-                      textAlign: TextAlign.left,
-                      textToDisplay: notifier.selectedType?.name ?? '',
-                      textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),))
-              ],
-            ),
-          ),
-          Expanded(child: !notifier.isLoadingMusic ? notifier.pageMusic == 0 ? const PopularMusicTab() : !showListExp ? const ExploredMusicTab()
-              : const ExplorerMusicsScreen() : const MusicPlaceholder()),
-          if(notifier.selectedMusic != null)
+          Expanded(
+              child: !notifier.isLoadingMusic
+                  ? notifier.pageMusic == 0
+                      ? const PopularMusicTab()
+                      : !showListExp
+                          ? const ExploredMusicTab()
+                          : const ExplorerMusicsScreen()
+                  : const MusicPlaceholder()),
+          if (notifier.selectedMusic != null)
             Container(
               decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: kHyppePrimary),
               width: double.infinity,
               margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10, top: 8),
-              child: CustomTextButton(onPressed: () async{
-                final uploadNotifier = context.read<PreUploadContentNotifier>();
-                print('test');
-                // notifier.isLoadVideo = true;
-                await notifier.audioPlayer.stop();
-                if(widget.isPic){
-                  // notifier.isLoadVideo = true;
-                  if(!widget.isInit){
-                    notifier.fixSelectedMusic = notifier.selectedMusic;
-                  }
-                  print('isLoadVideo : ${notifier.isLoadVideo}');
-                  uploadNotifier.musicSelected = notifier.selectedMusic;
-                  notifier.selectedMusic = null;
-                  notifier.selectedType = null;
-                  notifier.forceResetPlayer(true);
-                  notifier.searchController.text = '';
+              child: CustomTextButton(
+                  onPressed: () async {
+                    final uploadNotifier = context.read<PreUploadContentNotifier>();
+                    print('test');
+                    // notifier.isLoadVideo = true;
+                    await notifier.audioPlayer.stop();
+                    if (widget.isPic) {
+                      // notifier.isLoadVideo = true;
+                      if (!widget.isInit) {
+                        notifier.fixSelectedMusic = notifier.selectedMusic;
+                      }
+                      print('isLoadVideo : ${notifier.isLoadVideo}');
+                      uploadNotifier.musicSelected = notifier.selectedMusic;
+                      notifier.selectedMusic = null;
+                      notifier.selectedType = null;
+                      notifier.forceResetPlayer(true);
+                      notifier.searchController.text = '';
+                    } else {
+                      await notifier.videoMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '', isInit: widget.isInit);
+                      notifier.fixSelectedMusic = notifier.selectedMusic;
+                      uploadNotifier.musicSelected = notifier.selectedMusic;
+                      notifier.selectedMusic = null;
+                      notifier.selectedType = null;
+                      notifier.forceResetPlayer(true);
+                      notifier.searchController.text = '';
+                    }
 
-                }else{
-                  await notifier.videoMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '', isInit: widget.isInit);
-                  notifier.fixSelectedMusic = notifier.selectedMusic;
-                  uploadNotifier.musicSelected = notifier.selectedMusic;
-                  notifier.selectedMusic = null;
-                  notifier.selectedType = null;
-                  notifier.forceResetPlayer(true);
-                  notifier.searchController.text = '';
-                }
-
-                Navigator.pop(context);
-
-              },
+                    Navigator.pop(context);
+                  },
                   child: CustomTextWidget(
                     textToDisplay: notifier.language.select ?? 'select',
                     textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
@@ -146,8 +150,4 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
       );
     });
   }
-
 }
-
-
-

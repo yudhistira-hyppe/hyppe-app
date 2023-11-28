@@ -794,8 +794,10 @@ class PreviewContentNotifier with ChangeNotifier {
   Future<void> videoMerger(BuildContext context, String urlAudio, {isInit = false}) async {
     try {
       if (urlAudio.isNotEmpty) {
+        print("masuk mergeerr");
         _isLoadVideo = true;
         notifyListeners();
+        print(isLoadVideo);
         String outputPath = await System().getSystemPath(params: 'postVideo');
         outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
 
@@ -806,7 +808,7 @@ class PreviewContentNotifier with ChangeNotifier {
             final codeSession = await session.getReturnCode();
             if (ReturnCode.isSuccess(codeSession)) {
               print('ReturnCode = Success');
-              await restartVideoPlayer(outputPath, context, isInit: isInit);
+              // await restartVideoPlayer(outputPath, context, isInit: isInit);
             } else if (ReturnCode.isCancel(codeSession)) {
               print('ReturnCode = Cancel');
               _isLoadVideo = false;

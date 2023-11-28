@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +20,8 @@ class BuildEffect extends StatelessWidget {
         child: Center(
           child: GestureDetector(
             onTap: () {
-              notifier.showEffect();
+              // notifier.showEffect();
+              ShowBottomSheet.onShowEffect(context: context, whenComplete: () {});
             },
             child: const SizedBox(
                 height: 100,
