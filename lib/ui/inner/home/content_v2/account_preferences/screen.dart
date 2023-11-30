@@ -1,8 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/home/content_v2/account_preferences/widget/proof_picture.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/ux/routing.dart';

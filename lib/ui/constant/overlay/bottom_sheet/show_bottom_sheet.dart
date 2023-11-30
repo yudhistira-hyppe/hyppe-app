@@ -20,6 +20,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_d
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_interest_list.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_internal_server_error.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_location_search.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_login_app.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_option_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_ownership_EULA.dart';
@@ -71,6 +72,26 @@ class ShowBottomSheet {
 
   factory ShowBottomSheet() {
     return _instance;
+  }
+
+
+  static onLoginApp(context,) async {
+    await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        enableDrag: true,
+        isDismissible: true,
+        backgroundColor: Colors.transparent,
+        builder: (context){
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+              height: context.getHeight() * 0.92,
+              child: const OnLoginApp(),
+            ),
+          );
+    });
   }
 
   static onChooseMusic(context, {isPic = false, isInit = true}) async {

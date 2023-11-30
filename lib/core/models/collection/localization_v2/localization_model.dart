@@ -7,6 +7,16 @@ class LocalizationModelV2 {
   String? forgotPassword;
   String? dontHaveAnAccount;
   String? registerHere;
+  String? welcomeDescOne;
+  String? welcomeTitleTwo;
+  String? welcomeDescTwo;
+  String? welcomeTitleThree;
+  String? welcomeDescThree;
+  String? welcomeTitleFour;
+  String? welcomeDescFour;
+  String? exploreAsGuest;
+  String? loginMessage;
+  String? privateAndService;
   String? or;
   String? inWord;
   String? continueUsingGoogle;
@@ -1041,6 +1051,16 @@ class LocalizationModelV2 {
     this.forgotPassword,
     this.dontHaveAnAccount,
     this.registerHere,
+    this.welcomeDescOne,
+    this.welcomeTitleTwo,
+    this.welcomeDescTwo,
+    this.welcomeTitleThree,
+    this.welcomeDescThree,
+    this.welcomeTitleFour,
+    this.welcomeDescFour,
+    this.exploreAsGuest,
+    this.loginMessage,
+    this.privateAndService,
     this.or,
     this.inWord,
     this.continueUsingGoogle,
@@ -2077,6 +2097,16 @@ class LocalizationModelV2 {
     forgotPassword = json['forgotPassword'];
     dontHaveAnAccount = json['dontHaveAnAccount'];
     registerHere = json['registerHere'];
+    welcomeDescOne = json['welcomeDescOne'];
+    welcomeTitleTwo = json['welcomeTitleTwo'];
+    welcomeDescTwo = json['welcomeDescTwo'];
+    welcomeTitleThree = json['welcomeTitleThree'];
+    welcomeDescThree = json['welcomeDescThree'];
+    welcomeTitleFour = json['welcomeTitleFour'];
+    welcomeDescFour = json['welcomeDescFour'];
+    exploreAsGuest = json['exploreAsGuest'];
+    loginMessage = json['loginMessage'];
+    privateAndService = json['privateAndService'];
     or = json['or'];
     inWord = json['in'];
     continueUsingGoogle = json['continueUsingGoogle'];
