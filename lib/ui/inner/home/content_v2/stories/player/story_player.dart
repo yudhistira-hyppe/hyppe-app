@@ -31,6 +31,7 @@ import 'package:provider/provider.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../../app.dart';
+import '../../../../../../ux/path.dart';
 
 class StoryPlayerPage extends StatefulWidget {
   final StoryDetailScreenArgument argument;
@@ -450,7 +451,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     if (_curChildIdx == ((_groupUserStories![_curIdx].story?.length ?? 0) - 1)) {
       shown = [];
       if (_curIdx == (_groupUserStories!.length - 1)) {
-        Routing().moveBack();
+        // Routing().moveBack();
+        Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
       } else {
         _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
         _curChildIdx = 0;
