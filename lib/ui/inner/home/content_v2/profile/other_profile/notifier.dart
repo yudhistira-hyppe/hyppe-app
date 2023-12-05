@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_vid_detail_screen_argument.dart';
@@ -170,7 +168,7 @@ class OtherProfileNotifier with ChangeNotifier {
           : "";
 
   String? displayPhotoProfile() {
-    if (manyUser.last != null) {
+    if (manyUser.last.profile != null) {
       return _system.showUserPicture(manyUser.last.profile?.avatar?.mediaEndpoint);
     } else {
       return '';
@@ -512,7 +510,7 @@ class OtherProfileNotifier with ChangeNotifier {
     final connect = await _system.checkConnections();
 
     // if (connect) {
-    var result;
+    // var result;
     if (pageIndex == 0) {
       (Routing.navigatorKey.currentContext ?? context).read<ScrollPicNotifier>().connectionError = !connect;
       _routing.move(Routes.scrollPic,
@@ -711,9 +709,9 @@ class OtherProfileNotifier with ChangeNotifier {
     if (updatedData != null) {
       updatedData.reportedStatus = '';
     }
-    if (updatedData2 != null) {
-      updatedData2.reportedStatus = '';
-    }
+    // if (updatedData2 != null) {
+    //   updatedData2.reportedStatus = '';
+    // }
 
     notifyListeners();
   }

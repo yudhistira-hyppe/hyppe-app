@@ -10,7 +10,6 @@ import 'package:hyppe/core/models/collection/referral/model_referral.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ux/routing.dart';
 
@@ -77,7 +76,7 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   void _showSnackBar(BuildContext context, Color color, String message, String desc) {
-    Routing _routing = Routing();
+    // Routing _routing = Routing();
     ShowBottomSheet().onShowColouredSheet(
       context,
       message,

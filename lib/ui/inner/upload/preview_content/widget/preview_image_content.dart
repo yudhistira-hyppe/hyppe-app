@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:gif_view/gif_view.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:provider/provider.dart';
 
@@ -30,11 +31,6 @@ class PreviewImageContent extends StatefulWidget {
 class _PreviewImageContentState extends State<PreviewImageContent> with AfterFirstLayoutMixin {
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
 
@@ -46,8 +42,12 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
               top: 0,
               right: 0,
               bottom: 0,
-              child: Image.file(
-                  File(notifier.fileContent?[widget.currIndex] ?? ''),
+              child: notifier.featureType == FeatureType.pic
+              ? Image.memory(
+                  File(notifier.fileContent?[widget.currIndex] ?? '').readAsBytesSync(),
+                )
+              : Image.file(
+                 File(notifier.fileContent?[widget.currIndex] ?? ''),
                   filterQuality: FilterQuality.high,
                   frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                     return wasSynchronouslyLoaded
@@ -109,31 +109,31 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                   bottom: context.getHeight() * 0.4,
                   child: Column(
                     children: [
-                      Column(
-                        children: [
-                          Container(
-                            height: 48,
-                            width: 48,
-                            decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(24)), color: Colors.black.withOpacity(0.5)),
-                            child: CustomIconButtonWidget(
-                              onPressed: () async {
-                                notifier.openImageCropper(context, widget.currIndex);
-                              },
-                              iconData: "${AssetPath.vectorPath}edit.svg",
-                            ),
-                          ),
-                          eightPx,
-                          CustomTextWidget(
-                            textToDisplay: notifier.language.edit ?? 'Rotate',
-                            textStyle: const TextStyle(
-                              fontWeight: FontWeight.normal,
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                      twentyFourPx,
+                      // Column(
+                      //   children: [
+                      //     Container(
+                      //       height: 48,
+                      //       width: 48,
+                      //       decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(24)), color: Colors.black.withOpacity(0.5)),
+                      //       child: CustomIconButtonWidget(
+                      //         onPressed: () async {
+                      //           notifier.openImageCropper(context, widget.currIndex);
+                      //         },
+                      //         iconData: "${AssetPath.vectorPath}edit.svg",
+                      //       ),
+                      //     ),
+                      //     eightPx,
+                      //     CustomTextWidget(
+                      //       textToDisplay: notifier.language.edit ?? 'Rotate',
+                      //       textStyle: const TextStyle(
+                      //         fontWeight: FontWeight.normal,
+                      //         color: Colors.white,
+                      //         fontSize: 14,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // twentyFourPx,
                       InkWell(
                         onTap: () async {
                           notifier.audioPreviewPlayer.pause();
@@ -164,6 +164,33 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                           ],
                         ),
                       ),
+                      if (notifier.featureType == FeatureType.pic) twentyFourPx,
+                      if (notifier.featureType == FeatureType.pic)
+                        InkWell(
+                          onTap: () async {
+                            Routing().move(Routes.editPhoto);
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const CustomIconWidget(
+                                defaultColor: false,
+                                iconData: "${AssetPath.vectorPath}edit-v2.svg",
+                              ),
+                              fourPx,
+                              CustomTextWidget(
+                                maxLines: 1,
+                                textToDisplay: notifier.language.edit ?? '',
+                                textAlign: TextAlign.left,
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       twentyFourPx,
                       if (notifier.featureType == FeatureType.story || notifier.featureType == FeatureType.diary)
                       InkWell(
@@ -178,9 +205,9 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                           });
                           notifier.getSticker(context, index: notifier.stickerTabIndex);
                         },
-                        child: Column(
+                        child: const Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
+                          children: [
                             CustomIconWidget(
                               defaultColor: false,
                               iconData: "${AssetPath.vectorPath}circle_sticker.svg",
@@ -219,10 +246,10 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                     right: 0,
                     bottom: 0,
                     child: AnimatedOpacity(
-                      child: child,
                       opacity: frame == null ? 0 : 1,
                       duration: const Duration(seconds: 1),
                       curve: Curves.easeOut,
+                      child: child,
                     ),
                   ),
                   Positioned(
@@ -289,7 +316,6 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                                       throw 'file is null';
                                     }
                                   } catch (e) {
-                                    print('Error ImageCropper: $e');
                                     // ShowBottomSheet().onShowColouredSheet(context, e.toString(), color: kHyppeDanger, maxLines: 2);
                                   }
                                 },

@@ -8,8 +8,8 @@ import '../../../../../../../core/constants/asset_path.dart';
 import '../../../../../../constant/widget/custom_icon_widget.dart';
 
 class ShowImages extends StatefulWidget {
-  List<String> imageUrls;
-  ShowImages({Key? key, required this.imageUrls}) : super(key: key);
+  final List<String> imageUrls;
+  const ShowImages({Key? key, required this.imageUrls}) : super(key: key);
 
   @override
   State<ShowImages> createState() => _ShowImagesState();

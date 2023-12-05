@@ -19,7 +19,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
-import 'package:story_view/controller/story_controller.dart';
+// import 'package:story_view/controller/story_controller.dart';
 
 class LikeNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -174,9 +174,9 @@ class LikeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void viewLikeContent(BuildContext context, postId, eventType, title, emailData, {StoryController? storyController}) {
+  void viewLikeContent(BuildContext context, postId, eventType, title, emailData) {
     final email = SharedPreference().readStorage(SpKeys.email);
-    if (email == emailData) ShowBottomSheet.onShowUserViewContent(context, postId: postId, eventType: eventType, title: title, storyController: storyController);
+    if (email == emailData) ShowBottomSheet.onShowUserViewContent(context, postId: postId, eventType: eventType, title: title);
   }
 
   Future getLikeView(BuildContext context, postId, eventType, limit, {bool isScroll = false}) async {

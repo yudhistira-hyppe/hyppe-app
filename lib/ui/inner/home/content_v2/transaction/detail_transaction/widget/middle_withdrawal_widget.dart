@@ -6,10 +6,10 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
 class MiddleWithdrawalDetailWidget extends StatelessWidget {
-  TransactionHistoryModel? data;
-  LocalizationModelV2? language;
+  final TransactionHistoryModel? data;
+  final LocalizationModelV2? language;
 
-  MiddleWithdrawalDetailWidget({Key? key, this.data, this.language}) : super(key: key);
+  const MiddleWithdrawalDetailWidget({Key? key, this.data, this.language}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

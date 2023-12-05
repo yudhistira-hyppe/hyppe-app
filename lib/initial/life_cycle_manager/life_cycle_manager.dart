@@ -19,8 +19,10 @@ import 'package:hyppe/core/services/dynamic_link_service.dart';
 
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import '../../core/bloc/ads_video/bloc.dart';
 import '../../core/bloc/ads_video/state.dart';
@@ -45,6 +47,8 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
   Timer? _timerLink;
   final _socketService = SocketService();
   // final _isolateService = IsolateService();
+
+  static final _routing = Routing();
 
   Future<void> _initializeFlutterFire() async {
     if (kDebugMode) {
@@ -187,7 +191,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
             // final isOnHomeScreen = SharedPreference().readStorage(SpKeys.isOnHomeScreen);
             print('isOnHomeScreen: $isHomeScreen');
-            if (isHomeScreen) {
+            final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+            print("---------- $isShowAds");
+            if (isHomeScreen && !isShowAds) {
               print("isOnHomeScreen hit ads");
               await getAdsApsara();
             }
@@ -275,9 +281,10 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
   // }
 
   Future getAdsApsara() async {
+    if (await System().checkAdsTime() == false) return;
     final ads = await getPopUpAds();
     final id = ads.videoId;
-    if (id != null && ads.adsType != null) {
+    if (id != null || ads.adsType != null) {
       try {
         // final notifier = PostsBloc();
         // await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
@@ -297,23 +304,29 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
         //   // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
         // }
-        final notifier = PostsBloc();
-        await notifier.getAuthApsara(context, apsaraId: ads.videoId ?? '');
-
-        final fetch = notifier.postsFetch;
-        if (fetch.postsState == PostsState.videoApsaraSuccess) {
-          Map jsonMap = json.decode(fetch.data.toString());
-          print('jsonMap video Apsara : $jsonMap');
-          final auth = jsonMap['PlayAuth'];
-          // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
-          print('get Ads Video');
-          final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
-          print("---------- $isShowAds");
+        final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+        if (ads.mediaType?.toLowerCase() == 'image') {
           if (!isShowAds) {
-            System().adsPopUp(context, ads, auth, isInAppAds: true);
+            System().adsPopUpV2(context, ads, '');
           }
+        } else {
+          final notifier = PostsBloc();
+          await notifier.getAuthApsara(context, apsaraId: ads.videoId ?? '');
 
-          // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+          final fetch = notifier.postsFetch;
+          if (fetch.postsState == PostsState.videoApsaraSuccess) {
+            Map jsonMap = json.decode(fetch.data.toString());
+            print('jsonMap video Apsara : $jsonMap');
+            final auth = jsonMap['PlayAuth'];
+            // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
+            print('get Ads Video');
+            print("---------- $isShowAds");
+            if (!isShowAds) {
+              System().adsPopUpV2(context, ads, auth);
+            }
+
+            // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+          }
         }
       } catch (e) {
         'Failed to fetch ads data $e'.logger();

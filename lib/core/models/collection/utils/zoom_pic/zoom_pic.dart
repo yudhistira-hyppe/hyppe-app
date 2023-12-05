@@ -81,20 +81,20 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
   static const double _maxScale = 4.0;
   AnimationController? _flingAnimationController;
   Animation<Offset>? _flingAnimation;
-  AnimationController? _zoomAnimationController;
-  Animation<double>? _zoomAnimation;
+  // AnimationController? _zoomAnimationController;
+  // Animation<double>? _zoomAnimation;
   Offset? _offset;
   double? _scale;
-  Offset? _normalizedOffset;
+  // Offset? _normalizedOffset;
   double? _previousScale;
-  AllowMultipleHorizontalDragRecognizer? _allowMultipleHorizontalDragRecognizer;
-  AllowMultipleVerticalDragRecognizer? _allowMultipleVerticalDragRecognizer;
-  Offset? _tapDownGlobalPosition;
-  String? _url;
-  bool? _closeOnZoomOut;
-  Offset? _focalPoint;
+  // AllowMultipleHorizontalDragRecognizer? _allowMultipleHorizontalDragRecognizer;
+  // AllowMultipleVerticalDragRecognizer? _allowMultipleVerticalDragRecognizer;
+  // Offset? _tapDownGlobalPosition;
+  // String? _url;
+  // bool? _closeOnZoomOut;
+  // Offset? _focalPoint;
   bool? _animateToInitScale;
-  double? _initialScale;
+  // double? _initialScale;
 
 //===================================================
 
@@ -104,7 +104,7 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
   late AnimationController _controllerReset;
   OverlayEntry? _overlayEntry;
   bool _isZooming = false;
-  int _touchCount = 0;
+  // int _touchCount = 0;
   Matrix4 _transformMatrix = Matrix4.identity();
 
   final _transformWidget = GlobalKey<_TransformWidgetState>();
@@ -115,18 +115,18 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
   @override
   void initState() {
     super.initState();
-    _closeOnZoomOut = widget.closeOnZoomOut ?? false;
+    // _closeOnZoomOut = widget.closeOnZoomOut ?? false;
     _offset = Offset.zero;
     _scale = 1.0;
     _previousScale = 0;
-    _initialScale = widget.initialScale;
-    _focalPoint = widget.focalPoint;
+    // _initialScale = widget.initialScale;
+    // _focalPoint = widget.focalPoint;
     _animateToInitScale = widget.animateToInitScale;
     if (_animateToInitScale!) {
       // WidgetsBinding.instance.addPostFrameCallback((_) => _zoom(_focalPoint!, _initialScale!, context));
     }
     _flingAnimationController = AnimationController(vsync: this)..addListener(_handleFlingAnimation);
-    _zoomAnimationController = AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
+    // _zoomAnimationController = AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
 
     //===============================
     _startFocalPoint = Offset.zero;
@@ -156,11 +156,11 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
 
   // The maximum offset value is 0,0. If the size of this renderer's box is w,h
   // then the minimum offset value is w - _scale * w, h - _scale * h.
-  Offset _clampOffset(Offset offset) {
-    final Size size = context.size!;
-    final Offset minOffset = Offset(size.width, size.height) * (1.0 - _scale!);
-    return Offset(offset.dx.clamp(minOffset.dx, 0.0), offset.dy.clamp(minOffset.dy, 0.0));
-  }
+  // Offset _clampOffset(Offset offset) {
+  //   final Size size = context.size!;
+  //   final Offset minOffset = Offset(size.width, size.height) * (1.0 - _scale!);
+  //   return Offset(offset.dx.clamp(minOffset.dx, 0.0), offset.dy.clamp(minOffset.dy, 0.0));
+  // }
 
   void _handleFlingAnimation() {
     _transformWidget.currentState?.setMatrix(
@@ -212,7 +212,7 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
     // print("==========new posisi");
     setState(() {
       _previousScale = 1;
-      _normalizedOffset = (details.focalPoint - _offset!) / _scale!;
+      // _normalizedOffset = (details.focalPoint - _offset!) / _scale!;
       // The fling animation stops if an input gesture starts.
       _flingAnimationController!.stop();
     });
@@ -362,7 +362,7 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
         AllowMultipleHorizontalDragRecognizer: GestureRecognizerFactoryWithHandlers<AllowMultipleHorizontalDragRecognizer>(
           () => AllowMultipleHorizontalDragRecognizer(),
           (AllowMultipleHorizontalDragRecognizer instance) {
-            _allowMultipleHorizontalDragRecognizer = instance;
+            // _allowMultipleHorizontalDragRecognizer = instance;
             instance.onStart = (details) => this._handleHorizontalDragAcceptPolicy(instance);
             instance.onUpdate = (details) => this._handleHorizontalDragAcceptPolicy(instance);
           },
@@ -370,7 +370,7 @@ class _ZoomablePhotoViewerState extends State<ZoomablePhotoViewer> with TickerPr
         AllowMultipleVerticalDragRecognizer: GestureRecognizerFactoryWithHandlers<AllowMultipleVerticalDragRecognizer>(
           () => AllowMultipleVerticalDragRecognizer(),
           (AllowMultipleVerticalDragRecognizer instance) {
-            _allowMultipleVerticalDragRecognizer = instance;
+            // _allowMultipleVerticalDragRecognizer = instance;
             instance.onStart = (details) => this._handleVerticalDragAcceptPolicy(instance);
             instance.onUpdate = (details) => this._handleVerticalDragAcceptPolicy(instance);
           },

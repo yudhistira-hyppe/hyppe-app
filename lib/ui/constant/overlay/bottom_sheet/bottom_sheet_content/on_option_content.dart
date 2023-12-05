@@ -75,15 +75,16 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
   void _handleLink(BuildContext context, {required bool copiedToClipboard, required String description, required ContentData data}) async {
     late String _routes;
 
-    if (description == hyppeVid) {
+    if (description == hyppeVid || description == hyppeStory) {
       _routes = Routes.vidDetail;
     } else if (description == hyppeDiary) {
       _routes = Routes.diaryDetail;
     } else if (description == hyppePic) {
       _routes = Routes.picDetail;
-    } else if (description == hyppeStory) {
-      _routes = Routes.storyDetail;
     }
+    // else if (description == hyppeStory) {
+    //   _routes = Routes.storyDetail;
+    // }
 
     await createdDynamicLinkMixin(
       context,

@@ -39,8 +39,8 @@ class VidPlayerPage extends StatefulWidget {
   final ModeTypeAliPLayer playMode;
   final Map<String, dynamic> dataSourceMap;
   final ContentData? data;
-  double? height;
-  double? width;
+  final double? height;
+  final double? width;
   final bool inLanding;
   final bool fromDeeplink;
   final Function functionFullTriger;
@@ -62,7 +62,7 @@ class VidPlayerPage extends StatefulWidget {
   // FlutterAliplayer? fAliplayer;
   // FlutterAliplayer? fAliplayerAds;
 
-  VidPlayerPage({
+  const VidPlayerPage({
     Key? key,
     required this.playMode,
     required this.dataSourceMap,
@@ -104,9 +104,9 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   bool isPause = false;
   int? bottomIndex;
   List<Widget>? mFramePage;
-  ModeTypeAliPLayer? _playMode;
+  // ModeTypeAliPLayer? _playMode;
   Map<String, dynamic>? _dataSourceMap;
-  Map<String, dynamic>? _dataSourceAdsMap;
+  // Map<String, dynamic>? _dataSourceAdsMap;
   String urlVid = '';
   String _savePath = '';
   bool isMute = false;
@@ -125,7 +125,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
   final int _currentAdsPositionText = 0;
 
   //当前buffer进度
-  int _bufferPosition = 0;
+  // int _bufferPosition = 0;
 
   //是否展示loading
   bool _showLoading = false;
@@ -151,7 +151,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
 
   //缩略图
   // Uint8List _thumbnailBitmap;
-  ImageProvider? _imageProvider;
+  // ImageProvider? _imageProvider;
 
   //当前网络状态
   // ConnectivityResult? _currentConnectivityResult;
@@ -207,7 +207,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
 
     bool autoPlay = widget.isAutoPlay ?? false;
 
-    _playMode = widget.playMode;
+    // _playMode = widget.playMode;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
         fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.data?.postID ?? 'video_player_landing');
@@ -240,7 +240,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         // }
 
         _dataSourceMap = widget.dataSourceMap;
-        _dataSourceAdsMap = {};
+        // _dataSourceAdsMap = {};
         // isPlay = false;
         // isPrepare = false;
         setState(() {});
@@ -488,7 +488,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             }
           }
         } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-          _bufferPosition = extraValue ?? 0;
+          // _bufferPosition = extraValue ?? 0;
           if (mounted) {
             setState(() {});
           }
@@ -547,7 +547,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             var provider = MemoryImage(bitmap);
             precacheImage(provider, context).then((_) {
               setState(() {
-                _imageProvider = provider;
+                // _imageProvider = provider;
               });
             });
           },
@@ -941,6 +941,8 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
         break;
       case AppLifecycleState.detached:
         break;
+      default:
+        break;
     }
   }
 
@@ -1002,10 +1004,6 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
 
   @override
   Widget build(BuildContext context) {
-    var x = 0.0;
-    var y = 0.0;
-    var width = MediaQuery.of(context).size.width;
-
     if (widget.data!.isLoading) {
       Future.delayed(const Duration(milliseconds: 50), () {
         setState(() {
@@ -1438,7 +1436,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
     );
   }
 
-  GestureDetector _buildPlayPause(
+  Widget _buildPlayPause(
     Color iconColor,
     double barHeight,
   ) {
@@ -1889,7 +1887,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
                                     }
                                   }
                                 } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-                                  _bufferPosition = extraValue ?? 0;
+                                  // _bufferPosition = extraValue ?? 0;
                                   if (mounted) {
                                     setState(() {});
                                   }
@@ -2108,7 +2106,7 @@ class VidPlayerPageState extends State<VidPlayerPage> with WidgetsBindingObserve
             }
           }
         } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-          _bufferPosition = extraValue ?? 0;
+          // _bufferPosition = extraValue ?? 0;
           if (mounted) {
             setState(() {});
           }

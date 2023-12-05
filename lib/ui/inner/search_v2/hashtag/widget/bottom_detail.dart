@@ -10,11 +10,11 @@ import '../../../../../core/models/collection/search/search_content.dart';
 import 'hastag_tab.dart';
 
 class BottomDetail extends StatefulWidget {
-  Tags hashtag;
-  bool fromRoute;
-  double tab;
-  ScrollController scrollController;
-  BottomDetail({Key? key, required this.hashtag, required this.tab, this.fromRoute = false, required this.scrollController}) : super(key: key);
+  final Tags hashtag;
+  final bool fromRoute;
+  final double tab;
+  final ScrollController scrollController;
+  const BottomDetail({Key? key, required this.hashtag, required this.tab, this.fromRoute = false, required this.scrollController}) : super(key: key);
 
   @override
   State<BottomDetail> createState() => _BottomDetailState();

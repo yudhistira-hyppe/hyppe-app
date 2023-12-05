@@ -26,10 +26,9 @@ class _AutoCompleteUserTagState extends State<AutoCompleteUserTag> {
         child: Padding(
           padding: EdgeInsets.only(top: 100),
           child: Container(
-            height: notifier.searchPeolpleData != null ? 200 : 20,
+            height: 200,
             color: Theme.of(context).colorScheme.background,
-            child: notifier.searchPeolpleData != null
-                ? notifier.isLoading
+            child: notifier.isLoading
                     ? Row(
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,8 +97,7 @@ class _AutoCompleteUserTagState extends State<AutoCompleteUserTag> {
                                 )
                               ],
                             ),
-                          )
-                : Container(),
+                          ),
           ),
         ),
       ),

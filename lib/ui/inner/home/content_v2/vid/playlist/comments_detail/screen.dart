@@ -25,8 +25,8 @@ import '../../../../../../constant/widget/custom_text_button.dart';
 import '../../../../../../constant/widget/custom_text_widget.dart';
 
 class CommentsDetailScreen extends StatefulWidget {
-  CommentsArgument argument;
-  CommentsDetailScreen({Key? key, required this.argument}) : super(key: key);
+  final CommentsArgument argument;
+  const CommentsDetailScreen({Key? key, required this.argument}) : super(key: key);
 
   @override
   State<CommentsDetailScreen> createState() => _CommentsDetailScreenState();
@@ -278,7 +278,6 @@ class _CommentsDetailScreenState extends State<CommentsDetailScreen> {
   }
 
   Widget _bottomDetail(BuildContext context, ContentData data, CommentNotifierV2 notifier) {
-    final comments = notifier.commentData;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),

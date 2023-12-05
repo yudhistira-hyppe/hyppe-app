@@ -26,7 +26,6 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
-import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 
 class DynamicLinkService {
@@ -107,15 +106,15 @@ class DynamicLinkService {
           isHomeScreen = false;
           'deepLink isOnHomeScreen $isHomeScreen'.logger();
           switch (path) {
-            case Routes.storyDetail:
-              '_handleDeepLink storyDetail'.logger();
-              _routing.move(
-                path,
-                argument: StoryDetailScreenArgument()
-                  ..postID = deepLink.queryParameters['postID']
-                  ..backPage = false,
-              );
-              break;
+            // case Routes.storyDetail:
+            //   '_handleDeepLink storyDetail'.logger();
+            //   _routing.move(
+            //     path,
+            //     argument: StoryDetailScreenArgument()
+            //       ..postID = deepLink.queryParameters['postID']
+            //       ..backPage = false,
+            //   );
+            //   break;
             case Routes.vidDetail:
               '_handleDeepLink vidDetail'.logger();
               if (isFromSplash) {

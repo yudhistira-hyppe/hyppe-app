@@ -17,20 +17,20 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
-import 'package:story_view/story_view.dart';
+// import 'package:story_view/story_view.dart';
 
 class BuildTopView extends StatefulWidget {
   final String when;
   final bool onDetail;
   final ContentData? data;
-  final StoryController? storyController;
+  // final StoryController? storyController;
 
   const BuildTopView({
     Key? key,
     this.data,
     required this.when,
     this.onDetail = true,
-    this.storyController,
+    // this.storyController,
   }) : super(key: key);
 
   @override
@@ -74,7 +74,7 @@ class _BuildTopViewState extends State<BuildTopView> {
                             createdAt: widget.when,
                             isCelebrity: false,
                             isUserVerified: widget.data?.isIdVerified ?? false,
-                            onTapOnProfileImage: () => System().navigateToProfile(context, widget.data?.email ?? '', storyController: widget.storyController),
+                            onTapOnProfileImage: () => System().navigateToProfile(context, widget.data?.email ?? ''),
                             featureType: FeatureType.pic,
                             username: "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.username : valueNotifier?.username ?? ''}",
                             imageUrl: notifier.onProfilePicShow(
@@ -92,13 +92,13 @@ class _BuildTopViewState extends State<BuildTopView> {
                 widget.data?.email == SharedPreference().readStorage(SpKeys.email)
                     ? GestureDetector(
                         onTap: () {
-                          widget.storyController?.pause();
+                          // widget.storyController?.pause();
                           ShowBottomSheet().onShowOptionContent(
                             context,
                             contentData: widget.data!,
                             captionTitle: hyppeStory,
                             onDetail: widget.onDetail,
-                            storyController: widget.storyController,
+                            // storyController: widget.storyController,
                           );
                         },
                         child: const CustomIconWidget(

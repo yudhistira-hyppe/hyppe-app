@@ -3,18 +3,15 @@ import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
 import 'package:hyppe/ux/routing.dart';
 
 import '../../../../../../../core/constants/asset_path.dart';
-import '../../../../../constant/widget/custom_icon_widget.dart';
 
 class ShowImageProfile extends StatefulWidget {
-  String imageUrl;
-  ShowImageProfile({Key? key, required this.imageUrl}) : super(key: key);
+  final String imageUrl;
+  const ShowImageProfile({Key? key, required this.imageUrl}) : super(key: key);
 
   @override
   State<ShowImageProfile> createState() => _ShowImageProfileState();
@@ -22,12 +19,12 @@ class ShowImageProfile extends StatefulWidget {
 
 class _ShowImageProfileState extends State<ShowImageProfile> {
   var index = 0;
-  late PageController _pageController;
+  // late PageController _pageController;
 
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'ShowImages');
-    _pageController = PageController(initialPage: index);
+    // _pageController = PageController(initialPage: index);
     super.initState();
   }
 

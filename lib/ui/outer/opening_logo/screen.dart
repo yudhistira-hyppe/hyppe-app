@@ -10,8 +10,8 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import '../../inner/main/notifier.dart';
 
 class OpeningLogo extends StatefulWidget {
-  bool isLaunch;
-  OpeningLogo({Key? key, this.isLaunch = true}) : super(key: key);
+  final bool isLaunch;
+  const OpeningLogo({Key? key, this.isLaunch = true}) : super(key: key);
 
   @override
   _OpeningLogoState createState() => _OpeningLogoState();

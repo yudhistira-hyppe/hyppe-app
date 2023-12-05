@@ -6,10 +6,10 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import '../../../../core/models/collection/localization_v2/localization_model.dart';
 
 class SearchNoResult extends StatelessWidget {
-  EdgeInsetsGeometry? margin;
-  LocalizationModelV2 locale;
-  String keyword;
-  SearchNoResult(
+  final EdgeInsetsGeometry? margin;
+  final LocalizationModelV2 locale;
+  final String keyword;
+  const SearchNoResult(
       {Key? key, this.margin, required this.locale, required this.keyword})
       : super(key: key);
 

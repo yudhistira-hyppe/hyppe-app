@@ -11,7 +11,6 @@ import '../../../../../../../core/constants/asset_path.dart';
 import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
 import '../../../../../../../core/services/system.dart';
 import '../../../../../../constant/entities/like/notifier.dart';
-import '../../../../../../constant/widget/custom_cache_image.dart';
 
 class PicPlaylishScreen extends StatefulWidget {
   final AdsData data;
@@ -50,7 +49,7 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> with SingleTicker
           if (globalAudioPlayer != null) {
             globalAudioPlayer!.pause();
           }
-          final count = context.getAdsCount();
+          // final count = context.getAdsCount();
           await System().adsPopUp(materialAppKey.currentContext!, widget.data, widget.url);
           if (globalAudioPlayer != null) {
             globalAudioPlayer!.resume();

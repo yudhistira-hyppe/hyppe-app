@@ -2,7 +2,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/constants/enum.dart';
 
 class AliPlayer extends StatefulWidget {
   const AliPlayer({Key? key}) : super(key: key);
@@ -44,8 +43,8 @@ class _AliPlayerState extends State<AliPlayer> {
     super.initState();
   }
 
-  Map _dataSourceMap = {};
-  ModeTypeAliPLayer _playMode = ModeTypeAliPLayer.url;
+  // Map _dataSourceMap = {};
+  // ModeTypeAliPLayer _playMode = ModeTypeAliPLayer.url;
 
   // void onViewPlayerCreated(viewId) async {
   //   ///将 渲染 View 设置给播放器
@@ -81,8 +80,6 @@ class _AliPlayerState extends State<AliPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    var x = 0.0;
-    var y = 0.0;
     Orientation orientation = MediaQuery.of(context).orientation;
     var width = MediaQuery.of(context).size.width;
 

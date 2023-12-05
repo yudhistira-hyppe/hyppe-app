@@ -14,10 +14,10 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:provider/provider.dart';
 
 class BuySellWidget extends StatelessWidget {
-  TransactionHistoryModel? data;
-  LocalizationModelV2? language;
+  final TransactionHistoryModel? data;
+  final LocalizationModelV2? language;
 
-  BuySellWidget({Key? key, this.data, this.language}) : super(key: key);
+  const BuySellWidget({Key? key, this.data, this.language}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

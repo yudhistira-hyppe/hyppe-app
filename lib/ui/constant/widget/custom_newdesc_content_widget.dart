@@ -283,9 +283,9 @@ class _CustomNewDescContentState extends State<CustomNewDescContent> {
 
     var splitDesc = fixDesc.split(' ');
     splitDesc.removeWhere((e) => e == '');
-    for (final desc in splitDesc) {
-      // 'Fix Desc: $desc'.logger();
-    }
+    // for (final desc in splitDesc) {
+    //   // 'Fix Desc: $desc'.logger();
+    // }
     final List<ItemDesc> descItems = [];
     var tempDesc = '';
 

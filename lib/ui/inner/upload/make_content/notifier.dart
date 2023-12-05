@@ -20,9 +20,8 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../app.dart';
 
@@ -54,8 +53,10 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   double _slider = 0;
   bool _isVideo = false;
   CreatePostResponse? _postModel;
+  bool _showToast = false;
 
   double get progressDev => _progressDev;
+  int get elapsedProgress => _elapsedProgress;
   int get progressHuman => _progressHuman;
   bool get isVideo => _isVideo;
   double get slider => _slider;
@@ -63,6 +64,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   CreatePostResponse? get postModel => _postModel;
   Map<int, String>? get durationOptions => _durationOptions;
   int get selectedDuration => _selectedDuration;
+  bool get showToast => _showToast;
 
   set featureType(FeatureType? val) {
     _featureType = val;
@@ -89,20 +91,52 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     notifyListeners();
   }
 
+  set showToast(bool state){
+    _showToast = state;
+    notifyListeners();
+  }
+
+  showVideoToast(Duration duration){
+    if(!showToast){
+      showToast = true;
+      Future.delayed(duration, (){
+        showToast = false;
+      });
+    }
+  }
+
+  String _messageToast = '';
+  String get messageToast => _messageToast;
+  set messageToast(String val){
+    _messageToast = val;
+    notifyListeners();
+  }
+
   onInitialUploadContent() {
     _selectedDuration = 15;
-    if (_featureType == FeatureType.vid) {
-      _durationOptions = {15: "15${language.timerSecond}", 30: "30${language.timerSecond}", 60: "60${language.timerSecond}", 0: "1m>"}; // ignore this
-    } else if (_featureType == FeatureType.diary) {
-      _durationOptions = {
-        15: "15${language.timerSecond}",
-        30: "30${language.timerSecond}",
-        60: "60${language.timerSecond}",
-      };
-    } else {
-      _durationOptions = {
-        15: "15${language.timerSecond}",
-      };
+    // if (_featureType == FeatureType.vid) {
+    //   _durationOptions = {
+    //     15: "15${language.timerSecond}",
+    //     30: "30${language.timerSecond}",
+    //     60: "60${language.timerSecond}",
+    //     0: "1m>"}; // ignore this
+    // } else if (_featureType == FeatureType.diary) {
+    //   _durationOptions = {
+    //     15: "15${language.timerSecond}",
+    //     30: "30${language.timerSecond}",
+    //     60: "60${language.timerSecond}",
+    //   };
+    // } else {
+    //   _durationOptions = {
+    //     15: "15${language.timerSecond}",
+    //   };
+    // }
+    if(featureType == FeatureType.diary){
+      _selectedDuration = 60;
+    }else if(featureType == FeatureType.vid){
+      _selectedDuration = 1800;
+    }else if(featureType == FeatureType.story){
+      _selectedDuration = 15;
     }
     notifyListeners();
   }
@@ -172,6 +206,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   void _startTimer(BuildContext context) {
     _validateTimerWithFeature();
+
     _timer = Timer.periodic(
       const Duration(seconds: 1),
       (Timer timerIn) {
@@ -184,6 +219,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         if (_timer != null && (_timer?.isActive ?? false) && timerIn.isActive) {
           _elapsedProgress++;
           if (featureType != FeatureType.pic && selectedDuration != 0) {
+
             _progressDev = _elapsedProgress / _selectedDuration;
           } else {
             _progressDev = 1.0;
@@ -198,7 +234,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         }
         notifyListeners();
         if (_progressHuman == _selectedDuration && (featureType != FeatureType.vid || _selectedDuration != 0)) {
-          Future.delayed(Duration(milliseconds: _selectedDuration == 15 ? 1000 : 1300), () {
+          Future.delayed(const Duration(milliseconds: 500), () {
             onStopRecordedVideo(materialAppKey.currentContext ?? context);
           });
         }
@@ -284,7 +320,16 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     try {
       print('isVideo $isVideo');
 
-      await System().getLocalMedia(featureType: featureType, context: context, isVideo: isVideo).then((value) async {
+      await System().getLocalMedia(featureType: featureType, context: context, isVideo: isVideo, onException: (){
+        if(featureType == FeatureType.story){
+          messageToast = language.messageLessLimitStory ?? 'Error';
+          showVideoToast(const Duration(seconds: 3));
+        }else{
+          messageToast = language.messageLessLimitVideo ?? 'Error';
+          showVideoToast(const Duration(seconds: 3));
+        }
+
+      }).then((value) async {
         Future.delayed(const Duration(milliseconds: 1000), () async {
           if (value.values.single != null) {
             Future.delayed(const Duration(milliseconds: 1000), () => setLoading(false));
@@ -322,7 +367,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   //////////////////////////////////////////////////////////////// Camera function
 
   void cancelVideoRecordingWhenAppIsPausedOrInactive() {
-    Wakelock.disable();
+    WakelockPlus.disable();
     "================ disable wakelock 7".logger();
     cancelTimer();
     _progressDev = 0.0;
@@ -333,9 +378,10 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   @override
   void onStopRecordedVideo(BuildContext context) {
     try {
+      final tempDuration = Duration(seconds: elapsedProgress);
       dynamic cameraNotifier;
 
-      Wakelock.disable();
+      WakelockPlus.disable();
       "================ disable wakelock 6".logger();
       final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
       if (canDeppAr == 'true') {
@@ -348,7 +394,6 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       _progressDev = 0.0;
       _progressHuman = 0;
       _elapsedProgress = 0;
-
       cameraNotifier.stopVideoRecording().then((file) async {
         final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
         if (file?.path != null) {
@@ -366,8 +411,23 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         notifier.aspectRation = cameraNotifier.cameraAspectRatio;
 
         notifyListeners();
-        await _routing.move(Routes.previewContent);
+        messageToast = notifier.featureType == FeatureType.story ? (notifier.language.recordAtLeast4Seconds ?? 'Error') : (notifier.language.recordAtLeast15Seconds ?? 'Error');
+        if(featureType == FeatureType.story){
+          if(tempDuration.inSeconds >= 4){
+            await _routing.move(Routes.previewContent);
+          }else{
+            showVideoToast(const Duration(seconds: 3));
+          }
+        }else{
+          if(tempDuration.inSeconds >= 15){
+            await _routing.move(Routes.previewContent);
+          }else{
+            showVideoToast(const Duration(seconds: 3));
+          }
+        }
+
       });
+
     } catch (e) {
       e.logger();
     }
@@ -385,8 +445,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     }
     _startTimer(context);
     cameraNotifier.startVideoRecording();
-    if (!(await Wakelock.enabled)) {
-      Wakelock.enable();
+    if (!(await WakelockPlus.enabled)) {
+      WakelockPlus.enable();
     }
   }
 
@@ -400,7 +460,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     }
-    Wakelock.enable();
+    WakelockPlus.enable();
     print('pause execute');
     cameraNotifier.pauseVideoRecording();
   }
@@ -418,8 +478,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       cancelTimer();
       _startTimer(context);
     });
-    if (!(await Wakelock.enabled)) {
-      Wakelock.enable();
+    if (!(await WakelockPlus.enabled)) {
+      WakelockPlus.enable();
     }
   }
 

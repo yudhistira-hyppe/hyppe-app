@@ -19,6 +19,20 @@ class Env {
     }
   }
 
+  static final List dataBaseUrl2 = [
+    UrlConstants.interactive,
+    UrlConstants.discuss,
+    UrlConstants.deleteDiscuss,
+    UrlConstants.deleteChat,
+    UrlConstants.updateProfile,
+    UrlConstants.joinChallange,
+    UrlConstants.verificationIDSupportingDocs,
+    UrlConstants.verificationIDWithSupportDocs,
+    UrlConstants.uploadProfilePictureV2,
+    UrlConstants.createuserposts,
+    UrlConstants.updatepost,
+  ];
+
   static final EnvData dev = EnvData(
     debug: true,
     appID: appID,
@@ -27,6 +41,7 @@ class Env {
     debugShowMaterialGrid: false,
     debugShowCheckedModeBanner: false,
     baseUrl: "https://s1.hyppe.cloud",
+    baseUrl2: "https://s1.hyppe.cloud",
     deeplinkBaseUrl: "https://share.hyppe.app",
     apiBaseUrl: "https://s1.hyppe.cloud",
     versionApi: UrlConstants.apiV0,
@@ -40,6 +55,7 @@ class Env {
     debugShowMaterialGrid: false,
     debugShowCheckedModeBanner: false,
     baseUrl: "https://p1.hyppe.cloud",
+    baseUrl2: "https://p2.hyppe.cloud",
     deeplinkBaseUrl: "https://share.hyppe.app",
     apiBaseUrl: "https://p1.hyppe.cloud",
     versionApi: UrlConstants.apiV0,
@@ -56,6 +72,7 @@ class EnvData {
   final String appID;
   final String appStoreID;
   final String baseUrl;
+  final String baseUrl2;
   final String versionApi;
 
   EnvData({
@@ -68,6 +85,7 @@ class EnvData {
     required this.appID,
     required this.appStoreID,
     required this.baseUrl,
+    required this.baseUrl2,
     required this.versionApi,
   });
 }

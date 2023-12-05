@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -69,6 +68,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       notifier.captionController.text = notifier.hastagChallange;
       notifier.captionController.selection = TextSelection.collapsed(offset: 0);
     }
+    // notifier.initThumbnail();
 
     // Future.microtask(() => context.read<PreUploadContentNotifier>().checkLandingpage(context));
     if (mn?.tutorialData.isNotEmpty ?? [].isEmpty) {
@@ -325,7 +325,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   }
 
   void _handleTextChange(String newText) {
-    PreUploadContentNotifier notifier = context.read<PreUploadContentNotifier>();
+    // PreUploadContentNotifier notifier = context.read<PreUploadContentNotifier>();
 
     // if (newText.startsWith(_text)) {
     //   setState(() {

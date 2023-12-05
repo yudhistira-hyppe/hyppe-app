@@ -7,10 +7,10 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:provider/provider.dart';
 
 class TagLabel extends StatelessWidget {
-  String icon;
-  String label;
+  final String icon;
+  final String label;
   final Function() function;
-  TagLabel({Key? key, required this.icon, required this.label, required this.function}) : super(key: key);
+  const TagLabel({Key? key, required this.icon, required this.label, required this.function}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

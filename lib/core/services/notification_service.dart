@@ -8,9 +8,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../ui/inner/message_v2/notifier.dart';
 import '../../ui/inner/notification/notifier.dart';
@@ -236,7 +234,7 @@ class NotificationService {
         final Map<String, dynamic> jsonNotif = message.data;
         jsonNotif['isBackground'] = isBackground;
         // final Map<String, dynamic> map = json.decode(message.notification?.body ?? '{}');
-        var body;
+        // var body;
         // Platform.isIOS ? body = json.decode(message.notification?.body ?? '') : '';
         await flutterLocalNotificationsPlugin.show(
           message.hashCode,

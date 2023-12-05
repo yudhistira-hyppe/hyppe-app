@@ -10,7 +10,6 @@ import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -29,11 +28,9 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../../app.dart';
-// import 'package:connectivity_plus/connectivity_plus.dart';
 
 class StoryPlayerPage extends StatefulWidget {
   final StoryDetailScreenArgument argument;
@@ -56,7 +53,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   bool isPause = false;
   int? bottomIndex;
   List<Widget>? mFramePage;
-  ModeTypeAliPLayer? _playMode;
+  // ModeTypeAliPLayer? _playMode;
   Map<String, dynamic>? _dataSourceMap;
   String auth = '';
   List shown = [];
@@ -67,13 +64,13 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   final bool _mEnablePlayBack = false;
 
   //当前播放进度
-  int _currentPosition = 0;
+  // int _currentPosition = 0;
 
   //当前播放时间，用于Text展示
-  final int _currentPositionText = 0;
+  // int _currentPositionText = 0;
 
   //当前buffer进度
-  int _bufferPosition = 0;
+  // int _bufferPosition = 0;
 
   //是否展示loading
   bool _showLoading = false;
@@ -88,31 +85,31 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   String _snapShotPath = '';
 
   //提示内容
-  String _tipsContent = '';
+  // String _tipsContent = '';
 
   //是否展示提示内容
-  bool _showTipsWidget = false;
+  // bool _showTipsWidget = false;
 
   //是否有缩略图
-  final bool _thumbnailSuccess = false;
+  // bool _thumbnailSuccess = false;
 
   //缩略图
   // Uint8List _thumbnailBitmap;
-  ImageProvider? _imageProvider;
+  // ImageProvider? _imageProvider;
 
   //当前网络状态
   // ConnectivityResult? _currentConnectivityResult;
 
   ///seek中
-  bool _inSeek = false;
+  // bool _inSeek = false;
 
-  final bool _isLock = false;
+  // bool _isLock = false;
 
   //网络状态
-  final bool _isShowMobileNetWork = false;
+  // bool _isShowMobileNetWork = false;
 
   //当前播放器状态
-  int _currentPlayerState = 0;
+  // int _currentPlayerState = 0;
 
   String extSubTitleText = '';
 
@@ -124,8 +121,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   // PageController? _pageController;
 
-  final RefreshController _videoListRefreshController = RefreshController(initialRefresh: false);
-
   List<StoriesGroup>? _groupUserStories;
 
   PageController _pageController = PageController();
@@ -133,10 +128,10 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   int _curIdx = 0;
   int _curChildIdx = 0;
   int _lastCurIndex = -1;
-  bool _isPause = false;
-  final double _playerY = 0;
-  bool _isFirstRenderShow = false;
-  final bool _isBackgroundMode = false;
+  // bool _isPause = false;
+  double _playerY = 0;
+  // bool _isFirstRenderShow = false;
+  // bool _isBackgroundMode = false;
   int loadImage = 0;
 
   bool isOnPageTurning = false;
@@ -205,7 +200,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       WidgetsBinding.instance.addObserver(this);
       bottomIndex = 0;
       fAliplayer?.setAutoPlay(true);
-      _playMode = ModeTypeAliPLayer.auth;
+      // _playMode = ModeTypeAliPLayer.auth;
       isPlay = false;
       isPrepare = false;
       if (mounted) {
@@ -305,13 +300,13 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
-      _currentPlayerState = newState;
+      // _currentPlayerState = newState;
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-          Wakelock.enable();
+          WakelockPlus.enable();
           setState(() {
-            _showTipsWidget = false;
+            // _showTipsWidget = false;
             _showLoading = false;
             isPause = false;
           });
@@ -320,20 +315,20 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
           setState(() {});
-          Wakelock.disable();
+          WakelockPlus.disable();
           "================ disable wakelock 12".logger();
           _animationController?.stop();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
-          Wakelock.disable();
+          WakelockPlus.disable();
           "================ disable wakelock 11".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
-          Wakelock.disable();
+          WakelockPlus.disable();
           "================ disable wakelock 10".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusError:
-          Wakelock.disable();
+          WakelockPlus.disable();
           "================ disable wakelock 13".logger();
           break;
         default:
@@ -362,12 +357,12 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       }
     });
     fAliplayer?.setOnSeekComplete((playerId) {
-      _inSeek = false;
+      // _inSeek = false;
     });
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
-          _currentPosition = extraValue ?? 0;
+          // _currentPosition = extraValue ?? 0;
         }
         // if (!_inSeek) {
         //   setState(() {
@@ -375,7 +370,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         //   });
         // }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-        _bufferPosition = extraValue ?? 0;
+        // _bufferPosition = extraValue ?? 0;
         if (mounted) {
           setState(() {});
         }
@@ -395,13 +390,13 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       } else if (infoCode == FlutterAvpdef.AVPStatus_AVPStatusCompletion) {}
     });
     fAliplayer?.setOnCompletion((playerId) {
-      _showTipsWidget = true;
+      // _showTipsWidget = true;
       _showLoading = false;
-      _tipsContent = "Play Again";
+      // _tipsContent = "Play Again";
       isPause = true;
       _animationController?.reset();
       storyComplete(notifier);
-      _currentPosition = _videoDuration;
+      // _currentPosition = _videoDuration;
       if (mounted) {
         setState(() {});
       }
@@ -412,9 +407,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       // Fluttertoast.showToast(msg: "SnapShot Save : $path");
     });
     fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-      _showTipsWidget = true;
+      // _showTipsWidget = true;
       _showLoading = false;
-      _tipsContent = "$errorCode \n $errorMsg";
+      // _tipsContent = "$errorCode \n $errorMsg";
       if (mounted) {
         setState(() {});
       }
@@ -520,6 +515,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         break;
       case AppLifecycleState.detached:
         break;
+      default:
+        break;
     }
   }
 
@@ -532,7 +529,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   @override
   void dispose() {
     globalAliPlayer = null;
-    Wakelock.disable();
+    WakelockPlus.disable();
     "================ disable wakelock 9".logger();
     _animationController?.dispose();
     if (Platform.isIOS) {
@@ -639,16 +636,16 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             _lastCurIndex = _curIdx;
           },
           itemBuilder: (context, index) {
-            final player = AliPlayerView(
-              onCreated: (id) {
-                final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
-                onViewPlayerCreated(id, isImage);
-              },
-              x: 0,
-              y: _playerY,
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-            );
+            // final player = AliPlayerView(
+            //   onCreated: (id) {
+            //     final isImage = _groupUserStories?[index].story?[_curChildIdx].mediaType == 'image';
+            //     onViewPlayerCreated(id, isImage);
+            //   },
+            //   x: 0,
+            //   y: _playerY,
+            //   width: MediaQuery.of(context).size.width,
+            //   height: MediaQuery.of(context).size.height,
+            // );
             return Stack(
               children: [
                 // Text("${_groupUserStories?[_curIdx].story?[_curChildIdx].music?.apsaraMusic != null || _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType != 'image'}"),
@@ -1073,8 +1070,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'video') {
       await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].apsaraId ?? '');
       print("startsttt==========");
-      _isPause = false;
-      _isFirstRenderShow = false;
+      // _isPause = false;
+      // _isFirstRenderShow = false;
       if (mounted) {
         setState(() {});
       }

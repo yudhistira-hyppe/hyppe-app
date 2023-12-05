@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -12,7 +11,6 @@ import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/core/models/collection/google_map_place/location_model.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
@@ -23,6 +21,7 @@ import 'package:hyppe/core/services/notification_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/socket_service.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/screen.dart';
@@ -35,10 +34,10 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:wakelock/wakelock.dart';
 import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
 import 'package:hyppe/core/bloc/google_map_place/state.dart';
 import 'package:hyppe/core/models/collection/google_map_place/google_geocoding_model.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../app.dart';
 
@@ -468,14 +467,14 @@ class MainNotifier with ChangeNotifier {
     "=================== remove wakelock".logger();
     _inactivityTimer?.cancel();
     _inactivityTimer = null;
-    Wakelock.disable();
+    WakelockPlus.disable();
   }
 
   void initWakelockTimer({required Function() onShowInactivityWarning}) async {
     // adding delay to prevent if there's another that not disposed yet
     Future.delayed(const Duration(seconds: 2), () {
       "=================== init wakelock".logger();
-      Wakelock.enable();
+      WakelockPlus.enable();
       if (_inactivityTimer != null) _inactivityTimer?.cancel();
       _inactivityTimer = Timer(const Duration(seconds: 300), () => onShowInactivityWarning());
     });

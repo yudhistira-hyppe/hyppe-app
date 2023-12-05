@@ -12,8 +12,8 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class ListReferralUser extends StatelessWidget {
-  ReferralListUserArgument arguments;
-  ListReferralUser({Key? key, required this.arguments}) : super(key: key);
+  final ReferralListUserArgument arguments;
+  const ListReferralUser({Key? key, required this.arguments}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

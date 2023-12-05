@@ -17,7 +17,6 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
-import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -108,7 +107,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
       data?.following = following;
       notifyListeners();
     } else if (_routeArgument?.vidData?.postID != null) {
-      final userName = _routeArgument?.vidData?.username;
+      // final userName = _routeArgument?.vidData?.username;
       // if (userName?.isEmpty ?? true) {
       final following = _routeArgument?.vidData?.following;
       print('following initState $following');

@@ -118,6 +118,7 @@ class LocalizationModelV2 {
   String? imageOrVideoMax60secondsOnlyFor24Hours;
   String? onlyImage;
   String? flash;
+  String? effect;
   String? filters;
   String? text;
   String? stickers;
@@ -167,6 +168,7 @@ class LocalizationModelV2 {
   String? music;
   String? searchMusic;
   String? addMusic;
+  String? tapOnTrackToTrim;
   String? loading;
   String? popular;
   String? explore;
@@ -217,6 +219,11 @@ class LocalizationModelV2 {
   String? saturation;
   String? level;
   String? exposure;
+  String? perspective;
+  String? tint;
+  String? warmth;
+  String? discardEdit;
+  String? discardEditDesc;
   String? addLocation;
   String? type;
   String? free;
@@ -230,6 +237,14 @@ class LocalizationModelV2 {
   String? normal;
   String? finishingUp;
   String? permissionStorage;
+  String? cache;
+  String? download;
+  String? storage;
+  String? cacheAndDownload;
+  String? clear;
+  String? clearAll;
+  String? cacheDescription;
+  String? downloadDescription;
   String? failedUpdatedYourProfilePicture;
   String? successfullyUpdatedYourProfilePicture;
   String? failedUpdatePersonalInformation;
@@ -1009,6 +1024,13 @@ class LocalizationModelV2 {
   String? apply;
   String? selectDate;
   String? end;
+  String? recordAtLeast15Seconds;
+  String? recordAtLeast4Seconds;
+  String? messageLessLimitVideo;
+  String? messageLessLimitStory;
+  String? messageLimitVideo;
+  String? messageLimitDiary;
+  String? messageLimitStory;
 
   LocalizationModelV2({
     this.login,
@@ -1130,6 +1152,7 @@ class LocalizationModelV2 {
     this.imageOrVideoMax60secondsOnlyFor24Hours,
     this.onlyImage,
     this.flash,
+    this.effect,
     this.filters,
     this.text,
     this.stickers,
@@ -1179,6 +1202,7 @@ class LocalizationModelV2 {
     this.music,
     this.searchMusic,
     this.addMusic,
+    this.tapOnTrackToTrim,
     this.loading,
     this.popular,
     this.explore,
@@ -1229,6 +1253,11 @@ class LocalizationModelV2 {
     this.saturation,
     this.level,
     this.exposure,
+    this.perspective,
+    this.tint,
+    this.warmth,
+    this.discardEdit,
+    this.discardEditDesc,
     this.addLocation,
     this.type,
     this.free,
@@ -1242,6 +1271,14 @@ class LocalizationModelV2 {
     this.normal,
     this.finishingUp,
     this.permissionStorage,
+    this.cache,
+    this.download,
+    this.storage,
+    this.cacheAndDownload,
+    this.clear,
+    this.clearAll,
+    this.cacheDescription,
+    this.downloadDescription,
     this.failedUpdatedYourProfilePicture,
     this.successfullyUpdatedYourProfilePicture,
     this.failedUpdatePersonalInformation,
@@ -2021,6 +2058,14 @@ class LocalizationModelV2 {
     this.apply,
     this.selectDate,
     this.end,
+    this.recordAtLeast15Seconds,
+    this.recordAtLeast4Seconds,
+    this.messageLessLimitVideo,
+    this.messageLessLimitStory,
+    this.messageLimitVideo,
+    this.messageLimitDiary,
+    this.messageLimitStory,
+
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2143,6 +2188,7 @@ class LocalizationModelV2 {
     imageOrVideoMax60secondsOnlyFor24Hours = json['imageOrVideoMax60secondsOnlyFor24Hours'];
     onlyImage = json['onlyImage'];
     flash = json['flash'];
+    effect = json['effect'];
     filters = json['filters'];
     text = json['text'];
     stickers = json['stickers'];
@@ -2192,6 +2238,7 @@ class LocalizationModelV2 {
     music = json['music'];
     searchMusic = json['search_music'];
     addMusic = json['add_music'];
+    tapOnTrackToTrim = json['tap_on_track_to_trim'];
     loading = json['loading'];
     popular = json['popular'];
     explore = json['explore'];
@@ -2242,6 +2289,11 @@ class LocalizationModelV2 {
     saturation = json['saturation'];
     level = json['level'];
     exposure = json['exposure'];
+    perspective = json['perspective'];
+    tint = json['tint'];
+    warmth = json['warmth'];
+    discardEdit = json['discardEdit'];
+    discardEditDesc = json['discardEditDesc'];
     addLocation = json['addLocation'];
     type = json['type'];
     free = json['free'];
@@ -2255,6 +2307,14 @@ class LocalizationModelV2 {
     normal = json['normal'];
     finishingUp = json['finishingUp'];
     permissionStorage = json['permissionStorage'];
+    cache = json['cache'];
+    download = json['download'];
+    storage = json['storage'];
+    cacheAndDownload = json['cacheAndDownload'];
+    clear = json['clear'];
+    clearAll = json['clearAll'];
+    cacheDescription = json['cacheDescription'];
+    downloadDescription = json['downloadDescription'];
     failedUpdatedYourProfilePicture = json['failedUpdatedYourProfilePicture'];
     successfullyUpdatedYourProfilePicture = json['successfullyUpdatedYourProfilePicture'];
     failedUpdatePersonalInformation = json['failedUpdatePersonalInformation'];
@@ -3052,5 +3112,12 @@ class LocalizationModelV2 {
     joinTheChallenge = json['joinTheChallenge'];
     badgeCollection = json['badgeCollection'];
     understand = json['understand'];
+    recordAtLeast15Seconds = json['recordAtLeast15Seconds'];
+    recordAtLeast4Seconds = json['recordAtLeast4Seconds'];
+    messageLessLimitVideo = json['messageLessLimitVideo'];
+    messageLessLimitStory = json['messageLessLimitStory'];
+    messageLimitVideo = json['messageLimitVideo'];
+    messageLimitDiary = json['messageLimitDiary'];
+    messageLimitStory = json['messageLimitStory'];
   }
 }

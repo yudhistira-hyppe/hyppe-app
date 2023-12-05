@@ -1,10 +1,7 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:flutter/material.dart';
@@ -29,38 +26,40 @@ class _BuildSwitchButtonState extends State<BuildSwitchButton> {
             topRight: Radius.circular(8),
           ),
         ),
-        child: notifier.isRecordingVideo
-            ? Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16 * SizeConfig.scaleDiagonal),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 12,
-                      child: IgnorePointer(
-                        ignoring: true,
-                        child: Slider(
-                          max: 1.0,
-                          value: notifier.progressDev,
-                          onChanged: (double value) {},
-                          inactiveColor: kHyppeTextPrimary.withOpacity(0.5),
-                          activeColor: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                    fourPx,
-                    Expanded(
-                      flex: 2,
-                      child: CustomTextWidget(
-                        textToDisplay: System().formatDuration(Duration(seconds: notifier.progressHuman).inMilliseconds),
-                        textStyle: Theme.of(context).textTheme.caption,
-                      ),
-                    )
-                  ],
-                ),
-              )
-            : Row(
+        child:
+        // notifier.isRecordingVideo
+        //     ? Padding(
+        //         padding: EdgeInsets.symmetric(horizontal: 16 * SizeConfig.scaleDiagonal),
+        //         child: Row(
+        //           crossAxisAlignment: CrossAxisAlignment.center,
+        //           mainAxisAlignment: MainAxisAlignment.center,
+        //           children: [
+        //             Expanded(
+        //               flex: 12,
+        //               child: IgnorePointer(
+        //                 ignoring: true,
+        //                 child: Slider(
+        //                   max: 1.0,
+        //                   value: notifier.progressDev,
+        //                   onChanged: (double value) {},
+        //                   inactiveColor: kHyppeTextPrimary.withOpacity(0.5),
+        //                   activeColor: Theme.of(context).colorScheme.primary,
+        //                 ),
+        //               ),
+        //             ),
+        //             fourPx,
+        //             Expanded(
+        //               flex: 2,
+        //               child: CustomTextWidget(
+        //                 textToDisplay: System().formatDuration(Duration(seconds: notifier.progressHuman).inMilliseconds),
+        //                 textStyle: Theme.of(context).textTheme.caption,
+        //               ),
+        //             )
+        //           ],
+        //         ),
+        //       )
+        //     :
+        Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

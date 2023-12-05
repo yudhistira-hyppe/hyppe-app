@@ -1,5 +1,4 @@
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
-import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_diary_detail_screen_argument.dart';
@@ -28,6 +27,7 @@ import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/page_not_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/delete_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/cache_and_download/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/achievement/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/collection/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/chalange/leaderboard/detail/screen.dart';
@@ -86,6 +86,8 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/comments_detail/scre
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/screen.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
 import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/screen.dart' as message_detail_v2;
@@ -95,11 +97,12 @@ import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/upload/make_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/payment/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/boost/screen.dart';
+import 'package:hyppe/ui/inner/upload/preview_content/editor/photo/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/ownerhip_selling/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/screen.dart';
-import 'package:hyppe/ui/outer/ads/screen.dart';
+// import 'package:hyppe/ui/outer/ads/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/forgot_password_screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/set_new_password/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_screen.dart';
@@ -129,7 +132,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail.da
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/sign_in_security/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/change_password/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/screen.dart';
+// import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/screen.dart';
 
 import '../core/arguments/detail_ticket_argument.dart';
 import '../core/arguments/main_argument.dart';
@@ -149,7 +152,7 @@ class Generate {
       case Routes.root:
         return MaterialPageRoute(builder: (_) => OpeningLogo());
       case Routes.welcomeLogin:
-        return MaterialPageRoute(builder: (_) => WelcomeLoginScreen());
+        return MaterialPageRoute(builder: (_) => const WelcomeLoginScreen());
       case Routes.login:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case Routes.lobby:
@@ -162,9 +165,11 @@ class Generate {
       case Routes.homePageSignInSecurity:
         return MaterialPageRoute(builder: (_) => HyppeHomeSignAndSecurity());
       case Routes.makeContent:
-        return MaterialPageRoute(builder: (_) => MakeContentScreen());
+        return MaterialPageRoute(builder: (_) => const MakeContentScreen());
       case Routes.previewContent:
         return MaterialPageRoute(builder: (_) => const PreviewContentScreen());
+      case Routes.editPhoto:
+        return MaterialPageRoute(builder: (_) => const PhotoEditorScreen());
       case Routes.preUploadContent:
         return MaterialPageRoute(builder: (_) => PreUploadContentScreen(arguments: settings.arguments as UpdateContentsArgument));
       case Routes.ownershipSelling:
@@ -219,8 +224,8 @@ class Generate {
       case Routes.diaryDetail:
         return MaterialPageRoute(builder: (_) => DiaryPlayerPage(argument: settings.arguments as DiaryDetailScreenArgument));
 
-      case Routes.storyDetail:
-        return MaterialPageRoute(builder: (_) => HyppePlaylistStories(argument: settings.arguments as StoryDetailScreenArgument));
+      // case Routes.storyDetail:
+      //   return MaterialPageRoute(builder: (_) => HyppePlaylistStories(argument: settings.arguments as StoryDetailScreenArgument));
       // case Routes.showStories:
       //   return MaterialPageRoute(builder: (_) => StoryGroupScreen(argument: settings.arguments as StoryDetailScreenArgument));
       case Routes.showStories:
@@ -270,11 +275,11 @@ class Generate {
         return MaterialPageRoute(builder: (_) => ListReferralUser(arguments: settings.arguments as ReferralListUserArgument));
       case Routes.insertReferral:
         return MaterialPageRoute(builder: (_) => InsertReferral());
-      case Routes.showAds:
-        return MaterialPageRoute(
-            builder: (_) => AdsScreen(
-                  argument: settings.arguments as AdsArgument,
-                ));
+      // case Routes.showAds:
+      //   return MaterialPageRoute(
+      //       builder: (_) => AdsScreen(
+      //             argument: settings.arguments as AdsArgument,
+      //           ));
 
       case Routes.searcMore:
         return MaterialPageRoute(builder: (_) => const SearchMoreScreen());
@@ -368,6 +373,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const VerificationIDStepSupportDocsEula());
       case Routes.help:
         return MaterialPageRoute(builder: (_) => const HelpScreen());
+      case Routes.cacheAndDownload:
+        return MaterialPageRoute(builder: (_) => const CacheAndDownloadScreen());
       case Routes.faqDetail:
         return MaterialPageRoute(
             builder: (_) => FAQDetailScreen(
@@ -419,6 +426,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => ShimmerSlider(arguments: settings.arguments as SlidedPicDetailScreenArgument));
       case Routes.homeTutor:
         return MaterialPageRoute(builder: (_) => const HomeTutorScreen());
+      case Routes.streamer:
+        return MaterialPageRoute(builder: (_) => const StreamerScreen());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

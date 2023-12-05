@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart' as dio;
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -380,6 +378,16 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+
+  initThumbnail() async{
+    final isImage = ((fileContent?[0] ?? '').isImageFormat());
+    print('My Thumbnail: $isImage');
+    if(!isImage){
+      thumbNail = await System().createThumbnail(fileContent?[0] ?? '');
+      print('My Thumbnail: $thumbNail');
+    }
+
+  }
   void setDefaultFileContent(BuildContext context) {
     final notifierPre = context.read<PreviewContentNotifier>();
     final isPic = _fileContent?[0]?.isImageFormat();
@@ -587,7 +595,8 @@ class PreUploadContentNotifier with ChangeNotifier {
       musicSelected = null;
       notifier.defaultPath = null;
       if (notifier.betterPlayerController != null) {
-        notifier.betterPlayerController!.dispose();
+        // notifier.betterPlayerController!.dispose();
+        notifier.betterPlayerController!.pause();
       }
     } else {
       notifier.fixSelectedMusic = _musicSelected;

@@ -5,6 +5,7 @@
 -keep class ai.deepar.ar.core.videotexture.VideoTextureAndroidJava
 -dontwarn android.**
 
+-keep class org.webrtc.** { *; }
 -keep class com.alivc.**{*;}
 -keep class com.aliyun.**{*;}
 -keep class com.cicada.**{*;}

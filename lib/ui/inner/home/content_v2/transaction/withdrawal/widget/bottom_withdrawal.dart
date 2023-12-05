@@ -11,8 +11,8 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:provider/provider.dart';
 
 class BottomWithdrawalWidget extends StatelessWidget {
-  LocalizationModelV2 translate;
-  BottomWithdrawalWidget({Key? key, required this.translate}) : super(key: key);
+  final LocalizationModelV2 translate;
+  const BottomWithdrawalWidget({Key? key, required this.translate}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

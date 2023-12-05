@@ -8,8 +8,8 @@ import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 class CustomSearchBar extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final ValueChanged<String>? onChanged;
-  final Function? onPressedIcon;
-  final Function? onPressedRightIcon;
+  final Function()? onPressedIcon;
+  final Function()? onPressedRightIcon;
   final TextEditingController? controller;
   final Function()? onTap;
   final FocusNode? focusNode;
@@ -23,31 +23,32 @@ class CustomSearchBar extends StatelessWidget {
   final bool autoFocus;
   final bool withShadow;
 
-  const CustomSearchBar({
-    Key? key,
-    this.onSubmitted,
-    this.onChanged,
-    this.controller,
-    this.onTap,
-    this.hintText,
-    this.contentPadding,
-    this.onPressedIcon,
-    this.onPressedRightIcon,
-    this.heightText,
-    this.focusNode,
-    this.inputDecoration,
-    this.textInputType = TextInputType.text,
-    this.textAlign = TextAlign.start,
-    this.readOnly = false,
-    this.autoFocus = false,
-    this.withShadow = false
-  }) : super(key: key);
+  const CustomSearchBar(
+      {Key? key,
+      this.onSubmitted,
+      this.onChanged,
+      this.controller,
+      this.onTap,
+      this.hintText,
+      this.contentPadding,
+      this.onPressedIcon,
+      this.onPressedRightIcon,
+      this.heightText,
+      this.focusNode,
+      this.inputDecoration,
+      this.textInputType = TextInputType.text,
+      this.textAlign = TextAlign.start,
+      this.readOnly = false,
+      this.autoFocus = false,
+      this.withShadow = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16),
-      decoration: BoxDecoration(color: Theme.of(context).colorScheme.background,
+      decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.background,
           boxShadow: withShadow ? const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.5), blurRadius: 7)] : null,
           borderRadius: const BorderRadius.all(Radius.circular(4))),
       child: TextField(
@@ -58,11 +59,13 @@ class CustomSearchBar extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w400),
         decoration: inputDecoration ??
             InputDecoration(
-              suffixIcon: onPressedRightIcon != null ? CustomIconButtonWidget(
-                defaultColor: false,
-                onPressed: onPressedRightIcon,
-                iconData: "${AssetPath.vectorPath}filter.svg",
-              ) : null,
+                suffixIcon: onPressedRightIcon != null
+                    ? CustomIconButtonWidget(
+                        defaultColor: false,
+                        onPressed: onPressedRightIcon,
+                        iconData: "${AssetPath.vectorPath}filter.svg",
+                      )
+                    : null,
                 prefixIcon: CustomIconButtonWidget(
                   height: 24,
                   defaultColor: false,

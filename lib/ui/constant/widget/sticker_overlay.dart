@@ -1,6 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/models/collection/sticker/sticker_model.dart';
-import 'package:optimized_cached_image/optimized_cached_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_gif_widget.dart';
 
 class StickerOverlay extends StatelessWidget {
@@ -49,7 +49,7 @@ class StickerOverlay extends StatelessWidget {
               fit: BoxFit.contain,
               child: canPause && (sticker.image ?? '').toLowerCase().endsWith('.gif')
                   ? CustomGifWidget(url: sticker.image ?? '', isPause: isPause)
-                  : OptimizedCacheImage(imageUrl: sticker.image ?? ''),
+                  : CachedNetworkImage(imageUrl: sticker.image ?? ''),
             ),
           ),
         ),

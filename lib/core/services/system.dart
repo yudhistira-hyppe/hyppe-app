@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -17,7 +18,6 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/database/local_thumbnail.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart' as v2;
-import 'package:hyppe/core/models/collection/google_map_place/location_model.dart';
 
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/core/services/locations.dart';
@@ -31,7 +31,6 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dar
 import 'package:hyppe/ui/inner/home/content_v2/chalange/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/outer/welcome_login/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -45,17 +44,17 @@ import 'package:flutter_video_info/flutter_video_info.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:screen_protector/screen_protector.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:story_view/story_view.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../app.dart';
 import '../arguments/general_argument.dart';
@@ -171,12 +170,12 @@ class System {
   }
 
   Future openSetting() async {
-    openAppSettings().then((bool hasOpened) => debugPrint('App Settings opened: $hasOpened'));
+    openAppSettings().then((bool hasOpened) => debugPrint('App Settings opened: ' + hasOpened.toString()));
   }
 
   Future<PermissionStatus> checkPermission({required Permission permission}) async {
-    PermissionStatus status = await permission.status;
-    return status;
+    PermissionStatus _status = await permission.status;
+    return _status;
   }
 
   removeSpecialChar(String str) {
@@ -263,12 +262,12 @@ class System {
   }
 
   validateType(String? type) {
-    String contentType = '';
+    String _contentType = '';
     if (type == 'image') {
-      contentType = 'pic,$contentType';
+      _contentType = 'pic,$_contentType';
     }
-    contentType = 'vid,$contentType';
-    return contentType;
+    _contentType = 'vid,$_contentType';
+    return _contentType;
   }
 
   OverlayEntry createPopupDialog(Widget widgetToOverlay) {
@@ -306,10 +305,10 @@ class System {
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceIdentifier = "${androidInfo.id}-${androidInfo.hardware}-${androidInfo.androidId}-${androidInfo.board}";
+      deviceIdentifier = "${androidInfo.id}-${androidInfo.hardware}-${androidInfo.serialNumber}-${androidInfo.board}";
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      deviceIdentifier = "${iosInfo.identifierForVendor}";
+      deviceIdentifier = iosInfo.identifierForVendor ?? deviceID;
     } else if (kIsWeb) {
       // The web doesnt have a device UID, so use a combination fingerprint as an example
       WebBrowserInfo webInfo = await deviceInfo.webBrowserInfo;
@@ -528,7 +527,7 @@ class System {
     DeviceInfoPlugin plugin = DeviceInfoPlugin();
     if (Platform.isAndroid) {
       AndroidDeviceInfo android = await plugin.androidInfo;
-      if (android.version.sdkInt! < 33) {
+      if (android.version.sdkInt < 33) {
         if (await Permission.storage.request().isGranted) {
           // permissionGranted = true;
         } else if (await Permission.storage.request().isPermanentlyDenied) {
@@ -563,17 +562,18 @@ class System {
     LocalizationModelV2? model,
     bool isVideo = false,
     int maxFile = 3,
+    Function()? onException,
   }) async {
-    final ImagePicker imagePicker = ImagePicker();
+    final ImagePicker _imagePicker = ImagePicker();
 
     final notifier = context.read<TranslateNotifierV2>().translate;
-    Duration duration;
-    String errorMsg = '';
-    List<File>? filePickerResult;
+    Duration _duration;
+    String _errorMsg = '';
+    List<File>? _filePickerResult;
 
     bool _validateCountPost(int count) {
       if (count > 10) {
-        errorMsg = notifier.pleaseSelectMax10Items ?? '';
+        _errorMsg = notifier.pleaseSelectMax10Items ?? '';
         return true;
       }
       return false;
@@ -581,10 +581,10 @@ class System {
 
     if (featureType == null) {
       // used for change profile picture only
-      final pickerResult0 = await imagePicker.pickImage(source: ImageSource.gallery);
+      final _pickerResult = await _imagePicker.pickImage(source: ImageSource.gallery);
 
-      if (pickerResult0 != null) {
-        filePickerResult = [File(pickerResult0.path)];
+      if (_pickerResult != null) {
+        _filePickerResult = [File(_pickerResult.path)];
       }
     } else {
       // used for KYC pick multi image
@@ -592,49 +592,49 @@ class System {
         debugPrint("Masuk KYC");
         List<File>? imageFileList = [];
         if (pdf) {
-          final pickerResult0 = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.custom, allowedExtensions: ['pdf', 'doc']);
+          final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.custom, allowedExtensions: ['pdf', 'doc']);
           // validasi durasi
-          if (pickerResult0 != null) {
+          if (_pickerResult != null) {
             // untuk menampung file yang failed di validasi
-            String failFile = '';
+            String _failFile = '';
 
             // validasi count post
-            if (_validateCountPost(pickerResult0.files.length) == false) {
-              for (int element = 0; element < pickerResult0.files.length; element++) {
+            if (_validateCountPost(_pickerResult.files.length) == false) {
+              for (int element = 0; element < _pickerResult.files.length; element++) {
                 // validasi content type
-                if (pickerResult0.files[element].extension?.toLowerCase() == MP4 || pickerResult0.files[element].extension?.toLowerCase() == MOV) {
-                  await getVideoMetadata(pickerResult0.files[element].path ?? '').then((value) {
-                    duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
+                if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
+                  await getVideoMetadata(_pickerResult.files[element].path ?? '').then((value) {
+                    _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
                     // hapus file yang durasinya lebih dari 15 detik
-                    if (duration.inSeconds > 15) {
-                      failFile = '$failFile, ${pickerResult0.files[element].name}\n';
-                      pickerResult0.files.removeAt(element);
+                    if (_duration.inSeconds > 15) {
+                      _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
+                      _pickerResult.files.removeAt(element);
                     }
                   });
                 }
               }
 
               // show toast if there is fail file
-              if (failFile.isNotEmpty) {
-                errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$failFile';
-              }
+              // if (_failFile.isNotEmpty) {
+              //   _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
+              // }
 
-              if (pickerResult0.files.isNotEmpty) {
-                filePickerResult = pickerResult0.files.map((file) => File(file.path ?? '')).toList();
+              if (_pickerResult.files.isNotEmpty) {
+                _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
               }
             }
           }
         } else {
-          final List<XFile> selectedImages = await imagePicker.pickMultiImage(imageQuality: 90);
-          if ((selectedImages.isNotEmpty ?? false) && (selectedImages.length ?? 0) <= maxFile) {
+          final List<XFile>? selectedImages = await _imagePicker.pickMultiImage(imageQuality: 90);
+          if ((selectedImages?.isNotEmpty ?? false) && (selectedImages?.length ?? 0) <= maxFile) {
             for (XFile file in selectedImages ?? []) {
               debugPrint(file.path);
               imageFileList.add(File(file.path));
             }
-            filePickerResult = imageFileList;
+            _filePickerResult = imageFileList;
           } else {
-            errorMsg = "${notifier.pleaseSelectOneortheMaxFileis} $maxFile";
+            _errorMsg = "${notifier.pleaseSelectOneortheMaxFileis} $maxFile";
           }
         }
       }
@@ -662,12 +662,29 @@ class System {
         }
         print(permsiion);
         await _getStoragePermission();
-        await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false).then((result) {
+        await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false).then((result) async {
           if (result != null) {
-            if (result.files.single.extension?.toLowerCase() == MP4 || result.files.single.extension?.toLowerCase() == MOV) {
-              filePickerResult = [File(result.files.single.path ?? '')];
-            } else {
-              errorMsg = '${notifier.weCurrentlySupportOnlyMP4andMOVformat} ${result.names.single}';
+            for (int element = 0; element < result.files.length; element++) {
+              if (result.files[element].extension?.toLowerCase() == MP4 || result.files[element].extension?.toLowerCase() == MOV) {
+                await getVideoMetadata(result.files[element].path ?? '').then((value) {
+                  _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
+
+                  // hapus file yang durasinya lebih dari 60 detik
+                  if (_duration.inSeconds < 15) {
+                    // _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
+                    if (onException != null) {
+                      onException();
+                    }
+                    result.files.removeAt(element);
+                  }
+                });
+              } else {
+                _errorMsg = '${notifier.weCurrentlySupportOnlyMP4andMOVformat} ${result.names.single}';
+              }
+            }
+
+            if (result.files.isNotEmpty) {
+              _filePickerResult = result.files.map((file) => File(file.path ?? '')).toList();
             }
           }
         });
@@ -680,96 +697,110 @@ class System {
         //   }
         // });
 
-        final pickerResult = await imagePicker.pickImage(source: ImageSource.gallery);
+        final pickerResult = await _imagePicker.pickImage(source: ImageSource.gallery);
 
         if (pickerResult != null) {
-          filePickerResult = [File(pickerResult.path)];
+          _filePickerResult = [File(pickerResult.path)];
         }
       }
 
       if (featureType == FeatureType.diary) {
-        final pickerResult0 = await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false);
+        final _pickerResult = await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false);
 
         // validasi durasi
-        if (pickerResult0 != null) {
+        if (_pickerResult != null) {
           // untuk menampung file yang failed di validasi
-          String failFile = '';
+          // String _failFile = '';
 
           // validasi count post
-          if (_validateCountPost(pickerResult0.files.length) == false) {
-            for (int element = 0; element < pickerResult0.files.length; element++) {
-              if (pickerResult0.files[element].extension?.toLowerCase() == MP4 || pickerResult0.files[element].extension?.toLowerCase() == MOV) {
-                await getVideoMetadata(pickerResult0.files[element].path ?? '').then((value) {
-                  duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
+          if (_validateCountPost(_pickerResult.files.length) == false) {
+            for (int element = 0; element < _pickerResult.files.length; element++) {
+              if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
+                await getVideoMetadata(_pickerResult.files[element].path ?? '').then((value) {
+                  _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
                   // hapus file yang durasinya lebih dari 60 detik
-                  if (duration.inSeconds > 60) {
-                    failFile = '$failFile, ${pickerResult0.files[element].name}\n';
-                    pickerResult0.files.removeAt(element);
+                  if (_duration.inSeconds < 15) {
+                    if (onException != null) {
+                      onException();
+                    }
+                    // _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
+                    _pickerResult.files.removeAt(element);
                   }
                 });
               }
             }
 
             // show toast if there is fail file
-            if (failFile.isNotEmpty) {
-              errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$failFile';
-            }
+            // if (_failFile.isNotEmpty) {
+            //   _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
+            // }
 
-            if (pickerResult0.files.isNotEmpty) {
-              filePickerResult = pickerResult0.files.map((file) => File(file.path ?? '')).toList();
+            if (_pickerResult.files.isNotEmpty) {
+              _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
             }
           }
         }
       }
 
       if (featureType == FeatureType.story) {
-        if (isVideo) {
-          final pickerResult0 = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.video, allowCompression: false);
-          if (pickerResult0 != null) {
-            // untuk menampung file yang failed di validasi
-            String failFile = '';
+        final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.media, allowCompression: false);
+        if (_pickerResult != null) {
+          // untuk menampung file yang failed di validasi
+          // String _failFile = '';
 
-            // validasi count post
-            if (_validateCountPost(pickerResult0.files.length) == false) {
-              for (int element = 0; element < pickerResult0.files.length; element++) {
-                // validasi content type
-                if (pickerResult0.files[element].extension?.toLowerCase() == MP4 || pickerResult0.files[element].extension?.toLowerCase() == MOV) {
-                  await getVideoMetadata(pickerResult0.files[element].path ?? '').then((value) {
-                    duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
+          // validasi count post
+          if (_validateCountPost(_pickerResult.files.length) == false) {
+            for (int element = 0; element < _pickerResult.files.length; element++) {
+              // validasi content type
+              if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
+                await getVideoMetadata(_pickerResult.files[element].path ?? '').then((value) {
+                  _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
-                    // hapus file yang durasinya lebih dari 15 detik
-                    if (duration.inSeconds > 15) {
-                      failFile = '$failFile, ${pickerResult0.files[element].name}\n';
-                      pickerResult0.files.removeAt(element);
+                  // hapus file yang durasinya lebih dari 15 detik
+                  if (_duration.inSeconds < 4) {
+                    if (onException != null) {
+                      onException();
                     }
-                  });
+                    // _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
+                    _pickerResult.files.removeAt(element);
+                  }
+                });
+
+                // show toast if there is fail file
+                // if (_failFile.isNotEmpty) {
+                //   _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
+                // }
+
+                if (_pickerResult.files.isNotEmpty) {
+                  _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
                 }
               }
 
               // show toast if there is fail file
-              if (failFile.isNotEmpty) {
-                errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$failFile';
-              }
+              // if (_failFile.isNotEmpty) {
+              //   _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
+              // }
 
-              if (pickerResult0.files.isNotEmpty) {
-                filePickerResult = pickerResult0.files.map((file) => File(file.path ?? '')).toList();
+              if (_pickerResult.files.isNotEmpty) {
+                _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
               }
             }
           }
-        } else {
-          final pickerResult0 = await imagePicker.pickImage(source: ImageSource.gallery);
-
-          if (pickerResult0 != null) {
-            filePickerResult = [File(pickerResult0.path)];
-          }
+          // validasi durasi
         }
-
-        // validasi durasi
       }
     }
+    return {_errorMsg: _filePickerResult};
+  }
 
-    return {errorMsg: filePickerResult};
+  Future<Uint8List?> createThumbnail(String path) async {
+    return await VideoThumbnail.thumbnailData(
+      video: path,
+      imageFormat: ImageFormat.JPEG,
+      maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+      quality: 25,
+    );
   }
 
   saveThumbnail(String url, String id, {bool isCheck = false}) async {
@@ -833,9 +864,9 @@ class System {
     final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
 
     if (notifier.user.profile != null) {
-      final status = SharedPreference().readStorage(SpKeys.statusVerificationId);
+      final _status = SharedPreference().readStorage(SpKeys.statusVerificationId);
 
-      if (status == REVIEW) {
+      if (_status == REVIEW) {
         ShowBottomSheet().onShowColouredSheet(
           context,
           'Harap Menunggu Sedang Proses Pemeriksaan',
@@ -845,7 +876,7 @@ class System {
           color: Theme.of(context).colorScheme.error,
           iconSvg: "${AssetPath.vectorPath}close.svg",
         );
-      } else if (status == UNVERIFIED) {
+      } else if (_status == UNVERIFIED) {
         ShowBottomSheet.onShowIDVerification(context);
       } else {
         action();
@@ -1089,17 +1120,17 @@ class System {
       ),
     );
 
-    var linkResult = await FirebaseDynamicLinks.instance.buildShortLink(parameters);
+    var _linkResult = await FirebaseDynamicLinks.instance.buildShortLink(parameters);
 
     if (copiedToClipboard) {
-      copyToClipboard(linkResult.shortUrl.toString());
+      copyToClipboard(_linkResult.shortUrl.toString());
     }
 
     if (shareImmediately && !copiedToClipboard) {
-      await shareText(dynamicLink: linkResult.shortUrl.toString(), context: context);
+      await shareText(dynamicLink: _linkResult.shortUrl.toString(), context: context);
     }
 
-    return linkResult.shortUrl;
+    return _linkResult.shortUrl;
   }
 
   Future<Uri> createdReferralLink(BuildContext context) async {
@@ -1124,9 +1155,9 @@ class System {
       ),
     );
 
-    var linkResult = await FirebaseDynamicLinks.instance.buildShortLink(parameters);
+    var _linkResult = await FirebaseDynamicLinks.instance.buildShortLink(parameters);
 
-    return linkResult.shortUrl;
+    return _linkResult.shortUrl;
   }
 
   Future copyToClipboard(String data) async => await Clipboard.setData(ClipboardData(text: data));
@@ -1166,8 +1197,8 @@ class System {
     ui.Image boxImage = await repaintBoundary.toImage(pixelRatio: 3);
     ByteData? byteData = await boxImage.toByteData(format: ui.ImageByteFormat.png);
     var uint8list = byteData?.buffer.asUint8List();
-    final String pathFile = path.join(await getSystemPath(params: 'editedImg'), '${DateTime.now().toIso8601String()}.png');
-    File imgFile = File(pathFile);
+    final String _pathFile = path.join(await getSystemPath(params: 'editedImg'), '${DateTime.now().toIso8601String()}.png');
+    File imgFile = File(_pathFile);
     if (uint8list != null) {
       await imgFile.writeAsBytes(uint8list);
     }
@@ -1175,9 +1206,9 @@ class System {
   }
 
   Future<String> getSystemPath({String params = ''}) async {
-    var directory = await getTemporaryDirectory();
-    var result = await Directory('${directory.path}/$params').create(recursive: true);
-    return result.absolute.path;
+    var _directory = await getTemporaryDirectory();
+    var _result = await Directory('${_directory.path}/$params').create(recursive: true);
+    return _result.absolute.path;
   }
 
   Future<PackageInfo> getPackageInfo() async {
@@ -1286,44 +1317,67 @@ class System {
     }
   }
 
-  Future<void> navigateToProfile(BuildContext context, String email, {StoryController? storyController}) async {
-    final connect = await checkConnections();
+  Future<void> navigateToProfile(BuildContext context, String email) async {
+    // final connect = await checkConnections();
     // if (connect) {
     String myEmail = SharedPreference().readStorage(SpKeys.email) ?? "";
     if (email != myEmail) {
       context.read<OtherProfileNotifier>().checkFollowingToUser(context, email);
-      if (storyController != null) {
-        storyController.pause();
-        Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
-      } else {
-        if (globalAliPlayer != null) {
-          globalAliPlayer?.pause();
-        }
-        if (globalAudioPlayer != null) {
-          globalAudioPlayer?.pause();
-        }
-        await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-        if (globalAliPlayer != null) {
-          // globalAliPlayer?.play();
-        }
-        if (globalAudioPlayer != null) {
-          globalAudioPlayer?.resume();
-        }
+      // if (storyController != null) {
+      //   storyController.pause();
+      //   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
+      // } else {
+      //   if (globalAliPlayer != null) {
+      //     globalAliPlayer?.pause();
+      //   }
+      //   if (globalAudioPlayer != null) {
+      //     globalAudioPlayer?.pause();
+      //   }
+      //   await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+      //   if (globalAliPlayer != null) {
+      //     // globalAliPlayer?.play();
+      //   }
+      //   if (globalAudioPlayer != null) {
+      //     globalAudioPlayer?.resume();
+      //   }
+      // }
+      if (globalAliPlayer != null) {
+        globalAliPlayer?.pause();
+      }
+      if (globalAudioPlayer != null) {
+        globalAudioPlayer?.pause();
+      }
+      await Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+      if (globalAliPlayer != null) {
+        // globalAliPlayer?.play();
+      }
+      if (globalAudioPlayer != null) {
+        globalAudioPlayer?.resume();
       }
     } else {
-      if (storyController != null) {
-        context.read<HomeNotifier>().navigateToProfilePage(context, whenComplete: true, onWhenComplete: () => storyController.play());
-      } else {
-        if (globalAliPlayer != null) {
-          globalAliPlayer?.pause();
-        }
-        if (globalAudioPlayer != null) {
-          globalAudioPlayer?.pause();
-        }
-        await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
-        if (globalAudioPlayer != null) {
-          globalAudioPlayer?.resume();
-        }
+      // if (storyController != null) {
+      //   context.read<HomeNotifier>().navigateToProfilePage(context, whenComplete: true, onWhenComplete: () => storyController.play());
+      // } else {
+      //   if (globalAliPlayer != null) {
+      //     globalAliPlayer?.pause();
+      //   }
+      //   if (globalAudioPlayer != null) {
+      //     globalAudioPlayer?.pause();
+      //   }
+      //   await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
+      //   if (globalAudioPlayer != null) {
+      //     globalAudioPlayer?.resume();
+      //   }
+      // }
+      if (globalAliPlayer != null) {
+        globalAliPlayer?.pause();
+      }
+      if (globalAudioPlayer != null) {
+        globalAudioPlayer?.pause();
+      }
+      await Routing().move(Routes.selfProfile, argument: GeneralArgument(isTrue: true));
+      if (globalAudioPlayer != null) {
+        globalAudioPlayer?.resume();
       }
     }
     // } else {
@@ -1357,8 +1411,8 @@ class System {
   }
 
   String? bodyMultiLang({required String? bodyEn, required String? bodyId}) {
-    final isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
-    if (isoCodeCache == "id") {
+    final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
+    if (_isoCodeCache == "id") {
       return bodyId ?? bodyEn;
     }
     return bodyEn;
@@ -1468,6 +1522,27 @@ class System {
       }
       isShowingDialog = false;
     }
+  }
+
+  Future<bool> checkAdsTime() async {
+    bool check = false;
+    String lastTimeAds = SharedPreference().readStorage(SpKeys.datetimeLastShowAds) ?? '';
+    print("===-=-=-=-=-= $lastTimeAds");
+    print("===-=-=-=-=-= $isShowingDialog");
+    if (!isShowingDialog) {
+      if (lastTimeAds == '') {
+        check = true;
+      } else {
+        DateTime now = DateTime.now();
+        DateTime menitCache = DateTime.parse(lastTimeAds);
+        var jumlahMenit = System().menghitungJumlahMenit(menitCache, now);
+
+        if (jumlahMenit >= 14) {
+          check = true;
+        }
+      }
+    }
+    return check;
   }
 
   Future adsView(AdsData data, int time, {bool isClick = false}) async {
@@ -1630,7 +1705,7 @@ class System {
   }
 
   static String getFileSizeDescription(int size) {
-    StringBuffer bytes = StringBuffer();
+    StringBuffer bytes = new StringBuffer();
     if (size >= 1024 * 1024 * 1024) {
       double i = (size / (1024.00 * 1024.00 * 1024.00));
       bytes
@@ -1700,7 +1775,7 @@ class System {
     }
 
     if (finalSec > 9) {
-      msBuilder.write(finalSec);
+      msBuilder..write(finalSec);
     } else if (finalSec > 0) {
       msBuilder
         ..write("0")

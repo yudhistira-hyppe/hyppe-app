@@ -23,7 +23,7 @@ class CustomFollowButton extends StatelessWidget {
     SizeConfig().init(context);
     String title = '';
     bool _isAbleToClick = isFollowing != StatusFollowing.requested;
-    bool _isNotFollowing = (isFollowing == StatusFollowing.rejected || isFollowing == StatusFollowing.none);
+    // bool _isNotFollowing = (isFollowing == StatusFollowing.rejected || isFollowing == StatusFollowing.none);
 
     return Consumer<TranslateNotifierV2>(builder: (context, value, _) {
       switch (isFollowing) {

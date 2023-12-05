@@ -5,7 +5,6 @@ import 'package:hyppe/core/models/collection/localization_v2/localization_model.
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
-import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -20,7 +19,6 @@ import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:provider/provider.dart';
 
 class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
   final _system = System();
@@ -276,7 +274,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
       _loading = true;
       notifyListeners();
       if (!mounted) return false;
-      final signUpPinNotifier = Provider.of<SignUpPinNotifier>(context, listen: false);
+      // final signUpPinNotifier = Provider.of<SignUpPinNotifier>(context, listen: false);
 
       final notifier = UserBloc();
       await notifier.recoverPasswordBloc(

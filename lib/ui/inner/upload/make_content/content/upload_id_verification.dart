@@ -1,10 +1,8 @@
 import 'dart:io';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/entities/camera/screen.dart';
 import 'package:hyppe/ui/constant/entities/camera/widgets/camera_flash_button.dart';
-// import 'package:hyppe/ui/constant/entities/camera/widgets/camera_switch_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';

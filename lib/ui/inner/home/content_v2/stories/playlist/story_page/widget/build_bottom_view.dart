@@ -4,7 +4,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/loading_music_story.dart';
 import 'package:provider/provider.dart';
-import 'package:story_view/story_view.dart';
+// import 'package:story_view/story_view.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -15,7 +15,7 @@ import '../../../../../../../constant/widget/after_first_layout_mixin.dart';
 import '../../../../../../../constant/widget/music_status_page_widget.dart';
 
 class BuildBottomView extends StatefulWidget {
-  final StoryController? storyController;
+  // final StoryController? storyController;
   final AnimationController? animationController;
   final ContentData? data;
   final int? currentStory;
@@ -25,7 +25,7 @@ class BuildBottomView extends StatefulWidget {
 
   BuildBottomView({
     Key? key,
-    this.storyController,
+    // this.storyController,
     this.animationController,
     required this.data,
     required this.currentStory,
@@ -69,7 +69,6 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                   data: widget.data,
                   pause: widget.pause,
                   currentStory: widget.currentStory == -1 ? 0 : widget.currentStory,
-                  storyController: widget.storyController,
                 ),
                 if (widget.data?.music?.musicTitle != null)
                   Container(
@@ -188,7 +187,6 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                               child: Material(
                                 color: Colors.transparent,
                                 child: BuildButton(
-                                  storyController: widget.storyController,
                                   animationController: widget.animationController,
                                   data: widget.data,
                                   pause: widget.pause,

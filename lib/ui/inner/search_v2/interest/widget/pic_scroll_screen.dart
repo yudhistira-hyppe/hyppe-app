@@ -62,36 +62,33 @@ class PicScrollScreen extends StatefulWidget {
 
 class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingObserver, TickerProviderStateMixin, RouteAware  {
   FlutterAliplayer? fAliplayer;
-  TransformationController _transformationController = TransformationController();
-  // final scrollGlobal = GlobalKey<SelfProfileScreenState>();
-  // final a = SelfProfileScreenState();
 
   // bool isZoom = false;
   bool isPrepare = false;
   bool isPlay = false;
   bool isPause = false;
-  bool _showLoading = false;
-  bool _inSeek = false;
+  // bool _showLoading = false;
+  // bool _inSeek = false;
   bool isloading = false;
 
-  int _loadingPercent = 0;
-  int _currentPlayerState = 0;
+  // int _loadingPercent = 0;
+  // int _currentPlayerState = 0;
   int _videoDuration = 1;
-  int _currentPosition = 0;
-  int _bufferPosition = 0;
-  int _currentPositionText = 0;
+  // int _currentPosition = 0;
+  // int _bufferPosition = 0;
+  // int _currentPositionText = 0;
   int _curIdx = 0;
   int _lastCurIndex = -1;
 
   String auth = '';
   String url = '';
-  final Map _dataSourceMap = {};
-  ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
+  // final Map _dataSourceMap = {};
+  // ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
   bool isMute = false;
   String email = '';
   // String statusKyc = '';
   bool isInPage = true;
-  bool _scroolEnabled = true;
+  // bool _scroolEnabled = true;
   bool toComment = false;
 
   final ItemScrollController itemScrollController = ItemScrollController();
@@ -99,7 +96,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
 
   /// Listener that reports the position of items when the list is scrolled.
   final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
-  final ScrollController _scrollController = ScrollController();
+  // final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -187,12 +184,12 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
-      _currentPlayerState = newState;
+      // _currentPlayerState = newState;
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
           setState(() {
-            _showLoading = false;
+            // _showLoading = false;
             isPause = false;
           });
           break;
@@ -205,27 +202,27 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
       setState(() {
-        _loadingPercent = 0;
-        _showLoading = true;
+        // _loadingPercent = 0;
+        // _showLoading = true;
       });
     }, loadingProgress: (percent, netSpeed, playerId) {
-      _loadingPercent = percent;
+      // _loadingPercent = percent;
       if (percent == 100) {
-        _showLoading = false;
+        // _showLoading = false;
       }
       setState(() {});
     }, loadingEnd: (playerId) {
       setState(() {
-        _showLoading = false;
+        // _showLoading = false;
       });
     });
     fAliplayer?.setOnSeekComplete((playerId) {
-      _inSeek = false;
+      // _inSeek = false;
     });
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
-          _currentPosition = extraValue ?? 0;
+          // _currentPosition = extraValue ?? 0;
         }
         // if (!_inSeek) {
         //   setState(() {
@@ -233,7 +230,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
         //   });
         // }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-        _bufferPosition = extraValue ?? 0;
+        // _bufferPosition = extraValue ?? 0;
         if (mounted) {
           setState(() {});
         }
@@ -249,12 +246,12 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
       }
     });
     fAliplayer?.setOnCompletion((playerId) {
-      _showLoading = false;
+      // _showLoading = false;
 
       isPause = true;
 
       setState(() {
-        _currentPosition = _videoDuration;
+        // _currentPosition = _videoDuration;
       });
     });
 
@@ -263,14 +260,14 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
       // Fluttertoast.showToast(msg: "SnapShot Save : $path");
     });
     fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
-      _showLoading = false;
+      // _showLoading = false;
 
       setState(() {});
     });
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
       AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-      if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
+      if ((info.trackDefinition?.length ?? 0) > 0) {
         // trackFragmentKey.currentState.onTrackChanged(info);
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
@@ -306,10 +303,10 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
 
     isPlay = false;
 
-    _playMode = ModeTypeAliPLayer.auth;
+    // _playMode = ModeTypeAliPLayer.auth;
     // await getAuth(data.music?.apsaraMusic ?? '');
     if (data.reportedStatus != 'BLURRED') {
-      _playMode = ModeTypeAliPLayer.auth;
+      // _playMode = ModeTypeAliPLayer.auth;
       await getAuth(data.music?.apsaraMusic ?? '');
     }
 
@@ -471,6 +468,8 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
         break;
       case AppLifecycleState.detached:
         print("========= detached");
+        break;
+      default:
         break;
     }
   }
@@ -679,9 +678,7 @@ class _PicScrollScreenState extends State<PicScrollScreen> with WidgetsBindingOb
                       },
                       onDoubleTap: () {
                         final _likeNotifier = context.read<LikeNotifier>();
-                        if (pics[index] != null) {
-                          _likeNotifier.likePost(context, pics[index]);
-                        }
+                        _likeNotifier.likePost(context, pics[index]);
                       },
                       child: Center(
                         child: Container(

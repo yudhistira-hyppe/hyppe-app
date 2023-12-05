@@ -8,13 +8,9 @@ import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../../initial/hyppe/translate_v2.dart';
 
 class OnShowUserViewContentBottomSheet extends StatefulWidget {
   final String postId;

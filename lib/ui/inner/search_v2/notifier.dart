@@ -30,7 +30,7 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:story_view/controller/story_controller.dart';
+// import 'package:story_view/controller/story_controller.dart';
 
 import '../../../core/arguments/contents/slided_diary_detail_screen_argument.dart';
 import '../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
@@ -874,7 +874,7 @@ class SearchNotifier with ChangeNotifier {
             detailHashTag = mapDetailHashtag[keys];
             if (pics.isNotNullAndEmpty()) {
               final data = pics[0];
-              final url = data != null ? ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
+              final url = ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '');
               _tagImageMain = url;
             } else {
               _tagImageMain = '';
@@ -918,7 +918,7 @@ class SearchNotifier with ChangeNotifier {
               detailHashTag = mapDetailHashtag[keys];
               if (pics.isNotNullAndEmpty()) {
                 final data = pics[0];
-                final url = data != null ? ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
+                final url = ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '');
                 _tagImageMain = url;
               } else {
                 _tagImageMain = '';
@@ -945,7 +945,7 @@ class SearchNotifier with ChangeNotifier {
             }
             if (pics.isNotNullAndEmpty()) {
               final data = pics[0];
-              final url = data != null ? ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
+              final url = ((data.isApsara ?? false) ? (data.mediaThumbEndPoint ?? '') : System().showUserPicture(data.mediaThumbEndPoint) ?? '');
               _tagImageMain = url;
             } else {
               _tagImageMain = '';
@@ -1689,10 +1689,9 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  void navigateToOtherProfile(BuildContext context, ContentData data, StoryController storyController) {
+  void navigateToOtherProfile(BuildContext context, ContentData data) {
     Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email;
-    storyController.pause();
-    _routing.move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data.email)).whenComplete(() => storyController.play());
+    _routing.move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data.email));
   }
 
   void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
@@ -1721,9 +1720,7 @@ class SearchNotifier with ChangeNotifier {
     if (_updatedData != null) {
       _updatedData.reportedStatus = '';
     }
-    if (_updatedData2 != null) {
-      _updatedData2.reportedStatus = '';
-    }
+    _updatedData2?.reportedStatus = '';
 
     notifyListeners();
   }

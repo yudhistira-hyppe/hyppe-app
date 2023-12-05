@@ -6,51 +6,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
-import 'package:hyppe/core/bloc/ads_video/bloc.dart';
-import 'package:hyppe/core/bloc/ads_video/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
-import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:path_provider/path_provider.dart';
-// import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../../app.dart';
-import '../../../../../constant/entities/like/notifier.dart';
 
 class PlayerPage extends StatefulWidget {
   final ModeTypeAliPLayer playMode;
   final Map<String, dynamic> dataSourceMap;
   final ContentData? data;
-  double? height;
-  double? width;
+  final double? height;
+  final double? width;
   final bool inLanding;
   final bool fromDeeplink;
   final Function functionFullTriger;
   final Function(FlutterAliplayer, FlutterAliplayer)? getPlayers;
   final Function(bool, bool)? listenerPlay;
 
-  PlayerPage(
+  const PlayerPage(
       {Key? key,
       required this.playMode,
       required this.dataSourceMap,
@@ -58,7 +49,7 @@ class PlayerPage extends StatefulWidget {
       this.height,
       this.width,
       this.inLanding = false,
-      final this.fromDeeplink = false,
+      this.fromDeeplink = false,
       required this.functionFullTriger,
       this.getPlayers,
       this.listenerPlay})
@@ -76,7 +67,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   bool isPause = false;
   int? bottomIndex;
   List<Widget>? mFramePage;
-  ModeTypeAliPLayer? _playMode;
+  // ModeTypeAliPLayer? _playMode;
   Map<String, dynamic>? _dataSourceMap;
   Map<String, dynamic>? _dataSourceAdsMap;
   String urlVid = '';
@@ -97,7 +88,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   int _currentAdsPositionText = 0;
 
   //当前buffer进度
-  int _bufferPosition = 0;
+  // int _bufferPosition = 0;
 
   //是否展示loading
   bool _showLoading = false;
@@ -123,7 +114,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
 
   //缩略图
   // Uint8List _thumbnailBitmap;
-  ImageProvider? _imageProvider;
+  // ImageProvider? _imageProvider;
 
   //当前网络状态
   // ConnectivityResult? _currentConnectivityResult;
@@ -181,7 +172,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     //   isPlay = true;
     // }
 
-    _playMode = widget.playMode;
+    // _playMode = widget.playMode;
     _dataSourceMap = widget.dataSourceMap;
     _dataSourceAdsMap = {};
     // isPlay = false;
@@ -253,7 +244,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       print("aliyun : onStateChanged $newState");
       switch (newState) {
         case FlutterAvpdef.AVPStatus_AVPStatusStarted:
-          Wakelock.enable();
+          WakelockPlus.enable();
           setState(() {
             _showTipsWidget = false;
             _showLoading = false;
@@ -262,20 +253,20 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
-          Wakelock.disable();
+          WakelockPlus.disable();
 "================ disable wakelock 1".logger();
           setState(() {});
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusStopped:
-          Wakelock.disable();
+          WakelockPlus.disable();
 "================ disable wakelock 2".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
-          Wakelock.disable();
+          WakelockPlus.disable();
 "================ disable wakelock 3".logger();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusError:
-          Wakelock.disable();
+          WakelockPlus.disable();
 "================ disable wakelock 4".logger();
           break;
         default:
@@ -311,7 +302,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           });
         }
       } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-        _bufferPosition = extraValue ?? 0;
+        // _bufferPosition = extraValue ?? 0;
         if (mounted) {
           setState(() {});
         }
@@ -351,7 +342,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
 
     fAliplayer?.setOnTrackChanged((value, playerId) {
       AVPTrackInfo info = AVPTrackInfo.fromJson(value);
-      if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
+      if ((info.trackDefinition?.length ?? 0) > 0) {
         // trackFragmentKey.currentState.onTrackChanged(info);
         // Fluttertoast.showToast(msg: "${info.trackDefinition}切换成功");
       }
@@ -369,7 +360,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           var provider = MemoryImage(bitmap);
           precacheImage(provider, context).then((_) {
             setState(() {
-              _imageProvider = provider;
+              // _imageProvider = provider;
             });
           });
         },
@@ -509,20 +500,16 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     }
   }
 
-  _initAds(BuildContext context) async {
-    //for ads
-    // getCountVid();
-    // await _newInitAds(true);
-    if (context.getAdsCount() == null) {
-      context.setAdsCount(0);
-    } else {
-      if (context.getAdsCount() == 5) {
-        await _newInitAds(context, true);
-      } else if (context.getAdsCount() == 2) {
-        // await _newInitAds(false);
-      }
-    }
-  }
+  // _initAds(BuildContext context) async {
+  //   //for ads
+  //   // getCountVid();
+  //   // await _newInitAds(true);
+  //   if (context.getAdsCount() == 5) {
+  //     await _newInitAds(context, true);
+  //   } else if (context.getAdsCount() == 2) {
+  //     // await _newInitAds(false);
+  //   }
+  // }
 
   Future _newInitAds(BuildContext context, bool isContent) async {
     if (isContent) {
@@ -602,7 +589,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
             });
           }
         } else if (infoCode == FlutterAvpdef.BUFFEREDPOSITION) {
-          _bufferPosition = extraValue ?? 0;
+          // _bufferPosition = extraValue ?? 0;
           if (mounted) {
             setState(() {});
           }
@@ -677,12 +664,14 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         break;
       case AppLifecycleState.detached:
         break;
+      default:
+        break;
     }
   }
 
   @override
   void dispose() {
-    Wakelock.disable();
+    WakelockPlus.disable();
 "================ disable wakelock 5".logger();
     globalAliPlayer = null;
     if (Platform.isIOS) {
@@ -712,10 +701,10 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    var x = 0.0;
-    var y = 0.0;
+    // var x = 0.0;
+    // var y = 0.0;
     Orientation orientation = MediaQuery.of(context).orientation;
-    var width = MediaQuery.of(context).size.width;
+    // var width = MediaQuery.of(context).size.width;
 
     if (isloading) {
       return SizedBox(

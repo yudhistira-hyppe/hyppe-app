@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hyppe/core/bloc/transaction/bloc.dart';
 import 'package:hyppe/core/bloc/transaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -238,8 +235,8 @@ class TransactionNotifier extends ChangeNotifier {
     if (connect) {
       try {
         await getAccountBalance(context);
-        DateTime dateToday = DateTime.now();
-        String date = dateToday.toString().substring(0, 10);
+        // DateTime dateToday = DateTime.now();
+        // String date = dateToday.toString().substring(0, 10);
         // String email = 'freeman27@getnada.com';
         String email = SharedPreference().readStorage(SpKeys.email);
         final param = {"email": email, "sell": false, "buy": false, "withdrawal": false, 'boost': false, "rewards": false, "skip": _skip, "limit": _limit};
@@ -475,7 +472,7 @@ class TransactionNotifier extends ChangeNotifier {
   Future deleteBankAccount(BuildContext context, String id, index) async {
     bool connect = await System().checkConnections();
     if (connect) {
-      final email = SharedPreference().readStorage(SpKeys.email);
+      // final email = SharedPreference().readStorage(SpKeys.email);
       final Map params = {
         "id": id,
       };

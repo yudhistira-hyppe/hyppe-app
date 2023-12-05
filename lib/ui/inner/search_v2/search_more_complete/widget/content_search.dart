@@ -32,7 +32,7 @@ class ContentSearchState extends State<ContentSearch> {
   @override
   void initState() {
     FirebaseCrashlytics.instance.setCustomKey('layout', 'AllSearchShimmer');
-    final notifier = Provider.of<SearchNotifier>(context, listen: false);
+    // final notifier = Provider.of<SearchNotifier>(context, listen: false);
     // _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
     super.initState();
   }

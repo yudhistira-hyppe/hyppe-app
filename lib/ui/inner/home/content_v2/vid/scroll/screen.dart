@@ -70,7 +70,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   bool isPause = false;
   bool isloading = false;
   int _curIdx = -1;
-  int _lastCurIndex = -1;
+  // int _lastCurIndex = -1;
   int _cardIndex = 0;
 
   bool toComment = false;
@@ -79,7 +79,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   String email = '';
   LocalizationModelV2? lang;
   ContentData? dataSelected;
-  ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
+  // ModeTypeAliPLayer? _playMode = ModeTypeAliPLayer.auth;
 
   Map<int, FlutterAliplayer> dataAli = {};
 
@@ -193,7 +193,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   @override
   void didPopNext() {
     print("======= didPopNext dari diary");
-    final notifier = context.read<ScrollVidNotifier>();
+    // final notifier = context.read<ScrollVidNotifier>();
     if (_curIdx != -1) {
       vidData?[_curIdx].fAliplayer?.play();
     }
@@ -213,7 +213,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
   @override
   void didPushNext() {
     print("========= didPushNext dari diary");
-    final notifier = context.read<ScrollVidNotifier>();
+    // final notifier = context.read<ScrollVidNotifier>();
     if (_curIdx != -1) {
       vidData?[_curIdx].fAliplayer?.pause();
     }
@@ -311,7 +311,7 @@ class _ScrollVidState extends State<ScrollVid> with WidgetsBindingObserver, Tick
                                     itemBuilder: (BuildContext context, int index) {
                                       if (vidData == null || homeNotifier.isLoadingVid) {
                                         vidData?[index].fAliplayer?.pause();
-                                        _lastCurIndex = -1;
+                                        // _lastCurIndex = -1;
                                         return CustomShimmer(
                                           margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
                                           height: context.getHeight() / 8,

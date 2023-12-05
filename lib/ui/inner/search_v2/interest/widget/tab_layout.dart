@@ -20,10 +20,10 @@ import '../../widget/search_no_result_image.dart';
 
 class InterestTabLayout extends StatefulWidget {
   // SearchContentModel data;
-  Interest interest;
+  final Interest interest;
   // ScrollController scrollController;
 
-  InterestTabLayout({Key? key, required this.interest}) : super(key: key);
+  const InterestTabLayout({Key? key, required this.interest}) : super(key: key);
 
   @override
   State<InterestTabLayout> createState() => _InterestTabLayoutState();
@@ -217,7 +217,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
       }
     } else {
       return const SearchShimmer();
-      return SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+      // return SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
     }
   }
 }

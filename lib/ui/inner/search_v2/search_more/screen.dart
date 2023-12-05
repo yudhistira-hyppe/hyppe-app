@@ -23,7 +23,7 @@ class SearchMoreScreen extends StatefulWidget {
 
 class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   late TabController _tabController;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? lastInputValue;
 
   @override

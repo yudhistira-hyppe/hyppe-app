@@ -38,7 +38,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../core/bloc/posts_v2/bloc.dart';
 import '../search_v2/notifier.dart';
@@ -237,9 +237,11 @@ class HomeNotifier with ChangeNotifier {
       final diary = Provider.of<PreviewDiaryNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
       final pic = Provider.of<PreviewPicNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
       final stories = Provider.of<PreviewStoriesNotifier>(Routing.navigatorKey.currentContext ?? context, listen: false);
-      stories.myStoryGroup = {};
-      stories.storiesGroups = [];
-      notifyListeners();
+      if (!isgetMore) {
+        stories.myStoryGroup = {};
+        stories.storiesGroups = [];
+        notifyListeners();
+      }
 
       print("data pic ${(pic.pic?.isNotEmpty ?? [].isNotEmpty) && (diary.diaryData?.isNotEmpty ?? [].isNotEmpty)}");
       if ((!isreload && !isgetMore) && ((pic.pic?.isNotEmpty ?? [].isNotEmpty) && (diary.diaryData?.isNotEmpty ?? [].isNotEmpty) && (vid.vidData?.isNotEmpty ?? [].isNotEmpty))) {
@@ -292,6 +294,9 @@ class HomeNotifier with ChangeNotifier {
           break;
       }
       if (!isgetMore && stories.peopleStoriesData == null) {
+        stories.myStoryGroup = {};
+        stories.storiesGroups = [];
+        notifyListeners();
         await stories.initialStories(Routing.navigatorKey.currentContext ?? context);
         notifyListeners();
       }
@@ -321,8 +326,8 @@ class HomeNotifier with ChangeNotifier {
             if (pic.pic != null && isNew) {
               limit = pic.pic?.first.limitLandingpage ?? 2;
               if (mounted) {
-                if (context.read<MainNotifier>().tutorialData.isEmpty) {
-                  context.read<MainNotifier>().tutorialData = pic.pic?.first.tutorial ?? [];
+                if ((Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData.isEmpty) {
+                  (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData = pic.pic?.first.tutorial ?? [];
                 }
               }
             }
@@ -340,16 +345,16 @@ class HomeNotifier with ChangeNotifier {
           if (!mounted) return;
           if (!isreload && isNew && diary.diaryData != null) return;
           await diary.initialDiary(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
-          if (diary.diaryData != null && context.read<MainNotifier>().tutorialData.isEmpty) {
-            context.read<MainNotifier>().tutorialData = diary.diaryData?.first.tutorial ?? [];
+          if (diary.diaryData != null && (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData.isEmpty) {
+            (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData = diary.diaryData?.first.tutorial ?? [];
           }
           break;
         case 2:
           if (!mounted) return;
           if (!isreload && isNew && vid.vidData != null) return;
           await vid.initialVid(Routing.navigatorKey.currentContext ?? context, reload: isreload || isNew, list: allContents);
-          if (vid.vidData != null && context.read<MainNotifier>().tutorialData.isEmpty) {
-            context.read<MainNotifier>().tutorialData = vid.vidData?.first.tutorial ?? [];
+          if (vid.vidData != null && (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData.isEmpty) {
+            (Routing.navigatorKey.currentContext ?? context).read<MainNotifier>().tutorialData = vid.vidData?.first.tutorial ?? [];
           }
           break;
       }
@@ -724,12 +729,9 @@ class HomeNotifier with ChangeNotifier {
   }
 
   void onReport(BuildContext context, {required String postID, required String content, bool? isReport, String? key}) {
-    ContentData? updatedData;
-    ContentData? updatedData2;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
-    final pic2 = Provider.of<SlidedPicDetailNotifier>(context, listen: false);
     final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
 
     ScrollVidNotifier vidScroll = context.read<ScrollVidNotifier>();
@@ -760,11 +762,10 @@ class HomeNotifier with ChangeNotifier {
 
   void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
     ContentData? updatedData;
-    ContentData? updatedData2;
+
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
-    final pic2 = Provider.of<SlidedPicDetailNotifier>(context, listen: false);
     final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
 
     switch (content) {
@@ -891,7 +892,6 @@ class HomeNotifier with ChangeNotifier {
           final auth = jsonMap['PlayAuth'];
           // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
           print('get Ads Video');
-          final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
           // if (!isShowAds) {
           await System().adsPopUpV2(context, ads, auth);
           // }
@@ -1206,14 +1206,14 @@ class HomeNotifier with ChangeNotifier {
     "=================== remove wakelock".logger();
     _inactivityTimer?.cancel();
     _inactivityTimer = null;
-    Wakelock.disable();
+    WakelockPlus.disable();
   }
 
   void initWakelockTimer({required Function() onShowInactivityWarning}) async {
     // adding delay to prevent if there's another that not disposed yet
     Future.delayed(const Duration(milliseconds: 2000), () {
       "=================== init wakelock".logger();
-      Wakelock.enable();
+      WakelockPlus.enable();
       if (_inactivityTimer != null) _inactivityTimer?.cancel();
       _inactivityTimer = Timer(const Duration(seconds: 300), () => onShowInactivityWarning());
     });

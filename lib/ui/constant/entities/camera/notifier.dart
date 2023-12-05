@@ -4,14 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/effect/bloc.dart';
 import 'package:hyppe/core/bloc/effect/state.dart';
-import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
-import 'package:hyppe/core/models/collection/database/efect_model.dart';
 import 'package:hyppe/core/models/collection/effect/effect_model.dart';
-import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:camera/camera.dart';
@@ -46,7 +42,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   bool _isFlash = false;
   bool get isFlash => _isFlash;
-  set isFlash(bool state){
+  set isFlash(bool state) {
     _isFlash = state;
     notifyListeners();
   }
@@ -58,21 +54,28 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   List<EffectModel> _effects = [];
   List<EffectModel> get effects => _effects;
-  set effects(val){
+  set effects(val) {
     _effects = val;
     notifyListeners();
   }
 
   EffectModel? _selectedEffect;
   EffectModel? get selectedEffect => _selectedEffect;
-  set selectedEffect(val){
+  set selectedEffect(val) {
     _selectedEffect = val;
+    notifyListeners();
+  }
+
+  String _effectPath = '';
+  String get effectPath => _effectPath;
+  set effectPath(val) {
+    _effectPath = val;
     notifyListeners();
   }
 
   bool _isDownloadingEffect = false;
   bool get isDownloadingEffect => _isDownloadingEffect;
-  set isDownloadingEffect(bool state){
+  set isDownloadingEffect(bool state) {
     _isDownloadingEffect = state;
     notifyListeners();
   }
@@ -93,7 +96,6 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       flashMode = FlashMode.torch;
       isFlash = false;
       deepArController ??= DeepArController();
-
 
       print('Initializing DeepAR');
       await deepArController!
@@ -138,6 +140,9 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> initEffect(BuildContext context) async {
+    Directory directory = await path.getApplicationSupportDirectory();
+    effectPath = directory.path;
+    notifyListeners();
     try {
       final notifier = EffectBloc();
       await notifier.getEffects(context);
@@ -153,7 +158,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> setDeepAREffect(BuildContext context, EffectModel effectModel) async {
-    Directory directory = await path.getApplicationDocumentsDirectory();
+    Directory directory = await path.getApplicationSupportDirectory();
     var filePath = '${directory.path}${Platform.pathSeparator}${effectModel.fileAssetName}';
 
     if (await File(filePath).exists()) {
@@ -169,12 +174,12 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
             context: context,
             effectID: effectModel.postID,
             savePath: saveFile.path,
-            whenComplete:  () {
+            whenComplete: () {
               deepArController?.switchEffect(filePath);
               isDownloadingEffect = false;
               notifyListeners();
             },
-          );  
+          );
         }
       } catch (err) {
         err.logger();
@@ -219,8 +224,14 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   Future<void> onNewCameraSelected() async {
     print('DeepAR: balik kamera');
-    isFlash = false;
+    // isFlash = false;
     deepArController!.flipCamera();
+    print('myFlash: $isFlash');
+    if (isFlash) {
+      Future.delayed(const Duration(seconds: 1), () async {
+        await deepArController!.toggleFlash();
+      });
+    }
   }
 
   disposeCamera(BuildContext context) async {
@@ -277,11 +288,12 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   String flashIcon() {
     print('flashMode $flashMode : ${deepArController!.flashState}');
-    if(isFlash){
-      return "${AssetPath.vectorPath}flash-off.svg";
-    }else{
-      return "${AssetPath.vectorPath}flash.svg";
-    }
+    return "${AssetPath.vectorPath}ic_flash.svg";
+    // if(isFlash){
+    //   return "${AssetPath.vectorPath}flash-off.svg";
+    // }else{
+    //   return "${AssetPath.vectorPath}flash.svg";
+    // }
     // if (deepArController != null && deepArController!.flashState) {
     //   return "${AssetPath.vectorPath}flash-off.svg";
     // } else if (flashMode == FlashMode.auto) {
@@ -292,8 +304,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<File?> takePicture() async {
-
-    if(isFlash){
+    if (isFlash) {
       isFlash = (await deepArController?.toggleFlash() ?? false);
     }
     File _result;
@@ -347,7 +358,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       return null;
     }
 
-    if(isFlash){
+    if (isFlash) {
       isFlash = (await deepArController?.toggleFlash() ?? false);
     }
 
