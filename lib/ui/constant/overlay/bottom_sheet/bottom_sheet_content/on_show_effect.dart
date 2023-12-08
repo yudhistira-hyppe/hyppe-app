@@ -77,8 +77,14 @@ class OnShowEffect extends StatelessWidget {
     var filePath = '${notifier.effectPath}${Platform.pathSeparator}${effect.fileAssetName}';
     return InkWell(
       onTap: () {
-        notifier.selectedEffect = effect;
-        notifier.setDeepAREffect(context, effect);
+        if(notifier.selectedEffect == effect){
+          notifier.selectedEffect = null;
+          notifier.notUseEffect(context);
+        }else{
+          notifier.selectedEffect = effect;
+          notifier.setDeepAREffect(context, effect);
+        }
+
       },
       child: Container(
         width: (MediaQuery.of(context).size.width - 24) / 3,
