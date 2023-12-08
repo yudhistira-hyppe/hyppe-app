@@ -255,15 +255,11 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                           function: () async {
                             if (newUser == "FALSE") {
                               context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
-                              // notifier.thumbnailLocalMedia();
-                              notifier.featureType = FeatureType.pic;
-                              notifier.isVideo = false;
-                              notifier.selectedDuration = 15;
                               final tempIsHome = isHomeScreen;
                               if (tempIsHome) {
                                 isHomeScreen = false;
                               }
-                              Routing().moveAndPop(Routes.makeContent);
+                              Routing().moveAndPop(Routes.streamer);
                               if (tempIsHome) {
                                 isHomeScreen = true;
                               }
@@ -304,6 +300,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
         height: 27 * SizeConfig.scaleDiagonal,
         width: 27 * SizeConfig.scaleDiagonal,
         defaultColor: false,
+        color: kHyppePrimary,
       ),
     );
   }

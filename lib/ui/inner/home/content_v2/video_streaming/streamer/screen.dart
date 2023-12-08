@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_livepush_plugin/live_pusher_preview.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:provider/provider.dart';
 
@@ -13,13 +14,12 @@ class StreamerScreen extends StatefulWidget {
 }
 
 class _StreamerScreenState extends State<StreamerScreen> {
+  bool isloading = true;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      print("tunggu");
       var streampro = Provider.of<StreamerNotifier>(context, listen: false);
-      print("tunggu2");
       streampro.init();
     });
   }
@@ -32,38 +32,40 @@ class _StreamerScreenState extends State<StreamerScreen> {
           return Scaffold(
             backgroundColor: Colors.white,
             body: WillPopScope(
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  _buildPreviewWidget(context, notifier),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: TextButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.blue),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+              child: isloading
+                  ? CustomLoading()
+                  : Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        _buildPreviewWidget(context, notifier),
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: TextButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(Colors.blue),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                              ),
+                              minimumSize: MaterialStateProperty.all(Size(100, 10)),
+                            ),
+                            onPressed: (() {
+                              notifier.clickPushAction();
+                            }),
+                            child: Text(
+                              "Stream",
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                         ),
-                        minimumSize: MaterialStateProperty.all(Size(100, 10)),
-                      ),
-                      onPressed: (() {
-                        notifier.clickPushAction();
-                      }),
-                      child: Text(
-                        "Stream",
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          color: Colors.white,
-                        ),
-                      ),
+                        // _buildBottomWidget(state, viewService, dispatch),
+                        // _buildRightWidget(state, viewService, dispatch),
+                        // _buildTopViewWidget(state, viewService, dispatch),
+                        // _buildQueenWidget(state, viewService, dispatch),
+                      ],
                     ),
-                  ),
-                  // _buildBottomWidget(state, viewService, dispatch),
-                  // _buildRightWidget(state, viewService, dispatch),
-                  // _buildTopViewWidget(state, viewService, dispatch),
-                  // _buildQueenWidget(state, viewService, dispatch),
-                ],
-              ),
               onWillPop: () async {
                 notifier.destoryPusher();
                 notifier.dispose();
