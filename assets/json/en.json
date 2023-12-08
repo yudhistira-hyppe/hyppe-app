@@ -1031,5 +1031,6 @@
   "messageLessLimitStory": "Oops: your video less than 4 seconds.",
   "messageLimitVideo": "Your video is too long. Trim it to 30 minutes or less to proceed.",
   "messageLimitDiary": "Your video is too long. Trim it to 60 seconds or less to proceed.",
-  "messageLimitStory": "Your video is too long. Trim it to 15 seconds or less to proceed."
+  "messageLimitStory": "Your video is too long. Trim it to 15 seconds or less to proceed.",
+  "itstimetoLIVEandinteract": "It's time to LIVE and interact!"
 }

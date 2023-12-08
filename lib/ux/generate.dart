@@ -132,6 +132,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail.da
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/sign_in_security/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/change_password/screen.dart';
+import 'package:provider/provider.dart';
 // import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/screen.dart';
 
 import '../core/arguments/detail_ticket_argument.dart';
@@ -376,10 +377,7 @@ class Generate {
       case Routes.cacheAndDownload:
         return MaterialPageRoute(builder: (_) => const CacheAndDownloadScreen());
       case Routes.faqDetail:
-        return MaterialPageRoute(
-            builder: (_) => FAQDetailScreen(
-                  data: settings.arguments as FAQArgument,
-                ));
+        return MaterialPageRoute(builder: (_) => FAQDetailScreen(data: settings.arguments as FAQArgument));
       case Routes.supportTicket:
         return MaterialPageRoute(builder: (_) => const SupportTicketScreen());
       case Routes.appeal:
@@ -427,7 +425,7 @@ class Generate {
       case Routes.homeTutor:
         return MaterialPageRoute(builder: (_) => const HomeTutorScreen());
       case Routes.streamer:
-        return MaterialPageRoute(builder: (_) => const StreamerScreen());
+        return MaterialPageRoute(builder: (_) => ChangeNotifierProvider(create: (_) => StreamerNotifier(), child: const StreamerScreen()));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

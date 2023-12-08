@@ -1031,6 +1031,7 @@ class LocalizationModelV2 {
   String? messageLimitVideo;
   String? messageLimitDiary;
   String? messageLimitStory;
+  String? itstimetoLIVEandinteract;
 
   LocalizationModelV2({
     this.login,
@@ -2065,7 +2066,7 @@ class LocalizationModelV2 {
     this.messageLimitVideo,
     this.messageLimitDiary,
     this.messageLimitStory,
-
+    this.itstimetoLIVEandinteract,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -3119,5 +3120,6 @@ class LocalizationModelV2 {
     messageLimitVideo = json['messageLimitVideo'];
     messageLimitDiary = json['messageLimitDiary'];
     messageLimitStory = json['messageLimitStory'];
+    itstimetoLIVEandinteract = json['itstimetoLIVEandinteract'];
   }
 }

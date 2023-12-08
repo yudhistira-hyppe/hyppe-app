@@ -65,7 +65,12 @@ class SelfProfileTop extends StatelessWidget {
             // SelectableText("${notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}")}"),
             // SelectableText("${SharedPreference().readStorage(SpKeys.fcmToken)}"),
             // SelectableText("${System().getDeviceIdentifier().toString()}"),
-
+            GestureDetector(
+              onTap: () {
+                Routing().move(Routes.streamer);
+              },
+              child: Text("stram"),
+            ),
             Row(
               children: <Widget>[
                 // StoryColorValidator(

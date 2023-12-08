@@ -8,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+import 'package:flutter_livepush_plugin/live_pusher_preview.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -210,6 +211,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
+          print("---------- streaming pause -----------");
           if (mounted) setState(() {});
           break;
         default:
@@ -273,6 +275,9 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         // Fluttertoast.showToast(msg: "Looping Start");
       } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
         // Fluttertoast.showToast(msg: "change to soft ware decoder");
+        // mOptionsFragment.switchHardwareDecoder();
+      } else if (infoCode == FlutterAvpdef.paused) {
+        print("---------- streaming pause -----------");
         // mOptionsFragment.switchHardwareDecoder();
       }
     });
@@ -498,12 +503,14 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         Map jsonMap = json.decode(fetch.data.toString());
         auth = jsonMap['PlayAuth'];
 
-        fAliplayer?.setVidAuth(
-          vid: apsaraId,
-          region: DataSourceRelated.defaultRegion,
-          playAuth: auth,
-          definitionList: [DataSourceRelated.definitionList],
-        );
+        // fAliplayer?.setVidAuth(
+        //   vid: apsaraId,
+        //   region: DataSourceRelated.defaultRegion,
+        //   playAuth: auth,
+        //   definitionList: [DataSourceRelated.definitionList],
+        // );
+
+        fAliplayer?.setUrl("rtmp://live.hyppe.cloud/Hyppe/hdstream_hd-v?auth_key=1700732018-0-0-8e221f09856a236e9f2454e8dfddfae1");
 
         isloading = false;
         if (mounted) {

@@ -104,10 +104,10 @@ class ShowBottomSheet {
   }) async {
     await showModalBottomSheet(
       context: context,
-      // isScrollControlled: false,
       enableDrag: true,
       isDismissible: true,
       backgroundColor: Colors.transparent,
+      isScrollControlled: true,
       builder: (builder) {
         return Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
@@ -132,11 +132,15 @@ class ShowBottomSheet {
               disableBarrierInteraction: true,
               disableMovingAnimation: true,
               builder: Builder(builder: (context) {
-                return OnUploadContentBottomSheet(
-                  isDiary: isDiary,
-                  isPict: isPict,
-                  isStory: isStory,
-                  isVid: isVid,
+                return Wrap(
+                  children: [
+                    OnUploadContentBottomSheet(
+                      isDiary: isDiary,
+                      isPict: isPict,
+                      isStory: isStory,
+                      isVid: isVid,
+                    ),
+                  ],
                 );
               }),
             ),
@@ -800,7 +804,9 @@ class ShowBottomSheet {
     });
   }
 
-  static onReportFormContent(_,) {
+  static onReportFormContent(
+    _,
+  ) {
     showModalBottomSheet(
       context: _,
       isScrollControlled: true,
@@ -826,7 +832,7 @@ class ShowBottomSheet {
     });
   }
 
-  static onReportSpamContent(_, { ContentData? postData, AdsData? adsData, String? type, Function? onUpdate, bool? inDetail, String? key, Function()? onComplete}) {
+  static onReportSpamContent(_, {ContentData? postData, AdsData? adsData, String? type, Function? onUpdate, bool? inDetail, String? key, Function()? onComplete}) {
     showModalBottomSheet(
       context: _,
       isScrollControlled: true,

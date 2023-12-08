@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_livepush_plugin/beauty/live_beauty.dart';
 import 'package:flutter_livepush_plugin/live_base.dart';
 import 'package:flutter_livepush_plugin/live_push_def.dart';
 import 'package:flutter_livepush_plugin/live_pusher.dart';
 
-class Streamer with ChangeNotifier {
+/// Import a header file.
+import 'package:flutter_livepush_plugin/live_push_config.dart';
+
+class StreamerNotifier with ChangeNotifier {
+  int livePushMode = 0;
   late AlivcBase _alivcBase;
   late AlivcLivePusher _alivcLivePusher;
   late AlivcLiveBeautyManager _beautyManager;
@@ -15,27 +21,219 @@ class Streamer with ChangeNotifier {
     _alivcBase.registerSDK();
     _alivcBase.setObserver();
     _alivcBase.setOnLicenceCheck((result, reason) {
-      if (result == AlivcLiveLicenseCheckResultCode.success) {
-        // The SDK is registered.
-      } else {
-        print("======== belum ada lisensi ========");
+      print("======== belum ada lisensi $reason ========");
+      if (result != AlivcLiveLicenseCheckResultCode.success) {
+        print("======== belum ada lisensi $reason ========");
       }
     });
 
-    // _setLivePusher(action, ctx);
-    // _onListen(action, ctx);
+    _setLivePusher();
+    _onListen();
   }
 
-  // Future<void> _setPageOrientation(BuildContext ctx) async {
-  //   AlivcLivePushOrientation currentOrientation = await ctx.state.pusherConfig.getOrientation();
-  //   if (currentOrientation == AlivcLivePushOrientation.landscape_home_left) {
-  //     SystemChrome.setPreferredOrientations([
-  //       DeviceOrientation.landscapeLeft,
-  //     ]);
-  //   } else if (currentOrientation == AlivcLivePushOrientation.landscape_home_right) {
-  //     SystemChrome.setPreferredOrientations([
-  //       DeviceOrientation.landscapeRight,
-  //     ]);
-  //   }
-  // }
+  Future<void> _onListen() async {
+    /// Listener for stream ingest errors
+    /// Configure the callback for SDK errors.
+    _alivcBase.setOnLicenceCheck((result, reason) {
+      if (result != AlivcLiveLicenseCheckResultCode.success) {
+        print("======== belum ada lisensi $reason ========");
+      }
+    });
+
+    /// Configure the callback for system errors.
+    _alivcLivePusher.setOnSDKError((errorCode, errorDescription) {
+      print("========  setOnSDKError $errorDescription ========");
+      // Fluttertoast.showToast(
+      //   msg: AppLocalizations.of(ctx.context)!.camerapush_sdk_error,
+      //   gravity: ToastGravity.CENTER,
+      // );
+    });
+
+    /// 系统错误回调
+    _alivcLivePusher.setOnSystemError((errorCode, errorDescription) {
+      print("========  setOnSystemError $errorDescription ========");
+      // Fluttertoast.showToast(
+      //   msg: AppLocalizations.of(ctx.context)!.camerapush_system_error,
+      //   gravity: ToastGravity.CENTER,
+      // );
+    });
+
+    /// Listener for the stream ingest status
+    /// Configure the callback for preview start.
+    _alivcLivePusher.setOnPreviewStarted(() {});
+
+    /// Configure the callback for preview stop.
+    _alivcLivePusher.setOnPreviewStoped(() {});
+
+    /// Configure the callback for first frame rendering.
+    _alivcLivePusher.setOnFirstFramePreviewed(() {});
+
+    /// Configure the callback for start of stream ingest.
+    _alivcLivePusher.setOnPushStarted(() {});
+
+    /// Configure the callback for pause of stream ingest from the camera.
+    _alivcLivePusher.setOnPushPaused(() {});
+
+    /// Configure the callback for resume of stream ingest from the camera.
+    _alivcLivePusher.setOnPushResumed(() {});
+
+    /// Configure the callback for restart of stream ingest.
+    _alivcLivePusher.setOnPushRestart(() {});
+
+    /// Configure the callback for end of stream ingest.
+    _alivcLivePusher.setOnPushStoped(() {});
+
+    /// Listener for the network status during stream ingest
+    /// Configure the callback for failed connection of stream ingest.
+    _alivcLivePusher.setOnConnectFail((errorCode, errorDescription) {});
+
+    /// Configure the callback for network recovery.
+    _alivcLivePusher.setOnConnectRecovery(() {});
+
+    /// Configure the callback for disconnection.
+    _alivcLivePusher.setOnConnectionLost(() {});
+
+    /// Configure the callback for poor network.
+    _alivcLivePusher.setOnNetworkPoor(() {});
+
+    /// Configure the callback for failed reconnection.
+    _alivcLivePusher.setOnReconnectError((errorCode, errorDescription) {});
+
+    /// Configure the callback for reconnection start.
+    _alivcLivePusher.setOnReconnectStart(() {});
+
+    /// Configure the callback for successful reconnection.
+    _alivcLivePusher.setOnReconnectSuccess(() {});
+
+    /// Send data timeout
+    _alivcLivePusher.setOnSendDataTimeout(() {});
+
+    /// Configure the callback for complete playback of background music.
+    _alivcLivePusher.setOnBGMCompleted(() {});
+
+    /// Configure the callback for timeout of the download of background music.
+    _alivcLivePusher.setOnBGMDownloadTimeout(() {});
+
+    /// Configure the callback for failed playback of background music.
+    _alivcLivePusher.setOnBGMOpenFailed(() {});
+
+    /// Configure the callback for paused playback of background music.
+    _alivcLivePusher.setOnBGMPaused(() {});
+
+    /// Configure the callback for playback progress.
+    _alivcLivePusher.setOnBGMProgress((progress, duration) {
+      // ctx.dispatch(CameraPushActionCreator.onUpdateBGMProgress(progress));
+      // ctx.dispatch(CameraPushActionCreator.onUpdateBGMDuration(duration));
+    });
+
+    /// Configure the callback for resumed playback of background music.
+    _alivcLivePusher.setOnBGMResumed(() {
+      // ctx.dispatch(CameraPushActionCreator.updatePushStatusTip(AppLocalizations.of(ctx.context)!.camerapush_bgm_resume_log));
+    });
+
+    /// Configure the callback for start of playback of background music.
+    _alivcLivePusher.setOnBGMStarted(() {
+      // ctx.dispatch(CameraPushActionCreator.updatePushStatusTip(AppLocalizations.of(ctx.context)!.camerapush_bgm_start_log));
+    });
+
+    /// Configure the callback for stop of playback of background music.
+    _alivcLivePusher.setOnBGMStoped(() {
+      // ctx.dispatch(CameraPushActionCreator.updatePushStatusTip(AppLocalizations.of(ctx.context)!.camerapush_bgm_stop_log));
+      // ctx.dispatch(CameraPushActionCreator.onUpdateBGMProgress(0));
+      // ctx.dispatch(CameraPushActionCreator.onUpdateBGMDuration(0));
+    });
+
+    /// Configure callbacks related to snapshot capture.
+    _alivcLivePusher.setOnSnapshot((saveResult, savePath, {dirTypeForIOS}) {
+      // if (saveResult == true) {
+      //   String tip = AppLocalizations.of(ctx.context)!.camerapush_snapshot_tip;
+      //   if (Platform.isIOS) {
+      //     DirType saveDirType = DirType.document;
+      //     if (dirTypeForIOS == AlivcLiveSnapshotDirType.document) {
+      //       saveDirType = DirType.document;
+      //     } else {
+      //       saveDirType = DirType.library;
+      //     }
+      //     CommomUtils.getSaveDir(saveDirType, savePath).then((value) {
+      //       Fluttertoast.showToast(msg: tip + value.path, gravity: ToastGravity.CENTER);
+      //     });
+      //   } else {
+      //     Fluttertoast.showToast(msg: tip + savePath, gravity: ToastGravity.CENTER);
+      //   }
+      // }
+    });
+  }
+
+  Future<void> _setLivePusher() async {
+    AlivcLivePusherConfig pusherConfig = AlivcLivePusherConfig.init();
+    pusherConfig.setCameraType(AlivcLivePushCameraType.front);
+
+    /// Set the resolution to 540p.
+    pusherConfig.setResolution(AlivcLivePushResolution.resolution_540P);
+
+    /// Specify the frame rate. We recommend that you set the frame rate to 20 frames per second (FPS).
+    pusherConfig.setFps(AlivcLivePushFPS.fps_20);
+
+    /// Enable adaptive bitrate streaming. The default value is true.
+    pusherConfig.setEnableAutoBitrate(true);
+
+    /// Specify the group of pictures (GOP) size. A larger value indicates a higher latency. We recommend that you set the value to a number from 1 to 2.
+    pusherConfig.setVideoEncodeGop(AlivcLivePushVideoEncodeGOP.gop_2);
+
+    /// Specify the reconnection duration. The value cannot be less than 1000. Unit: milliseconds. We recommend that you use the default value.
+    pusherConfig.setConnectRetryInterval(2000);
+
+    /// Disable the mirroring mode for preview.
+    pusherConfig.setPreviewMirror(false);
+
+    /// Set the stream ingest orientation to portrait.
+    pusherConfig.setOrientation(AlivcLivePushOrientation.portrait);
+    _alivcLivePusher = AlivcLivePusher.init();
+    _alivcLivePusher.initLivePusher();
+    _alivcLivePusher.createConfig();
+    _alivcLivePusher.setErrorDelegate();
+    _alivcLivePusher.setInfoDelegate();
+    _alivcLivePusher.setNetworkDelegate();
+    _alivcLivePusher.setCustomFilterDelegate();
+    _alivcLivePusher.setCustomDetectorDelegate();
+    _alivcLivePusher.setBGMDelegate();
+  }
+
+  Future<void> _clickSnapShot() async {
+    if (Platform.isIOS) {
+      /// dir parameter: On iOS, the path is a relative path. A custom directory is automatically generated in the system sandbox. If you set this parameter to "", snapshots are stored in the root directory of the system sandbox.
+      /// dirTypeForIOS parameter: Optional. If you do not specify this parameter, snapshots are stored in the [document] directory of the system sandbox.
+      _alivcLivePusher.snapshot(1, 0, "snapshot", dirTypeForIOS: AlivcLiveSnapshotDirType.document);
+    } else {
+      // CommomUtils.getSystemPath(DirType.externalFile).then((value) {
+      //   _alivcLivePusher.snapshot(1, 0, value);
+      // });
+    }
+
+    /// Set the listener for snapshot capture.
+    _alivcLivePusher.setSnapshotDelegate();
+  }
+
+  Future<void> previewCreated() async {
+    _alivcLivePusher.startPreview();
+    // _beautyManager.setupBeauty();
+    // ctx.dispatch(CameraPushActionCreator.onClickPreview(CameraPushPagePreviewState.startPreview));
+  }
+
+//   rtmp://ingest.hyppe.cloud/Hyppe/hdstream?auth_key=1700732018-0-0-580e7fb4d21585a87315470a335513c1
+
+// Stream URL (download stream dari user yang nnton)
+// rtmp://live.hyppe.cloud/Hyppe/hdstream_hd-v?auth_key=1700732018-0-0-8e221f09856a236e9f2454e8dfddfae1
+
+  Future<void> clickPushAction() async {
+    String pushURL = "rtmp://ingest.hyppe.cloud/Hyppe/hdstream?auth_key=1700732018-0-0-580e7fb4d21585a87315470a335513c1";
+
+    _alivcLivePusher.startPushWithURL(pushURL);
+  }
+
+  Future<void> destoryPusher() async {
+    _alivcLivePusher.stopPush();
+    _alivcLivePusher.stopPreview();
+    _alivcLivePusher.destroy();
+  }
 }

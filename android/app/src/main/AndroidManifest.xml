@@ -190,5 +190,14 @@
             android:value="false" /> -->
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+
+        <!--   请在此处填写申请到的license相关信息     -->
+        <!--   推流SDK License文档: https://help.aliyun.com/document_detail/431730.html     -->
+        <meta-data
+            android:name="com.aliyun.alivc_license.licensekey"
+            android:value="YPjDSudTjeykeVcRW2dc74c6dfbb14dd1aa73ed1ee5b64861" />
+        <meta-data
+            android:name="com.aliyun.alivc_license.licensefile"
+            android:value="assets/alivc_resource/AliVideoCert-com_hyppe_hyppeapp$e0ed2c994b24ef9e2aebb221b54aef55-20231204140624.crt" />
     </application>
 </manifest>
