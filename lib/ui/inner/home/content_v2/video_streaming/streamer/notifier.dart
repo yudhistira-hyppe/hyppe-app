@@ -188,6 +188,9 @@ class StreamerNotifier with ChangeNotifier {
 
     /// Set the stream ingest orientation to portrait.
     pusherConfig.setOrientation(AlivcLivePushOrientation.portrait);
+
+    pusherConfig.setPreviewDisplayMode(AlivcPusherPreviewDisplayMode.preview_aspect_fill);
+
     _alivcLivePusher = AlivcLivePusher.init();
     _alivcLivePusher.initLivePusher();
     _alivcLivePusher.createConfig();

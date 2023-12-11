@@ -254,15 +254,15 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                           icon: "${AssetPath.vectorPath}hyppeLive.svg",
                           function: () async {
                             if (newUser == "FALSE") {
-                              context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
-                              final tempIsHome = isHomeScreen;
-                              if (tempIsHome) {
-                                isHomeScreen = false;
-                              }
+                              // context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
+                              // final tempIsHome = isHomeScreen;
+                              // if (tempIsHome) {
+                              //   isHomeScreen = false;
+                              // }
                               Routing().moveAndPop(Routes.streamer);
-                              if (tempIsHome) {
-                                isHomeScreen = true;
-                              }
+                              // if (tempIsHome) {
+                              //   isHomeScreen = true;
+                              // }
                             }
                           })
                       : Container(),
