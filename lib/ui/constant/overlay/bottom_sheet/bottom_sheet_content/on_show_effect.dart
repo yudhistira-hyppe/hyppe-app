@@ -84,7 +84,6 @@ class OnShowEffect extends StatelessWidget {
           notifier.selectedEffect = effect;
           notifier.setDeepAREffect(context, effect);
         }
-
       },
       child: Container(
         width: (MediaQuery.of(context).size.width - 24) / 3,

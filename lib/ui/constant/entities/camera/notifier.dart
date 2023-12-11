@@ -177,7 +177,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     )
         .then((value) {
     print('DeepAR: DeepAR done initialized $value');
-    Future.delayed(const Duration(milliseconds: 500), (){
+    Future.delayed(const Duration(milliseconds: 1000), (){
       isRestart = false;
     });
     isInitializedIos = true;

@@ -95,7 +95,10 @@ class _CameraViewState extends State<CameraView> {
           // _topMediaOptions(notifier.deepArController),
           // _bottomMediaOptions(notifier.deepArController),
         ],
-      ): const Center(child: CustomLoading(),)),
+      ): Container(
+            alignment: Alignment.center,
+              margin: const EdgeInsets.only(bottom: 200),
+              child: const CustomLoading())),
     );
   }
 
