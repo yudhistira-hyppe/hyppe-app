@@ -25,7 +25,7 @@ class OnShowEffect extends StatelessWidget {
 
     return Consumer<CameraNotifier>(
       builder: (context, notifier, child) => Container(
-        height: MediaQuery.of(context).size.height * 0.6,
+        height: double.infinity,
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.3),
