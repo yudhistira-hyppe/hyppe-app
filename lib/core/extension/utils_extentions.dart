@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -34,6 +35,10 @@ extension ContextScreen on BuildContext {
   double getHeight() {
     return MediaQuery.of(this).size.height;
   }
+
+  double getScreenDiagonal() => sqrt((getHeight() * getHeight()) + (getWidth() * getWidth()));
+
+  double getScaleDiagonal() => getScaleDiagonal() /(sqrt((414 * 414) + (895 * 895)));
 
   TextTheme getTextTheme() {
     return Theme.of(this).textTheme;

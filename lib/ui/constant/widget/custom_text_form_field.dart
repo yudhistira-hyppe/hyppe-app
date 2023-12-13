@@ -27,6 +27,7 @@ class CustomTextFormField extends StatelessWidget {
   final int? minLines;
   final int? maxLines;
   final bool isEnabled;
+  final bool expand;
 
   const CustomTextFormField(
       {Key? key,
@@ -53,7 +54,7 @@ class CustomTextFormField extends StatelessWidget {
       this.maxLength,
       this.cursorHeight,
       this.minLines,
-      this.maxLines, this.isEnabled = true})
+      this.maxLines, this.isEnabled = true, this.expand = false})
       : super(key: key);
 
   @override
@@ -65,6 +66,7 @@ class CustomTextFormField extends StatelessWidget {
           cursorColor: cursorColor,
           enabled: isEnabled,
           autovalidateMode: autovalidateMode,
+          expands: expand,
           style: style,
           cursorHeight: cursorHeight,
           onTap: onTap,

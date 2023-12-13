@@ -1044,5 +1044,8 @@
   "messageLimitStory": "Durasi video terlalu panjang. Potong video menjadi 15 detik atau kurang untuk melanjutkan.",
   "liveVideo": "Siaran LIVE ",
   "liveHost": "Host siaran LIVE",
-  "whosWatching": "Siapa yang menonton"
+  "whosWatching": "Siapa yang menonton",
+  "removeUser": "Keluarkan",
+  "deleteComment2": "Hapus Komentar",
+  "pinComment": "Sematkan Komentar"
 }

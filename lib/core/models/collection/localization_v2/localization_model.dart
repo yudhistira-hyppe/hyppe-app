@@ -1044,6 +1044,9 @@ class LocalizationModelV2 {
   String? liveVideo;
   String? liveHost;
   String? whosWatching;
+  String? removeUser;
+  String? deleteComment2;
+  String? pinComment;
 
   LocalizationModelV2({
     this.login,
@@ -2091,6 +2094,9 @@ class LocalizationModelV2 {
     this.liveVideo,
     this.liveHost,
     this.whosWatching,
+    this.removeUser,
+    this.deleteComment2,
+    this.pinComment
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -3157,5 +3163,8 @@ class LocalizationModelV2 {
     liveVideo = json['liveVideo'];
     liveHost = json['liveHost'];
     whosWatching = json['whosWatching'];
+    removeUser = json['removeUser'];
+    deleteComment2 = json['deleteComment2'];
+    pinComment = json['pinComment'];
   }
 }

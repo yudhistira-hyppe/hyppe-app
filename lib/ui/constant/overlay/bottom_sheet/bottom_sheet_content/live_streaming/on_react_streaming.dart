@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/widget/react_stream_item.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +13,8 @@ import '../../../../widget/custom_spacer.dart';
 import '../../../../widget/custom_text_widget.dart';
 
 class OnReactStreaming extends StatefulWidget {
-  const OnReactStreaming({super.key});
+  final ReactStream react;
+  const OnReactStreaming({super.key, required this.react});
 
   @override
   State<OnReactStreaming> createState() => _OnReactStreamingState();
@@ -22,10 +22,16 @@ class OnReactStreaming extends StatefulWidget {
 
 class _OnReactStreamingState extends State<OnReactStreaming> {
 
-  ReactStream? reactStream;
+  late ReactStream reactStream;
   int textLenght = 0;
 
   final controller = TextEditingController();
+
+  @override
+  void initState() {
+    reactStream = widget.react;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +124,9 @@ class _OnReactStreamingState extends State<OnReactStreaming> {
           sixteenPx,
           CustomGesture(
             margin: EdgeInsets.zero,
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context, reactStream);
+            },
             child: Container(
               width: double.infinity,
               height: 34,
@@ -129,7 +137,7 @@ class _OnReactStreamingState extends State<OnReactStreaming> {
               ),
               alignment: Alignment.center,
               child: CustomTextWidget(
-                textToDisplay: language.removeUser ?? '',
+                textToDisplay: language.send ?? '',
                 textAlign: TextAlign.center,
                 textStyle: const TextStyle(
                     fontSize: 12,

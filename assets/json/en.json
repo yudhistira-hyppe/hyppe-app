@@ -1044,5 +1044,8 @@
   "messageLimitStory": "Your video is too long. Trim it to 15 seconds or less to proceed.",
   "liveVideo": "'s LIVE video",
   "liveHost": "LIVE host",
-  "whosWatching": "Who's watching"
+  "whosWatching": "Who's watching",
+  "removeUser": "Remove",
+  "deleteComment2": "Delete Comment",
+  "pinComment": "Pin Comment"
 }

@@ -152,4 +152,5 @@ class Routes {
 
   //======================== Streaming ============
   static const String streamer = '/streamer';
+  static const String streamingFeedback = '/streaming-feedback';
 }

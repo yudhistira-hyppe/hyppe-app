@@ -100,36 +100,67 @@ class _OnListWatchersState extends State<OnListWatchers> {
   @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;
-    return Scaffold(
-      appBar: AppBar(
-        leading: CustomIconButtonWidget(
-          defaultColor: true,
-          iconData: "${AssetPath.vectorPath}back-arrow.svg",
-          onPressed: () => Routing().moveBack(),
-        ),
-        title: const CustomTextWidget(
-          textToDisplay: "List Penonton",
-          textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-        ),
-      ),
-      body: SafeArea(
-        child: ListView.builder(
-            itemCount: wacthers.length,
-            itemBuilder: (context, index) {
-              final watcher = wacthers[index];
-              return watcherItem(watcher, language);
-            }),
+    return SafeArea(
+      child: Column(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            height: 64,
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 16),
+                    child: CustomIconButtonWidget(
+                      height: 30,
+                      width: 30,
+                      onPressed: () {
+                        Routing().moveBack();
+                      },
+                      color: Colors.black,
+                      defaultColor: false,
+                      iconData: "${AssetPath.vectorPath}back-arrow.svg",
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: CustomTextWidget(
+                      textToDisplay: 'List Penonton',
+                    textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+                itemCount: wacthers.length,
+                itemBuilder: (context, index) {
+                  final watcher = wacthers[index];
+                  return watcherItem(watcher, index, language);
+                }),
+          ),
+        ],
       ),
     );
   }
 
-  Widget watcherItem(Watcher watcher, LocalizationModelV2 language) {
+  Widget watcherItem(Watcher watcher, int index, LocalizationModelV2 language) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          CustomTextWidget(
+            textToDisplay: '${index + 1}',
+            textStyle:
+                const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          ),
+          sixteenPx,
           CustomProfileImage(
             width: 36,
             height: 36,
@@ -170,17 +201,16 @@ class _OnListWatchersState extends State<OnListWatchers> {
                 borderRadius: BorderRadius.circular(8),
                 color: watcher.isFollowing
                     ? context.getColorScheme().primary.withOpacity(0.85)
-                    : kHyppeNotConnect,
+                    : kHyppeBurem.withOpacity(0.25),
               ),
               alignment: Alignment.center,
               child: CustomTextWidget(
-                textToDisplay: language.follow ?? '',
+                textToDisplay: !watcher.isFollowing ? (language.following ?? '') : (language.follow ?? ''),
                 textAlign: TextAlign.center,
                 textStyle: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: watcher.isFollowing
-                        ? Colors.white : Colors.black),
+                    color: watcher.isFollowing ? Colors.white : Colors.black),
               ),
             ),
           )
