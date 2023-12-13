@@ -4,14 +4,14 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../core/constants/asset_path.dart';
-import '../../../../../core/constants/shared_preference_keys.dart';
-import '../../../../../core/constants/themes/hyppe_colors.dart';
-import '../../../../../core/services/shared_preference.dart';
-import '../../../widget/custom_gesture.dart';
-import '../../../widget/custom_icon_widget.dart';
-import '../../../widget/custom_profile_image.dart';
-import '../../../widget/custom_spacer.dart';
+import '../../../../../../core/constants/asset_path.dart';
+import '../../../../../../core/constants/shared_preference_keys.dart';
+import '../../../../../../core/constants/themes/hyppe_colors.dart';
+import '../../../../../../core/services/shared_preference.dart';
+import '../../../../widget/custom_gesture.dart';
+import '../../../../widget/custom_icon_widget.dart';
+import '../../../../widget/custom_profile_image.dart';
+import '../../../../widget/custom_spacer.dart';
 
 class OnLiveStreamStatus extends StatefulWidget {
   const OnLiveStreamStatus({super.key});
@@ -49,7 +49,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
     final language = context.read<TranslateNotifierV2>().translate;
     final isIndo = SharedPreference().readStorage(SpKeys.isoCode) == 'id';
     return Container(
-      height: MediaQuery.of(context).size.height * 0.6,
+      height: double.infinity,
       width: double.infinity,
       padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
       decoration: BoxDecoration(
@@ -122,7 +122,8 @@ class Watcher {
   final String? image;
   final String? username;
   final String? name;
-  const Watcher({this.image, this.username, this.name});
+  final bool isFollowing;
+  const Watcher({this.image, this.username, this.name, this.isFollowing = true});
 }
 
 class ItemAccount extends StatelessWidget {
@@ -189,7 +190,7 @@ class ItemAccount extends StatelessWidget {
                     border: Border.all(color: kHyppeBurem, width: 1)),
                 alignment: Alignment.center,
                 child: CustomTextWidget(
-                  textToDisplay: language.remove ?? '',
+                  textToDisplay: language.removeUser ?? '',
                   textAlign: TextAlign.center,
                   textStyle: const TextStyle(
                       fontSize: 12,
