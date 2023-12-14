@@ -7,6 +7,16 @@ class LocalizationModelV2 {
   String? forgotPassword;
   String? dontHaveAnAccount;
   String? registerHere;
+  String? welcomeDescOne;
+  String? welcomeTitleTwo;
+  String? welcomeDescTwo;
+  String? welcomeTitleThree;
+  String? welcomeDescThree;
+  String? welcomeTitleFour;
+  String? welcomeDescFour;
+  String? exploreAsGuest;
+  String? loginMessage;
+  String? privateAndService;
   String? or;
   String? inWord;
   String? continueUsingGoogle;
@@ -1032,6 +1042,33 @@ class LocalizationModelV2 {
   String? messageLimitDiary;
   String? messageLimitStory;
   String? itstimetoLIVEandinteract;
+  String? liveVideo;
+  String? liveHost;
+  String? whosWatching;
+  String? removeUser;
+  String? messageRemoveUser1;
+  String? messageRemoveUser2;
+  String? deleteComment2;
+  String? pinComment;
+  String? liveVideoHasEnded;
+  String? duration;
+  String? engagement;
+  String? totalViewers;
+  String? totalShares;
+  String? newFollowers;
+  String? totalComments;
+  String? viewerList;
+  String? howWasYourLiveExperience;
+  String? poor;
+  String? neutral;
+  String? good;
+  String? letUsKnowIfYouHaveAnyQuestionsOrFeedback;
+  String? yourFeedbackIsValuableToHyppeForEnhancingYourPersonalizedExperience;
+  String? disableComments;
+  String? pauseLive;
+  String? pauseLiveTitle;
+  String? pauseLiveBody;
+  String? pause;
 
   LocalizationModelV2({
     this.login,
@@ -1042,6 +1079,16 @@ class LocalizationModelV2 {
     this.forgotPassword,
     this.dontHaveAnAccount,
     this.registerHere,
+    this.welcomeDescOne,
+    this.welcomeTitleTwo,
+    this.welcomeDescTwo,
+    this.welcomeTitleThree,
+    this.welcomeDescThree,
+    this.welcomeTitleFour,
+    this.welcomeDescFour,
+    this.exploreAsGuest,
+    this.loginMessage,
+    this.privateAndService,
     this.or,
     this.inWord,
     this.continueUsingGoogle,
@@ -2067,6 +2114,33 @@ class LocalizationModelV2 {
     this.messageLimitDiary,
     this.messageLimitStory,
     this.itstimetoLIVEandinteract,
+    this.liveVideo,
+    this.liveHost,
+    this.whosWatching,
+    this.removeUser,
+    this.messageRemoveUser1,
+    this.messageRemoveUser2,
+    this.deleteComment2,
+    this.pinComment,
+    this.liveVideoHasEnded,
+    this.duration,
+    this.engagement,
+    this.totalViewers,
+    this.totalShares,
+    this.newFollowers,
+    this.totalComments,
+    this.viewerList,
+    this.howWasYourLiveExperience,
+    this.poor,
+    this.neutral,
+    this.good,
+    this.letUsKnowIfYouHaveAnyQuestionsOrFeedback,
+    this.yourFeedbackIsValuableToHyppeForEnhancingYourPersonalizedExperience,
+    this.disableComments,
+    this.pauseLive,
+    this.pauseLiveTitle,
+    this.pauseLiveBody,
+    this.pause,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2078,6 +2152,16 @@ class LocalizationModelV2 {
     forgotPassword = json['forgotPassword'];
     dontHaveAnAccount = json['dontHaveAnAccount'];
     registerHere = json['registerHere'];
+    welcomeDescOne = json['welcomeDescOne'];
+    welcomeTitleTwo = json['welcomeTitleTwo'];
+    welcomeDescTwo = json['welcomeDescTwo'];
+    welcomeTitleThree = json['welcomeTitleThree'];
+    welcomeDescThree = json['welcomeDescThree'];
+    welcomeTitleFour = json['welcomeTitleFour'];
+    welcomeDescFour = json['welcomeDescFour'];
+    exploreAsGuest = json['exploreAsGuest'];
+    loginMessage = json['loginMessage'];
+    privateAndService = json['privateAndService'];
     or = json['or'];
     inWord = json['in'];
     continueUsingGoogle = json['continueUsingGoogle'];
@@ -3121,5 +3205,32 @@ class LocalizationModelV2 {
     messageLimitDiary = json['messageLimitDiary'];
     messageLimitStory = json['messageLimitStory'];
     itstimetoLIVEandinteract = json['itstimetoLIVEandinteract'];
+    liveVideo = json['liveVideo'];
+    liveHost = json['liveHost'];
+    whosWatching = json['whosWatching'];
+    removeUser = json['removeUser'];
+    messageRemoveUser1 = json["messageRemoveUser1"];
+    messageRemoveUser2 = json["messageRemoveUser2"];
+    deleteComment2 = json['deleteComment2'];
+    pinComment = json['pinComment'];
+    liveVideoHasEnded = json["liveVideoHasEnded"];
+    duration = json["duration"];
+    engagement = json["engagement"];
+    totalViewers = json["totalViewers"];
+    totalShares = json["totalShares"];
+    newFollowers = json["newFollowers"];
+    totalComments = json["totalComments"];
+    viewerList = json["viewerList"];
+    howWasYourLiveExperience = json["howWasYourLiveExperience"];
+    poor = json["poor"];
+    neutral = json["neutral"];
+    good = json["good"];
+    letUsKnowIfYouHaveAnyQuestionsOrFeedback = json['letUsKnowIfYouHaveAnyQuestionsOrFeedback'];
+    yourFeedbackIsValuableToHyppeForEnhancingYourPersonalizedExperience = json['yourFeedbackIsValuableToHyppeForEnhancingYourPersonalizedExperience'];
+    disableComments = json['disableComments'];
+    pauseLive = json['pauseLive'];
+    pauseLiveTitle = json['pauseLiveTitle'];
+    pauseLiveBody = json['pauseLiveBody'];
+    pause = json['pause'];
   }
 }

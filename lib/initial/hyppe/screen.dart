@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_sharing_intent/flutter_sharing_intent.dart';
 import 'package:flutter_sharing_intent/model/sharing_file.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
@@ -11,9 +10,7 @@ import 'package:hyppe/ux/generate.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import '../../app.dart';
-import '../../ux/path.dart';
 
 class Hyppe extends StatefulWidget {
   const Hyppe({super.key});

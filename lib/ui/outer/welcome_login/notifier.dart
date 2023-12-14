@@ -40,7 +40,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   final _googleSignInService = GoogleSignInService();
   final signOutGoogle = GoogleSignInService();
   LocalizationModelV2 language = LocalizationModelV2();
-  // late PermissionStatus _permissionGranted;
   translate(LocalizationModelV2 translate) {
     language = translate;
     notifyListeners();
@@ -74,6 +73,12 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   bool get hide => _hide;
   bool get incorrect => _incorrect;
   GoogleSignInAccount? get userGoogleSignIn => _userGoogleSignIn;
+  int _currIndex = 0;
+  int get currIndex => _currIndex;
+  set currIndex(int val){
+    _currIndex = val;
+    notifyListeners();
+  }
 
   set latitude(double val) {
     _latitude = val;
@@ -119,6 +124,8 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
     _incorrect = val;
     notifyListeners();
   }
+
+  void goToEula() => _routing.move(Routes.userAgreement);
 
   static const loadingForgotPasswordKey = 'loadingForgotPasswordKey';
   static const loadingLoginGoogleKey = 'loadingLoginGoogleKey';
@@ -646,6 +653,13 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   //     // _currentUser = fbUser;
   //   }
   // }
+  
+  List<WelcomeData> get welcomeList => [
+    WelcomeData(image: 'welcome_image_1.svg', title: 'Welcome Hyppers', desc: (language.welcomeDescOne ?? '')),
+    WelcomeData(image: 'welcome_image_2.svg', title: (language.welcomeTitleTwo ?? ''), desc: (language.welcomeDescTwo ?? '')),
+    WelcomeData(image: 'welcome_image_3.svg', title: (language.welcomeTitleThree ?? ''), desc: (language.welcomeDescThree ?? '')),
+    WelcomeData(image: 'welcome_image_4.svg', title: (language.welcomeTitleFour ?? ''), desc: (language.welcomeDescFour ?? '')),
+  ];
 
   Future testLogin(BuildContext context) async {
     bool connection = await System().checkConnections();
@@ -692,4 +706,11 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       setLoading(false);
     });
   }
+}
+
+class WelcomeData{
+  final String image;
+  final String title;
+  final String desc;
+  WelcomeData({required this.image, required this.title, required this.desc});
 }

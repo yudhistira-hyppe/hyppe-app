@@ -72,7 +72,7 @@ class _CameraViewState extends State<CameraView> {
     final deviceRatio = context.getWidth() / context.getHeight();
     return Consumer<CameraNotifier>(
       builder: (_, notifier, __) => Scaffold(
-          body: Stack(
+          body: !notifier.isRestart ? Stack(
         children: [
           notifier.deepArController == null
               ? const CustomLoading()
@@ -95,7 +95,10 @@ class _CameraViewState extends State<CameraView> {
           // _topMediaOptions(notifier.deepArController),
           // _bottomMediaOptions(notifier.deepArController),
         ],
-      )),
+      ): Container(
+            alignment: Alignment.center,
+              margin: const EdgeInsets.only(bottom: 200),
+              child: const CustomLoading())),
     );
   }
 

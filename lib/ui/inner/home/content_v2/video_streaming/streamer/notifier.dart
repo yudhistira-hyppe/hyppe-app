@@ -351,4 +351,14 @@ class StreamerNotifier with ChangeNotifier {
     print(mute);
     notifyListeners();
   }
+
+  Future<void> pauseLive() async {
+    try {
+      print("hahahahahha");
+    } catch (e) {
+      print("hahahahahha");
+    }
+
+    // _alivcLivePusher.pause();
+  }
 }

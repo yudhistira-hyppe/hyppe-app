@@ -32,6 +32,7 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/fullscreen/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -247,5 +248,6 @@ class AppDependencies {
         ChangeNotifierProvider<ChallangeNotifier>(create: (context) => ChallangeNotifier()),
         ChangeNotifierProvider<TutorNotifier>(create: (context) => TutorNotifier()),
         ChangeNotifierProvider<VideoNotifier>(create: (context) => VideoNotifier()),
+        ChangeNotifierProvider<StreamingFeedbackNotifier>(create: (context) => StreamingFeedbackNotifier())
       ];
 }

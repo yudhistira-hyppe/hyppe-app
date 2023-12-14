@@ -17,6 +17,8 @@ import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import '../../../widget/custom_gif_widget.dart';
+
 class OnShowSticker extends StatelessWidget {
   const OnShowSticker({Key? key}) : super(key: key);
 
@@ -401,7 +403,10 @@ class OnShowSticker extends StatelessWidget {
           width: (MediaQuery.of(context).size.width - 32) / tab.column,
           height: (MediaQuery.of(context).size.width - 32) / tab.column,
           padding: const EdgeInsets.all(8),
-          child: CachedNetworkImage(
+          child: (sticker.image ?? '').toLowerCase().endsWith('.gif') ? CustomGifWidget(
+            url: sticker.image ?? '',
+            isPause: false,
+          ) : CachedNetworkImage(
             imageUrl: sticker.image ?? '',
             progressIndicatorBuilder: (context, url, downloadProgress) => 
                Padding(

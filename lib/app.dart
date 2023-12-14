@@ -17,10 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/vid_player_page.dart';
-import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:receive_intent/receive_intent.dart';
 
 import 'core/services/SqliteData.dart';
 import 'core/services/api_action.dart';

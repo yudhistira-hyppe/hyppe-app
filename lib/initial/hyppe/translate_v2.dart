@@ -23,6 +23,7 @@ import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/notifier.dart';
 
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -244,6 +245,7 @@ class TranslateNotifierV2 with ChangeNotifier {
       // await context.read<PinAccountNotifier>().translate(translate);
 
       context.read<VerificationIDNotifier>().translate(translate);
+      context.read<StreamingFeedbackNotifier>().translate(translate);
 
       notifyListeners();
       if (index != null && _listLanguage.isNotEmpty) {

@@ -821,7 +821,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           _routing.moveAndPop(Routes.lobby);
         } else {
           print('onCloseStory moveBack');
-          _routing.moveBack();
+          Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
         }
         _ableClose = false;
       }

@@ -37,6 +37,13 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   double get cameraAspectRatio => (deepArController?.imageDimensions.height ?? 0.0) / (deepArController?.imageDimensions.width ?? 0.0);
   double get yScale => 1;
 
+  bool _isRestart = false;
+  bool get isRestart => _isRestart;
+  set isRestart(bool state){
+    _isRestart = state;
+    notifyListeners();
+  }
+
   bool _showEffected = false;
   bool get showEffected => _showEffected;
 
@@ -155,6 +162,29 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     } catch (e) {
       'get effect: ERROR: $e'.logger();
     }
+  }
+
+  Future notUseEffect(BuildContext context) async{
+    isRestart = true;
+    await deepArController?.destroy();
+    deepArController = DeepArController();
+    final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
+    await deepArController!
+        .initialize(
+    androidLicenseKey: "2a5a8cfda693ae38f2e20925295b950b13f0a7c186dcd167b5997655932d82ceb0cbc27be4c0b513",
+    iosLicenseKey: "6389e21310378b39591d7a24897a1f59456ce3c5cf0fbf89033d535438d2f1cf10ea4829b25cf117",
+    resolution: _configureResolutionDeepArPreset(onStoryIsPhoto: notifier.featureType == FeatureType.story ? !notifier.isVideo : null),
+    )
+        .then((value) {
+    print('DeepAR: DeepAR done initialized $value');
+    Future.delayed(const Duration(milliseconds: 1000), (){
+      isRestart = false;
+    });
+    isInitializedIos = true;
+    print(deepArController!.isInitialized);
+    print(isInitialized);
+    initEffect(context);
+    });
   }
 
   Future<void> setDeepAREffect(BuildContext context, EffectModel effectModel) async {

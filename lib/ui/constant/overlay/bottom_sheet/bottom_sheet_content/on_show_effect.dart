@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../../widget/custom_base_cache_image.dart';
+
 class OnShowEffect extends StatelessWidget {
   const OnShowEffect({Key? key}) : super(key: key);
 
@@ -21,7 +23,7 @@ class OnShowEffect extends StatelessWidget {
 
     return Consumer<CameraNotifier>(
       builder: (context, notifier, child) => Container(
-        height: MediaQuery.of(context).size.height * 0.6,
+        height: double.infinity,
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.3),
@@ -77,8 +79,13 @@ class OnShowEffect extends StatelessWidget {
     var filePath = '${notifier.effectPath}${Platform.pathSeparator}${effect.fileAssetName}';
     return InkWell(
       onTap: () {
-        notifier.selectedEffect = effect;
-        notifier.setDeepAREffect(context, effect);
+        if(notifier.selectedEffect == effect){
+          notifier.selectedEffect = null;
+          notifier.notUseEffect(context);
+        }else{
+          notifier.selectedEffect = effect;
+          notifier.setDeepAREffect(context, effect);
+        }
       },
       child: Container(
         width: (MediaQuery.of(context).size.width - 24) / 3,
@@ -104,17 +111,60 @@ class OnShowEffect extends StatelessWidget {
                             future: File(filePath).exists(),
                             builder: (context, snapshot) {
                               print(filePath);
-                              print(snapshot.data);
-                              if (snapshot.data == true) {
-                                return Image.network(
-                                  '${Env.data.baseUrl}/api/assets/filter/image/thumb/${effect.postID}?x-auth-user=$email&x-auth-token=$token',
-                                );
-                              }
-                              return Image.network(
-                                '${Env.data.baseUrl}/api/assets/filter/image/thumb/${effect.postID}?x-auth-user=$email&x-auth-token=$token',
-                                color: Colors.black45,
-                                colorBlendMode: BlendMode.darken,
+                              print("snapdata: ${snapshot.data}");
+                              return CustomBaseCacheImage(
+                                imageUrl: '${Env.data.baseUrl}/api/assets/filter/image/thumb/${effect.postID}?x-auth-user=$email&x-auth-token=$token',
+                                imageBuilder: (_, imageProvider) {
+                                  return Container(
+                                    width: 70,
+                                    height: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                      // color: snapshot.data == true ? null : Colors.black45,
+                                      // backgroundBlendMode: snapshot.data == true ? null : BlendMode.darken,
+                                      image: DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: imageProvider,
+                                        opacity: snapshot.data == true ? 1.0 : 0.5
+                                      ),
+                                    ),
+                                  );
+                                },
+                                placeHolderWidget: ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomLoading()),
+                                errorWidget: (_, url, error) {
+                                  return ClipRRect(
+                                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                      child: Image.network(
+                                        url,
+                                        fit: BoxFit.fill,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        errorBuilder: (_, __, ___) {
+                                          return ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomLoading());
+                                        },
+                                        loadingBuilder: (_, child, event) {
+                                          if (event == null) {
+                                            return Center(child: child);
+                                          } else {
+                                            return ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomLoading());
+                                          }
+                                        },
+                                      ));
+                                  // return ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer());
+                                },
+                                emptyWidget: ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomLoading()),
                               );
+                              // if (snapshot.data == true) {
+                              //
+                              //   return Image.network(
+                              //     '${Env.data.baseUrl}/api/assets/filter/image/thumb/${effect.postID}?x-auth-user=$email&x-auth-token=$token',
+                              //   );
+                              // }
+                              // return Image.network(
+                              //   '${Env.data.baseUrl}/api/assets/filter/image/thumb/${effect.postID}?x-auth-user=$email&x-auth-token=$token',
+                              //   color: Colors.black45,
+                              //   colorBlendMode: BlendMode.darken,
+                              // );
                             }),
                       ),
                     ),

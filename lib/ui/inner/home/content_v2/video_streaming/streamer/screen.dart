@@ -14,6 +14,7 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/beforelive.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/pauseLive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/streamer.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
@@ -146,7 +147,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                     //                 ? prepare(titile: "Siaran LIVE telah dimulai!")
                     //                 : Container(),
                     // if (notifier.statusLive == 'Ready' || notifier.statusLive == 'Online') StreamerWidget(),
-
+                    PauseLive(),
                     StreamerWidget(commentFocusNode: commentFocusNode),
                     // Align(
                     //   alignment: Alignment.center,
