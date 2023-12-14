@@ -1,3 +1,7 @@
+import 'package:flutter_livepush_plugin/live_base.dart';
+import 'package:flutter_livepush_plugin/live_push_config.dart';
+import 'package:flutter_livepush_plugin/live_push_def.dart';
+import 'package:flutter_livepush_plugin/live_pusher.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -9,6 +13,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
@@ -41,15 +46,38 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
   GlobalKey keybutton = GlobalKey();
   String newUser = '';
 
+  late AlivcBase _alivcBase;
+  late AlivcLivePusher _alivcLivePusher;
+  late AlivcLivePusherConfig _alivcLivePusherConfig;
+
   @override
   void initState() {
+    print("OnUploadContentBottomSheet");
     super.initState();
+    _initPush();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       newUser = SharedPreference().readStorage(SpKeys.newUser) ?? 'FALSE';
       if (newUser == "TRUE") {
         WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keybutton]));
       }
     });
+  }
+
+  Future<void> _initPush() async {
+    print("init init init");
+    _alivcBase = AlivcBase.init();
+    _alivcBase.registerSDK();
+    _alivcBase.setObserver();
+    _alivcBase.setOnLicenceCheck((result, reason) {
+      print("======== belum ada lisensi $reason ========");
+      if (result != AlivcLiveLicenseCheckResultCode.success) {
+        print("======== belum ada lisensi $reason ========");
+      }
+    });
+    _alivcLivePusher = AlivcLivePusher.init();
+    _alivcLivePusher.createConfig();
+    _alivcLivePusherConfig = AlivcLivePusherConfig.init();
+    _alivcLivePusherConfig.setCameraType(AlivcLivePushCameraType.front);
   }
 
   @override

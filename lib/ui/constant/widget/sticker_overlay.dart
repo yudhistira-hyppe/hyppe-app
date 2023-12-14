@@ -10,7 +10,6 @@ class StickerOverlay extends StatelessWidget {
   final bool fullscreen;
   final bool isPause;
   final bool canPause;
-  
 
   const StickerOverlay({
     super.key,
@@ -25,12 +24,7 @@ class StickerOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
-        for (StickerModel sticker in stickers ?? [])
-          fullscreen
-              ? viewSticker(sticker)
-              : FittedBox(fit: BoxFit.contain, child: viewSticker(sticker))
-      ],
+      children: [for (StickerModel sticker in stickers ?? []) fullscreen ? viewSticker(sticker) : FittedBox(fit: BoxFit.contain, child: viewSticker(sticker))],
     );
   }
 
@@ -47,9 +41,7 @@ class StickerOverlay extends StatelessWidget {
             ),
             child: FittedBox(
               fit: BoxFit.contain,
-              child: canPause && (sticker.image ?? '').toLowerCase().endsWith('.gif')
-                  ? CustomGifWidget(url: sticker.image ?? '', isPause: isPause)
-                  : CachedNetworkImage(imageUrl: sticker.image ?? ''),
+              child: canPause && (sticker.image ?? '').toLowerCase().endsWith('.gif') ? CustomGifWidget(url: sticker.image ?? '', isPause: isPause) : CachedNetworkImage(imageUrl: sticker.image ?? ''),
             ),
           ),
         ),

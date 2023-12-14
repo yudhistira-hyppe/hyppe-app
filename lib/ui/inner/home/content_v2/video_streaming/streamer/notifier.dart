@@ -8,18 +8,46 @@ import 'package:flutter_livepush_plugin/live_pusher.dart';
 
 /// Import a header file.
 import 'package:flutter_livepush_plugin/live_push_config.dart';
+import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/item.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class StreamerNotifier with ChangeNotifier {
   int livePushMode = 0;
+  int timeReady = 3;
+
   late AlivcBase _alivcBase;
   late AlivcLivePusher _alivcLivePusher;
   late AlivcLiveBeautyManager _beautyManager;
 
-  Future<void> init() async {
+  bool isloading = false;
+  bool mute = false;
+
+  FocusNode titleFocusNode = FocusNode();
+  TextEditingController titleLiveCtrl = TextEditingController();
+
+  String _titleLive = '';
+  String get titleLive => _titleLive;
+  String pushURL = "rtmp://ingest.hyppe.cloud/Hyppe/hdstream?auth_key=1700732018-0-0-580e7fb4d21585a87315470a335513c1";
+  //Status => Offline - Prepare - StandBy - Ready - Online
+  String statusLive = 'Offline';
+
+  List<Item> _items = <Item>[];
+  List<Item> get items => _items;
+
+  set titleLive(String val) {
+    _titleLive = val;
+    notifyListeners();
+  }
+
+  Future<void> init(BuildContext context) async {
+    // final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
+    isloading = true;
+    notifyListeners();
     // _setPageOrientation(action, ctx);
     _alivcBase = AlivcBase.init();
-    _alivcBase.registerSDK();
-    _alivcBase.setObserver();
+    await _alivcBase.registerSDK();
+    await _alivcBase.setObserver();
     _alivcBase.setOnLicenceCheck((result, reason) {
       print("======== belum ada lisensi $reason ========");
       if (result != AlivcLiveLicenseCheckResultCode.success) {
@@ -27,8 +55,19 @@ class StreamerNotifier with ChangeNotifier {
       }
     });
 
-    _setLivePusher();
-    _onListen();
+    await _setLivePusher();
+    await _onListen();
+    isloading = false;
+    notifyListeners();
+  }
+
+  Future requestPermission(BuildContext context) async {
+    final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
+    if (isGranted) {
+      return;
+    } else {
+      await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
+    }
   }
 
   Future<void> _onListen() async {
@@ -69,7 +108,11 @@ class StreamerNotifier with ChangeNotifier {
     _alivcLivePusher.setOnFirstFramePreviewed(() {});
 
     /// Configure the callback for start of stream ingest.
-    _alivcLivePusher.setOnPushStarted(() {});
+    _alivcLivePusher.setOnPushStarted(() {
+      statusLive = 'StandBy';
+      notifyListeners();
+      countDown();
+    });
 
     /// Configure the callback for pause of stream ingest from the camera.
     _alivcLivePusher.setOnPushPaused(() {});
@@ -218,7 +261,9 @@ class StreamerNotifier with ChangeNotifier {
   }
 
   Future<void> previewCreated() async {
-    _alivcLivePusher.startPreview();
+    _alivcLivePusher.startPreview().then((value) {
+      print("===== start preview ====");
+    });
     // _beautyManager.setupBeauty();
     // ctx.dispatch(CameraPushActionCreator.onClickPreview(CameraPushPagePreviewState.startPreview));
   }
@@ -229,14 +274,81 @@ class StreamerNotifier with ChangeNotifier {
 // rtmp://live.hyppe.cloud/Hyppe/hdstream_hd-v?auth_key=1700732018-0-0-8e221f09856a236e9f2454e8dfddfae1
 
   Future<void> clickPushAction() async {
-    String pushURL = "rtmp://ingest.hyppe.cloud/Hyppe/hdstream?auth_key=1700732018-0-0-580e7fb4d21585a87315470a335513c1";
-
+    statusLive = 'Prepare';
+    notifyListeners();
     _alivcLivePusher.startPushWithURL(pushURL);
   }
 
   Future<void> destoryPusher() async {
+    statusLive = 'Offline';
     _alivcLivePusher.stopPush();
     _alivcLivePusher.stopPreview();
     _alivcLivePusher.destroy();
+  }
+
+  void flipCamera() {
+    _alivcLivePusher.switchCamera();
+  }
+
+  void countDown() async {
+    await Future.delayed(const Duration(milliseconds: 1000), () {
+      timeReady--;
+      notifyListeners();
+      if (timeReady > 0) {
+        countDown();
+      } else {
+        statusLive = 'Ready';
+        notifyListeners();
+        Future.delayed(Duration(seconds: 2), () {
+          statusLive = 'Online';
+          notifyListeners();
+        });
+      }
+    });
+  }
+
+  List<Widget> loveStreamer(AnimationController animationController) {
+    // print('isPreventedEmoji: $isPreventedEmoji');
+    final animatedOpacity = Tween<double>(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(parent: animationController, curve: Curves.linear));
+    return items.map((item) {
+      var tween = Tween<Offset>(
+        begin: const Offset(0, 1),
+        end: const Offset(0, -1.7),
+      ).chain(CurveTween(curve: Curves.linear));
+      return SlideTransition(
+        position: animationController.drive(tween),
+        child: AnimatedAlign(
+            alignment: item.alignment,
+            duration: const Duration(seconds: 10),
+            child: FadeTransition(
+              opacity: animatedOpacity,
+              child: Material(color: Colors.transparent, child: Icon(Icons.heart_broken)),
+            )),
+      );
+    }).toList();
+  }
+
+  void makeItems(AnimationController animationController) {
+    items.clear();
+    for (int i = 0; i < 1; i++) {
+      items.add(Item());
+      // notifyListeners();
+    }
+
+    print("ini print $items");
+
+    // notifyListeners();
+    animationController.reset();
+    animationController.forward().whenComplete(() {});
+  }
+
+  void soundMute() {
+    mute = !mute;
+    _alivcLivePusher.setMute(mute);
+    print(mute);
+    notifyListeners();
   }
 }

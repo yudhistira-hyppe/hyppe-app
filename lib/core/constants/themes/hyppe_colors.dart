@@ -49,6 +49,8 @@ const kHyppeTextSuccess = Color(0xff237804);
 const kHyppeTextIcon = Color(0xff7d8389);
 const kHyppeDividerColor = Color(0xff2c3236);
 
+var kHyppeTransparent = Color.fromARGB(255, 0, 0, 0).withOpacity(0.3);
+
 const kSkeletonHighlightColor = Color(0xffADADAD);
 const kSkeletonBaseColor = Color(0xff878787);
 final kSkeleton = LinearGradient(
