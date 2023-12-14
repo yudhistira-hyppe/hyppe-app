@@ -46,7 +46,7 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Consumer<WelcomeLoginNotifier>(builder: (context, notifier, _) {
+    // return Consumer<WelcomeLoginNotifier>(builder: (context, notifier, _) {
     //   return WillPopScope(
     //       onWillPop: () async {
     //         MoveToBackground.moveTaskToBack();
