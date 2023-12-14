@@ -8,10 +8,12 @@ import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../core/services/shared_preference.dart';
+import '../../../../../../ux/routing.dart';
 import '../../../../widget/custom_gesture.dart';
 import '../../../../widget/custom_icon_widget.dart';
 import '../../../../widget/custom_profile_image.dart';
 import '../../../../widget/custom_spacer.dart';
+import '../../../general_dialog/show_general_dialog.dart';
 
 class OnLiveStreamStatus extends StatefulWidget {
   const OnLiveStreamStatus({super.key});
@@ -180,7 +182,25 @@ class ItemAccount extends StatelessWidget {
           if (!isHost)
             CustomGesture(
               margin: EdgeInsets.zero,
-              onTap: () {},
+              onTap: () async {
+                await ShowGeneralDialog.generalDialog(
+                    context,
+                    titleText: "${language.remove} $username?",
+                    bodyText: "${language.messageRemoveUser1} $username ${language.messageRemoveUser2}",
+                    maxLineTitle: 1,
+                    maxLineBody: 4,
+                    functionPrimary: () async {
+                      Routing().moveBack();
+                    },
+                    functionSecondary: () {
+                      Routing().moveBack();
+                    },
+                    titleButtonPrimary: "${language.remove}",
+                    titleButtonSecondary: "${language.cancel}",
+                    barrierDismissible: true,
+                    isHorizontal: false
+                );
+              },
               child: Container(
                 width: 86,
                 height: 24,

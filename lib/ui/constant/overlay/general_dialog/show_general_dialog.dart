@@ -73,7 +73,7 @@ class ShowGeneralDialog {
       Function? functionSecondary,
       String? titleButtonPrimary,
       String? titleButtonSecondary,
-      bool? barrierDismissible = false}) {
+      bool? barrierDismissible = false, bool isHorizontal = true}) {
     showGeneralDialog(
       //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
@@ -92,6 +92,7 @@ class ShowGeneralDialog {
           functionSecondary: functionSecondary,
           titleButtonPrimary: titleButtonPrimary,
           titleButtonSecondary: titleButtonSecondary,
+          isHorizontal: isHorizontal,
         ),
       ),
       transitionBuilder: (context, animation, secondaryAnimation, child) {

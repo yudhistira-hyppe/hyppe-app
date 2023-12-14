@@ -29,6 +29,7 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<StreamingFeedbackNotifier>(builder: (context, notifier, _) {
+      final language = notifier.language;
       return Scaffold(
         body: SafeArea(
           child: Container(
@@ -48,15 +49,17 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                   ),
                 ),
                 twentyPx,
-                const CustomTextWidget(
-                  textToDisplay: 'LIVE telah berakhir',
-                  textStyle:
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                CustomTextWidget(
+                  textToDisplay:
+                      language.liveVideoHasEnded ?? 'LIVE telah berakhir',
+                  textStyle: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 eightPx,
-                const CustomTextWidget(
-                  textToDisplay: '18 September 2023 • Durasi 10:23',
-                  textStyle: TextStyle(fontSize: 12, color: kHyppeBurem),
+                CustomTextWidget(
+                  textToDisplay:
+                      '18 September 2023 • ${language.duration} 10:23',
+                  textStyle: const TextStyle(fontSize: 12, color: kHyppeBurem),
                 ),
                 twentyPx,
                 Container(
@@ -70,9 +73,9 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CustomTextWidget(
-                        textToDisplay: 'Keterlibatan',
-                        textStyle: TextStyle(
+                      CustomTextWidget(
+                        textToDisplay: language.engagement ?? 'Keterlibatan',
+                        textStyle: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       sixteenPx,
@@ -83,20 +86,28 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              itemStatus('Jumlah Penonton', '100'),
+                              itemStatus(
+                                  language.totalViewers ?? 'Jumlah Penonton',
+                                  '100'),
                               twentyPx,
-                              itemStatus('Jumlah Komentar', '5000'),
+                              itemStatus(
+                                  language.totalComments ?? 'Jumlah Komentar',
+                                  '5000'),
                             ],
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              itemStatus('Jumlah Membagikan', '30'),
+                              itemStatus(
+                                  language.totalShares ?? 'Jumlah Membagikan',
+                                  '30'),
                               twentyPx,
-                              itemStatus('Jumlah Suka', '10.000'),
+                              itemStatus(language.totalLikes ?? 'Jumlah Suka',
+                                  '10.000'),
                             ],
                           ),
-                          itemStatus('Pengikut Baru', '2')
+                          itemStatus(
+                              language.newFollowers ?? 'Pengikut Baru', '2')
                         ],
                       ),
                     ],
@@ -114,9 +125,9 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const CustomTextWidget(
-                          textToDisplay: 'List Penonton',
-                          textStyle: TextStyle(
+                        CustomTextWidget(
+                          textToDisplay: language.viewerList ?? 'List Penonton',
+                          textStyle: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         CustomGesture(
@@ -147,67 +158,73 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CustomTextWidget(
-                        textToDisplay: 'Bagaimana pengalaman siaran LIVE-mu?',
-                        textStyle: TextStyle(
+                      CustomTextWidget(
+                        textToDisplay: language.howWasYourLiveExperience ??
+                            'Bagaimana pengalaman siaran LIVE-mu?',
+                        textStyle: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       twentyPx,
                       reactChosen != null
                           ? Container(
-                        width: double.infinity,
-                            child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                            CustomIconWidget(
-                                defaultColor: false,
-                                iconData: reactChosen == ReactStream.bad
-                                    ? '${AssetPath.vectorPath}bad_active.svg'
-                                    : reactChosen == ReactStream.neutral
-                                    ? '${AssetPath.vectorPath}neutral_active.svg'
-                                    : '${AssetPath.vectorPath}good_active.svg'),
-                            eightPx,
-                            CustomTextWidget(
-                              textToDisplay: reactChosen == ReactStream.bad
-                                  ? 'Buruk'
-                                  : reactChosen == ReactStream.neutral
-                                  ? 'Netral'
-                                  : 'Baik',
-                              textStyle: const TextStyle(fontSize: 12, color: kHyppeBurem),
-                            ),
-                        ],
-                      ),
-                          )
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CustomIconWidget(
+                                      defaultColor: false,
+                                      iconData: reactChosen == ReactStream.bad
+                                          ? '${AssetPath.vectorPath}bad_active.svg'
+                                          : reactChosen == ReactStream.neutral
+                                              ? '${AssetPath.vectorPath}neutral_active.svg'
+                                              : '${AssetPath.vectorPath}good_active.svg'),
+                                  eightPx,
+                                  CustomTextWidget(
+                                    textToDisplay:
+                                        reactChosen == ReactStream.bad
+                                            ? (language.poor ?? 'Buruk')
+                                            : reactChosen == ReactStream.neutral
+                                                ? (language.neutral ?? 'Netral')
+                                                : (language.good ?? 'Baik'),
+                                    textStyle: const TextStyle(
+                                        fontSize: 12, color: kHyppeBurem),
+                                  ),
+                                ],
+                              ),
+                            )
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 ReactStreamItem(
                                     onTap: () async {
-                                      reactChosen = await ShowBottomSheet().onReactStreaming(
-                                          context, ReactStream.bad);
+                                      reactChosen = await ShowBottomSheet()
+                                          .onReactStreaming(
+                                              context, ReactStream.bad);
                                       setState(() {});
                                     },
                                     svg:
                                         '${AssetPath.vectorPath}bad_outline.svg',
-                                    desc: 'Buruk'),
+                                    desc: (language.poor ?? 'Buruk')),
                                 ReactStreamItem(
                                     onTap: () async {
-                                      reactChosen = await ShowBottomSheet().onReactStreaming(
-                                          context, ReactStream.neutral);
+                                      reactChosen = await ShowBottomSheet()
+                                          .onReactStreaming(
+                                              context, ReactStream.neutral);
                                       setState(() {});
                                     },
                                     svg:
                                         '${AssetPath.vectorPath}neutral_outline.svg',
-                                    desc: 'Netral'),
+                                    desc: (language.neutral ?? 'Netral')),
                                 ReactStreamItem(
                                     onTap: () async {
-                                      reactChosen = await ShowBottomSheet().onReactStreaming(
-                                          context, ReactStream.good);
+                                      reactChosen = await ShowBottomSheet()
+                                          .onReactStreaming(
+                                              context, ReactStream.good);
                                       setState(() {});
                                     },
                                     svg:
                                         '${AssetPath.vectorPath}good_outline.svg',
-                                    desc: 'Baik')
+                                    desc: (language.good ?? 'Baik'))
                               ],
                             )
                     ],

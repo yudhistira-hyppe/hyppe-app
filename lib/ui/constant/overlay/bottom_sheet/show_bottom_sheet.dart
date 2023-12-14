@@ -5,7 +5,8 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
-import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
+import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart'
+    as messageData;
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
@@ -65,6 +66,7 @@ import 'package:provider/provider.dart';
 import 'package:showcaseview/showcaseview.dart';
 // import 'package:story_view/story_view.dart';
 import 'bottom_sheet_content/live_streaming/on_react_streaming.dart';
+import 'bottom_sheet_content/live_streaming/on_streaming_options.dart';
 import 'bottom_sheet_content/on_show_success_ownership_content.dart';
 import 'bottom_sheet_content/on_sign_out.dart';
 import 'bottom_sheet_content/on_something_when_wrong.dart';
@@ -79,38 +81,51 @@ class ShowBottomSheet {
     return _instance;
   }
 
-
-  static onLoginApp(context,) async {
+  static onLoginApp(
+    context,
+  ) async {
     await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         enableDrag: true,
         isDismissible: true,
         backgroundColor: Colors.transparent,
-        builder: (context){
+        builder: (context) {
           return Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
-              decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16))),
               height: context.getHeight() * 0.92,
               child: const OnLoginApp(),
             ),
           );
-    });
+        });
   }
 
-  static onStreamWatchersStatus(context,) async {
+  static onStreamWatchersStatus(
+    context,
+  ) async {
     await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         enableDrag: true,
         isDismissible: true,
         backgroundColor: Colors.transparent,
-        builder: (context){
+        builder: (context) {
           return Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
-              decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16))),
               height: context.getHeight() * 0.6,
               child: const OnLiveStreamStatus(),
             ),
@@ -118,18 +133,25 @@ class ShowBottomSheet {
         });
   }
 
-  static onDeleteWatcherComment(context,) async {
+  static onDeleteWatcherComment(
+    context,
+  ) async {
     await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         enableDrag: true,
         isDismissible: true,
         backgroundColor: Colors.transparent,
-        builder: (context){
+        builder: (context) {
           return Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
-              decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16))),
               height: context.getHeight() * 0.3,
               child: const OnDeleteWatcherComment(),
             ),
@@ -137,18 +159,49 @@ class ShowBottomSheet {
         });
   }
 
-  static onWatcherStatus(context,) async {
+  static onStreamingOptions(context) async {
     await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         enableDrag: true,
         isDismissible: true,
         backgroundColor: Colors.transparent,
-        builder: (context){
+        builder: (context) {
           return Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
-              decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16))),
+              height: 145,
+              child: const OnStreamingOptions(),
+            ),
+          );
+        });
+  }
+
+  static onWatcherStatus(
+    context,
+  ) async {
+    await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        enableDrag: true,
+        isDismissible: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16))),
               height: context.getHeight() * 0.3,
               child: const OnWatcherStatus(),
             ),
@@ -156,42 +209,54 @@ class ShowBottomSheet {
         });
   }
 
-  Future<ReactStream> onReactStreaming(context, ReactStream react) async{
+  Future<ReactStream> onReactStreaming(context, ReactStream react) async {
     return await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         enableDrag: true,
         isDismissible: true,
         backgroundColor: Colors.transparent,
-        builder: (context){
+        builder: (context) {
           return Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
-              decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16))),
               height: context.getHeight() * 0.5,
-              child: OnReactStreaming(react: react,),
+              child: OnReactStreaming(
+                react: react,
+              ),
             ),
           );
         });
   }
 
-  static onListOfWatcher(context) async{
+  static onListOfWatcher(context) async {
     await showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    enableDrag: true,
-    isDismissible: true,
-    backgroundColor: Colors.transparent,
-    builder: (context){
-      return Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Container(
-          decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
-          height: context.getHeight() * 0.97,
-          child: const OnListWatchers(),
-        ),
-      );
-    });
+        context: context,
+        isScrollControlled: true,
+        enableDrag: true,
+        isDismissible: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16))),
+              height: context.getHeight() * 0.97,
+              child: const OnListWatchers(),
+            ),
+          );
+        });
   }
 
   static onChooseMusic(context, {isPic = false, isInit = true}) async {
@@ -203,9 +268,14 @@ class ShowBottomSheet {
         backgroundColor: Colors.transparent,
         builder: (context) {
           return Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
-              decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16))),
               height: context.getHeight() * 0.92,
               child: OnChooseMusicBottomSheet(
                 isPic: isPic,
@@ -231,7 +301,8 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             // height: SizeConfig.screenHeight! / 1.78,
             decoration: BoxDecoration(
@@ -267,7 +338,8 @@ class ShowBottomSheet {
     );
   }
 
-  static onLongPressDeleteMessage(BuildContext _, {messageData.MessageDataV2? data, required Function() function}) {
+  static onLongPressDeleteMessage(BuildContext _,
+      {messageData.MessageDataV2? data, required Function() function}) {
     showModalBottomSheet(
       context: _,
       isScrollControlled: false,
@@ -294,7 +366,8 @@ class ShowBottomSheet {
     );
   }
 
-  static onNoInternetConnection(_, {Function? tryAgainButton, Function? onBackButton}) {
+  static onNoInternetConnection(_,
+      {Function? tryAgainButton, Function? onBackButton}) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: _,
@@ -303,7 +376,8 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             height: SizeConfig.screenHeight,
             decoration: BoxDecoration(
@@ -314,7 +388,9 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnNoInternetConnectionBottomSheet(tryAgainButton: tryAgainButton ?? () {}, onBackButton: onBackButton),
+            child: OnNoInternetConnectionBottomSheet(
+                tryAgainButton: tryAgainButton ?? () {},
+                onBackButton: onBackButton),
           ),
         );
       },
@@ -333,7 +409,8 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             height: SizeConfig.screenHeight,
             decoration: BoxDecoration(
@@ -351,7 +428,11 @@ class ShowBottomSheet {
     );
   }
 
-  static onShowReport(BuildContext context, {ContentData? data, ReportType? reportType, double? height, bool fromLandscapeMode = false}) {
+  static onShowReport(BuildContext context,
+      {ContentData? data,
+      ReportType? reportType,
+      double? height,
+      bool fromLandscapeMode = false}) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -369,7 +450,11 @@ class ShowBottomSheet {
             ),
           ),
           padding: const EdgeInsets.all(0),
-          child: ReportContent(userID: data?.email, postID: data?.postID, reportType: reportType, fromLandscapeMode: fromLandscapeMode),
+          child: ReportContent(
+              userID: data?.email,
+              postID: data?.postID,
+              reportType: reportType,
+              fromLandscapeMode: fromLandscapeMode),
         );
       },
     ).whenComplete(() {
@@ -378,7 +463,8 @@ class ShowBottomSheet {
     });
   }
 
-  static onShowReportStory(context, {ContentData? data, int? index, bool? forceStop}) {
+  static onShowReportStory(context,
+      {ContentData? data, int? index, bool? forceStop}) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -387,7 +473,8 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             height: SizeConfig.screenHeight! / 4,
             decoration: BoxDecoration(
@@ -398,7 +485,10 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: ReportContent(userID: data?.email, storyID: data?.postID, reportType: ReportType.story),
+            child: ReportContent(
+                userID: data?.email,
+                storyID: data?.postID,
+                reportType: ReportType.story),
           ),
         );
       },
@@ -434,7 +524,10 @@ class ShowBottomSheet {
               },
               child: SafeArea(
                 child: Container(
-                  height: !notifier.isLoading ? SizeConfig.screenHeight! : SizeConfig.screenHeight! - (28 + (SizeConfig.screenWidth! / 1.78)),
+                  height: !notifier.isLoading
+                      ? SizeConfig.screenHeight!
+                      : SizeConfig.screenHeight! -
+                          (28 + (SizeConfig.screenWidth! / 1.78)),
                   decoration: BoxDecoration(
                     color: Theme.of(_).colorScheme.background,
                     borderRadius: const BorderRadius.only(
@@ -523,7 +616,9 @@ class ShowBottomSheet {
             child: Container(
                 height: 330,
                 decoration: BoxDecoration(
-                  color: Theme.of(Routing.navigatorKey.currentContext ?? ctx).colorScheme.surface,
+                  color: Theme.of(Routing.navigatorKey.currentContext ?? ctx)
+                      .colorScheme
+                      .surface,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
@@ -670,7 +765,10 @@ class ShowBottomSheet {
           child: Container(
               margin: margin,
               padding: padding,
-              decoration: BoxDecoration(color: color, borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? 0))),
+              decoration: BoxDecoration(
+                  color: color,
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(borderRadius ?? 0))),
               child: OnColouredSheet(
                 isArrow: isArrow,
                 isMargin: margin != null,
@@ -746,7 +844,11 @@ class ShowBottomSheet {
     );
   }
 
-  PersistentBottomSheetController<T>? onShowFilters<T>(BuildContext context, GlobalKey<ScaffoldState> scaffoldState, String file, GlobalKey? globalKey) {
+  PersistentBottomSheetController<T>? onShowFilters<T>(
+      BuildContext context,
+      GlobalKey<ScaffoldState> scaffoldState,
+      String file,
+      GlobalKey? globalKey) {
     return scaffoldState.currentState?.showBottomSheet<T>(
       (context) => GestureDetector(
         onVerticalDragStart: (_) {},
@@ -862,7 +964,8 @@ class ShowBottomSheet {
           child: Container(
             height: MediaQuery.of(context).size.height * 0.28,
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
               color: Theme.of(context).colorScheme.surface,
             ),
             child: const SafeArea(
@@ -891,7 +994,8 @@ class ShowBottomSheet {
       context: _,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             // height: SizeConfig.screenHeight / 1.78,
             decoration: BoxDecoration(
@@ -921,13 +1025,16 @@ class ShowBottomSheet {
     });
   }
 
-  static onReportFormContent(_,) {
+  static onReportFormContent(
+    _,
+  ) {
     showModalBottomSheet(
       context: _,
       isScrollControlled: true,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             // height: SizeConfig.screenHeight / 1.78,
             decoration: BoxDecoration(
@@ -947,7 +1054,14 @@ class ShowBottomSheet {
     });
   }
 
-  static onReportSpamContent(_, { ContentData? postData, AdsData? adsData, String? type, Function? onUpdate, bool? inDetail, String? key, Function()? onComplete}) {
+  static onReportSpamContent(_,
+      {ContentData? postData,
+      AdsData? adsData,
+      String? type,
+      Function? onUpdate,
+      bool? inDetail,
+      String? key,
+      Function()? onComplete}) {
     showModalBottomSheet(
       context: _,
       isScrollControlled: true,
@@ -955,7 +1069,8 @@ class ShowBottomSheet {
         return FractionallySizedBox(
           heightFactor: 0.9,
           child: Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(builder).viewInsets.bottom),
             child: Container(
               height: SizeConfig.screenHeight ?? 0 / 1.09,
               decoration: BoxDecoration(
@@ -998,7 +1113,8 @@ class ShowBottomSheet {
         return FractionallySizedBox(
           heightFactor: 0.9,
           child: Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(builder).viewInsets.bottom),
             child: Container(
               height: SizeConfig.screenHeight ?? 0 / 1.09,
               decoration: BoxDecoration(
@@ -1281,7 +1397,8 @@ class ShowBottomSheet {
         });
   }
 
-  static onBuyContent(context, {ContentData? data, FlutterAliplayer? fAliplayer}) {
+  static onBuyContent(context,
+      {ContentData? data, FlutterAliplayer? fAliplayer}) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -1566,7 +1683,9 @@ class ShowBottomSheet {
     );
   }
 
-  static onPeriodChallange(context, String idchallenge, bool isDetail, int session, {bool isWinner = false}) async {
+  static onPeriodChallange(
+      context, String idchallenge, bool isDetail, int session,
+      {bool isWinner = false}) async {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -1575,7 +1694,8 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             height: SizeConfig.screenHeight! / 1.5,
             decoration: BoxDecoration(
@@ -1607,7 +1727,8 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             height: SizeConfig.screenHeight! / 2.2,
             // height: SizeConfig.screenHeight!,
@@ -1667,7 +1788,8 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             // height: SizeConfig.screenHeight! / 1.78,
             decoration: BoxDecoration(

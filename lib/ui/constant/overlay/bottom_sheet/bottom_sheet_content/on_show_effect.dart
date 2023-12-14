@@ -12,7 +12,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../widget/custom_base_cache_image.dart';
-import '../../../widget/custom_shimmer.dart';
 
 class OnShowEffect extends StatelessWidget {
   const OnShowEffect({Key? key}) : super(key: key);
@@ -151,21 +150,21 @@ class OnShowEffect extends StatelessWidget {
                                           }
                                         },
                                       ));
-                                  return ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer());
+                                  // return ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomShimmer());
                                 },
                                 emptyWidget: ClipRRect(borderRadius: BorderRadius.circular(10), child: const CustomLoading()),
                               );
-                              if (snapshot.data == true) {
-
-                                return Image.network(
-                                  '${Env.data.baseUrl}/api/assets/filter/image/thumb/${effect.postID}?x-auth-user=$email&x-auth-token=$token',
-                                );
-                              }
-                              return Image.network(
-                                '${Env.data.baseUrl}/api/assets/filter/image/thumb/${effect.postID}?x-auth-user=$email&x-auth-token=$token',
-                                color: Colors.black45,
-                                colorBlendMode: BlendMode.darken,
-                              );
+                              // if (snapshot.data == true) {
+                              //
+                              //   return Image.network(
+                              //     '${Env.data.baseUrl}/api/assets/filter/image/thumb/${effect.postID}?x-auth-user=$email&x-auth-token=$token',
+                              //   );
+                              // }
+                              // return Image.network(
+                              //   '${Env.data.baseUrl}/api/assets/filter/image/thumb/${effect.postID}?x-auth-user=$email&x-auth-token=$token',
+                              //   color: Colors.black45,
+                              //   colorBlendMode: BlendMode.darken,
+                              // );
                             }),
                       ),
                     ),

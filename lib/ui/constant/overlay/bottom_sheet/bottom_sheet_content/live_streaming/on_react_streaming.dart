@@ -21,7 +21,6 @@ class OnReactStreaming extends StatefulWidget {
 }
 
 class _OnReactStreamingState extends State<OnReactStreaming> {
-
   late ReactStream reactStream;
   int textLenght = 0;
 
@@ -55,7 +54,8 @@ class _OnReactStreamingState extends State<OnReactStreaming> {
               iconData: "${AssetPath.vectorPath}handler.svg"),
           sixteenPx,
           CustomTextWidget(
-            textToDisplay: "Bagaimana pengalaman siaran Live-mu?",
+            textToDisplay: language.howWasYourLiveExperience ??
+                "Bagaimana pengalaman siaran Live-mu?",
             textStyle: context
                 .getTextTheme()
                 .bodyText1
@@ -65,21 +65,36 @@ class _OnReactStreamingState extends State<OnReactStreaming> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ReactStreamItem(svg: reactStream == ReactStream.bad ? '${AssetPath.vectorPath}bad_active.svg' : '${AssetPath.vectorPath}bad_outline.svg', desc: 'Buruk', onTap: (){
-                setState(() {
-                  reactStream = ReactStream.bad;
-                });
-              }),
-              ReactStreamItem(svg: reactStream == ReactStream.neutral ? '${AssetPath.vectorPath}neutral_active.svg' : '${AssetPath.vectorPath}neutral_outline.svg', desc: 'Netral', onTap: (){
-                setState(() {
-                  reactStream = ReactStream.neutral;
-                });
-              }),
-              ReactStreamItem(svg: reactStream == ReactStream.good ? '${AssetPath.vectorPath}good_active.svg' : '${AssetPath.vectorPath}good_outline.svg', desc: 'Baik', onTap: (){
-                setState(() {
-                  reactStream = ReactStream.good;
-                });
-              }),
+              ReactStreamItem(
+                  svg: reactStream == ReactStream.bad
+                      ? '${AssetPath.vectorPath}bad_active.svg'
+                      : '${AssetPath.vectorPath}bad_outline.svg',
+                  desc: (language.poor ?? 'Buruk'),
+                  onTap: () {
+                    setState(() {
+                      reactStream = ReactStream.bad;
+                    });
+                  }),
+              ReactStreamItem(
+                  svg: reactStream == ReactStream.neutral
+                      ? '${AssetPath.vectorPath}neutral_active.svg'
+                      : '${AssetPath.vectorPath}neutral_outline.svg',
+                  desc: (language.neutral ?? 'Netral'),
+                  onTap: () {
+                    setState(() {
+                      reactStream = ReactStream.neutral;
+                    });
+                  }),
+              ReactStreamItem(
+                  svg: reactStream == ReactStream.good
+                      ? '${AssetPath.vectorPath}good_active.svg'
+                      : '${AssetPath.vectorPath}good_outline.svg',
+                  desc: (language.good ?? 'Baik'),
+                  onTap: () {
+                    setState(() {
+                      reactStream = ReactStream.good;
+                    });
+                  }),
             ],
           ),
           sixteenPx,
@@ -92,29 +107,37 @@ class _OnReactStreamingState extends State<OnReactStreaming> {
             child: TextField(
               maxLines: null, // Set this
               expands: true, // and this
+              maxLength: 200,
               keyboardType: TextInputType.text,
               textAlign: TextAlign.start,
               textAlignVertical: TextAlignVertical.top,
-              onChanged: (text){
+              onChanged: (text) {
                 setState(() {
                   textLenght = text.length;
                 });
               },
               decoration: InputDecoration(
-                hintText: "Beri tahu kami jika kamu memiliki pertanyaan, saran, ataupun masukan ",
-                contentPadding: const EdgeInsets.only(left: 5, top: 5),
+                hintText: language.letUsKnowIfYouHaveAnyQuestionsOrFeedback ??
+                    "Beri tahu kami jika kamu memiliki pertanyaan, saran, ataupun masukan ",
+                contentPadding:
+                    const EdgeInsets.only(left: 5, top: 5, right: 5),
                 hintMaxLines: 3,
-                hintStyle: const TextStyle(fontSize: 14, color: kHyppeBurem, fontWeight: FontWeight.normal),
+                hintStyle: const TextStyle(
+                    fontSize: 14,
+                    color: kHyppeBurem,
+                    fontWeight: FontWeight.normal),
                 border: InputBorder.none,
                 filled: true,
                 // focusedBorder: InputBorder.none,
                 focusedBorder: OutlineInputBorder(
                   borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  borderSide: BorderSide(width: 2, color: context.getColorScheme().primary),
+                  borderSide: BorderSide(
+                      width: 2, color: context.getColorScheme().primary),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  borderSide: BorderSide(width: 1, color: context.getColorScheme().secondary),
+                  borderSide: BorderSide(
+                      width: 1, color: context.getColorScheme().secondary),
                 ),
                 errorBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
@@ -131,9 +154,9 @@ class _OnReactStreamingState extends State<OnReactStreaming> {
               width: double.infinity,
               height: 34,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: context.getColorScheme().primary.withOpacity(0.8),
-                  // border: Border.all(color: kHyppeBurem, width: 1)
+                borderRadius: BorderRadius.circular(8),
+                color: context.getColorScheme().primary.withOpacity(0.8),
+                // border: Border.all(color: kHyppeBurem, width: 1)
               ),
               alignment: Alignment.center,
               child: CustomTextWidget(
@@ -147,10 +170,13 @@ class _OnReactStreamingState extends State<OnReactStreaming> {
             ),
           ),
           sixteenPx,
-          const CustomTextWidget(
-            textToDisplay: 'Tanggapanmu sangat berarti untuk Hyppe dapat meningkatkan  pengalamanmu secara personal.',
+          CustomTextWidget(
+            textToDisplay: language
+                    .yourFeedbackIsValuableToHyppeForEnhancingYourPersonalizedExperience ??
+                'Tanggapanmu sangat berarti untuk Hyppe dapat meningkatkan  pengalamanmu secara personal.',
+            maxLines: 2,
             textAlign: TextAlign.center,
-            textStyle: TextStyle(
+            textStyle: const TextStyle(
               fontSize: 12,
               color: kHyppeBurem,
             ),

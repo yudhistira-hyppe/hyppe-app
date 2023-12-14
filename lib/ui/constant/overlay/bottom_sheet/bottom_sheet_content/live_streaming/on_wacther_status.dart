@@ -11,7 +11,6 @@ import '../../../../widget/custom_gesture.dart';
 import '../../../../widget/custom_icon_widget.dart';
 import '../../../../widget/custom_spacer.dart';
 import '../../../../widget/custom_text_widget.dart';
-import '../../show_bottom_sheet.dart';
 import 'on_live_stream_status.dart';
 
 class OnWatcherStatus extends StatefulWidget {

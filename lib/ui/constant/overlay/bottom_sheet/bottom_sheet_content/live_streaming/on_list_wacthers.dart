@@ -127,7 +127,7 @@ class _OnListWatchersState extends State<OnListWatchers> {
                 Align(
                   alignment: Alignment.center,
                   child: CustomTextWidget(
-                      textToDisplay: 'List Penonton',
+                      textToDisplay: language.viewerList ?? 'List Penonton',
                     textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                 )

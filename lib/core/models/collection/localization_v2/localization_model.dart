@@ -1045,8 +1045,29 @@ class LocalizationModelV2 {
   String? liveHost;
   String? whosWatching;
   String? removeUser;
+  String? messageRemoveUser1;
+  String? messageRemoveUser2;
   String? deleteComment2;
   String? pinComment;
+  String? liveVideoHasEnded;
+  String? duration;
+  String? engagement;
+  String? totalViewers;
+  String? totalShares;
+  String? newFollowers;
+  String? totalComments;
+  String? viewerList;
+  String? howWasYourLiveExperience;
+  String? poor;
+  String? neutral;
+  String? good;
+  String? letUsKnowIfYouHaveAnyQuestionsOrFeedback;
+  String? yourFeedbackIsValuableToHyppeForEnhancingYourPersonalizedExperience;
+  String? disableComments;
+  String? pauseLive;
+  String? pauseLiveTitle;
+  String? pauseLiveBody;
+  String? pause;
 
   LocalizationModelV2({
     this.login,
@@ -2095,8 +2116,29 @@ class LocalizationModelV2 {
     this.liveHost,
     this.whosWatching,
     this.removeUser,
+    this.messageRemoveUser1,
+    this.messageRemoveUser2,
     this.deleteComment2,
-    this.pinComment
+    this.pinComment,
+    this.liveVideoHasEnded,
+    this.duration,
+    this.engagement,
+    this.totalViewers,
+    this.totalShares,
+    this.newFollowers,
+    this.totalComments,
+    this.viewerList,
+    this.howWasYourLiveExperience,
+    this.poor,
+    this.neutral,
+    this.good,
+    this.letUsKnowIfYouHaveAnyQuestionsOrFeedback,
+    this.yourFeedbackIsValuableToHyppeForEnhancingYourPersonalizedExperience,
+    this.disableComments,
+    this.pauseLive,
+    this.pauseLiveTitle,
+    this.pauseLiveBody,
+    this.pause,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -3164,7 +3206,28 @@ class LocalizationModelV2 {
     liveHost = json['liveHost'];
     whosWatching = json['whosWatching'];
     removeUser = json['removeUser'];
+    messageRemoveUser1 = json["messageRemoveUser1"];
+    messageRemoveUser2 = json["messageRemoveUser2"];
     deleteComment2 = json['deleteComment2'];
     pinComment = json['pinComment'];
+    liveVideoHasEnded = json["liveVideoHasEnded"];
+    duration = json["duration"];
+    engagement = json["engagement"];
+    totalViewers = json["totalViewers"];
+    totalShares = json["totalShares"];
+    newFollowers = json["newFollowers"];
+    totalComments = json["totalComments"];
+    viewerList = json["viewerList"];
+    howWasYourLiveExperience = json["howWasYourLiveExperience"];
+    poor = json["poor"];
+    neutral = json["neutral"];
+    good = json["good"];
+    letUsKnowIfYouHaveAnyQuestionsOrFeedback = json['letUsKnowIfYouHaveAnyQuestionsOrFeedback'];
+    yourFeedbackIsValuableToHyppeForEnhancingYourPersonalizedExperience = json['yourFeedbackIsValuableToHyppeForEnhancingYourPersonalizedExperience'];
+    disableComments = json['disableComments'];
+    pauseLive = json['pauseLive'];
+    pauseLiveTitle = json['pauseLiveTitle'];
+    pauseLiveBody = json['pauseLiveBody'];
+    pause = json['pause'];
   }
 }

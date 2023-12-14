@@ -154,8 +154,8 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
                   CustomGesture(
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     onTap: () {
-                      // ShowBottomSheet.onLoginApp(context);
-                      Routing().move(Routes.streamingFeedback);
+                      ShowBottomSheet.onStreamingOptions(context);
+                      // Routing().move(Routes.streamingFeedback);
                     },
                     child: Container(
                       width: double.infinity,

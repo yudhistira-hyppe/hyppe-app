@@ -15,18 +15,20 @@ class GeneralAlertDialog extends StatefulWidget {
   final String? titleButtonPrimary;
   final String? titleButtonSecondary;
   final bool? isLoading;
-  const GeneralAlertDialog({
-    Key? key,
-    this.titleText,
-    this.bodyText,
-    this.maxLineTitle,
-    this.maxLineBody,
-    required this.functionPrimary,
-    this.functionSecondary,
-    this.titleButtonPrimary,
-    this.titleButtonSecondary,
-    this.isLoading = false,
-  }) : super(key: key);
+  final bool isHorizontal;
+  const GeneralAlertDialog(
+      {Key? key,
+      this.titleText,
+      this.bodyText,
+      this.maxLineTitle,
+      this.maxLineBody,
+      required this.functionPrimary,
+      this.functionSecondary,
+      this.titleButtonPrimary,
+      this.titleButtonSecondary,
+      this.isLoading = false,
+      this.isHorizontal = true})
+      : super(key: key);
 
   @override
   State<GeneralAlertDialog> createState() => _GeneralAlertDialogState();
@@ -72,33 +74,59 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
               : twelvePx,
           _isLoading
               ? const CustomLoading()
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    widget.functionSecondary == null
-                        ? Container()
-                        : Expanded(
-                            child: _buildButton(
-                              caption: '${widget.titleButtonSecondary}',
-                              color: Colors.transparent,
-                              function: widget.functionSecondary ?? () {},
-                              textColor: theme.colorScheme.primary,
-                              // function: () => _routing.moveBack(),
-                              theme: theme,
-                            ),
+              : widget.isHorizontal
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        widget.functionSecondary == null
+                            ? Container()
+                            : Expanded(
+                                child: _buildButton(
+                                  caption: '${widget.titleButtonSecondary}',
+                                  color: Colors.transparent,
+                                  function: widget.functionSecondary ?? () {},
+                                  textColor: theme.colorScheme.primary,
+                                  // function: () => _routing.moveBack(),
+                                  theme: theme,
+                                ),
+                              ),
+                        Expanded(
+                          child: _buildButton(
+                            caption: '${widget.titleButtonPrimary}',
+                            textColor: kHyppeLightButtonText,
+                            color: theme.colorScheme.primary,
+                            function: widget.functionPrimary,
+                            // function: () => widget.function(),
+                            theme: theme,
                           ),
-                    Expanded(
-                      child: _buildButton(
-                        caption: '${widget.titleButtonPrimary}',
-                        textColor: kHyppeLightButtonText,
-                        color: theme.colorScheme.primary,
-                        function: widget.functionPrimary,
-                        // function: () => widget.function(),
-                        theme: theme,
-                      ),
-                    ),
-                  ],
-                )
+                        ),
+                      ],
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildButton(
+                          caption: '${widget.titleButtonPrimary}',
+                          textColor: kHyppeLightButtonText,
+                          color: theme.colorScheme.primary,
+                          function: widget.functionPrimary,
+                          matchParent: true,
+                          // function: () => widget.function(),
+                          theme: theme,
+                        ),
+                        widget.functionSecondary == null
+                            ? Container()
+                            : _buildButton(
+                                caption: '${widget.titleButtonSecondary}',
+                                color: Colors.transparent,
+                                function: widget.functionSecondary ?? () {},
+                                textColor: theme.colorScheme.primary,
+                                matchParent: true,
+                                // function: () => _routing.moveBack(),
+                                theme: theme,
+                              ),
+                      ],
+                    )
         ],
       ),
     );
@@ -109,7 +137,8 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
       required String caption,
       required Function function,
       required Color color,
-      Color? textColor}) {
+      Color? textColor,
+      bool matchParent = false}) {
     return CustomTextButton(
       onPressed: () async {
         try {
@@ -120,10 +149,18 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
           setState(() => _isLoading = false);
         }
       },
-      child: CustomTextWidget(
-          textToDisplay: caption,
-          textStyle:
-              theme.textTheme.button?.copyWith(color: textColor, fontSize: 14)),
+      child: matchParent
+          ? Container(
+              width: double.infinity,
+              child: CustomTextWidget(
+                  textToDisplay: caption,
+                  textStyle: theme.textTheme.button
+                      ?.copyWith(color: textColor, fontSize: 14)),
+            )
+          : CustomTextWidget(
+              textToDisplay: caption,
+              textStyle: theme.textTheme.button
+                  ?.copyWith(color: textColor, fontSize: 14)),
       style: theme.elevatedButtonTheme.style?.copyWith(
         backgroundColor: MaterialStateProperty.all(color),
       ),
