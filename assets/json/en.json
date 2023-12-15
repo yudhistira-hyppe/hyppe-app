@@ -1068,5 +1068,6 @@
   "pauseLive": "Pause LIVE",
   "pauseLiveTitle": "Pause LIVE?",
   "pauseLiveBody": "Your LIVE video will temporarily freeze when paused. You can pause for up to 5 minutes, 3 times.",
-  "pause": "Pause"
+  "pause": "Pause",
+  "exploreLiveToLivenUpYourDay": "Explore LIVE to liven up your day!"
 }

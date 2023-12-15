@@ -1049,9 +1049,10 @@ class System {
     final translate = context.read<TranslateNotifierV2>().translate;
     String time = '';
     int seconds = (DateTime.now().millisecondsSinceEpoch - timestamp) ~/ 1000;
-    int minutes = seconds ~/ 60;
-    int hours = seconds ~/ 3600;
-    int days = seconds ~/ 86400;
+    final duration = Duration(seconds: seconds);
+    int minutes = duration.inMinutes;
+    int hours = duration.inHours;
+    int days = duration.inDays;
     int weeks = seconds ~/ 604800;
     if (weeks > 0) {
       time = weeks.toString() +

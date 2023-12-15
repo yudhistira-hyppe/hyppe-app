@@ -345,6 +345,20 @@ extension IntegerExtension on int {
       }
     }
   }
+
+  String getCountShort(){
+    if(this >= 1000000){
+      final million = (this / 1000000).ceil();
+      final hundred = (this / 100000).ceil();
+      return '$million.${hundred}M';
+    }else if(this >= 1000){
+      final thousand = (this / 1000).ceil();
+      final hundred = (this / 100).ceil();
+      return '$thousand.${hundred}K';
+    }else{
+      return toString();
+    }
+  }
 }
 
 extension NumExtension on num {

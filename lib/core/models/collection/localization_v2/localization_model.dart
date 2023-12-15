@@ -1068,6 +1068,7 @@ class LocalizationModelV2 {
   String? pauseLiveTitle;
   String? pauseLiveBody;
   String? pause;
+  String? exploreLiveToLivenUpYourDay;
 
   LocalizationModelV2({
     this.login,
@@ -2139,6 +2140,7 @@ class LocalizationModelV2 {
     this.pauseLiveTitle,
     this.pauseLiveBody,
     this.pause,
+    this.exploreLiveToLivenUpYourDay,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -3229,5 +3231,6 @@ class LocalizationModelV2 {
     pauseLiveTitle = json['pauseLiveTitle'];
     pauseLiveBody = json['pauseLiveBody'];
     pause = json['pause'];
+    exploreLiveToLivenUpYourDay = json['exploreLiveToLivenUpYourDay'];
   }
 }
