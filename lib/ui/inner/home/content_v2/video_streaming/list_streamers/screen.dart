@@ -18,7 +18,7 @@ class ListStreamersScreen extends StatefulWidget {
   State<ListStreamersScreen> createState() => _ListStreamersScreenState();
 }
 
-class _ListStreamersScreenState extends State<ListStreamersScreen> {
+class _ListStreamersScreenState extends State<ListStreamersScreen>  with TickerProviderStateMixin{
   final streamers = const [
     Streamer(
         image:
@@ -118,6 +118,20 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> {
         isFollowing: true),
   ];
 
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller = AnimationController(vsync: this);
+    _controller.addListener(() {
+      if(_controller.isCompleted){
+        _controller.reset();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<StreamingFeedbackNotifier>(builder: (context, notifier, _) {
@@ -145,15 +159,21 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: CustomTextWidget(
-                  textToDisplay:
-                      notifier.language.exploreLiveToLivenUpYourDay ??
-                          'Serunya LIVE untuk ramaikan harimu!',
-                  textStyle: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
+              GestureDetector(
+                onTap: (){
+                    _controller..duration = const Duration(seconds: 2)..forward();
+
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: CustomTextWidget(
+                    textToDisplay:
+                        notifier.language.exploreLiveToLivenUpYourDay ??
+                            'Serunya LIVE untuk ramaikan harimu!',
+                    textStyle: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
               Expanded(
@@ -167,6 +187,13 @@ class _ListStreamersScreenState extends State<ListStreamersScreen> {
                     child: Wrap(
                       children: List.generate(streamers.length, (index) {
                         final streamer = streamers[index];
+                        // return Lottie.asset(
+                        //   "${AssetPath.jsonPath}loveicon.json",
+                        //   width: sizeTile,
+                        //   height: sizeTile + 150,
+                        //   repeat: false,
+                        //   controller: _controller
+                        // );
                         if (index % 2 == 0) {
                           return Container(
                             width: sizeTile,
