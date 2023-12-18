@@ -1069,5 +1069,15 @@
   "pauseLive": "Jeda LIVE",
   "pauseLiveTitle": "Jeda siaran LIVE?",
   "pauseLiveBody": "Siaran LIVE kamu akan berhenti sementara ketika dijeda. Kamu dapat melakukan jeda selama 5 menit hingga 3 kali.",
-  "pause": "Jeda"
+  "pause": "Jeda",
+  "liveBroadcastIsPausedViewersCannotCurrentlySeeYou": "Siaran LIVE dijeda, penonton saat ini tidak dapat melihatmu",
+  "theLiveBroadcastWillEndAfterTheCountdown": "Siaran LIVE akan berakhir setelah hitung mundur",
+  "continueLive": "Lanjutkan LIVE",
+  "addComment": "Tambah komentar...",
+  "endofLIVEBroadcast": "Akhiri siaran LIVE?",
+  "areYouSureYouWantToEndTheLIVEBroadcast": "Kamu yakin ingin mengakhiri siaran LIVE?",
+  "endNow": "Akhiri Sekarang",
+  "liveBroadcastRemaining5Minutes": "Siaran LIVE sisa 5 menit",
+  "youOnlyHave5MinutesLeftinTheLiveBroadcast": "Waktumu tinggal 5 menit dalam siaran LIVE",
+  "commentsAreDisabled": "Komentar dinonaktifkan"
 }

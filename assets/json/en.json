@@ -1069,5 +1069,15 @@
   "pauseLive": "Pause LIVE",
   "pauseLiveTitle": "Pause LIVE?",
   "pauseLiveBody": "Your LIVE video will temporarily freeze when paused. You can pause for up to 5 minutes, 3 times.",
-  "pause": "Pause"
+  "pause": "Pause",
+  "liveBroadcastIsPausedViewersCannotCurrentlySeeYou": "LIVE broadcast is paused, viewers cannot currently see you",
+  "theLiveBroadcastWillEndAfterTheCountdown": "The LIVE broadcast will end after the countdown",
+  "continueLive": "Continue LIVE",
+  "addComment": "Add a Comment...",
+  "endofLIVEBroadcast": "End of LIVE broadcast?",
+  "areYouSureYouWantToEndTheLIVEBroadcast": "Are you sure you want to end the LIVE broadcast?",
+  "endNow": "End Now",
+  "liveBroadcastRemaining5Minutes": "LIVE broadcast remaining 5 minutes",
+  "youOnlyHave5MinutesLeftinTheLiveBroadcast": "You only have 5 minutes left in the LIVE broadcast",
+  "commentsAreDisabled": "Comments are disabled"
 }

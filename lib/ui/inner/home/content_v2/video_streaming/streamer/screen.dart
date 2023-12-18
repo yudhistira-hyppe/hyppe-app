@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_livepush_plugin/live_pusher_preview.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
-import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/beforelive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/pauseLive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/streamer.dart';
-import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 
@@ -132,32 +128,29 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
         backgroundColor: Colors.white,
         body: WillPopScope(
           child: notifier.isloading
-              ? Container(height: SizeConfig.screenHeight, child: Center(child: CustomLoading()))
+              ? SizedBox(height: SizeConfig.screenHeight, child: const Center(child: CustomLoading()))
               : Stack(
                   children: [
                     _buildPreviewWidget(context, notifier),
-
-                    // notifier.statusLive == 'Offline'
-                    //     ? const BeforeLive()
-                    //     : notifier.statusLive == 'Prepare'
-                    //         ? prepare()
-                    //         : notifier.statusLive == 'StandBy'
-                    //             ? startCounting(notifier.timeReady)
-                    //             : notifier.statusLive == 'Ready'
-                    //                 ? prepare(titile: "Siaran LIVE telah dimulai!")
-                    //                 : Container(),
-                    // if (notifier.statusLive == 'Ready' || notifier.statusLive == 'Online') StreamerWidget(),
-                    PauseLive(),
-                    StreamerWidget(commentFocusNode: commentFocusNode),
+                    notifier.isloadingPreview
+                        ? SizedBox(height: SizeConfig.screenHeight, child: const Center(child: CustomLoading()))
+                        : notifier.statusLive == StatusStream.offline
+                            ? BeforeLive(mounted: mounted)
+                            : notifier.statusLive == StatusStream.prepare
+                                ? prepare()
+                                : notifier.statusLive == StatusStream.standBy
+                                    ? startCounting(notifier.timeReady)
+                                    : notifier.statusLive == StatusStream.ready
+                                        ? prepare(titile: "Siaran LIVE telah dimulai!")
+                                        : Container(),
+                    if (notifier.isPause) const PauseLive(),
+                    if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) StreamerWidget(commentFocusNode: commentFocusNode),
+                    // StreamerWidget(commentFocusNode: commentFocusNode),
                     // Align(
                     //   alignment: Alignment.center,
                     //   child: GestureDetector(
                     //     onTap: () {
-                    //       a++;
-                    //       _debouncer.run(() {
-                    //         print(a);
-                    //         a = 0;
-                    //       });
+                    //       // notifier.addCommentDummy();
                     //     }, //doesnt work
                     //     onPanDown: (details) => print('tdgreen'),
                     //     child: Container(
@@ -233,8 +226,6 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
   }
 
   Widget _buildPreviewWidget(BuildContext context, StreamerNotifier notifier) {
-    var x = 0.0;
-    var y = 0.0;
     var width = MediaQuery.of(context).size.width;
     var height = 1000.0;
 

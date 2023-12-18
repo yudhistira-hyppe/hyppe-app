@@ -66,13 +66,13 @@ class SelfProfileTop extends StatelessWidget {
             // SelectableText("${notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}")}"),
             // SelectableText("${SharedPreference().readStorage(SpKeys.fcmToken)}"),
             // SelectableText("${System().getDeviceIdentifier().toString()}"),
-            GestureDetector(
-              onTap: () {
-                // Routing().move(Routes.streamer);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => testAnimation()));
-              },
-              child: Text("stram"),
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     // Routing().move(Routes.streamer);
+            //     Navigator.of(context).push(MaterialPageRoute(builder: (context) => testAnimation()));
+            //   },
+            //   child: Text("stram"),
+            // ),
             Row(
               children: <Widget>[
                 // StoryColorValidator(

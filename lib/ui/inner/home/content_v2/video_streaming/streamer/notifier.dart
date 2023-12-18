@@ -1,5 +1,6 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_livepush_plugin/beauty/live_beauty.dart';
 import 'package:flutter_livepush_plugin/live_base.dart';
@@ -8,20 +9,55 @@ import 'package:flutter_livepush_plugin/live_pusher.dart';
 
 /// Import a header file.
 import 'package:flutter_livepush_plugin/live_push_config.dart';
+import 'package:hyppe/core/bloc/live_stream/bloc.dart';
+import 'package:hyppe/core/bloc/live_stream/state.dart';
+import 'package:hyppe/core/config/env.dart';
+import 'package:hyppe/core/config/url_constants.dart';
+import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart';
+import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/response/generic_response.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/core/services/socket_service.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/item.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class StreamerNotifier with ChangeNotifier {
+  static const String eventComment = 'COMMENT_STREAM_SINGLE';
+  static const String eventViewStream = 'VIEW_STREAM';
+  static const String eventLikeStream = 'LIKE_STREAM';
+  static const String eventCommentDisable = 'COMMENT_STREAM_DISABLED';
+
+  final _socketService = SocketService();
+
   int livePushMode = 0;
   int timeReady = 3;
+  int totLikes = 0;
+  int totViews = 0;
+
+  LinkStreamModel dataStream = LinkStreamModel();
 
   late AlivcBase _alivcBase;
   late AlivcLivePusher _alivcLivePusher;
   late AlivcLiveBeautyManager _beautyManager;
 
+  bool isloadingPreview = true;
   bool isloading = false;
   bool mute = false;
+  bool isPause = false;
+  bool isCommentDisable = false;
 
   FocusNode titleFocusNode = FocusNode();
   TextEditingController titleLiveCtrl = TextEditingController();
@@ -30,15 +66,19 @@ class StreamerNotifier with ChangeNotifier {
   String get titleLive => _titleLive;
   String pushURL = "rtmp://ingest.hyppe.cloud/Hyppe/hdstream?auth_key=1700732018-0-0-580e7fb4d21585a87315470a335513c1";
   //Status => Offline - Prepare - StandBy - Ready - Online
-  String statusLive = 'Offline';
+  StatusStream statusLive = StatusStream.offline;
 
   List<Item> _items = <Item>[];
   List<Item> get items => _items;
+
+  List<CommentLiveModel> comment = [];
 
   set titleLive(String val) {
     _titleLive = val;
     notifyListeners();
   }
+
+  LocalizationModelV2? tn;
 
   Future<void> init(BuildContext context) async {
     // final isGranted = await System().requestPermission(context, permissions: [Permission.camera, Permission.microphone]);
@@ -54,11 +94,11 @@ class StreamerNotifier with ChangeNotifier {
         print("======== belum ada lisensi $reason ========");
       }
     });
-
     await _setLivePusher();
     await _onListen();
     isloading = false;
     notifyListeners();
+    tn = context.read<TranslateNotifierV2>().translate;
   }
 
   Future requestPermission(BuildContext context) async {
@@ -97,9 +137,12 @@ class StreamerNotifier with ChangeNotifier {
       // );
     });
 
-    /// Listener for the stream ingest status
+    /// Listener for the stream ingest status`
     /// Configure the callback for preview start.
-    _alivcLivePusher.setOnPreviewStarted(() {});
+    _alivcLivePusher.setOnPreviewStarted(() {
+      isloadingPreview = false;
+      notifyListeners();
+    });
 
     /// Configure the callback for preview stop.
     _alivcLivePusher.setOnPreviewStoped(() {});
@@ -109,16 +152,22 @@ class StreamerNotifier with ChangeNotifier {
 
     /// Configure the callback for start of stream ingest.
     _alivcLivePusher.setOnPushStarted(() {
-      statusLive = 'StandBy';
+      statusLive = StatusStream.standBy;
       notifyListeners();
       countDown();
     });
 
     /// Configure the callback for pause of stream ingest from the camera.
-    _alivcLivePusher.setOnPushPaused(() {});
+    _alivcLivePusher.setOnPushPaused(() {
+      isPause = true;
+      notifyListeners();
+    });
 
     /// Configure the callback for resume of stream ingest from the camera.
-    _alivcLivePusher.setOnPushResumed(() {});
+    _alivcLivePusher.setOnPushResumed(() {
+      isPause = false;
+      notifyListeners();
+    });
 
     /// Configure the callback for restart of stream ingest.
     _alivcLivePusher.setOnPushRestart(() {});
@@ -273,14 +322,30 @@ class StreamerNotifier with ChangeNotifier {
 // Stream URL (download stream dari user yang nnton)
 // rtmp://live.hyppe.cloud/Hyppe/hdstream_hd-v?auth_key=1700732018-0-0-8e221f09856a236e9f2454e8dfddfae1
 
-  Future<void> clickPushAction() async {
-    statusLive = 'Prepare';
+  Future<void> clickPushAction(BuildContext context, mounted) async {
+    if (titleLive == '') {
+      titleLive = context.read<SelfProfileNotifier>().user.profile?.fullName ?? '';
+    }
+    statusLive = StatusStream.prepare;
     notifyListeners();
-    _alivcLivePusher.startPushWithURL(pushURL);
+    var init = await initLiveStream(context, mounted);
+    if (init) {
+      Future.delayed(Duration(seconds: 1));
+      _alivcLivePusher.startPushWithURL(dataStream.urlIngest ?? '');
+      _connectAndListenToSocket(eventComment);
+      _connectAndListenToSocket(eventLikeStream);
+      _connectAndListenToSocket(eventViewStream);
+
+      // _alivcLivePusher.startPushWithURL(pushURL);
+    } else {
+      statusLive = StatusStream.offline;
+      notifyListeners();
+    }
   }
 
   Future<void> destoryPusher() async {
-    statusLive = 'Offline';
+    WakelockPlus.disable();
+    statusLive = StatusStream.offline;
     _alivcLivePusher.stopPush();
     _alivcLivePusher.stopPreview();
     _alivcLivePusher.destroy();
@@ -297,10 +362,11 @@ class StreamerNotifier with ChangeNotifier {
       if (timeReady > 0) {
         countDown();
       } else {
-        statusLive = 'Ready';
+        statusLive = StatusStream.ready;
         notifyListeners();
-        Future.delayed(Duration(seconds: 2), () {
-          statusLive = 'Online';
+        Future.delayed(const Duration(seconds: 2), () {
+          statusLive = StatusStream.online;
+          initTimer();
           notifyListeners();
         });
       }
@@ -348,17 +414,169 @@ class StreamerNotifier with ChangeNotifier {
   void soundMute() {
     mute = !mute;
     _alivcLivePusher.setMute(mute);
-    print(mute);
+    debugPrint(mute.toString());
     notifyListeners();
   }
 
   Future<void> pauseLive() async {
-    try {
-      print("hahahahahha");
-    } catch (e) {
-      print("hahahahahha");
-    }
+    mute = true;
+    _alivcLivePusher.pause();
+    notifyListeners();
+  }
 
-    // _alivcLivePusher.pause();
+  Future<void> resumeLive() async {
+    mute = false;
+    _alivcLivePusher.resume();
+    notifyListeners();
+  }
+
+  int x = 0;
+  void addCommentDummy() {
+    // comment.insert(0, 'hahaha ${x++}');
+    notifyListeners();
+  }
+
+  void initTimer() async {
+    // adding delay to prevent if there's another that not disposed yet
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      WakelockPlus.enable();
+
+      Timer(const Duration(seconds: 10), () {
+        ShowGeneralDialog.generalDialog(
+          Routing.navigatorKey.currentContext,
+          titleText: tn?.liveBroadcastRemaining5Minutes ?? '',
+          bodyText: tn?.youOnlyHave5MinutesLeftinTheLiveBroadcast ?? 'Waktumu tinggal 5 menit dalam siaran LIVE',
+          maxLineTitle: 1,
+          maxLineBody: 4,
+          functionPrimary: () async {
+            Routing().moveBack();
+          },
+          titleButtonPrimary: tn?.understand ?? '',
+          barrierDismissible: true,
+          isHorizontal: false,
+          fillColor: false,
+        );
+      });
+    });
+  }
+
+  Future initLiveStream(BuildContext context, mounted) async {
+    bool returnNext = false;
+    bool connect = await System().checkConnections();
+
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {'title': titleLive};
+
+        if (mounted) {
+          await notifier.getLinkStream(context, data, UrlConstants.getLinkStream);
+        }
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          dataStream = LinkStreamModel.fromJson(fetch.data);
+          returnNext = true;
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      returnNext = false;
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          initLiveStream(context, mounted);
+        });
+      }
+    }
+    return returnNext;
+  }
+
+  Future disableComment(BuildContext context, mounted) async {
+    bool connect = await System().checkConnections();
+
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {"_id": dataStream.sId, "commentDisabled": !isCommentDisable, "type": "COMMENT_DISABLED"};
+        if (mounted) {
+          await notifier.getLinkStream(context, data, UrlConstants.updateStream);
+        }
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          isCommentDisable = !isCommentDisable;
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          initLiveStream(context, mounted);
+        });
+      }
+    }
+  }
+
+  void _connectAndListenToSocket(String events) async {
+    String? token = SharedPreference().readStorage(SpKeys.userToken);
+    String? email = SharedPreference().readStorage(SpKeys.email);
+
+    // if (_socketService.isRunning) {
+    //   _socketService.closeSocket();
+    // }
+
+    _socketService.connectToSocket(
+      () {
+        _socketService.events(
+          events,
+          (message) {
+            try {
+              handleSocket(message, events);
+              print('ini message dari socket $events ----- ${message}');
+            } catch (e) {
+              e.toString().logger();
+            }
+          },
+        );
+      },
+      host: Env.data.baseUrl,
+      options: OptionBuilder()
+          .setAuth({
+            "x-auth-user": "$email",
+            "x-auth-token": "$token",
+          })
+          .setTransports(
+            ['websocket'],
+          )
+          .setPath('${Env.data.versionApi}/socket.io')
+          .disableAutoConnect()
+          .build(),
+    );
+  }
+
+  void handleSocket(message, event) {
+    if (event == eventComment) {
+      var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
+      if (messages.idStream == dataStream.sId) {
+        comment.insert(0, messages);
+      }
+    } else if (event == eventLikeStream) {
+      var messages = CountLikeLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
+      if (messages.idStream == dataStream.sId) {
+        totLikes += messages.likeCount ?? 0;
+      }
+    } else if (event == eventViewStream) {
+      var messages = CountViewLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
+      if (messages.idStream == dataStream.sId) {
+        totViews = messages.viewCount ?? 0;
+      }
+    }
+    notifyListeners();
   }
 }

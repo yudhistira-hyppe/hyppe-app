@@ -9,11 +9,18 @@ class StreamerWidget extends StatelessWidget {
   final FocusNode? commentFocusNode;
   const StreamerWidget({super.key, this.commentFocusNode});
 
-  Widget interactive() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [ListCommentLive(commentFocusNode: commentFocusNode), twentyEightPx, const FormCommentLive()],
+  Widget interactive(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          ListCommentLive(commentFocusNode: commentFocusNode),
+          twentyEightPx,
+          FormCommentLive(commentFocusNode: commentFocusNode),
+        ],
+      ),
     );
   }
 
@@ -31,7 +38,7 @@ class StreamerWidget extends StatelessWidget {
             children: [TitleLive(), sixteenPx, StatusNControl()],
           ),
           const Spacer(),
-          interactive(),
+          interactive(context),
         ],
       ),
     ));

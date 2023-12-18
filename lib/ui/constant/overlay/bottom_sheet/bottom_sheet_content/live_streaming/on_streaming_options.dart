@@ -45,7 +45,10 @@ class _OnStreamingOptionsState extends State<OnStreamingOptions> {
             child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
           ),
           CustomGesture(
-              onTap: () async {},
+              onTap: () async {
+                widget.notifier.disableComment(context, mounted);
+                Routing().moveBack();
+              },
               margin: EdgeInsets.zero,
               child: Container(
                 width: double.infinity,
@@ -63,6 +66,7 @@ class _OnStreamingOptionsState extends State<OnStreamingOptions> {
           ),
           CustomGesture(
             onTap: () async {
+              Routing().moveBack();
               await ShowGeneralDialog.generalDialog(
                 context,
                 titleText: language.pauseLiveTitle ?? "Pause LIVE?",
@@ -70,10 +74,8 @@ class _OnStreamingOptionsState extends State<OnStreamingOptions> {
                 maxLineTitle: 1,
                 maxLineBody: 4,
                 functionPrimary: () async {
-                  print("asdasdasdad");
-                  // widget.notifier.pauseLive();
-
-                  // Routing().moveBack();
+                  widget.notifier.pauseLive();
+                  Routing().moveBack();
                 },
                 functionSecondary: () {
                   Routing().moveBack();

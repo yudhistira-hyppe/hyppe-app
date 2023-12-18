@@ -38,6 +38,8 @@ enum TypeApiSearch { normal, detailHashTag, detailInterest }
 
 enum AdsType { between, content, popup }
 
+enum StatusStream { offline, prepare, standBy, ready, online }
+
 enum ErrorType {
   myStory,
   peopleStory,
@@ -104,4 +106,4 @@ enum VideoShowMode { grid, screen }
 
 enum PageSrc { selfProfile, otherProfile, interest, hashtag, searchData }
 
-enum ReactStream { bad, neutral, good}
+enum ReactStream { bad, neutral, good }

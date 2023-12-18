@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
@@ -15,6 +16,7 @@ class TitleLive extends StatelessWidget {
   Widget build(BuildContext context) {
     var profileImage = context.read<HomeNotifier>().profileImage;
     var profileImageKey = context.read<HomeNotifier>().profileImageKey;
+    var tn = context.read<TranslateNotifierV2>().translate;
     return Consumer<StreamerNotifier>(
       builder: (_, notifier, __) => Expanded(
           flex: 2,
@@ -38,7 +40,7 @@ class TitleLive extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Office Vlog akjsdhkahsd kja hskdjah ksjdh aksjdh',
+                      notifier.titleLive,
                       style: TextStyle(
                         color: kHyppeTextPrimary,
                         fontWeight: FontWeight.w700,
@@ -47,7 +49,7 @@ class TitleLive extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      '200 Suka',
+                      '${notifier.totLikes} ${tn.like}',
                       style: TextStyle(
                         fontSize: 10,
                         color: kHyppeTextPrimary,

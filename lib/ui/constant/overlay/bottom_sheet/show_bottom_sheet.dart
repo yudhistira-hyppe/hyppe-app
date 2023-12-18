@@ -156,8 +156,8 @@ class ShowBottomSheet {
             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
               decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
-              // height: 145,
-              height: SizeConfig.screenHeight,
+              height: 145,
+              // height: SizeConfig.screenHeight,
               child: OnStreamingOptions(notifier: notifier),
             ),
           );

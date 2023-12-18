@@ -1068,6 +1068,16 @@ class LocalizationModelV2 {
   String? pauseLive;
   String? pauseLiveTitle;
   String? pauseLiveBody;
+  String? liveBroadcastIsPausedViewersCannotCurrentlySeeYou;
+  String? theLiveBroadcastWillEndAfterTheCountdown;
+  String? continueLive;
+  String? addComment;
+  String? endofLIVEBroadcast;
+  String? areYouSureYouWantToEndTheLIVEBroadcast;
+  String? liveBroadcastRemaining5Minutes;
+  String? youOnlyHave5MinutesLeftinTheLiveBroadcast;
+  String? commentsAreDisabled;
+  String? endNow;
   String? pause;
 
   LocalizationModelV2({
@@ -2140,6 +2150,16 @@ class LocalizationModelV2 {
     this.pauseLive,
     this.pauseLiveTitle,
     this.pauseLiveBody,
+    this.liveBroadcastIsPausedViewersCannotCurrentlySeeYou,
+    this.theLiveBroadcastWillEndAfterTheCountdown,
+    this.continueLive,
+    this.addComment,
+    this.endofLIVEBroadcast,
+    this.areYouSureYouWantToEndTheLIVEBroadcast,
+    this.liveBroadcastRemaining5Minutes,
+    this.youOnlyHave5MinutesLeftinTheLiveBroadcast,
+    this.commentsAreDisabled,
+    this.endNow,
     this.pause,
   });
 
@@ -3231,6 +3251,16 @@ class LocalizationModelV2 {
     pauseLive = json['pauseLive'];
     pauseLiveTitle = json['pauseLiveTitle'];
     pauseLiveBody = json['pauseLiveBody'];
+    liveBroadcastIsPausedViewersCannotCurrentlySeeYou = json['liveBroadcastIsPausedViewersCannotCurrentlySeeYou'];
+    theLiveBroadcastWillEndAfterTheCountdown = json['theLiveBroadcastWillEndAfterTheCountdown'];
+    continueLive = json['continueLive'];
+    addComment = json['addComment'];
+    endofLIVEBroadcast = json['endofLIVEBroadcast'];
+    areYouSureYouWantToEndTheLIVEBroadcast = json['areYouSureYouWantToEndTheLIVEBroadcast'];
+    liveBroadcastRemaining5Minutes = json['liveBroadcastRemaining5Minutes'];
+    youOnlyHave5MinutesLeftinTheLiveBroadcast = json['youOnlyHave5MinutesLeftinTheLiveBroadcast'];
+    commentsAreDisabled = json['commentsAreDisabled'];
+    endNow = json['endNow'];
     pause = json['pause'];
   }
 }

@@ -4,6 +4,8 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
+import 'package:provider/provider.dart';
 
 class ListCommentLive extends StatelessWidget {
   final FocusNode? commentFocusNode;
@@ -11,48 +13,60 @@ class ListCommentLive extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: SizeConfig.screenHeight! * (commentFocusNode!.hasFocus ? 0.15 : 0.3),
-      width: SizeConfig.screenWidth! * 0.7,
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomProfileImage(
-                  cacheKey: '',
-                  following: true,
-                  forStory: false,
-                  width: 26 * SizeConfig.scaleDiagonal,
-                  height: 26 * SizeConfig.scaleDiagonal,
-                  imageUrl: System().showUserPicture(''),
-                  // badge: notifier.user.profile?.urluserBadge,
-                  allwaysUseBadgePadding: false,
-                ),
-                twelvePx,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'marcelardianto',
-                        style: TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+    return Consumer<StreamerNotifier>(
+      builder: (_, notifier, __) => SizedBox(
+        height: SizeConfig.screenHeight! * (commentFocusNode!.hasFocus ? 0.15 : 0.3),
+        width: SizeConfig.screenWidth! * 0.7,
+        child: notifier.isCommentDisable
+            ? Container()
+            : ListView.builder(
+                reverse: true,
+                shrinkWrap: true,
+                itemCount: notifier.comment.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onLongPress: () {
+                      print("asdasd");
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomProfileImage(
+                            cacheKey: '',
+                            following: true,
+                            forStory: false,
+                            width: 26 * SizeConfig.scaleDiagonal,
+                            height: 26 * SizeConfig.scaleDiagonal,
+                            imageUrl: System().showUserPicture(
+                              notifier.comment[index].avatar?.mediaEndpoint,
+                            ),
+                            // badge: notifier.user.profile?.urluserBadge,
+                            allwaysUseBadgePadding: false,
+                          ),
+                          twelvePx,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  notifier.comment[index].username ?? '',
+                                  style: TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                                ),
+                                Text(
+                                  notifier.comment[index].messages ?? '',
+                                  style: TextStyle(color: kHyppeTextPrimary),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                      Text(
-                        'kuy makan pizza bareng!!',
-                        style: TextStyle(color: kHyppeTextPrimary),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          );
-        },
+                    ),
+                  );
+                },
+              ),
       ),
     );
   }

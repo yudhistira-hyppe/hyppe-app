@@ -12,7 +12,8 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class BeforeLive extends StatelessWidget {
-  const BeforeLive({super.key});
+  final bool? mounted;
+  const BeforeLive({super.key, this.mounted});
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +115,7 @@ class BeforeLive extends StatelessWidget {
                         color: Colors.transparent,
                       ),
                       GestureDetector(
-                        onTap: () => notifier.clickPushAction(),
+                        onTap: () => notifier.clickPushAction(context, mounted),
                         child: const Padding(
                           padding: EdgeInsets.only(right: 40.0, left: 25),
                           child: CustomIconWidget(

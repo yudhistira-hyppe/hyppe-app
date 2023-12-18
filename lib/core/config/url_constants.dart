@@ -69,6 +69,9 @@ class UrlConstants {
   /* User Content route */
   static const String bankRoute = "/api/banks";
 
+  /* User Content route */
+  static const String liveStramRoute = "/api/live";
+
   /* v3 user ads */
   static const String adsRoute = "/api/ads";
 
@@ -455,4 +458,8 @@ class UrlConstants {
 
   // Get Sticker
   static const String getStickers = "/api/mediastiker/listingapp";
+
+  //Live Stream
+  static const String getLinkStream = "$liveStramRoute/create";
+  static const String updateStream = "$liveStramRoute/update";
 }

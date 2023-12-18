@@ -64,16 +64,20 @@ class ShowGeneralDialog {
     showCupertinoDialog(context: _, barrierLabel: 'Barrier', barrierDismissible: true, builder: (context) => PermanentlyDeniedPermissionContent(permissions: permissions));
   }
 
-  static generalDialog(_,
-      {String? titleText,
-      String? bodyText,
-      int? maxLineTitle,
-      int? maxLineBody,
-      required Function functionPrimary,
-      Function? functionSecondary,
-      String? titleButtonPrimary,
-      String? titleButtonSecondary,
-      bool? barrierDismissible = false, bool isHorizontal = true}) {
+  static generalDialog(
+    _, {
+    String? titleText,
+    String? bodyText,
+    int? maxLineTitle,
+    int? maxLineBody,
+    required Function functionPrimary,
+    Function? functionSecondary,
+    String? titleButtonPrimary,
+    String? titleButtonSecondary,
+    bool? barrierDismissible = false,
+    bool isHorizontal = true,
+    bool? fillColor = true,
+  }) {
     showGeneralDialog(
       //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
@@ -93,6 +97,7 @@ class ShowGeneralDialog {
           titleButtonPrimary: titleButtonPrimary,
           titleButtonSecondary: titleButtonSecondary,
           isHorizontal: isHorizontal,
+          fillColor: fillColor ?? false,
         ),
       ),
       transitionBuilder: (context, animation, secondaryAnimation, child) {

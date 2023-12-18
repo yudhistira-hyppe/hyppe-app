@@ -151,18 +151,18 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                                             // haveStory: notifier.chatData[index].isHaveStory ?? false,
                                             haveStory: false,
                                             // child: ClipOval(
-                                              child: CustomProfileImage(
-                                                forStory: false,
-                                                following: true,
-                                                onTap: () => System().navigateToProfile(context, discussData?.senderOrReceiverInfo?.email ?? ''),
-                                                // imageUrl: notifier.userID == notifier.chatData[index].senderID
-                                                //     ? '${notifier.chatData[index].picReceiverUrl + SMALL}'
-                                                //     : '${notifier.chatData[index].picSenderUrl + SMALL}',
-                                                imageUrl: System().showUserPicture(discussData?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
-                                                height: 50 * SizeConfig.scaleDiagonal,
-                                                width: 50 * SizeConfig.scaleDiagonal,
-                                                badge: discussData?.senderOrReceiverInfo?.urluserBadge,
-                                              ),
+                                            child: CustomProfileImage(
+                                              forStory: false,
+                                              following: true,
+                                              onTap: () => System().navigateToProfile(context, discussData?.senderOrReceiverInfo?.email ?? ''),
+                                              // imageUrl: notifier.userID == notifier.chatData[index].senderID
+                                              //     ? '${notifier.chatData[index].picReceiverUrl + SMALL}'
+                                              //     : '${notifier.chatData[index].picSenderUrl + SMALL}',
+                                              imageUrl: System().showUserPicture(discussData?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
+                                              height: 50 * SizeConfig.scaleDiagonal,
+                                              width: 50 * SizeConfig.scaleDiagonal,
+                                              badge: discussData?.senderOrReceiverInfo?.urluserBadge,
+                                            ),
                                             // ),
                                           ),
                                           title: CustomTextWidget(
