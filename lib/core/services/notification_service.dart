@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
@@ -7,6 +8,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:provider/provider.dart';
 
@@ -141,11 +143,20 @@ class NotificationService {
           "array yg di dapat $index1".logger();
           notifier.onClickUser(materialAppKey.currentContext!, result[index1]);
         } else if (map['url'] != null) {
-          if (isFromSplash) {
-            page = 3;
-          } else {
-            Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby, argument: MainArgument(canShowAds: false, page: 3));
+          final String url = map['url'];
+          print('URL notif: $url');
+          if(url.contains('https://share.hyppe.app/')){
+            final uri = Uri.parse(url);
+            final data = await FirebaseDynamicLinks.instance.getDynamicLink(uri);
+            DynamicLinkService.handleDeepLink(data);
+          }else{
+            if (isFromSplash) {
+              page = 3;
+            } else {
+              Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby, argument: MainArgument(canShowAds: false, page: 3));
+            }
           }
+
         } else {
           throw 'Not recognize the type of the object of the notification ';
         }

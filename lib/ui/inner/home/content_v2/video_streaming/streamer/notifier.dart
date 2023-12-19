@@ -9,8 +9,13 @@ import 'package:flutter_livepush_plugin/live_pusher.dart';
 
 /// Import a header file.
 import 'package:flutter_livepush_plugin/live_push_config.dart';
+import 'package:hyppe/core/arguments/follow_user_argument.dart';
+import 'package:hyppe/core/bloc/follow/bloc.dart';
+import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/bloc/live_stream/bloc.dart';
 import 'package:hyppe/core/bloc/live_stream/state.dart';
+import 'package:hyppe/core/bloc/user_v2/bloc.dart';
+import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -18,7 +23,10 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
+import 'package:hyppe/core/models/collection/live_stream/viewers_live_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
+import 'package:hyppe/core/query_request/users_data_query.dart';
 import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/socket_service.dart';
@@ -35,6 +43,10 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class StreamerNotifier with ChangeNotifier {
+  final UsersDataQuery _usersFollowingQuery = UsersDataQuery()
+    ..eventType = InteractiveEventType.following
+    ..withEvents = [InteractiveEvent.initial, InteractiveEvent.accept, InteractiveEvent.request];
+
   static const String eventComment = 'COMMENT_STREAM_SINGLE';
   static const String eventViewStream = 'VIEW_STREAM';
   static const String eventLikeStream = 'LIKE_STREAM';
@@ -46,8 +58,12 @@ class StreamerNotifier with ChangeNotifier {
   int timeReady = 3;
   int totLikes = 0;
   int totViews = 0;
+  int pageViewers = 0;
+  int rowViewers = 10;
 
   LinkStreamModel dataStream = LinkStreamModel();
+  UserProfileModel audienceProfile = UserProfileModel();
+  StatusFollowing statusFollowing = StatusFollowing.none;
 
   late AlivcBase _alivcBase;
   late AlivcLivePusher _alivcLivePusher;
@@ -55,6 +71,10 @@ class StreamerNotifier with ChangeNotifier {
 
   bool isloadingPreview = true;
   bool isloading = false;
+  bool isloadingViewers = false;
+  bool isloadingViewersMore = false;
+  bool isloadingProfile = false;
+  bool isCheckLoading = false;
   bool mute = false;
   bool isPause = false;
   bool isCommentDisable = false;
@@ -62,6 +82,7 @@ class StreamerNotifier with ChangeNotifier {
   FocusNode titleFocusNode = FocusNode();
   TextEditingController titleLiveCtrl = TextEditingController();
 
+  String userName = '';
   String _titleLive = '';
   String get titleLive => _titleLive;
   String pushURL = "rtmp://ingest.hyppe.cloud/Hyppe/hdstream?auth_key=1700732018-0-0-580e7fb4d21585a87315470a335513c1";
@@ -71,6 +92,7 @@ class StreamerNotifier with ChangeNotifier {
   List<Item> _items = <Item>[];
   List<Item> get items => _items;
 
+  List<ViewersLiveModel> dataViewers = [];
   List<CommentLiveModel> comment = [];
 
   set titleLive(String val) {
@@ -323,6 +345,7 @@ class StreamerNotifier with ChangeNotifier {
 // rtmp://live.hyppe.cloud/Hyppe/hdstream_hd-v?auth_key=1700732018-0-0-8e221f09856a236e9f2454e8dfddfae1
 
   Future<void> clickPushAction(BuildContext context, mounted) async {
+    userName = context.read<SelfProfileNotifier>().user.profile?.username ?? '';
     if (titleLive == '') {
       titleLive = context.read<SelfProfileNotifier>().user.profile?.fullName ?? '';
     }
@@ -517,9 +540,137 @@ class StreamerNotifier with ChangeNotifier {
       if (context.mounted) {
         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
           Routing().moveBack();
+          disableComment(context, mounted);
+        });
+      }
+    }
+  }
+
+  Future getViewer(BuildContext context, mounted, {String? idStream}) async {
+    if (pageViewers == 0) isloadingViewers = true;
+    notifyListeners();
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {"_id": idStream ?? dataStream.sId, "page": pageViewers, "limit": rowViewers};
+        if (mounted) {
+          await notifier.getLinkStream(context, data, UrlConstants.viewrStream);
+        }
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          fetch.data.forEach((v) => dataViewers.add(ViewersLiveModel.fromJson(v)));
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
           initLiveStream(context, mounted);
         });
       }
+    }
+    isloadingViewers = false;
+    notifyListeners();
+  }
+
+  Future getMoreViewer(BuildContext context, mounted, idStream, ScrollController scrollController) async {
+    if (!isloadingViewers && scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+      isloadingViewersMore = true;
+      notifyListeners();
+      pageViewers++;
+      await getViewer(context, mounted, idStream: idStream);
+      isloadingViewersMore = false;
+      notifyListeners();
+    }
+  }
+
+  Future getProfileNCheck(BuildContext context, String email) async {
+    int totLoading = 0;
+    isloadingProfile = true;
+    notifyListeners();
+    await checkFollowingToUser(context, email).then((value) => totLoading++);
+    await getProfile(context, email).then((value) => totLoading++);
+    if (totLoading >= 2) {
+      isloadingProfile = false;
+      notifyListeners();
+    }
+  }
+
+  Future getProfile(BuildContext context, String email) async {
+    final usersNotifier = UserBloc();
+    checkFollowingToUser(context, email);
+    await usersNotifier.getUserProfilesBloc(context, search: email, withAlertMessage: true);
+
+    final usersFetch = usersNotifier.userFetch;
+
+    if (usersFetch.userState == UserState.getUserProfilesSuccess) {
+      audienceProfile = usersFetch.data;
+    }
+  }
+
+  Future<void> checkFollowingToUser(BuildContext context, String email) async {
+    try {
+      _usersFollowingQuery.senderOrReceiver = email;
+      _usersFollowingQuery.limit = 200;
+      print('reload contentsQuery : 11');
+      final resFuture = _usersFollowingQuery.reload(context);
+      final resRequest = await resFuture;
+
+      if (resRequest.isNotEmpty) {
+        if (resRequest.any((element) => element.event == InteractiveEvent.accept)) {
+          statusFollowing = StatusFollowing.following;
+        } else if (resRequest.any((element) => element.event == InteractiveEvent.initial)) {
+          statusFollowing = StatusFollowing.requested;
+        }
+      }
+    } catch (e) {
+      'load following request list: ERROR: $e'.logger();
+    }
+    notifyListeners();
+  }
+
+  Future followUser(BuildContext context, email, {isUnFollow = false}) async {
+    try {
+      // _system.actionReqiredIdCard(
+      //   context,
+      //   action: () async {
+      // statusFollowing = StatusFollowing.requested;
+      isCheckLoading = true;
+      final notifier = FollowBloc();
+      await notifier.followUserBlocV2(
+        context,
+        data: FollowUserArgument(
+          receiverParty: email ?? '',
+          eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
+        ),
+      );
+      final fetch = notifier.followFetch;
+      if (fetch.followState == FollowState.followUserSuccess) {
+        if (isUnFollow) {
+          statusFollowing = StatusFollowing.none;
+        } else {
+          statusFollowing = StatusFollowing.following;
+        }
+      } else if (statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following) {
+        statusFollowing = StatusFollowing.none;
+      }
+      // else {
+      //   statusFollowing = StatusFollowing.none;
+      // }
+      //   },
+      //   uploadContentAction: false,
+      // );
+      isCheckLoading = false;
+      notifyListeners();
+    } catch (e) {
+      'followUser error: $e'.logger();
+      // statusFollowing = StatusFollowing.none;
+      ShowBottomSheet.onShowSomethingWhenWrong(context);
     }
   }
 

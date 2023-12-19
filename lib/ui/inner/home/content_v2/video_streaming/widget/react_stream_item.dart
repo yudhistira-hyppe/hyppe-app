@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
-import '../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../constant/widget/custom_text_widget.dart';
 import '../../../../../constant/widget/icon_button_widget.dart';
 

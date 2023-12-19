@@ -21,7 +21,6 @@ import 'package:move_to_background/move_to_background.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/asset_path.dart';
-import '../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../constant/widget/custom_icon_widget.dart';
 import 'notifier.dart';
 
@@ -154,8 +153,8 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
     //               CustomGesture(
     //                 margin: const EdgeInsets.symmetric(horizontal: 16),
     //                 onTap: () {
-    //                   ShowBottomSheet.onStreamingOptions(context);
-    //                   // Routing().move(Routes.streamingFeedback);
+    //                   // ShowBottomSheet.onStreamingOptions(context);
+    //                   Routing().move(Routes.listStreamers);
     //                 },
     //                 child: Container(
     //                   width: double.infinity,
@@ -181,7 +180,7 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
     //                 child: Container(
     //                   width: double.infinity,
     //                   height: 44,
-    //
+
     //                   decoration: BoxDecoration(
     //                       borderRadius: BorderRadius.circular(8),
     //                       color: Colors.transparent,

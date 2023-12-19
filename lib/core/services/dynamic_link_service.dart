@@ -15,6 +15,8 @@ import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/services/system.dart';
 
 import '../../app.dart';
+import '../bloc/posts_v2/bloc.dart';
+import '../models/collection/posts/content_v2/content_data.dart';
 import 'shared_preference.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -60,7 +62,7 @@ class DynamicLinkService {
 
     // handle link that has been retrieved
     print("ini event handledeeplink");
-    _handleDeepLink(data);
+    handleDeepLink(data);
 
     // Register a link callback to fire if the app is opened up from the background
     // using a dynamic link.
@@ -68,7 +70,7 @@ class DynamicLinkService {
       (event) {
         print("ini event handledeeplink 202020202 $event");
         // handle link that has been retrieved
-        _handleDeepLink(event);
+        handleDeepLink(event);
       },
       onError: (e) {
         'Link Failed: ${e.toString()}'.logger();
@@ -76,7 +78,32 @@ class DynamicLinkService {
     );
   }
 
-  static void _handleDeepLink(PendingDynamicLinkData? data) async {
+  Future<ContentData?> getDetailPost(BuildContext context, String postID, String visibility) async {
+    try {
+      // loadPic = true;
+      final notifier = PostsBloc();
+      await notifier.getContentsBlocV2(context, postID: postID, pageRows: 1, pageNumber: 1, type: FeatureType.diary, visibility: visibility);
+      final fetch = notifier.postsFetch;
+
+      final _res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
+      if (_res != null) {
+        if (_res.isNotEmpty) {
+          return _res.first;
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    } catch (e) {
+      e.logger();
+    } finally {
+      // loadPic = false;
+    }
+    return null;
+  }
+
+  static void handleDeepLink(PendingDynamicLinkData? data) async {
     Uri? deepLink = data?.link;
     deepLink.logger();
     if (deepLink != null) {

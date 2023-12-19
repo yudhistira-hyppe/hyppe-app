@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:hyppe/core/arguments/general_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -19,6 +20,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/constants/asset_path.dart';
+import '../../../../core/services/dynamic_link_service.dart';
 import '../../../constant/widget/custom_icon_widget.dart';
 
 class Component extends StatefulWidget {
@@ -52,14 +54,20 @@ class _ComponentState extends State<Component> {
               final allow = Uri.parse(fixUrl).isAbsolute;
               if (allow) {
                 try {
-                  final uri = Uri.parse(fixUrl);
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(
-                      uri,
-                      mode: LaunchMode.externalApplication,
-                    );
-                  } else {
-                    throw "Could not launch $uri";
+                  if(fixUrl.contains('https://share.hyppe.app/')){
+                    final uri = Uri.parse(fixUrl);
+                    final data = await FirebaseDynamicLinks.instance.getDynamicLink(uri);
+                    DynamicLinkService.handleDeepLink(data);
+                  }else{
+                    final uri = Uri.parse(fixUrl);
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(
+                        uri,
+                        mode: LaunchMode.externalApplication,
+                      );
+                    } else {
+                      throw "Could not launch $uri";
+                    }
                   }
                   // can't launch url, there is some error
                 } catch (e) {
@@ -183,7 +191,7 @@ class _ComponentState extends State<Component> {
                         sixPx,
                         CustomTextWidget(
                           textToDisplay: widget.data?.createdAt != null
-                              ? System().readTimestamp(DateFormat("yyyy-MM-dd hh:mm:ss").parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true)
+                              ? System().readTimestamp(DateFormat("yyyy-MM-dd HH:mm:ss").parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true)
                               : '',
                           textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
                         ),

@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
@@ -41,7 +42,7 @@ class TitleLive extends StatelessWidget {
                   children: [
                     Text(
                       notifier.titleLive,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: kHyppeTextPrimary,
                         fontWeight: FontWeight.w700,
                       ),
@@ -50,7 +51,7 @@ class TitleLive extends StatelessWidget {
                     ),
                     Text(
                       '${notifier.totLikes} ${tn.like}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 10,
                         color: kHyppeTextPrimary,
                       ),
@@ -58,9 +59,14 @@ class TitleLive extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
-                Icons.keyboard_arrow_down,
-                color: kHyppeTextPrimary,
+              GestureDetector(
+                onTap: () {
+                  ShowBottomSheet.onStreamWatchersStatus(context, notifier);
+                },
+                child: const Icon(
+                  Icons.keyboard_arrow_down,
+                  color: kHyppeTextPrimary,
+                ),
               )
             ],
           )),

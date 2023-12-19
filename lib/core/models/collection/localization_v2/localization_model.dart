@@ -1079,6 +1079,7 @@ class LocalizationModelV2 {
   String? commentsAreDisabled;
   String? endNow;
   String? pause;
+  String? exploreLiveToLivenUpYourDay;
 
   LocalizationModelV2({
     this.login,
@@ -2161,6 +2162,7 @@ class LocalizationModelV2 {
     this.commentsAreDisabled,
     this.endNow,
     this.pause,
+    this.exploreLiveToLivenUpYourDay,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -3262,5 +3264,6 @@ class LocalizationModelV2 {
     commentsAreDisabled = json['commentsAreDisabled'];
     endNow = json['endNow'];
     pause = json['pause'];
+    exploreLiveToLivenUpYourDay = json['exploreLiveToLivenUpYourDay'];
   }
 }

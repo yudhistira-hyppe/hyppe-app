@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
@@ -26,42 +27,45 @@ class ListCommentLive extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onLongPress: () {
-                      print("asdasd");
+                      ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '');
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomProfileImage(
-                            cacheKey: '',
-                            following: true,
-                            forStory: false,
-                            width: 26 * SizeConfig.scaleDiagonal,
-                            height: 26 * SizeConfig.scaleDiagonal,
-                            imageUrl: System().showUserPicture(
-                              notifier.comment[index].avatar?.mediaEndpoint,
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomProfileImage(
+                              cacheKey: '',
+                              following: true,
+                              forStory: false,
+                              width: 26 * SizeConfig.scaleDiagonal,
+                              height: 26 * SizeConfig.scaleDiagonal,
+                              imageUrl: System().showUserPicture(
+                                notifier.comment[index].avatar?.mediaEndpoint,
+                              ),
+                              // badge: notifier.user.profile?.urluserBadge,
+                              allwaysUseBadgePadding: false,
                             ),
-                            // badge: notifier.user.profile?.urluserBadge,
-                            allwaysUseBadgePadding: false,
-                          ),
-                          twelvePx,
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  notifier.comment[index].username ?? '',
-                                  style: TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
-                                ),
-                                Text(
-                                  notifier.comment[index].messages ?? '',
-                                  style: TextStyle(color: kHyppeTextPrimary),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
+                            twelvePx,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    notifier.comment[index].username ?? '',
+                                    style: TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                                  ),
+                                  Text(
+                                    notifier.comment[index].messages ?? '',
+                                    style: TextStyle(color: kHyppeTextPrimary),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   );

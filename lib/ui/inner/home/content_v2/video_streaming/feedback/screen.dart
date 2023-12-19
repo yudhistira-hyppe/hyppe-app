@@ -19,8 +19,7 @@ class StreamingFeedbackScreen extends StatefulWidget {
   const StreamingFeedbackScreen({super.key});
 
   @override
-  State<StreamingFeedbackScreen> createState() =>
-      _StreamingFeedbackScreenState();
+  State<StreamingFeedbackScreen> createState() => _StreamingFeedbackScreenState();
 }
 
 class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
@@ -50,22 +49,18 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                 ),
                 twentyPx,
                 CustomTextWidget(
-                  textToDisplay:
-                      language.liveVideoHasEnded ?? 'LIVE telah berakhir',
-                  textStyle: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.bold),
+                  textToDisplay: language.liveVideoHasEnded ?? 'LIVE telah berakhir',
+                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 eightPx,
                 CustomTextWidget(
-                  textToDisplay:
-                      '18 September 2023 • ${language.duration} 10:23',
+                  textToDisplay: '18 September 2023 • ${language.duration} 10:23',
                   textStyle: const TextStyle(fontSize: 12, color: kHyppeBurem),
                 ),
                 twentyPx,
                 Container(
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                   decoration: BoxDecoration(
                     border: Border.all(color: kHyppeBorderTab),
                     borderRadius: BorderRadius.circular(3),
@@ -75,8 +70,7 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                     children: [
                       CustomTextWidget(
                         textToDisplay: language.engagement ?? 'Keterlibatan',
-                        textStyle: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       sixteenPx,
                       Row(
@@ -86,28 +80,20 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              itemStatus(
-                                  language.totalViewers ?? 'Jumlah Penonton',
-                                  '100'),
+                              itemStatus(language.totalViewers ?? 'Jumlah Penonton', '100'),
                               twentyPx,
-                              itemStatus(
-                                  language.totalComments ?? 'Jumlah Komentar',
-                                  '5000'),
+                              itemStatus(language.totalComments ?? 'Jumlah Komentar', '5000'),
                             ],
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              itemStatus(
-                                  language.totalShares ?? 'Jumlah Membagikan',
-                                  '30'),
+                              itemStatus(language.totalShares ?? 'Jumlah Membagikan', '30'),
                               twentyPx,
-                              itemStatus(language.totalLikes ?? 'Jumlah Suka',
-                                  '10.000'),
+                              itemStatus(language.totalLikes ?? 'Jumlah Suka', '10.000'),
                             ],
                           ),
-                          itemStatus(
-                              language.newFollowers ?? 'Pengikut Baru', '2')
+                          itemStatus(language.newFollowers ?? 'Pengikut Baru', '2')
                         ],
                       ),
                     ],
@@ -116,41 +102,36 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                 twelvePx,
                 Container(
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                   decoration: BoxDecoration(
                     border: Border.all(color: kHyppeBorderTab),
                     borderRadius: BorderRadius.circular(3),
                   ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomTextWidget(
-                          textToDisplay: language.viewerList ?? 'List Penonton',
-                          textStyle: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    CustomTextWidget(
+                      textToDisplay: language.viewerList ?? 'List Penonton',
+                      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    CustomGesture(
+                      margin: EdgeInsets.zero,
+                      onTap: () {
+                        // ShowBottomSheet.onListOfWatcher(context);
+                      },
+                      child: CustomTextWidget(
+                        textToDisplay: '100',
+                        textStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: context.getColorScheme().primary,
                         ),
-                        CustomGesture(
-                          margin: EdgeInsets.zero,
-                          onTap: () {
-                            ShowBottomSheet.onListOfWatcher(context);
-                          },
-                          child: CustomTextWidget(
-                            textToDisplay: '100',
-                            textStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: context.getColorScheme().primary,
-                            ),
-                          ),
-                        ),
-                      ]),
+                      ),
+                    ),
+                  ]),
                 ),
                 twelvePx,
                 Container(
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                   decoration: BoxDecoration(
                     border: Border.all(color: kHyppeBorderTab),
                     borderRadius: BorderRadius.circular(3),
@@ -159,10 +140,8 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextWidget(
-                        textToDisplay: language.howWasYourLiveExperience ??
-                            'Bagaimana pengalaman siaran LIVE-mu?',
-                        textStyle: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        textToDisplay: language.howWasYourLiveExperience ?? 'Bagaimana pengalaman siaran LIVE-mu?',
+                        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       twentyPx,
                       reactChosen != null
@@ -180,14 +159,12 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                                               : '${AssetPath.vectorPath}good_active.svg'),
                                   eightPx,
                                   CustomTextWidget(
-                                    textToDisplay:
-                                        reactChosen == ReactStream.bad
-                                            ? (language.poor ?? 'Buruk')
-                                            : reactChosen == ReactStream.neutral
-                                                ? (language.neutral ?? 'Netral')
-                                                : (language.good ?? 'Baik'),
-                                    textStyle: const TextStyle(
-                                        fontSize: 12, color: kHyppeBurem),
+                                    textToDisplay: reactChosen == ReactStream.bad
+                                        ? (language.poor ?? 'Buruk')
+                                        : reactChosen == ReactStream.neutral
+                                            ? (language.neutral ?? 'Netral')
+                                            : (language.good ?? 'Baik'),
+                                    textStyle: const TextStyle(fontSize: 12, color: kHyppeBurem),
                                   ),
                                 ],
                               ),
@@ -197,33 +174,24 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                               children: [
                                 ReactStreamItem(
                                     onTap: () async {
-                                      reactChosen = await ShowBottomSheet()
-                                          .onReactStreaming(
-                                              context, ReactStream.bad);
+                                      reactChosen = await ShowBottomSheet().onReactStreaming(context, ReactStream.bad);
                                       setState(() {});
                                     },
-                                    svg:
-                                        '${AssetPath.vectorPath}bad_outline.svg',
+                                    svg: '${AssetPath.vectorPath}bad_outline.svg',
                                     desc: (language.poor ?? 'Buruk')),
                                 ReactStreamItem(
                                     onTap: () async {
-                                      reactChosen = await ShowBottomSheet()
-                                          .onReactStreaming(
-                                              context, ReactStream.neutral);
+                                      reactChosen = await ShowBottomSheet().onReactStreaming(context, ReactStream.neutral);
                                       setState(() {});
                                     },
-                                    svg:
-                                        '${AssetPath.vectorPath}neutral_outline.svg',
+                                    svg: '${AssetPath.vectorPath}neutral_outline.svg',
                                     desc: (language.neutral ?? 'Netral')),
                                 ReactStreamItem(
                                     onTap: () async {
-                                      reactChosen = await ShowBottomSheet()
-                                          .onReactStreaming(
-                                              context, ReactStream.good);
+                                      reactChosen = await ShowBottomSheet().onReactStreaming(context, ReactStream.good);
                                       setState(() {});
                                     },
-                                    svg:
-                                        '${AssetPath.vectorPath}good_outline.svg',
+                                    svg: '${AssetPath.vectorPath}good_outline.svg',
                                     desc: (language.good ?? 'Baik'))
                               ],
                             )

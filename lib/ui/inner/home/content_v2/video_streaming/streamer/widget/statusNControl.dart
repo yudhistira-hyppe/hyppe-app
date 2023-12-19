@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -32,24 +33,29 @@ class StatusNControl extends StatelessWidget {
                 style: TextStyle(color: kHyppeTextPrimary, wordSpacing: 10),
               ),
             ),
-            Container(
-              width: 50 * SizeConfig.scaleDiagonal,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              decoration: BoxDecoration(color: kHyppeTransparent, borderRadius: BorderRadius.circular(3)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.remove_red_eye_outlined,
-                    color: kHyppeTextPrimary,
-                    size: 12,
-                  ),
-                  sixPx,
-                  Text(
-                    '${notifier.totViews}',
-                    style: const TextStyle(color: kHyppeTextPrimary, fontSize: 10, fontWeight: FontWeight.w700),
-                  ),
-                ],
+            GestureDetector(
+              onTap: () {
+                ShowBottomSheet.onStreamWatchersStatus(context, notifier);
+              },
+              child: Container(
+                width: 50 * SizeConfig.scaleDiagonal,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                decoration: BoxDecoration(color: kHyppeTransparent, borderRadius: BorderRadius.circular(3)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.remove_red_eye_outlined,
+                      color: kHyppeTextPrimary,
+                      size: 12,
+                    ),
+                    sixPx,
+                    Text(
+                      '${notifier.totViews}',
+                      style: const TextStyle(color: kHyppeTextPrimary, fontSize: 10, fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
               ),
             ),
             Column(

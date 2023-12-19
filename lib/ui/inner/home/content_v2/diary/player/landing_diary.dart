@@ -503,14 +503,14 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
         Map jsonMap = json.decode(fetch.data.toString());
         auth = jsonMap['PlayAuth'];
 
-        // fAliplayer?.setVidAuth(
-        //   vid: apsaraId,
-        //   region: DataSourceRelated.defaultRegion,
-        //   playAuth: auth,
-        //   definitionList: [DataSourceRelated.definitionList],
-        // );
+        fAliplayer?.setVidAuth(
+          vid: apsaraId,
+          region: DataSourceRelated.defaultRegion,
+          playAuth: auth,
+          definitionList: [DataSourceRelated.definitionList],
+        );
 
-        fAliplayer?.setUrl("rtmp://live.hyppe.cloud/hyppe-live/657c273b0ab4e05eb5e9b217?auth_key=1702638924-0-0-3552ac8a8381dfd1e71bc48280564583");
+        // fAliplayer?.setUrl("");
 
         isloading = false;
         if (mounted) {

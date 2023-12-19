@@ -104,6 +104,7 @@ class ShowBottomSheet {
 
   static onStreamWatchersStatus(
     context,
+    StreamerNotifier notifier,
   ) async {
     await showModalBottomSheet(
         context: context,
@@ -117,7 +118,12 @@ class ShowBottomSheet {
             child: Container(
               decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
               height: context.getHeight() * 0.6,
-              child: const OnLiveStreamStatus(),
+              child: ChangeNotifierProvider<StreamerNotifier>(
+                  create: (context) => StreamerNotifier(),
+                  child: OnLiveStreamStatus(
+                    idStream: notifier.dataStream.sId,
+                    notifier: notifier,
+                  )),
             ),
           );
         });
@@ -166,6 +172,7 @@ class ShowBottomSheet {
 
   static onWatcherStatus(
     context,
+    String email,
   ) async {
     await showModalBottomSheet(
         context: context,
@@ -179,7 +186,11 @@ class ShowBottomSheet {
             child: Container(
               decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
               height: context.getHeight() * 0.3,
-              child: const OnWatcherStatus(),
+              child: ChangeNotifierProvider<StreamerNotifier>(
+                  create: (context) => StreamerNotifier(),
+                  child: OnWatcherStatus(
+                    email: email,
+                  )),
             ),
           );
         });
@@ -206,7 +217,7 @@ class ShowBottomSheet {
         });
   }
 
-  static onListOfWatcher(context) async {
+  static onListOfWatcher(context, StreamerNotifier notifier) async {
     await showModalBottomSheet(
         context: context,
         isScrollControlled: true,

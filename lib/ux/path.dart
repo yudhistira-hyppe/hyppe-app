@@ -53,6 +53,7 @@ class Routes {
   static const String picSlideDetailPreview = '/pic-slide-detail-preview';
 
   static const String diaryDetail = '/diary-detail';
+  static const String diaryView = '/diary-view';
   static const String diarySeeAllScreen = '/diary-see-all-screen';
 
   // static const String storyDetail = '/story-detail';
@@ -153,4 +154,5 @@ class Routes {
   //======================== Streaming ============
   static const String streamer = '/streamer';
   static const String streamingFeedback = '/streaming-feedback';
+  static const String listStreamers = '/list-streamers';
 }
