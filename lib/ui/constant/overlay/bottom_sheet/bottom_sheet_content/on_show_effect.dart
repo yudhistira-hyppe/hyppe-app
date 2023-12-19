@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/effect/effect_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
@@ -23,7 +24,7 @@ class OnShowEffect extends StatelessWidget {
 
     return Consumer<CameraNotifier>(
       builder: (context, notifier, child) => Container(
-        height: double.infinity,
+        height: context.getHeight() * 0.6,
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.3),

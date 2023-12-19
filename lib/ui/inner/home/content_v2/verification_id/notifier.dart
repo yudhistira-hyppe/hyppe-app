@@ -356,13 +356,13 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     //   cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     // }
     ShowGeneralDialog.loadingDialog(context);
-    cameraNotifier.takePicture().then((filePath) async {
+    cameraNotifier.takePicture(context).then((filePath) async {
       if (filePath != null) {
         imagePath = filePath.path;
         aspectRatio = cameraNotifier.cameraAspectRatio;
         await validateIDCard(context);
         Routing().moveAndPop(Routes.verificationIDStep5);
-        context.read<CameraNotifier>().flashOff();
+        context.read<CameraNotifier>().flashOff(Routing.navigatorKey.currentContext ?? context);
       }
     });
   }
@@ -377,7 +377,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     //   cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     // }
     final cameraDirection = cameraNotifier.cameraController?.description.lensDirection;
-    cameraNotifier.takePicture().then((filePath) async {
+    cameraNotifier.takePicture(context).then((filePath) async {
       if (filePath != null) {
         selfiePath = filePath.path;
         aspectRatio = cameraNotifier.cameraAspectRatio;

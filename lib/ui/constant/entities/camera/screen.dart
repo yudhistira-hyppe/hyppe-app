@@ -5,6 +5,7 @@ import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
@@ -61,7 +62,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
       if (widget.onChangeAppLifecycleState != null) widget.onChangeAppLifecycleState!();
       notifier.disposeCamera(context);
     } else if (state == AppLifecycleState.resumed) {
-      notifier.onNewCameraSelected();
+      notifier.onNewCameraSelected(Routing.navigatorKey.currentContext!);
     }
     super.didChangeAppLifecycleState(state);
   }

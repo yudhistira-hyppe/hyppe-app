@@ -437,13 +437,14 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   void onRecordedVideo(BuildContext context) async {
     print('start recording');
     dynamic cameraNotifier;
+    final fixContext = Routing.navigatorKey.currentContext ?? context;
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
     if (canDeppAr == 'true') {
-      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+      cameraNotifier = Provider.of<CameraDevicesNotifier>(fixContext, listen: false);
     } else {
-      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+      cameraNotifier = Provider.of<CameraNotifier>(fixContext, listen: false);
     }
-    _startTimer(context);
+    _startTimer(fixContext);
     cameraNotifier.startVideoRecording();
     if (!(await WakelockPlus.enabled)) {
       WakelockPlus.enable();
@@ -492,7 +493,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     }
-    cameraNotifier.takePicture().then((filePath) async {
+    cameraNotifier.takePicture(context).then((filePath) async {
       if (filePath != null) {
         final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
         notifier.fileContent = [filePath.path];

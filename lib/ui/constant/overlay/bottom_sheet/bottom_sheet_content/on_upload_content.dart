@@ -210,7 +210,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                                 children: [
                                   ListTile(
                                     visualDensity: VisualDensity.adaptivePlatformDensity,
-                                    onTap: () {
+                                    onTap: () async {
                                       if (newUser == "FALSE") {
                                         context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
                                         // notifier.thumbnailLocalMedia();
@@ -221,7 +221,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                                         if (tempIsHome) {
                                           isHomeScreen = false;
                                         }
-                                        Routing().moveAndPop(Routes.makeContent);
+                                        await Routing().moveAndPop(Routes.makeContent);
                                         if (tempIsHome) {
                                           isHomeScreen = true;
                                         }
@@ -258,7 +258,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                                 children: [
                                   ListTile(
                                     visualDensity: VisualDensity.adaptivePlatformDensity,
-                                    onTap: () {
+                                    onTap: () async {
                                       if (newUser == "FALSE") {
                                         context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
                                         // notifier.thumbnailLocalMedia();
@@ -269,7 +269,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                                         if (tempIsHome) {
                                           isHomeScreen = false;
                                         }
-                                        Routing().moveAndPop(Routes.makeContent);
+                                        await Routing().moveAndPop(Routes.makeContent);
                                         if (tempIsHome) {
                                           isHomeScreen = true;
                                         }
@@ -304,7 +304,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                         widget.isPict
                             ? ListTile(
                                 visualDensity: VisualDensity.adaptivePlatformDensity,
-                                onTap: () {
+                                onTap: () async {
                                   if (newUser == "FALSE") {
                                     context.read<PreviewVidNotifier>().canPlayOpenApps = false; //biar ga play di landingpage
                                     // notifier.thumbnailLocalMedia();
@@ -315,16 +315,10 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                                     if (tempIsHome) {
                                       isHomeScreen = false;
                                     }
-                                    Routing().moveAndPop(Routes.makeContent);
+                                    await Routing().moveAndPop(Routes.makeContent);
                                     if (tempIsHome) {
                                       isHomeScreen = true;
                                     }
-                                    // Future.delayed(const Duration(seconds: 1), (){
-                                    //   Routing().moveAndPop(Routes.makeContent);
-                                    //   if(tempIsHome){
-                                    //     isHomeScreen = true;
-                                    //   }
-                                    // });
                                   }
                                 },
                                 dense: true,
