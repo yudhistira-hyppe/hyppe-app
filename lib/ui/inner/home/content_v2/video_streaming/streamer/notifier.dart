@@ -94,6 +94,7 @@ class StreamerNotifier with ChangeNotifier {
 
   List<ViewersLiveModel> dataViewers = [];
   List<CommentLiveModel> comment = [];
+  List<int> animationIndexes = [];
 
   set titleLive(String val) {
     _titleLive = val;

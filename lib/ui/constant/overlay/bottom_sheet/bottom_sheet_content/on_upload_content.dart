@@ -265,7 +265,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                                     if (tempIsHome) {
                                       isHomeScreen = false;
                                     }
-                                    Routing().moveAndPop(Routes.makeContent);
+                                    await Routing().moveAndPop(Routes.makeContent);
                                     if (tempIsHome) {
                                       isHomeScreen = true;
                                     }

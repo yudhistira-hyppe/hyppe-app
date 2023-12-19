@@ -214,7 +214,7 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
     // }
   }
 
-  Future<XFile?> takePicture() async {
+  Future<XFile?> takePicture(BuildContext context) async {
     XFile _result;
     if (!isInitialized) {
       return null;
@@ -244,7 +244,7 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
     }
 
     try {
-      await cameraController!.startVideoRecording();
+      cameraController!.startVideoRecording();
       notifyListeners();
     } on CameraException catch (e) {
       e.logger();

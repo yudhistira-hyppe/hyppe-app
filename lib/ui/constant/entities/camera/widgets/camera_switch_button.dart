@@ -4,6 +4,8 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/provider_widget.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../ux/routing.dart';
+
 class CameraSwitchButton extends ProviderWidget<CameraNotifier> {
   const CameraSwitchButton({Key? key}) : super(key: key, reactive: false);
 
@@ -13,7 +15,7 @@ class CameraSwitchButton extends ProviderWidget<CameraNotifier> {
       onDoubleTap: null,
       onTap: () {
         // notifier.setLoading(true, loadingObject: CameraNotifier.loadingForSwitching);
-        Future.delayed(const Duration(milliseconds: 250), () => notifier.onNewCameraSelected());
+        Future.delayed(const Duration(milliseconds: 250), () => notifier.onNewCameraSelected(Routing.navigatorKey.currentContext ?? context));
       },
       child: const CustomIconWidget(
         defaultColor: false,

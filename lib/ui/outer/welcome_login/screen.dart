@@ -180,7 +180,6 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
     //                 child: Container(
     //                   width: double.infinity,
     //                   height: 44,
-
     //                   decoration: BoxDecoration(
     //                       borderRadius: BorderRadius.circular(8),
     //                       color: Colors.transparent,

@@ -252,16 +252,22 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 
-  Future<void> onNewCameraSelected() async {
+  Future<void> onNewCameraSelected(BuildContext context) async {
+    final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
     print('DeepAR: balik kamera');
     // isFlash = false;
     deepArController!.flipCamera();
     print('myFlash: $isFlash');
-    if (isFlash) {
-      Future.delayed(const Duration(seconds: 1), () async {
-        await deepArController!.toggleFlash();
-      });
+    if(notifier.featureType == FeatureType.pic || (notifier.featureType == FeatureType.story && !notifier.isVideo)){
+
+    }else{
+      if (isFlash) {
+        Future.delayed(const Duration(seconds: 1), () async {
+          await deepArController!.toggleFlash();
+        });
+      }
     }
+
   }
 
   disposeCamera(BuildContext context) async {
@@ -306,19 +312,49 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     return Resolution.veryHigh;
   }
 
-  Future<void> onFlashButtonPressed() async {
-    isFlash = await deepArController!.toggleFlash();
-  }
-
-  void flashOff() async {
-    if (deepArController!.flashState) {
+  Future<void> onFlashButtonPressed(BuildContext context) async {
+    final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
+    if(notifier.featureType == FeatureType.pic){
+      isFlash = !isFlash;
+    }else if(notifier.featureType == FeatureType.story){
+      if(notifier.isVideo){
+        isFlash = await deepArController!.toggleFlash();
+      }else{
+        isFlash = !isFlash;
+      }
+    }else{
       isFlash = await deepArController!.toggleFlash();
     }
+
+  }
+
+  void flashOff(BuildContext context) async {
+    final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
+    if(notifier.featureType == FeatureType.pic){
+      if(isFlash){
+        isFlash = !isFlash;
+      }
+    }else if(notifier.featureType == FeatureType.story){
+      if(notifier.isVideo){
+        if (deepArController!.flashState) {
+          isFlash = await deepArController!.toggleFlash();
+        }
+      }else{
+        if(isFlash){
+          isFlash = !isFlash;
+        }
+      }
+    }else{
+      if (deepArController!.flashState) {
+        isFlash = await deepArController!.toggleFlash();
+      }
+    }
+
   }
 
   String flashIcon() {
     print('flashMode $flashMode : ${deepArController!.flashState}');
-    return "${AssetPath.vectorPath}ic_flash.svg";
+    return isFlash ? "${AssetPath.vectorPath}ic_flash.svg" : "${AssetPath.vectorPath}ic_unflash.svg";
     // if(isFlash){
     //   return "${AssetPath.vectorPath}flash-off.svg";
     // }else{
@@ -333,10 +369,19 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     // }
   }
 
-  Future<File?> takePicture() async {
-    if (isFlash) {
-      isFlash = (await deepArController?.toggleFlash() ?? false);
+  Future<File?> takePicture(BuildContext context) async {
+    final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
+    if(notifier.featureType == FeatureType.pic || (notifier.featureType == FeatureType.story && !notifier.isVideo)){
+      if (isFlash){
+        await deepArController?.toggleFlash();
+        await Future.delayed(const Duration(seconds: 1));
+      }
+    }else{
+      if (isFlash) {
+        isFlash = (await deepArController?.toggleFlash() ?? false);
+      }
     }
+
     File _result;
     File? _result2;
     if (!isInitialized) {
@@ -350,7 +395,9 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     try {
       await deepArController!.takeScreenshot().then((file) {
         _result2 = file;
-
+        if(isFlash){
+          deepArController?.toggleFlash();
+        }
         // OpenFile.open(file.path);
       });
       _result = _result2!;
@@ -375,7 +422,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
     try {
       _showEffected = false;
-      await deepArController!.startVideoRecording();
+      deepArController!.startVideoRecording();
       notifyListeners();
     } on CameraException catch (e) {
       e.logger();

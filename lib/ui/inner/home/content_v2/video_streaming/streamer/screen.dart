@@ -6,15 +6,16 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/beforelive.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/pauseLive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/streamer.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
+import 'dart:math' as math;
 
 class Debouncer {
   final int milliseconds;
@@ -46,8 +47,6 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
 
   bool isLiked = false;
 
-  late AnimationController emojiController;
-
   @override
   void initState() {
     bool theme = SharedPreference().readStorage(SpKeys.themeData) ?? false;
@@ -56,7 +55,6 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      emojiController = AnimationController(vsync: this, duration: const Duration(seconds: 7));
       var streampro = Provider.of<StreamerNotifier>(context, listen: false);
       streampro.requestPermission(context);
       streampro.init(context);
@@ -120,6 +118,22 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
   //   );
   // }
   List<Offset> likeOffsets = [];
+  List<int> text = [1, 2, 3, 4, 1, 1, 1, 1, 1];
+
+  double getRandomDouble(double min, double max) {
+    // Membuat instance dari kelas Random
+    final random = math.Random();
+
+    // Menghasilkan angka acak antara min dan max
+    // dengan presisi 4 digit di belakang koma
+    double randomValue = min + random.nextDouble() * (max - min);
+
+    // Membulatkan angka menjadi 4 digit di belakang koma
+    randomValue = double.parse(randomValue.toStringAsFixed(4));
+
+    return randomValue;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<StreamerNotifier>(
@@ -132,6 +146,26 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
               : Stack(
                   children: [
                     _buildPreviewWidget(context, notifier),
+                    Positioned.fill(
+                      bottom: -90,
+                      right: 10,
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: SizedBox(
+                          width: 70,
+                          child: Stack(
+                            children: text.map((e) {
+                              double randomValue = getRandomDouble(-0.0999, 0.0999);
+                              return Transform(
+                                alignment: Alignment.bottomCenter,
+                                transform: Matrix4.rotationZ(randomValue),
+                                child: LoveLootie(),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    ),
                     notifier.isloadingPreview
                         ? SizedBox(height: SizeConfig.screenHeight, child: const Center(child: CustomLoading()))
                         : notifier.statusLive == StatusStream.offline
@@ -160,12 +194,11 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                     //     ),
                     //   ),
                     // ),
-                    SafeArea(child: Stack(children: [...notifier.loveStreamer(emojiController)]))
                   ],
                 ),
           onWillPop: () async {
             notifier.destoryPusher();
-            notifier.dispose();
+            // notifier.dispose();
             return true;
           },
         ),
