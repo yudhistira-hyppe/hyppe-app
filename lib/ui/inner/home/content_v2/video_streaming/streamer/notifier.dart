@@ -73,7 +73,7 @@ class StreamerNotifier with ChangeNotifier {
 
   late AlivcBase _alivcBase;
   late AlivcLivePusher _alivcLivePusher;
-  late AlivcLiveBeautyManager _beautyManager;
+  // late AlivcLiveBeautyManager _beautyManager;
 
   bool isloadingPreview = true;
   bool isloading = false;

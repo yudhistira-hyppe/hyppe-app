@@ -56,7 +56,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
       streampro.init(context);
 
       commentFocusNode.addListener(() {
-        print("Has focus: ${commentFocusNode.hasFocus}");
+        // print("Has focus: ${commentFocusNode.hasFocus}");
       });
 
       AlivcPusherPreviewType viewType;
@@ -194,7 +194,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
 
   int a = 0;
 
-  final _debouncer = Debouncer(milliseconds: 2000);
+  // final _debouncer = Debouncer(milliseconds: 2000);
 
   Widget prepare({String? titile}) {
     return Container(
@@ -228,7 +228,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
           alignment: Alignment.center,
           child: CustomTextWidget(
               textToDisplay: time.toString(),
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 color: kHyppeTextPrimary,
                 fontSize: 80,
               )),
