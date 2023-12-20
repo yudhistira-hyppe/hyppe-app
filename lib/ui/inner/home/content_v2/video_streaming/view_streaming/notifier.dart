@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../../core/bloc/live_stream/bloc.dart';
 import '../../../../../../core/bloc/live_stream/state.dart';
@@ -110,8 +111,64 @@ class ViewStreamingNotifier with ChangeNotifier {
     }
   }
 
-  likeStreaming(BuildContext context, LinkStreamModel model, List<String> likes) async{
+  Future<void> destoryPusher() async {
+    WakelockPlus.disable();
+    statusLive = StatusStream.offline;
+    totLikes = 0;
+    totViews = 0;
+    isCommentDisable = false;
+    commentController.clear();
+    userName = '';
+    statusLive = StatusStream.offline;
+    dataViewers = [];
+    comment = [];
+    animationIndexes = [];
+    _socketService.closeSocket();
+  }
 
+  List<String> likeList = [];
+
+  bool _notYet = true;
+  bool get notYet => _notYet;
+  set notYet(bool state){
+    _notYet = state;
+    notifyListeners();
+  }
+
+  bool _now = true;
+  bool get now => _now;
+  set now(bool state){
+    _now = state;
+    notifyListeners();
+  }
+
+  likeStreaming(BuildContext context, LinkStreamModel model, List<String> likes) async{
+    bool connect = await System().checkConnections();
+
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {'_id': model.sId, "type": "LIKE", "like": likes};
+
+        await notifier.getLinkStream(context, data, UrlConstants.updateStream);
+        final fetch = notifier.liveStreamFetch;
+        // if (fetch.postsState == LiveStreamState.getApiSuccess) {
+        //   returnNext = true;
+        // }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      // returnNext = false;
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          exitStreaming(context, model);
+        });
+      }
+    }
   }
 
   Future getListStreamers(BuildContext context, mounted, {bool isReload = true}) async {

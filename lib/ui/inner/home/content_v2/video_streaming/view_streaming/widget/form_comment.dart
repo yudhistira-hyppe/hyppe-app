@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:provider/provider.dart';
@@ -94,7 +96,21 @@ class FormCommentViewer extends StatelessWidget {
               width: 36,
               height: 36,
               defaultColor: false,
-              onPressed: () {})
+              onPressed: () {
+                notifier.notYet = true;
+                notifier.likeList.add(System().getCurrentDate());
+                Future.delayed(const Duration(seconds: 1), (){
+                  if(notifier.now){
+                    notifier.notYet = false;
+                  }
+                  if(!notifier.notYet){
+                    if(notifier.streamerData != null){
+                      notifier.likeStreaming(context, notifier.streamerData!, notifier.likeList);
+                    }
+                  }
+                });
+
+              })
           // commentFocusNode!.hasFocus
           //     ? Container()
           //     : Padding(

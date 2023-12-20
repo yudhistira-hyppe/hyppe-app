@@ -581,7 +581,10 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           iconData: "${AssetPath.vectorPath}close.svg",
                           defaultColor: false,
                           onPressed: () {
-                            notifier.exitStreaming(context, widget.args.data).whenComplete(() => Routing().moveBack());
+                            notifier.exitStreaming(context, widget.args.data).whenComplete(() async{
+                              Routing().moveBack();
+                              await notifier.destoryPusher();
+                            });
                           })
                     ],
                   ),
@@ -598,6 +601,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
           ),
           onWillPop: () async {
             await notifier.exitStreaming(context, widget.args.data);
+            await notifier.destoryPusher();
             return true;
           },
         ),
