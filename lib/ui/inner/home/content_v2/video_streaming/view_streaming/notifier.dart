@@ -110,6 +110,10 @@ class ViewStreamingNotifier with ChangeNotifier {
     }
   }
 
+  likeStreaming(BuildContext context, LinkStreamModel model, List<String> likes) async{
+
+  }
+
   Future getListStreamers(BuildContext context, mounted, {bool isReload = true}) async {
     loading = true;
     bool connect = await System().checkConnections();

@@ -10,17 +10,14 @@ class ViewerComment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ListCommentViewer(commentFocusNode: commentFocusNode),
-          twentyEightPx,
-          FormCommentViewer(commentFocusNode: commentFocusNode),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        ListCommentViewer(commentFocusNode: commentFocusNode),
+        twentyEightPx,
+        FormCommentViewer(commentFocusNode: commentFocusNode),
+      ],
     );
   }
 }
