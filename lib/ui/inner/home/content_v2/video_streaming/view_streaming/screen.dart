@@ -445,22 +445,30 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
 
   @override
   Widget build(BuildContext context) {
+    fAliplayer?.setScalingMode(FlutterAvpdef.AVP_SCALINGMODE_SCALEASPECTFIT);
     return Consumer<ViewStreamingNotifier>(builder: (_, notifier, __) {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: WillPopScope(
           child: Container(
+            width: SizeConfig.screenWidth,
             height: SizeConfig.screenHeight,
-            // width: SizeConfig.screenWidth,
-            color: Colors.red,
             child: Stack(
-              fit: StackFit.expand,
               children: [
-                Positioned.fill(
+                Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.screenHeight,
+                  color: Colors.black,
+                ),
+                Container(
+                  color: Colors.black,
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.screenHeight,
                   child: AliPlayerView(
                     onCreated: onViewPlayerCreated,
                     x: 0,
                     y: 0,
-                    height: 100,
+                    height: SizeConfig.screenHeight,
                     width: SizeConfig.screenWidth,
                   ),
                 ),
