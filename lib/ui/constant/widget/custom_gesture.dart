@@ -7,13 +7,14 @@ class CustomGesture extends StatelessWidget {
   final Function() onTap;
   final Widget child;
   final EdgeInsetsGeometry margin;
+  final double radius;
   const CustomGesture(
       {Key? key,
       this.width,
       this.height,
       required this.onTap,
       required this.child,
-      required this.margin})
+        this.margin = EdgeInsets.zero, this.radius = 8})
       : super(key: key);
 
   @override
@@ -31,7 +32,7 @@ class CustomGesture extends StatelessWidget {
           child: InkWell(
               onTap: onTap,
               splashColor: context.getColorScheme().primary,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(radius),
               child: child),
         ),
       ),

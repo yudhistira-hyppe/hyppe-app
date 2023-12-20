@@ -100,7 +100,7 @@ dependencies:
   colorfilter_generator: ^0.0.8
   fraction: ^4.1.4
   themed: ^4.0.0
-  holding_gesture: ^1.2.0
+
 
   flutter_livepush_plugin: ^2.1.0+1
 

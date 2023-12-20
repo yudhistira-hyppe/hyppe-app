@@ -38,7 +38,9 @@ extension ContextScreen on BuildContext {
 
   double getScreenDiagonal() => sqrt((getHeight() * getHeight()) + (getWidth() * getWidth()));
 
-  double getScaleDiagonal() => getScaleDiagonal() /(sqrt((414 * 414) + (895 * 895)));
+  double getScaleDiagonal() => getScreenDiagonal() /(sqrt((414 * 414) + (895 * 895)));
+
+  double getHeightStatusBar() => MediaQuery.of(this).viewPadding.top;
 
   TextTheme getTextTheme() {
     return Theme.of(this).textTheme;

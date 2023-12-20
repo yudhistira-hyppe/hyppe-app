@@ -6,6 +6,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,10 @@ class HomeAppBar extends StatelessWidget {
       backgroundColor: Colors.white,
       actions: [
         // Doku(),
+        CustomIconButtonWidget(iconData: '${AssetPath.vectorPath}ic_live_streaming.svg', onPressed: (){
+          Routing().move(Routes.listStreamers);
+        }),
+        sixteenPx,
         Consumer<MainNotifier>(builder: (context, notifier, _) {
           final isReceived = notifier.receivedMsg;
           return GestureDetector(

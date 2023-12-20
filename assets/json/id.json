@@ -1080,5 +1080,7 @@
   "liveBroadcastRemaining5Minutes": "Siaran LIVE sisa 5 menit",
   "youOnlyHave5MinutesLeftinTheLiveBroadcast": "Waktumu tinggal 5 menit dalam siaran LIVE",
   "commentsAreDisabled": "Komentar dinonaktifkan",
-  "exploreLiveToLivenUpYourDay!": "Serunya LIVE untuk ramaikan harimu!"
+  "exploreLiveToLivenUpYourDay!": "Serunya LIVE untuk ramaikan harimu!",
+  "emptyStreamers": "Belum ada yang LIVE nih",
+  "messageEmptyStreamers": "Yuk, saatnya LIVE-kan suasana!"
 }
