@@ -118,12 +118,10 @@ class ShowBottomSheet {
             child: Container(
               decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
               height: context.getHeight() * 0.6,
-              child: ChangeNotifierProvider<StreamerNotifier>(
-                  create: (context) => StreamerNotifier(),
-                  child: OnLiveStreamStatus(
-                    idStream: notifier.dataStream.sId,
-                    notifier: notifier,
-                  )),
+              child: OnLiveStreamStatus(
+                idStream: notifier.dataStream.sId,
+                notifier: notifier,
+              ),
             ),
           );
         });
@@ -186,17 +184,15 @@ class ShowBottomSheet {
             child: Container(
               decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
               height: context.getHeight() * 0.3,
-              child: ChangeNotifierProvider<StreamerNotifier>(
-                  create: (context) => StreamerNotifier(),
-                  child: OnWatcherStatus(
-                    email: email,
-                  )),
+              child: OnWatcherStatus(
+                email: email,
+              ),
             ),
           );
         });
   }
 
-  Future<ReactStream> onReactStreaming(context, ReactStream react) async {
+  Future<ReactStream> onReactStreaming(context, ReactStream react, int nilai) async {
     return await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -211,13 +207,14 @@ class ShowBottomSheet {
               height: context.getHeight() * 0.5,
               child: OnReactStreaming(
                 react: react,
+                nilai: nilai,
               ),
             ),
           );
         });
   }
 
-  static onListOfWatcher(context, StreamerNotifier notifier) async {
+  static onListOfWatcher(context) async {
     await showModalBottomSheet(
         context: context,
         isScrollControlled: true,

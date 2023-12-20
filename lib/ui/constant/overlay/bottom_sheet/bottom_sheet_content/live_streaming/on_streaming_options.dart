@@ -67,24 +67,41 @@ class _OnStreamingOptionsState extends State<OnStreamingOptions> {
           CustomGesture(
             onTap: () async {
               Routing().moveBack();
-              await ShowGeneralDialog.generalDialog(
-                context,
-                titleText: language.pauseLiveTitle ?? "Pause LIVE?",
-                bodyText: language.pauseLiveBody ?? "Your LIVE video will temporarily freeze when paused. You can pause for up to 5 minutes, 3 times.",
-                maxLineTitle: 1,
-                maxLineBody: 4,
-                functionPrimary: () async {
-                  widget.notifier.pauseLive();
-                  Routing().moveBack();
-                },
-                functionSecondary: () {
-                  Routing().moveBack();
-                },
-                titleButtonPrimary: "${language.pause}",
-                titleButtonSecondary: "${language.cancel}",
-                barrierDismissible: true,
-                isHorizontal: false,
-              );
+              if (widget.notifier.totPause < 3) {
+                await ShowGeneralDialog.generalDialog(
+                  context,
+                  titleText: language.pauseLiveTitle ?? "Pause LIVE?",
+                  bodyText: language.pauseLiveBody ?? "Your LIVE video will temporarily freeze when paused. You can pause for up to 5 minutes, 3 times.",
+                  maxLineTitle: 1,
+                  maxLineBody: 4,
+                  functionPrimary: () async {
+                    widget.notifier.pauseLive();
+                    Routing().moveBack();
+                  },
+                  functionSecondary: () {
+                    Routing().moveBack();
+                  },
+                  titleButtonPrimary: "${language.pause}",
+                  titleButtonSecondary: "${language.cancel}",
+                  barrierDismissible: true,
+                  isHorizontal: false,
+                );
+              } else {
+                await ShowGeneralDialog.generalDialog(
+                  context,
+                  titleText: language.youveReachedPauseLimit ?? "",
+                  bodyText: language.youveReachedPauseLimitDesc ?? "",
+                  maxLineTitle: 1,
+                  maxLineBody: 4,
+                  functionPrimary: () async {
+                    Routing().moveBack();
+                  },
+                  titleButtonPrimary: "${language.gotIt}",
+                  barrierDismissible: true,
+                  isHorizontal: false,
+                  fillColor: false,
+                );
+              }
             },
             margin: EdgeInsets.zero,
             child: Container(

@@ -4,7 +4,6 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/iconButton.dart';
@@ -28,7 +27,7 @@ class FormCommentLive extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 0),
                   child: TextFormField(
                     focusNode: commentFocusNode,
-                    // controller: searchProvider.searchController,
+                    controller: notifier.commentCtrl,
                     keyboardType: TextInputType.text,
                     style: const TextStyle(color: Colors.white),
                     cursorColor: Colors.white,
@@ -36,7 +35,7 @@ class FormCommentLive extends StatelessWidget {
                     decoration: InputDecoration(
                         hintText: notifier.isCommentDisable ? tn.commentsAreDisabled : tn.addComment,
                         isDense: true, // important line
-                        contentPadding: EdgeInsets.fromLTRB(10, 15, commentFocusNode!.hasFocus ? 80 : 10, 15), // control your hints text size
+                        contentPadding: EdgeInsets.fromLTRB(10, 10, commentFocusNode!.hasFocus ? 70 : 10, 10), // control your hints text size
                         hintStyle: const TextStyle(color: Colors.white),
                         fillColor: kHyppeTransparent,
                         filled: true,
@@ -47,24 +46,33 @@ class FormCommentLive extends StatelessWidget {
                 ),
                 !commentFocusNode!.hasFocus
                     ? Container()
-                    : Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: CustomTextButton(
-                              onPressed: () {},
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(kHyppePrimary),
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                    ),
+                    : Positioned.fill(
+                        top: 0,
+                        child: Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: CustomTextButton(
+                                  onPressed: () {
+                                    notifier.sendMessage(context, context.mounted).then((value) {
+                                      commentFocusNode!.unfocus();
+                                    });
+                                  },
+                                  style: ButtonStyle(
+                                      visualDensity: VisualDensity.comfortable,
+                                      padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                      backgroundColor: MaterialStateProperty.all(kHyppePrimary),
+                                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(18.0),
+                                        ),
+                                      )),
+                                  child: Text(
+                                    tn.send ?? '',
+                                    style: TextStyle(color: kHyppeTextPrimary, fontSize: 10),
                                   )),
-                              child: Text(
-                                tn.send ?? '',
-                                style: TextStyle(color: kHyppeTextPrimary),
-                              )),
-                        )),
+                            )),
+                      ),
               ],
             ),
           ),

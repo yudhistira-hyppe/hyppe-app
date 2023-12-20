@@ -15,14 +15,22 @@ import '../../../../widget/custom_spacer.dart';
 import '../../../../widget/icon_button_widget.dart';
 
 class OnListWatchers extends StatefulWidget {
-  final StreamerNotifier? notifier;
-  const OnListWatchers({super.key, this.notifier});
+  const OnListWatchers({super.key});
 
   @override
   State<OnListWatchers> createState() => _OnListWatchersState();
 }
 
 class _OnListWatchersState extends State<OnListWatchers> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      var streampro = Provider.of<StreamerNotifier>(context, listen: false);
+      streampro.getViewer(context, mounted, end: true);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;

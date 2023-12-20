@@ -21,8 +21,8 @@ class IconButtonLive extends StatelessWidget {
           customBorder: const CircleBorder(),
           child: Ink(
             decoration: const BoxDecoration(shape: BoxShape.circle),
-            height: 45,
-            width: 45,
+            height: 40,
+            width: 40,
             child: widget,
           ),
         ),

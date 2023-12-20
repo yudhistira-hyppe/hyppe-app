@@ -36,6 +36,7 @@ class UserProfileModel {
   String? idUser;
   String? loginSource;
   UserBadgeModel? urluserBadge;
+  bool? creator;
 
   UserProfileModel({
     this.country,
@@ -68,6 +69,7 @@ class UserProfileModel {
     this.idUser,
     this.loginSource,
     this.urluserBadge,
+    this.creator,
   });
 
   UserProfileModel.fromJson(Map<String, dynamic> json) {
@@ -115,6 +117,7 @@ class UserProfileModel {
     statusKyc = json['statusKyc'] ?? '';
     idUser = json['iduser'] ?? '';
     loginSource = json['loginSource'] ?? 'manual';
+    creator = json['creator'] ?? false;
     if (json['urluserBadge'] != null && json['urluserBadge'].isNotEmpty) {
       if (json['urluserBadge'] is List) {
         urluserBadge = UserBadgeModel.fromJson(json['urluserBadge'].first);

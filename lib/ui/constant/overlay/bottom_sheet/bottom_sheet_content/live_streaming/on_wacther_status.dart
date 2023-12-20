@@ -71,8 +71,9 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                 : Column(
                     children: [
                       sixteenPx,
+                      // SelectableText("${System().showUserPicture(notifier.audienceProfile.avatar?.mediaEndpoint)}"),
                       ItemAccount(
-                        urlImage: System().showUserPicture(notifier.audienceProfile.avatar?.mediaEndpoint) ?? '',
+                        urlImage: notifier.audienceProfile.avatar?.mediaEndpoint ?? '',
                         name: notifier.audienceProfile.fullName ?? '',
                         username: notifier.audienceProfile.username ?? '',
                         isHost: false,

@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_livepush_plugin/live_pusher_preview.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
@@ -15,7 +13,6 @@ import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/p
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/streamer.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
-import 'dart:math' as math;
 
 class Debouncer {
   final int milliseconds;
@@ -49,7 +46,6 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
 
   @override
   void initState() {
-    bool theme = SharedPreference().readStorage(SpKeys.themeData) ?? false;
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
@@ -60,7 +56,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
       streampro.init(context);
 
       commentFocusNode.addListener(() {
-        print("Has focus: ${commentFocusNode.hasFocus}");
+        // print("Has focus: ${commentFocusNode.hasFocus}");
       });
 
       AlivcPusherPreviewType viewType;
@@ -117,22 +113,6 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
   //     ),
   //   );
   // }
-  List<Offset> likeOffsets = [];
-  List<int> text = [1, 2, 3, 4, 1, 1, 1, 1, 1];
-
-  double getRandomDouble(double min, double max) {
-    // Membuat instance dari kelas Random
-    final random = math.Random();
-
-    // Menghasilkan angka acak antara min dan max
-    // dengan presisi 4 digit di belakang koma
-    double randomValue = min + random.nextDouble() * (max - min);
-
-    // Membulatkan angka menjadi 4 digit di belakang koma
-    randomValue = double.parse(randomValue.toStringAsFixed(4));
-
-    return randomValue;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,12 +134,11 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                         child: SizedBox(
                           width: 70,
                           child: Stack(
-                            children: text.map((e) {
-                              double randomValue = getRandomDouble(-0.0999, 0.0999);
-                              return Transform(
-                                alignment: Alignment.bottomCenter,
-                                transform: Matrix4.rotationZ(randomValue),
-                                child: LoveLootie(),
+                            children: notifier.animationIndexes.map((e) {
+                              return LoveLootie(
+                                onAnimationFinished: () {
+                                  notifier.removeAnimation(e);
+                                },
                               );
                             }).toList(),
                           ),
@@ -215,7 +194,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
 
   int a = 0;
 
-  final _debouncer = Debouncer(milliseconds: 2000);
+  // final _debouncer = Debouncer(milliseconds: 2000);
 
   Widget prepare({String? titile}) {
     return Container(
@@ -249,7 +228,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
           alignment: Alignment.center,
           child: CustomTextWidget(
               textToDisplay: time.toString(),
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 color: kHyppeTextPrimary,
                 fontSize: 80,
               )),

@@ -73,11 +73,7 @@ class StatusNControl extends StatelessWidget {
                         maxLineTitle: 1,
                         maxLineBody: 4,
                         functionPrimary: () async {
-                          notifier.destoryPusher();
-                          Routing().moveBack();
-                          Future.delayed(const Duration(milliseconds: 2000), () {
-                            Routing().moveBack();
-                          });
+                          notifier.endLive(context, context.mounted);
                         },
                         functionSecondary: () {
                           Routing().moveBack();

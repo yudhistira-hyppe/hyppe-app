@@ -15,6 +15,7 @@ import 'package:hyppe/core/arguments/image_preview_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/arguments/referral_list_user.dart';
+import 'package:hyppe/core/arguments/summary_live_argument.dart';
 import 'package:hyppe/core/arguments/ticket_argument.dart';
 import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
@@ -429,9 +430,9 @@ class Generate {
       case Routes.homeTutor:
         return MaterialPageRoute(builder: (_) => const HomeTutorScreen());
       case Routes.streamer:
-        return MaterialPageRoute(builder: (_) => ChangeNotifierProvider(create: (_) => StreamerNotifier(), child: const StreamerScreen()));
+        return MaterialPageRoute(builder: (_) => const StreamerScreen());
       case Routes.streamingFeedback:
-        return MaterialPageRoute(builder: (_) => const StreamingFeedbackScreen());
+        return MaterialPageRoute(builder: (_) => StreamingFeedbackScreen(arguments: settings.arguments as SummaryLiveArgument));
       case Routes.listStreamers:
         return MaterialPageRoute(builder: (_) => const ListStreamersScreen());
       case Routes.viewStreaming:
