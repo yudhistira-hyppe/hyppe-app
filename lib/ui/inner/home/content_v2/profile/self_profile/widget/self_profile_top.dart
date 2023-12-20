@@ -17,7 +17,6 @@ import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/show_image_profile.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/testanimationScreen.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';

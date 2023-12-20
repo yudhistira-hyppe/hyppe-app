@@ -10,6 +10,7 @@ import 'package:flutter_livepush_plugin/live_pusher.dart';
 /// Import a header file.
 import 'package:flutter_livepush_plugin/live_push_config.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
+import 'package:hyppe/core/arguments/summary_live_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/bloc/live_stream/bloc.dart';
@@ -23,6 +24,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/comment_live_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
+import 'package:hyppe/core/models/collection/live_stream/live_summary_model.dart';
 import 'package:hyppe/core/models/collection/live_stream/viewers_live_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
@@ -36,11 +38,13 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/item.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+import 'dart:math' as math;
 
 class StreamerNotifier with ChangeNotifier {
   final UsersDataQuery _usersFollowingQuery = UsersDataQuery()
@@ -60,10 +64,12 @@ class StreamerNotifier with ChangeNotifier {
   int totViews = 0;
   int pageViewers = 0;
   int rowViewers = 10;
+  int totPause = 0;
 
   LinkStreamModel dataStream = LinkStreamModel();
   UserProfileModel audienceProfile = UserProfileModel();
   StatusFollowing statusFollowing = StatusFollowing.none;
+  LiveSummaryModel dataSummary = LiveSummaryModel();
 
   late AlivcBase _alivcBase;
   late AlivcLivePusher _alivcLivePusher;
@@ -81,6 +87,9 @@ class StreamerNotifier with ChangeNotifier {
 
   FocusNode titleFocusNode = FocusNode();
   TextEditingController titleLiveCtrl = TextEditingController();
+  TextEditingController commentCtrl = TextEditingController();
+  Timer? inactivityTimer;
+  DateTime dateTimeStart = DateTime.now();
 
   String userName = '';
   String _titleLive = '';
@@ -133,6 +142,18 @@ class StreamerNotifier with ChangeNotifier {
     }
   }
 
+  void addAnimation(int index) {
+    animationIndexes.add(index);
+    notifyListeners();
+  }
+
+  void removeAnimation(int index) {
+    // animationIndexes.remove(index);
+    notifyListeners();
+    print("=== total ${animationIndexes.length}");
+    print("=== skrng ${index} -- ${animationIndexes}");
+  }
+
   Future<void> _onListen() async {
     /// Listener for stream ingest errors
     /// Configure the callback for SDK errors.
@@ -154,10 +175,20 @@ class StreamerNotifier with ChangeNotifier {
     /// 系统错误回调
     _alivcLivePusher.setOnSystemError((errorCode, errorDescription) {
       print("========  setOnSystemError $errorDescription ========");
-      // Fluttertoast.showToast(
-      //   msg: AppLocalizations.of(ctx.context)!.camerapush_system_error,
-      //   gravity: ToastGravity.CENTER,
-      // );
+      ShowGeneralDialog.generalDialog(
+        Routing.navigatorKey.currentContext,
+        titleText: 'Camera Stream Error',
+        bodyText: 'Please back and stream again',
+        maxLineTitle: 1,
+        maxLineBody: 4,
+        functionPrimary: () async {
+          Routing().moveBack();
+        },
+        titleButtonPrimary: tn?.understand ?? '',
+        barrierDismissible: true,
+        isHorizontal: false,
+        fillColor: false,
+      );
     });
 
     /// Listener for the stream ingest status`
@@ -206,22 +237,84 @@ class StreamerNotifier with ChangeNotifier {
     _alivcLivePusher.setOnConnectRecovery(() {});
 
     /// Configure the callback for disconnection.
-    _alivcLivePusher.setOnConnectionLost(() {});
+    _alivcLivePusher.setOnConnectionLost(() {
+      ShowGeneralDialog.generalDialog(
+        Routing.navigatorKey.currentContext,
+        titleText: 'Error no connection',
+        bodyText: 'Please check your internet',
+        maxLineTitle: 1,
+        maxLineBody: 4,
+        functionPrimary: () async {
+          Routing().moveBack();
+        },
+        titleButtonPrimary: tn?.understand ?? '',
+        barrierDismissible: true,
+        isHorizontal: false,
+        fillColor: false,
+      );
+    });
 
     /// Configure the callback for poor network.
-    _alivcLivePusher.setOnNetworkPoor(() {});
+    _alivcLivePusher.setOnNetworkPoor(() {
+      ShowGeneralDialog.showToastAlert(Routing.navigatorKey.currentContext!, 'There was a bad network', () async {});
+    });
 
     /// Configure the callback for failed reconnection.
     _alivcLivePusher.setOnReconnectError((errorCode, errorDescription) {});
 
     /// Configure the callback for reconnection start.
-    _alivcLivePusher.setOnReconnectStart(() {});
+    _alivcLivePusher.setOnReconnectStart(() {
+      ShowGeneralDialog.generalDialog(
+        Routing.navigatorKey.currentContext,
+        titleText: 'Start reconnecting',
+        bodyText: 'Please Wait',
+        maxLineTitle: 1,
+        maxLineBody: 4,
+        functionPrimary: () async {
+          Routing().moveBack();
+        },
+        titleButtonPrimary: tn?.understand ?? '',
+        barrierDismissible: true,
+        isHorizontal: false,
+        fillColor: false,
+      );
+    });
 
     /// Configure the callback for successful reconnection.
-    _alivcLivePusher.setOnReconnectSuccess(() {});
+    _alivcLivePusher.setOnReconnectSuccess(() {
+      ShowGeneralDialog.generalDialog(
+        Routing.navigatorKey.currentContext,
+        titleText: 'Reconnection succeed',
+        bodyText: '',
+        maxLineTitle: 1,
+        maxLineBody: 4,
+        functionPrimary: () async {
+          Routing().moveBack();
+        },
+        titleButtonPrimary: tn?.understand ?? '',
+        barrierDismissible: true,
+        isHorizontal: false,
+        fillColor: false,
+      );
+    });
 
     /// Send data timeout
-    _alivcLivePusher.setOnSendDataTimeout(() {});
+    _alivcLivePusher.setOnSendDataTimeout(() {
+      ShowGeneralDialog.generalDialog(
+        Routing.navigatorKey.currentContext,
+        titleText: 'Send data timeout',
+        bodyText: '',
+        maxLineTitle: 1,
+        maxLineBody: 4,
+        functionPrimary: () async {
+          Routing().moveBack();
+        },
+        titleButtonPrimary: tn?.understand ?? '',
+        barrierDismissible: true,
+        isHorizontal: false,
+        fillColor: false,
+      );
+    });
 
     /// Configure the callback for complete playback of background music.
     _alivcLivePusher.setOnBGMCompleted(() {});
@@ -347,6 +440,7 @@ class StreamerNotifier with ChangeNotifier {
 
   Future<void> clickPushAction(BuildContext context, mounted) async {
     userName = context.read<SelfProfileNotifier>().user.profile?.username ?? '';
+    dateTimeStart = DateTime.now();
     if (titleLive == '') {
       titleLive = context.read<SelfProfileNotifier>().user.profile?.fullName ?? '';
     }
@@ -373,6 +467,33 @@ class StreamerNotifier with ChangeNotifier {
     _alivcLivePusher.stopPush();
     _alivcLivePusher.stopPreview();
     _alivcLivePusher.destroy();
+    livePushMode = 0;
+    timeReady = 3;
+    totLikes = 0;
+    totViews = 0;
+    pageViewers = 0;
+    rowViewers = 10;
+    isloadingPreview = true;
+    isloading = false;
+    isloadingViewers = false;
+    isloadingViewersMore = false;
+    isloadingProfile = false;
+    isCheckLoading = false;
+    mute = false;
+    isPause = false;
+    isCommentDisable = false;
+    titleLiveCtrl.clear();
+    userName = '';
+    _titleLive = '';
+    statusLive = StatusStream.offline;
+    _items = [];
+    dataViewers = [];
+    comment = [];
+    animationIndexes = [];
+    _socketService.closeSocket();
+    commentCtrl.clear();
+    inactivityTimer?.cancel();
+    inactivityTimer = null;
   }
 
   void flipCamera() {
@@ -445,6 +566,7 @@ class StreamerNotifier with ChangeNotifier {
   Future<void> pauseLive() async {
     mute = true;
     _alivcLivePusher.pause();
+    totPause++;
     notifyListeners();
   }
 
@@ -460,12 +582,22 @@ class StreamerNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  Future endLive(BuildContext context, mounted, {bool isBack = true}) async {
+    if (isBack) Routing().moveBack();
+    var dateTimeFinish = DateTime.now();
+    Duration duration = dateTimeFinish.difference(dateTimeStart);
+    await stopStream(context, mounted);
+    destoryPusher();
+    Routing().moveReplacement(Routes.streamingFeedback, argument: SummaryLiveArgument(duration: duration, data: dataSummary));
+  }
+
   void initTimer() async {
     // adding delay to prevent if there's another that not disposed yet
-    Future.delayed(const Duration(milliseconds: 2000), () {
+    Future.delayed(const Duration(milliseconds: 1000), () {
       WakelockPlus.enable();
 
-      Timer(const Duration(seconds: 10), () {
+      if (inactivityTimer != null) inactivityTimer?.cancel();
+      inactivityTimer = Timer(const Duration(seconds: 10), () {
         ShowGeneralDialog.generalDialog(
           Routing.navigatorKey.currentContext,
           titleText: tn?.liveBroadcastRemaining5Minutes ?? '',
@@ -482,6 +614,38 @@ class StreamerNotifier with ChangeNotifier {
         );
       });
     });
+  }
+
+  Future stopStream(BuildContext context, mounted) async {
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {"_id": dataStream.sId, "type": "STOP"};
+
+        if (mounted) {
+          await notifier.getLinkStream(context, data, UrlConstants.updateStream);
+        }
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          dataSummary = LiveSummaryModel.fromJson(fetch.data);
+          notifyListeners();
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      // returnNext = false;
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          initLiveStream(context, mounted);
+        });
+      }
+    }
+    // return returnNext;
   }
 
   Future initLiveStream(BuildContext context, mounted) async {
@@ -547,14 +711,21 @@ class StreamerNotifier with ChangeNotifier {
     }
   }
 
-  Future getViewer(BuildContext context, mounted, {String? idStream}) async {
+  Future getViewer(BuildContext context, mounted, {String? idStream, bool end = false}) async {
     if (pageViewers == 0) isloadingViewers = true;
     notifyListeners();
     bool connect = await System().checkConnections();
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
-        Map data = {"_id": idStream ?? dataStream.sId, "page": pageViewers, "limit": rowViewers};
+        Map data = {
+          "_id": idStream ?? dataStream.sId,
+          "page": pageViewers,
+          "limit": rowViewers,
+        };
+        if (end = true) {
+          data['type'] = "END";
+        }
         if (mounted) {
           await notifier.getLinkStream(context, data, UrlConstants.viewrStream);
         }
@@ -675,6 +846,73 @@ class StreamerNotifier with ChangeNotifier {
     }
   }
 
+  Future sendMessage(BuildContext context, mounted) async {
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {"_id": dataStream.sId, "messages": commentCtrl.text, "type": "COMMENT"};
+        if (mounted) {
+          await notifier.getLinkStream(context, data, UrlConstants.updateStream);
+        }
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          commentCtrl.text = '';
+          notifyListeners();
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          initLiveStream(context, mounted);
+        });
+      }
+    }
+    isloadingViewers = false;
+    notifyListeners();
+  }
+
+  Future sendScoreLive(BuildContext context, mounted, {String? desc, int? score}) async {
+    isloading = true;
+    notifyListeners();
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {
+          "_id": dataStream.sId,
+          "feedBack": score, //1,2,3
+          "feedbackText": desc
+        };
+        if (mounted) {
+          await notifier.getLinkStream(context, data, UrlConstants.feedbackStream);
+        }
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          isloading = false;
+
+          notifyListeners();
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    } else {
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          initLiveStream(context, mounted);
+        });
+      }
+    }
+    isloading = false;
+    notifyListeners();
+  }
+
   void _connectAndListenToSocket(String events) async {
     String? token = SharedPreference().readStorage(SpKeys.userToken);
     String? email = SharedPreference().readStorage(SpKeys.email);
@@ -712,7 +950,7 @@ class StreamerNotifier with ChangeNotifier {
     );
   }
 
-  void handleSocket(message, event) {
+  void handleSocket(message, event) async {
     if (event == eventComment) {
       var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
@@ -722,6 +960,14 @@ class StreamerNotifier with ChangeNotifier {
       var messages = CountLikeLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
         totLikes += messages.likeCount ?? 0;
+        print("totalnya ${animationIndexes}");
+        // for (var i = 0; i < (messages.likeCount ?? 0); i++) {
+        var run = getRandomDouble(1, 999999999999999);
+        animationIndexes.add(run.toInt());
+
+        notifyListeners();
+        await Future.delayed(const Duration(milliseconds: 700));
+        // }
       }
     } else if (event == eventViewStream) {
       var messages = CountViewLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
@@ -730,5 +976,19 @@ class StreamerNotifier with ChangeNotifier {
       }
     }
     notifyListeners();
+  }
+
+  double getRandomDouble(double min, double max) {
+    // Membuat instance dari kelas Random
+    final random = math.Random();
+
+    // Menghasilkan angka acak antara min dan max
+    // dengan presisi 4 digit di belakang koma
+    double randomValue = min + random.nextDouble() * (max - min);
+
+    // Membulatkan angka menjadi 4 digit di belakang koma
+    randomValue = double.parse(randomValue.toStringAsFixed(4));
+
+    return randomValue;
   }
 }

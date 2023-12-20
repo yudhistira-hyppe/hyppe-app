@@ -24,7 +24,7 @@ class PauseLive extends StatelessWidget {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
           child: Container(
-            padding: const EdgeInsets.all(70),
+            padding: const EdgeInsets.all(50),
             decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
             child: Center(
               child: Padding(
@@ -46,7 +46,9 @@ class PauseLive extends StatelessWidget {
                       child: TweenAnimationBuilder<Duration>(
                         duration: const Duration(minutes: 5, seconds: 0),
                         tween: Tween(begin: Duration(minutes: 5, seconds: 0), end: Duration.zero),
-                        onEnd: () {},
+                        onEnd: () {
+                          context.read<StreamerNotifier>().endLive(context, context.mounted, isBack: false);
+                        },
                         builder: (BuildContext context, Duration value, Widget? child) {
                           final minutes = value.inMinutes;
                           final seconds = value.inSeconds % 60;

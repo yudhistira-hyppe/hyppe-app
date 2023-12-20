@@ -1080,5 +1080,8 @@
   "liveBroadcastRemaining5Minutes": "LIVE broadcast remaining 5 minutes",
   "youOnlyHave5MinutesLeftinTheLiveBroadcast": "You only have 5 minutes left in the LIVE broadcast",
   "commentsAreDisabled": "Comments are disabled",
-  "exploreLiveToLivenUpYourDay": "Explore LIVE to liven up your day!"
+  "exploreLiveToLivenUpYourDay": "Explore LIVE to liven up your day!",
+  "youveReachedPauseLimit": "You've reached pause limit",
+  "youveReachedPauseLimitDesc": "You have used all 3 pause opportunities in this LIVE video.",
+  "gotIt": "Got It"
 }

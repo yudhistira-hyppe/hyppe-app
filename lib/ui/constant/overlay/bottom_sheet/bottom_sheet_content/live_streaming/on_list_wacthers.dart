@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/live_stream/viewers_live_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/live_streaming/on_live_stream_status.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:provider/provider.dart';
@@ -16,14 +15,22 @@ import '../../../../widget/custom_spacer.dart';
 import '../../../../widget/icon_button_widget.dart';
 
 class OnListWatchers extends StatefulWidget {
-  final StreamerNotifier? notifier;
-  const OnListWatchers({super.key, this.notifier});
+  const OnListWatchers({super.key});
 
   @override
   State<OnListWatchers> createState() => _OnListWatchersState();
 }
 
 class _OnListWatchersState extends State<OnListWatchers> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      var streampro = Provider.of<StreamerNotifier>(context, listen: false);
+      streampro.getViewer(context, mounted, end: true);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final language = context.read<TranslateNotifierV2>().translate;

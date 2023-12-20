@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/summary_live_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_gesture.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../core/constants/asset_path.dart';
@@ -16,7 +19,8 @@ import '../../../../../constant/widget/icon_button_widget.dart';
 import '../widget/react_stream_item.dart';
 
 class StreamingFeedbackScreen extends StatefulWidget {
-  const StreamingFeedbackScreen({super.key});
+  final SummaryLiveArgument? arguments;
+  const StreamingFeedbackScreen({super.key, this.arguments});
 
   @override
   State<StreamingFeedbackScreen> createState() => _StreamingFeedbackScreenState();
@@ -54,7 +58,8 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                 ),
                 eightPx,
                 CustomTextWidget(
-                  textToDisplay: '18 September 2023 • ${language.duration} 10:23',
+                  textToDisplay:
+                      '${System().dateFormatter(DateTime.now().toString(), 3)} • ${language.duration} ${widget.arguments?.duration.inHours} : ${widget.arguments?.duration.inMinutes} : ${widget.arguments?.duration.inSeconds}',
                   textStyle: const TextStyle(fontSize: 12, color: kHyppeBurem),
                 ),
                 twentyPx,
@@ -80,20 +85,20 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              itemStatus(language.totalViewers ?? 'Jumlah Penonton', '100'),
+                              itemStatus(language.totalViewers ?? 'Jumlah Penonton', widget.arguments?.data.totalViews.toString() ?? '0'),
                               twentyPx,
-                              itemStatus(language.totalComments ?? 'Jumlah Komentar', '5000'),
+                              itemStatus(language.totalComments ?? 'Jumlah Komentar', widget.arguments?.data.totalComment.toString() ?? '0'),
                             ],
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              itemStatus(language.totalShares ?? 'Jumlah Membagikan', '30'),
+                              itemStatus(language.totalShares ?? 'Jumlah Membagikan', widget.arguments?.data.totalShare.toString() ?? '0'),
                               twentyPx,
-                              itemStatus(language.totalLikes ?? 'Jumlah Suka', '10.000'),
+                              itemStatus(language.totalLikes ?? 'Jumlah Suka', widget.arguments?.data.totalLike.toString() ?? '0'),
                             ],
                           ),
-                          itemStatus(language.newFollowers ?? 'Pengikut Baru', '2')
+                          itemStatus(language.newFollowers ?? 'Pengikut Baru', widget.arguments?.data.totalFollower.toString() ?? '0')
                         ],
                       ),
                     ],
@@ -115,10 +120,10 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                     CustomGesture(
                       margin: EdgeInsets.zero,
                       onTap: () {
-                        // ShowBottomSheet.onListOfWatcher(context);
+                        ShowBottomSheet.onListOfWatcher(context);
                       },
                       child: CustomTextWidget(
-                        textToDisplay: '100',
+                        textToDisplay: widget.arguments?.data.totalViews.toString() ?? '0',
                         textStyle: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -145,7 +150,7 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                       ),
                       twentyPx,
                       reactChosen != null
-                          ? Container(
+                          ? SizedBox(
                               width: double.infinity,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -174,21 +179,21 @@ class _StreamingFeedbackScreenState extends State<StreamingFeedbackScreen> {
                               children: [
                                 ReactStreamItem(
                                     onTap: () async {
-                                      reactChosen = await ShowBottomSheet().onReactStreaming(context, ReactStream.bad);
+                                      reactChosen = await ShowBottomSheet().onReactStreaming(context, ReactStream.bad, 1);
                                       setState(() {});
                                     },
                                     svg: '${AssetPath.vectorPath}bad_outline.svg',
                                     desc: (language.poor ?? 'Buruk')),
                                 ReactStreamItem(
                                     onTap: () async {
-                                      reactChosen = await ShowBottomSheet().onReactStreaming(context, ReactStream.neutral);
+                                      reactChosen = await ShowBottomSheet().onReactStreaming(context, ReactStream.neutral, 2);
                                       setState(() {});
                                     },
                                     svg: '${AssetPath.vectorPath}neutral_outline.svg',
                                     desc: (language.neutral ?? 'Netral')),
                                 ReactStreamItem(
                                     onTap: () async {
-                                      reactChosen = await ShowBottomSheet().onReactStreaming(context, ReactStream.good);
+                                      reactChosen = await ShowBottomSheet().onReactStreaming(context, ReactStream.good, 3);
                                       setState(() {});
                                     },
                                     svg: '${AssetPath.vectorPath}good_outline.svg',

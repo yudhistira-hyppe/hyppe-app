@@ -12,8 +12,8 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
@@ -49,6 +49,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
   late AlivcBase _alivcBase;
   late AlivcLivePusher _alivcLivePusher;
   late AlivcLivePusherConfig _alivcLivePusherConfig;
+  bool isCreator = false;
 
   @override
   void initState() {
@@ -56,6 +57,9 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
     super.initState();
     _initPush();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        isCreator = context.read<SelfProfileNotifier>().user.profile?.creator ?? false;
+      });
       newUser = SharedPreference().readStorage(SpKeys.newUser) ?? 'FALSE';
       if (newUser == "TRUE") {
         WidgetsBinding.instance.addPostFrameCallback((_) => ShowCaseWidget.of(context).startShowCase([keybutton]));
@@ -275,8 +279,10 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                           ],
                         )
                       : Container(),
+                  // Text('hahaha ${isCreator}'),
                   widget.isLive
                       ? menu(
+                          isCreators: isCreator,
                           title: "Hyppelive".toLowerCase(),
                           subTitle: notifier.language.itstimetoLIVEandinteract ?? '',
                           icon: "${AssetPath.vectorPath}hyppeLive.svg",
@@ -287,7 +293,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
                               // if (tempIsHome) {
                               //   isHomeScreen = false;
                               // }
-                              Routing().moveAndPop(Routes.streamer);
+                              if (isCreator) Routing().moveAndPop(Routes.streamer);
                               // if (tempIsHome) {
                               //   isHomeScreen = true;
                               // }
@@ -304,7 +310,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
     );
   }
 
-  Widget menu({String? title, String? subTitle, String? icon, Function()? function}) {
+  Widget menu({String? title, String? subTitle, String? icon, Function()? function, bool? isCreators}) {
     return ListTile(
       visualDensity: VisualDensity.adaptivePlatformDensity,
       onTap: function,
@@ -313,12 +319,12 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
       title: CustomTextWidget(
         textToDisplay: title ?? '',
         textAlign: TextAlign.start,
-        textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+        textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800, color: isCreators != null && !isCreators ? kHyppeBurem : null),
       ),
       subtitle: Container(
         margin: const EdgeInsets.only(top: 5),
         child: CustomTextWidget(
-          textToDisplay: subTitle ?? '',
+          textToDisplay: "$subTitle",
           textAlign: TextAlign.start,
           textStyle: const TextStyle(fontSize: 16, color: Color(0xffaaaaaa)),
         ),
@@ -328,7 +334,7 @@ class _OnUploadContentBottomSheetState extends State<OnUploadContentBottomSheet>
         height: 27 * SizeConfig.scaleDiagonal,
         width: 27 * SizeConfig.scaleDiagonal,
         defaultColor: false,
-        color: kHyppePrimary,
+        color: isCreators != null && !isCreators ? kHyppeBurem : kHyppePrimary,
       ),
     );
   }

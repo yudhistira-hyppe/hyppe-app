@@ -27,7 +27,7 @@ class ListCommentLive extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onLongPress: () {
-                      ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '');
+                      // ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '');
                     },
                     child: Container(
                       color: Colors.transparent,
@@ -36,17 +36,20 @@ class ListCommentLive extends StatelessWidget {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomProfileImage(
-                              cacheKey: '',
-                              following: true,
-                              forStory: false,
-                              width: 26 * SizeConfig.scaleDiagonal,
-                              height: 26 * SizeConfig.scaleDiagonal,
-                              imageUrl: System().showUserPicture(
-                                notifier.comment[index].avatar?.mediaEndpoint,
+                            GestureDetector(
+                              onTap: () => ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? ''),
+                              child: CustomProfileImage(
+                                cacheKey: '',
+                                following: true,
+                                forStory: false,
+                                width: 26 * SizeConfig.scaleDiagonal,
+                                height: 26 * SizeConfig.scaleDiagonal,
+                                imageUrl: System().showUserPicture(
+                                  notifier.comment[index].avatar?.mediaEndpoint,
+                                ),
+                                // badge: notifier.user.profile?.urluserBadge,
+                                allwaysUseBadgePadding: false,
                               ),
-                              // badge: notifier.user.profile?.urluserBadge,
-                              allwaysUseBadgePadding: false,
                             ),
                             twelvePx,
                             Expanded(
@@ -55,11 +58,11 @@ class ListCommentLive extends StatelessWidget {
                                 children: [
                                   Text(
                                     notifier.comment[index].username ?? '',
-                                    style: TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                                    style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
                                   ),
                                   Text(
                                     notifier.comment[index].messages ?? '',
-                                    style: TextStyle(color: kHyppeTextPrimary),
+                                    style: const TextStyle(color: kHyppeTextPrimary),
                                   ),
                                 ],
                               ),

@@ -17,7 +17,7 @@ class StreamerWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           ListCommentLive(commentFocusNode: commentFocusNode),
-          twentyEightPx,
+          fifteenPx,
           FormCommentLive(commentFocusNode: commentFocusNode),
         ],
       ),
