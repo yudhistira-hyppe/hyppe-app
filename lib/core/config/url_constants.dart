@@ -464,4 +464,5 @@ class UrlConstants {
   static const String updateStream = "$liveStramRoute/update";
   static const String viewrStream = "$liveStramRoute/view";
   static const String feedbackStream = "$liveStramRoute/feedback";
+  static const String listLiveStreaming = "$liveStramRoute/list";
 }

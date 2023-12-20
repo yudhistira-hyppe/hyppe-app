@@ -1083,5 +1083,8 @@
   "exploreLiveToLivenUpYourDay": "Serunya LIVE untuk ramaikan harimu!",
   "youveReachedPauseLimit": "Kesempatan jeda sudah habis",
   "youveReachedPauseLimitDesc": "Kamu telah menggunakan 3 kali kesempatan jeda untuk siaran LIVE ini.",
-  "gotIt": "Mengerti"
+  "gotIt": "Mengerti",
+  "exploreLiveToLivenUpYourDay!": "Serunya LIVE untuk ramaikan harimu!",
+  "emptyStreamers": "Belum ada yang LIVE nih",
+  "messageEmptyStreamers": "Yuk, saatnya LIVE-kan suasana!"
 }

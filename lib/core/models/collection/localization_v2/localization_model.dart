@@ -1083,6 +1083,8 @@ class LocalizationModelV2 {
   String? youveReachedPauseLimit;
   String? youveReachedPauseLimitDesc;
   String? gotIt;
+  String? emptyStreamers;
+  String? messageEmptyStreamers;
 
   LocalizationModelV2({
     this.login,
@@ -2169,6 +2171,8 @@ class LocalizationModelV2 {
     this.youveReachedPauseLimit,
     this.youveReachedPauseLimitDesc,
     this.gotIt,
+    this.emptyStreamers,
+    this.messageEmptyStreamers,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -3274,5 +3278,7 @@ class LocalizationModelV2 {
     youveReachedPauseLimit = json['youveReachedPauseLimit'];
     youveReachedPauseLimitDesc = json['youveReachedPauseLimitDesc'];
     gotIt = json['gotIt'];
+    emptyStreamers = json['emptyStreamers'];
+    messageEmptyStreamers = json['messageEmptyStreamers'];
   }
 }

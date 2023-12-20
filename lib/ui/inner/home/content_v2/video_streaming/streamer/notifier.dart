@@ -95,7 +95,7 @@ class StreamerNotifier with ChangeNotifier {
   String _titleLive = '';
   String get titleLive => _titleLive;
   String pushURL = "rtmp://ingest.hyppe.cloud/Hyppe/hdstream?auth_key=1700732018-0-0-580e7fb4d21585a87315470a335513c1";
-  //Status => Offline - Prepare - StandBy - Ready - Online
+  ///Status => Offline - Prepare - StandBy - Ready - Online
   StatusStream statusLive = StatusStream.offline;
 
   List<Item> _items = <Item>[];

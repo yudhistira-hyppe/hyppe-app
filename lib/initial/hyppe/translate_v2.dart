@@ -57,6 +57,7 @@ import '../../ui/constant/entities/comment_v2/notifier.dart';
 import '../../ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import '../../ui/inner/home/content_v2/help/detail_ticket/notifier.dart';
 import '../../ui/inner/home/content_v2/pin/notifier.dart';
+import '../../ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 
 class TranslateNotifierV2 with ChangeNotifier {
   TranslateNotifierV2._private();
@@ -246,6 +247,7 @@ class TranslateNotifierV2 with ChangeNotifier {
 
       context.read<VerificationIDNotifier>().translate(translate);
       context.read<StreamingFeedbackNotifier>().translate(translate);
+      context.read<ViewStreamingNotifier>().translate(translate);
 
       notifyListeners();
       if (index != null && _listLanguage.isNotEmpty) {

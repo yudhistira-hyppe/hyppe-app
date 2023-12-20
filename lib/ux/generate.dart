@@ -21,6 +21,7 @@ import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
+import 'package:hyppe/core/arguments/view_streaming_argument.dart';
 import 'package:hyppe/ui/constant/entities/appeal/screen.dart';
 import 'package:hyppe/ui/constant/entities/appeal/success_appeal.dart';
 import 'package:hyppe/ui/constant/entities/web_view/screen.dart';
@@ -89,7 +90,6 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/scroll/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/feedback/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/video_streaming/list_streamers/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
 import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
@@ -144,6 +144,8 @@ import '../ui/inner/home/content_v2/help/detail_ticket/screen.dart';
 import '../ui/inner/home/content_v2/help/ticket_history/screen.dart';
 import '../ui/inner/home/content_v2/pic/playlist/slide/slide_screen.dart';
 import '../ui/inner/home/content_v2/vid/playlist/screen_v2.dart';
+import '../ui/inner/home/content_v2/video_streaming/view_streaming/list_streamers/screen.dart';
+import '../ui/inner/home/content_v2/video_streaming/view_streaming/screen.dart';
 import '../ui/inner/search_v2/hashtag/detail_screen.dart';
 
 class Generate {
@@ -433,6 +435,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => StreamingFeedbackScreen(arguments: settings.arguments as SummaryLiveArgument));
       case Routes.listStreamers:
         return MaterialPageRoute(builder: (_) => const ListStreamersScreen());
+      case Routes.viewStreaming:
+        return MaterialPageRoute(builder: (_) => ViewStreamingScreen(args: settings.arguments as ViewStreamingArgument,));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

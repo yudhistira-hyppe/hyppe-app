@@ -71,7 +71,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
             const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
             sixteenPx,
             CustomTextWidget(
-              textToDisplay: "${isIndo ? language.liveVideo : ''}natalia.jessica${!isIndo ? language.liveVideo : ''}",
+              textToDisplay: "${isIndo ? language.liveVideo : ''}${widget.notifier?.dataStream.username}${!isIndo ? language.liveVideo : ''}",
               textStyle: context.getTextTheme().bodyText1?.copyWith(fontWeight: FontWeight.w700),
             ),
             sixteenPx,
@@ -81,7 +81,7 @@ class _OnLiveStreamStatusState extends State<OnLiveStreamStatus> {
               textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: kHyppeBurem),
             ),
             sixteenPx,
-            ItemAccount(urlImage: profileImage, username: widget.notifier?.titleLive ?? '', name: widget.notifier?.userName ?? ''),
+            ItemAccount(urlImage: System().showUserPicture(widget.notifier?.dataStream.avatar?.mediaEndpoint ?? '') ?? '', username: widget.notifier?.dataStream.userId ?? '', name: widget.notifier?.dataStream.username ?? ''),
             eightPx,
             CustomTextWidget(
               textAlign: TextAlign.left,

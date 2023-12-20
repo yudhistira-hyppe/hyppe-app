@@ -70,6 +70,8 @@ import 'package:hyppe/ui/inner/search_v2/notifier.dart' as sV2;
 import '../../ui/constant/entities/comment_v2/notifier.dart';
 import '../../ui/inner/home/content_v2/help/detail_ticket/notifier.dart';
 import '../../ui/inner/home/content_v2/vid/playlist/notifier.dart';
+import '../../ui/inner/home/content_v2/video_streaming/streamer/notifier.dart';
+import '../../ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 
 class AppDependencies {
   static List<SingleChildWidget> inject({required HyppeNotifier rootNotifier}) => [
@@ -250,6 +252,8 @@ class AppDependencies {
         ChangeNotifierProvider<TutorNotifier>(create: (context) => TutorNotifier()),
         ChangeNotifierProvider<VideoNotifier>(create: (context) => VideoNotifier()),
         ChangeNotifierProvider<StreamingFeedbackNotifier>(create: (context) => StreamingFeedbackNotifier()),
-        ChangeNotifierProvider<StreamerNotifier>(create: (context) => StreamerNotifier())
+        ChangeNotifierProvider<StreamerNotifier>(create: (context) => StreamerNotifier()),
+        ChangeNotifierProvider<StreamingFeedbackNotifier>(create: (context) => StreamingFeedbackNotifier()),
+        ChangeNotifierProvider<ViewStreamingNotifier>(create: (context) => ViewStreamingNotifier())
       ];
 }

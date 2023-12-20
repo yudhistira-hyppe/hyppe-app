@@ -15,7 +15,11 @@ class UserProfileAvatarModel {
 
   String? imageKey; //untuk key image cache
 
-  UserProfileAvatarModel({this.createdAt, this.mediaBasePath, this.mediaUri, this.active, this.mediaType, this.mediaEndpoint, this.updatedAt, this.imageKey});
+  String? fsSourceUri;
+
+  String? fsTargetUri;
+
+  UserProfileAvatarModel({this.createdAt, this.mediaBasePath, this.mediaUri, this.active, this.mediaType, this.mediaEndpoint, this.updatedAt, this.imageKey, this.fsSourceUri, this.fsTargetUri});
 
   UserProfileAvatarModel.fromJson(Map<String, dynamic> json) {
     createdAt = json['createdAt'];
@@ -26,6 +30,8 @@ class UserProfileAvatarModel {
     mediaEndpoint = json['mediaEndpoint'];
     updatedAt = json['updatedAt'];
     imageKey = '';
+    fsSourceUri = json['fsSourceUri'];
+    fsTargetUri = json['fsTargetUri'];
   }
 
   Map<String, dynamic> toJson() {
@@ -37,6 +43,8 @@ class UserProfileAvatarModel {
     data['mediaType'] = mediaType;
     data['mediaEndpoint'] = mediaEndpoint;
     data['updatedAt'] = updatedAt;
+    data['fsSourceUri'] = fsSourceUri;
+    data['fsTargetUri'] = fsTargetUri;
     return data;
   }
 }
