@@ -128,10 +128,10 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   List<String> likeList = [];
 
-  bool _notYet = true;
-  bool get notYet => _notYet;
-  set notYet(bool state){
-    _notYet = state;
+  bool _isOver = false;
+  bool get isOver => _isOver;
+  set isOver(bool state){
+    _isOver = state;
     notifyListeners();
   }
 

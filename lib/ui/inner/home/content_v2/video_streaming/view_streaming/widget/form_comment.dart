@@ -97,18 +97,6 @@ class FormCommentViewer extends StatelessWidget {
               height: 36,
               defaultColor: false,
               onPressed: () {
-                notifier.notYet = true;
-                notifier.likeList.add(System().getCurrentDate());
-                Future.delayed(const Duration(seconds: 1), (){
-                  if(notifier.now){
-                    notifier.notYet = false;
-                  }
-                  if(!notifier.notYet){
-                    if(notifier.streamerData != null){
-                      notifier.likeStreaming(context, notifier.streamerData!, notifier.likeList);
-                    }
-                  }
-                });
 
               })
           // commentFocusNode!.hasFocus

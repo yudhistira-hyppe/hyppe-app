@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,6 +28,7 @@ import '../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../core/services/shared_preference.dart';
 import '../../../../../../core/services/system.dart';
 import '../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import '../../../../../constant/widget/custom_loading.dart';
 import '../../../../../constant/widget/custom_profile_image.dart';
 import '../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../constant/widget/custom_text_widget.dart';
@@ -40,7 +42,8 @@ class ViewStreamingScreen extends StatefulWidget {
   State<ViewStreamingScreen> createState() => _ViewStreamingScreenState();
 }
 
-class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsBindingObserver, TickerProviderStateMixin {
+class _ViewStreamingScreenState extends State<ViewStreamingScreen>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   FocusNode commentFocusNode = FocusNode();
 
   FlutterAliplayer? fAliplayer;
@@ -126,17 +129,22 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
 
     bool theme = SharedPreference().readStorage(SpKeys.themeData) ?? false;
     super.initState();
-    final notifier = (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>();
+    final notifier = (Routing.navigatorKey.currentContext ?? context)
+        .read<ViewStreamingNotifier>();
     notifier.initViewStreaming(widget.args.data);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       commentFocusNode.addListener(() {
         print("Has focus: ${commentFocusNode.hasFocus}");
       });
-      notifier.startViewStreaming(Routing.navigatorKey.currentContext ?? context, mounted, widget.args.data);
+      notifier.startViewStreaming(
+          Routing.navigatorKey.currentContext ?? context,
+          mounted,
+          widget.args.data);
       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.args.data.sId);
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(
+          playerId: widget.args.data.sId);
 
       WidgetsBinding.instance.addObserver(this);
       bottomIndex = 0;
@@ -163,7 +171,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      fAliplayer
+          ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
 
       if (Platform.isAndroid) {
         getExternalStorageDirectories().then((value) {
@@ -187,7 +196,9 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+      fAliplayer
+          ?.getPlayerName()
+          .then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
         setState(() {
@@ -415,7 +426,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     WakelockPlus.disable();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     if (Platform.isIOS) {
@@ -453,7 +465,72 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
           child: Container(
             width: SizeConfig.screenWidth,
             height: SizeConfig.screenHeight,
-            child: Stack(
+            child: notifier.isOver ? Stack(
+              children: [
+                Positioned.fill(
+                  child: Container(
+                    width: double.infinity,
+                    height: context.getHeight(),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(image: NetworkImage(displayPhotoProfileOriginal(
+                          widget.args.data.avatar?.mediaEndpoint ??
+                              '') ??
+                          ''), fit: BoxFit.cover),
+                    ),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                        child: Container(
+                          decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
+                        ),
+                      ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomTextWidget(
+                        textToDisplay: 'Siaran LIVE telah berakhir',
+                        textStyle: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                      twelvePx,
+                      CustomTextWidget(
+                        textToDisplay:
+                        '${notifier.totViews} ${notifier.language.views}',
+                        textStyle: const TextStyle(
+                            fontSize: 14,
+                            color: Color(0xffdadada)),
+                      ),
+                      twelvePx,
+                      SizedBox(
+                        width: 80,
+                        height: 80,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(40),
+                          child: streamerImage(displayPhotoProfileOriginal(
+                              widget.args.data.avatar?.mediaEndpoint ??
+                                  '') ??
+                              ''),
+                        ),
+                      ),
+                      twelvePx,
+                      CustomTextWidget(
+                        textToDisplay: widget.args.data.username ?? '',
+                        textStyle: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xffdadada)),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ) : Stack(
               children: [
                 Container(
                   width: SizeConfig.screenWidth,
@@ -506,7 +583,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                         width: 36,
                         height: 36,
                         following: true,
-                        imageUrl: System().showUserPicture(widget.args.data.avatar?.mediaEndpoint ?? ''),
+                        imageUrl: System().showUserPicture(
+                            widget.args.data.avatar?.mediaEndpoint ?? ''),
                         forStory: false,
                       ),
                       twelvePx,
@@ -519,11 +597,17 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                               CustomTextWidget(
                                 textAlign: TextAlign.left,
                                 textToDisplay: widget.args.data.username ?? '',
-                                textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: Colors.white),
+                                textStyle: context
+                                    .getTextTheme()
+                                    .bodyText2
+                                    ?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white),
                               ),
                               fourPx,
                               const CustomIconWidget(
-                                iconData: "${AssetPath.vectorPath}arrow_down.svg",
+                                iconData:
+                                    "${AssetPath.vectorPath}arrow_down.svg",
                                 defaultColor: false,
                                 color: Colors.white,
                                 width: 10,
@@ -534,8 +618,11 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           fourPx,
                           CustomTextWidget(
                             textAlign: TextAlign.left,
-                            textToDisplay: "${notifier.totLikes.getCountShort()} likes",
-                            textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: Colors.white),
+                            textToDisplay:
+                                "${notifier.totLikes.getCountShort()} likes",
+                            textStyle: context.getTextTheme().caption?.copyWith(
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white),
                           ),
                         ],
                       ),
@@ -549,11 +636,15 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                   child: Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
-                        decoration: BoxDecoration(color: kHyppeDanger, borderRadius: BorderRadius.circular(3)),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 3),
+                        decoration: BoxDecoration(
+                            color: kHyppeDanger,
+                            borderRadius: BorderRadius.circular(3)),
                         child: const Text(
                           'LIVE',
-                          style: TextStyle(color: kHyppeTextPrimary, wordSpacing: 10),
+                          style: TextStyle(
+                              color: kHyppeTextPrimary, wordSpacing: 10),
                         ),
                       ),
                       eightPx,
@@ -566,8 +657,11 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                         },
                         child: Container(
                           width: 50 * context.getScaleDiagonal(),
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                          decoration: BoxDecoration(color: kHyppeTransparent, borderRadius: BorderRadius.circular(3)),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 6),
+                          decoration: BoxDecoration(
+                              color: kHyppeTransparent,
+                              borderRadius: BorderRadius.circular(3)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -579,7 +673,10 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                               sixPx,
                               Text(
                                 notifier.totViews.getCountShort(),
-                                style: const TextStyle(color: kHyppeTextPrimary, fontSize: 10, fontWeight: FontWeight.w700),
+                                style: const TextStyle(
+                                    color: kHyppeTextPrimary,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700),
                               ),
                             ],
                           ),
@@ -589,7 +686,9 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           iconData: "${AssetPath.vectorPath}close.svg",
                           defaultColor: false,
                           onPressed: () {
-                            notifier.exitStreaming(context, widget.args.data).whenComplete(() async{
+                            notifier
+                                .exitStreaming(context, widget.args.data)
+                                .whenComplete(() async {
                               Routing().moveBack();
                               await notifier.destoryPusher();
                             });
@@ -603,7 +702,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                     right: 16,
                     child: ViewerComment(
                       commentFocusNode: commentFocusNode,
-                    ))
+                    )),
               ],
             ),
           ),
@@ -615,5 +714,33 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
         ),
       );
     });
+  }
+
+  String? displayPhotoProfileOriginal(String url) {
+    try {
+      var orginial = url.split('/');
+      var endpoint = "/profilepict/orignal/${orginial.last}";
+      return System().showUserPicture(endpoint);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Widget streamerImage(String image) {
+    return Stack(
+      children: [
+        const Align(
+          alignment: Alignment.center,
+          child: CustomLoading(),
+        ),
+        Positioned.fill(
+            child: Image.network(
+          image,
+          width: double.infinity,
+          height: double.infinity,
+          fit: BoxFit.cover,
+        )),
+      ],
+    );
   }
 }
