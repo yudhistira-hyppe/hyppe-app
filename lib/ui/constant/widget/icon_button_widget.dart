@@ -21,8 +21,7 @@ class CustomIconButtonWidget extends StatelessWidget {
       this.alignment = Alignment.center,
       this.defaultColor = false,
       this.padding = const EdgeInsets.all(8.0)})
-      :
-        super(key: key);
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -3,8 +3,9 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 
 class IconButtonLive extends StatelessWidget {
   final Widget? widget;
-  final Function? onPressed;
-  const IconButtonLive({super.key, this.onPressed, this.widget});
+  final Function()? onPressed;
+  final Function(bool)? onClicked;
+  const IconButtonLive({super.key, this.onPressed, this.widget, this.onClicked});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,17 @@ class IconButtonLive extends StatelessWidget {
         shape: const CircleBorder(),
         child: InkWell(
           splashColor: Colors.black,
-          onTap: onPressed as void Function()?,
+          onTap: onPressed,
+          onTapUp: (val) {
+            if (onClicked != null) {
+              onClicked!(false);
+            }
+          },
+          onTapDown: (val) {
+            if (onClicked != null) {
+              onClicked!(true);
+            }
+          },
           customBorder: const CircleBorder(),
           child: Ink(
             decoration: const BoxDecoration(shape: BoxShape.circle),

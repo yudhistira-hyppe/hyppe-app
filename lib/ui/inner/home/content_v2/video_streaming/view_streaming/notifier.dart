@@ -22,6 +22,7 @@ import '../../../../../../core/services/socket_service.dart';
 import '../../../../../../core/services/system.dart';
 import '../../../../../../ux/routing.dart';
 import '../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'dart:math' as math;
 
 class ViewStreamingNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -40,6 +41,7 @@ class ViewStreamingNotifier with ChangeNotifier {
   static const String eventCommentDisable = 'COMMENT_STREAM_DISABLED';
 
   String userName = '';
+
   ///Status => Offline - Prepare - StandBy - Ready - Online
   StatusStream statusLive = StatusStream.offline;
 
@@ -51,34 +53,40 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   bool _loading = false;
   bool get loading => _loading;
-  set loading(bool state){
+  set loading(bool state) {
     _loading = state;
     notifyListeners();
   }
 
   bool _isCommentDisable = false;
   bool get isCommentDisable => _isCommentDisable;
-  set isCommentDisable(bool state){
+  set isCommentDisable(bool state) {
     _isCommentDisable = state;
+    notifyListeners();
+  }
+
+  bool _isClicked = false;
+  bool get isClicked => _isClicked;
+  set isClicked(bool state) {
+    _isClicked = state;
     notifyListeners();
   }
 
   List<LinkStreamModel> _listStreamers = [];
   List<LinkStreamModel> get listStreamers => _listStreamers;
-  set listStreamers(List<LinkStreamModel> data){
+  set listStreamers(List<LinkStreamModel> data) {
     _listStreamers = data;
     notifyListeners();
   }
 
   LinkStreamModel? streamerData;
 
-  initListStreamers(){
+  initListStreamers() {
     _loading = true;
     _listStreamers = [];
-
   }
 
-  initViewStreaming(LinkStreamModel data){
+  initViewStreaming(LinkStreamModel data) {
     totLikes = data.totalLike ?? 0;
     totViews = data.totalView ?? 0;
     streamerData = data;
@@ -131,19 +139,23 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   bool _isOver = false;
   bool get isOver => _isOver;
-  set isOver(bool state){
+  set isOver(bool state) {
     _isOver = state;
-    notifyListeners();
   }
 
   bool _now = true;
   bool get now => _now;
-  set now(bool state){
+  set now(bool state) {
     _now = state;
     notifyListeners();
   }
 
-  likeStreaming(BuildContext context, LinkStreamModel model, List<String> likes) async{
+  void likeAdd() {
+    likeList.add(System().getCurrentDate());
+    notifyListeners();
+  }
+
+  likeStreaming(BuildContext context, LinkStreamModel model, List<String> likes) async {
     bool connect = await System().checkConnections();
 
     if (connect) {
@@ -175,7 +187,7 @@ class ViewStreamingNotifier with ChangeNotifier {
   Future getListStreamers(BuildContext context, mounted, {bool isReload = true}) async {
     loading = true;
     bool connect = await System().checkConnections();
-    if(isReload){
+    if (isReload) {
       listStreamers = [];
     }
 
@@ -184,7 +196,6 @@ class ViewStreamingNotifier with ChangeNotifier {
         final notifier = LiveStreamBloc();
         Map data = {"page": 0, "limit": 20};
         if (mounted) {
-
           await notifier.getLinkStream(context, data, UrlConstants.listLiveStreaming);
         }
         final fetch = notifier.liveStreamFetch;
@@ -268,6 +279,40 @@ class ViewStreamingNotifier with ChangeNotifier {
     return returnNext;
   }
 
+  Future sendLike(BuildContext context, LinkStreamModel model) async {
+    bool connect = await System().checkConnections();
+
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {
+          "_id": model.sId,
+          "like": likeList,
+          // "like":["2023-12-14 12:01:49"],
+          "type": "LIKE"
+        };
+
+        await notifier.getLinkStream(context, data, UrlConstants.updateStream);
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          likeList = [];
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      // returnNext = false;
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          exitStreaming(context, model);
+        });
+      }
+    }
+  }
+
   Future<void> startViewStreaming(BuildContext context, mounted, LinkStreamModel data) async {
     notifyListeners();
     var init = await initLiveStream(context, mounted, data);
@@ -293,10 +338,10 @@ class ViewStreamingNotifier with ChangeNotifier {
     // }
 
     _socketService.connectToSocket(
-          () {
+      () {
         _socketService.events(
           events,
-              (message) {
+          (message) {
             try {
               handleSocket(message, events, data);
               print('ini message dari socket $events ----- ${message}');
@@ -309,19 +354,19 @@ class ViewStreamingNotifier with ChangeNotifier {
       host: Env.data.baseUrl,
       options: OptionBuilder()
           .setAuth({
-        "x-auth-user": "$email",
-        "x-auth-token": "$token",
-      })
+            "x-auth-user": "$email",
+            "x-auth-token": "$token",
+          })
           .setTransports(
-        ['websocket'],
-      )
+            ['websocket'],
+          )
           .setPath('${Env.data.versionApi}/socket.io')
           .disableAutoConnect()
           .build(),
     );
   }
 
-  void handleSocket(message, event, LinkStreamModel dataStream) {
+  void handleSocket(message, event, LinkStreamModel dataStream) async {
     if (event == eventComment) {
       var messages = CommentLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
@@ -331,6 +376,13 @@ class ViewStreamingNotifier with ChangeNotifier {
       var messages = CountLikeLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
         totLikes += messages.likeCount ?? 0;
+        print("totalnya ${animationIndexes}");
+        // for (var i = 0; i < (messages.likeCount ?? 0); i++) {
+        var run = getRandomDouble(1, 999999999999999);
+        animationIndexes.add(run.toInt());
+
+        notifyListeners();
+        await Future.delayed(const Duration(milliseconds: 700));
       }
     } else if (event == eventViewStream) {
       var messages = CountViewLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
@@ -339,5 +391,19 @@ class ViewStreamingNotifier with ChangeNotifier {
       }
     }
     notifyListeners();
+  }
+
+  double getRandomDouble(double min, double max) {
+    // Membuat instance dari kelas Random
+    final random = math.Random();
+
+    // Menghasilkan angka acak antara min dan max
+    // dengan presisi 4 digit di belakang koma
+    double randomValue = min + random.nextDouble() * (max - min);
+
+    // Membulatkan angka menjadi 4 digit di belakang koma
+    randomValue = double.parse(randomValue.toStringAsFixed(4));
+
+    return randomValue;
   }
 }
