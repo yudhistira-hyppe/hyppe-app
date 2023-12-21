@@ -29,6 +29,11 @@ class IconButtonLive extends StatelessWidget {
               onClicked!(true);
             }
           },
+          onTapCancel: (){
+            if (onClicked != null) {
+              onClicked!(false);
+            }
+          },
           customBorder: const CircleBorder(),
           child: Ink(
             decoration: const BoxDecoration(shape: BoxShape.circle),

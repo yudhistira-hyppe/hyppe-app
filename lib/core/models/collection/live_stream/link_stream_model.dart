@@ -15,6 +15,7 @@ class LinkStreamModel {
   int? totalLike;
   int? totalFollower;
   String? username;
+  String? fullName;
   String? title;
 
   LinkStreamModel(
@@ -32,6 +33,7 @@ class LinkStreamModel {
       this.totalLike,
       this.totalFollower,
       this.username,
+        this.fullName,
       this.title});
 
   LinkStreamModel.fromJson(Map<String, dynamic> json) {
@@ -50,6 +52,7 @@ class LinkStreamModel {
     totalLike = json['totalLike'];
     totalFollower = json['totalFollower'];
     username = json['username'];
+    fullName = json['fullName'];
     title = json['title'];
   }
 }
