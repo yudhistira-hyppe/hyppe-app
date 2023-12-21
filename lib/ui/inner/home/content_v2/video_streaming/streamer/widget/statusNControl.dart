@@ -95,10 +95,13 @@ class StatusNControl extends StatelessWidget {
                     }),
                 sixteenPx,
                 IconButtonLive(
-                    widget: const CustomIconWidget(
-                      width: 24,
-                      iconData: "${AssetPath.vectorPath}flip.svg",
-                      defaultColor: false,
+                    widget: Align(
+                      alignment: Alignment.center,
+                      child: const CustomIconWidget(
+                        width: 24,
+                        iconData: "${AssetPath.vectorPath}flip.svg",
+                        defaultColor: false,
+                      ),
                     ),
                     onPressed: () {
                       notifier.flipCamera();

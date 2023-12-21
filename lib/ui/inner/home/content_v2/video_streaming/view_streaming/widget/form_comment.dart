@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/iconButton.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +19,7 @@ class FormCommentViewer extends StatefulWidget {
 
 class _FormCommentViewerState extends State<FormCommentViewer> {
   final _debouncer = Debouncer(milliseconds: 2000);
+  String comment = '';
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +40,11 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                   style: const TextStyle(color: Colors.white),
                   cursorColor: Colors.white,
                   enabled: !notifier.isCommentDisable,
+                  onChanged: (value) {
+                    setState(() {
+                      comment = value;
+                    });
+                  },
                   decoration: InputDecoration(
                       hintText: notifier.isCommentDisable ? tn.commentsAreDisabled : tn.addComment,
                       isDense: true, // important line
@@ -56,28 +58,37 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                 ),
                 !widget.commentFocusNode!.hasFocus
                     ? Container()
-                    : Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: CustomTextButton(
-                              onPressed: () {
-                                if (notifier.streamerData != null) {
-                                  notifier.sendComment(context, notifier.streamerData!, notifier.commentController.text);
-                                }
-                              },
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(kHyppePrimary),
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                    ),
-                                  )),
-                              child: Text(
-                                tn.send ?? '',
-                                style: TextStyle(color: kHyppeTextPrimary),
-                              )),
-                        )),
+                    : comment == ''
+                        ? Container()
+                        : Positioned.fill(
+                            top: 0,
+                            child: Align(
+                                alignment: Alignment.topRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: CustomTextButton(
+                                      onPressed: () {
+                                        if (notifier.streamerData != null) {
+                                          setState(() {
+                                            comment = '';
+                                          });
+                                          notifier.sendComment(context, notifier.streamerData!, notifier.commentController.text);
+                                        }
+                                      },
+                                      style: ButtonStyle(
+                                          visualDensity: VisualDensity.comfortable,
+                                          backgroundColor: MaterialStateProperty.all(kHyppePrimary),
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(18.0),
+                                            ),
+                                          )),
+                                      child: Text(
+                                        tn.send ?? '',
+                                        style: TextStyle(color: kHyppeTextPrimary),
+                                      )),
+                                )),
+                          ),
               ],
             ),
           ),
@@ -96,7 +107,7 @@ class _FormCommentViewerState extends State<FormCommentViewer> {
                           height: 24,
                         ),
                       ),
-                      onClicked: (state){
+                      onClicked: (state) {
                         notifier.isClicked = state;
                       },
                       onPressed: () {

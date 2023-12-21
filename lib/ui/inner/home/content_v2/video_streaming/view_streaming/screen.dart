@@ -13,6 +13,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/streamer/widget/love_lottie.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/love_lottie.dart';
+import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/pauseLive.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/title_view_live.dart';
 import 'package:hyppe/ui/inner/home/content_v2/video_streaming/view_streaming/widget/viewer_comment.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -22,9 +23,11 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../../app.dart';
 import '../../../../../../core/config/ali_config.dart';
+import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../../core/services/shared_preference.dart';
 import '../../../../../../core/services/system.dart';
+import '../../../../../constant/widget/custom_icon_widget.dart';
 import '../../../../../constant/widget/custom_loading.dart';
 import '../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../constant/widget/custom_text_widget.dart';
@@ -38,8 +41,7 @@ class ViewStreamingScreen extends StatefulWidget {
   State<ViewStreamingScreen> createState() => _ViewStreamingScreenState();
 }
 
-class _ViewStreamingScreenState extends State<ViewStreamingScreen>
-    with WidgetsBindingObserver, TickerProviderStateMixin {
+class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsBindingObserver, TickerProviderStateMixin {
   FocusNode commentFocusNode = FocusNode();
 
   FlutterAliplayer? fAliplayer;
@@ -50,6 +52,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
   bool isloading = false;
   bool isPrepare = false;
   bool isPause = false;
+  bool liveIsPause = false;
   int? bottomIndex;
   List<Widget>? mFramePage;
   Map<String, dynamic>? _dataSourceMap;
@@ -125,22 +128,17 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
 
     bool theme = SharedPreference().readStorage(SpKeys.themeData) ?? false;
     super.initState();
-    final notifier = (Routing.navigatorKey.currentContext ?? context)
-        .read<ViewStreamingNotifier>();
+    final notifier = (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>();
     notifier.initViewStreaming(widget.args.data);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       commentFocusNode.addListener(() {
         print("Has focus: ${commentFocusNode.hasFocus}");
       });
-      notifier.startViewStreaming(
-          Routing.navigatorKey.currentContext ?? context,
-          mounted,
-          widget.args.data);
+      notifier.startViewStreaming(Routing.navigatorKey.currentContext ?? context, mounted, widget.args.data);
       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
-      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(
-          playerId: widget.args.data.sId);
+      fAliplayer = FlutterAliPlayerFactory.createAliPlayer(playerId: widget.args.data.sId);
 
       WidgetsBinding.instance.addObserver(this);
       bottomIndex = 0;
@@ -167,8 +165,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
 
       //set player
       fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-      fAliplayer
-          ?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+      fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
 
       if (Platform.isAndroid) {
         getExternalStorageDirectories().then((value) {
@@ -192,9 +189,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
     });
     fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      fAliplayer
-          ?.getPlayerName()
-          .then((value) => print("getPlayerName==${value}"));
+      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
         setState(() {
@@ -209,21 +204,24 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
     fAliplayer?.setOnStateChanged((newState, playerId) {
+      print('--aaaaaaa----- $newState');
       // _currentPlayerState = newState;
       try {
         switch (newState) {
           case FlutterAvpdef.AVPStatus_AVPStatusStarted:
             WakelockPlus.enable();
+
             setState(() {
               // _showTipsWidget = false;
               _showLoading = false;
               isPause = false;
+              liveIsPause = false;
             });
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusPaused:
-            isPause = true;
-            setState(() {});
-            WakelockPlus.disable();
+            setState(() {
+              liveIsPause = true;
+            });
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             WakelockPlus.disable();
@@ -235,9 +233,11 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
             WakelockPlus.disable();
+            context.read<ViewStreamingNotifier>().isOver = true;
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusError:
             WakelockPlus.disable();
+            context.read<ViewStreamingNotifier>().isOver = true;
             break;
           default:
         }
@@ -246,10 +246,16 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
       }
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-      setState(() {
-        _loadingPercent = 0;
-        _showLoading = true;
-      });
+      if (!(context.read<ViewStreamingNotifier>().dataStreaming.pause ?? false)) {
+        setState(() {
+          _loadingPercent = 0;
+          _showLoading = true;
+        });
+      }
+      print("------------isloading ---------");
+      if (context.read<ViewStreamingNotifier>().endLive) {
+        context.read<ViewStreamingNotifier>().isOver = true;
+      }
     }, loadingProgress: (percent, netSpeed, playerId) {
       if (percent == 100) {
         _showLoading = false;
@@ -281,9 +287,11 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
     });
     fAliplayer?.setOnSeekComplete((playerId) {
       // _inSeek = false;
+      context.read<ViewStreamingNotifier>().isOver = true;
     });
     var lastDetik = 0;
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
+      print("---------- status $infoCode ");
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
           _currentPosition = extraValue ?? 0;
@@ -316,6 +324,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
           setState(() {});
         }
       } else if (infoCode == FlutterAvpdef.AUTOPLAYSTART) {
+        liveIsPause = false;
+        setState(() {});
         // Fluttertoast.showToast(msg: "AutoPlay");
       } else if (infoCode == FlutterAvpdef.CACHESUCCESS) {
         // Fluttertoast.showToast(msg: "Cache Success");
@@ -422,16 +432,15 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: SystemUiOverlay.values);
+    fAliplayer?.stop();
+    fAliplayer?.destroy();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     WakelockPlus.disable();
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
     }
 
-    fAliplayer?.stop();
-    fAliplayer?.destroy();
     super.dispose();
     globalAdsPopUp = null;
     WidgetsBinding.instance.removeObserver(this);
@@ -461,258 +470,265 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen>
           child: Container(
             width: SizeConfig.screenWidth,
             height: SizeConfig.screenHeight,
-            child: notifier.isOver ? Stack(
-              children: [
-                Positioned.fill(
-                  child: Container(
-                    width: double.infinity,
-                    height: context.getHeight(),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(image: NetworkImage(displayPhotoProfileOriginal(
-                          widget.args.data.avatar?.mediaEndpoint ??
-                              '') ??
-                          ''), fit: BoxFit.cover),
-                    ),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                        child: Container(
-                          decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
-                        ),
-                      ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+            child: notifier.isOver
+                ? Stack(
                     children: [
-                      CustomTextWidget(
-                        textToDisplay: 'Siaran LIVE telah berakhir',
-                        textStyle: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                      twelvePx,
-                      CustomTextWidget(
-                        textToDisplay:
-                        '${notifier.totViews} ${notifier.language.views}',
-                        textStyle: const TextStyle(
-                            fontSize: 14,
-                            color: Color(0xffdadada)),
-                      ),
-                      twelvePx,
-                      SizedBox(
-                        width: 80,
-                        height: 80,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(40),
-                          child: streamerImage(displayPhotoProfileOriginal(
-                              widget.args.data.avatar?.mediaEndpoint ??
-                                  '') ??
-                              ''),
+                      Positioned.fill(
+                        child: Container(
+                          width: double.infinity,
+                          height: context.getHeight(),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(image: NetworkImage(displayPhotoProfileOriginal(widget.args.data.avatar?.mediaEndpoint ?? '') ?? ''), fit: BoxFit.cover),
+                          ),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                            child: Container(
+                              decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
+                            ),
+                          ),
                         ),
                       ),
-                      twelvePx,
-                      CustomTextWidget(
-                        textToDisplay: widget.args.data.username ?? '',
-                        textStyle: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xffdadada)),
+                      SafeArea(
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: GestureDetector(
+                            onTap: () {
+                              Routing().moveBack();
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 30.0),
+                              child: CustomIconWidget(
+                                iconData: "${AssetPath.vectorPath}close.svg",
+                                defaultColor: false,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomTextWidget(
+                              textToDisplay: 'Siaran LIVE telah berakhir',
+                              textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                            twelvePx,
+                            CustomTextWidget(
+                              textToDisplay: '${notifier.totViews} ${notifier.language.views}',
+                              textStyle: const TextStyle(fontSize: 14, color: Color(0xffdadada)),
+                            ),
+                            twelvePx,
+                            SizedBox(
+                              width: 80,
+                              height: 80,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(40),
+                                child: streamerImage(displayPhotoProfileOriginal(widget.args.data.avatar?.mediaEndpoint ?? '') ?? ''),
+                              ),
+                            ),
+                            twelvePx,
+                            CustomTextWidget(
+                              textToDisplay: widget.args.data.username ?? '',
+                              textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xffdadada)),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  )
+                : Stack(
+                    children: [
+                      Container(
+                        color: Colors.black,
+                        width: SizeConfig.screenWidth,
+                        height: SizeConfig.screenHeight,
+                        child: AliPlayerView(
+                          onCreated: onViewPlayerCreated,
+                          x: 0,
+                          y: 0,
+                          height: SizeConfig.screenHeight,
+                          width: SizeConfig.screenWidth,
+                        ),
+                      ),
+                      if (notifier.dataStreaming.pause ?? false) const PauseLiveView(),
+                      // if (liveIsPause) const PauseLiveView(),
+                      Positioned.fill(
+                        bottom: -60,
+                        right: 0,
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: SizedBox(
+                            width: 70,
+                            child: Stack(
+                              children: notifier.animationIndexes.map((e) {
+                                return LoveLootie(
+                                  onAnimationFinished: () {
+                                    // notifier.removeAnimation(e);
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned.fill(
+                        bottom: -60,
+                        right: 0,
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: SizedBox(
+                            width: 70,
+                            child: Stack(
+                              children: notifier.likeList.map((e) {
+                                return LoveSingleLootie(
+                                  onAnimationFinished: () {
+                                    // notifier.removeAnimation(e);
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (_showLoading && !(notifier.dataStreaming.pause ?? false))
+                        Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const CircularProgressIndicator(
+                                  backgroundColor: Colors.white,
+                                  strokeWidth: 3.0,
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text(
+                                  "$_loadingPercent%",
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      TitleViewLive(data: widget.args.data, totLikes: notifier.totLikes, totViews: notifier.totViews),
+                      // Positioned(
+                      //   top: 12 + context.getHeightStatusBar(),
+                      //   left: 16,
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.start,
+                      //     children: [
+                      //       CustomProfileImage(
+                      //         width: 36,
+                      //         height: 36,
+                      //         following: true,
+                      //         imageUrl: System().showUserPicture(widget.args.data.avatar?.mediaEndpoint ?? ''),
+                      //         forStory: false,
+                      //       ),
+                      //       twelvePx,
+                      //       Column(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: [
+                      //           Row(
+                      //             children: [
+                      //               CustomTextWidget(
+                      //                 textAlign: TextAlign.left,
+                      //                 textToDisplay: widget.args.data.username ?? '',
+                      //                 textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: Colors.white),
+                      //               ),
+                      //               fourPx,
+                      //               const CustomIconWidget(
+                      //                 iconData: "${AssetPath.vectorPath}arrow_down.svg",
+                      //                 defaultColor: false,
+                      //                 color: Colors.white,
+                      //                 width: 10,
+                      //                 height: 10,
+                      //               )
+                      //             ],
+                      //           ),
+                      //           fourPx,
+                      //           CustomTextWidget(
+                      //             textAlign: TextAlign.left,
+                      //             textToDisplay: "${notifier.totLikes.getCountShort()} likes",
+                      //             textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: Colors.white),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //       fourPx,
+                      //     ],
+                      //   ),
+                      // ),
+                      // Positioned(
+                      //   top: 12 + context.getHeightStatusBar(),
+                      //   right: 16,
+                      //   child: Row(
+                      //     children: [
+                      //       Container(
+                      //         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                      //         decoration: BoxDecoration(color: kHyppeDanger, borderRadius: BorderRadius.circular(3)),
+                      //         child: const Text(
+                      //           'LIVE',
+                      //           style: TextStyle(color: kHyppeTextPrimary, wordSpacing: 10),
+                      //         ),
+                      //       ),
+                      //       eightPx,
+                      //       GestureDetector(
+                      //         onTap: () {
+                      //           print('testing see views');
+                      //           final ref = context.read<StreamerNotifier>();
+                      //           ref.dataStream = widget.args.data;
+                      //           ShowBottomSheet.onStreamWatchersStatus(context, ref);
+                      //         },
+                      //         child: Container(
+                      //           width: 50 * context.getScaleDiagonal(),
+                      //           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                      //           decoration: BoxDecoration(color: kHyppeTransparent, borderRadius: BorderRadius.circular(3)),
+                      //           child: Row(
+                      //             mainAxisAlignment: MainAxisAlignment.center,
+                      //             children: [
+                      //               const Icon(
+                      //                 Icons.remove_red_eye_outlined,
+                      //                 color: kHyppeTextPrimary,
+                      //                 size: 12,
+                      //               ),
+                      //               sixPx,
+                      //               Text(
+                      //                 notifier.totViews.getCountShort(),
+                      //                 style: const TextStyle(color: kHyppeTextPrimary, fontSize: 10, fontWeight: FontWeight.w700),
+                      //               ),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       CustomIconButtonWidget(
+                      //           iconData: "${AssetPath.vectorPath}close.svg",
+                      //           defaultColor: false,
+                      //           onPressed: () {
+                      //             notifier.exitStreaming(context, widget.args.data).whenComplete(() async {
+                      //               Routing().moveBack();
+                      //               await notifier.destoryPusher();
+                      //             });
+                      //           })
+                      //     ],
+                      //   ),
+                      // ),
+                      Positioned(
+                          bottom: 36,
+                          left: 16,
+                          right: 16,
+                          child: ViewerComment(
+                            commentFocusNode: commentFocusNode,
+                            data: widget.args.data,
+                          ))
                     ],
                   ),
-                )
-              ],
-            ) : Stack(
-              children: [
-                Container(
-                  color: Colors.black,
-                  width: SizeConfig.screenWidth,
-                  height: SizeConfig.screenHeight,
-                  child: AliPlayerView(
-                    onCreated: onViewPlayerCreated,
-                    x: 0,
-                    y: 0,
-                    height: SizeConfig.screenHeight,
-                    width: SizeConfig.screenWidth,
-                  ),
-                ),
-                Positioned.fill(
-                  bottom: -90,
-                  right: 10,
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: SizedBox(
-                      width: 70,
-                      child: Stack(
-                        children: notifier.animationIndexes.map((e) {
-                          return LoveLootie(
-                            onAnimationFinished: () {
-                              // notifier.removeAnimation(e);
-                            },
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned.fill(
-                  bottom: -90,
-                  right: 10,
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: SizedBox(
-                      width: 70,
-                      child: Stack(
-                        children: notifier.likeList.map((e) {
-                          return LoveSingleLootie(
-                            onAnimationFinished: () {
-                              // notifier.removeAnimation(e);
-                            },
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ),
-                if (_showLoading)
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const CircularProgressIndicator(
-                            backgroundColor: Colors.white,
-                            strokeWidth: 3.0,
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          Text(
-                            "$_loadingPercent%",
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                TitleViewLive(data: widget.args.data, totLikes: notifier.totLikes, totViews: notifier.totViews),
-                // Positioned(
-                //   top: 12 + context.getHeightStatusBar(),
-                //   left: 16,
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.start,
-                //     children: [
-                //       CustomProfileImage(
-                //         width: 36,
-                //         height: 36,
-                //         following: true,
-                //         imageUrl: System().showUserPicture(widget.args.data.avatar?.mediaEndpoint ?? ''),
-                //         forStory: false,
-                //       ),
-                //       twelvePx,
-                //       Column(
-                //         mainAxisAlignment: MainAxisAlignment.center,
-                //         crossAxisAlignment: CrossAxisAlignment.start,
-                //         children: [
-                //           Row(
-                //             children: [
-                //               CustomTextWidget(
-                //                 textAlign: TextAlign.left,
-                //                 textToDisplay: widget.args.data.username ?? '',
-                //                 textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: Colors.white),
-                //               ),
-                //               fourPx,
-                //               const CustomIconWidget(
-                //                 iconData: "${AssetPath.vectorPath}arrow_down.svg",
-                //                 defaultColor: false,
-                //                 color: Colors.white,
-                //                 width: 10,
-                //                 height: 10,
-                //               )
-                //             ],
-                //           ),
-                //           fourPx,
-                //           CustomTextWidget(
-                //             textAlign: TextAlign.left,
-                //             textToDisplay: "${notifier.totLikes.getCountShort()} likes",
-                //             textStyle: context.getTextTheme().caption?.copyWith(fontWeight: FontWeight.w400, color: Colors.white),
-                //           ),
-                //         ],
-                //       ),
-                //       fourPx,
-                //     ],
-                //   ),
-                // ),
-                // Positioned(
-                //   top: 12 + context.getHeightStatusBar(),
-                //   right: 16,
-                //   child: Row(
-                //     children: [
-                //       Container(
-                //         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
-                //         decoration: BoxDecoration(color: kHyppeDanger, borderRadius: BorderRadius.circular(3)),
-                //         child: const Text(
-                //           'LIVE',
-                //           style: TextStyle(color: kHyppeTextPrimary, wordSpacing: 10),
-                //         ),
-                //       ),
-                //       eightPx,
-                //       GestureDetector(
-                //         onTap: () {
-                //           print('testing see views');
-                //           final ref = context.read<StreamerNotifier>();
-                //           ref.dataStream = widget.args.data;
-                //           ShowBottomSheet.onStreamWatchersStatus(context, ref);
-                //         },
-                //         child: Container(
-                //           width: 50 * context.getScaleDiagonal(),
-                //           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                //           decoration: BoxDecoration(color: kHyppeTransparent, borderRadius: BorderRadius.circular(3)),
-                //           child: Row(
-                //             mainAxisAlignment: MainAxisAlignment.center,
-                //             children: [
-                //               const Icon(
-                //                 Icons.remove_red_eye_outlined,
-                //                 color: kHyppeTextPrimary,
-                //                 size: 12,
-                //               ),
-                //               sixPx,
-                //               Text(
-                //                 notifier.totViews.getCountShort(),
-                //                 style: const TextStyle(color: kHyppeTextPrimary, fontSize: 10, fontWeight: FontWeight.w700),
-                //               ),
-                //             ],
-                //           ),
-                //         ),
-                //       ),
-                //       CustomIconButtonWidget(
-                //           iconData: "${AssetPath.vectorPath}close.svg",
-                //           defaultColor: false,
-                //           onPressed: () {
-                //             notifier.exitStreaming(context, widget.args.data).whenComplete(() async {
-                //               Routing().moveBack();
-                //               await notifier.destoryPusher();
-                //             });
-                //           })
-                //     ],
-                //   ),
-                // ),
-                Positioned(
-                    bottom: 36,
-                    left: 16,
-                    right: 16,
-                    child: ViewerComment(
-                      commentFocusNode: commentFocusNode,
-                    )),
-              ],
-            ),
           ),
           onWillPop: () async {
             await notifier.exitStreaming(context, widget.args.data);

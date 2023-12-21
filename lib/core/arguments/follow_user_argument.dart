@@ -5,11 +5,13 @@ class FollowUserArgument {
   String receiverParty; // user yang mau di follow
   InteractiveEventType eventType;
   InteractiveEvent? replyEvent;
+  String? idMediaStreaming;
 
   FollowUserArgument({
     this.replyEvent,
     required this.eventType,
     required this.receiverParty,
+    this.idMediaStreaming,
   });
 
   Map<String, dynamic> toJson() {
@@ -19,6 +21,10 @@ class FollowUserArgument {
     if (replyEvent != null) {
       data['replyEventType'] = System().convertEventToString(replyEvent);
     }
+    if (idMediaStreaming != null) {
+      data['idMediaStreaming'] = idMediaStreaming;
+    }
+
     return data;
   }
 }

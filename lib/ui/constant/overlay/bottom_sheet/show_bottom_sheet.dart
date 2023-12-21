@@ -171,6 +171,7 @@ class ShowBottomSheet {
   static onWatcherStatus(
     context,
     String email,
+    String idMediaStreaming,
   ) async {
     await showModalBottomSheet(
         context: context,
@@ -186,6 +187,7 @@ class ShowBottomSheet {
               height: context.getHeight() * 0.3,
               child: OnWatcherStatus(
                 email: email,
+                idMediaStreaming: idMediaStreaming,
               ),
             ),
           );

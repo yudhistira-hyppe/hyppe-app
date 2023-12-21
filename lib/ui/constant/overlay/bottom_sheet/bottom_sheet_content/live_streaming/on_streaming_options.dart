@@ -75,7 +75,7 @@ class _OnStreamingOptionsState extends State<OnStreamingOptions> {
                   maxLineTitle: 1,
                   maxLineBody: 4,
                   functionPrimary: () async {
-                    widget.notifier.pauseLive();
+                    widget.notifier.pauseLive(context, mounted);
                     Routing().moveBack();
                   },
                   functionSecondary: () {

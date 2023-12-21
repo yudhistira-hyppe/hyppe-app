@@ -20,7 +20,8 @@ import 'on_live_stream_status.dart';
 
 class OnWatcherStatus extends StatefulWidget {
   final String? email;
-  const OnWatcherStatus({super.key, this.email});
+  final String? idMediaStreaming;
+  const OnWatcherStatus({super.key, this.email, this.idMediaStreaming});
 
   @override
   State<OnWatcherStatus> createState() => _OnWatcherStatusState();
@@ -113,9 +114,9 @@ class _OnWatcherStatusState extends State<OnWatcherStatus> {
                             ? null
                             : () {
                                 if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
-                                  notifier.followUser(context, widget.email);
+                                  notifier.followUser(context, widget.email, idMediaStreaming: widget.idMediaStreaming);
                                 } else if (notifier.statusFollowing == StatusFollowing.following) {
-                                  notifier.followUser(context, widget.email, isUnFollow: true);
+                                  notifier.followUser(context, widget.email, isUnFollow: true, idMediaStreaming: widget.idMediaStreaming);
                                 }
                               },
                         child: notifier.isCheckLoading

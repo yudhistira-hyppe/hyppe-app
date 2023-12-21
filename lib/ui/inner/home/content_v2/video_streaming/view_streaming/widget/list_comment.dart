@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/live_stream/link_stream_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../../core/constants/size_config.dart';
@@ -12,7 +13,8 @@ import '../notifier.dart';
 
 class ListCommentViewer extends StatelessWidget {
   final FocusNode? commentFocusNode;
-  const ListCommentViewer({super.key, this.commentFocusNode});
+  final LinkStreamModel? data;
+  const ListCommentViewer({super.key, this.commentFocusNode, this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -23,56 +25,61 @@ class ListCommentViewer extends StatelessWidget {
         child: notifier.isCommentDisable
             ? Container()
             : ListView.builder(
-          reverse: true,
-          shrinkWrap: true,
-          itemCount: notifier.comment.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onLongPress: () {
-                ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '');
-              },
-              child: Container(
-                color: Colors.transparent,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomProfileImage(
-                        cacheKey: '',
-                        following: true,
-                        forStory: false,
-                        width: 26 * SizeConfig.scaleDiagonal,
-                        height: 26 * SizeConfig.scaleDiagonal,
-                        imageUrl: System().showUserPicture(
-                          notifier.comment[index].avatar?.mediaEndpoint,
-                        ),
-                        // badge: notifier.user.profile?.urluserBadge,
-                        allwaysUseBadgePadding: false,
-                      ),
-                      twelvePx,
-                      Expanded(
-                        child: Column(
+                reverse: true,
+                shrinkWrap: true,
+                itemCount: notifier.comment.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onLongPress: () {
+                      // ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '');
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              notifier.comment[index].username ?? '',
-                              style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                            GestureDetector(
+                              onTap: () {
+                                ShowBottomSheet.onWatcherStatus(context, notifier.comment[index].email ?? '', data?.sId ?? '');
+                              },
+                              child: CustomProfileImage(
+                                cacheKey: '',
+                                following: true,
+                                forStory: false,
+                                width: 26 * SizeConfig.scaleDiagonal,
+                                height: 26 * SizeConfig.scaleDiagonal,
+                                imageUrl: System().showUserPicture(
+                                  notifier.comment[index].avatar?.mediaEndpoint,
+                                ),
+                                // badge: notifier.user.profile?.urluserBadge,
+                                allwaysUseBadgePadding: false,
+                              ),
                             ),
-                            Text(
-                              notifier.comment[index].messages ?? '',
-                              style: const TextStyle(color: kHyppeTextPrimary),
-                            ),
+                            twelvePx,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    notifier.comment[index].username ?? '',
+                                    style: const TextStyle(color: Color(0xffcecece), fontWeight: FontWeight.w700),
+                                  ),
+                                  Text(
+                                    notifier.comment[index].messages ?? '',
+                                    style: const TextStyle(color: kHyppeTextPrimary),
+                                  ),
+                                ],
+                              ),
+                            )
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                ),
+                      ),
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
       ),
     );
   }

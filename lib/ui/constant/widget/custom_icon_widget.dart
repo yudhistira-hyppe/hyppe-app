@@ -18,12 +18,14 @@ class CustomIconWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset(
-      iconData,
-      width: width,
-      height: height,
-      color: defaultColor ? Theme.of(context).iconTheme.color : color,
-      allowDrawingOutsideViewBox: true,
+    return UnconstrainedBox(
+      child: SvgPicture.asset(
+        iconData,
+        width: width,
+        height: height,
+        color: defaultColor ? Theme.of(context).iconTheme.color : color,
+        allowDrawingOutsideViewBox: true,
+      ),
     );
   }
 }

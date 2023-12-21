@@ -9,6 +9,7 @@ import 'package:flutter_livepush_plugin/live_pusher.dart';
 
 /// Import a header file.
 import 'package:flutter_livepush_plugin/live_push_config.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/arguments/summary_live_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
@@ -95,6 +96,7 @@ class StreamerNotifier with ChangeNotifier {
   String _titleLive = '';
   String get titleLive => _titleLive;
   String pushURL = "rtmp://ingest.hyppe.cloud/Hyppe/hdstream?auth_key=1700732018-0-0-580e7fb4d21585a87315470a335513c1";
+
   ///Status => Offline - Prepare - StandBy - Ready - Online
   StatusStream statusLive = StatusStream.offline;
 
@@ -128,6 +130,9 @@ class StreamerNotifier with ChangeNotifier {
     });
     await _setLivePusher();
     await _onListen();
+    // double max = await _alivcLivePusher.getMaxZoom();
+    // print("---=-=-=- maxzooom $max");
+    // _alivcLivePusher.setZoom(2.0);
     isloading = false;
     notifyListeners();
     tn = context.read<TranslateNotifierV2>().translate;
@@ -175,19 +180,9 @@ class StreamerNotifier with ChangeNotifier {
     /// 系统错误回调
     _alivcLivePusher.setOnSystemError((errorCode, errorDescription) {
       print("========  setOnSystemError $errorDescription ========");
-      ShowGeneralDialog.generalDialog(
-        Routing.navigatorKey.currentContext,
-        titleText: 'Camera Stream Error',
-        bodyText: 'Please back and stream again',
-        maxLineTitle: 1,
-        maxLineBody: 4,
-        functionPrimary: () async {
-          Routing().moveBack();
-        },
-        titleButtonPrimary: tn?.understand ?? '',
-        barrierDismissible: true,
-        isHorizontal: false,
-        fillColor: false,
+      Fluttertoast.showToast(
+        msg: 'Camera Stream Error, Please back and stream again',
+        gravity: ToastGravity.CENTER,
       );
     });
 
@@ -238,19 +233,9 @@ class StreamerNotifier with ChangeNotifier {
 
     /// Configure the callback for disconnection.
     _alivcLivePusher.setOnConnectionLost(() {
-      ShowGeneralDialog.generalDialog(
-        Routing.navigatorKey.currentContext,
-        titleText: 'Error no connection',
-        bodyText: 'Please check your internet',
-        maxLineTitle: 1,
-        maxLineBody: 4,
-        functionPrimary: () async {
-          Routing().moveBack();
-        },
-        titleButtonPrimary: tn?.understand ?? '',
-        barrierDismissible: true,
-        isHorizontal: false,
-        fillColor: false,
+      Fluttertoast.showToast(
+        msg: 'Error no connection lost',
+        gravity: ToastGravity.CENTER,
       );
     });
 
@@ -260,59 +245,34 @@ class StreamerNotifier with ChangeNotifier {
     });
 
     /// Configure the callback for failed reconnection.
-    _alivcLivePusher.setOnReconnectError((errorCode, errorDescription) {});
+    _alivcLivePusher.setOnReconnectError((errorCode, errorDescription) {
+      Fluttertoast.showToast(
+        msg: 'Failed Reconnection',
+        gravity: ToastGravity.CENTER,
+      );
+    });
 
     /// Configure the callback for reconnection start.
     _alivcLivePusher.setOnReconnectStart(() {
-      ShowGeneralDialog.generalDialog(
-        Routing.navigatorKey.currentContext,
-        titleText: 'Start reconnecting',
-        bodyText: 'Please Wait',
-        maxLineTitle: 1,
-        maxLineBody: 4,
-        functionPrimary: () async {
-          Routing().moveBack();
-        },
-        titleButtonPrimary: tn?.understand ?? '',
-        barrierDismissible: true,
-        isHorizontal: false,
-        fillColor: false,
+      Fluttertoast.showToast(
+        msg: 'Reconnection start',
+        gravity: ToastGravity.CENTER,
       );
     });
 
     /// Configure the callback for successful reconnection.
     _alivcLivePusher.setOnReconnectSuccess(() {
-      ShowGeneralDialog.generalDialog(
-        Routing.navigatorKey.currentContext,
-        titleText: 'Reconnection succeed',
-        bodyText: '',
-        maxLineTitle: 1,
-        maxLineBody: 4,
-        functionPrimary: () async {
-          Routing().moveBack();
-        },
-        titleButtonPrimary: tn?.understand ?? '',
-        barrierDismissible: true,
-        isHorizontal: false,
-        fillColor: false,
+      Fluttertoast.showToast(
+        msg: 'Successful reconnection',
+        gravity: ToastGravity.CENTER,
       );
     });
 
     /// Send data timeout
     _alivcLivePusher.setOnSendDataTimeout(() {
-      ShowGeneralDialog.generalDialog(
-        Routing.navigatorKey.currentContext,
-        titleText: 'Send data timeout',
-        bodyText: '',
-        maxLineTitle: 1,
-        maxLineBody: 4,
-        functionPrimary: () async {
-          Routing().moveBack();
-        },
-        titleButtonPrimary: tn?.understand ?? '',
-        barrierDismissible: true,
-        isHorizontal: false,
-        fillColor: false,
+      Fluttertoast.showToast(
+        msg: 'Send data timeout',
+        gravity: ToastGravity.CENTER,
       );
     });
 
@@ -471,6 +431,7 @@ class StreamerNotifier with ChangeNotifier {
     timeReady = 3;
     totLikes = 0;
     totViews = 0;
+    totPause = 0;
     pageViewers = 0;
     rowViewers = 10;
     isloadingPreview = true;
@@ -563,17 +524,25 @@ class StreamerNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> pauseLive() async {
-    mute = true;
-    _alivcLivePusher.pause();
-    totPause++;
-    notifyListeners();
+  Future<void> pauseLive(BuildContext context, mounted) async {
+    var pause = await pauseSendStatus(context);
+    if (pause) {
+      mute = true;
+      _alivcLivePusher.setMute(true);
+      _alivcLivePusher.pause();
+      totPause++;
+      notifyListeners();
+    }
   }
 
-  Future<void> resumeLive() async {
-    mute = false;
-    _alivcLivePusher.resume();
-    notifyListeners();
+  Future<void> resumeLive(BuildContext context) async {
+    var pause = await pauseSendStatus(context);
+    if (pause) {
+      mute = false;
+      _alivcLivePusher.resume();
+      _alivcLivePusher.setMute(false);
+      notifyListeners();
+    }
   }
 
   int x = 0;
@@ -597,7 +566,7 @@ class StreamerNotifier with ChangeNotifier {
       WakelockPlus.enable();
 
       if (inactivityTimer != null) inactivityTimer?.cancel();
-      inactivityTimer = Timer(const Duration(seconds: 10), () {
+      inactivityTimer = Timer(const Duration(seconds: 3300), () {
         ShowGeneralDialog.generalDialog(
           Routing.navigatorKey.currentContext,
           titleText: tn?.liveBroadcastRemaining5Minutes ?? '',
@@ -614,6 +583,39 @@ class StreamerNotifier with ChangeNotifier {
         );
       });
     });
+  }
+
+  Future pauseSendStatus(BuildContext context) async {
+    print("hahahahah -------==== = = =");
+    bool returnNext = false;
+    bool connect = await System().checkConnections();
+
+    if (connect) {
+      try {
+        final notifier = LiveStreamBloc();
+        Map data = {"_id": dataStream.sId, "type": "PAUSE"};
+
+        await notifier.getLinkStream(context, data, UrlConstants.updateStream);
+
+        final fetch = notifier.liveStreamFetch;
+        if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          returnNext = true;
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      notifyListeners();
+    } else {
+      returnNext = false;
+      if (context.mounted) {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+          pauseSendStatus(context);
+        });
+      }
+    }
+    return returnNext;
   }
 
   Future stopStream(BuildContext context, mounted) async {
@@ -711,19 +713,25 @@ class StreamerNotifier with ChangeNotifier {
     }
   }
 
-  Future getViewer(BuildContext context, mounted, {String? idStream, bool end = false}) async {
+  Future getViewer(BuildContext context, mounted, {String? idStream, bool end = false, bool isMore = false}) async {
     if (pageViewers == 0) isloadingViewers = true;
     notifyListeners();
     bool connect = await System().checkConnections();
     if (connect) {
       try {
         final notifier = LiveStreamBloc();
+        if (!isMore) {
+          pageViewers = 0;
+          dataViewers = [];
+          notifyListeners();
+        }
+
         Map data = {
           "_id": idStream ?? dataStream.sId,
           "page": pageViewers,
           "limit": rowViewers,
         };
-        if (end = true) {
+        if (end == true) {
           data['type'] = "END";
         }
         if (mounted) {
@@ -755,7 +763,7 @@ class StreamerNotifier with ChangeNotifier {
       isloadingViewersMore = true;
       notifyListeners();
       pageViewers++;
-      await getViewer(context, mounted, idStream: idStream);
+      await getViewer(context, mounted, idStream: idStream, isMore: true);
       isloadingViewersMore = false;
       notifyListeners();
     }
@@ -806,7 +814,7 @@ class StreamerNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future followUser(BuildContext context, email, {isUnFollow = false}) async {
+  Future followUser(BuildContext context, email, {isUnFollow = false, String? idMediaStreaming}) async {
     try {
       // _system.actionReqiredIdCard(
       //   context,
@@ -819,6 +827,7 @@ class StreamerNotifier with ChangeNotifier {
         data: FollowUserArgument(
           receiverParty: email ?? '',
           eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
+          idMediaStreaming: idMediaStreaming,
         ),
       );
       final fetch = notifier.followFetch;

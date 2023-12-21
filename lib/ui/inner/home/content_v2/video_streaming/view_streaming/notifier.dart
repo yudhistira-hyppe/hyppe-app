@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/live_stream/streaming_model.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
-
 import '../../../../../../core/bloc/live_stream/bloc.dart';
 import '../../../../../../core/bloc/live_stream/state.dart';
 import '../../../../../../core/config/env.dart';
@@ -39,8 +39,11 @@ class ViewStreamingNotifier with ChangeNotifier {
   static const String eventViewStream = 'VIEW_STREAM';
   static const String eventLikeStream = 'LIKE_STREAM';
   static const String eventCommentDisable = 'COMMENT_STREAM_DISABLED';
+  static const String eventStatusStream = 'STATUS_STREAM';
 
   String userName = '';
+
+  StreamingModel dataStreaming = StreamingModel();
 
   ///Status => Offline - Prepare - StandBy - Ready - Online
   StatusStream statusLive = StatusStream.offline;
@@ -50,6 +53,8 @@ class ViewStreamingNotifier with ChangeNotifier {
   List<int> animationIndexes = [];
   int totLikes = 0;
   int totViews = 0;
+
+  bool endLive = false;
 
   bool _loading = false;
   bool get loading => _loading;
@@ -101,6 +106,7 @@ class ViewStreamingNotifier with ChangeNotifier {
     totViews = data.totalView ?? 0;
     streamerData = data;
     isOver = false;
+    endLive = false;
   }
 
   sendComment(BuildContext context, LinkStreamModel model, String comment) async {
@@ -162,6 +168,7 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   void likeAdd() {
     likeList.add(System().getCurrentDate());
+    totLikes++;
     notifyListeners();
   }
 
@@ -181,7 +188,6 @@ class ViewStreamingNotifier with ChangeNotifier {
       } catch (e) {
         debugPrint(e.toString());
       }
-
       notifyListeners();
     } else {
       // returnNext = false;
@@ -301,6 +307,7 @@ class ViewStreamingNotifier with ChangeNotifier {
         }
         final fetch = notifier.liveStreamFetch;
         if (fetch.postsState == LiveStreamState.getApiSuccess) {
+          dataStreaming = StreamingModel.fromJson(fetch.data);
           returnNext = true;
         }
       } catch (e) {
@@ -362,6 +369,7 @@ class ViewStreamingNotifier with ChangeNotifier {
       _connectAndListenToSocket(eventComment, data);
       _connectAndListenToSocket(eventLikeStream, data);
       _connectAndListenToSocket(eventViewStream, data);
+      _connectAndListenToSocket(eventStatusStream, data);
 
       // _alivcLivePusher.startPushWithURL(pushURL);
     } else {
@@ -415,7 +423,8 @@ class ViewStreamingNotifier with ChangeNotifier {
       }
     } else if (event == eventLikeStream) {
       var messages = CountLikeLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
-      if (messages.idStream == dataStream.sId) {
+      String userId = SharedPreference().readStorage(SpKeys.userID);
+      if (messages.idStream == dataStream.sId && userId != messages.userId) {
         totLikes += messages.likeCount ?? 0;
         print("totalnya ${animationIndexes}");
         // for (var i = 0; i < (messages.likeCount ?? 0); i++) {
@@ -430,7 +439,23 @@ class ViewStreamingNotifier with ChangeNotifier {
       if (messages.idStream == dataStream.sId) {
         totViews = messages.viewCount ?? 0;
       }
+    } else if (event == eventStatusStream) {
+      var messages = StatusStreamLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
+      if (messages.idStream == dataStream.sId) {
+        if (messages.pause != null) {
+          await Future.delayed(const Duration(milliseconds: 4500));
+          dataStreaming.pause = messages.pause;
+        } else {
+          endLive = true;
+          notifyListeners();
+          Fluttertoast.showToast(
+            msg: 'Live Streaming akan segera berakhir',
+            gravity: ToastGravity.CENTER,
+          );
+        }
+      }
     }
+
     notifyListeners();
   }
 

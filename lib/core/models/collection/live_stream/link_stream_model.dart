@@ -17,24 +17,27 @@ class LinkStreamModel {
   String? username;
   String? fullName;
   String? title;
+  String? email;
 
-  LinkStreamModel(
-      {this.status,
-      this.userId,
-      this.expireTime,
-      this.startLive,
-      this.urlStream,
-      this.urlIngest,
-      this.createAt,
-      this.sId,
-      this.avatar,
-      this.interest,
-      this.totalView,
-      this.totalLike,
-      this.totalFollower,
-      this.username,
-        this.fullName,
-      this.title});
+  LinkStreamModel({
+    this.status,
+    this.userId,
+    this.expireTime,
+    this.startLive,
+    this.urlStream,
+    this.urlIngest,
+    this.createAt,
+    this.sId,
+    this.avatar,
+    this.interest,
+    this.totalView,
+    this.totalLike,
+    this.totalFollower,
+    this.username,
+    this.fullName,
+    this.title,
+    this.email,
+  });
 
   LinkStreamModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -45,7 +48,7 @@ class LinkStreamModel {
     urlIngest = json['urlIngest'];
     createAt = json['createAt'];
     sId = json['_id'];
-    avatar = UserProfileAvatarModel.fromJson(json['avatar']);
+    avatar = json['avatar'] != null ? UserProfileAvatarModel.fromJson(json['avatar']) : null;
 
     interest = json['interest'];
     totalView = json['totalView'];
@@ -54,5 +57,6 @@ class LinkStreamModel {
     username = json['username'];
     fullName = json['fullName'];
     title = json['title'];
+    email = json['email'];
   }
 }

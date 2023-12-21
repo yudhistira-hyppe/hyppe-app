@@ -510,7 +510,7 @@ class _LandingDiaryPageState extends State<LandingDiaryPage> with WidgetsBinding
           definitionList: [DataSourceRelated.definitionList],
         );
 
-        // fAliplayer?.setUrl("");
+        // fAliplayer?.setUrl("http://live.hyppe.cloud/hyppe-live/657fc76b8ce9ba14df462a6c.m3u8?auth_key=1703736940-0-0-cd08b66600e03a8939d029474f694f55");
 
         isloading = false;
         if (mounted) {
