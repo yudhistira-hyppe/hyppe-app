@@ -9,6 +9,7 @@ import 'package:flutter_livepush_plugin/live_pusher.dart';
 
 /// Import a header file.
 import 'package:flutter_livepush_plugin/live_push_config.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/arguments/summary_live_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
@@ -129,6 +130,9 @@ class StreamerNotifier with ChangeNotifier {
     });
     await _setLivePusher();
     await _onListen();
+    // double max = await _alivcLivePusher.getMaxZoom();
+    // print("---=-=-=- maxzooom $max");
+    // _alivcLivePusher.setZoom(2.0);
     isloading = false;
     notifyListeners();
     tn = context.read<TranslateNotifierV2>().translate;
@@ -176,19 +180,9 @@ class StreamerNotifier with ChangeNotifier {
     /// 系统错误回调
     _alivcLivePusher.setOnSystemError((errorCode, errorDescription) {
       print("========  setOnSystemError $errorDescription ========");
-      ShowGeneralDialog.generalDialog(
-        Routing.navigatorKey.currentContext,
-        titleText: 'Camera Stream Error',
-        bodyText: 'Please back and stream again',
-        maxLineTitle: 1,
-        maxLineBody: 4,
-        functionPrimary: () async {
-          Routing().moveBack();
-        },
-        titleButtonPrimary: tn?.understand ?? '',
-        barrierDismissible: true,
-        isHorizontal: false,
-        fillColor: false,
+      Fluttertoast.showToast(
+        msg: 'Camera Stream Error, Please back and stream again',
+        gravity: ToastGravity.CENTER,
       );
     });
 
@@ -239,19 +233,9 @@ class StreamerNotifier with ChangeNotifier {
 
     /// Configure the callback for disconnection.
     _alivcLivePusher.setOnConnectionLost(() {
-      ShowGeneralDialog.generalDialog(
-        Routing.navigatorKey.currentContext,
-        titleText: 'Error no connection',
-        bodyText: 'Please check your internet',
-        maxLineTitle: 1,
-        maxLineBody: 4,
-        functionPrimary: () async {
-          Routing().moveBack();
-        },
-        titleButtonPrimary: tn?.understand ?? '',
-        barrierDismissible: true,
-        isHorizontal: false,
-        fillColor: false,
+      Fluttertoast.showToast(
+        msg: 'Error no connection lost',
+        gravity: ToastGravity.CENTER,
       );
     });
 
@@ -261,59 +245,34 @@ class StreamerNotifier with ChangeNotifier {
     });
 
     /// Configure the callback for failed reconnection.
-    _alivcLivePusher.setOnReconnectError((errorCode, errorDescription) {});
+    _alivcLivePusher.setOnReconnectError((errorCode, errorDescription) {
+      Fluttertoast.showToast(
+        msg: 'Failed Reconnection',
+        gravity: ToastGravity.CENTER,
+      );
+    });
 
     /// Configure the callback for reconnection start.
     _alivcLivePusher.setOnReconnectStart(() {
-      ShowGeneralDialog.generalDialog(
-        Routing.navigatorKey.currentContext,
-        titleText: 'Start reconnecting',
-        bodyText: 'Please Wait',
-        maxLineTitle: 1,
-        maxLineBody: 4,
-        functionPrimary: () async {
-          Routing().moveBack();
-        },
-        titleButtonPrimary: tn?.understand ?? '',
-        barrierDismissible: true,
-        isHorizontal: false,
-        fillColor: false,
+      Fluttertoast.showToast(
+        msg: 'Reconnection start',
+        gravity: ToastGravity.CENTER,
       );
     });
 
     /// Configure the callback for successful reconnection.
     _alivcLivePusher.setOnReconnectSuccess(() {
-      ShowGeneralDialog.generalDialog(
-        Routing.navigatorKey.currentContext,
-        titleText: 'Reconnection succeed',
-        bodyText: '',
-        maxLineTitle: 1,
-        maxLineBody: 4,
-        functionPrimary: () async {
-          Routing().moveBack();
-        },
-        titleButtonPrimary: tn?.understand ?? '',
-        barrierDismissible: true,
-        isHorizontal: false,
-        fillColor: false,
+      Fluttertoast.showToast(
+        msg: 'Successful reconnection',
+        gravity: ToastGravity.CENTER,
       );
     });
 
     /// Send data timeout
     _alivcLivePusher.setOnSendDataTimeout(() {
-      ShowGeneralDialog.generalDialog(
-        Routing.navigatorKey.currentContext,
-        titleText: 'Send data timeout',
-        bodyText: '',
-        maxLineTitle: 1,
-        maxLineBody: 4,
-        functionPrimary: () async {
-          Routing().moveBack();
-        },
-        titleButtonPrimary: tn?.understand ?? '',
-        barrierDismissible: true,
-        isHorizontal: false,
-        fillColor: false,
+      Fluttertoast.showToast(
+        msg: 'Send data timeout',
+        gravity: ToastGravity.CENTER,
       );
     });
 
@@ -772,7 +731,7 @@ class StreamerNotifier with ChangeNotifier {
           "page": pageViewers,
           "limit": rowViewers,
         };
-        if (end = true) {
+        if (end == true) {
           data['type'] = "END";
         }
         if (mounted) {

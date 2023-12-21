@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/arguments/view_streaming_argument.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_gesture.dart';
@@ -25,15 +27,12 @@ class ListStreamersScreen extends StatefulWidget {
   State<ListStreamersScreen> createState() => _ListStreamersScreenState();
 }
 
-class _ListStreamersScreenState extends State<ListStreamersScreen>
-    with TickerProviderStateMixin, AfterFirstLayoutMixin {
+class _ListStreamersScreenState extends State<ListStreamersScreen> with TickerProviderStateMixin, AfterFirstLayoutMixin, WidgetsBindingObserver, RouteAware {
   late AnimationController _controller;
 
   @override
   void initState() {
-    Routing.navigatorKey.currentContext
-        ?.read<ViewStreamingNotifier>()
-        .initListStreamers();
+    Routing.navigatorKey.currentContext?.read<ViewStreamingNotifier>().initListStreamers();
     super.initState();
     _controller = AnimationController(vsync: this);
     _controller.addListener(() {
@@ -45,10 +44,7 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
 
   @override
   void afterFirstLayout(BuildContext context) {
-    (Routing.navigatorKey.currentContext ?? context)
-        .read<ViewStreamingNotifier>()
-        .getListStreamers(
-            Routing.navigatorKey.currentContext ?? context, mounted);
+    (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>().getListStreamers(Routing.navigatorKey.currentContext ?? context, mounted);
   }
 
   String? displayPhotoProfileOriginal(String url) {
@@ -59,6 +55,19 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
     } catch (e) {
       return null;
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didPopNext() {
+    Routing.navigatorKey.currentContext?.read<ViewStreamingNotifier>().initListStreamers();
+    (Routing.navigatorKey.currentContext ?? context).read<ViewStreamingNotifier>().getListStreamers(Routing.navigatorKey.currentContext ?? context, mounted);
+    super.didPopNext();
   }
 
   @override
@@ -78,10 +87,7 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
           title: Container(
             width: double.infinity,
             alignment: Alignment.centerLeft,
-            child: const CustomTextWidget(
-                textToDisplay: 'HyppeLive',
-                textStyle:
-                    TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            child: const CustomTextWidget(textToDisplay: 'HyppeLive', textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           ),
         ),
         body: SafeArea(
@@ -95,14 +101,10 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
                     ..forward();
                 },
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: CustomTextWidget(
-                    textToDisplay:
-                        notifier.language.exploreLiveToLivenUpYourDay ??
-                            'Serunya LIVE untuk ramaikan harimu!',
-                    textStyle: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                    textToDisplay: notifier.language.exploreLiveToLivenUpYourDay ?? 'Serunya LIVE untuk ramaikan harimu!',
+                    textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -129,40 +131,30 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
                                   width: 187,
                                   decoration: BoxDecoration(
                                     image: const DecorationImage(
-                                      image: AssetImage(
-                                          '${AssetPath.pngPath}empty_data.png'),
+                                      image: AssetImage('${AssetPath.pngPath}empty_data.png'),
                                       fit: BoxFit.cover,
                                     ),
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
                                 ),
                                 CustomTextWidget(
-                                  textToDisplay:
-                                      notifier.language.emptyStreamers ?? '',
-                                  textStyle: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                  textToDisplay: notifier.language.emptyStreamers ?? '',
+                                  textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                 ),
                                 CustomTextWidget(
-                                  textToDisplay:
-                                  notifier.language.messageEmptyStreamers ?? '',
-                                  textStyle: const TextStyle(
-                                      fontSize: 12, color: kHyppeBurem),
+                                  textToDisplay: notifier.language.messageEmptyStreamers ?? '',
+                                  textStyle: const TextStyle(fontSize: 12, color: kHyppeBurem),
                                 )
                               ],
                             ))
                         : Wrap(
-                            children: List.generate(
-                                notifier.loading
-                                    ? 10
-                                    : notifier.listStreamers.length, (index) {
+                            children: List.generate(notifier.loading ? 10 : notifier.listStreamers.length, (index) {
                               if (notifier.loading) {
                                 if (index % 2 == 0) {
                                   return Container(
                                     width: sizeTile,
                                     height: sizeTile,
-                                    margin: const EdgeInsets.only(
-                                        left: 4, right: 2, bottom: 4, top: 4),
+                                    margin: const EdgeInsets.only(left: 4, right: 2, bottom: 4, top: 4),
                                     child: CustomShimmer(
                                       width: sizeTile,
                                       height: sizeTile,
@@ -173,8 +165,7 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
                                   return Container(
                                     width: sizeTile,
                                     height: sizeTile,
-                                    margin: const EdgeInsets.only(
-                                        left: 2, right: 4, bottom: 4, top: 4),
+                                    margin: const EdgeInsets.only(left: 2, right: 4, bottom: 4, top: 4),
                                     child: CustomShimmer(
                                       width: sizeTile,
                                       height: sizeTile,
@@ -198,65 +189,34 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
                                     child: Container(
                                       width: sizeTile,
                                       height: sizeTile,
-                                      margin: const EdgeInsets.only(
-                                          left: 4, right: 2, bottom: 4, top: 4),
+                                      margin: const EdgeInsets.only(left: 4, right: 2, bottom: 4, top: 4),
                                       child: CustomGesture(
                                         onTap: () {
-                                          Routing().move(Routes.viewStreaming,
-                                              argument: ViewStreamingArgument(
-                                                  data: streamer));
+                                          Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: streamer));
                                         },
                                         child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                                          borderRadius: BorderRadius.circular(8),
                                           child: Stack(
                                             children: [
-                                              Positioned.fill(
-                                                  child: streamerImage(
-                                                      displayPhotoProfileOriginal(
-                                                              streamer.avatar
-                                                                      ?.mediaEndpoint ??
-                                                                  '') ??
-                                                          '')),
+                                              Positioned.fill(child: streamerImage(displayPhotoProfileOriginal(streamer.avatar?.mediaEndpoint ?? '') ?? '')),
                                               Positioned(
                                                 top: 8,
                                                 right: 14,
                                                 child: Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 4,
-                                                          right: 8,
-                                                          top: 2,
-                                                          bottom: 2),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              4),
-                                                      color: Colors.black
-                                                          .withOpacity(0.5)),
+                                                  padding: const EdgeInsets.only(left: 4, right: 8, top: 2, bottom: 2),
+                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.black.withOpacity(0.5)),
                                                   child: Row(
                                                     children: [
                                                       const CustomIconWidget(
-                                                        iconData:
-                                                            '${AssetPath.vectorPath}eye.svg',
+                                                        iconData: '${AssetPath.vectorPath}eye.svg',
                                                         width: 16,
                                                         height: 16,
                                                         defaultColor: false,
                                                       ),
                                                       fourPx,
                                                       CustomTextWidget(
-                                                        textToDisplay: streamer
-                                                                .totalView
-                                                                ?.getCountShort() ??
-                                                            '0',
-                                                        textStyle:
-                                                            const TextStyle(
-                                                                fontSize: 10,
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700),
+                                                        textToDisplay: streamer.totalView?.getCountShort() ?? '0',
+                                                        textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
                                                       )
                                                     ],
                                                   ),
@@ -266,36 +226,17 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
                                                 left: 10,
                                                 bottom: 14,
                                                 child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     if (streamer.title != null)
                                                       CustomTextWidget(
-                                                        textToDisplay:
-                                                            streamer.title ??
-                                                                '',
-                                                        textStyle:
-                                                            const TextStyle(
-                                                                fontSize: 10,
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700),
+                                                        textToDisplay: streamer.title ?? '',
+                                                        textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
                                                       ),
                                                     twoPx,
                                                     CustomTextWidget(
-                                                      textToDisplay:
-                                                          streamer.username ??
-                                                              '',
-                                                      textStyle:
-                                                          const TextStyle(
-                                                              fontSize: 10,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700),
+                                                      textToDisplay: streamer.username ?? '',
+                                                      textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
                                                     ),
                                                   ],
                                                 ),
@@ -311,63 +252,34 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
                                   return Container(
                                     width: sizeTile,
                                     height: sizeTile,
-                                    margin: const EdgeInsets.only(
-                                        left: 4, right: 2, bottom: 4, top: 4),
+                                    margin: const EdgeInsets.only(left: 4, right: 2, bottom: 4, top: 4),
                                     child: CustomGesture(
                                       onTap: () {
-                                        Routing().move(Routes.viewStreaming,
-                                            argument: ViewStreamingArgument(
-                                                data: streamer));
+                                        Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: streamer));
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
                                         child: Stack(
                                           children: [
-                                            Positioned.fill(
-                                                child: streamerImage(
-                                                    displayPhotoProfileOriginal(
-                                                            streamer.avatar
-                                                                    ?.mediaEndpoint ??
-                                                                '') ??
-                                                        '')),
+                                            Positioned.fill(child: streamerImage(displayPhotoProfileOriginal(streamer.avatar?.mediaEndpoint ?? '') ?? '')),
                                             Positioned(
                                               top: 8,
                                               right: 14,
                                               child: Container(
-                                                padding: const EdgeInsets.only(
-                                                    left: 4,
-                                                    right: 8,
-                                                    top: 2,
-                                                    bottom: 2),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4),
-                                                    color: Colors.black
-                                                        .withOpacity(0.5)),
+                                                padding: const EdgeInsets.only(left: 4, right: 8, top: 2, bottom: 2),
+                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.black.withOpacity(0.5)),
                                                 child: Row(
                                                   children: [
                                                     const CustomIconWidget(
-                                                      iconData:
-                                                          '${AssetPath.vectorPath}eye.svg',
+                                                      iconData: '${AssetPath.vectorPath}eye.svg',
                                                       width: 16,
                                                       height: 16,
                                                       defaultColor: false,
                                                     ),
                                                     fourPx,
                                                     CustomTextWidget(
-                                                      textToDisplay: streamer
-                                                              .totalView
-                                                              ?.getCountShort() ??
-                                                          '0',
-                                                      textStyle:
-                                                          const TextStyle(
-                                                              fontSize: 10,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700),
+                                                      textToDisplay: streamer.totalView?.getCountShort() ?? '0',
+                                                      textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
                                                     )
                                                   ],
                                                 ),
@@ -377,31 +289,17 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
                                               left: 10,
                                               bottom: 14,
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   if (streamer.title != null)
                                                     CustomTextWidget(
-                                                      textToDisplay:
-                                                          streamer.title ?? '',
-                                                      textStyle:
-                                                          const TextStyle(
-                                                              fontSize: 10,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700),
+                                                      textToDisplay: streamer.title ?? '',
+                                                      textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
                                                     ),
                                                   twoPx,
                                                   CustomTextWidget(
-                                                    textToDisplay:
-                                                        streamer.username ?? '',
-                                                    textStyle: const TextStyle(
-                                                        fontSize: 10,
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w700),
+                                                    textToDisplay: streamer.username ?? '',
+                                                    textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
                                                   ),
                                                 ],
                                               ),
@@ -415,63 +313,34 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
                                   return Container(
                                     width: sizeTile,
                                     height: sizeTile,
-                                    margin: const EdgeInsets.only(
-                                        left: 2, right: 4, bottom: 4, top: 4),
+                                    margin: const EdgeInsets.only(left: 2, right: 4, bottom: 4, top: 4),
                                     child: CustomGesture(
                                       onTap: () {
-                                        Routing().move(Routes.viewStreaming,
-                                            argument: ViewStreamingArgument(
-                                                data: streamer));
+                                        Routing().move(Routes.viewStreaming, argument: ViewStreamingArgument(data: streamer));
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
                                         child: Stack(
                                           children: [
-                                            Positioned.fill(
-                                                child: streamerImage(
-                                                    displayPhotoProfileOriginal(
-                                                            streamer.avatar
-                                                                    ?.mediaEndpoint ??
-                                                                '') ??
-                                                        '')),
+                                            Positioned.fill(child: streamerImage(displayPhotoProfileOriginal(streamer.avatar?.mediaEndpoint ?? '') ?? '')),
                                             Positioned(
                                               top: 8,
                                               right: 14,
                                               child: Container(
-                                                padding: const EdgeInsets.only(
-                                                    left: 4,
-                                                    right: 8,
-                                                    top: 2,
-                                                    bottom: 2),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4),
-                                                    color: Colors.black
-                                                        .withOpacity(0.5)),
+                                                padding: const EdgeInsets.only(left: 4, right: 8, top: 2, bottom: 2),
+                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.black.withOpacity(0.5)),
                                                 child: Row(
                                                   children: [
                                                     const CustomIconWidget(
-                                                      iconData:
-                                                          '${AssetPath.vectorPath}eye.svg',
+                                                      iconData: '${AssetPath.vectorPath}eye.svg',
                                                       width: 16,
                                                       height: 16,
                                                       defaultColor: false,
                                                     ),
                                                     fourPx,
                                                     CustomTextWidget(
-                                                      textToDisplay: streamer
-                                                              .totalView
-                                                              ?.getCountShort() ??
-                                                          '0',
-                                                      textStyle:
-                                                          const TextStyle(
-                                                              fontSize: 10,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700),
+                                                      textToDisplay: streamer.totalView?.getCountShort() ?? '0',
+                                                      textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
                                                     )
                                                   ],
                                                 ),
@@ -481,31 +350,17 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
                                               left: 10,
                                               bottom: 14,
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   if (streamer.title != null)
                                                     CustomTextWidget(
-                                                      textToDisplay:
-                                                          streamer.title ?? '',
-                                                      textStyle:
-                                                          const TextStyle(
-                                                              fontSize: 10,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700),
+                                                      textToDisplay: streamer.title ?? '',
+                                                      textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
                                                     ),
                                                   twoPx,
                                                   CustomTextWidget(
-                                                    textToDisplay:
-                                                        streamer.username ?? '',
-                                                    textStyle: const TextStyle(
-                                                        fontSize: 10,
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w700),
+                                                    textToDisplay: streamer.username ?? '',
+                                                    textStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.w700),
                                                   ),
                                                 ],
                                               ),
@@ -542,6 +397,9 @@ class _ListStreamersScreenState extends State<ListStreamersScreen>
           width: double.infinity,
           height: double.infinity,
           fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Image.asset('${AssetPath.pngPath}profile-error.jpg', fit: BoxFit.fitWidth);
+          },
         )),
       ],
     );
@@ -555,11 +413,5 @@ class Streamer {
   final bool isFollowing;
   final String? streamDesc;
   final int watchersCount;
-  const Streamer(
-      {this.image,
-      this.username,
-      this.name,
-      this.isFollowing = true,
-      this.streamDesc,
-      this.watchersCount = 0});
+  const Streamer({this.image, this.username, this.name, this.isFollowing = true, this.streamDesc, this.watchersCount = 0});
 }

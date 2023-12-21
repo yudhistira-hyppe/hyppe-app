@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/live_stream/streaming_model.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
-
 import '../../../../../../core/bloc/live_stream/bloc.dart';
 import '../../../../../../core/bloc/live_stream/state.dart';
 import '../../../../../../core/config/env.dart';
@@ -55,6 +54,8 @@ class ViewStreamingNotifier with ChangeNotifier {
   int totLikes = 0;
   int totViews = 0;
 
+  bool endLive = false;
+
   bool _loading = false;
   bool get loading => _loading;
   set loading(bool state) {
@@ -95,6 +96,7 @@ class ViewStreamingNotifier with ChangeNotifier {
     totViews = data.totalView ?? 0;
     streamerData = data;
     isOver = false;
+    endLive = false;
   }
 
   sendComment(BuildContext context, LinkStreamModel model, String comment) async {
@@ -156,6 +158,7 @@ class ViewStreamingNotifier with ChangeNotifier {
 
   void likeAdd() {
     likeList.add(System().getCurrentDate());
+    totLikes++;
     notifyListeners();
   }
 
@@ -175,7 +178,6 @@ class ViewStreamingNotifier with ChangeNotifier {
       } catch (e) {
         debugPrint(e.toString());
       }
-
       notifyListeners();
     } else {
       // returnNext = false;
@@ -380,7 +382,8 @@ class ViewStreamingNotifier with ChangeNotifier {
       }
     } else if (event == eventLikeStream) {
       var messages = CountLikeLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
-      if (messages.idStream == dataStream.sId) {
+      String userId = SharedPreference().readStorage(SpKeys.userID);
+      if (messages.idStream == dataStream.sId && userId != messages.userId) {
         totLikes += messages.likeCount ?? 0;
         print("totalnya ${animationIndexes}");
         // for (var i = 0; i < (messages.likeCount ?? 0); i++) {
@@ -398,7 +401,17 @@ class ViewStreamingNotifier with ChangeNotifier {
     } else if (event == eventStatusStream) {
       var messages = StatusStreamLiveModel.fromJson(GenericResponse.fromJson(json.decode('$message')).responseData);
       if (messages.idStream == dataStream.sId) {
-        dataStreaming.pause = messages.pause;
+        if (messages.pause != null) {
+          await Future.delayed(const Duration(milliseconds: 4500));
+          dataStreaming.pause = messages.pause;
+        } else {
+          endLive = true;
+          notifyListeners();
+          Fluttertoast.showToast(
+            msg: 'Live Streaming akan segera berakhir',
+            gravity: ToastGravity.CENTER,
+          );
+        }
       }
     }
 

@@ -27,12 +27,14 @@ class CommentLiveModel {
 class CountLikeLiveModel {
   String? idStream;
   int? likeCount;
+  String? userId;
 
-  CountLikeLiveModel({this.idStream, this.likeCount});
+  CountLikeLiveModel({this.idStream, this.likeCount, this.userId});
 
   CountLikeLiveModel.fromJson(Map<String, dynamic> json) {
     idStream = json['idStream'];
     likeCount = json['likeCount'];
+    userId = json['userId'];
   }
 }
 
@@ -51,11 +53,13 @@ class CountViewLiveModel {
 class StatusStreamLiveModel {
   String? idStream;
   bool? pause;
+  bool? status;
 
-  StatusStreamLiveModel({this.idStream, this.pause});
+  StatusStreamLiveModel({this.idStream, this.pause, this.status});
 
   StatusStreamLiveModel.fromJson(Map<String, dynamic> json) {
     idStream = json['idStream'];
     pause = json['pause'];
+    status = json['status'];
   }
 }

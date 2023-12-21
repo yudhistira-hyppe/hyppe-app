@@ -224,8 +224,9 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
             });
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusPaused:
-            liveIsPause = true;
-            setState(() {});
+            setState(() {
+              liveIsPause = true;
+            });
             break;
           case FlutterAvpdef.AVPStatus_AVPStatusStopped:
             WakelockPlus.disable();
@@ -235,7 +236,6 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
               });
             }
             break;
-
           case FlutterAvpdef.AVPStatus_AVPStatusCompletion:
             WakelockPlus.disable();
             context.read<ViewStreamingNotifier>().isOver = true;
@@ -244,7 +244,6 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
             WakelockPlus.disable();
             context.read<ViewStreamingNotifier>().isOver = true;
             break;
-
           default:
         }
       } catch (e) {
@@ -252,10 +251,16 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
       }
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
-      setState(() {
-        _loadingPercent = 0;
-        _showLoading = true;
-      });
+      if (!(context.read<ViewStreamingNotifier>().dataStreaming.pause ?? false)) {
+        setState(() {
+          _loadingPercent = 0;
+          _showLoading = true;
+        });
+      }
+      print("------------isloading ---------");
+      if (context.read<ViewStreamingNotifier>().endLive) {
+        context.read<ViewStreamingNotifier>().isOver = true;
+      }
     }, loadingProgress: (percent, netSpeed, playerId) {
       if (percent == 100) {
         _showLoading = false;
@@ -287,6 +292,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
     });
     fAliplayer?.setOnSeekComplete((playerId) {
       // _inSeek = false;
+      context.read<ViewStreamingNotifier>().isOver = true;
     });
     var lastDetik = 0;
     fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
@@ -553,9 +559,10 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                         ),
                       ),
                       if (notifier.dataStreaming.pause ?? false) const PauseLiveView(),
+                      // if (liveIsPause) const PauseLiveView(),
                       Positioned.fill(
-                        bottom: -90,
-                        right: 10,
+                        bottom: -60,
+                        right: 0,
                         child: Align(
                           alignment: Alignment.bottomRight,
                           child: SizedBox(
@@ -573,8 +580,8 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                         ),
                       ),
                       Positioned.fill(
-                        bottom: -90,
-                        right: 10,
+                        bottom: -60,
+                        right: 0,
                         child: Align(
                           alignment: Alignment.bottomRight,
                           child: SizedBox(
@@ -591,7 +598,7 @@ class _ViewStreamingScreenState extends State<ViewStreamingScreen> with WidgetsB
                           ),
                         ),
                       ),
-                      if (_showLoading)
+                      if (_showLoading && !(notifier.dataStreaming.pause ?? false))
                         Positioned.fill(
                           child: Align(
                             alignment: Alignment.center,
