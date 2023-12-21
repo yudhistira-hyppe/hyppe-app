@@ -137,7 +137,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                             children: notifier.animationIndexes.map((e) {
                               return LoveLootie(
                                 onAnimationFinished: () {
-                                  notifier.removeAnimation(e);
+                                  // notifier.removeAnimation(e);
                                 },
                               );
                             }).toList(),
@@ -159,24 +159,24 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
                     if (notifier.isPause) const PauseLive(),
                     if (notifier.statusLive == StatusStream.ready || notifier.statusLive == StatusStream.online) StreamerWidget(commentFocusNode: commentFocusNode),
                     // StreamerWidget(commentFocusNode: commentFocusNode),
-                    Align(
-                      alignment: Alignment.center,
-                      child: GestureDetector(
-                        onTap: () {
-                          a++;
-                          _debouncer.run(() {
-                            print(a);
-                            a = 0;
-                          });
-                        }, //doesnt work
-                        onPanDown: (details) => print('tdgreen'),
-                        child: Container(
-                          height: 100,
-                          width: 100,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ),
+                    // Align(
+                    //   alignment: Alignment.center,
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       a++;
+                    //       _debouncer.run(() {
+                    //         print(a);
+                    //         a = 0;
+                    //       });
+                    //     }, //doesnt work
+                    //     onPanDown: (details) => print('tdgreen'),
+                    //     child: Container(
+                    //       height: 100,
+                    //       width: 100,
+                    //       color: Colors.red,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
           onWillPop: () async {
@@ -198,7 +198,7 @@ class _StreamerScreenState extends State<StreamerScreen> with TickerProviderStat
 
   int a = 0;
 
-  final _debouncer = Debouncer(milliseconds: 2000);
+  // final _debouncer = Debouncer(milliseconds: 2000);
 
   Widget prepare({String? titile}) {
     return Container(
