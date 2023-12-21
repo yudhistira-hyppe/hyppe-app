@@ -126,6 +126,11 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
 
   @override
   void initState() {
+    if (widget.data.certified ?? false) {
+      System().block(context);
+    } else {
+      System().disposeBlock();
+    }
     _currentPositionText = widget.videoIndicator.positionText ?? 0;
     _currentPosition = widget.videoIndicator.seekValue ?? 0;
     // widget.fAliplayer?.play();
@@ -476,7 +481,7 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                           final player = VidPlayerPage(
                             // vidData: notifier.vidData,
                             fromFullScreen: true,
-                            orientation: Orientation.portrait,
+                            orientation: orientation,
                             playMode: (vidData?[index].isApsara ?? false) ? ModeTypeAliPLayer.auth : ModeTypeAliPLayer.url,
                             dataSourceMap: map,
                             data: vidData?[index],
@@ -546,24 +551,39 @@ class _VideoFullscreenPageState extends State<VideoFullscreenPage> with AfterFir
                               ),
                               if (Platform.isIOS)
                                 Align(
-                                  alignment: Alignment.topRight,
-                                  child: InkWell(
-                                    onTap: () {
-                                      int changevalue;
-                                      changevalue = _currentPosition + 1000;
-                                      if (changevalue > _videoDuration) {
-                                        changevalue = _videoDuration;
-                                      }
-                                      widget.data.isLoading = true;
-                                      setState(() {});
-                                      Navigator.pop(context, VideoIndicator(videoDuration: _videoDuration, seekValue: changevalue, positionText: _currentPositionText, showTipsWidget: _showTipsWidget, isMute: isMute));
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(16.0),
-                                      child: CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
+                                      alignment: Alignment.topRight,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            int changevalue;
+                                            changevalue = _currentPosition + 1000;
+                                            if (changevalue > _videoDuration) {
+                                              changevalue = _videoDuration;
+                                            }
+                                            widget.data.isLoading = true;
+                                            setState(() {});
+                                            Navigator.pop(
+                                                context,
+                                                VideoIndicator(
+                                                    videoDuration: _videoDuration,
+                                                    seekValue: changevalue,
+                                                    positionText:
+                                                        _currentPositionText,
+                                                    showTipsWidget:
+                                                        _showTipsWidget,
+                                                    isMute: isMute));
+                                          },
+                                          padding: orientation == Orientation.portrait ? const EdgeInsets.symmetric(
+                                              horizontal: 8.0, vertical: 42.0) : const EdgeInsets.symmetric(
+                                              horizontal: 46.0, vertical: 8.0),
+                                          icon: const CustomIconWidget(
+                                              iconData:
+                                                  "${AssetPath.vectorPath}close.svg",
+                                              defaultColor: false),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
                               if(isLoadingVid)
                                 Container(width: context.getWidth(), height: SizeConfig.screenHeight,
                                   padding: EdgeInsets.only(bottom: 20),
