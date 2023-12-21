@@ -196,7 +196,7 @@ PODS:
     - GoogleMLKit/TextRecognition (~> 3.2.0)
   - google_sign_in_ios (0.0.1):
     - Flutter
-    - GoogleSignIn (~> 7.0)
+    - GoogleSignIn (~> 6.2)
   - GoogleAppMeasurement (9.6.0):
     - GoogleAppMeasurement/AdIdSupport (= 9.6.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
@@ -226,10 +226,10 @@ PODS:
   - GoogleMLKit/TextRecognition (3.2.0):
     - GoogleMLKit/MLKitCore
     - MLKitTextRecognition (~> 1.4.0-beta6)
-  - GoogleSignIn (7.0.0):
+  - GoogleSignIn (6.2.4):
     - AppAuth (~> 1.5)
-    - GTMAppAuth (< 3.0, >= 1.3)
-    - GTMSessionFetcher/Core (< 4.0, >= 1.1)
+    - GTMAppAuth (~> 1.3)
+    - GTMSessionFetcher/Core (< 3.0, >= 1.1)
   - GoogleToolboxForMac/DebugUtils (2.3.2):
     - GoogleToolboxForMac/Defines (= 2.3.2)
   - GoogleToolboxForMac/Defines (2.3.2)
@@ -263,9 +263,9 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilitiesComponents (1.1.0):
     - GoogleUtilities/Logger
-  - GTMAppAuth (2.0.0):
+  - GTMAppAuth (1.3.1):
     - AppAuth/Core (~> 1.6)
-    - GTMSessionFetcher/Core (< 4.0, >= 1.5)
+    - GTMSessionFetcher/Core (< 3.0, >= 1.5)
   - GTMSessionFetcher/Core (1.7.2)
   - image_cropper (0.0.4):
     - Flutter
@@ -340,9 +340,9 @@ PODS:
     - Flutter
     - ScreenProtectorKit (~> 1.3.1)
   - ScreenProtectorKit (1.3.1)
-  - SDWebImage (5.18.5):
-    - SDWebImage/Core (= 5.18.5)
-  - SDWebImage/Core (5.18.5)
+  - SDWebImage (5.18.7):
+    - SDWebImage/Core (= 5.18.7)
+  - SDWebImage/Core (5.18.7)
   - SDWebImageWebPCoder (0.14.2):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.17)
@@ -592,15 +592,15 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   google_mlkit_commons: e9070f57232c3a3e4bd42fdfa621bb1f4bb3e709
   google_mlkit_text_recognition: 9967360384e93b09686aca67fc9f13f9a957d770
-  google_sign_in_ios: 8115e3fbe097e6509beb819ed602d47369d9011f
+  google_sign_in_ios: 1256ff9d941db546373826966720b0c24804bcdd
   GoogleAppMeasurement: 6de2b1a69e4326eb82ee05d138f6a5cb7311bcb1
   GoogleDataTransport: 57c22343ab29bc686febbf7cbb13bad167c2d8fe
   GoogleMLKit: 0017a6a8372e1a182139b9def4d89be5d87ca5a7
-  GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
+  GoogleSignIn: 5651ce3a61e56ca864160e79b484cd9ed3f49b7a
   GoogleToolboxForMac: 8bef7c7c5cf7291c687cf5354f39f9db6399ad34
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
   GoogleUtilitiesComponents: 679b2c881db3b615a2777504623df6122dd20afe
-  GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
+  GTMAppAuth: 0ff230db599948a9ad7470ca667337803b3fc4dd
   GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   image_cropper: a3291c624a953049bc6a02e1f8c8ceb162a24b25
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
@@ -625,7 +625,7 @@ SPEC CHECKSUMS:
   receive_sharing_intent: c0d87310754e74c0f9542947e7cbdf3a0335a3b1
   screen_protector: 6f92086bd2f2f4b54f54913289b9d1310610140b
   ScreenProtectorKit: 83a6281b02c7a5902ee6eac4f5045f674e902ae4
-  SDWebImage: 7ac2b7ddc5e8484c79aa90fc4e30b149d6a2c88f
+  SDWebImage: f9258c58221ed854cfa0e2b80ee4033710b1c6d3
   SDWebImageWebPCoder: 633b813fca24f1de5e076bcd7f720c038b23892b
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
@@ -633,7 +633,7 @@ SPEC CHECKSUMS:
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
-  url_launcher_ios: 68d46cc9766d0c41dbdc884310529557e3cd7a86
+  url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
   video_player_avfoundation: e9e6f9cae7d7a6d9b43519b0aab382bca60fcfd1
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
